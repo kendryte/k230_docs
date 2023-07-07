@@ -1,0 +1,104 @@
+{
+    // MD003
+    "heading-style": {
+        "style": "atx"
+    },
+    // MD004
+    "ul-style": {
+        "style": "consistent"
+    },
+    // MD007
+    "ul-indent": {
+        "indent": 2
+    },
+    // MD009
+    "no-trailing-spaces": {
+        "br_spaces": 2,
+        "list_item_empty_lines": false,
+        "strict": false
+    },
+    // MD010
+    "no-hard-tabs": {
+        "code_blocks": true,
+        "ignore_code_languages": ["Makefile","makefile"],
+        "spaces_per_tab": 1
+    },
+    // MD011
+    "no-multiple-blanks": {
+        "maximum": 1
+    },
+    // MD013
+    "line-length": {
+        "strict": false,
+        "line_length": 2000,
+        "code_blocks": false
+    },
+    // MD022
+    "blanks-around-headers": {
+        "lines_above": 1,
+        "lines_below": 1
+    },
+    // MD025
+    "single-title": {
+        "level": 1
+    },
+    // MD024
+    "no-duplicate-heading": {
+        "allow_different_nesting": false,
+        "siblings_only": false
+    },
+    // MD029
+    "ol-prefix": {
+        //"style": "one_or_ordered"
+        "style": "one"
+    },
+    // MD030
+    "list-marker-space": {
+        "ol_multi": 1,
+        "ol_single": 1,
+        "ul_multi": 1,
+        "ul_single": 1
+    },
+    // MD031
+    "blanks-around-fences": {
+        "list_items": true
+    },
+    // MD033
+    "no-inline-html": {
+        "allowed_elements": ["div"]
+    },
+    // MD035
+    "hr-style": {
+        "style": "---"
+    },
+    // MD040
+    "fenced-code-language": {
+        "allowed_languages": [],
+        "language_only": false
+    },
+    // MD041
+    "first-line-heading": {
+        "level": 1
+    },
+    // MD044
+    "proper-names": {
+        "code_blocks": true,
+        "names": []
+    },
+    // MD046
+    "code-block-style": {
+        "style": "fenced"
+    },
+    // MD048
+    "code-fence-style": {
+        "style": "backtick"
+    },
+    // MD049
+    "emphasis-style": {
+        "style": "asterisk"
+    },
+    // MD050
+    "strong-style": {
+        "style": "asterisk"
+    }
+}

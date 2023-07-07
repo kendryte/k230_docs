@@ -1,0 +1,24 @@
+# docker image from https://github.com/DavidAnson/markdownlint-cli2
+# vscode markdownlint https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
+# markdownlint-cli2: https://github.com/DavidAnson/markdownlint-cli2
+# markdownlint rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+#
+
+markdownlint:
+  rules:
+    # MR job
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    # release job
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG =~ /^v\d+\.\d+.*$/
+    # pre-release job
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: always
+  stage: test
+  timeout: 10m
+  image: registry.gitlab.com/pipeline-components/markdownlint-cli2:latest
+  tags: 
+    - k230
+  script:
+   - markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
+

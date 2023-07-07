@@ -1,0 +1,15 @@
+name: Improvement
+description: 向我们提出改进
+title: "[Improvement]: "
+labels: ["improvement"]
+body:
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Improvement
+      description: 改进
+      placeholder: |
+        You can suggest to us to add some content or modify the typography. (您可以向我们建议新增某些内容或修改排版)
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in. (您能点击这个区域然后拖动文件来添加图片或文件)
+    validations:
+      required: true

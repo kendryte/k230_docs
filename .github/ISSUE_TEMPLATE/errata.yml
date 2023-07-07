@@ -1,0 +1,15 @@
+name: Errata
+description: 向我们反馈错误
+title: "[Errata]: "
+labels: ["errata"]
+body:
+  - type: textarea
+    id: errata
+    attributes:
+      label: Errata
+      description: 勘误
+      placeholder: |
+        Please describe the wrong document and location. (请您描述一下错误的文档及位置)
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in. (您能点击这个区域然后拖动文件来添加图片或文件)
+    validations:
+      required: true
