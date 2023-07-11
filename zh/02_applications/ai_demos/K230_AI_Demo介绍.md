@@ -25,7 +25,7 @@
 
 ### 概述
 
-K230 AI Demo集合包括人脸、身体、手部、车牌相关的检测、识别、分割任务。
+K230 AI Demo集合包括人脸、身体、手部相关的分类、检测、识别任务。
 
 ### 硬件环境
 
@@ -36,7 +36,7 @@ K230 AI Demo集合包括人脸、身体、手部、车牌相关的检测、识�
 
 源码路径位于`src/reference/ai_poc`，目录结构如下：
 
-``` shell
+```shell
 .
 ├── build_app.sh
 ├── cmake
@@ -47,37 +47,28 @@ K230 AI Demo集合包括人脸、身体、手部、车牌相关的检测、识�
 ├── face_glasses
 ├── face_landmark
 ├── face_mask
-├── face_parse
 ├── face_pose
 ├── falldown_detect
-├── fitness
-├── licence_det
-├── licence_det_rec
 ├── object_detect_yolov8n
-├── person_attr
 ├── person_detect
 ├── pose_detect
 ├── shell
 ├── sq_hand_det
 ├── sq_handkp_class
 ├── sq_handkp_det
-├── sq_handreco
-└── vehicle_attr
+└── sq_handreco
 ```
 
 kmodel及image路径位于`src/big/kmodel/ai_poc`，目录结构如下：
 
 ``` shell
-.
 ├── images
 │   ├── 1024x1331.jpg
 │   ├── 1024x624.jpg
+│   ├── 1024x768.jpg
 │   ├── bus.jpg
-│   ├── car.jpg
 │   ├── falldown_elder.jpg
-│   ├── hrnet_demo.jpg
-│   ├── input_hd.jpg
-│   └── test.jpg
+│   └── input_hd.jpg
 └── kmodel
     ├── face_detection_320.kmodel
     ├── face_emotion.kmodel
@@ -85,16 +76,10 @@ kmodel及image路径位于`src/big/kmodel/ai_poc`，目录结构如下：
     ├── face_glasses.kmodel
     ├── face_landmark.kmodel
     ├── face_mask.kmodel
-    ├── face_parse.kmodel
     ├── face_pose.kmodel
     ├── hand_det.kmodel
     ├── handkp_det.kmodel
     ├── hand_reco.kmodel
-    ├── licence_reco.kmodel
-    ├── LPD_320.kmodel
-    ├── LPD_640.kmodel
-    ├── person_pulc.kmodel
-    ├── vehicle.kmodel
     ├── yolov5n-falldown.kmodel
     ├── yolov5n.kmodel
     ├── yolov8n_320.kmodel
@@ -104,6 +89,6 @@ kmodel及image路径位于`src/big/kmodel/ai_poc`，目录结构如下：
 
 ### 编译及运行程序
 
-1.进入src/reference/ai_poc
-2.执行build_app.sh脚本（之前脚本前确保src/big/kmodel/ai_poc下已经有相应kmodel和images），会将kmodel、images、shell、elf统一拷贝生成到k230_bin文件夹
-3.将整个文件夹拷贝到板子上，在大核上执行sh脚本即可运行相应demo.
+- 进入src/reference/ai_poc
+- 执行build_app.sh脚本（之前脚本前确保src/big/kmodel/ai_poc下已经有相应kmodel和images），会将kmodel、images、shell、elf统一拷贝生成到k230_bin文件夹
+- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应demo
