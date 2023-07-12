@@ -194,7 +194,7 @@ V = 0.4392\*R - 0.3990\*G - 0.0402\*B + 128
 | | H264 | HEVC | JPEG |
 |:--|:--|:--|:--|
 | 输入格式 | H.264 Baseline;H.264 Main;H.264 High;H.264 High10;支持interlaced stream | HEVC (H.265) Main/Main10 | JPEG, baseline sequential |
-| 输出格式 | YUV420 NV12, ARGB8888, BGRA8888 | YUV420 NV12, ARGB8888, BGRA8888 | YUV422 UYVY, YUV420 NV12, ARGB8888, BGRA8888 |
+| 输出格式 | YUV420 NV12 | YUV420 NV12 | YUV422 UYVY, YUV420 NV12 |
 | 解码通道 | 4路 | 4路 | 4路 |
 
 注意：H264/HEVC/JPEG共用4路。
@@ -2321,11 +2321,11 @@ typedef enum {
 定义JPEG码流PACK类型枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_P_FRAME = 1,
-&emsp;K_VENC_I_FRAME = 2,
-&emsp;K_VENC_HEADER = 3,
-&emsp;K_VENC_BUTT
+typedef enum {  
+&emsp;K_VENC_P_FRAME = 1,  
+&emsp;K_VENC_I_FRAME = 2,  
+&emsp;K_VENC_HEADER = 3,  
+&emsp;K_VENC_BUTT  
 } k_venc_pack_type;
 
 【成员】
