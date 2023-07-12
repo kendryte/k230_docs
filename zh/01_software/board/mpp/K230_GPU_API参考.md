@@ -1057,3 +1057,43 @@ vg_lite.ko模块加载后会占用大约130KB内存，除command buffer及显存
 1. 使用API绘制
 1. 调用[vg_lite_finish](#3214-vg_lite_finish)或[vg_lite_flush](#3215-vg_lite_flush)提交命令进行渲染，等待绘制结束
 1. 进程结束前，调用[vg_lite_close](#3213-vg_lite_close)关闭GPU
+
+## 6. 示例
+
+K230 SDK 中包含了多个 GPU 示例，源码放置在 `src/little/buildroot-ext/package/vg_lite/test/samples`，在 buildroot 中打开 BR2_PACKAGE_VG_LITE_DEMOS 即可构建并添加到生成的系统镜像中（默认打开）。
+
+### 6.1 tiger
+
+这是一个绘制老虎图像的示例，运行后会在当前目录下生成 `tiger.png`。
+
+![tiger.png](images/tiger.png)
+
+### 6.2 linearGrad
+
+这是一个线性渐变的图像示例，运行后会在当前目录下生成 `linearGrad.png`。
+
+![linearGrad.png](images/linearGrad.png)
+
+### 6.3 imgIndex
+
+这是一个使用了颜色查找表的示例，运行后会在当前目录下生成 `imgIndex1.png`、`imgIndex2.png`、`imgIndex4.png` 和 `imgIndex8.png`，分别使用了不同数量的颜色索引。
+
+![imgIndex1.png](images/imgIndex1.png)
+
+![imgIndex2.png](images/imgIndex2.png)
+
+![imgIndex4.png](images/imgIndex4.png)
+
+![imgIndex8.png](images/imgIndex8.png)
+
+### 6.4 vglite_drm
+
+这是一个 GPU + DRM 显示联动的示例，
+
+注意：由于 linux 下的视频输出驱动并**不包含**初始化功能，所以需要在运行前确保屏幕已经在使用，例如可以在大核上运行 `sample_vo.elf 3`。
+
+### 6.5 vglite_cube
+
+这是一个 GPU + DRM 显示联动的示例，在屏幕上绘制一个不停旋转的正方体。
+
+注意：由于 linux 下的视频输出驱动并**不包含**初始化功能，所以需要在运行前确保屏幕已经在使用，例如可以在大核上运行 `sample_vo.elf 3`。
