@@ -21,6 +21,33 @@
 
 <div style="page-break-after:always"></div>
 
+## 目录
+
+[TOC]
+
+## 前言
+
+### 读者对象
+
+本文档（本指南）主要适用于以下人员：
+
+- 技术支持工程师
+- 软件开发工程师
+
+### 缩略词定义
+
+| 简称 | 说明 |
+| --- | --- |
+| DRM | Direct Rendering Manager |
+| KMS | Kernel Mode Setting
+| GUI | Graphical User Interface
+
+### 修订记录
+
+| 文档版本号 | 修改说明 | 修改者 | 日期 |
+| --- | --- | --- | --- |
+| V1.0 | 初版 | 王权 | 2023/06/25 |
+
 ## K230 GUI实战
 
 LVGL是流行的免费开源嵌入式图形库，可以用于嵌入式系统的图形用户界面(GUI)开发。
