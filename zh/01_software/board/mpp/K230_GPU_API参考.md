@@ -1066,13 +1066,25 @@ K230 SDK 中包含了多个 GPU 示例，源码放置在 `src/little/buildroot-e
 
 这是一个绘制老虎图像的示例，运行后会在当前目录下生成 `tiger.png`。
 
+![tiger.png](images/tiger.png)
+
 ### 6.2 linearGrad
 
 这是一个线性渐变的图像示例，运行后会在当前目录下生成 `linearGrad.png`。
 
+![linearGrad.png](images/linearGrad.png)
+
 ### 6.3 imgIndex
 
 这是一个使用了颜色查找表的示例，运行后会在当前目录下生成 `imgIndex1.png`、`imgIndex2.png`、`imgIndex4.png` 和 `imgIndex8.png`，分别使用了不同数量的颜色索引。
+
+![imgIndex1.png](images/imgIndex1.png)
+
+![imgIndex2.png](images/imgIndex2.png)
+
+![imgIndex4.png](images/imgIndex4.png)
+
+![imgIndex8.png](images/imgIndex8.png)
 
 ### 6.4 vglite_drm
 
