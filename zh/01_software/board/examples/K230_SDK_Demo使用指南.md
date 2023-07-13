@@ -676,7 +676,7 @@ PC的相机应用或安装PotPlayer软件
 
 小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
 
-参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../02_reference/software/K230_USB%E5%BA%94%E7%94%A8%E5%AE%9E%E6%88%98_UVC%E4%BC%A0%E8%BE%93YUV%E5%8F%8A%E7%BC%96%E7%A0%81%E7%A0%81%E6%B5%81.md)
+参考 [K230_USB应用实战_UVC传输YUV及编码码流](/zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
 
 ##### 2.9.4.2 执行
 
