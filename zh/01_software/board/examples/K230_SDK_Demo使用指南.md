@@ -778,10 +778,10 @@ K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
 K230开发板USB0通过typeC转typeA连接鼠标或键盘。
 
 ```shell
-[root@canaan / ]$ test_mouse /dev/input/event0
+[root@canaan / ]$ test_mouse /dev/input/event2
 #点击或移动鼠标，串口会有对应的显示。
 
-[root@canaan / ]$ test_keyboard /dev/input/event0
+[root@canaan / ]$ test_keyboard /dev/input/event2
 #按下键盘不同的按键，串口会有对应的显示。
 ```
 
