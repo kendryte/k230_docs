@@ -676,7 +676,7 @@ PC的相机应用或安装PotPlayer软件
 
 小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
 
-参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../02_reference/software/K230_USB%E5%BA%94%E7%94%A8%E5%AE%9E%E6%88%98_UVC%E4%BC%A0%E8%BE%93YUV%E5%8F%8A%E7%BC%96%E7%A0%81%E7%A0%81%E6%B5%81.md)
+参考 [K230_USB应用实战_UVC传输YUV及编码码流](/zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
 
 ##### 2.9.4.2 执行
 
@@ -778,10 +778,10 @@ K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
 K230开发板USB0通过typeC转typeA连接鼠标或键盘。
 
 ```shell
-[root@canaan / ]$ test_mouse /dev/input/event0
+[root@canaan / ]$ test_mouse /dev/input/event2
 #点击或移动鼠标，串口会有对应的显示。
 
-[root@canaan / ]$ test_keyboard /dev/input/event0
+[root@canaan / ]$ test_keyboard /dev/input/event2
 #按下键盘不同的按键，串口会有对应的显示。
 ```
 
