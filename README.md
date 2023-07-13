@@ -6,7 +6,7 @@
 
 [TOC]
 
-## K230相关链接
+## K230相关资源链接
 
 | 链接 | 说明  |
 | ------ | ---- |
@@ -15,6 +15,8 @@
 | [K230 SDK Gitee mirror](https://gitee.com/kendryte/k230_sdk) | Kendryte K230 SDK Gitee mirror Repo |
 |[K230 Docs Gitee mirror](https://gitee.com/kendryte/k230_docs)| Kendryte K230 Docs Gitee mirror Repo |
 |[K230 SDK Release mirror](https://kendryte-download.canaan-creative.com/k230/release/sdk/k230_sdk.tar.gz)| 嘉楠勘智K230 SDK release k230_sdk.tar.gz下载 |
+|[K230 Docs Release mirror](https://kendryte-download.canaan-creative.com/k230/release/docs/k230_docs.tar.gz)| 嘉楠勘智K230 Docs release k230_docs.tar.gz下载 |
+|[Canaan Kendryte K230](https://www.canaan-creative.com/product/k230)| 嘉楠勘智K230 |
 |[Canaan Kendryte Forum](https://developer.canaan-creative.com/)| 嘉楠勘智开发者论坛 |
 
 ## K230硬件文档
@@ -143,6 +145,10 @@
 
 ### K230 SDK AI教程
 
+| 文档名称 | 文档概要 |
+| --- | --- |
+| [K230_AI_Demo介绍.md](zh/02_applications/ai_demos/K230_AI_Demo介绍.md) | K230 AI Demo介绍|
+
 ## K230 SDK 其它文档
 
 | 文档名称 | 文档概要 |
@@ -157,6 +163,6 @@
 
 北京嘉楠捷思信息技术有限公司
 
-网址：[canaan-creative.com](https://www.canaan-creative.com/)
+网址：[www.canaan-creative.com](https://www.canaan-creative.com/)
 
 商务垂询：[salesAI@canaan-creative.com](mailto:salesAI@canaan-creative.com)
