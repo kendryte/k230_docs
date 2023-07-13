@@ -157,6 +157,6 @@
 
 北京嘉楠捷思信息技术有限公司
 
-网址：[canaan-creative.com](https://www.canaan-creative.com/)
+网址：[www.canaan-creative.com](https://www.canaan-creative.com/)
 
 商务垂询：[salesAI@canaan-creative.com](mailto:salesAI@canaan-creative.com)
