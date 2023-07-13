@@ -145,6 +145,10 @@
 
 ### K230 SDK AI教程
 
+| 文档名称 | 文档概要 |
+| --- | --- |
+| [K230_AI_Demo介绍.md](zh/02_applications/ai_demos/K230_AI_Demo介绍.md) | K230 AI Demo介绍|
+
 ## K230 SDK 其它文档
 
 | 文档名称 | 文档概要 |
