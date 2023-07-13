@@ -2,6 +2,11 @@ name: Errata
 description: 向我们反馈错误
 title: "[Errata]: "
 labels: ["errata"]
+assignees:
+  - wuwentao
+  - zhangxiaojingCAN
+  - kexinliang666
+  - chenhb3 
 body:
   - type: textarea
     id: errata

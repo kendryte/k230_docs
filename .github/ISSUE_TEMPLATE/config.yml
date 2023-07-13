@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: kendryte Community
-    about: kendryte 开发者社区
+  - name: Kendryte Community
+    about: Kendryte 开发者社区
     url: https://developer.canaan-creative.com/
+  - name: Kendryte K230
+    about: kendryte k230
+    url: https://www.canaan-creative.com/product/k230
