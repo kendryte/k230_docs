@@ -1630,6 +1630,8 @@ VICAP_WORK_OFFLINE_MODE,
 | VICAP_WORK_ONLINE_MODE  | 在线模式 |
 | VICAP_WORK_OFFLINE_MODE | 离线模式 |
 
+【注意事项】支持多个摄像头输入时，必须指定为离线模式。
+
 #### 3.1.12 k_vicap_sensor_info
 
 【说明】VICAP sensor配置信息
@@ -1696,25 +1698,31 @@ VICAP_DUMP_RAW = 2,
 
 ```c
 typedef struct {
-k_vicap_window acq_win;
-k_vicap_work_mode mode;
-k_vicap_isp_pipe_ctrl pipe_ctrl;
-k_u32 cpature_frame;
-k_vicap_sensor_info sensor_info;
-k_bool dw_enable;
+    k_vicap_window acq_win;
+    k_vicap_work_mode mode;
+    k_vicap_isp_pipe_ctrl pipe_ctrl;
+    k_u32 cpature_frame;
+    k_vicap_sensor_info sensor_info;
+    k_bool dw_enable;
+    k_u32 buffer_num;
+    k_u32 buffer_size;
 } k_vicap_dev_attr;
 ```
 
 【成员】
 
-| **成员名称**  | **描述**                                          |
-|---------------|---------------------------------------------------|
-| acq_win       | 图像捕获窗口                                      |
-| mode          | Vicap工作模式                                     |
-| pipe_ctrl     | ISP pipeline 控制开关 |
-| cpature_frame | 指定采集数据的帧数，输入范围\[0,1023\]，0：持续采集 |
-| sensor_info   | Sensor配置信息                                    |
-| dw_enable     | Dewarp使能（详见 [K230_SDK_Dewarp使用指南.md](../../pc/dewarp/K230_SDK_Dewarp使用指南.md)）|
+| **成员名称**  | **描述**                                                     |
+| ------------- | ------------------------------------------------------------ |
+| acq_win       | 图像捕获窗口                                                 |
+| mode          | Vicap工作模式。当支持多个摄像头输入时，必须指定为离线模式。  |
+| pipe_ctrl     | ISP pipeline 控制开关。                                      |
+| cpature_frame | 指定采集数据的帧数，输入范围\[0,1023\]，0：持续采集          |
+| sensor_info   | Sensor配置信息                                               |
+| dw_enable     | Dewarp使能（详见 [K230_SDK_Dewarp使用指南.md](../../pc/dewarp/K230_SDK_Dewarp使用指南.md)） |
+| buffer_num    | 离线模式下，配置sensor接收数据的缓冲区个数                   |
+| buffer_size   | 离线模式下，配置sensor接收数据的缓冲区大小                   |
+
+【注意事项】对于小内存应用场景，建议关闭3DNR模块，减小内存占用。关闭方式为应用设置设备属性时，将 pipe_ctrl.bits.dnr3_enable 设置为0
 
 #### 3.1.15 k_vicap_chn_attr
 
@@ -1724,22 +1732,23 @@ k_bool dw_enable;
 
 ```c
 typedef struct {
-k_vicap_window out_win;
-k_vicap_window crop_win;
-k_vicap_window scale_win;
-k_bool crop_enable;
-k_bool scale_enable;
-k_bool chn_enable;
-k_pixel_format pix_format;
-k_u32 buffer_num;
-k_u32 buffer_size;
+    k_vicap_window out_win;
+    k_vicap_window crop_win;
+    k_vicap_window scale_win;
+    k_bool crop_enable;
+    k_bool scale_enable;
+    k_bool chn_enable;
+    k_pixel_format pix_format;
+    k_u32 buffer_num;
+    k_u32 buffer_size;
+    k_u8 alignment;
 } k_vicap_chn_attr;
 ```
 
 【成员】
 
 | **成员名称** | **描述**                 |
-|--------------|--------------------------|
+| ------------ | ------------------------ |
 | out_win      | 输出窗口大小             |
 | crop_win     | 裁剪窗口大小             |
 | scale_win    | 缩放窗口大小             |
@@ -1749,6 +1758,7 @@ k_u32 buffer_size;
 | pix_format   | 输出像素格式             |
 | buffer_num   | 当前通道使用的缓冲区个数 |
 | buffer_size  | 缓冲区大小               |
+| alignment    | 缓冲区对齐方式           |
 
 ### 3.2 Sensor
 

@@ -194,7 +194,7 @@ V = 0.4392\*R - 0.3990\*G - 0.0402\*B + 128
 | | H264 | HEVC | JPEG |
 |:--|:--|:--|:--|
 | 输入格式 | H.264 Baseline;H.264 Main;H.264 High;H.264 High10;支持interlaced stream | HEVC (H.265) Main/Main10 | JPEG, baseline sequential |
-| 输出格式 | YUV420 NV12, ARGB8888, BGRA8888 | YUV420 NV12, ARGB8888, BGRA8888 | YUV422 UYVY, YUV420 NV12, ARGB8888, BGRA8888 |
+| 输出格式 | YUV420 NV12 | YUV420 NV12 | YUV422 UYVY, YUV420 NV12 |
 | 解码通道 | 4路 | 4路 | 4路 |
 
 注意：H264/HEVC/JPEG共用4路。
@@ -259,24 +259,29 @@ VDEC支持流式发送：
 #### 2.1.1 kd_mpi_venc_create_chn
 
 【描述】
+
 创建编码通道。
 
 【语法】
+
 k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#3115-k_venc_chn_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入      |
 | attr     | 编码通道属性指针。                                                   | 输入      |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -295,31 +300,38 @@ k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#3115-k_venc
 | 4096        | 128    | 4096  | 64     | 8192 | 128 | 8192 | 64  |
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.2 kd_mpi_venc_destory_chn
 
 【描述】
+
 销毁编码通道。
 
 【语法】
+
 k_s32 kd_mpi_venc_destory_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -332,31 +344,38 @@ k_s32 kd_mpi_venc_destory_chn(k_u32 chn_num);
 - 销毁前必须停止接收图像，否则返回失败。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.3 kd_mpi_venc_start_chn
 
 【描述】
+
 开启编码通道接收输入图像。
 
 【语法】
+
 k_s32 kd_mpi_venc_start_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -371,32 +390,39 @@ k_s32 kd_mpi_venc_start_chn(k_u32 chn_num);
 - 只有开启接收之后编码器才开始接收图像编码。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.4 kd_mpi_venc_stop_chn
 
 【描述】
+
 停止编码通道接收输入图像。
 
 【语法】
+
 k_s32 kd_mpi_venc_stop_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -412,32 +438,39 @@ k_s32 kd_mpi_venc_stop_chn(k_u32 chn_num);
 - 调用此接口仅停止接收原始数据编码，码流buffer并不会被清除。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn)
 
 #### 2.1.5 kd_mpi_venc_query_status
 
 【描述】
+
 查询编码通道状态。
 
 【语法】
+
 k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#3115-k_venc_chn_attr) \*status);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | status   | 编码通道的状态指针。                                                     | 输出 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -450,20 +483,25 @@ k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#3115-k_venc_c
 - 如果通道未创建，则返回失败。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 
 #### 2.1.6 kd_mpi_venc_get_stream
 
 【描述】
+
 获取编码后的码流。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) \*stream, k_s32 milli_sec);
 
 【参数】
+
 | 参数名称  | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
@@ -471,12 +509,14 @@ k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream)
 | milli_sec | 获取码流超时时间。 取值范围： [-1, +∞ ) -1：阻塞。 0：非阻塞。 大于0：超时时间 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -491,33 +531,40 @@ k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream)
 - 如果milli_sec小于-1，返回K_ERR_VENC_ILLEGAL_PARAM。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.7 kd_mpi_venc_release_stream
 
 【描述】
+
 释放码流缓存。
 
 【语法】
+
 k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) \*stream);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | stream   | 码流结构体指针。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -531,21 +578,26 @@ k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_str
 - 如果stream为空，则返回错误码K_ERR_VENC_NULL_PTR。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.8 kd_mpi_venc_send_frame
 
 【描述】
+
 支持用户发送原始图像进行编码。
 
 【语法】
+
 k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 milli_sec);
 
 【参数】
+
 | 参数名称  | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 编码通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
@@ -553,12 +605,14 @@ k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 mi
 | milli_sec | 发送图像超时时间。 取值范围： [-1,+∞ ) -1：阻塞。 0：非阻塞。 \> 0：超时时间。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -573,33 +627,40 @@ k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 mi
 - 调用该接口发送图像，用户需要保证编码通道已创建且开启接收输入图像。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.9 kd_mpi_venc_set_rotaion
 
 【描述】
+
 设置编码图像旋转角度。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_rotaion(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | rotation | 旋转角度枚举。 | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -608,35 +669,43 @@ k_s32 kd_mpi_venc_set_rotaion(k_u32 chn_num, const [k_rotation](#3112-k_rotation
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.10 kd_mpi_venc_get_rotaion
 
 【描述】
+
 获取编码图像旋转角度。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](3113-k_rotation) \*rotation);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入      |
 | rotation | 旋转角度枚举指针。                                                   | 输出      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -645,35 +714,43 @@ k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](3113-k_rotation) \*rot
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.11 kd_mpi_venc_set_mirror
 
 【描述】
+
 设置编码图像旋转角度。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_mirror) mirror);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 通道号。取值范围：[0, VENC_MAX_CHN_NUM)。 | 输入 |
 | mirror | 翻转方式枚举。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 【需求】
 
@@ -681,21 +758,26 @@ k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_m
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 【举例】
+
 无。
 【相关主题】
+
 无。
 
 #### 2.1.12 kd_mpi_venc_get_mirror
 
 【描述】
+
 设置编码图像旋转角度。
 【语法】
+
 | k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror) mirror);|
-|---|
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 通道号。取值范围：[0, VENC_MAX_CHN_NUM)。 | 输入 |
@@ -709,6 +791,7 @@ k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_m
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 【需求】
 
@@ -716,33 +799,41 @@ k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_m
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 【举例】
+
 无。
 【相关主题】
+
 无。
 
 #### 2.1.13 kd_mpi_venc_enable_idr
 
 【描述】
+
 设置IDR帧使能。
 
 【语法】
+
 k_s32 kd_mpi_venc_enable_idr(k_u32 chn_num, const k_bool idr_enable);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | idr_enable | 是否使能IDR帧。0：不使能。1：使能。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -755,32 +846,39 @@ k_s32 kd_mpi_venc_enable_idr(k_u32 chn_num, const k_bool idr_enable);
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.14 kd_mpi_venc_set_2d_mode
 
 【描述】
+
 设置2D运算模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) mode);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | mode     | 2D运算模式枚举。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -793,32 +891,39 @@ k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#318-k_
 - 目前运算模式不支持K_VENC_2D_CALC_MODE_CSC模式。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.15 kd_mpi_venc_get_2d_mode
 
 【描述】
+
 获取2D运算模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) \*mode);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | mode     | 2D运算模式枚举指针。                                                      | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -832,20 +937,25 @@ k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2
 - 目前运算模式不支持K_VENC_2D_CALC_MODE_CSC模式。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.16 kd_mpi_venc_set_2d_osd_param
 
 【描述】
+
 设置2D运算中OSD的区域属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
@@ -853,12 +963,14 @@ k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 | attr     | OSD属性指针。                                                                               | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -871,20 +983,25 @@ k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 - 如果有n个叠加区域，索引值应分别设置为0\~n-1。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.17 kd_mpi_venc_get_2d_osd_param
 
 【描述】
+
 获取2D运算中指定索引的OSD的区域属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
@@ -892,12 +1009,14 @@ k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 | attr     | OSD属性指针。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -906,23 +1025,29 @@ k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.18 kd_mpi_venc_set_2d_border_param
 
 【描述】
+
 设置2D运算中的画框属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。        | 输入 |
@@ -930,12 +1055,14 @@ k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2
 | attr     | 画框属性指针。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -948,20 +1075,25 @@ k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2
 - 如果有n个框，索引值应分别设置为0\~n-1。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.19 kd_mpi_venc_get_2d_border_param
 
 【描述】
+
 获取2D运算中的画框属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
@@ -969,12 +1101,14 @@ k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_bord
 | attr     | 画框属性指针。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -983,35 +1117,43 @@ k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_bord
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.20 kd_mpi_venc_set_2d_custom_coef
 
 【描述】
+
 设置2D运算中的图像格式转换系数。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_2d_custom_coef(k_u32 chn_num, const k_s16 \*coef);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | coef     | 转换系数指针。参考[2D转换系数的计算](#12141-2d转换系数的计算)                    | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1027,32 +1169,39 @@ k_s32 kd_mpi_venc_set_2d_custom_coef(k_u32 chn_num, const k_s16 \*coef);
 - 在运算模式为K_VENC_2D_CALC_MODE_BORDER时，不适用转换系数，调用本接口会报错。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode)
 
 #### 2.1.21 kd_mpi_venc_get_2d_custom_coef
 
 【描述】
+
 获取2D运算中的图像格式转换系数。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_custom_coef(k_u32 chn_num, k_s16 \*coef);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | coef     | 转换系数指针。参考[2D转换系数的计算](#12141-2d转换系数的计算)  | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1066,32 +1215,39 @@ k_s32 kd_mpi_venc_get_2d_custom_coef(k_u32 chn_num, k_s16 \*coef);
 - 在运算模式为K_VENC_2D_CALC_MODE_BORDER时，不适用转换系数，调用本接口会报错。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.22 kd_mpi_venc_set_2d_color_gamut
 
 【描述】
+
 设置2D运算的色域。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) color_gamut);
 
 【参数】
+
 | 参数名称    | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num     | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | color_gamut | 色域枚举。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1106,32 +1262,39 @@ k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut
 - 在运算模式为K_VENC_2D_CALC_MODE_BORDER时，不适用色域，调用本接口会报错。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.23 kd_mpi_venc_get_2d_color_gamut
 
 【描述】
+
 获取2D运算的色域。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) \*color_gamut);
 
 【参数】
+
 | 参数名称    | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num     | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | color_gamut | 色域枚举指针。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1146,31 +1309,38 @@ k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#311
 - 在运算模式为K_VENC_2D_CALC_MODE_BORDER时，不适用色域，调用本接口会报错。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.24 kd_mpi_venc_attach_2d
 
 【描述】
+
 将2D运算与venc关联。
 
 【语法】
+
 k_s32 kd_mpi_venc_attach_2d(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1183,31 +1353,38 @@ k_s32 kd_mpi_venc_attach_2d(k_u32 chn_num);
 - 目前绑定只支持编码通道号和2D运算通道号相同的模式。只有前3路编码支持attach 2D操作。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.25 kd_mpi_venc_detach_2d
 
 【描述】
+
 将2D运算与venc分离。
 
 【语法】
+
 k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 2D运算通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1220,17 +1397,21 @@ k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
 - 调用该接口，用户需要保证编码通道已停止。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.26 kd_mpi_venc_send_2d_frame
 
 【描述】
+
 向2D模块发送一帧数据。
 
 【语法】
+
 | k_s32 kd_mpi_venc_send_2d_frame(k_u32 chn_num, const k_video_frame_info \*frame, k_s32 milli_sec);
 
 【参数】
@@ -1242,12 +1423,14 @@ k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
 | milli_sec | 发送图像超时时间。 取值范围： [-1,+∞ ) -1：阻塞。 0：非阻塞。 \> 0：超时时间。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                      |
 | 非0    | 失败，返回[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1260,17 +1443,21 @@ k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
 - 本接口只在单2D运算的场景使用，在2D运算后再进行编码的场景，需要使用venc发送图形的接口[kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame)。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame)
 
 #### 2.1.27 kd_mpi_venc_get_2d_frame
 
 【描述】
+
 获取2D运算结果。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 milli_sec);
 
 【参数】
@@ -1282,12 +1469,14 @@ k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 
 | milli_sec | 发送图像超时时间。 取值范围： [-1,+∞ ) -1：阻塞。 0：非阻塞。 \> 0：超时时间。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1300,31 +1489,38 @@ k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 
 - 本接口只在单2D运算的场景使用，在2D运算后再进行编码的场景，获取编码后的码流需要使用[kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream)
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream)
 
 #### 2.1.28 kd_mpi_venc_start_2d_chn
 
 【描述】
+
 开始2D通道接收输入图像。
 
 【语法】
+
 k_s32 kd_mpi_venc_start_2d_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 2D运算通道号，取值范围[0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1336,31 +1532,38 @@ k_s32 kd_mpi_venc_start_2d_chn(k_u32 chn_num);
 - 本接口只在单2D运算的场景使用，在VENC+2D的场景，需要调用[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.29 kd_mpi_venc_stop_2d_chn
 
 【描述】
+
 停止2D通道接收输入图像。
 
 【语法】
+
 k_s32 kd_mpi_venc_stop_2d_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num | 2D运算通道号，取值范围[0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1369,34 +1572,42 @@ k_s32 kd_mpi_venc_stop_2d_chn(k_u32 chn_num);
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.30 kd_mpi_venc_request_idr
 
 【描述】
+
 请求IDR帧，在调用之后立即产生一个IDR帧。
 
 【语法】
+
 k_s32 kd_mpi_venc_request_idr(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1405,35 +1616,43 @@ k_s32 kd_mpi_venc_request_idr(k_u32 chn_num);
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.31 kd_mpi_venc_set_h265_sao
 
 【描述】
+
 设置H.265通道的Sao属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h265_sao | H.265协议编码通道的Sao配置。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1446,32 +1665,39 @@ k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#3127-k_ve
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.32 kd_mpi_venc_get_h265_sao
 
 【描述】
+
 获取H.265通道的Sao属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h265_sao | H.265协议编码通道的Sao配置。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1480,35 +1706,43 @@ k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#3127-k_venc_h26
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.33 kd_mpi_venc_set_dblk
 
 【描述】
+
 设置H.264/H.265协议编码通道的Deblocking使能。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_dblk(k_u32 chn_num, const k_bool dblk_en);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | dblk_en | 是否使能deblocking。K_TRUE：使能。K_FALSE：不使能。默认使能。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1521,32 +1755,39 @@ k_s32 kd_mpi_venc_set_dblk(k_u32 chn_num, const k_bool dblk_en);
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.34 kd_mpi_venc_get_dblk
 
 【描述】
+
 获取H.264/H.265协议编码通道的Deblocking状态。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_dblk(k_u32 chn_num, k_bool *dblk_en);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | dblk_en | 是否使能deblocking。K_TRUE：使能。K_FALSE：不使能。默认使能。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1555,35 +1796,43 @@ k_s32 kd_mpi_venc_get_dblk(k_u32 chn_num, k_bool *dblk_en);
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.35 kd_mpi_venc_set_roi_attr
 
 【描述】
+
 设置H.264/H.265通道的ROI属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | dblk_en | 是否使能deblocking。K_TRUE：使能。K_FALSE：不使能。默认使能。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1596,32 +1845,39 @@ k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#3129-k_ve
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.36 kd_mpi_venc_get_roi_attr
 
 【描述】
+
 获取H.264/H.265通道的ROI属性。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | dblk_en | 是否使能deblocking。K_TRUE：使能。K_FALSE：不使能。默认使能。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1630,35 +1886,43 @@ k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#3129-k_venc_roi
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.37 kd_mpi_venc_set_h264_entropy
 
 【描述】
+
 设置H.264协议编码通道的熵编码模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h264_entropy | H.264协议编码通道的熵编码模式。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1671,32 +1935,39 @@ k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#3
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.38 kd_mpi_venc_get_h264_entropy
 
 【描述】
+
 获取H.264协议编码通道的熵编码模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h264_entropy | H.264协议编码通道的熵编码模式。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1705,35 +1976,43 @@ k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#3130-k_
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.39 kd_mpi_venc_set_h265_entropy
 
 【描述】
+
 设置H.265协议编码通道的熵编码模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h265_entropy | H.265协议编码通道的熵编码模式。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1746,32 +2025,39 @@ k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#3
 - 本接口需要在创建编码通道之后，开始编码通道之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.1.40 kd_mpi_venc_get_h265_entropy
 
 【描述】
+
 获取H.265协议编码通道的熵编码模式。
 
 【语法】
+
 k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 通道号。 取值范围：[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | 输入 |
 | h265_entropy | H.265协议编码通道的熵编码模式。 | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，返回[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1780,12 +2066,15 @@ k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_
 - 库文件：libvenc.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 ### 2.2 视频解码
@@ -1806,24 +2095,29 @@ k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_
 #### 2.2.1 kd_mpi_vdec_create_chn
 
 【描述】
+
 创建视频解码通道。
 
 【语法】
+
 k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) \*attr);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | attr     | 解码通道属性指针。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1832,34 +2126,42 @@ k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.2 kd_mpi_vdec_destroy_chn
 
 【描述】
+
 销毁视频解码通道。
 
 【语法】
+
 k_s32 kd_mpi_vdec_destroy_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述  | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1868,34 +2170,42 @@ k_s32 kd_mpi_vdec_destroy_chn(k_u32 chn_num);
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.3 kd_mpi_vdec_start_chn
 
 【描述】
+
 开启视频解码通道。
 
 【语法】
+
 k_s32 kd_mpi_vdec_start_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1904,34 +2214,42 @@ k_s32 kd_mpi_vdec_start_chn(k_u32 chn_num);
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.4 kd_mpi_vdec_stop_chn
 
 【描述】
+
 停止视频解码通道。
 
 【语法】
+
 k_s32 kd_mpi_vdec_stop_chn(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1940,35 +2258,43 @@ k_s32 kd_mpi_vdec_stop_chn(k_u32 chn_num);
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.5 kd_mpi_vdec_query_status
 
 【描述】
+
 查询解码通道状态。
 
 【语法】
+
 k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#3114-(#324-k_vdec_chn_status) \*status);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | status   | 视频解码通道状态结构体指针。                                               | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -1977,20 +2303,25 @@ k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#3114-(#324-k_
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.6 kd_mpi_vdec_send_stream
 
 【描述】
+
 向视频解码通道发送码流数据。
 
 【语法】
+
 k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_stream) \*stream, k_s32 milli_sec);
 
 【参数】
@@ -2002,12 +2333,14 @@ k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_s
 | milli_sec | 送码流方式标志。 取值范围：  -1：阻塞。 0：非阻塞。 正值：超时时间，没有上限值，以ms为单位。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -2016,23 +2349,29 @@ k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_s
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.7 kd_mpi_vdec_get_frame
 
 【描述】
+
 获取视频解码通道的解码图像。
 
 【语法】
+
 k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_vdec_supplement_info](#327-k_vdec_supplement_info) \*supplement, k_s32 milli_sec);
 
 【参数】
+
 | 参数名称   | 描述 | 输入/输出 |
 |---|---|---|
 | chn | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。  输入 |
@@ -2041,12 +2380,14 @@ k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_v
 | milli_sec  | 送码流方式标志。 取值范围：  -1：阻塞。 0：非阻塞。 正值：超时时间，没有上限值，以ms为单位 动态属性。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -2055,35 +2396,43 @@ k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_v
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.8 kd_mpi_vdec_release_frame
 
 【描述】
+
 获取视频解码通道的解码图像。
 
 【语法】
+
 k_s32 kd_mpi_vdec_release_frame(k_u32 chn_num, const k_video_frame_info \*frame_info);
 
 【参数】
+
 | 参数名称   | 描述 | 输入/输出 |
 |---|---|---|
 | chn        | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | frame_info | 解码后的图像信息指针，由[kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame)接口获取，参考《K230 系统控制 API参考》。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -2092,35 +2441,43 @@ k_s32 kd_mpi_vdec_release_frame(k_u32 chn_num, const k_video_frame_info \*frame_
 - 库文件：libvdec.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame)
 
 #### 2.2.9 kd_mpi_vdec_set_downscale
 
 【描述】
+
 设置解码输出缩小的图像(指定长宽或按比例)。
 
 【语法】
+
 k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const  [k_vdec_downscale](#3211-k_vdec_downscale)  *downscale)
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | downscale    | 缩小尺寸参数结构体指针。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -2129,35 +2486,43 @@ k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const  [k_vdec_downscale](#3211-k
 - 库文件：libvdec.a
 
 【注意】
+
 在kd_mpi_vdec_create_chn和kd_mpi_vdec_start_chn之间设置。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 #### 2.2.10 kd_mpi_vdec_set_rotation
 
 【描述】
+
 设置解码旋转角度。
 
 【语法】
+
 k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotation) rotation)
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | rotation | 旋转角度枚举。 | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
 | 非0    | 失败，参见[错误码](#5-错误码)。 |
 
 【芯片差异】
+
 无。
 
 【需求】
@@ -2166,12 +2531,15 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 - 库文件：libvdec.a
 
 【注意】
+
 在kd_mpi_vdec_create_chn和kd_mpi_vdec_start_chn之间设置。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 ## 3. 数据类型
@@ -2215,6 +2583,7 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 #### 3.1.1 VENC_MAX_CHN_NUM
 
 【说明】
+
 定义最大通道个数。
 
 【定义】
@@ -2222,14 +2591,17 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 \#define VENC_MAX_CHN_NUM 4
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.2 K_VENC_MAX_2D_OSD_REGION_NUM
 
 【说明】
+
 定义2D运算叠加OSD的最大Region个数。
 
 【定义】
@@ -2237,14 +2609,17 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 \#define K_VENC_MAX_2D_OSD_REGION_NUM 8
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.3 K_VENC_MAX_2D_BORDER_NUM
 
 【说明】
+
 定义2D运算画框的最大个数。
 
 【定义】
@@ -2252,14 +2627,17 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 \#define K_VENC_MAX_2D_BORDER_NUM 32
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.4 K_VENC_2D_COFF_NUM
 
 【说明】
+
 定义2D运算CSC转换系数的个数。
 
 【定义】
@@ -2267,14 +2645,17 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 \#define K_VENC_2D_COFF_NUM 12
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.5 K_VENC_2D_MAX_CHN_NUM
 
 【说明】
+
 定义2D运算channel个数。
 
 【定义】
@@ -2282,26 +2663,31 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotati
 \#define K_VENC_2D_MAX_CHN_NUM 3
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.6 k_venc_rc_mode
 
 【说明】
+
 定义编码通道码率控制器模式。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_RC_MODE_CBR = 1,
-&emsp;K_VENC_RC_MODE_VBR,
-&emsp;K_VENC_RC_MODE_FIXQP,
-&emsp;K_VENC_RC_MODE_MJPEG_FIXQP,
-&emsp;K_VENC_RC_MODE_BUTT,
+
+typedef enum {  
+&emsp;K_VENC_RC_MODE_CBR = 1,  
+&emsp;K_VENC_RC_MODE_VBR,  
+&emsp;K_VENC_RC_MODE_FIXQP,  
+&emsp;K_VENC_RC_MODE_MJPEG_FIXQP,  
+&emsp;K_VENC_RC_MODE_BUTT,  
 } k_venc_rc_mode;
 
 【成员】
+
 | 成员名称 | 描述 |
 |---|---|
 | K_VENC_RC_MODE_CBR | H.264/H.265 CBR模式。 |
@@ -2310,25 +2696,30 @@ typedef enum {
 | K_VENC_RC_MODE_MJPEG_FIXQP | MJPEG Fixqp模式。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.7 k_venc_pack_type
 
 【说明】
+
 定义JPEG码流PACK类型枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_P_FRAME = 1,
-&emsp;K_VENC_I_FRAME = 2,
-&emsp;K_VENC_HEADER = 3,
-&emsp;K_VENC_BUTT
+
+typedef enum {  
+&emsp;K_VENC_P_FRAME = 1,  
+&emsp;K_VENC_I_FRAME = 2,  
+&emsp;K_VENC_HEADER = 3,  
+&emsp;K_VENC_BUTT  
 } k_venc_pack_type;
 
 【成员】
+
 | 成员名称       | 描述     |
 |----------------|----------|
 | K_VENC_P_FRAME | I帧。    |
@@ -2336,23 +2727,27 @@ typedef enum {
 | K_VENC_HEADER  | Header。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.8 k_venc_2d_calc_mode
 
 【说明】
+
 定义2d运算的计算模式枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_2D_CALC_MODE_CSC = 0,
-&emsp;K_VENC_2D_CALC_MODE_OSD,
-&emsp;K_VENC_2D_CALC_MODE_BORDER,
-&emsp;K_VENC_2D_CALC_MODE_OSD_BORDER,
-&emsp;K_VENC_2D_CALC_MODE_BUTT
+
+typedef enum {  
+&emsp;K_VENC_2D_CALC_MODE_CSC = 0,  
+&emsp;K_VENC_2D_CALC_MODE_OSD,  
+&emsp;K_VENC_2D_CALC_MODE_BORDER,  
+&emsp;K_VENC_2D_CALC_MODE_OSD_BORDER,  
+&emsp;K_VENC_2D_CALC_MODE_BUTT  
 } k_venc_2d_calc_mode;
 
 【成员】
@@ -2369,69 +2764,76 @@ typedef enum {
 - 目前不支持K_VENC_2D_CALC_MODE_CSC模式。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.9 k_venc_2d_src_dst_fmt
 
 【说明】
+
 定义2D运算的输入输出数据格式枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV12= 0,
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV21,
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_I420,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB1555,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB1555,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA5551,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX5551,
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR888,
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB565,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR565,
-&emsp;K_VENC_2D_SRC_DST_FMT_SEPERATE_RGB,
-&emsp;K_VENC_2D_SRC_DST_FMT_BUTT
+
+typedef enum {  
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV12= 0,  
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV21,  
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_I420,  
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,  
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB4444,  
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB1555,  
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB8888,  
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB4444,  
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB1555,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA8888,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA4444,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA5551,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX8888,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX4444,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX5551,  
+&emsp;K_VENC_2D_SRC_DST_FMT_RGB888,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGR888,  
+&emsp;K_VENC_2D_SRC_DST_FMT_RGB565,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BGR565,  
+&emsp;K_VENC_2D_SRC_DST_FMT_SEPERATE_RGB,  
+&emsp;K_VENC_2D_SRC_DST_FMT_BUTT  
 } k_venc_2d_src_dst_fmt;
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.10 k_venc_2d_osd_fmt
 
 【说明】
+
 定义2D运算的OSD层数据格式枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VENC_2D_OSD_FMT_ARGB8888= 0,
-&emsp;K_VENC_2D_OSD_FMT_ARGB4444,
-&emsp;K_VENC_2D_OSD_FMT_ARGB1555,
-&emsp;K_VENC_2D_OSD_FMT_XRGB8888,
-&emsp;K_VENC_2D_OSD_FMT_XRGB4444,
-&emsp;K_VENC_2D_OSD_FMT_XRGB1555,
-&emsp;K_VENC_2D_OSD_FMT_BGRA8888,
-&emsp;K_VENC_2D_OSD_FMT_BGRA4444,
-&emsp;K_VENC_2D_OSD_FMT_BGRA5551,
-&emsp;K_VENC_2D_OSD_FMT_BGRX8888,
-&emsp;K_VENC_2D_OSD_FMT_BGRX4444,
-&emsp;K_VENC_2D_OSD_FMT_BGRX5551,
-&emsp;K_VENC_2D_OSD_FMT_RGB888,
-&emsp;K_VENC_2D_OSD_FMT_BGR888,
-&emsp;K_VENC_2D_OSD_FMT_RGB565,
-&emsp;K_VENC_2D_OSD_FMT_BGR565,
-&emsp;K_VENC_2D_OSD_FMT_SEPERATE_RGB,
-&emsp;K_VENC_2D_OSD_FMT_BUTT
+
+typedef enum {  
+&emsp;K_VENC_2D_OSD_FMT_ARGB8888= 0,  
+&emsp;K_VENC_2D_OSD_FMT_ARGB4444,  
+&emsp;K_VENC_2D_OSD_FMT_ARGB1555,  
+&emsp;K_VENC_2D_OSD_FMT_XRGB8888,  
+&emsp;K_VENC_2D_OSD_FMT_XRGB4444,  
+&emsp;K_VENC_2D_OSD_FMT_XRGB1555,  
+&emsp;K_VENC_2D_OSD_FMT_BGRA8888,  
+&emsp;K_VENC_2D_OSD_FMT_BGRA4444,  
+&emsp;K_VENC_2D_OSD_FMT_BGRA5551,  
+&emsp;K_VENC_2D_OSD_FMT_BGRX8888,  
+&emsp;K_VENC_2D_OSD_FMT_BGRX4444,  
+&emsp;K_VENC_2D_OSD_FMT_BGRX5551,  
+&emsp;K_VENC_2D_OSD_FMT_RGB888,  
+&emsp;K_VENC_2D_OSD_FMT_BGR888,  
+&emsp;K_VENC_2D_OSD_FMT_RGB565,  
+&emsp;K_VENC_2D_OSD_FMT_BGR565,  
+&emsp;K_VENC_2D_OSD_FMT_SEPERATE_RGB,  
+&emsp;K_VENC_2D_OSD_FMT_BUTT  
 } k_venc_2d_osd_fmt;
 
 【注意事项】
@@ -2439,30 +2841,34 @@ typedef enum {
 - 目前叠加图像只支持ARGB8888、ARGB4444和ARGB1555的格式。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.11 k_venc_2d_add_order
 
 【说明】
+
 定义2D运算的OSD叠加（video、osd和背景层）顺序枚举。
 
 【定义】
-typedef enum {
-/\* bottom ------\> top \*/
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD= 0,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG,
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,
-&emsp;K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_BUTT
+
+typedef enum {  
+/\* bottom ------\> top \*/  
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD= 0,  
+&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO,  
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG,  
+&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO,  
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,  
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,  
+&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,  
+&emsp;K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,  
+&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,  
+&emsp;K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,  
+&emsp;K_VENC_2D_ADD_ORDER_BUTT  
 } k_venc_2d_add_order;
 
 【成员】
+
 | 成员名称                         | 描述                                     |
 |----------------------------------|------------------------------------------|
 | K_VENC_2D_ADD_ORDER_VIDEO_OSD    | Video在底层，OSD在顶层。                 |
@@ -2477,26 +2883,31 @@ typedef enum {
 | K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO | OSD在底层，背景色在中间层，video在顶层。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.12 k_rotation
 
 【说明】
+
 定义编码旋转角度枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VPU_ROTATION_0 = 0,
-&emsp;K_VPU_ROTATION_90 = 1,
-&emsp;K_VPU_ROTATION_180 = 2,
-&emsp;K_VPU_ROTATION_270 = 3,
-&emsp;K_VPU_ROTATION_BUTT
+
+typedef enum {  
+&emsp;K_VPU_ROTATION_0 = 0,  
+&emsp;K_VPU_ROTATION_90 = 1,  
+&emsp;K_VPU_ROTATION_180 = 2,  
+&emsp;K_VPU_ROTATION_270 = 3,  
+&emsp;K_VPU_ROTATION_BUTT  
 } k_rotation;
 
 【成员】
+
 | 成员名称             | 描述              |
 |----------------------|-------------------|
 | K_VPU_ROTATION_0    | 不旋转，旋转0度。 |
@@ -2505,50 +2916,59 @@ typedef enum {
 | K_VPU_ROTATION_270  | 旋转270度。       |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.13 k_venc_mirror
 
 【说明】
+
 定义编码翻转方式枚举。
 
 【定义】
 
-typedef enum {
-&emsp;K_VENC_MIRROR_HORI = 0,
-&emsp;K_VENC_MIRROR_VERT = 1,
-&emsp;K_VENC_MIRROR_BUTT
-} k_venc_mirror; |
+typedef enum {  
+&emsp;K_VENC_MIRROR_HORI = 0,  
+&emsp;K_VENC_MIRROR_VERT = 1,  
+&emsp;K_VENC_MIRROR_BUTT  
+} k_venc_mirror;
 
 【成员】
+
 | 成员名称             | 描述              |
 |----------------------|-------------------|
 | K_VENC_MIRROR_HORI   | 水平翻转。 |
 | K_VENC_MIRROR_VERT   | 垂直翻转。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.14 k_venc_2d_color_gamut
 
 【说明】
+
 定义2D运算的色域枚举。
 
 【定义】
-typedef enum {
-&emsp;VENC_2D_COLOR_GAMUT_BT601 = 0,
-&emsp;VENC_2D_COLOR_GAMUT_BT709,
-&emsp;VENC_2D_COLOR_GAMUT_BT2020,
-&emsp;VENC_2D_COLOR_GAMUT_BUTT
+
+typedef enum {  
+&emsp;VENC_2D_COLOR_GAMUT_BT601 = 0,  
+&emsp;VENC_2D_COLOR_GAMUT_BT709,  
+&emsp;VENC_2D_COLOR_GAMUT_BT2020,  
+&emsp;VENC_2D_COLOR_GAMUT_BUTT  
 } k_venc_2d_color_gamut;
 
 【成员】
+
 | 成员名称                   | 描述        |
 |----------------------------|-------------|
 | VENC_2D_COLOR_GAMUT_BT601  | BT.601色域  |
@@ -2556,50 +2976,60 @@ typedef enum {
 | VENC_2D_COLOR_GAMUT_BT2020 | BT.2020色域 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.15 k_venc_chn_attr
 
 【说明】
+
 定义编码通道属性结构体。
 
 【定义】
+
 typedef struct {
 &emsp;[k_venc_attr](#3116-k_venc_attr) venc_attr;
 &emsp;[k_venc_rc_attr](#3117-k_venc_rc_attr) rc_attr;
 } k_venc_chn_attr;
 
 【成员】
+
 | 成员名称  | 描述             |
 |-----------|------------------|
 | venc_attr | 编码器属性。     |
 | rc_attr   | 码率控制器属性。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.16 k_venc_attr
 
 【说明】
+
 定义编码器属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_u32 stream_buf_size;
-&emsp;k_u32 stream_buf_cnt;
-&emsp;k_u32 pic_width;
-&emsp;k_u32 pic_height;
-&emsp;k_venc_profile profile;
+
+typedef struct {  
+&emsp;k_payload_type type;  
+&emsp;k_u32 stream_buf_size;  
+&emsp;k_u32 stream_buf_cnt;  
+&emsp;k_u32 pic_width;  
+&emsp;k_u32 pic_height;  
+&emsp;k_venc_profile profile;  
 } k_venc_attr;
 
 【成员】
+
 | 成员名称 | 描述 |
 |---|---|
 | type            | 编码协议类型枚。 |
@@ -2611,27 +3041,32 @@ typedef struct {
 | pic_height      | 编码图像高度。 取值范围： `[MIN_HEIGHT, MAX_HEIGHT]`，以像素为 单位。 必须是MIN_ALIGN的整数倍。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.17 k_venc_rc_attr
 
 【说明】
+
 定义编码通道码率控制器属性结构体。
 
 【定义】
-typedef struct {
-&emsp;[k_venc_rc_mode](#316-k_venc_rc_mode) rc_mode;
-&emsp;union { [k_venc_cbr](#3118-k_venc_cbr) cbr;
-&emsp;&emsp;[k_venc_vbr](#3119-k_venc_vbr) vbr;
-&emsp;&emsp;[k_venc_fixqp](#3120-k_venc_fixqp) fixqp;
-&emsp;&emsp;[k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp) mjpeg_fixqp;
-&emsp;};
+
+typedef struct {  
+&emsp;[k_venc_rc_mode](#316-k_venc_rc_mode) rc_mode;  
+&emsp;union { [k_venc_cbr](#3118-k_venc_cbr) cbr;  
+&emsp;&emsp;[k_venc_vbr](#3119-k_venc_vbr) vbr;  
+&emsp;&emsp;[k_venc_fixqp](#3120-k_venc_fixqp) fixqp;  
+&emsp;&emsp;[k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp) mjpeg_fixqp;  
+&emsp;};  
 } k_venc_rc_attr;
 
 【成员】
+
 | 成员名称     | 描述                                        |
 |--------------|---------------------------------------------|
 | rc_mode      | RC模式。                                    |
@@ -2641,26 +3076,31 @@ typedef struct {
 | mjpeg_fixqp  | Mjpeg协议编码通道Fixqp模式属性。            |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.18 k_venc_cbr
 
 【说明】
+
 定义H.264/H.265编码通道CBR属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 gop;
-&emsp;k_u32 stats_time;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 bit_rate;
+
+typedef struct {  
+&emsp;k_u32 gop;  
+&emsp;k_u32 stats_time;  
+&emsp;k_u32 src_frame_rate;  
+&emsp;k_u32 dst_frame_rate;  
+&emsp;k_u32 bit_rate;  
 } k_venc_cbr;
 
 【成员】
+
 | 成员名称        | 描述                                               |
 |-----------------|----------------------------------------------------|
 | gop             | gop值。                                            |
@@ -2674,24 +3114,28 @@ typedef struct {
 - 如果设置的码率超过芯片手册中规定的最大实时码率，则不能保证实时编码。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.19 k_venc_vbr
 
 【说明】
+
 定义H.264/H.265编码通道VBR属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 gop;
-&emsp;k_u32 stats_time;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 max_bit_rate;
-&emsp;k_u32 bit_rate;
+
+typedef struct {  
+&emsp;k_u32 gop;  
+&emsp;k_u32 stats_time;  
+&emsp;k_u32 src_frame_rate;  
+&emsp;k_u32 dst_frame_rate;  
+&emsp;k_u32 max_bit_rate;  
+&emsp;k_u32 bit_rate;  
 } k_venc_vbr;
 
 【成员】
+
 | 成员名称        | 描述                                               |
 |-----------------|----------------------------------------------------|
 | gop             | gop值。                                            |
@@ -2702,25 +3146,30 @@ typedef struct {
 | bit_rate        | 平均bitrate，以kbps为单位。                        |
 
 【注意事项】
+
 请参见[k_venc_cbr](#3118-k_venc_cbr)关于src_frame_rate和dst_frame_rate的说明。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.20 k_venc_fixqp
 
 【说明】
+
 定义H.264/H.265编码通道Fixqp属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 gop;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 i_qp; k_u32 p_qp;
+
+typedef struct {  
+&emsp;k_u32 gop;  
+&emsp;k_u32 src_frame_rate;  
+&emsp;k_u32 dst_frame_rate;  
+&emsp;k_u32 i_qp; k_u32 p_qp;  
 } k_venc_fixqp;
 
 【成员】
+
 | 成员名称        | 描述                                   |
 |-----------------|----------------------------------------|
 | gop             | gop值。                                |
@@ -2730,24 +3179,29 @@ typedef struct {
 | q_qp            | P帧所有宏块Qp值。 取值范围： `[0, 51]`。 |
 
 【注意事项】
+
 请参见[k_venc_cbr](#3118-k_venc_cbr)关于src_frame_rate和dst_frame_rate的说明。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.21 k_venc_mjpeg_fixqp
 
 【说明】
+
 定义MJPEG编码通道Fixqp属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 q_factor;
+
+typedef struct {  
+&emsp;k_u32 src_frame_rate;  
+&emsp;k_u32 dst_frame_rate;  
+&emsp;k_u32 q_factor;  
 } k_venc_mjpeg_fixqp;
 
 【成员】
+
 | 成员名称        | 描述                                      |
 |-----------------|-------------------------------------------|
 | src_frame_rate  | 输入帧率，以fps为单位。                   |
@@ -2755,24 +3209,29 @@ typedef struct {
 | q_factor        | MJPEG编码的Qfactor。 取值范围： `[1, 99]`。 |
 
 【注意事项】
+
 请参见[k_venc_cbr](#3118-k_venc_cbr)关于src_frame_rate和dst_frame_rate的说明。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.22 k_venc_chn_status
 
 【说明】
+
 定义编码通道的状态结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 cur_packs;
-&emsp;k_u64 release_pic_pts;
-&emsp;k_bool end_of_stream;
+
+typedef struct {  
+&emsp;k_u32 cur_packs;  
+&emsp;k_u64 release_pic_pts;  
+&emsp;k_bool end_of_stream;  
 } k_venc_chn_status;
 
 【成员】
+
 | 成员名称         | 描述                    |
 |------------------|-------------------------|
 | cur_packs        | 当前帧的码流包个数。    |
@@ -2780,48 +3239,58 @@ typedef struct {
 | end_of_stream    | Stream结束标志位。      |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.23 k_venc_stream
 
 【说明】
+
 定义帧码流类型结构体。
 
 【定义】
-typedef struct {
-&emsp;[k_venc_pack](#3124-k_venc_pack) \*pack;
-&emsp;k_u32 pack_cnt;
+
+typedef struct {  
+&emsp;[k_venc_pack](#3124-k_venc_pack) \*pack;  
+&emsp;k_u32 pack_cnt;  
 } k_venc_stream;
 
 【成员】
+
 | 成员名称 | 描述                     |
 |----------|--------------------------|
 | pack     | 帧码流包结构。           |
 | pack_cnt | 一帧码流的所有包的个数。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.24 k_venc_pack
 
 【说明】
+
 定义帧码流包结构体。
 
 【定义】
-&emsp;typedef struct {
-&emsp;k_u64 phys_addr;
-&emsp;k_u32 len;
-&emsp;k_u64 pts;
-&emsp;[k_venc_pack_type](#317-k_venc_pack_type) type;
+
+&emsp;typedef struct {  
+&emsp;k_u64 phys_addr;  
+&emsp;k_u32 len;  
+&emsp;k_u64 pts;  
+&emsp;[k_venc_pack_type](#317-k_venc_pack_type) type;  
 } k_venc_pack;
 
 【成员】
+
 | 成员名称   | 描述                |
 |------------|---------------------|
 | phys_addr  | 码流包物理地址。    |
@@ -2830,32 +3299,37 @@ typedef struct {
 | type       | 包数据类型。        |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.25 k_venc_2d_osd_attr
 
 【说明】
+
 2D叠加属性结构体。
 
 【定义】
-typedef struct{
-&emsp;k_u16 width;
-&emsp;k_u16 height;
-&emsp;k_u16 startx;
-&emsp;k_u16 starty;
-&emsp;k_u32 phys_addr`[3]`;
-&emsp;k_u8 bg_alpha;
-&emsp;k_u8 osd_alpha;
-&emsp;k_u8 video_alpha;
-&emsp;[k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;
-&emsp;k_u32 bg_color;
-&emsp;[k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;
+
+typedef struct{  
+&emsp;k_u16 width;  
+&emsp;k_u16 height;  
+&emsp;k_u16 startx;  
+&emsp;k_u16 starty;  
+&emsp;k_u32 phys_addr`[3]`;  
+&emsp;k_u8 bg_alpha;  
+&emsp;k_u8 osd_alpha;  
+&emsp;k_u8 video_alpha;  
+&emsp;[k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;  
+&emsp;k_u32 bg_color;  
+&emsp;[k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;  
 } k_venc_2d_osd_attr;
 
 【成员】
+
 | 成员名称    | 描述                                                                      |
 |-------------|---------------------------------------------------------------------------|
 | width       | OSD叠加区域的宽度。                                                       |
@@ -2877,24 +3351,28 @@ typedef struct{
 - OSD的src和dst地址必须相同。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.26 k_venc_2d_border_attr
 
 【说明】
+
 2D画框结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u16 width;
-&emsp;k_u16 height;
-&emsp;k_u16 line_width;
-&emsp;k_u32 color;
-&emsp;k_u16 startx;
-&emsp;k_u16 starty;
+
+typedef struct {  
+&emsp;k_u16 width;  
+&emsp;k_u16 height;  
+&emsp;k_u16 line_width;  
+&emsp;k_u32 color;  
+&emsp;k_u16 startx;  
+&emsp;k_u16 starty;  
 } k_venc_2d_border_attr;
 
 【成员】
+
 | 成员名称   | 描述                                                                 |
 |------------|----------------------------------------------------------------------|
 | width      | 画框区域的宽度，此为外框宽度，包含线宽。                             |
@@ -2911,42 +3389,50 @@ typedef struct {
 - src和dst地址必须相同。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.27 k_venc_h265_sao
 
 【说明】
+
 定义H.265协议编码通道Sao的结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 slice_sao_luma_flag;
-&emsp;k_u32 slice_sao_chroma_flag;
+
+typedef struct {  
+&emsp;k_u32 slice_sao_luma_flag;  
+&emsp;k_u32 slice_sao_chroma_flag;  
 } k_venc_h265_sao;
 
 【成员】
+
 | 成员名称 | 描述 |
 |:--|:--|
 | slice_sao_luma_flag | 默认为1。取值范围：0或1。 |
 | slice_sao_chroma_flag | 默认为1。取值范围：0或1。 |
 
 【注意事项】
+
 无。
 
 #### 3.1.28 k_venc_rect
 
 【说明】
+
 定义矩形区域信息结构体。
 
 【定义】
-typedef struct {
-&emsp;k_s32 left;
-&emsp;k_s32 right;
-&emsp;k_u32 top;
-&emsp;k_u32 bottom;
+
+typedef struct {  
+&emsp;k_s32 left;  
+&emsp;k_s32 right;  
+&emsp;k_u32 top;  
+&emsp;k_u32 bottom;  
 } k_venc_rect;
 
 【成员】
+
 | 成员名称 | 描述 |
 |:--|:--|
 | left   | Left offset。 |
@@ -2955,26 +3441,31 @@ typedef struct {
 | bottom | Bottom offset。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.29 k_venc_roi_attr
 
 【说明】
+
 定义编码感兴趣区域信息。
 
 【定义】
-typedef struct {
-&emsp;k_u32 idx;
-&emsp;k_bool enable;
-&emsp;k_bool is_abs_qp;
-&emsp;k_s32 qp;
-&emsp;[k_venc_rect](#3128-k_venc_rect) rect;
+
+typedef struct {  
+&emsp;k_u32 idx;  
+&emsp;k_bool enable;  
+&emsp;k_bool is_abs_qp;  
+&emsp;k_s32 qp;  
+&emsp;[k_venc_rect](#3128-k_venc_rect) rect;  
 } k_venc_roi_attr;
 
 【成员】
+
 | 成员名称 | 描述 |
 |:--|:--|
 | idx | ROI区域的索引，系统支持的索引范围为`[0,15]`，不支持超出这个范围的索引。 |
@@ -2984,53 +3475,65 @@ typedef struct {
 | rect | ROI区域。left、 right、 top、bottom必须是16对齐。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.30 k_venc_h264_entropy
 
 【说明】
+
 定义H.264协议编码通道熵编码结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 entropy_coding_mode;
-&emsp;k_u32 cabac_init_idc;
+
+typedef struct {  
+&emsp;k_u32 entropy_coding_mode;  
+&emsp;k_u32 cabac_init_idc;  
 } k_venc_h264_entropy;
 
 【成员】
+
 | 成员名称 | 描述 |
 |:--|:--|
 | entropy_coding_mode | 熵编码模式。0： cavlc。1： cabac。>=2没有意义。Baseline不支持cabac。 默认值为1。|
 | cabac_init_idc | 取值范围： `[0, 2]`, 默认值0，具体含义请参见H.264协议。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.1.31 k_venc_h265_entropy
 
 【说明】
+
 定义H.265协议编码通道熵编码结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 cabac_init_flag;
+
+typedef struct {  
+&emsp;k_u32 cabac_init_flag;  
 } k_venc_h265_entropy;
 
 【成员】
+
 | 成员名称 | 描述 |
-|:--|:--||
+|:--|:--|
 | cabac_init_flag | 取值范围： `[0, 1]`, 默认值1，具体含义请参见H.265协议。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 ### 3.2 视频解码
@@ -3048,6 +3551,7 @@ typedef struct {
 #### 3.2.1 K_VDEC_MAX_CHN_NUM
 
 【说明】
+
 定义最大通道个数。
 
 【定义】
@@ -3055,53 +3559,63 @@ typedef struct {
 \#define K_VDEC_MAX_CHN_NUM 4
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.2 k_vdec_send_mode
 
 【说明】
+
 定义解码通道属性结构体。
 
 【定义】
-typedef enum {
-&emsp;K_VDEC_SEND_MODE_STREAM = 0,
-&emsp;K_VDEC_SEND_MODE_FRAME,
-&emsp;K_VDEC_SEND_MODE_BUTT
+
+typedef enum {  
+&emsp;K_VDEC_SEND_MODE_STREAM = 0,  
+&emsp;K_VDEC_SEND_MODE_FRAME,  
+&emsp;K_VDEC_SEND_MODE_BUTT  
 } k_vdec_send_mode;
 
 【成员】
+
 | 成员名称                | 描述                           |
 |-------------------------|--------------------------------|
 | K_VDEC_SEND_MODE_STREAM | 按流方式发送码流。             |
 | OT_VDEC_SEND_MODE_FRAME | 按帧方式发送码流。以帧为单位。 |
 
 【注意事项】
+
 目前只支持流式发送。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.3 k_vdec_chn_attr
 
 【说明】
+
 定义解码通道属性结构体。
 
 【定义】
-typedef struct {
-&emsp;k_payload_type type;
-&emsp;[k_vdec_send_mode](#322-k_vdec_send_mode) mode;
-&emsp;k_u32 pic_width;
-&emsp;k_u32 pic_height;
-&emsp;k_u32 stream_buf_size;
-&emsp;k_u32 frame_buf_size;
-&emsp;k_u32 frame_buf_cnt;
-&emsp;k_pixel_format pic_format;
+
+typedef struct {  
+&emsp;k_payload_type type;  
+&emsp;[k_vdec_send_mode](#322-k_vdec_send_mode) mode;  
+&emsp;k_u32 pic_width;  
+&emsp;k_u32 pic_height;  
+&emsp;k_u32 stream_buf_size;  
+&emsp;k_u32 frame_buf_size;  
+&emsp;k_u32 frame_buf_cnt;  
+&emsp;k_pixel_format pic_format;  
 } k_vdec_chn_attr;
 
 【成员】
+
 | 成员名称         | 描述                                              |
 |------------------|---------------------------------------------------|
 | type             | 解码协议类型枚举值。                              |
@@ -3117,24 +3631,27 @@ typedef struct {
 - 目前支持的pic_format为：PIXEL_FORMAT_YUV_SEMIPLANAR_420和PIXEL_FORMAT_YVU_PLANAR_420。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.4 k_vdec_chn_status
 
 【说明】
+
 定义通道状态结构体。
 
 【定义】
-typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_bool is_started;
-&emsp;k_u32 recv_stream_frames;
-&emsp;k_u32 dec_stream_frames;
-&emsp;[k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;
-&emsp;k_u32 width;
-&emsp;k_u32 height;
-&emsp;k_u64 latest_frame_pts;
-&emsp;k_bool end_of_stream;
+
+typedef struct {  
+&emsp;k_payload_type type;  
+&emsp;k_bool is_started;  
+&emsp;k_u32 recv_stream_frames;  
+&emsp;k_u32 dec_stream_frames;  
+&emsp;[k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;  
+&emsp;k_u32 width;  
+&emsp;k_u32 height;  
+&emsp;k_u64 latest_frame_pts;  
+&emsp;k_bool end_of_stream;  
 } k_vdec_chn_status;
 
 【成员】
@@ -3152,24 +3669,29 @@ typedef struct {
 | end_of_stream       | Stream结束标志位。                                             |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.5 k_vdec_dec_err
 
 【说明】
+
 定义解码错误信息结构体。
 
 【定义】
-typedef struct {
-&emsp;k_s32 set_pic_size_err;
-&emsp;k_s32 format_err;
-&emsp;k_s32 stream_unsupport;
+
+typedef struct {  
+&emsp;k_s32 set_pic_size_err;  
+&emsp;k_s32 format_err;  
+&emsp;k_s32 stream_unsupport;  
 } k_vdec_dec_err;
 
 【成员】
+
 | 成员名称          | 描述                                                     |
 |-------------------|----------------------------------------------------------|
 | set_pic_size_err  | 图像的宽（或高）比通道的宽（或高）大。                   |
@@ -3177,25 +3699,30 @@ typedef struct {
 | stream_unsupport  | 不支持的规格（码流规格与解决方案宣称支持的规格不一致）。 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.6 k_vdec_stream
 
 【说明】
+
 定义视频解码的码流结构体。
 
 【定义】
-typedef struct {
-&emsp;k_bool end_of_stream;
-&emsp;k_u64 pts;
-&emsp;k_u32 len;
-&emsp;k_u8 \* addr;
+
+typedef struct {  
+&emsp;k_bool end_of_stream;  
+&emsp;k_u64 pts;  
+&emsp;k_u32 len;  
+&emsp;k_u8 \* addr;  
 } k_vdec_stream;
 
 【成员】
+
 | 成员名称      | 描述                         |
 |---------------|------------------------------|
 | end_of_stream | 是否发完所有码流。           |
@@ -3204,24 +3731,29 @@ typedef struct {
 | addr          | 码流包的地址。               |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.7 k_vdec_supplement_info
 
 【说明】
+
 定义输出帧补充信息。
 
 【定义】
-typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_bool is_valid_frame;
-&emsp;k_bool end_of_stream;
+
+typedef struct {  
+&emsp;k_payload_type type;  
+&emsp;k_bool is_valid_frame;  
+&emsp;k_bool end_of_stream;  
 } k_vdec_supplement_info;
 
 【成员】
+
 | 成员名称       | 描述                 |
 |----------------|----------------------|
 | type           | 解码协议类型枚举值。 |
@@ -3229,97 +3761,117 @@ typedef struct {
 | end_of_stream  | Stream结束标志位。   |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.8 k_vdec_dsl_mode
 
 【说明】
+
 定义解码减小尺寸模式枚举。
 
 【定义】
-typedef enum {
-&emsp;K_VDEC_DSL_MODE_BY_SIZE,
-&emsp;K_VDEC_DSL_MODE_BY_RATIO,
-&emsp;K_VDEC_DSL_MODE_BUTT
+
+typedef enum {  
+&emsp;K_VDEC_DSL_MODE_BY_SIZE,  
+&emsp;K_VDEC_DSL_MODE_BY_RATIO,  
+&emsp;K_VDEC_DSL_MODE_BUTT  
 } k_vdec_dsl_mode;
 
 【成员】
+
 | 成员名称                | 描述                           |
 |-------------------------|--------------------------------|
 | K_VDEC_DSL_MODE_BY_SIZE | 根据尺寸减小。             |
 | K_VDEC_DSL_MODE_BY_RATIO | 根据比例减小。            |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.9 k_vdec_dsl_size
 
 【说明】
+
 定义解码按照大小减小尺寸参数结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u32 dsl_frame_width;
-&emsp;k_u32 dsl_frame_height;
+
+typedef struct {  
+&emsp;k_u32 dsl_frame_width;  
+&emsp;k_u32 dsl_frame_height;  
 } k_vdec_dsl_size;
 
 【成员】
+
 | 成员名称                | 描述                           |
 |-------------------------|--------------------------------|
 | dsl_frame_width | 减小尺寸后的宽度。             |
 | dsl_frame_height | 减小尺寸后的高度。            |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.10 k_vdec_dsl_ratio
 
 【说明】
+
 定义解码按照比例减小尺寸参数结构体。
 
 【定义】
-typedef struct {
-&emsp;k_u8 dsl_ratio_hor;
-&emsp;k_u8 dsl_ratio_ver;
+
+typedef struct {  
+&emsp;k_u8 dsl_ratio_hor;  
+&emsp;k_u8 dsl_ratio_ver;  
 } k_vdec_dsl_ratio;
 
 【成员】
+
 | 成员名称                | 描述                           |
 |-------------------------|--------------------------------|
 | dsl_frame_width | 减小尺寸水平方向的比例。             |
 | dsl_frame_height | 减小尺寸垂直方向的比例。            |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 #### 3.2.11 k_vdec_downscale
 
 【说明】
+
 缩小尺寸结构体。
 
 【定义】
-typedef struct {
-    &emsp;[k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;
-    &emsp;union
-    {
-    &emsp;&emsp;[k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;
-    &emsp;&emsp;[k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;
-    };
+
+typedef struct {  
+    &emsp;[k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;  
+    &emsp;union  
+    {  
+    &emsp;&emsp;[k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;  
+    &emsp;&emsp;[k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;  
+    };  
 } k_vdec_downscale;
 
 【成员】
+
 | 成员名称       | 描述                 |
 |----------------|----------------------|
 | dsl_mode       | 减小尺寸模式枚举。 |
@@ -3327,9 +3879,11 @@ typedef struct {
 | dsl_ratio      | 按照比例减小尺寸参数结构体。   |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 无。
 
 ## 4. MAPI
@@ -3379,27 +3933,33 @@ MAPI是在小核调用，用以获取venc的码流数据。
 ##### 4.1.3.1 kd_mapi_venc_init
 
 【描述】
+
 初始化编码通道。
 
 【语法】
+
 k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#3115-k_venc_chn_attr) \* pst_venc_attr)
 
 【参数】
+
 | 参数名称      | 描述                                        | 输入/输出 |
 |---------------|---------------------------------------------|-----------|
 | chn_num       | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 | pst_venc_attr | VENC 通道属性指针。 静态属性。              | 输入      |
 
 【返回值】
+
 | 返回值 | 描述               |
 |--------|--------------------|
 | 0      | 成功               |
 | 非0    | 失败，其值为错误码 |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
@@ -3409,71 +3969,88 @@ k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#3115-k_venc_chn_attr) 
 - 重复初始化返回成功
 
 【举例】
+
 请参考sample_venc代码
 
 【相关主题】
+
 [kd_mapi_venc_deinit](#4132-kd_mapi_venc_deinit)
 [k_venc_chn_attr](#3115-k_venc_chn_attr)
 
 ##### 4.1.3.2 kd_mapi_venc_deinit
 
 【描述】
+
 编码通道去初始化。
 
 【语法】
+
 k_s32 kd_mapi_venc_deinit(k_u32 chn_num)
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_init](#4131-kd_mapi_venc_init)
 
 ##### 4.1.3.3 kd_mapi_venc_registercallback
 
 【描述】
+
 注册编码通道回调函数，用于编码数据的获取。
 
 【语法】
+
 k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) \*pst_venc_cb);
 
 【参数】
+
 | 参数名称    | 描述                                        | 输入/输出 |
 |-------------|---------------------------------------------|-----------|
 | chn_num     | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 | pst_venc_cb | 编码器回调函数结构体指针。                  | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
@@ -3484,73 +4061,90 @@ k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd
 - 每个通道最多支持五个回调函数。
 
 【举例】
+
 无
 
 【相关主题】
+
 kd_mapi_venc_unregistercallback
 kd_venc_callback_s
 
 ##### 4.1.3.4 kd_mapi_venc_unregistercallback
 
 【描述】
+
 解注册编码通道回调函数。
 
 【语法】
+
 k_s32 kd_mapi_venc_unregistercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) \*pst_venc_cb);
 
 【参数】
+
 | 参数名称    | 描述                                        | 输入/输出 |
 |-------------|---------------------------------------------|-----------|
 | chn_num     | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 | pst_venc_cb | 编码器回调函数结构体指针。                  | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 pst_venc_cb回调函数结构体内容与注册时的结构体内容完全一致时才能解注册该回调函数。
 
 【举例】
+
 无
 
 【相关主题】
+
 [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
 
 ##### 4.1.3.5 kd_mapi_venc_start
 
 【描述】
+
 启动编码通道。
 
 【语法】
+
 k_s32 kd_mapi_venc_start(k_s32 chn_num ,k_s32 s32_frame_cnt);
 
 【参数】
+
 | 参数名称      | 描述                                        | 输入/输出 |
 |---------------|---------------------------------------------|-----------|
 | chn_num       | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 | s32_frame_cnt | 期望编码帧的个数                            | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
@@ -3563,55 +4157,69 @@ k_s32 kd_mapi_venc_start(k_s32 chn_num ,k_s32 s32_frame_cnt);
 - 编码完成的标记请查看[kd_venc_data_s](#4143-kd_venc_data_s) 中end_of_stream。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_stop](#4136-kd_mapi_venc_stop)
 
 ##### 4.1.3.6 kd_mapi_venc_stop
 
 【描述】
+
 停止编码通道。
 
 【语法】
+
 k_s32 kd_mapi_venc_stop(k_s32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 ##### 4.1.3.7 kd_mapi_venc_bind_vi
 
 【描述】
+
 编码通道绑定输入源VI
 
 【语法】
+
 k_s32 kd_mapi_venc_bind_vi(k_s32 src_dev, k_s32 src_chn,k_s32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | src_dev  | 输入源Device ID                             | 输入      |
@@ -3619,36 +4227,45 @@ k_s32 kd_mapi_venc_bind_vi(k_s32 src_dev, k_s32 src_chn,k_s32 chn_num);
 | chn_num  | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_unbind_vi](#4138-kd_mapi_venc_unbind_vi)
 
 ##### 4.1.3.8 kd_mapi_venc_unbind_vi
 
 【描述】
+
 解绑定编码通道的输入源VI。
 
 【语法】
+
 k_s32 kd_mapi_venc_unbind_vi(k_s32 src_dev, k_s32 src_chn, k_s32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | src_dev  | 输入源Device ID                             | 输入      |
@@ -3656,86 +4273,107 @@ k_s32 kd_mapi_venc_unbind_vi(k_s32 src_dev, k_s32 src_chn, k_s32 chn_num);
 | chn_num  | VENC 通道号 取值范围：[0, VENC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_bind_vi](#4137-kd_mapi_venc_bind_vi)
 
 ##### 4.1.3.9 kd_mapi_venc_request_idr
 
 【描述】
+
 请求IDR帧，在调用之后立即产生一个IDR帧。
 
 【语法】
+
 k_s32 kd_mapi_venc_request_idr(k_s32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VENC 通道号 取值范围：`[0, VENC_MAX_CHN_NUM]`   | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 ##### 4.1.3.10 kd_mapi_venc_enable_idr
 
 【描述】
+
 使能IDR帧，根据GOP间隔产生IDR帧。
 
 【语法】
+
 k_s32 kd_mapi_venc_enable_idr(k_s32 chn_num, k_bool idr_enable);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VENC 通道号 取值范围：`[0, VENC_MAX_CHN_NUM]`   | 输入      |
 | idr_enable  | 是否是能IDR帧，0:不使能 1:使能              | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
@@ -3744,34 +4382,40 @@ k_s32 kd_mapi_venc_enable_idr(k_s32 chn_num, k_bool idr_enable);
 - 该接口应在[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)之后，[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)之前调用。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 #### 4.1.4 数据类型
 
 视频编码相关的数据类型定义如下：
-[kd_venc_callback_s](#4141-kd_venc_callback_s)
-[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-[kd_venc_data_s](#4143-kd_venc_data_s)
-[k_venc_data_pack_s](#4144-k_venc_data_pack_s)
-[KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)
-[KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
+
+- [kd_venc_callback_s](#4141-kd_venc_callback_s)
+- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+- [kd_venc_data_s](#4143-kd_venc_data_s)
+- [k_venc_data_pack_s](#4144-k_venc_data_pack_s)
+- [KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)
+- [KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
 
 ##### 4.1.4.1 kd_venc_callback_s
 
 【说明】
+
 编码回调函数结构体。
 
 【定义】
-typedef struct
-{
-&emsp;[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-&emsp;k_u8 \*p_private_data;
+
+typedef struct  
+{  
+&emsp;[pfn_venc_dataproc](#4142-pfn_venc_dataproc)  
+&emsp;k_u8 \*p_private_data;  
 }kd_venc_callback_s;
 
 【成员】
+
 | 成员名称       | 描述                                                  |
 |----------------|-------------------------------------------------------|
 | pfn_data_cb    | 回调处理函数。用于获取编码数据                        |
@@ -3783,19 +4427,23 @@ typedef struct
 - p_private_data为私有数据，用户可选用。
 
 【相关数据类型及接口】
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-[kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
-[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+
+- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
 
 ##### 4.1.4.2 pfn_venc_dataproc
 
 【说明】
+
 定义编码数据回调函数。
 
 【定义】
+
 typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_data_pack_s) \*p_vstream_data, k_u8 \*p_private_data);
 
 【成员】
+
 | 成员名称       | 描述         |
 |----------------|--------------|
 | chn_num        | 编码通道句柄 |
@@ -3803,18 +4451,22 @@ typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_
 | p_private_data | 私有数据指针 |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-[kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+
+- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
 
 ##### 4.1.4.3 kd_venc_data_s
 
 【说明】
+
 编码后的数据包类型。
 
 【定义】
+
 typedef struct
 {
 &emsp;[k_venc_chn_status](#3122-k_venc_chn_status);
@@ -3823,6 +4475,7 @@ typedef struct
 }kd_venc_data_s;
 
 【成员】
+
 | 成员名称     | 描述     |
 |--------------|----------|
 | status       | 通道状态 |
@@ -3830,28 +4483,33 @@ typedef struct
 | astPack      | 数据包   |
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 ##### 4.1.4.4 k_venc_data_pack_s
 
 【说明】
+
 编码后的数据包类型。
 
 【定义】
-typedef struct
-{
-&emsp;k_char * vir_addr;
-&emsp;k_u64 phys_addr;
-&emsp;k_u32 len;
-&emsp;k_u64 pts;
-&emsp;k_venc_pack_type type;
+
+typedef struct  
+{  
+&emsp;k_char * vir_addr;  
+&emsp;k_u64 phys_addr;  
+&emsp;k_u32 len;  
+&emsp;k_u64 pts;  
+&emsp;k_venc_pack_type type;  
 }k_venc_data_pack_s;
 
 【成员】
+
 | 成员名称  | 描述             |
 |-----------|------------------|
 | vir_addr  | 数据包的虚拟地址 |
@@ -3861,14 +4519,17 @@ typedef struct
 | type      | 码流PACK类型     |
 
 【注意事项】
+
 vir_addr和phys_addr都有一个地址；
 
 【相关数据类型及接口】
+
 [kd_venc_data_s](#4143-kd_venc_data_s)
 
 ##### 4.1.4.5 KD_VENC_MAX_FRAME_PACKCOUNT
 
 【说明】
+
 定义每帧数据中包的最大个数。
 
 【定义】
@@ -3876,14 +4537,17 @@ vir_addr和phys_addr都有一个地址；
 \#define KD_VENC_MAX_FRAME_PACKCOUNT 12
 
 【注意事项】
+
 无
 
 【相关数据类型及接口】
+
 无
 
 ##### 4.1.4.6 KD_VENC_LIMITLESS_FRAME_COUNT
 
 【说明】
+
 定义视频无限制编码。
 
 【定义】
@@ -3891,9 +4555,11 @@ vir_addr和phys_addr都有一个地址；
 \#define KD_VENC_LIMITLESS_FRAME_COUNT -1
 
 【注意事项】
+
 无。
 
 【相关数据类型及接口】
+
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 ### 4.2 视频解码
@@ -3923,27 +4589,33 @@ vir_addr和phys_addr都有一个地址；
 ##### 4.2.1.1 kd_mapi_vdec_init
 
 【描述】
+
 初始化解码通道。
 
 【语法】
+
 k_s32 kd_mapi_vdec_init(k_u32 chn_num,const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
 
 【参数】
+
 | 参数名称      | 描述                                        | 输入/输出 |
 |---------------|---------------------------------------------|-----------|
 | chn_num       | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM) | 输入      |
 | attr          | VDEC 通道属性指针。 静态属性。              | 输入      |
 
 【返回值】
+
 | 返回值 | 描述               |
 |--------|--------------------|
 | 0      | 成功               |
 | 非0    | 失败，其值为错误码 |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
@@ -3953,124 +4625,156 @@ k_s32 kd_mapi_vdec_init(k_u32 chn_num,const [k_vdec_chn_attr](#323-k_vdec_chn_at
 - 重复初始化返回成功
 
 【举例】
+
 请参考sample_vdec代码
 
 【相关主题】
+
 [kd_mapi_vdec_deinit](#4212-kd_mapi_vdec_deinit)
 
 ##### 4.2.1.2 kd_mapi_vdec_deinit
 
 【描述】
+
 编码通道去初始化。
 
 【语法】
+
 k_s32 kd_mapi_vdec_deinit(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_vdec_init](#4211-kd_mapi_vdec_init)
 
 ##### 4.2.1.3 kd_mapi_vdec_start
 
 【描述】
+
 启动解码通道。
 
 【语法】
+
 k_s32 kd_mapi_vdec_start(k_u32 chn_num);
 
 【参数】
+
 | 参数名称      | 描述                                        | 输入/输出 |
 |---------------|---------------------------------------------|-----------|
 | chn_num       | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无 。
 
 【需求】
+
 头文件：mapi_venc_api.h、k_venc_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_vdec_stop](#4214-kd_mapi_vdec_stop)
 
 ##### 4.2.1.4 kd_mapi_vdec_stop
 
 【描述】
+
 停止解码通道。
 
 【语法】
+
 k_s32 kd_mapi_vdec_stop(k_u32 chn_num);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM) | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_vdec_start](#4213-kd_mapi_vdec_start)
 
 ##### 4.2.1.5 kd_mapi_vdec_bind_vo
 
 【描述】
+
 解码通道绑定输出源VO
 
 【语法】
+
 k_s32 kd_mapi_vdec_bind_vo(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM)  | 输入      |
@@ -4078,36 +4782,45 @@ k_s32 kd_mapi_vdec_bind_vo(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
 | vo_chn   | 输出vo device channel                       | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_vdec_unbind_vo](#4216-kd_mapi_vdec_unbind_vo)
 
 ##### 4.2.1.6 kd_mapi_vdec_unbind_vo
 
 【描述】
+
 解绑定解码通道的输出源VO。
 
 【语法】
+
 k_s32 kd_mapi_vdec_unbind_ao(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM)  | 输入      |
@@ -4115,36 +4828,45 @@ k_s32 kd_mapi_vdec_unbind_ao(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
 | vo_chn   | 输出vo device channel                       | 输入      |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 [kd_mapi_vdec_bind_vo](#4215-kd_mapi_vdec_bind_vo)
 
 ##### 4.2.1.7 kd_mapi_vdec_send_stream
 
 【描述】
+
 发送stream数据解码。
 
 【语法】
+
 k_s32 kd_mapi_vdec_send_stream(k_u32 chn_num, [k_vdec_stream](#326-k_vdec_stream) *stream, k_s32 milli_sec);
 
 【参数】
+
 | 参数名称 | 描述                                        | 输入/输出 |
 |----------|---------------------------------------------|-----------|
 | chn_num  | VDEC 通道号 取值范围：[0, VDEC_MAX_CHN_NUM)  | 输入      |
@@ -4152,61 +4874,76 @@ k_s32 kd_mapi_vdec_send_stream(k_u32 chn_num, [k_vdec_stream](#326-k_vdec_stream
 | milli_sec | 送码流方式标志。 取值范围：  -1：阻塞。 0：非阻塞。 正值：超时时间，没有上限值，以ms为单位。 | 输入 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 ##### 4.2.1.8 kd_mapi_vdec_query_status
 
 【描述】
+
 查询解码通道状态。
 
 【语法】
+
 k_s32 kd_mapi_vdec_query_status(k_u32 chn_num, k_vdec_chn_status *status);
 
 【参数】
+
 | 参数名称 | 描述 | 输入/输出 |
 |---|---|---|
 | chn_num  | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。 | 输入 |
 | status   | 视频解码通道状态结构体指针。                                               | 输出 |
 
 【返回值】
+
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
 | 非0    | 失败，其值为[错误码](#5-错误码) |
 
 【芯片差异】
+
 无。
 
 【需求】
+
 头文件：mapi_vdec_api.h、k_vdec_comm.h
 库文件：libmapi.a libipcmsg.a libdatafifo.a
 
 【注意】
+
 无。
 
 【举例】
+
 无。
 
 【相关主题】
+
 无。
 
 ## 5. 错误码

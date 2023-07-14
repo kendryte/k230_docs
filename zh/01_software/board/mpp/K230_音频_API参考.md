@@ -3377,36 +3377,36 @@ typedef k_u32 k_handle;
 
 | 错误代码 | 宏定义                 | 描述                        |
 |----------|------------------------|-----------------------------|
-|          | K_ERR_AI_INVALID_DEVID | 音频输入设备号无效          |
-|          | K_ERR_AI_INVALID_CHNID | 音频输入通道号无效          |
-|          | K_ERR_AI_ILLEGAL_PARAM | 音频输入参数设置无效        |
-|          | K_ERR_AI_NOT_ENABLED   | 音频输入设备或通道没有使 能 |
-|          | K_ERR_AI_NULL_PTR      | 输入参数空指针错误          |
-|          | K_ERR_AI_NOT_CFG       | 音频输入设备属性未设置      |
-|          | K_ERR_AI_NOT_SUPPORT   | 操作不支持                  |
-|          | K_ERR_AI_NOT_PERM      | 操作不允许                  |
-|          | K_ERR_AI_NO_MEM        | 分配内存失败                |
-|          | K_ERR_AI_NO_BUF        | 音频输入缓存不足            |
-|          | K_ERR_AI_BUF_EMPTY     | 音频输入缓存为空            |
-|          | K_ERR_AI_BUF_FULL      | 音频输入缓存为满            |
-|          | K_ERR_AI_NOT_READY     | 音频输入系统未初始化        |
-|          | K_ERR_AI_BUSY          | 音频输入系统忙              |
+|0xA0158001| K_ERR_AI_INVALID_DEVID | 音频输入设备号无效          |
+|0xA0158002| K_ERR_AI_INVALID_CHNID | 音频输入通道号无效          |
+|0xA0158003| K_ERR_AI_ILLEGAL_PARAM | 音频输入参数设置无效        |
+|0xA0158004| K_ERR_AI_NOT_ENABLED   | 音频输入设备或通道没有使 能 |
+|0xA0158005| K_ERR_AI_NULL_PTR      | 输入参数空指针错误          |
+|0xA0158006| K_ERR_AI_NOT_CFG       | 音频输入设备属性未设置      |
+|0xA0158007| K_ERR_AI_NOT_SUPPORT   | 操作不支持                  |
+|0xA0158008| K_ERR_AI_NOT_PERM      | 操作不允许                  |
+|0xA0158009| K_ERR_AI_NO_MEM        | 分配内存失败                |
+|0xA015800A| K_ERR_AI_NO_BUF        | 音频输入缓存不足            |
+|0xA015800B| K_ERR_AI_BUF_EMPTY     | 音频输入缓存为空            |
+|0xA015800C| K_ERR_AI_BUF_FULL      | 音频输入缓存为满            |
+|0xA015800D| K_ERR_AI_NOT_READY     | 音频输入系统未初始化        |
+|0xA015800E| K_ERR_AI_BUSY          | 音频输入系统忙              |
 
 ### 4.2 音频输出API 错误码
 
 | 错误代码 | 宏定义                  | 描述                      |
 |----------|-------------------------|---------------------------|
-|          | K_ERR_AO_INVALID_DEV_ID | 音频输出设备号无效        |
-|          | K_ERR_AO_INVALID_CHN_ID | 音频输出通道号无效        |
-|          | K_ERR_AO_ILLEGAL_PARAM  | 音频输出参数设置无效      |
-|          | K_ERR_AO_NOT_ENABLED    | 音频输出设备或通道没使能  |
-|          | K_ERR_AO_NULL_PTR       | 输出空指针错误            |
-|          | K_ERR_AO_NOT_CFG        | 音频输出设备属性未设置    |
-|          | K_ERR_AO_NOT_SUPPORT    | 操作不被支持              |
-|          | K_ERR_AO_NOT_PERM       | 操作不允许                |
-|          | K_ERR_AO_NO_MEM         | 系统内存不足              |
-|          | K_ERR_AO_NO_BUF         | 音频输出缓存不足          |
-|          | K_ERR_AO_BUF_EMPTY      | 音频输出缓存为空          |
-|          | K_ERR_AO_BUF_FULL       | 音频输出缓存为满          |
-|          | K_ERR_AO_NOT_READY      | 音频输出系统未初始化      |
-|          | K_ERR_AO_BUSY           | 音频输出系统忙            |
+|0xA0159001| K_ERR_AO_INVALID_DEV_ID | 音频输出设备号无效        |
+|0xA0159002| K_ERR_AO_INVALID_CHN_ID | 音频输出通道号无效        |
+|0xA0159003| K_ERR_AO_ILLEGAL_PARAM  | 音频输出参数设置无效      |
+|0xA0159004| K_ERR_AO_NOT_ENABLED    | 音频输出设备或通道没使能  |
+|0xA0159005| K_ERR_AO_NULL_PTR       | 输出空指针错误            |
+|0xA0159006| K_ERR_AO_NOT_CFG        | 音频输出设备属性未设置    |
+|0xA0159007| K_ERR_AO_NOT_SUPPORT    | 操作不被支持              |
+|0xA0159008| K_ERR_AO_NOT_PERM       | 操作不允许                |
+|0xA0159009| K_ERR_AO_NO_MEM         | 系统内存不足              |
+|0xA015900A| K_ERR_AO_NO_BUF         | 音频输出缓存不足          |
+|0xA015900B| K_ERR_AO_BUF_EMPTY      | 音频输出缓存为空          |
+|0xA015900C| K_ERR_AO_BUF_FULL       | 音频输出缓存为满          |
+|0xA015900D| K_ERR_AO_NOT_READY      | 音频输出系统未初始化      |
+|0xA015900E| K_ERR_AO_BUSY           | 音频输出系统忙            |

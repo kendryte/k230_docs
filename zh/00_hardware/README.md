@@ -1,5 +1,7 @@
 # K230 SDK Hardware Docs
 
+[TOC]
+
 ## K230 硬件相关文档
 
 | 文档名称 | 文档概要 |
@@ -9,7 +11,7 @@
 | [K230_PINOUT_V1.0_20230524](K230_PINOUT_V1.0_20230524.xlsx) | K230 芯片引脚定义 |
 | [K230_datasheet.md](K230_datasheet.md) | K230 Datasheet |
 
-## K230 工程设计文件
+## K230 LP3 工程设计文件
 
 | 文档名称 | 文档概要 |
 | --- | --- |
@@ -20,6 +22,17 @@
 | [K230-DEMO-BOARD-BOM-20230510](K230/K230-DEMO-BOARD-BOM-20230510.xlsx) | K230 Demo Board所用器件BOM |
 | [K230-DEMO-BOARD-SCH.DSN](K230/K230-DEMO-BOARD-SCH.DSN) | K230 Demo Board 原理图Cadence CIS Capture文件 |
 | [K230-DEMO-BOARD-SCH.pdf](K230/K230-DEMO-BOARD-SCH.pdf) | K230 Demo Board 原理图 pdf文件 |
+
+## K230 LP4 工程设计文件
+
+| 文档名称 | 文档概要 |
+| --- | --- |
+| [K230-USIP-EVB-LP4-V1_1-A_1-20230412-DXF](K230_LP4/K230-USIP-EVB-LP4-V1_1-A_1-20230412-DXF.zip) | K230 LP4 Demo Board DXF 文件|
+| [K230-USIP-EVB-LP4-V1_1-A_1-20230412-GERBER](K230_LP4/K230-USIP-EVB-LP4-V1_1-A_1-20230412-GERBER.zip) | K230 LP4 Demo Board制板用GERBER文件 |
+| [K230-USIP-EVB-LP4-V1_1-A_1-20230412-PCB](K230_LP4/K230-USIP-EVB-LP4-V1_1-A_1-20230412-PCB.zip) | K230 LP4 Demo Board PCB Cadence 设计文件|
+| [K230-USIP-EVB-LP4-V1_1-A_1-20230412-SMT](K230_LP4/K230-USIP-EVB-LP4-V1_1-A_1-20230412-SMT.zip) | K230 LP4 Demo Board SMT 焊接排布与钻孔文件|
+| [K230-USIP-EVB-LP4-SCH-V1.1-A.1-20230330](K230_LP4/K230-USIP-EVB-LP4-SCH-V1.1-A.1-20230330.xlsx) | K230 LP4 Demo Board所用器件BOM |
+| [K230-USIP-EVB-LP4-SCH-V1.1-A.1-20230330.DSN](K230_LP4/K230-USIP-EVB-LP4-SCH-V1.1-A.1-20230330.DSN) | K230 LP4 Demo Board 原理图Cadence CIS Capture文件 |
 
 ## K230D 工程设计文件
 

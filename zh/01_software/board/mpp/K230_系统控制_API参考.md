@@ -1095,7 +1095,7 @@ Supplement保存的DCF和ISP的虚拟地址信息为内核态虚拟地址
 
 设置 VB 内存的附加信息。
 
-![打开的书 轮廓](458c9a7b50ccf347bf7ed5e8c4c5b7a8.png)说明
+![打开的书 轮廓](images/458c9a7b50ccf347bf7ed5e8c4c5b7a8.png)说明
 
 有些信息需要附加在 VB 内存的后面。例如 DCF 信息、ISP 的统计信息、ISP 的一些实时参数
 

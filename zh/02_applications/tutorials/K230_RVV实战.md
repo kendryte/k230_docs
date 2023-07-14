@@ -23,7 +23,9 @@
 
 ## 概述
 
-提高数据并行性的一种方式是向量计算技术，Riscv使用了这项技术。 K230 采用的是玄铁C908双核处理器,其中大核C908带了RVV1.0扩展，本文描述了如何在大核rt-smart上使用rvv功能
+RVV（RISC-V Vector Extension）是指RISC-V指令集架构的向量扩展。RISC-V是一种开源的指令集架构，它的设计简洁、可扩展性强，并且具有广泛的应用领域。RVV作为RISC-V的一个可选扩展，旨在支持向量处理和并行计算。RVV定义了一组新的指令，用于执行向量操作。这些指令允许同时处理多个数据元素，从而提高计算效率和吞吐量。向量操作可以在单个指令中执行，而不需要通过循环或逐个操作来处理每个数据元素。RVV支持不同的向量长度，可以根据应用的需求选择不同的向量长度。向量长度可以是固定的，也可以是可配置的。RVV还支持不同的数据类型，包括整数、浮点数和定点数等。
+
+RVV的引入为处理器提供了向量处理和并行计算的能力，可以加速各种应用，如图像处理、信号处理、机器学习、科学计算等。同时，RVV的开放和可扩展性也使得各个厂商和开发者根据自己的需求进行定制和优化。K230 采用的是玄铁C908双核处理器,其中大核C908带了RVV1.0扩展，本文描述了如何在大核rt-smart上使用rvv功能。以及体验RVV加速带来的实际效果。
 
 ## 环境准备
 
@@ -37,17 +39,168 @@ k230_SDK
 
 ## 使用RVV功能
 
-### 源码位置
+### 源码编写
 
-`src/big/unittest/testcases/rvv_utest`
+为了体验RVV在向量计算上加速的优势，我们以图像缩放作为应用场景，编写一个demo。在sdk的如下路径创建一个文件夹
+
+`k230_sdk/src/big/rt-smart/userapps/testcases/scale`
+
+注意如果在k230_sdk下运行了make或者make rt-smart的话可能会导致修改被覆盖，读者可以将完成后的源码拷贝一份到如下目录
+
+`k230_sdk/src/big/unittest/testcases`
+
+#### 源码
+
+在scale目录下创建C源码文件scale.c
+
+``` C
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <time.h>
+
+#pragma pack(push, 1)
+typedef struct {
+    unsigned short signature;
+    unsigned int fileSize;
+    unsigned short reserved1;
+    unsigned short reserved2;
+    unsigned int dataOffset;
+} BitmapFileHeader;
+
+typedef struct {
+    unsigned int headerSize;
+    int width;
+    int height;
+    unsigned short planes;
+    unsigned short bitsPerPixel;
+    unsigned int compression;
+    unsigned int imageSize;
+    int xPixelsPerMeter;
+    int yPixelsPerMeter;
+    unsigned int colorsUsed;
+    unsigned int colorsImportant;
+} BitmapInfoHeader;
+#pragma pack(pop)
+
+
+
+void __attribute__((optimize(3)))
+scaleBMP(const char* inputPath, const char* outputPath, float scaleFactor) {
+    // 读取输入BMP文件
+    FILE* inputFile = fopen(inputPath, "rb");
+    if (inputFile == NULL) {
+        printf("Failed to open input BMP file.\n");
+        return;
+    }
+
+    BitmapFileHeader fileHeader;
+    BitmapInfoHeader infoHeader;
+    fread(&fileHeader, sizeof(BitmapFileHeader), 1, inputFile);
+    fread(&infoHeader, sizeof(BitmapInfoHeader), 1, inputFile);
+
+    int originalWidth = infoHeader.width;
+    int originalHeight = infoHeader.height;
+    int originalImageSize = infoHeader.imageSize;
+
+    unsigned char* originalImageData = (unsigned char*) malloc(originalImageSize);
+    fread(originalImageData, originalImageSize, 1, inputFile);
+    fclose(inputFile);
+
+    // 计算缩放后的图像尺寸
+    int scaledWidth = (int)(originalWidth * scaleFactor);
+    int scaledHeight = (int)(originalHeight * scaleFactor);
+    int scaledImageSize = scaledWidth * scaledHeight * 3;
+
+    // 创建输出BMP文件
+    FILE* outputFile = fopen(outputPath, "wb");
+    if (outputFile == NULL) {
+        printf("Failed to create output BMP file.\n");
+        free(originalImageData);
+        return;
+    }
+
+    // 更新BMP文件头信息
+    fileHeader.fileSize = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + scaledImageSize;
+    infoHeader.width = scaledWidth;
+    infoHeader.height = scaledHeight;
+    infoHeader.imageSize = scaledImageSize;
+    fwrite(&fileHeader, sizeof(BitmapFileHeader), 1, outputFile);
+    fwrite(&infoHeader, sizeof(BitmapInfoHeader), 1, outputFile);
+
+    clock_t start, finish;
+    start = clock();
+    // 缩放图像数据
+    unsigned char* scaledImageData = (unsigned char*) malloc(scaledImageSize);
+    for (int y = 0; y < scaledHeight; y++) {
+        for (int x = 0; x < scaledWidth; x++) {
+            int originalX = (int)(x / scaleFactor);
+            int originalY = (int)(y / scaleFactor);
+            scaledImageData[(y * scaledWidth + x) * 3 + 0] = originalImageData[(originalY * originalWidth + originalX) * 3 + 0];
+            scaledImageData[(y * scaledWidth + x) * 3 + 1] = originalImageData[(originalY * originalWidth + originalX) * 3 + 1];
+            scaledImageData[(y * scaledWidth + x) * 3 + 2] = originalImageData[(originalY * originalWidth + originalX) * 3 + 2];
+        }
+    }
+    finish = clock();
+    printf("scale cacl use time:%f ms\n",(double)(finish - start) / CLOCKS_PER_SEC);
+
+    // 写入缩放后的图像数据
+    fwrite(scaledImageData, scaledImageSize, 1, outputFile);
+    fclose(outputFile);
+
+    free(originalImageData);
+    free(scaledImageData);
+
+    printf("BMP image scaling completed.\n");
+}
+
+
+int main() 
+{
+    const char* inputPath = "input.bmp";
+    const char* outputPath = "output.bmp";
+    float scaleFactor = 0.5; // 缩放因子
+    scaleBMP(inputPath, outputPath, scaleFactor);
+    return 0;
+}
+```
+
+#### SCONS配置文件
+
+- 创建SConscript文件
+
+```python
+# RT-Thread building script for component
+
+from building import *
+
+cwd = GetCurrentDir()
+src = Glob('*.c')
+CPPPATH = [cwd]
+
+CPPDEFINES = [
+    'HAVE_CCONFIG_H',
+]
+group = DefineGroup('scale', src, depend = [''], CPPPATH = CPPPATH, CPPDEFINES = CPPDEFINES)
+
+Return('group')
+```
+
+- 创建SConstruct文件
+
+``` python
+import os
+import sys
+
+# add building.py path
+sys.path = sys.path + [os.path.join('..','..','..','tools')]
+from building import *
+
+BuildApplication('scale', 'SConscript', usr_root = '../../..')
+```
 
 ### 编译
-
-在k230_sdk目录下运行
-
-``` shell
-make rt-smart-apps
-```
 
 进入目录 `src/big/rt-smart` 运行脚本 `source smart-env.sh riscv64` 配置环境变量。
 
@@ -59,97 +212,101 @@ PREFIX       => riscv64-unknown-linux-musl-
 EXEC_PATH    => /home/testUser/k230_sdk/src/big/rt-smart/../../../toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin
 ```
 
-进入`userapps/testcases/rvv_utest`目录运行`scons`编译
+进入`userapps/testcases/scale`目录运行`scons --release`编译
 
 ``` shell
-$ cd userapps/testcases/rvv_utest
-$ scons
+$ cd userapps/testcases/scale
+$ scons --release
 scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Building targets ...
-scons: building associated VariantDir targets: build/rvv_utest
-CC build/rvv_utest/rvv_utest.o
-LINK rvv_utest.elf
-/home/testUser/k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/../lib/gcc/riscv64-unknown-linux-musl/12.0.1/../../../../riscv64-unknown-linux-musl/bin/ld: warning: rvv_utest.elf has a LOAD segment with RWX permissions
+scons: building associated VariantDir targets: build/scale
+CC build/scale/scal.o
+LINK scale.elf
+/home/haohaibo/work/k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/../lib/gcc/riscv64-unknown-linux-musl/12.0.1/../../../../riscv64-unknown-linux-musl/bin/ld: warning: scale.elf has a LOAD segment with RWX permissions
+scons: done building targets.
 ```
 
-之后即可将编译完成的rvv_utest.elf拷贝到sharefs内运行
+将编译好的程序重命名
 
 ``` shell
-msh /sharefs>./rvv_utest.elf
-enter thread run [1] times
-enter thread run [67] times
-enter thread run [96] times
-enter thread run [56] times
-enter thread run [89] times
-enter thread run [51] times
-enter thread run [55] times
-enter thread run [1] times
-enter thread run [29] times
-enter thread run [53] times
-vadd_test check passed
+mv scale.elf scale_with_rvv.elf
 ```
 
-在源码目录下使用objdump工具反编译可确认是否产生了vector指令
+编辑k230_sdk/src/big/rt-smart/tools/riscv64.py文件，去掉编译选项的v扩展。
+
+``` diff
+$:k230_sdk/src/big/rt-smart/userapps/testcases/scale$ git diff
+diff --git a/tools/riscv64.py b/tools/riscv64.py
+index 16fc9b2..c045bf5 100644
+--- a/tools/riscv64.py
++++ b/tools/riscv64.py
+@@ -44,7 +44,7 @@ class ARCHRISCV64():
+                 EXT_CFLAGS = ''
+                 EXT_LFLAGS = ''
+ 
+-            DEVICE = ' -mcmodel=medany -march=rv64imafdcv -mabi=lp64d'
++            DEVICE = ' -mcmodel=medany -march=rv64imafdc -mabi=lp64d'
+             self.CFLAGS    = configuration.get('CFLAGS', DEVICE + ' -Werror -Wall' + EXT_CFLAGS)
+             self.AFLAGS    = configuration.get('AFLAGS', ' -c' + DEVICE + ' -x assembler-with-cpp -D__ASSEMBLY__ -I.' + EXT_CFLAGS)
+             LINK_SCRIPT    = configuration.get('LINK_SCRIPT', os.path.join(USR_ROOT, 'linker_scripts', 'riscv64', 'link.lds'))
+haohaibo@develop:~/work/k230_sdk/src/big/rt-smart/userapps/testcases/scale$ 
+
+```
+
+重新编译源码,之后将编译完的scale.elf和scale_with_rvv.elf全部拷贝到sharefs下运行。
+
+### 运行
+
+准备一张24位bmp的图片，命名为input.bmp(可以用PC画图软件保存生成), 与程序放在同一目录，之后大核通过sharefs运行这俩个程序。
+
+``` shell
+msh /sharefs>scale.elf
+scale cacl use time:0.013952 ms
+BMP image scaling completed.
+msh /sharefs>scale.elf
+scale cacl use time:0.013960 ms
+BMP image scaling completed.
+msh /sharefs>scale.elf
+scale cacl use time:0.013941 ms
+BMP image scaling completed.
+msh /sharefs>scale.elf
+scale cacl use time:0.013936 ms
+BMP image scaling completed.
+msh /sharefs>scale.elf
+scale cacl use time:0.013945 ms
+BMP image scaling completed.
+msh /sharefs>scale.elf
+scale cacl use time:0.013957 ms
+BMP image scaling completed.
+msh /sharefs>scale_with_rvv.elf
+scale cacl use time:0.010139 ms
+BMP image scaling completed.
+msh /sharefs>scale_with_rvv.elf
+scale cacl use time:0.010133 ms
+BMP image scaling completed.
+msh /sharefs>scale_with_rvv.elf
+scale cacl use time:0.010135 ms
+BMP image scaling completed.
+msh /sharefs>scale_with_rvv.elf
+scale cacl use time:0.010144 ms
+BMP image scaling completed.
+msh /sharefs>scale_with_rvv.elf
+scale cacl use time:0.010142 ms
+BMP image scaling completed.
+```
+
+从打印信息看，使用了V扩展指令后，数组的计算明显加快了，如果增大图像的分辨率到4K，可以看到更明显的对比。
+
+### 反编译
+
+可以在源码目录下使用objdump工具反编译可确认是否产生了vector指令
 
 ``` text
-$ riscv64-unknown-linux-musl-objdump -D rvv_utest.elf | grep 'vadd'
-0000000200002b48 <vadd>:
-   200002b48: 04d05e63          blez a3,200002ba4 <vadd+0x5c>
-   200002b5c: 04f76563          bltu a4,a5,200002ba6 <vadd+0x5e>
-   200002b68: 02f87363          bgeu a6,a5,200002b8e <vadd+0x46>
-   200002b7c: 038c8c57          vadd.vv v24,v24,v25
-   200002b8a: f2ed              bnez a3,200002b6c <vadd+0x24>
-   200002ba0: feb699e3          bne a3,a1,200002b92 <vadd+0x4a>
-   200002ba8: bf65              j 200002b60 <vadd+0x18>
-0000000200002baa <vadd_test>:
-   200002c36: f13ff0ef          jal ra,200002b48 <vadd>
-   200002c3e: a835              j 200002c7a <vadd_test+0xd0>
-   200002c5c: 00f70a63          beq a4,a5,200002c70 <vadd_test+0xc6>
-   200002c84: fae7dee3          bge a5,a4,200002c40 <vadd_test+0x96>
-   200002cd0: edbff0ef          jal ra,200002baa <vadd_test>
-      90: 00000d57          vadd.vv v26,v0,v0,v0.t
-     1b6: 00000157          vadd.vv v2,v0,v0,v0.t
-     24a: 007c0357          vadd.vv v6,v7,v24,v0.t
-     2a0: 000006d7          vadd.vv v13,v0,v0,v0.t
-     360: 00000c57          vadd.vv v24,v0,v0,v0.t
-     b14: 00000d57          vadd.vv v26,v0,v0,v0.t
+$ riscv64-unknown-linux-musl-objdump scale_with_rvv.elf -S |grep 'vadd'
+   200002c7e:03bf4dd7          vadd.vx v27,v27,t5
+   200002c94:03834c57          vadd.vx v24,v24,t1
+$ riscv64-unknown-linux-musl-objdump scale_with_rvv.elf -S |grep 'vmul'
+   200002c98:97856c57           vmul.vx v24,v24,a0
+
 ```
-
-### 源码简介
-
-``` C
-void __attribute__((noinline, noclone, optimize(3)))
-vadd (int *dst, int *op1, int *op2, int count)
-{
-  for (int i = 0; i < count; ++i)
-    dst[i] = op1[i] + op2[i];
-}
-
-#define ELEMS 10
-
-int vadd_test(void)
-{
-    int in1[ELEMS] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    int in2[ELEMS] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-    int out[ELEMS];
-    int check[ELEMS] = { 3, 5, 7, 9, 11, 13, 15, 17, 19, 21 };
-
-    vadd (out, in1, in2, ELEMS);
-
-    for (int i = 0; i < ELEMS; ++i)
-    {
-        if (out[i] != check[i]) {
-            printf("check error\n");
-            __builtin_abort();
-        }
-    }
-    return 0;
-}
-```
-
-vadd_test函数中预先计算了俩个数组(in1 in2)的和作为校验结果，之后使用vadd函数做数组加法。vadd函数在定义时添加了optimize(3)的属性设置，该函数将使用O3编译。
-之后编译器会将数组加法优化为向量指令计算。
-`src/big/rt-smart/tools/riscv64.py`文件内定义了编译参数可使用V指令扩展优化。
-
-DEVICE = ' -mcmodel=medany -march=rv64imafdc`v` -mabi=lp64d'

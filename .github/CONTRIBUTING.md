@@ -9,7 +9,7 @@ issue和pull request填写时都支持Markdown，关于GitHub的Markdown语法�
 
 ## 提交issue
 
-1. 打开issue界面 [isuue](https://github.com/kendryte/k230_docs/issues)
+1. 打开issue界面 [issue](https://github.com/kendryte/k230_docs/issues)
 2. 查看issue列表中是否已经存在相似issue，如果没有请点击`New issue`按钮
 3. 根据您的问题类型，选择不同的issue模板
 4. 填写必须项后(带红色\*标记)，点击`Submit new issue`按钮完成提交

@@ -2,6 +2,11 @@ name: Improvement
 description: 向我们提出改进
 title: "[Improvement]: "
 labels: ["improvement"]
+assignees:
+  - wuwentao
+  - zhangxiaojingCAN
+  - kexinliang666
+  - chenhb3 
 body:
   - type: textarea
     id: improvement
