@@ -83,6 +83,10 @@ rtsp-client支持接收audio、video以及发送backchannel audio mediaSubSessio
 
 实现mp4文件播放。视频支持h264、h265，音频支持g711a/u。
 
+#### 1.2.5 混音
+
+实现两路g711a/u混音。
+
 ## 2. API参考
 
 ### 2.1 可视对讲rtsp-server
@@ -606,8 +610,9 @@ KdPlayer模块提供以下API：
 - [kd_player_init](#231-kd_player_init)：初始化。
 - [kd_player_deinit](#232-kd_player_deinit)：反初始化。
 - [kd_player_setdatasource](#233-kd_player_setdatasource)：设置媒体播放文件。
-- [kd_player_start](#234-kd_player_start)：开始播放。
-- [kd_player_stop](#234-kd_player_stop)：停止播放。
+- [kd_player_regcallback](#234-kd_player_regcallback)：注册事件回调。
+- [kd_player_start](#235-kd_player_start)：开始播放。
+- [kd_player_stop](#236-kd_player_stop)：停止播放。
 
 #### 2.3.1 kd_player_init
 
@@ -633,7 +638,7 @@ k_s32 kd_player_init();
 【需求】
 
 - 头文件：kplayer.h
-- 库文件：
+- 库文件：libkplayer.a
 
 【注意】
 
@@ -671,7 +676,7 @@ k_s32 kd_player_deinit();
 【需求】
 
 - 头文件：kplayer.h
-- 库文件：
+- 库文件：libkplayer.a
 
 【注意】
 
@@ -711,7 +716,7 @@ k_s32 kd_player_setdatasource(const k_char* filePath);
 【需求】
 
 - 头文件：kplayer.h
-- 库文件：
+- 库文件：libkplayer.a
 
 【注意】
 
@@ -725,7 +730,48 @@ k_s32 kd_player_setdatasource(const k_char* filePath);
 
 无。
 
-#### 2.3.4 kd_player_start
+#### 2.3.4 kd_player_regcallback
+
+【描述】
+
+注册播放器事件回调。
+
+【语法】
+
+k_s32 kd_player_regcallback( K_PLAYER_EVENT_FN pfnCallback,void* pData);
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+|---|---|---|
+| pfnCallback  | 回调函数指针 | 输入 |
+| pData  | 回调数据指针 | 输入 |
+
+【返回值】
+
+| 返回值 | 描述                          |
+|--------|-------------------------------|
+| 0      | 成功。                        |
+| 非0    | 失败。 |
+
+【需求】
+
+- 头文件：kplayer.h
+- 库文件：libkplayer.a
+
+【注意】
+
+无。
+
+【举例】
+
+无。
+
+【相关主题】
+
+无。
+
+#### 2.3.5 kd_player_start
 
 【描述】
 
@@ -749,7 +795,7 @@ k_s32 kd_player_start();
 【需求】
 
 - 头文件：kplayer.h
-- 库文件：
+- 库文件：libkplayer.a
 
 【注意】
 
@@ -763,7 +809,7 @@ k_s32 kd_player_start();
 
 无。
 
-#### 2.3.4 kd_player_stop
+#### 2.3.6 kd_player_stop
 
 【描述】
 
@@ -787,7 +833,100 @@ k_s32 kd_player_stop();
 【需求】
 
 - 头文件：kplayer.h
-- 库文件：
+- 库文件：libkplayer.a
+
+【注意】
+
+无。
+
+【举例】
+
+无。
+
+【相关主题】
+
+无。
+
+### 2.4 音频混音
+
+混音模块提供以下API：
+
+- [kd_mix_g711a_audio](#241-kd_mix_g711a_audio)：g711a混音。
+- [kd_mix_g711u_audio](#242-kd_mix_g711u_audio)：g711u混音。
+
+#### 2.4.1 kd_mix_g711a_audio
+
+【描述】
+
+g711a混音
+
+【语法】
+
+k_s32 kd_mix_g711a_audio(k_char \*src_data1, k_char \*src_data2, k_u32 data_len, k_char \*dst_mix_data);
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+|---|---|---|
+| src_data1  | 混音源数据1 | 输入 |
+| src_data2  | 混音源数据2 | 输入 |
+| data_len  | 混音数据长度 | 输入 |
+| dst_mix_data  | 混音结果数据 | 输出 |
+
+【返回值】
+
+| 返回值 | 描述                          |
+|--------|-------------------------------|
+| 0      | 成功。                        |
+| 非0    | 失败。 |
+
+【需求】
+
+- 头文件：g711_mix_audio.h
+- 库文件：libaudio_mix.a
+
+【注意】
+
+无。
+
+【举例】
+
+无。
+
+【相关主题】
+
+无。
+
+#### 2.4.2 kd_mix_g711u_audio
+
+【描述】
+
+g711u混音
+
+【语法】
+
+k_s32 kd_mix_g711u_audio(k_char \*src_data1, k_char \*src_data2, k_u32 data_len, k_char \*dst_mix_data);
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+|---|---|---|
+| src_data1  | 混音源数据1 | 输入 |
+| src_data2  | 混音源数据2 | 输入 |
+| data_len  | 混音数据长度 | 输入 |
+| dst_mix_data  | 混音结果数据 | 输出 |
+
+【返回值】
+
+| 返回值 | 描述                          |
+|--------|-------------------------------|
+| 0      | 成功。                        |
+| 非0    | 失败。 |
+
+【需求】
+
+- 头文件：g711_mix_audio.h
+- 库文件：libaudio_mix.a
 
 【注意】
 
