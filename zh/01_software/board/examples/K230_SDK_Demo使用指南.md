@@ -1208,3 +1208,49 @@ isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
 1. 挂载 nfs，挂载成功以后在大小核都可以看到`/sharefs`目录，将编译出来的 demo `sample_dpu_vo.elf`拷贝到服务器的 nfs 目录下，此时在大核 rtt 的`/sharefs`下也能看到对应的 elf 文件.
 1. 使用命令`./sample_dpu_vo.elf`启动 demo，此时会在屏幕上显示 dpu 处理后的深度图。
 1. 按'q'退出 demo。
+
+### 2.20 OTA远程升级 Demo
+
+#### 2.20.1 Demo 简介
+
+OTA为空中下载技术(Over The Air)，区别于现场刷机，通过网络对设备固件进行更新。
+
+#### 2.20.2 Feature说明
+
+1. 烧录方式与更新固件都存放在远端服务器上，方便修改。
+1. 支持升级包验签加密，保证数据完整性以及安全性；
+1. 未支持灾难恢复方案。常见的OTA灾难恢复机制有A/B备份方案，或Recovery方案。K230的应用场景可能使用容量小的Norflash，也可能使用容量大的eMMC。具体的使用场景可以基于此Demo进行开发。
+
+#### 2.20.3 依赖资源
+
+搭建http服务器，如使用hfs网络文件服务器。
+
+#### 2.20.4 使用说明
+
+##### 2.20.4.1 编译
+
+```shell
+xxx@develop:~/k230/k230_sdk/tools/ota$ tree
+.
+├── ota_package
+│   ├── rootfs
+│   │   ├── etc
+│   │   └── mnt
+│   └── rtt_system.bin
+├── ota_private.pem
+├── ota_public.pem
+├── ota_upgrade.sh
+├── package_kpk.sh
+└── README
+```
+
+1. 设备端的ota程序位于buildroot-ext/package/ota，编译buildroot会把ota程序安装到文件系统的/usr/bin目录下，ota.cfg安装到/etc/目录下。
+1. 升级包制作方法：进入k230_sdk/tools/ota目录，执行./package_kpk.sh ota_package会产生ota_package.kpk即为升级包。ota_package目录自行创建，包含了需要升级的分区固件(如rtt_system.bin)，以及小核linux的文件系统的文件。
+1. 不同介质的分区固件参考k230_sdk/tools/gen_image_cfg/xxx.cfg文件，即使有的分区在小核linux系统上看不到，也可以通过offset偏移地址对整个磁盘空间进行擦写升级。
+1. ota_upgrade.sh 是设备端执行的升级脚本，如果分区有修改，需要对这个脚本做对应的修改。
+1. ota_private.pem 升级包签名的私钥，需要把公钥编译或拷贝到设备的/etc/目录下。参考README
+
+##### 2.20.4.2 执行
+
+1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
+1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
