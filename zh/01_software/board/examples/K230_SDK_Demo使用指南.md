@@ -58,6 +58,7 @@
 | V1.6     | 增加DRM demo，增加LVGL demo | SDK部 | 2023-6-29 |
 | V1.7     | 修改venc demo中的sensor参数，vdec demo中增加MAPI VDEC绑定VO解码显示 | SDK部 | 2023-6-30 |
 | V1.8     | 修改mapi sample_venc和rtsp_demo的使用说明 | SDK部 | 2023-7-1 |
+| V1.9 | 修改vicap demo使用说明，支持多路sensor输入 | SDK部 | 2023-8-1 |
 
 ## 1. 概述
 
@@ -504,7 +505,7 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。
 
 #### 2.6.2 Feature说明
 
-当前版本支持OV9732和OV9286、imx335 三个摄像头模组图像采集预览，支持单个摄像头最多输出三路数据流。
+当前版本支持OV9732和OV9286、imx335 三个摄像头模组图像采集预览，支持单个摄像头最多输出三路数据流，最多支持3路摄像头数据输入。
 
 #### 2.6.3 依赖资源
 
@@ -527,13 +528,33 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。
 
 当输入：`sample_vicap`命令后打印如下提示信息：
 
-![图片描述](images/3e2e061af6118ae112633da2aaba6376.png)
+```shell
+usage: ./sample_vicap -mode 0 -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1
+Options:
+ -mode:         vicap work mode[0: online mode, 1: offline mode. only offline mode support multiple sensor input]     default 0
+ -dev:          vicap device id[0,1,2]        default 0
+ -dw:           enable dewarp[0,1]    default 0
+ -sensor:       sensor type[0: ov9732@1280x720, 1: ov9286_ir@1280x720], 2: ov9286_speckle@1280x720]
+ -ae:           ae status[0: disable AE, 1: enable AE]        default enable
+ -awb:          awb status[0: disable AWB, 1: enable AWb]     default enable
+ -chn:          vicap output channel id[0,1,2]        default 0
+ -ow:           the output image width, default same with input width
+ -oh:           the output image height, default same with input height
+ -ox:           the output image start position of x
+ -oy:           the output image start position of y
+ -crop:         crop enable[0: disable, 1: enable]
+ -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
+ -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
+ -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion]
+ -help:         print this help
+```
 
 参数说明如下：
 
 | **参数名称** | **可选参数值** | **参数说明** |
 |---|---|---|
 | -dev         | 0：vicap设备0 1：vicap设备1 2：vicap设备2.                             | 指定当前使用的vicap设备，系统最多支持三个vicap设备。通过指定设备号实现sensor与不同vicap设备之间的绑定关系。 例如： -dev 1 -sensor 0即表示将ov9732 1280x720 RGB图像输出绑定到vicap设备1.                   |
+| -mode | 0：在线模式；1：离线模式 | 指定vicap设备工作模式，当前之前在线模式和离线模式。对于多个sensor输入，必须指定为离线模式。 |
 | -sensor      | 0: ov9732@1280x720,  1: ov9286_ir@1280x720,  2: ov9286_speckle@1280x720, 3: imx335_2lan@1920x1080, 4:imx335_2lan@2592x1944, 5: imx335_4lan@2592x1944| 指定当前使用的sensor类型，当前系统支持三种类型图像输出：ov9732 1280x720 RGB图像输出，ov9286 1280x720红外图像输出，ov9286 1280x720散斑图像输出。 imx335 输出的是rgb 的图像                                                         |
 | -chn         | 0：vicap设备输出通道0 1：vicap设备输出通道1 2：vicap设备输出通道2.     | 指定当前使用的vicap设备的输出通道，一个vicap设备最多支持三路输出，仅通道0支持RAW图像格式输出  |
 | -ow          |                                                                         | 指定输出图像宽度，默认为输入图像宽度。宽度需要16字节对齐。 如果默认宽度超过显示屏输出最大宽度，则使用显示输出宽度作为图像最终输出宽度 如果输出宽度小于输入图像宽度，且未指定ox或者oy参数，则默认为缩放输出 |
@@ -545,11 +566,17 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。
 | -preview     | 0：禁用预览显示 1：使能预览显示                                         | 指定输出图像预览显示功能。默认为使能。当前最多支持2路输出图像同时预览。 |
 | -rotation    | 0：旋转0度 1：旋转90度 2：旋转180度 3：旋转270度 4：不支持旋转          | 指定预览显示窗口旋转角度。默认仅第一路输出图像窗口支持旋转功能。 |
 
-示例：
+示例1：
 
 `./sample_vicap -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480`
 
-说明：将ov9732@1280x720 RGB 绑定到vicap设备,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1280x720），通道1输出图像大小为640x480
+说明：将ov9732@1280x720 RGB 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1280x720），通道1输出图像大小为640x480
+
+示例2：
+
+`./sample_vicap.elf -mode 1 -dev 0 -sensor 0 -chn 0 -ow 1080 -oh 720 -dev 1 -sensor 1 -chn 0 -ow 1080 -oh 720 -dev 2 -sensor 2 -chn 0 -ow 1080 -oh 720 -preview 0`
+
+说明：三路输入输出。将ov9732@1280x720 RGB 绑定到vicap设备0，并设置通道0输出大小为1080x720的图像；将ov9286@1280x720 红外绑定到vicap设备1，并设置通道0输出大小为1080x720的图像；将ov9286@1280x720 散斑绑定到vicap设备2，并设置通道0输出大小为1080x720的图像（无预览）；
 
 ### 2.7 DMA_demo
 
