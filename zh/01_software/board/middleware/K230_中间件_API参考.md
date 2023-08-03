@@ -71,19 +71,15 @@ rtsp-client支持接收audio、video以及发送backchannel audio mediaSubSessio
 
 相关描述见可视对讲协议章节
 
-#### 1.2.2 媒体封装
-
-在mapi等基础上，提供封装，配置和设置媒体部分； 提供写入音视频码流和音视频码流回调接口，以及控制接口；
-
-#### 1.2.3 录像
+#### 1.2.2 录像
 
 本月底前，暂由app直接使用muxer接口来进行
 
-#### 1.2.4 播放器
+#### 1.2.3 播放器
 
 实现mp4文件播放。视频支持h264、h265，音频支持g711a/u。
 
-#### 1.2.5 混音
+#### 1.2.4 混音
 
 实现两路g711a/u混音。
 
@@ -599,10 +595,6 @@ int SendAudioData(const uint8_t *data, size_t size, uint64_t timestamp);
 
 无。
 
-### 2.2 媒体封装
-
-KdMedia模块提供以下API：
-
 ### 2.3 播放器封装
 
 KdPlayer模块提供以下API：
@@ -939,3 +931,348 @@ k_s32 kd_mix_g711u_audio(k_char \*src_data1, k_char \*src_data2, k_u32 data_len,
 【相关主题】
 
 无。
+
+### 2.5 MP4格式封装解封装
+
+MP4格式封装解封装提供如下API：
+
+- [kd_mp4_create](#251-kd_mp4_create)：MP4实例创建
+- [kd_mp4_destroy](#252-kd_mp4_destroy)：MP4实例销毁
+- [kd_mp4_create_track](#253-kd_mp4_create_track)：为MP4创建track
+- [kd_mp4_destroy_tracks](#254-kd_mp4_destroy_tracks)：为MP4销毁所有track
+- [kd_mp4_write_frame](#255-kd_mp4_write_frame)：MP4中写入帧数据。
+- [kd_mp4_get_file_info](#256-kd_mp4_get_file_info)：获取MP4文件信息。
+- [kd_mp4_get_track_by_index](#257-kd_mp4_get_track_by_index)：根据下标获取track信息。
+- [kd_mp4_get_frame](#258-kd_mp4_get_frame)：获取track码流信息。
+
+#### 2.5.1 kd_mp4_create
+
+【描述】
+
+MP4实例创建
+
+【语法】
+
+int kd_mp4_create(KD_HANDLE *mp4_handle, k_mp4_config_s \*mp4_cfg);
+
+【参数】
+
+|     参数   |     描述    |   输入/输出   |
+|------------|------------|--------------|
+| mp4_handle | MP4实例句柄 |     输出     |
+| mp4_cfg    | 参数配置信息 |     输入     |
+
+【返回值】
+
+|  返回值  |   描述  |
+|----------|--------|
+|    0     |  成功  |
+|   非0    |  失败  |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+通过mp4_cfg配置信息可以指定当前创建的MP4实例时muxer实例或者demuxer实例
+
+【举例】
+
+参考 samples下 mp4_muxer和mp4_demuxer
+
+【相关主题】
+
+无
+
+#### 2.5.2 kd_mp4_destroy
+
+【描述】
+
+MP4实例销毁
+
+【语法】
+
+int kd_mp4_destroy(KD_HANDLE mp4_handle);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle | MP4实例句柄 |     输入       |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|-----------|
+|      0       |    成功    |
+|     非0      |    失败     |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+无
+
+【举例】
+
+参考 samples下 mp4_muxer和mp4_demuxer
+
+【相关主题】
+
+无
+
+#### 2.5.3 kd_mp4_create_track
+
+【描述】
+
+为MP4创建track
+
+【语法】
+
+int kd_mp4_create_track(KD_HANDLE mp4_handle, KD_HANDLE \*track_handle, k_mp4_track_info_s \*mp4_track_info);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle | MP4实例句柄 |    输入        |
+|track_handle| track句柄   |    输出        |
+|mp4_track_info| track配置 |    输入        |
+
+【返回值】
+
+|    返回值   |    描述    |
+|-------------|------------|
+|     0       |    成功     |
+|    非0      |    失败     |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为muxer API，当创建的MP4实例为muxer实例时使用
+- 目前每个MP4支持创建最多3个track
+
+【举例】
+
+参考 samples下 mp4_muxer
+
+【相关主题】
+
+无
+
+#### 2.5.4 kd_mp4_destroy_tracks
+
+【描述】
+
+为MP4销毁所有track
+
+【语法】
+
+int kd_mp4_destroy_tracks(KD_HANDLE mp4_handle);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle |  MP4实例   |   输入          |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|-----------|
+|     0        |   成功     |
+|    非0       |   失败     |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为muxer API，当创建的MP4实例为muxer实例时使用
+- 请在创建MP4实例和track之后调用该接口
+
+【举例】
+
+参考 samples下 mp4_muxer
+
+【相关主题】
+
+无
+
+#### 2.5.5 kd_mp4_write_frame
+
+【描述】
+
+MP4中写入帧数据
+
+【语法】
+
+int kd_mp4_write_frame(KD_HANDLE mp4_handle, KD_HANDLE track_handle, k_mp4_frame_data_s *frame_data);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+|  mp4_handle| MP4实例句柄 |  输入          |
+| track_handle| track句柄  |  输入          |
+| frame_data  |  帧数据信息 |  输入         |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|-----------|
+|      0       |    成功    |
+|     非0      |    失败    |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为muxer API，当创建的MP4实例为muxer实例时使用
+- 请在创建MP4实例和track之后调用该接口
+
+【举例】
+
+参考 samples下 mp4_muxer
+
+【相关主题】
+
+无
+
+#### 2.5.6 kd_mp4_get_file_info
+
+【描述】
+
+获取MP4文件信息
+
+【语法】
+
+int kd_mp4_get_file_info(KD_HANDLE mp4_handle, k_mp4_file_info_s *file_info);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle | MP4实例句柄 |   输入         |
+| file_info  | MP4文件信息 |   输出         |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|-----------|
+|      0       |    成功    |
+|     非0      |    失败    |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为demuxer API，当创建的MP4实例为demuxer实例时使用
+
+【举例】
+
+参考 samples下 mp4_demuxer
+
+【相关主题】
+
+无
+
+#### 2.5.7 kd_mp4_get_track_by_index
+
+【描述】
+
+根据下标获取track信息
+
+【语法】
+
+int kd_mp4_get_track_by_index(KD_HANDLE mp4_handle, uint32_t index, k_mp4_track_info_s *mp4_track_info);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle | MP4实例句柄|   输入          |
+|   index    |   下标     |   输入          |
+| mp4_track_info | track信息 | 输出         |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|------------|
+|      0       |    成功     |
+|     非0      |    失败     |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为demuxer API，当创建的MP4实例为demuxer实例时使用
+
+【举例】
+
+参考 samples下 mp4_demuxer
+
+【相关主题】
+
+无
+
+#### 2.5.8 kd_mp4_get_frame
+
+【描述】
+
+获取track码流信息
+
+【语法】
+
+int kd_mp4_get_frame(KD_HANDLE mp4_handle, k_mp4_frame_data_s *frame_data);
+
+【参数】
+
+|    参数    |    描述    |    输入/输出    |
+|------------|------------|----------------|
+| mp4_handle |  MP4实例句柄|    输入        |
+| frame_data |  码流信息   |    输出        |
+
+【返回值】
+
+|    返回值    |    描述    |
+|--------------|-----------|
+|      0       |   成功     |
+|     非0      |   失败     |
+
+【需求】
+
+- 头文件：mp4_format.h
+- 库文件：libmp4.a
+
+【注意】
+
+- 该API为demuxer API，当创建的MP4实例为demuxer实例时使用
+
+【举例】
+
+参考 samples下 mp4_demuxer
+
+【相关主题】
+
+无
