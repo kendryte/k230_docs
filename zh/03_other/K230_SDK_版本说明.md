@@ -140,6 +140,8 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 14 | K230 SDK V0.8 | 添加DRM  | Linux小核添加DRM驱动及demo                                                                                                                      |      |
 | 15 | K230 SDK V0.8 | 添加LVGL  | Linux小核添加LVGL及demo                                                                                                                      |      |
 | 16 | K230 SDK V0.8 | 快启APP  | 快启APP Sensor改为Imx335(带晶振)                                                                                                                      |      |
+| 17 | K230 SDK V0.9 | mcm  | 支持最多三路sensor                                                                                                                      |      |
+| 18 | K230 SDK V0.9 | display mapi  | 添加视频输出类MAPI                                                                                                                      |      |
 
 ### 4.3 平台
 
