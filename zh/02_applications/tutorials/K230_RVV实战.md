@@ -49,7 +49,6 @@ k230_SDK
 
 `k230_sdk/src/big/unittest/testcases`
 
-
 #### 源码
 
 在scale目录下创建C源码文件scale.c
@@ -130,8 +129,8 @@ scaleBMP(const char* inputPath, const char* outputPath, float scaleFactor) {
     fwrite(&fileHeader, sizeof(BitmapFileHeader), 1, outputFile);
     fwrite(&infoHeader, sizeof(BitmapInfoHeader), 1, outputFile);
 
-	clock_t start, finish;
-	start = clock();
+    clock_t start, finish;
+    start = clock();
     // 缩放图像数据
     unsigned char* scaledImageData = (unsigned char*) malloc(scaledImageSize);
     for (int y = 0; y < scaledHeight; y++) {
@@ -143,8 +142,8 @@ scaleBMP(const char* inputPath, const char* outputPath, float scaleFactor) {
             scaledImageData[(y * scaledWidth + x) * 3 + 2] = originalImageData[(originalY * originalWidth + originalX) * 3 + 2];
         }
     }
-	finish = clock();
-	printf("scale cacl use time:%f ms\n",(double)(finish - start) / CLOCKS_PER_SEC);
+    finish = clock();
+    printf("scale cacl use time:%f ms\n",(double)(finish - start) / CLOCKS_PER_SEC);
 
     // 写入缩放后的图像数据
     fwrite(scaledImageData, scaledImageSize, 1, outputFile);
@@ -166,6 +165,7 @@ int main()
     return 0;
 }
 ```
+
 #### SCONS配置文件
 
 - 创建SConscript文件
@@ -202,7 +202,6 @@ BuildApplication('scale', 'SConscript', usr_root = '../../..')
 
 ### 编译
 
-
 进入目录 `src/big/rt-smart` 运行脚本 `source smart-env.sh riscv64` 配置环境变量。
 
 ```shell
@@ -227,11 +226,13 @@ LINK scale.elf
 /home/haohaibo/work/k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/../lib/gcc/riscv64-unknown-linux-musl/12.0.1/../../../../riscv64-unknown-linux-musl/bin/ld: warning: scale.elf has a LOAD segment with RWX permissions
 scons: done building targets.
 ```
+
 将编译好的程序重命名
 
 ``` shell
 mv scale.elf scale_with_rvv.elf
 ```
+
 编辑k230_sdk/src/big/rt-smart/tools/riscv64.py文件，去掉编译选项的v扩展。
 
 ``` diff
@@ -294,6 +295,7 @@ msh /sharefs>scale_with_rvv.elf
 scale cacl use time:0.010142 ms
 BMP image scaling completed.
 ```
+
 从打印信息看，使用了V扩展指令后，数组的计算明显加快了，如果增大图像的分辨率到4K，可以看到更明显的对比。
 
 ### 反编译
@@ -302,10 +304,9 @@ BMP image scaling completed.
 
 ``` text
 $ riscv64-unknown-linux-musl-objdump scale_with_rvv.elf -S |grep 'vadd'
-   200002c7e:	03bf4dd7          	vadd.vx	v27,v27,t5
-   200002c94:	03834c57          	vadd.vx	v24,v24,t1
+   200002c7e:03bf4dd7          vadd.vx v27,v27,t5
+   200002c94:03834c57          vadd.vx v24,v24,t1
 $ riscv64-unknown-linux-musl-objdump scale_with_rvv.elf -S |grep 'vmul'
-   200002c98:	97856c57          	vmul.vx	v24,v24,a0
+   200002c98:97856c57           vmul.vx v24,v24,a0
 
 ```
-
