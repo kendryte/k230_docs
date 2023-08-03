@@ -52,7 +52,7 @@ k230_SDK
 
 #### 源码
 
-在scale目录下创建C源码文件
+在scale目录下创建C源码文件scale.c
 
 ``` C
 #include <stdio.h>
@@ -253,7 +253,7 @@ haohaibo@develop:~/work/k230_sdk/src/big/rt-smart/userapps/testcases/scale$
 
 ```
 
-重新编译编译源码,之后将编译完的scale.elf和scale_with_rvv.elf全部拷贝到sharefs下运行。
+重新编译源码,之后将编译完的scale.elf和scale_with_rvv.elf全部拷贝到sharefs下运行。
 
 ### 运行
 
