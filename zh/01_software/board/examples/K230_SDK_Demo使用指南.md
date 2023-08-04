@@ -723,7 +723,7 @@ msh /bin\>./sample_sys_init.elf
 
 typec USB线连接USB1与PC，potplayer播放器播放摄像头。
 
-默认使用BULK传输，使用以下命令可以更改为ISO传输。但是当前的USB驱动采用buffer DMA方式，ISO传输的性能比较低，需要改成desc DMA方式。
+默认使用BULK传输，使用以下命令可以更改为ISO传输。
 
 ```shell
 ./canaan-camera.sh -i
@@ -767,6 +767,7 @@ typeC线，typeC转typeA。
 ##### 2.10.4.1 作为device模拟U盘
 
 ```shell
+#规划一块内存空间作为模拟U盘的磁盘空间。
 [root@canaan / ]#gadget-storage-mem.sh
 2+0 records in
 2+0 records out
@@ -776,11 +777,17 @@ mkfs.fat 4.1 (2017-01-24)
 [ 1218.895464] dwc2 91540000.usb-otg: bound driver configfs-gadget
 [root@canaan / ]#[ 1219.019554] dwc2 91540000.usb-otg: new device is high-speed
 [ 1219.056629] dwc2 91540000.usb-otg: new address 5
+
+##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
+[root@canaan ~ ]#gadget-storage.sh 
+[  359.995510] Mass Storage Function, version: 2009/09/11
+[  360.000762] LUN: removable file: (no medium)
+[  360.013138] dwc2 91540000.usb-otg: bound driver configfs-gadget
+[root@canaan ~ ]#[  360.136809] dwc2 91540000.usb-otg: new device is high-speed
+[  360.173543] dwc2 91540000.usb-otg: new address 43
 ```
 
-连接开发板的USB1，typeC连接PC，PC上显示U盘连接。容量为1.98MB。
-
-`gadget-storage-mem.sh` 支持把SD/eMMC的FAT分区当作U盘的分区使用。
+连接开发板的USB1，typeC连接PC，PC上显示U盘连接。
 
 ##### 2.10.4.2 作为HOST连接U盘
 
@@ -803,6 +810,23 @@ K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
 ##### 2.10.4.4 作为HOST连接鼠标键盘
 
 K230开发板USB0通过typeC转typeA连接鼠标或键盘。
+
+```shell
+#通过以下命令确定input设备对应的event。K230开发板如果没有连接屏幕，连接鼠标键盘对应的event会改变。
+[root@canaan ~ ]#cat /proc/bus/input/devices
+...
+I: Bus=0003 Vendor=046d Product=c52f Version=0111
+N: Name="Logitech USB Receiver"
+P: Phys=usb-91500000.usb-otg-1/input0
+S: Sysfs=/devices/platform/soc/91500000.usb-otg/usb1/1-1/1-1:1.0/0003:046D:C52F.0001/input/input2
+U: Uniq=
+H: Handlers=event2 
+B: PROP=0
+B: EV=17
+B: KEY=ffff0000 0 0 0 0
+B: REL=1943
+B: MSC=10
+```
 
 ```shell
 [root@canaan / ]$ test_mouse /dev/input/event2
@@ -1254,7 +1278,7 @@ OTA为空中下载技术(Over The Air)，区别于现场刷机，通过网络对
 
 #### 2.20.4 使用说明
 
-##### 2.20.4.1 编译
+##### 2.20.4.1 制作升级包
 
 ```shell
 xxx@develop:~/k230/k230_sdk/tools/ota$ tree
@@ -1271,13 +1295,16 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 └── README
 ```
 
-1. 设备端的ota程序位于buildroot-ext/package/ota，编译buildroot会把ota程序安装到文件系统的/usr/bin目录下，ota.cfg安装到/etc/目录下。
-1. 升级包制作方法：进入k230_sdk/tools/ota目录，执行./package_kpk.sh ota_package会产生ota_package.kpk即为升级包。ota_package目录自行创建，包含了需要升级的分区固件(如rtt_system.bin)，以及小核linux的文件系统的文件。
+1. 升级包制作方法：进入k230_sdk/tools/ota目录，执行./package_kpk.sh ota_package会产生ota_package.kpk即为升级包。ota_package目录自行创建，包含了需要升级的分区固件(如rtt_system.bin)，以及小核linux的文件系统的文件。值得注意的是，升级的机制是把升级包下载到内存然后解压缩进行烧录，受限于内存容量限制，ota_package 包含的分区文件大小不能太大，不超过20MB。可以分多次烧录。
 1. 不同介质的分区固件参考k230_sdk/tools/gen_image_cfg/xxx.cfg文件，即使有的分区在小核linux系统上看不到，也可以通过offset偏移地址对整个磁盘空间进行擦写升级。
 1. ota_upgrade.sh 是设备端执行的升级脚本，如果分区有修改，需要对这个脚本做对应的修改。
 1. ota_private.pem 升级包签名的私钥，需要把公钥编译或拷贝到设备的/etc/目录下。参考README
 
-##### 2.20.4.2 执行
+##### 2.20.4.2 编译设备端程序
+
+1. 设备端的ota程序位于buildroot-ext/package/ota，编译buildroot会把ota程序安装到文件系统的/usr/bin目录下，ota.cfg安装到/etc/目录下。ota.cfg可配置服务器端升级包的下载链接以及公钥的路径。
+
+##### 2.20.4.3 执行
 
 1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
 1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
