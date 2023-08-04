@@ -175,6 +175,10 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 25 | K230 SDK V0.8 | spi nand 支持 | 小核(uboot,linux)支持4线spi nand驱动, sdk支持从spinand启动; | |
 | 26 | K230 SDK V0.8 | UVC基础demo | UVC支持IMX335摄像头，UVC支持MJPEG格式 | |
 | 27 | K230 SDK V0.8 | spinor 增加人脸特性等参数分区 | spi nor 新增人脸特性、ai模型、标定参数、大核app、散斑、快起参数等参数分区；从spinor启动时uboot会解析并加载各个分区数据。 | |
+| 28 | K230 SDK V0.9 | 小核PWM驱动 | 支持小核PWM驱动 | |
+| 29 | K230 SDK V0.9 | 小核ADC驱动 | 支持小核ADC驱动 | |
+| 30 | K230 SDK V0.9 | 支持K230D开发板 | SDK支持K230D开发板（SD卡启动） | |
+| 31 | K230 SDK V0.9 | OTA | 支持OTA升级 | |
 
 ### 4.4 架构
 
