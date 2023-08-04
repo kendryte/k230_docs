@@ -131,6 +131,7 @@
 | [K230_GPU应用实战.md](zh/02_applications/tutorials/K230_GPU应用实战.md) | K230 GPU应用实战|
 | [K230_GUI实战_LVGL移植教程.md](zh/02_applications/tutorials/K230_GUI实战_LVGL移植教程.md) | K230 GUI实战 LVGL移植教程|
 | [K230_RVV实战.md](zh/02_applications/tutorials/K230_RVV实战.md) | K230 RVV实战|
+| [K230_RVV优化性能说明.md](zh/02_applications/tutorials/K230_RVV优化性能说明.md) | K230 RVV优化性能说明|
 | [K230_USB应用实战_UVC传输YUV及编码码流.md](zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md) | K230 USB应用实战 UVC传输YUV及编码码流|
 | [K230_图像实战_开机视频和开机logo.md](zh/02_applications/tutorials/K230_图像实战_开机视频和开机logo.md) | K230 图像实战 开机视频和开机logo|
 | [K230_图像采集实战_如何支持一款新sensor.md](zh/02_applications/tutorials/K230_图像采集实战_如何支持一款新sensor.md) | K230 图像采集实战 如何支持一款新sensor|
