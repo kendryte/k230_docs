@@ -83,6 +83,7 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
+| [K230_中间件_API参考.md](zh/01_software/board/middleware/K230_中间件_API参考.md) | K230 中间件 API参考 |
 | [K230_openblas_开发使用指南.md](zh/01_software/board/middleware/K230_openblas_开发使用指南.md) | K230 OpenBLAS 开发使用指南|
 | [K230_opencv_开发使用指南.md](zh/01_software/board/middleware/K230_opencv_开发使用指南.md) | K230 OpenCV 开发使用指南|
 
@@ -142,6 +143,7 @@
 | 文档名称 | 文档概要 |
 | --- | --- |
 | [K230_场景实战_智能门锁.md](zh/02_applications/business_poc/K230_场景实战_智能门锁.md) | K230 场景实战 智能门锁|
+| [K230_场景实战_猫眼.md](zh/02_applications/business_poc/猫眼.md) | K230 场景实战 猫眼|
 
 ### K230 SDK AI教程
 
