@@ -198,7 +198,13 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 16 | K230 SDK V0.7 | TRNG读功能     | 小核Linux中增加TRNG读功能                                                                                                         |                                     |
 | 17 | K230 SDK V0.7 | 快起demo       | 添加大核快速启动人脸检测demo                                                                                                       |                                     |
 | 18 | K230 SDK V0.7 | PMU功能        | 添加小核linux的PMU待机和唤醒功能                                                                                                   |                                     |
-| 19 | K230 SDK V0.8 | 门锁POC        | 大核添加POC门锁功能，小核添加UI功能，通过UI界面或SD卡注册人脸并完成识别                                                                                                   |                                     |
+| 19 | K230 SDK V0.8 | 门锁POC        | 大核添加POC门锁功能，小核添加UI功能，通过UI界面或SD卡注册人脸并完成识别
+
+| 20 | K230 SDK V0.9 | 门锁POC        | 支持ov9286,人脸检测和识别（包含IR和散斑活体，散斑包含DPU
+深度提取）
+
+| 21 | K230 SDK V0.9 | 加解密        | 添加小核linux的aes-gcm加解密功能
+| 22 | K230 SDK V0.9 | 功耗控制        | uboot中增加对芯片时钟/电源域管理，大核rt-smart中增加对CPU1，DPU，VPU，KPU，display的功耗控制，小核linux中增加对display的功耗控制                                                                                                |                                     |
 
 ### 4.5 其它
 
