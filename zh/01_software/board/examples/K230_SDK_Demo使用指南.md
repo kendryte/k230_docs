@@ -862,13 +862,13 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 
 运行`tiger`命令，执行完成后在当前目录下生成tiger.png，如下图所示
 
-![卡通人物 描述已自动生成](images/e54764629a9e9fb63ec4340d316e4f42.png)
+![老虎图像](images/e54764629a9e9fb63ec4340d316e4f42.png)
 
 ##### 2.11.4.2 linearGrad
 
 运行`linearGrad`命令，执行完成后在当前目录生成linearGrad.png，如下图所示
 
-![图片描述](images/24db1c231608cd26a5a981e055aa6910.png)
+![线性渐变](images/24db1c231608cd26a5a981e055aa6910.png)
 
 ##### 2.11.4.3 imgIndex
 
@@ -876,19 +876,39 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 
 - `imgIndex1.png`: index1模式，支持2种颜色
 
-![图片描述](images/9f7f9bfaedf0f183b63b59ace6e1569e.png)
+![index1](images/9f7f9bfaedf0f183b63b59ace6e1569e.png)
 
 - `imgIndex2.png`: index2模式，支持4种颜色
 
-![图片描述](images/c4bb92a96fd0ba1f4973a27ecd6f60eb.png)
+![index2](images/c4bb92a96fd0ba1f4973a27ecd6f60eb.png)
 
 - `imgIndex4.png`: index4模式，支持16种颜色
 
-![图片描述](images/9a3c47da0975b0226e75453a79a8da2c.png)
+![index4](images/9a3c47da0975b0226e75453a79a8da2c.png)
 
 - `imgIndex8.png`: index8模式，支持256种颜色
 
-![背景图案 描述已自动生成](images/1f24a6530d8c0d1ed22bb3eea26a33fb.png)
+![index8](images/1f24a6530d8c0d1ed22bb3eea26a33fb.png)
+
+##### 2.11.4.4 vglite_drm
+
+运行`vglite_drm`命令，会在LCD屏幕上显示由GPU绘制的图案，再按一次`Enter`键显示下一个图案，如图所示
+
+![第一个图案](../../../02_applications/tutorials/images/gpu-1.jpg)
+
+![第二个图案](../../../02_applications/tutorials/images/gpu-3.jpg)
+
+##### 2.11.4.5 vglite_cube
+
+运行`vglite_cube`命令，会在LCD屏幕上显示由GPU绘制的旋转的正方体，如下图所示
+
+![Cube](images/gpu-1.jpg)
+
+这个demo运行时内核会有大量的打印消息，如果不希望显示这些消息可以降低内核打印级别
+
+```shell
+sysctl -w kernel.printk=6
+```
 
 ### 2.12 DRM显示demo
 
