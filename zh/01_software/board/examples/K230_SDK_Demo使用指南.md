@@ -1001,7 +1001,7 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 
 1. 通过 ` lsmod ` 检查小核侧是否加载k_ipcm模块，如未加载，执行 `insmod k_ipcm.ko` 加载k_ipcm模块
 1. 在大核侧启动核间通信进程，执行 `./sample_sys_inif.elf`
-1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明：
+1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944。
 
 ```shell
 Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720
@@ -1021,7 +1021,7 @@ Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720
                     -h: the video encoder height
 ```
 
-可通过` ctrl+c `停止运行，小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放。
+小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放；如需停止运行，请先停止vlc拉流，然后执行` ctrl+c `停止运行 rtsp_demo。
 
 ### 2.15 FaceAeDemo
 
