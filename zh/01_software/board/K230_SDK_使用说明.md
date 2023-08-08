@@ -77,6 +77,8 @@ K230-USIP-LP3-EVB：具体硬件信息参考 《K230-USIP-LP3-EVB-硬件使用�
 
 K230-USIP-LP4-EVB：具体硬件信息参考 《K230-USIP-LP4-EVB-硬件使用说明》
 
+K230-SIP-EVB：具体硬件信息参考 《K230_硬件设计指南》
+
 ### 2.2 开发环境搭建
 
 #### 2.2.1 编译环境
@@ -141,6 +143,8 @@ k230_sdk
 ├── configs
 │   ├── k230_evb_defconfig
 │   └── k230_evb_usiplpddr4_defconfig
+│   └── k230d_defconfig
+│   └── k230_evb_nand_defconfig
 ├── Kconfig
 ├── LICENSE
 ├── Makefile
@@ -204,6 +208,8 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 
 `k230_evb_defconfig` ：基于K230 USIP LP3 EVB的默认SDK配置文件
 `k230_evb_usiplpddr4_defconfig` ：基于K230 USIP LP4 EVB的默认SDK配置文件
+`k230d_defconfig` ：基于K230-SIP-EVB的默认SDK配置文件
+`k230_evb_nand_defconfig` ：基于K230 USIP LP3 EVB会生成nand镜像的默认SDK配置文件
 
 ### 4.3 编译 SDK
 
@@ -237,24 +243,16 @@ Step 5: 进入docker环境，
 Step 6: Docker环境下执行下面命令进行编译SDK
 
 ```bash
-make CONF=k230_evb_defconfig  #编译K230-USIP-LP4-EVB板子镜像
+make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 #make CONF=k230_evb_usiplpddr4_defconfig  #编译K230-USIP-LP4-EVB板子镜像
+#make CONF=k230d_defconfig  #编译K230-SIP-EVB板子镜像
+#make CONF=k230_evb_nand_defconfig  #编译K230-USIP-LP3-EVB板子nand镜像
 ```
 
 > 编译K230-USIP-LP4-EVB板子镜像使用`make CONF=k230_evb_usiplpddr4_defconfig`命令
 > 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
-
-特别的：
-如果需要nand镜像，先做以下修改,然后重新进行步骤'Step 5'，进行编译。
-1）小核uboot下，修改k230_sdk\src\little\uboot\arch\riscv\dts\k230_evb.dts 中spi0节点的配置，即测试nandflash时，编译前将compatible 设置为 "spi-nand"；测试norflash时，将compatible设为"jedec,spi-nor"，
-&spi0 {
-    spi-flash@0 {
-        //compatible = "spi-nand";
-        compatible = "jedec,spi-nor";
-        reg = <0>;
-
-2）小核linux下，修改k230_sdk\src\little\linux\arch\riscv\boot\dts\kendryte\k230_evb.dtsi 中spi0节点的配置，将k230_evb_nand.dtsi内容覆盖到k230_evb.dtsi,以修改SPI0节点的内容。（两个dtsi仅SPI0节点内容不同）
-3）k230_sdk下，修改k230_sdk\parse.mak，禁用：'$(K230_SDK_ROOT)/tools/menuconfig_to_code.sh'
+> 编译K230-SIP-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
+> 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令。
 
 #### 4.3.2 编译输出产物
 
@@ -291,6 +289,12 @@ sdk默认编译的是快起镜像(uboot直接启动系统，不会进入uboot命
 sdk默认不产生安全镜像，如果需要安全镜像，请参考下面增加CONFIG_GEN_SECURITY_IMG配置：
 
 在sdk主目录 执行`make menuconfig` ，选择`board configuration`，配上`create security image` 选项。
+
+#### 4.3.5 debug镜像
+
+sdk默认产生release镜像，如果需要调试镜像，请参考下面增加CONFIG_BUILD_DEBUG_VER配置：
+
+在sdk主目录 执行`make menuconfig` ，选择`build debug/release version`，配上`debug` 选项。
 
 ## 5. SDK 镜像烧写
 
@@ -372,7 +376,8 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 
 1）把sysimage-spinor32m.img镜像下载到内存。
 
-`usb start; dhcp; tftp 0x9000000 10.10.1.94:wjx/sysimage-spinor32m.img;`
+`usb start; dhcp; tftp 0x9000000 10.10.1.94:wjx/sysimage-spinor32m.img;
+ #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2200000`
 
 2）把镜像写到spi nor flash
 
