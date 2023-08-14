@@ -254,6 +254,14 @@ make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 > 编译K230-SIP-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
 > 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令。
 
+备注：
+当编译k230d_defconfig镜像需要替换k230_sdk\src\big\mpp\kernel\lib\libvo.a。替换方法如下：
+下载
+<https://kendryte-download.canaan-creative.com/k230/downloads/mpp_lib/libvo_k230d.a>
+
+替换
+先备份一份libvo.a，然后将下载的libvo_k230d.a 替换成 libvo.a。重新编译即可
+
 #### 4.3.2 编译输出产物
 
 编译完成后，在`output/xx_defconfig/images`目录下可以看到编译输出产物。
