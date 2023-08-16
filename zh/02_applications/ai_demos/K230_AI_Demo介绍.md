@@ -25,12 +25,13 @@
 
 ### 概述
 
-K230 AI Demo集合包括人脸、身体、手部相关的分类、检测、识别任务。
+K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块，包含了分类、检测、分割、识别和跟踪等多种功能，给客户提供如何使用K230开发AI相关应用的参考。
 
 ### 硬件环境
 
 - K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - K230-USIP-IMX335-SENSOR-V1.1模组
+- 个别AI Demo（segment_yolov8n）需要K230-UNSIP-LP4-EVB-V1.0环境
 
 ### 源码位置
 
@@ -39,6 +40,7 @@ K230 AI Demo集合包括人脸、身体、手部相关的分类、检测、识�
 ```shell
 .
 ├── build_app.sh
+├── bytetrack
 ├── cmake
 ├── CMakeLists.txt
 ├── face_detection
@@ -49,46 +51,81 @@ K230 AI Demo集合包括人脸、身体、手部相关的分类、检测、识�
 ├── face_mask
 ├── face_pose
 ├── falldown_detect
+├── fitness
+├── licence_det
+├── licence_det_rec
+├── llamac
 ├── object_detect_yolov8n
+├── person_attr
 ├── person_detect
 ├── pose_detect
+├── pphumanseg
+├── segment_yolov8n
 ├── shell
 ├── sq_hand_det
 ├── sq_handkp_class
 ├── sq_handkp_det
-└── sq_handreco
+├── sq_handkp_ocr
+├── sq_handreco
+├── vehicle_attr
+└── version
 ```
 
-kmodel及image路径位于`src/big/kmodel/ai_poc`，目录结构如下：
+kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构如下：
 
 ``` shell
+.
 ├── images
+│   ├── 1000.jpg
 │   ├── 1024x1331.jpg
 │   ├── 1024x624.jpg
 │   ├── 1024x768.jpg
 │   ├── bus.jpg
+│   ├── bytetrack_data
+│   ├── car.jpg
 │   ├── falldown_elder.jpg
-│   └── input_hd.jpg
-└── kmodel
-    ├── face_detection_320.kmodel
-    ├── face_emotion.kmodel
-    ├── face_gender.kmodel
-    ├── face_glasses.kmodel
-    ├── face_landmark.kmodel
-    ├── face_mask.kmodel
-    ├── face_pose.kmodel
-    ├── hand_det.kmodel
-    ├── handkp_det.kmodel
-    ├── hand_reco.kmodel
-    ├── yolov5n-falldown.kmodel
-    ├── yolov5n.kmodel
-    ├── yolov8n_320.kmodel
-    ├── yolov8n_640.kmodel
-    └── yolov8n-pose.kmodel
+│   ├── hrnet_demo.jpg
+│   ├── input_hd.jpg
+│   ├── input_ocr.jpg
+│   └── licence.jpg
+├── kmodel
+│   ├── bytetrack_yolov5n.kmodel
+│   ├── face_detection_320.kmodel
+│   ├── face_detection_640.kmodel
+│   ├── face_emotion.kmodel
+│   ├── face_gender.kmodel
+│   ├── face_glasses.kmodel
+│   ├── face_landmark.kmodel
+│   ├── face_mask.kmodel
+│   ├── face_pose.kmodel
+│   ├── hand_det.kmodel
+│   ├── handkp_det.kmodel
+│   ├── hand_reco.kmodel
+│   ├── human_seg_2023mar.kmodel
+│   ├── licence_reco.kmodel
+│   ├── LPD_640.kmodel
+│   ├── ocr_det.kmodel
+│   ├── ocr_rec.kmodel
+│   ├── person_attr_yolov5n.kmodel
+│   ├── person_detect_yolov5n.kmodel
+│   ├── person_pulc.kmodel
+│   ├── vehicle_attr_yolov5n.kmodel
+│   ├── vehicle.kmodel
+│   ├── yolov5n-falldown.kmodel
+│   ├── yolov8n_320.kmodel
+│   ├── yolov8n_640.kmodel
+│   ├── yolov8n-pose.kmodel
+│   ├── yolov8n_seg_320.kmodel
+│   └── yolov8n_seg_640.kmodel
+└── utils
+    ├── Asci0816.zf
+    ├── HZKf2424.hz
+    ├── llama.bin
+    └── tokenizer.bin
 ```
 
 ### 编译及运行程序
 
 - 进入src/reference/ai_poc
-- 执行build_app.sh脚本（之前脚本前确保src/big/kmodel/ai_poc下已经有相应kmodel和images），会将kmodel、images、shell、elf统一拷贝生成到k230_bin文件夹
-- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应demo
+- 执行build_app.sh脚本（执行脚本前确保src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
+- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
