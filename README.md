@@ -155,6 +155,7 @@
 | 文档名称 | 文档概要 |
 | --- | --- |
 | [K230_场景实战_智能门锁.md](zh/02_applications/business_poc/K230_场景实战_智能门锁.md) | K230 场景实战 智能门锁|
+| [K230_场景实战_智能门锁_ov9286.md](zh/02_applications/business_poc/K230_场景实战_智能门锁_OV9286.md) | K230 场景实战 智能门锁 OV9286|
 | [K230_场景实战_猫眼.md](zh/02_applications/business_poc/K230_场景实战_猫眼.md) | K230 场景实战 猫眼|
 
 ### K230 SDK AI教程
