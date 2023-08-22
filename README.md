@@ -112,6 +112,7 @@
 | [K230_视频编解码_API参考.md](zh/01_software/board/mpp/K230_视频编解码_API参考.md) | K230 视频编解码 API参考|
 | [K230_视频输出_API参考.md](zh/01_software/board/mpp/K230_视频输出_API参考.md) | K230 视频输出 API参考|
 | [K230_音频_API参考.md](zh/01_software/board/mpp/K230_音频_API参考.md) | K230 音频 API参考|
+| [K230_FFT_API参考.md](zh/01_software/board/mpp/K230_FFT_API参考.md) | K230 FFT API参考|
 
 #### K230 sdk osdrv 文档
 
@@ -130,6 +131,7 @@
 | --- | --- |
 | [K230_SDK_Tuning_Tool使用指南.md](zh/01_software/pc/pqtools/K230_SDK_Tuning_Tool使用指南.md) | K230 SDK Tuning Tool 使用指南|
 | [K230_SDK_Dewarp使用指南.md](zh/01_software/pc/dewarp/K230_SDK_Dewarp使用指南.md) | K230 SDK Dewarp 使用指南 |
+| [K230_SDK_Burntool使用指南.md](zh/01_software/pc/burntool/K230_SDK_Burntool使用指南.md) | K230 SDK Burntool 使用指南 |
 
 ## K230 SDK 使用教程
 
