@@ -4392,12 +4392,13 @@ k_s32 kd_mapi_venc_enable_idr(k_s32 chn_num, k_bool idr_enable);
 #### 4.1.4 数据类型
 
 视频编码相关的数据类型定义如下：
-[kd_venc_callback_s](#4141-kd_venc_callback_s)
-[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-[kd_venc_data_s](#4143-kd_venc_data_s)
-[k_venc_data_pack_s](#4144-k_venc_data_pack_s)
-[KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)
-[KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
+
+- [kd_venc_callback_s](#4141-kd_venc_callback_s)
+- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+- [kd_venc_data_s](#4143-kd_venc_data_s)
+- [k_venc_data_pack_s](#4144-k_venc_data_pack_s)
+- [KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)
+- [KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
 
 ##### 4.1.4.1 kd_venc_callback_s
 
@@ -4427,9 +4428,9 @@ typedef struct
 
 【相关数据类型及接口】
 
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-[kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
-[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
 
 ##### 4.1.4.2 pfn_venc_dataproc
 
@@ -4455,8 +4456,8 @@ typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_
 
 【相关数据类型及接口】
 
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-[kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
 
 ##### 4.1.4.3 kd_venc_data_s
 
