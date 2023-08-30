@@ -59,6 +59,7 @@
 | V1.7     | 修改venc demo中的sensor参数，vdec demo中增加MAPI VDEC绑定VO解码显示 | SDK部 | 2023-6-30 |
 | V1.8     | 修改mapi sample_venc和rtsp_demo的使用说明 | SDK部 | 2023-7-1 |
 | V1.9 | 修改vicap demo使用说明，支持多路sensor输入 | SDK部 | 2023-8-1 |
+| V2.0 | 修改uvc demo的测试命令 | SDK部 | 2023-8-30 |
 
 ## 1. 概述
 
@@ -682,7 +683,7 @@ uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播�
 
 #### 2.9.3 依赖资源
 
-摄像头模组，IMX335摄像头测试效果最佳。
+摄像头模组，OV9732/IMX335摄像头。
 
 type c线连接USB1与PC
 
@@ -710,13 +711,13 @@ PC的相机应用或安装PotPlayer软件
 进入大核rt-smart系统后，进入/bin目录下，执行
 
 ```shell
-msh /bin\>./sample_sys_init.elf
+msh /sharefs/app>./sample_sys_init.elf
 ```
 
 进入小核linux系统后，进入`/mnt`目录下，执行
 
 ```shell
-./canaan-camera.sh
+./canaan-camera.sh start otg1
 
 ./camera
 ```
@@ -726,23 +727,20 @@ typec USB线连接USB1与PC，potplayer播放器播放摄像头。
 默认使用BULK传输，使用以下命令可以更改为ISO传输。
 
 ```shell
-./canaan-camera.sh -i
+./canaan-camera.sh stop
+
+./canaan-camera.sh start otg1 iso
 
 ./camera -i
 ```
 
-当前推荐使用IMX335摄像头测试。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试，后面的版本会逐步支持改善。
+默认为IMX335摄像头。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试。
 
 进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
 `视频录制设备`->`设备`，选择`UVC Camera`
 `视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
-注：不同格式切换前，需要重启demo，即暂不支持demo启动后，PotPlayer直接切换不同格式
 
 PotPlayer -> `打开` -> `摄像头/其他设备`
-
-##### 2.9.4.2.3 补充说明
-
-该demo还处于开发阶段，对于程序的安全退出的设计还未完成，每次测试需要重新启动操作系统。后续版本逐步完善体验，敬请期待。
 
 ### 2.10 USB_demo
 
@@ -779,7 +777,7 @@ mkfs.fat 4.1 (2017-01-24)
 [ 1219.056629] dwc2 91540000.usb-otg: new address 5
 
 ##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
-[root@canaan ~ ]#gadget-storage.sh 
+[root@canaan ~ ]#gadget-storage.sh
 [  359.995510] Mass Storage Function, version: 2009/09/11
 [  360.000762] LUN: removable file: (no medium)
 [  360.013138] dwc2 91540000.usb-otg: bound driver configfs-gadget
@@ -820,7 +818,7 @@ N: Name="Logitech USB Receiver"
 P: Phys=usb-91500000.usb-otg-1/input0
 S: Sysfs=/devices/platform/soc/91500000.usb-otg/usb1/1-1/1-1:1.0/0003:046D:C52F.0001/input/input2
 U: Uniq=
-H: Handlers=event2 
+H: Handlers=event2
 B: PROP=0
 B: EV=17
 B: KEY=ffff0000 0 0 0 0
