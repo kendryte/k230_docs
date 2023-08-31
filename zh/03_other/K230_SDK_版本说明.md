@@ -129,21 +129,24 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 1  | K230 SDK V0.5 | vicap         | 支持sensor图像采集（OV9732、OV9286）                                                                                                  |      |
 | 2  | K230 SDK V0.5 | AE            | 支持AE自动曝光                                                                                                                        |      |
 | 3  | K230 SDK V0.5 | vicap bind vo | vicap 绑定到 vo输出图像                                                                                                               |      |
-| 4  | K230 SDK V0.5 | GPU绘图       | 矢量绘制填充（直线、二次贝塞尔曲线、三次贝塞尔曲线、椭圆曲线） 线性渐变 颜色查找表 图像合成/混合，BLIT                                |      |
-| 5  | K230 SDK V0.5 | 图像调优      | tuning tool 通过网络、串口连接开发板进行图像调优。 black level correction  lens shading correction  color calibration  AWB CAC  gamma |      |
+| 4  | K230 SDK V0.5 | GPU绘图       | 矢量绘制填充（直线、二次贝塞尔曲线、三次贝塞尔曲线、椭圆曲线） 线性渐变 颜色查找表 图像合成/混合，BLIT                                     |      |
+| 5  | K230 SDK V0.5 | 图像调优      | tuning tool 通过网络、串口连接开发板进行图像调优。 black level correction  lens shading correction  color calibration  AWB CAC  gamma   |      |
 | 6  | K230 SDK V0.5 | display bind  | 支持vo和vicap，vo 和 vdec 绑定                                                                                                        |      |
-| 7  | K230 SDK V0.5 | display 显示  | 支持osd和yuv 显示 支持dump 帧功能 支持dsi 和 vo timing 可配 支持插帧功能                                                              |      |
-| 8  | K230 SDK V0.6 | 图像调优      | tuning tool可以配置sensor寄存器                                                                                                       |      |
-| 9  | K230 SDK V0.6 | 时间戳、帧号  | 支持时间戳、帧号                                                                                                                      |      |
+| 7  | K230 SDK V0.5 | display 显示  | 支持osd和yuv 显示 支持dump 帧功能 支持dsi 和 vo timing 可配 支持插帧功能                                                                 |      |
+| 8  | K230 SDK V0.6 | 图像调优       | tuning tool可以配置sensor寄存器                                                                                                       |      |
+| 9  | K230 SDK V0.6 | 时间戳、帧号   | 支持时间戳、帧号                                                                                                                      |      |
 | 10 | K230 SDK V0.6 | ISP+KPU Demo  | 人脸检测联动demo                                                                                                                      |      |
-| 11 | K230 SDK V0.7 | dewarp  | 添加dewarp功能，可以实现畸变校正                                                                                                                        |      |
-| 12 | K230 SDK V0.7 | Face AE  | 添加了FaceAE的功能及对应的FaceAE demo                                                                                                                      |      |
-| 13 | K230 SDK V0.7 | 添加Imx335  | 添加Imx335 sensor驱动及demo                                                                                                                      |      |
-| 14 | K230 SDK V0.8 | 添加DRM  | Linux小核添加DRM驱动及demo                                                                                                                      |      |
-| 15 | K230 SDK V0.8 | 添加LVGL  | Linux小核添加LVGL及demo                                                                                                                      |      |
-| 16 | K230 SDK V0.8 | 快启APP  | 快启APP Sensor改为Imx335(带晶振)                                                                                                                      |      |
-| 17 | K230 SDK V0.9 | mcm  | 支持最多三路sensor                                                                                                                      |      |
-| 18 | K230 SDK V0.9 | display mapi  | 添加视频输出类MAPI                                                                                                                      |      |
+| 11 | K230 SDK V0.7 | dewarp        | 添加dewarp功能，可以实现畸变校正                                                                                                       |      |
+| 12 | K230 SDK V0.7 | Face AE       | 添加了FaceAE的功能及对应的FaceAE demo                                                                                                  |      |
+| 13 | K230 SDK V0.7 | 添加Imx335    | 添加Imx335 sensor驱动及demo                                                                                                            |      |
+| 14 | K230 SDK V0.8 | 添加DRM       | Linux小核添加DRM驱动及demo                                                                                                             |      |
+| 15 | K230 SDK V0.8 | 添加LVGL      | Linux小核添加LVGL及demo                                                                                                                |      |
+| 16 | K230 SDK V0.8 | 快启APP       | 快启APP Sensor改为Imx335(带晶振)                                                                                                       |      |
+| 17 | K230 SDK V0.9 | mcm           | 支持最多三路sensor                                                                                                                     |      |
+| 18 | K230 SDK V0.9 | display mapi  | 添加视频输出类MAPI                                                                                                                     |      |
+| 19 | K230 SDK V1.0 | 调测-Dump sensor raw     | 支持dump sensor raw数据                                                                                                     |      |
+| 20 | K230 SDK V1.0 | 调测-帧数统计             | 支持总输入、输出帧数统计功能                                                                                                 |      |
+| 21 | K230 SDK V1.0 | dewarp -分屏             | 支持2、4分屏输出                                                                                                            |      |
 
 ### 4.3 平台
 
