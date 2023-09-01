@@ -210,6 +210,8 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 20 | K230 SDK V0.9 | 门锁 POC        | 支持 ov9286,人脸检测和识别（包含 IR 和散斑活体，散斑包含 DPU 深度提取） |                                     |
 | 21 | K230 SDK V0.9 | 加解密        | 添加小核 linux 的 aes-gcm 加解密功能 |                                     |
 | 22 | K230 SDK V0.9 | 功耗控制        | uboot 中增加对芯片时钟/电源域管理，大核 rt-smart 中增加对 CPU1，DPU，VPU，KPU，display 的功耗控制，小核 linux 中增加对 display 的功耗控制                                                                                                |                                     |
+| 23 | K230 SDK V1.0 | 门锁POC        | 添加人脸特征值加解密功能 |                                     |
+| 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
 
 ### 4.5 其它
 
