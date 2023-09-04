@@ -1326,3 +1326,85 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 
 1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
 1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
+
+### 2.21 FFT Demo
+
+#### 2.21.1 Demo 简介
+
+本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
+
+#### 2.21.2 Feature说明
+
+先进行fft计算，在进行ifft计算
+
+#### 2.21.3 依赖资源
+
+无
+
+#### 2.21.4 使用说明
+
+##### 2.21.4.1 编译
+
+> 请参考release sdk软件包中的README.md。
+
+##### 2.21.4.2 执行
+
+1. 大小核系统都起来后，在大核命令行执行下面命令：
+
+   ```bash
+   cd /sharefs/app;./sample_fft.elf 
+   ```
+
+   大核串口输出内容如下：
+
+   ```text
+   msh /sharefs/app>./sample_fft.elf 1 0
+   -----fft ifft point 0064  -------
+       max diff 0003 0001 
+       i=0045 real  hf 0000  hif fc24 org fc21 dif 0003
+       i=0003 imag  hf ffff  hif 0001 org 0000 dif 0001
+   -----fft ifft point 0064 use 133 us result: ok 
+   
+   
+   -----fft ifft point 0128  -------
+       max diff 0003 0002 
+       i=0015 real  hf 0001  hif fca1 org fc9e dif 0003
+       i=0031 imag  hf 0001  hif fffe org 0000 dif 0002
+   -----fft ifft point 0128 use 121 us result: ok 
+   
+   
+   -----fft ifft point 0256  -------
+       max diff 0003 0001 
+       i=0030 real  hf 0000  hif fca1 org fc9e dif 0003
+       i=0007 imag  hf ffff  hif 0001 org 0000 dif 0001
+   -----fft ifft point 0256 use 148 us result: ok 
+   
+   
+   -----fft ifft point 0512  -------
+       max diff 0003 0003 
+       i=0060 real  hf 0000  hif fca1 org fc9e dif 0003
+       i=0314 imag  hf 0001  hif fffd org 0000 dif 0003
+   -----fft ifft point 0512 use 206 us result: ok 
+   
+   
+   -----fft ifft point 1024  -------
+       max diff 0005 0002 
+       i=0511 real  hf 0000  hif fc00 org fc05 dif 0005
+       i=0150 imag  hf 0000  hif fffe org 0000 dif 0002
+   -----fft ifft point 1024 use 328 us result: ok 
+   
+   
+   -----fft ifft point 2048  -------
+       max diff 0005 0003 
+       i=1022 real  hf 0000  hif fc00 org fc05 dif 0005
+       i=1021 imag  hf 0000  hif 0003 org 0000 dif 0003
+   -----fft ifft point 2048 use 574 us result: ok 
+   
+   
+   -----fft ifft point 4096  -------
+       max diff 0005 0002 
+       i=4094 real  hf 027b  hif 041f org 0424 dif 0005
+       i=0122 imag  hf 0000  hif 0002 org 0000 dif 0002
+   -----fft ifft point 4096 use 1099 us result: ok 
+   
+   ```

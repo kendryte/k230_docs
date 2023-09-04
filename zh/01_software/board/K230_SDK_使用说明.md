@@ -79,6 +79,8 @@ K230-USIP-LP4-EVB：具体硬件信息参考 《K230-USIP-LP4-EVB-硬件使用�
 
 K230-SIP-EVB：具体硬件信息参考 《K230_硬件设计指南》
 
+k230-pi(canmv):具体硬件信息参考 《K230_硬件设计指南》
+
 ### 2.2 开发环境搭建
 
 #### 2.2.1 编译环境
@@ -144,7 +146,6 @@ k230_sdk
 │   ├── k230_evb_defconfig
 │   └── k230_evb_usiplpddr4_defconfig
 │   └── k230d_defconfig
-│   └── k230_evb_nand_defconfig
 ├── Kconfig
 ├── LICENSE
 ├── Makefile
@@ -167,15 +168,20 @@ k230_sdk
 │       ├── ai_poc
 │       ├── business_poc
 │       └── fancy_poc
+├── board
+│   ├── common
+│   │   ├── env
+│   │   └── gen_image_cfg
+│   │   ├── gen_image_script
+│   │   └── post_copy_rootfs
+│   ├── k230_evb_doorlock
+│   └── k230_evb_peephole_device
 └── tools
     ├── docker
     │   └── Dockerfile
     ├── doxygen
     ├── firmware_gen.py
-    ├── gen_image_cfg
-    ├── gen_image.sh
-    ├── get_download_url.sh
-    └── post_copy_rootfs
+    └── get_download_url.sh
 ```
 
 各个目录用途描述如下：
@@ -193,6 +199,7 @@ k230_sdk
     小核代码包含：`linux`内核代码，`buildroot`代码，`uboot`代码
 
 - `tools`：存放各种工具，脚本等。例如`kconfig`，`doxygen`，`dockerfile`等
+- `board`：环境变量、镜像配置文件、文件系统等
 
 ## 4. SDK 编译
 
@@ -210,6 +217,10 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 `k230_evb_usiplpddr4_defconfig` ：基于K230 USIP LP4 EVB的默认SDK配置文件
 `k230d_defconfig` ：基于K230-SIP-EVB的默认SDK配置文件
 `k230_evb_nand_defconfig` ：基于K230 USIP LP3 EVB会生成nand镜像的默认SDK配置文件
+`k230_canmv_defconfig` ：基于K230-PI(canmv)的默认SDK配置文件
+`k230_evb_doorlock_defconfig` ：基于K230 USIP LP3 EVB的门锁poc默认SDK配置文件
+`k230_evb_peephole_device_defconfig` ：基于K230 USIP LP3 EVB的猫眼POC
+`k230d_doorlock_defconfig` ：基于K230-SIP-EVB的门锁POC
 
 ### 4.3 编译 SDK
 
@@ -252,7 +263,7 @@ make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 > 编译K230-USIP-LP4-EVB板子镜像使用`make CONF=k230_evb_usiplpddr4_defconfig`命令
 > 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
 > 编译K230-SIP-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
-> 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令。
+> 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令
 
 备注：
 当编译k230d_defconfig镜像需要替换k230_sdk\src\big\mpp\kernel\lib\libvo.a。替换方法如下：
@@ -291,6 +302,8 @@ make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 sdk默认编译的是快起镜像(uboot直接启动系统，不会进入uboot命令行)，如果需要进入uboot命令行，请参考下面取消`CONFIG_QUICK_BOOT`配置：
 
 在sdk主目录 执行 `make menuconfig` ，选择`board configuration`，取消`quick boot` 配置选项。
+
+非快起系统变快起系统方法：进入uboot命行执行`setenv quick_boot true;saveenv;`
 
 #### 4.3.4 安全镜像
 
@@ -360,7 +373,7 @@ Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具
 
 ### 5.2 Emmc镜像烧写参考
 
-#### 5.2.1 Linux下烧写参考
+#### 5.2.1 Linux下烧写emm参考
 
 1)把镜像的压缩包下载到sd卡
 
@@ -378,6 +391,23 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 
 3)切成emmc启动，重启板子
 
+#### 5.2.1 Uboot下烧写emmc参考
+
+1）把ssysimage-sdcard.img.gz镜像下载到内存。
+
+```bash
+usb start; dhcp;  tftp 0x900000010.10.1.94:wjx/sysimage-sdcard.img.gz;
+ #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2400000 
+```
+
+2）把镜像写到emmc
+
+```bash
+gzwrite mmc  0   0x${fileaddr}  0x${filesize};
+```
+
+3）重启板子
+
 ### 5.3 Spinor镜像烧写参考
 
 #### 5.3.1 Uboot下烧写参考
@@ -385,7 +415,7 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 1）把sysimage-spinor32m.img镜像下载到内存。
 
 `usb start; dhcp; tftp 0x9000000 10.10.1.94:wjx/sysimage-spinor32m.img;
- #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2200000`
+ #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2400000
 
 2）把镜像写到spi nor flash
 
@@ -485,7 +515,7 @@ CONFIG_SPI_NOR_LR_BASE=0x16c0000
 CONFIG_SPI_NOR_LR_SIZE=0x900000
 ```
 
-tools/menuconfig_to_code.sh 脚本会根据这些定义动态(关键脚本如下)修改linux设备树和tools/gen_image_cfg/genimage-spinor.cfg文件；
+tools/menuconfig_to_code.sh 脚本会根据这些定义动态(关键脚本如下)修改linux设备树和board/common/gen_image_cfg/genimage-spinor.cfg文件；
 
 ```bash
 image sysimage-spinor32m.img {
@@ -546,11 +576,11 @@ image sysimage-spinor32m.img {
 }
 ```
 
-最后genimage 会解析tools/gen_image_cfg/genimage-spinor.cfg 文件并生成正确的镜像。
+最后genimage 会解析board/common/gen_image_cfg/genimage-spinor.cfg 文件并生成正确的镜像。
 
 ```bash
 genimage --rootpath little-core/rootfs/ --tmppath genimage.tmp --inputpath images --outputpath images
---config tools/gen_image_cfg/genimage-spinor.cfg
+--config board/common/gen_image_cfg/genimage-spinor.cfg
 ```
 
 #### 6.1.3分区数据格式及生成过程
@@ -562,7 +592,7 @@ genimage --rootpath little-core/rootfs/ --tmppath genimage.tmp --inputpath image
 主要生成脚本如下：
 
 ```bsh
-#更详细的生成细节请阅读 tools/gen_image.sh 脚本的gen_cfg_part_bin函数
+#更详细的生成细节请阅读 board/common/gen_image_script/gen_image_comm_func.sh 脚本的gen_cfg_part_bin函数
 ${k230_gzip} -f -k ${filename}  #gzip
 sed -i -e "1s/\x08/\x09/"  ${filename}.gz
 #add uboot head
@@ -599,7 +629,7 @@ rtapp分区的app不能重复执行，设计这个分区的目的是节省内存
 编译的时候会把大核romfs文件系统里面模型文件的指针修改到ai模型区域(见下面脚本)，使用方法和普通文件一样使用就行。
 
 ```bash
-#详见tools/gen_image.sh 文件
+#详见board/common/gen_image_script/gen_image.sh 文件
 for f in ${all_kmode};
     do
         eval fstart="\${${f%%\.*}_start}"
@@ -636,7 +666,7 @@ gd25lx256e
 
 #### 6.2.2 sd和emmc分区修改
 
-如果需要分区请修改tools/gen_image_cfg/genimage-sdcard.cfg 文件，修改完后执行下make build-image
+如果需要分区请修改board/common/gen_image_cfg/genimage-sdcard.cfg 文件，修改完后执行下make build-image
 
 ### 6.3 spi nand
 
@@ -656,7 +686,7 @@ gd25lx256e
 
 #### 6.3.2 spi nand分区修改
 
-如果需要分区请修改tools/gen_image_cfg/genimage-spinand.cfg 文件，修改完后执行下make build-image
+如果需要分区请修改board/common/gen_image_cfg/genimage-spinand.cfg 文件，修改完后执行下make build-image
 
 #### 6.3.4  spi nand验证过的型号
 
