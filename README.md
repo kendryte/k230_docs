@@ -166,6 +166,7 @@
 | 文档名称 | 文档概要 |
 | --- | --- |
 | [K230_AI_Demo介绍.md](zh/02_applications/ai_demos/K230_AI_Demo介绍.md) | K230 AI Demo介绍|
+| [K230_Fancy_Poc介绍.md](zh/02_applications/fancy_poc/K230_Fancy_Poc介绍.md) | K230 Fancy Poc介绍 |
 
 ## K230 SDK 其它文档
 
