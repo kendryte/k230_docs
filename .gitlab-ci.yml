@@ -48,8 +48,7 @@ manual_sync:
 markdownlint:
   rules:
     # MR job
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   stage: test
   timeout: 10m
   image: registry.gitlab.com/pipeline-components/markdownlint-cli2:latest
