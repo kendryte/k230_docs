@@ -57,7 +57,7 @@
 在SDK中包含的rtsp相关demo位于`k230_sdk/src/common/cdk/user/samples`目录下，其中
 
 - `rtsp_demo`：语音推音视频流程序
-- `rtsp`：语音对讲服务器端程序
+- `rtsp_server`：语音对讲服务器端程序
 - `backchannel_client`：语音对讲客户端程序
 
 ### 2.2 源码介绍
@@ -112,9 +112,11 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
 | help | 打印命令行参数信息 | - | - |
 | n | session个数 | `[1, 3]` | 1 |
 | t | 编码类型 | h264、h265、mjpeg | h264 |
-| w | 视频编码宽度 | `[128, 1920]` | 1280 |
-| h | 视频编码高度 | `[64, 1080]` |720 |
-| s | sensor类型。| 0: ov9732；1: ov9286 ir；2: ov9286 speckle；3: imx335 2LANE 1920Wx1080H；4: imx335 2LANE 2592Wx1944H；5: imx335 4LANE 2592Wx1944H；6: imx335 2LANE MCLK 7425 1920Wx1080H；7: imx335 2LANE MCLK 7425 2592Wx1944H；8: imx335 4LANE MCLK 7425 2592Wx1944H | 7 |
+| w | 视频编码宽度 | `[640, 1920]` | 1280 |
+| h | 视频编码高度 | `[480, 1080]` |720 |
+| s | sensor类型| 查看camera sensor文档 | 7 |
+
+sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
 
 #### 3.1.2 编译程序
 
@@ -152,7 +154,22 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
 `k230_sdk/src/common/cdk/user/samples/rtsp_demo/rtsp_server`
 `k230_sdk/src/common/cdk/user/samples/rtsp_demo/backchannel_client`
 
-#### 3.2.2 运行程序
+#### 3.2.2 rtsp_server参数说明
+
+| 参数名 | 描述 |参数范围 | 默认值 |
+|:--|:--|:--|:--|
+| h | 打印命令行参数信息 | - | - |
+| v | 是否创建video session | - | - |
+| t | 编码类型 | h264、h265 | h265 |
+| w | 视频编码宽度 | `[640, 1920]` | 1280 |
+| h | 视频编码高度 | `[480, 1080]` |720 |
+| b | 视频编码码率 | - | 2000 |
+| a | 变声设置 | `[-12, 12]`| 0 |
+| s | sensor类型| 查看camera sensor文档 | 7 |
+
+sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
+
+#### 3.2.3 运行程序
 
 两块EVB连到同一个网段，一个作为server，一个作为client。大小核完全启动后。
 
@@ -165,6 +182,8 @@ client端运行如下命令：
 
 - 在大核上执行：`cd /sharefs; ./sample_sys_init.elf`
 - 在小核上执行：`./backclient_test rtsp://<server_ip>:8554/BackChannelTest`）
+
+backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
 
 ## 4. 运行sharefs
 

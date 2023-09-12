@@ -55,7 +55,8 @@
 | V1.4       | 大核自启动程序说明           | 郝海波 | 2023-06-1  |
 | v1.5       | usip lp4                  | 王建新 | 2023-06-12 |
 | V1.6       | 修改大核自启动程序说明           | 赵忠祥 | 2023-06-28  |
-| v1.7 | 增加启动介质分区章节,镜像烧录章节调整， | 王建新 | 2023-07-05 |
+| v1.7 | 增加启动介质分区章节,镜像烧录章节调整 | 王建新 | 2023-07-05 |
+| v1.8 | 增加CanMV-K230主板信息 | 陈海斌 | 2023-10-11 |
 
 ## 1. 概述
 
@@ -73,13 +74,14 @@ K230 SDK 软件架构层次如图 1-1 所示：
 
 ### 2.1 支持的硬件
 
-K230-USIP-LP3-EVB：具体硬件信息参考 《K230-USIP-LP3-EVB-硬件使用说明》
+K230平台支持的硬件信息文档可以参考目录:[00_hardware](../../00_hardware) , 其中不同主板的硬件信息文档目录如下:
 
-K230-USIP-LP4-EVB：具体硬件信息参考 《K230-USIP-LP4-EVB-硬件使用说明》
-
-K230-SIP-EVB：具体硬件信息参考 《K230_硬件设计指南》
-
-k230-pi(canmv):具体硬件信息参考 《K230_硬件设计指南》
+| 主板类型  | 主板硬件参考目录|
+| --- | --- |
+| K230-USIP-LP3-EVB |具体硬件信息参考: [00_hardware/K230_LP3](../../00_hardware/K230_LP3) |
+| K230-USIP-LP4-EVB | 具体硬件信息参考: [00_hardware/K230_LP4](../../00_hardware/K230_LP4)|
+| K230-SIP-LP3-EVB | 具体硬件信息参考: [00_hardware/K230D](../../00_hardware/K230D)|
+| CanMV-K230 | 具体硬件信息参考: [00_hardware](../../00_hardware/CanMV_K230)|
 
 ### 2.2 开发环境搭建
 
@@ -102,7 +104,24 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 
 ### 2.3 单板准备
 
-本章节以K230-USIP-LP3-EVB为例
+本章节以K230-USIP-LP3-EVB和CanMV-K230 主板使用为例
+
+#### 2.3.1 CanMV-K230
+
+请准备如下硬件：
+
+- CanMV-K230
+- TypeC USB线  至少1根
+- 网线一根(可选)
+- HDMI线一根
+- SD卡
+- 支持HDMI的显示器
+
+说明：CanMV-K230主板电源和串口共用一个TypeC口，如下图：
+
+![图形用户界面, 文本, 应用程序 描述已自动生成](images/canmv_power_001.png)
+
+#### 2.3.2 K230-USIP-LP3-EVB
 
 请准备如下硬件：
 
@@ -114,13 +133,15 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 
 说明：TypeC USB 转以太网推荐型号是<https://item.jd.com/5326738.html>
 
-参考《K230-USIP-LP3-EVB-硬件使用说明》准备开发板。
+参考《K230 DEMO BOARD 资源使用说明》准备开发板。
 
-K230 EVB通过USB提供两路调试串口，windows下使用调试串口，需要安装USB转串口驱动程序，驱动下载链接如下：
+#### 2.3.3 串口
+
+K230 主板通过USB提供两路调试串口，windows下使用调试串口，需要安装USB转串口驱动程序，驱动下载链接如下：
 
 <https://ftdichip.com/wp-content/uploads/2021/11/CDM-v2.12.36.4.U-WHQL-Certified.zip>
 
-安装了驱动后，板子上电，PC使用type C数据线连接EVB的调试串口后，可以发现两个USB串口设备，如下图所示：
+安装了驱动后，板子上电，PC使用type C数据线连接主板的调试串口后，可以发现两个USB串口设备，如下图所示：
 
 ![图形用户界面, 文本, 应用程序 描述已自动生成](images/bcb6636268b91758f87ff54523251eeb.png)
 
@@ -215,12 +236,12 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 
 `k230_evb_defconfig` ：基于K230 USIP LP3 EVB的默认SDK配置文件
 `k230_evb_usiplpddr4_defconfig` ：基于K230 USIP LP4 EVB的默认SDK配置文件
-`k230d_defconfig` ：基于K230-SIP-EVB的默认SDK配置文件
+`k230d_defconfig` ：基于K230-SIP-LP3-EVB的默认SDK配置文件
 `k230_evb_nand_defconfig` ：基于K230 USIP LP3 EVB会生成nand镜像的默认SDK配置文件
-`k230_canmv_defconfig` ：基于K230-PI(canmv)的默认SDK配置文件
+`k230_canmv_defconfig` ：基于CanMV-K230的默认SDK配置文件
 `k230_evb_doorlock_defconfig` ：基于K230 USIP LP3 EVB的门锁poc默认SDK配置文件
 `k230_evb_peephole_device_defconfig` ：基于K230 USIP LP3 EVB的猫眼POC
-`k230d_doorlock_defconfig` ：基于K230-SIP-EVB的门锁POC
+`k230d_doorlock_defconfig` ：基于K230-SIP-LP3-EVB的门锁POC
 
 ### 4.3 编译 SDK
 
@@ -256,26 +277,22 @@ Step 6: Docker环境下执行下面命令进行编译SDK
 ```bash
 make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 #make CONF=k230_evb_usiplpddr4_defconfig  #编译K230-USIP-LP4-EVB板子镜像
-#make CONF=k230d_defconfig  #编译K230-SIP-EVB板子镜像
+#make CONF=k230d_defconfig  #编译K230-SIP-LP3-EVB板子镜像
 #make CONF=k230_evb_nand_defconfig  #编译K230-USIP-LP3-EVB板子nand镜像
 ```
 
-> 编译K230-USIP-LP4-EVB板子镜像使用`make CONF=k230_evb_usiplpddr4_defconfig`命令
-> 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
-> 编译K230-SIP-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
-> 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令
-
-备注：
-当编译k230d_defconfig镜像需要替换k230_sdk\src\big\mpp\kernel\lib\libvo.a。替换方法如下：
-下载
-<https://kendryte-download.canaan-creative.com/k230/downloads/mpp_lib/libvo_k230d.a>
-
-替换
-先备份一份libvo.a，然后将下载的libvo_k230d.a 替换成 libvo.a。重新编译即可
+> - 编译K230-USIP-LP4-EVB板子镜像使用`make CONF=k230_evb_usiplpddr4_defconfig`命令
+> - 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
+> - 编译K230-SIP-LP3-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
+> - 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令
+> - 编译CanMV-K230板子的镜像使用 `make CONF=CONF=k230_canmv_defconfig`  命令
+>
+> 备注：
+sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
 #### 4.3.2 编译输出产物
 
-编译完成后，在`output/xx_defconfig/images`目录下可以看到编译输出产物。
+编译完成后，在`output/xx_defconfig/images`目录下可以看到编译输出产物。ls
 
 ![文本 描述已自动生成](images/da6d48091ee0af8107a63cde01a2b75b.png)
 
@@ -318,6 +335,9 @@ sdk默认产生release镜像，如果需要调试镜像，请参考下面增加C
 在sdk主目录 执行`make menuconfig` ，选择`build debug/release version`，配上`debug` 选项。
 
 ## 5. SDK 镜像烧写
+
+根据不同主板的硬件特性和软件需求，请选择支持的镜像烧写方式。
+> CanMV-K230主板仅支持sd卡镜像启动。
 
 ### 5.1 sd卡镜像烧录
 
@@ -715,6 +735,8 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ## 8. SDK单板调试
 
+> CanMV-K230主板由于没有引出调试GPIO,因此,不支持单板调试方式。
+
 ### 8.1 调试前准备
 
 1.从 T-Head 公 司 的 OCC 平 台<https://occ.t-head.cn/community/download>下载`T-Head-DebugServer`软件和《DebugServer User Guide v5.6》，并参考《DebugServer User Guide v5.6》在pc电脑上安装`T-Head-DebugServer`软件；
@@ -743,13 +765,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ## 9. SDK启动
 
-当前版本默认编译生成的镜像，烧录到板子上后，大核会自动运行一个程序。
+当前版本默认编译生成的镜像，烧录到板子上后，大核会自动运行一个人脸检测程序,显示屏上会显示摄像头采集的图片;启动后可以在大核的控制台端输入'q'退出该程序。
 
-SDK V0.7版本的自启动程序为基于OV9732摄像头的人脸检测程序，启动后可以在大核的控制台端输入'q'退出该程序。
-
-若使用的EVB板没有连接OV9732，则该自启动程序会报错，同样在大核的控制台端输入'q'退出该程序。
-若需要取消大核的自启动功能，需将 `k230_sdk/src/big/rt-smart/init.sh` 中的内容注释掉。
-
-SDK V0.8版本的自启动程序是基于IMX335摄像头（板载晶振）的人脸检测程序，启动后在大核的控制台输入'q'可以退出程序。
-
-同样的，如果没有连接IMX335，则自启动程序报错，程序自动退出。按回车即可回到控制台。
+> 1. EVB系列主板如果没有连接IMX335摄像头,则自启动程序报错，程序自动退出,按回车即可回到控制台。
+> 1. 若需要取消大核的自启动功能，需将 `k230_sdk/src/big/rt-smart/init.sh` 中的内容注释掉。

@@ -2,7 +2,7 @@
 
 首先感谢您参与本开源项目，在您提交issue和pull request之前请认真阅读本指南
 
-在提交pull request时一定要关联相应的issue，如果没有相应issue，请先创建issue  
+在提交pull request时一定要关联相应的issue，如果没有相应issue，请先创建issue
 关于pull request关联issue，GitHub支持自动和手动关联，具体操作请参考[Link PR to issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
 
 issue和pull request填写时都支持Markdown，关于GitHub的Markdown语法和扩展请参考[GitHub Flavored Markdown](https://docs.github.com/en/get-started/writing-on-github)
@@ -29,6 +29,6 @@ issue和pull request填写时都支持Markdown，关于GitHub的Markdown语法�
 
 ## Markdown检查
 
-本项目会对上传的Markdown文件进行格式化检查和内部引用链接检查，如果不符合格式要求或存在不能访问的链接，导致PR不能被merge，因此提交PR前请确保您已在本地进行过检查  
-格式检查工具使用的是`markdownlint`，规则配置文件是[markdownlint.json](../.markdownlint.json)。本地可使用`vscode`安装`markdownlint`来进行在线检查和格式化  
+本项目会对上传的Markdown文件进行格式化检查和内部引用链接检查，如果不符合格式要求或存在不能访问的链接，导致PR不能被merge，因此提交PR前请确保您已在本地进行过检查
+格式检查工具使用的是`markdownlint`，规则配置文件是[markdownlint.json](../.markdownlint.json)。本地可使用`vscode`安装`markdownlint`来进行在线检查和格式化
 您也可以在提交PR之前，先push到您GitHub仓库的`check`分支进行CI检查，避免重复修改PR

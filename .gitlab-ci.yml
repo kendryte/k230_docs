@@ -12,8 +12,15 @@ variables:
 default:
   interruptible: true
 
+stages:
+  - lint
+  - build
+  - sync
+  - deploy
+
 # MR merged
 merge_sync:
+  stage: sync
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
   extends:
@@ -22,6 +29,7 @@ merge_sync:
 
 # tag push
 tag_sync:
+  stage: sync
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG =~ /^v\d+\.\d+.*$/
   extends:
@@ -30,6 +38,7 @@ tag_sync:
 
 # auto sync
 schedule_sync:
+  stage: sync
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   extends:
@@ -38,6 +47,7 @@ schedule_sync:
 
 # manual sync
 manual_sync:
+  stage: sync
   rules:
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: always
@@ -50,8 +60,9 @@ markdown-link-check:
   rules:
     # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  stage: test
+  stage: lint
   timeout: 10m
+  retry: 2
   tags:
     - k230
   image: ai.b-bug.org:5000/markdown:latest
@@ -66,7 +77,7 @@ markdownlint:
   rules:
     # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  stage: test
+  stage: lint
   timeout: 10m
   image: ai.b-bug.org:5000/markdown:latest
   tags:
@@ -137,3 +148,19 @@ markdownlint:
     - echo "---push to github---"
     - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
 
+build-web-docs:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+  image: ai.b-bug.org:5000/python:web-docs
+  tags:
+    - k230
+  environment:
+    name: dev
+    url: https://ai.b-bug.org/k230/docs/dev/
+  script:
+    - git fetch
+    - git checkout dev
+    - make mhtml
+    - rm -rf /data1/k230/docs/*
+    - cp -r _build/* /data1/k230/docs

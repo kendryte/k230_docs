@@ -63,11 +63,11 @@ wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/X
 
 ### 2.1 release sdk编译固件，烧录固件
 
-参考 [K230_SDK_使用说明](../../01_software/board/K230_SDK_使用说明.md) 2/3/4/5章节描述
+参考 [K230_SDK_使用说明](../../../zh/01_software/board/K230_SDK_使用说明.md) 2/3/4/5章节描述
 
 ### 2.2 执行命令测试demo
 
-参考 [K230_SDK_Demo使用指南](../../01_software/board/examples/K230_SDK_Demo使用指南.md) 2.9 UVC_demo 章节
+参考 [K230_SDK_Demo使用指南](../../../zh/01_software/board/examples/K230_SDK_EVB_Board_Demo使用指南.md) 2.9 UVC_demo 章节
 
 ## 3. 如何开发UVC功能
 

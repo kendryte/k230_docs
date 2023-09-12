@@ -29,8 +29,7 @@ K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta
 
 ### 硬件环境
 
-- K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
-- K230-USIP-IMX335-SENSOR-V1.1模组
+- K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1/CanMV-K230（默认支持）
 
 ### 源码位置
 
