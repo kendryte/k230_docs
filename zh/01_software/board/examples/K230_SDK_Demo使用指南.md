@@ -126,6 +126,8 @@ Venc demo实现对vi接收到到图形进行编码，并且可以对输入图像
 
 #### 2.2.2 Feature说明
 
+只支持1280x720分辨率。
+
 #### 2.2.3 依赖资源
 
 摄像头
@@ -321,9 +323,13 @@ audio demo通过调用api接口来实现音频输入和输出功能。音频输�
 
 1. 音频子板i2s收发回环测试，只支持32bit采样精度。原因如下：
 
-音频子板采集使用MSM261S3526Z0CM硅麦克风，为I2S Philips格式；音频子板输出使用codec tm8211，为i2s 右对齐格式，16bit采样。右因 i2s模块收发使用同一个ws，收发同时运行只能配置一种i2s 对齐格式。为正确获取音频数据，需适配MSM261S3526Z0CM硅麦克风，因此i2s收发配置为I2S Philips格式。但是此时输出为右对齐格式，所以输出数据就会损失精度。但使用32bit精度收发时，不受i2s对齐格式显示，因此无影响。
+    音频子板采集使用MSM261S3526Z0CM硅麦克风，为I2S Philips格式；音频子板输出使用codec tm8211，为i2s 右对齐格式，16bit采样。右因 i2s模块收发使用同一个ws，收发同时运行只能配置一种i2s 对齐格式。为正确获取音频数据，需适配MSM261S3526Z0CM硅麦克风，因此i2s收发配置为I2S Philips格式。但是此时输出为右对齐格式，所以输出数据就会损失精度。但使用32bit精度收发时，不受i2s对齐格式显示，因此无影响。
 
-如果单独测试音频输入或者音频输出，不受采样精度影响，16/24/32bit都支持。
+    如果单独测试音频输入或者音频输出，不受采样精度影响，16/24/32bit都支持。
+
+1. 使用音频子板采集音频时，采样率支持范围(8k~48k).
+
+    音频子板采集模块使用MSM261S3526Z0CM硅麦克风，最大时钟为4MHZ。当采样率为96k(6.144MHZ)和192k(12.288MHZ)时，从音频子板上采集到的声音会异常。
 
 #### 2.5.3 依赖资源
 
@@ -1352,7 +1358,7 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
    ```bash
-   cd /sharefs/app;./sample_fft.elf 
+   cd /sharefs/app;./sample_fft.elf
    ```
 
    大核串口输出内容如下：
@@ -1360,51 +1366,51 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
    ```text
    msh /sharefs/app>./sample_fft.elf 1 0
    -----fft ifft point 0064  -------
-       max diff 0003 0001 
+       max diff 0003 0001
        i=0045 real  hf 0000  hif fc24 org fc21 dif 0003
        i=0003 imag  hf ffff  hif 0001 org 0000 dif 0001
-   -----fft ifft point 0064 use 133 us result: ok 
-   
-   
+   -----fft ifft point 0064 use 133 us result: ok
+
+
    -----fft ifft point 0128  -------
-       max diff 0003 0002 
+       max diff 0003 0002
        i=0015 real  hf 0001  hif fca1 org fc9e dif 0003
        i=0031 imag  hf 0001  hif fffe org 0000 dif 0002
-   -----fft ifft point 0128 use 121 us result: ok 
-   
-   
+   -----fft ifft point 0128 use 121 us result: ok
+
+
    -----fft ifft point 0256  -------
-       max diff 0003 0001 
+       max diff 0003 0001
        i=0030 real  hf 0000  hif fca1 org fc9e dif 0003
        i=0007 imag  hf ffff  hif 0001 org 0000 dif 0001
-   -----fft ifft point 0256 use 148 us result: ok 
-   
-   
+   -----fft ifft point 0256 use 148 us result: ok
+
+
    -----fft ifft point 0512  -------
-       max diff 0003 0003 
+       max diff 0003 0003
        i=0060 real  hf 0000  hif fca1 org fc9e dif 0003
        i=0314 imag  hf 0001  hif fffd org 0000 dif 0003
-   -----fft ifft point 0512 use 206 us result: ok 
-   
-   
+   -----fft ifft point 0512 use 206 us result: ok
+
+
    -----fft ifft point 1024  -------
-       max diff 0005 0002 
+       max diff 0005 0002
        i=0511 real  hf 0000  hif fc00 org fc05 dif 0005
        i=0150 imag  hf 0000  hif fffe org 0000 dif 0002
-   -----fft ifft point 1024 use 328 us result: ok 
-   
-   
+   -----fft ifft point 1024 use 328 us result: ok
+
+
    -----fft ifft point 2048  -------
-       max diff 0005 0003 
+       max diff 0005 0003
        i=1022 real  hf 0000  hif fc00 org fc05 dif 0005
        i=1021 imag  hf 0000  hif 0003 org 0000 dif 0003
-   -----fft ifft point 2048 use 574 us result: ok 
-   
-   
+   -----fft ifft point 2048 use 574 us result: ok
+
+
    -----fft ifft point 4096  -------
-       max diff 0005 0002 
+       max diff 0005 0002
        i=4094 real  hf 027b  hif 041f org 0424 dif 0005
        i=0122 imag  hf 0000  hif 0002 org 0000 dif 0002
-   -----fft ifft point 4096 use 1099 us result: ok 
-   
+   -----fft ifft point 4096 use 1099 us result: ok
+
    ```
