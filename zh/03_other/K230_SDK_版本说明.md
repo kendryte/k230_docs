@@ -148,6 +148,7 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 19 | K230 SDK V1.0 | 调测-Dump sensor raw     | 支持dump sensor raw数据                                                                                                     |      |
 | 20 | K230 SDK V1.0 | 调测-帧数统计             | 支持总输入、输出帧数统计功能                                                                                                 |      |
 | 21 | K230 SDK V1.0 | dewarp -分屏             | 支持2、4分屏输出                                                                                                            |      |
+| 22 | K230 SDK V1.0 | HDR                      | 支持HDR功能，支持Imx335 2dol HDR                                                                                            |      |
 
 ### 4.3 平台
 
