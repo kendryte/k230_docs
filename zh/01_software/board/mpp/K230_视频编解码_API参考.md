@@ -688,7 +688,7 @@ k_s32 kd_mpi_venc_set_rotaion(k_u32 chn_num, const [k_rotation](#3112-k_rotation
 
 【语法】
 
-k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](3113-k_rotation) \*rotation);
+k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](#3112-k_rotation) \*rotation);
 
 【参数】
 
@@ -2277,7 +2277,7 @@ k_s32 kd_mpi_vdec_stop_chn(k_u32 chn_num);
 
 【语法】
 
-k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#3114-(#324-k_vdec_chn_status) \*status);
+k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#324-k_vdec_chn_status) \*status);
 
 【参数】
 

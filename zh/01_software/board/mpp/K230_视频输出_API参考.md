@@ -226,7 +226,7 @@ VO的时序配置和dsi 的时序配置采用的一样的配置参数，具体�
 
 ##### V1.2.3.2 O的layer层配置
 
-VO layer 层目前支持3个layer层、4个osd层。Layer层只能显示yuv的图像格式（layer0 和 layer1 支持的功能在[概述](#概述)中的图表）。
+VO layer 层目前支持3个layer层、4个osd层。Layer层只能显示yuv的图像格式（layer0 和 layer1 支持的功能在[概述](#1-概述)中的图表）。
 
 ##### 1.2.3.3 VO 的回写功能配置
 

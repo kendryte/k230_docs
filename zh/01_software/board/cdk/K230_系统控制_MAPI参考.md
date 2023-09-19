@@ -67,32 +67,20 @@ MAPI的特性是跨OS调用，在K230的大小核上均可以调用相同的API�
 
 该功能模块提供以下API：
 
-- [K230系统控制MAPI参考](#k230系统控制mapi参考)
-  - [免责声明](#免责声明)
-  - [商标声明](#商标声明)
-  - [目录](#目录)
-  - [前言](#前言)
-    - [概述](#概述)
-    - [读者对象](#读者对象)
-    - [缩略词定义](#缩略词定义)
-    - [修订记录](#修订记录)
-  - [1. 概述](#1-概述)
-    - [1.1 概述](#11-概述)
-    - [1.2 功能描述](#12-功能描述)
-  - [2. API参考](#2-api参考)
-    - [2.1 kd\_mapi\_sys\_init](#21-kd_mapi_sys_init)
-    - [2.2 kd\_mapi\_sys\_deinit](#22-kd_mapi_sys_deinit)
-    - [2.3 kd\_mapi\_media\_init](#23-kd_mapi_media_init)
-    - [2.4 kd\_mapi\_media\_deinit](#24-kd_mapi_media_deinit)
-    - [2.5 kd\_mapi\_alloc\_buffer](#25-kd_mapi_alloc_buffer)
-    - [2.6 kd\_mapi\_free\_buffer](#26-kd_mapi_free_buffer)
-    - [2.7 kd\_mapi\_sys\_get\_vb\_block](#27-kd_mapi_sys_get_vb_block)
-    - [2.8 kd\_mapi\_sys\_release\_vb\_block](#28-kd_mapi_sys_release_vb_block)
-  - [3. 数据类型](#3-数据类型)
-    - [3.1 k\_mapi\_mod\_id\_e](#31-k_mapi_mod_id_e)
-    - [3.2 k\_mapi\_media\_config\_t](#32-k_mapi_media_config_t)
-    - [3.3 k\_mapi\_media\_attr\_t](#33-k_mapi_media_attr_t)
-  - [4. 错误码](#4-错误码)
+- [2. API参考](#2-api参考)
+  - [2.1 kd\_mapi\_sys\_init](#21-kd_mapi_sys_init)
+  - [2.2 kd\_mapi\_sys\_deinit](#22-kd_mapi_sys_deinit)
+  - [2.3 kd\_mapi\_media\_init](#23-kd_mapi_media_init)
+  - [2.4 kd\_mapi\_media\_deinit](#24-kd_mapi_media_deinit)
+  - [2.5 kd\_mapi\_alloc\_buffer](#25-kd_mapi_alloc_buffer)
+  - [2.6 kd\_mapi\_free\_buffer](#26-kd_mapi_free_buffer)
+  - [2.7 kd\_mapi\_sys\_get\_vb\_block](#27-kd_mapi_sys_get_vb_block)
+  - [2.8 kd\_mapi\_sys\_release\_vb\_block](#28-kd_mapi_sys_release_vb_block)
+- [3. 数据类型](#3-数据类型)
+  - [3.1 k\_mapi\_mod\_id\_e](#31-k_mapi_mod_id_e)
+  - [3.2 k\_mapi\_media\_config\_t](#32-k_mapi_media_config_t)
+  - [3.3 k\_mapi\_media\_attr\_t](#33-k_mapi_media_attr_t)
+- [4. 错误码](#4-错误码)
 
 ### 2.1 kd_mapi_sys_init
 
@@ -102,7 +90,9 @@ MAPI的特性是跨OS调用，在K230的大小核上均可以调用相同的API�
 
 【语法】
 
+```c
 k_s32 kd_mapi_sys_init(void );
+```
 
 【参数】
 
@@ -144,7 +134,9 @@ k_s32 kd_mapi_sys_init(void );
 
 【语法】
 
+```c
 k_s32 kd_mapi_sys_deinit(void );
+```
 
 【参数】
 
@@ -186,7 +178,9 @@ k_s32 kd_mapi_sys_deinit(void );
 
 【语法】
 
+```c
 k_s32 kd_mapi_media_init(const [k_mapi_media_attr_t](#33-k_mapi_media_attr_t) *media_attr);
+```
 
 【参数】
 
@@ -230,7 +224,9 @@ k_s32 kd_mapi_media_init(const [k_mapi_media_attr_t](#33-k_mapi_media_attr_t) *m
 
 【语法】
 
+```c
 k_s32 kd_mapi_media_deinit(void);
+```
 
 【参数】
 
@@ -272,7 +268,9 @@ k_s32 kd_mapi_media_deinit(void);
 
 【语法】
 
+```c
 k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const k_char *name);
+```
 
 【参数】
 
@@ -320,7 +318,9 @@ k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const 
 
 【语法】
 
+```c
 k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
+```
 
 【参数】
 
@@ -366,7 +366,9 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 
 【语法】
 
+```c
 k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_size, const char\* mmz_name);
+```
 
 【参数】
 
@@ -414,7 +416,9 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_siz
 
 【语法】
 
+```c
 k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
+```
 
 【参数】
 
