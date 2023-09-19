@@ -48,7 +48,7 @@
 
 ## 贡献指南
 
-如果您对本项目感兴趣，想要反馈问题或提交文档，请参考[CONTRIBUTING](/.github/CONTRIBUTING.md)
+如果您对本项目感兴趣，想要反馈问题或提交文档，请参考[CONTRIBUTING](../../.github/CONTRIBUTING.md)
 
 ## 联系我们
 

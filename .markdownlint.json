@@ -20,7 +20,10 @@
     // MD010
     "no-hard-tabs": {
         "code_blocks": true,
-        "ignore_code_languages": ["Makefile","makefile"],
+        "ignore_code_languages": [
+            "Makefile",
+            "makefile"
+        ],
         "spaces_per_tab": 1
     },
     // MD011
@@ -65,7 +68,9 @@
     },
     // MD033
     "no-inline-html": {
-        "allowed_elements": ["div"]
+        "allowed_elements": [
+            "div"
+        ]
     },
     // MD035
     "hr-style": {
