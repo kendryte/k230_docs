@@ -59,6 +59,7 @@
 | V1.7     | 修改venc demo中的sensor参数，vdec demo中增加MAPI VDEC绑定VO解码显示 | SDK部 | 2023-6-30 |
 | V1.8     | 修改mapi sample_venc和rtsp_demo的使用说明 | SDK部 | 2023-7-1 |
 | V1.9 | 修改vicap demo使用说明，支持多路sensor输入 | SDK部 | 2023-8-1 |
+| V2.0 | 修改uvc demo的测试命令 | SDK部 | 2023-8-30 |
 
 ## 1. 概述
 
@@ -565,6 +566,7 @@ Options:
 | -ofmt        | 0：yuv格式输出 1：rgb格式输出 2：raw格式输出                            | 指定输出图像格式，默认为yuv输出。  |
 | -preview     | 0：禁用预览显示 1：使能预览显示                                         | 指定输出图像预览显示功能。默认为使能。当前最多支持2路输出图像同时预览。 |
 | -rotation    | 0：旋转0度 1：旋转90度 2：旋转180度 3：旋转270度 4：不支持旋转          | 指定预览显示窗口旋转角度。默认仅第一路输出图像窗口支持旋转功能。 |
+| -hdr | 0：禁用HDR，1：使能HDR。 | HDR模块控制开关。默认关闭 |
 
 示例1：
 
@@ -577,6 +579,12 @@ Options:
 `./sample_vicap.elf -mode 1 -dev 0 -sensor 0 -chn 0 -ow 1080 -oh 720 -dev 1 -sensor 1 -chn 0 -ow 1080 -oh 720 -dev 2 -sensor 2 -chn 0 -ow 1080 -oh 720 -preview 0`
 
 说明：三路输入输出。将ov9732@1280x720 RGB 绑定到vicap设备0，并设置通道0输出大小为1080x720的图像；将ov9286@1280x720 红外绑定到vicap设备1，并设置通道0输出大小为1080x720的图像；将ov9286@1280x720 散斑绑定到vicap设备2，并设置通道0输出大小为1080x720的图像（无预览）；
+
+示例3：
+
+`./sample_vicap.elf -dev 0 -sensor 17 -hdr 1 -chn 0 -ow 1080 -oh 720`
+
+说明：使能IMX335 2DOL HDR模式
 
 ### 2.7 DMA_demo
 
@@ -682,7 +690,7 @@ uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播�
 
 #### 2.9.3 依赖资源
 
-摄像头模组，IMX335摄像头测试效果最佳。
+摄像头模组，OV9732/IMX335摄像头。
 
 type c线连接USB1与PC
 
@@ -703,20 +711,20 @@ PC的相机应用或安装PotPlayer软件
 
 小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
 
-参考 [K230_USB应用实战_UVC传输YUV及编码码流](/zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
+参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
 
 ##### 2.9.4.2 执行
 
 进入大核rt-smart系统后，进入/bin目录下，执行
 
 ```shell
-msh /bin\>./sample_sys_init.elf
+msh /sharefs/app>./sample_sys_init.elf
 ```
 
 进入小核linux系统后，进入`/mnt`目录下，执行
 
 ```shell
-./canaan-camera.sh
+./canaan-camera.sh start otg1
 
 ./camera
 ```
@@ -726,23 +734,20 @@ typec USB线连接USB1与PC，potplayer播放器播放摄像头。
 默认使用BULK传输，使用以下命令可以更改为ISO传输。
 
 ```shell
-./canaan-camera.sh -i
+./canaan-camera.sh stop
+
+./canaan-camera.sh start otg1 iso
 
 ./camera -i
 ```
 
-当前推荐使用IMX335摄像头测试。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试，后面的版本会逐步支持改善。
+默认为IMX335摄像头。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试。
 
 进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
 `视频录制设备`->`设备`，选择`UVC Camera`
 `视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
-注：不同格式切换前，需要重启demo，即暂不支持demo启动后，PotPlayer直接切换不同格式
 
 PotPlayer -> `打开` -> `摄像头/其他设备`
-
-##### 2.9.4.2.3 补充说明
-
-该demo还处于开发阶段，对于程序的安全退出的设计还未完成，每次测试需要重新启动操作系统。后续版本逐步完善体验，敬请期待。
 
 ### 2.10 USB_demo
 
@@ -779,7 +784,7 @@ mkfs.fat 4.1 (2017-01-24)
 [ 1219.056629] dwc2 91540000.usb-otg: new address 5
 
 ##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
-[root@canaan ~ ]#gadget-storage.sh 
+[root@canaan ~ ]#gadget-storage.sh
 [  359.995510] Mass Storage Function, version: 2009/09/11
 [  360.000762] LUN: removable file: (no medium)
 [  360.013138] dwc2 91540000.usb-otg: bound driver configfs-gadget
@@ -820,7 +825,7 @@ N: Name="Logitech USB Receiver"
 P: Phys=usb-91500000.usb-otg-1/input0
 S: Sysfs=/devices/platform/soc/91500000.usb-otg/usb1/1-1/1-1:1.0/0003:046D:C52F.0001/input/input2
 U: Uniq=
-H: Handlers=event2 
+H: Handlers=event2
 B: PROP=0
 B: EV=17
 B: KEY=ffff0000 0 0 0 0
@@ -1328,3 +1333,85 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 
 1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
 1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
+
+### 2.21 FFT Demo
+
+#### 2.21.1 Demo 简介
+
+本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
+
+#### 2.21.2 Feature说明
+
+先进行fft计算，在进行ifft计算
+
+#### 2.21.3 依赖资源
+
+无
+
+#### 2.21.4 使用说明
+
+##### 2.21.4.1 编译
+
+> 请参考release sdk软件包中的README.md。
+
+##### 2.21.4.2 执行
+
+1. 大小核系统都起来后，在大核命令行执行下面命令：
+
+   ```bash
+   cd /sharefs/app;./sample_fft.elf 
+   ```
+
+   大核串口输出内容如下：
+
+   ```text
+   msh /sharefs/app>./sample_fft.elf 1 0
+   -----fft ifft point 0064  -------
+       max diff 0003 0001 
+       i=0045 real  hf 0000  hif fc24 org fc21 dif 0003
+       i=0003 imag  hf ffff  hif 0001 org 0000 dif 0001
+   -----fft ifft point 0064 use 133 us result: ok 
+   
+   
+   -----fft ifft point 0128  -------
+       max diff 0003 0002 
+       i=0015 real  hf 0001  hif fca1 org fc9e dif 0003
+       i=0031 imag  hf 0001  hif fffe org 0000 dif 0002
+   -----fft ifft point 0128 use 121 us result: ok 
+   
+   
+   -----fft ifft point 0256  -------
+       max diff 0003 0001 
+       i=0030 real  hf 0000  hif fca1 org fc9e dif 0003
+       i=0007 imag  hf ffff  hif 0001 org 0000 dif 0001
+   -----fft ifft point 0256 use 148 us result: ok 
+   
+   
+   -----fft ifft point 0512  -------
+       max diff 0003 0003 
+       i=0060 real  hf 0000  hif fca1 org fc9e dif 0003
+       i=0314 imag  hf 0001  hif fffd org 0000 dif 0003
+   -----fft ifft point 0512 use 206 us result: ok 
+   
+   
+   -----fft ifft point 1024  -------
+       max diff 0005 0002 
+       i=0511 real  hf 0000  hif fc00 org fc05 dif 0005
+       i=0150 imag  hf 0000  hif fffe org 0000 dif 0002
+   -----fft ifft point 1024 use 328 us result: ok 
+   
+   
+   -----fft ifft point 2048  -------
+       max diff 0005 0003 
+       i=1022 real  hf 0000  hif fc00 org fc05 dif 0005
+       i=1021 imag  hf 0000  hif 0003 org 0000 dif 0003
+   -----fft ifft point 2048 use 574 us result: ok 
+   
+   
+   -----fft ifft point 4096  -------
+       max diff 0005 0002 
+       i=4094 real  hf 027b  hif 041f org 0424 dif 0005
+       i=0122 imag  hf 0000  hif 0002 org 0000 dif 0002
+   -----fft ifft point 4096 use 1099 us result: ok 
+   
+   ```

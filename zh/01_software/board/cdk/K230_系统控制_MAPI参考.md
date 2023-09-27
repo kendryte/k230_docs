@@ -272,7 +272,7 @@ k_s32 kd_mapi_media_deinit(void);
 
 【语法】
 
-k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const k_char *name);
+k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const k_char \*name);
 
 【参数】
 

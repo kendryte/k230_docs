@@ -58,13 +58,13 @@
 
 | 文档版本号 | 修改说明 | 修改者     | 日期     |
 |------------|----------|------------|----------|
-| V1.0       | 初版     | SDK 部 | 2023-8-7 |
+| V1.0       | 初版     | SDK 部 | 2023-9-4 |
 
 ## 1. 版本信息
 
 | 所属产品 | 版本号 | 发布日期 |
 |----------|--------|----------|
-| K230 SDK | V0.9.0 | 2023-8-7|
+| K230 SDK | V1.0.0 | 2023-9-4|
 
 ## 2. 支持的硬件
 
@@ -121,6 +121,7 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 32 | K230 SDK V0.8 | dpu demo | 屏显深度图：vicap->dma->dpu->vo | |
 | 32 | K230 SDK V0.8 | 语音对讲 demo | 增加语音对讲demo | |
 | 33 | K230 SDK V0.9 | 猫眼poc | 远程猫眼，实现可视对讲、变声、录像、人形检测及抓拍功能。 | |
+| 34 | K230 SDK V1.0 | 猫眼poc | 1. 猫眼设备端增加UI控制。 2. 增加本地猫眼语音对讲功能。3. 手机端录像功能改为设备端实现，始终为录像。4. 猫眼设备端增加回放功能。| |
 
 ### 4.2 图像
 
@@ -129,21 +130,25 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 1  | K230 SDK V0.5 | vicap         | 支持sensor图像采集（OV9732、OV9286）                                                                                                  |      |
 | 2  | K230 SDK V0.5 | AE            | 支持AE自动曝光                                                                                                                        |      |
 | 3  | K230 SDK V0.5 | vicap bind vo | vicap 绑定到 vo输出图像                                                                                                               |      |
-| 4  | K230 SDK V0.5 | GPU绘图       | 矢量绘制填充（直线、二次贝塞尔曲线、三次贝塞尔曲线、椭圆曲线） 线性渐变 颜色查找表 图像合成/混合，BLIT                                |      |
-| 5  | K230 SDK V0.5 | 图像调优      | tuning tool 通过网络、串口连接开发板进行图像调优。 black level correction  lens shading correction  color calibration  AWB CAC  gamma |      |
+| 4  | K230 SDK V0.5 | GPU绘图       | 矢量绘制填充（直线、二次贝塞尔曲线、三次贝塞尔曲线、椭圆曲线） 线性渐变 颜色查找表 图像合成/混合，BLIT                                     |      |
+| 5  | K230 SDK V0.5 | 图像调优      | tuning tool 通过网络、串口连接开发板进行图像调优。 black level correction  lens shading correction  color calibration  AWB CAC  gamma   |      |
 | 6  | K230 SDK V0.5 | display bind  | 支持vo和vicap，vo 和 vdec 绑定                                                                                                        |      |
-| 7  | K230 SDK V0.5 | display 显示  | 支持osd和yuv 显示 支持dump 帧功能 支持dsi 和 vo timing 可配 支持插帧功能                                                              |      |
-| 8  | K230 SDK V0.6 | 图像调优      | tuning tool可以配置sensor寄存器                                                                                                       |      |
-| 9  | K230 SDK V0.6 | 时间戳、帧号  | 支持时间戳、帧号                                                                                                                      |      |
+| 7  | K230 SDK V0.5 | display 显示  | 支持osd和yuv 显示 支持dump 帧功能 支持dsi 和 vo timing 可配 支持插帧功能                                                                 |      |
+| 8  | K230 SDK V0.6 | 图像调优       | tuning tool可以配置sensor寄存器                                                                                                       |      |
+| 9  | K230 SDK V0.6 | 时间戳、帧号   | 支持时间戳、帧号                                                                                                                      |      |
 | 10 | K230 SDK V0.6 | ISP+KPU Demo  | 人脸检测联动demo                                                                                                                      |      |
-| 11 | K230 SDK V0.7 | dewarp  | 添加dewarp功能，可以实现畸变校正                                                                                                                        |      |
-| 12 | K230 SDK V0.7 | Face AE  | 添加了FaceAE的功能及对应的FaceAE demo                                                                                                                      |      |
-| 13 | K230 SDK V0.7 | 添加Imx335  | 添加Imx335 sensor驱动及demo                                                                                                                      |      |
-| 14 | K230 SDK V0.8 | 添加DRM  | Linux小核添加DRM驱动及demo                                                                                                                      |      |
-| 15 | K230 SDK V0.8 | 添加LVGL  | Linux小核添加LVGL及demo                                                                                                                      |      |
-| 16 | K230 SDK V0.8 | 快启APP  | 快启APP Sensor改为Imx335(带晶振)                                                                                                                      |      |
-| 17 | K230 SDK V0.9 | mcm  | 支持最多三路sensor                                                                                                                      |      |
-| 18 | K230 SDK V0.9 | display mapi  | 添加视频输出类MAPI                                                                                                                      |      |
+| 11 | K230 SDK V0.7 | dewarp        | 添加dewarp功能，可以实现畸变校正                                                                                                       |      |
+| 12 | K230 SDK V0.7 | Face AE       | 添加了FaceAE的功能及对应的FaceAE demo                                                                                                  |      |
+| 13 | K230 SDK V0.7 | 添加Imx335    | 添加Imx335 sensor驱动及demo                                                                                                            |      |
+| 14 | K230 SDK V0.8 | 添加DRM       | Linux小核添加DRM驱动及demo                                                                                                             |      |
+| 15 | K230 SDK V0.8 | 添加LVGL      | Linux小核添加LVGL及demo                                                                                                                |      |
+| 16 | K230 SDK V0.8 | 快启APP       | 快启APP Sensor改为Imx335(带晶振)                                                                                                       |      |
+| 17 | K230 SDK V0.9 | mcm           | 支持最多三路sensor                                                                                                                     |      |
+| 18 | K230 SDK V0.9 | display mapi  | 添加视频输出类MAPI                                                                                                                     |      |
+| 19 | K230 SDK V1.0 | 调测-Dump sensor raw     | 支持dump sensor raw数据                                                                                                     |      |
+| 20 | K230 SDK V1.0 | 调测-帧数统计             | 支持总输入、输出帧数统计功能                                                                                                 |      |
+| 21 | K230 SDK V1.0 | dewarp -分屏             | 支持2、4分屏输出                                                                                                            |      |
+| 22 | K230 SDK V1.0 | HDR                      | 支持HDR功能，支持Imx335 2dol HDR                                                                                            |      |
 
 ### 4.3 平台
 
@@ -180,6 +185,7 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 29 | K230 SDK V0.9 | 小核ADC驱动 | 支持小核ADC驱动 | |
 | 30 | K230 SDK V0.9 | 支持K230D开发板 | SDK支持K230D开发板（SD卡启动） | |
 | 31 | K230 SDK V0.9 | OTA | 支持OTA升级 | |
+| 31 | K230 SDK V1.0 | 大核FFT | 支持FFT驱动 | |
 
 ### 4.4 架构
 
@@ -207,6 +213,8 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | 20 | K230 SDK V0.9 | 门锁 POC        | 支持 ov9286,人脸检测和识别（包含 IR 和散斑活体，散斑包含 DPU 深度提取） |                                     |
 | 21 | K230 SDK V0.9 | 加解密        | 添加小核 linux 的 aes-gcm 加解密功能 |                                     |
 | 22 | K230 SDK V0.9 | 功耗控制        | uboot 中增加对芯片时钟/电源域管理，大核 rt-smart 中增加对 CPU1，DPU，VPU，KPU，display 的功耗控制，小核 linux 中增加对 display 的功耗控制                                                                                                |                                     |
+| 23 | K230 SDK V1.0 | 门锁POC        | 添加人脸特征值加解密功能 |                                     |
+| 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
 
 ### 4.5 其它
 
@@ -226,6 +234,5 @@ K230 USIP LP3 EVB：具体硬件信息参考《K230 EVB硬件使用文档》。
 | ID | 功能模块      | 问题/限制描述                                                                         | 备注 |
 |----|---------------|---------------------------------------------------------------------------------------|------|
 | 1  | VPU 编码       | VPU 重复编码多次，有概率性卡住                                                          |      |
-| 2  | VO            | VO 显示动态画面时，中间会有一条折线                                                     |      |
-| 3  | usb            | 通过 usb 传输 h264 编码长时间运行会异常                    |      |
-| 4  | 猫眼 poc | 模拟手机端运行过程中网络断开后不能自动重连 | |
+| 2  | usb            | 通过 usb 传输 h264 编码长时间运行会异常                    |      |
+| 3  | 猫眼 poc | 模拟手机端运行过程中网络断开后不能自动重连 | |

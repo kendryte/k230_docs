@@ -25,7 +25,7 @@
 
 ### 概述
 
-K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、metahuman(数字人)等项目，该工程旨在为客户提供POC搭建流程思路。
+K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta_human(数字人)、meta_hand(手势渲染)和finger_reader(指读)等项目，该工程旨在为客户提供POC搭建流程思路。
 
 ### 硬件环境
 
@@ -41,6 +41,8 @@ K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta
 ├── build_app.sh
 ├── cmake
 ├── CMakeLists.txt
+├── finger_reader
+├── meta_hand
 ├── meta_human
 ├── multimodal_chat_robot
 └── version
