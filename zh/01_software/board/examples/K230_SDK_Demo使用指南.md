@@ -146,20 +146,10 @@ index:
     2) OSD + H.264e.
     3) OSD + Border + H.265e.
 
-sensor_index:
-    0: OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR
-    1: OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR
-    2: OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE
-    3: OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR
-    7: IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR
-    8: IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_LINEAR
-    9: IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_LINEAR
-    10: IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_MCLK_7425_LINEAR
-    11: IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR
-    12: IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR
+sensor_index: see vicap doc
 ```
 
-IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR
+sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，默认值为7
 
 举例：
 
@@ -180,15 +170,7 @@ sample_venc默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS
 ```shell
 Usage: ./sample_venc -s 0 -n 2 -o /tmp -t 0
                      -s or --sensor_type [sensor_index],\n");
-                            0: ov9732
-                            1: ov9286 ir
-                            2: ov9286 speckle
-                            3: imx335 2LANE 1920Wx1080H (default)
-                            4: imx335 2LANE 2592Wx1944H
-                            5: imx335 4LANE 2592Wx1944H
-                            6: imx335 2LANE MCLK 7425 1920Wx1080H
-                            7: imx335 2LANE MCLK 7425 2592Wx1944H
-                            8: imx335 4LANE MCLK 7425 2592Wx1944H
+                            see vicap doc
                      -n or --chn_num [number], 1, 2, 3
                      -t or --type [type_index]
                             0: h264 type
@@ -197,6 +179,8 @@ Usage: ./sample_venc -s 0 -n 2 -o /tmp -t 0
                      -o or --out_path [output_path]
                      -h or --help, will print usage
 ```
+
+sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，默认值为7
 
 可通过` ctrl+c `停止运行，根据不同的编码类型，会在小核指定的输出目录下生成不同的码流文件，对于h264类型，会生成形如`stream_chn0.264`文件，其中 0 代表0通道；对于h265类型，会生成形如 `stream_chn0.265`文件，同样 0 代表0通道；对于jpeg类型，会生成形如`chn0_0.jpg`的jpg图片，代表0通道第0张图片，默认会生成10张jpg图片。
 
@@ -264,6 +248,9 @@ Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显�
 | 参数名 | 说明                                       | 默认值 |
 |--------|--------------------------------------------|--------|
 | i      | 输入文件名，需要后缀名分别为.264/.265/.jpg | -    |
+| type | vo connector type, 参看vo 文档描述 | 0 |
+
+其中type取值参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，设置为0
 
 ###### 2.4.4.1.1 VDEC绑定VO解码显示
 
@@ -1011,20 +998,14 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 ```shell
 Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720
                     -s: the sensor type:
-                        0: ov9732
-                        1: ov9286 ir
-                        2: ov9286 speckle
-                        3: imx335 2LANE 1920Wx1080H (default)
-                        4: imx335 2LANE 2592Wx1944H
-                        5: imx335 4LANE 2592Wx1944H
-                        6: imx335 2LANE MCLK 7425 1920Wx1080H
-                        7: imx335 2LANE MCLK 7425 2592Wx1944H
-                        8: imx335 4LANE MCLK 7425 2592Wx1944H
+                        see vicap doc
                     -n: the session number, range: 1, 2，3
                     -t: the video encoder type: h264/h265/mjpeg
                     -w: the video encoder width
                     -h: the video encoder height
 ```
+
+其中sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
 
 小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放；如需停止运行，请先停止vlc拉流，然后执行` ctrl+c `停止运行 rtsp_demo。
 
@@ -1229,7 +1210,22 @@ isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
 
 参考release sdk软件包中的`README.md`中介绍，在docker环境编译cdk-user即可，编译完成后在`k230_sdk/src/common/cdk/user/out/little`下生成可执行程序rtsp_server, backchannel_client
 
-##### 2.18.4.2 执行
+##### 2.18.4.2 rtsp_server参数说明
+
+| 参数名 | 描述 |参数范围 | 默认值 |
+|:--|:--|:--|:--|
+| h | 打印命令行参数信息 | - | - |
+| v | 是否创建video session | - | - |
+| t | 编码类型 | h264、h265 | h265 |
+| w | 视频编码宽度 | `[640, 1920]` | 1280 |
+| h | 视频编码高度 | `[480, 1080]` |720 |
+| b | 视频编码码率 | - | 2000 |
+| a | 变声设置 | `[-12, 12]`| 0 |
+| s | sensor类型| 查看camera sensor文档 | 7 |
+
+sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
+
+##### 2.18.4.3 执行
 
 为描述方便，运行server的板子命名为板A， 运行client的命名为板B：
 
@@ -1249,6 +1245,8 @@ isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
 1. 在小核上执行：`insmod k_ipcm.ko`
 1. 在大核上执行：`cd /bin; ./sample_sys_init.elf`
 1. 在小核上执行：`./backclient_test rtsp：<server_ip>：8554/BackChannelTest`）
+
+backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
 
 ### 2.19 深度图显示 Demo
 
