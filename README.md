@@ -153,6 +153,7 @@
 | [K230_音频实战_音频采集_播放和编解码.md](zh/02_applications/tutorials/K230_音频实战_音频采集_播放和编解码.md) | K230 实战基础篇 音频采集、播放和编解码|
 | [K230_编码实战_rtsp_server搭建和推流.md](zh/02_applications/tutorials/K230_编码实战_rtsp_server搭建和推流.md) | K230 编码实战 rtsp server 搭建和推流|
 | [K230_AI实战_HHB神经网络模型部署工具.md](zh/02_applications/tutorials/K230_AI实战_HHB神经网络模型部署工具.md) | K230 AI实战 HHB神经网络模型部署工具|
+| [K230_内存占用分析指南.md](zh/02_applications/tutorials/K230_内存占用分析指南.md) | K230 内存占用分析指南|
 
 ### K230 SDK 商业应用
 
