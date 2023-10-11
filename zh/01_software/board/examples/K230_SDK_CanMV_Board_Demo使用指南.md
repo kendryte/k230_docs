@@ -29,7 +29,7 @@
 
 ### 概述
 
-本文档主要K230 SDK中提供的demo程序。
+本文档主要介绍K230 SDK中提供适配Canmv-K230开发板上的demo程序。
 
 ### 读者对象
 
@@ -49,17 +49,7 @@
 
 | 文档版本号 | 修改说明  | 修改者 | 日期  |
 |---|---|---|---|
-| V1.0       | 初版 | 系统软件部 | 2023-03-10 |
-| V1.1.     | 增加VICAP、DPU demo、UVC demo描述  | 系统软件部 | 2023-04-07 |
-| V1.2.     | 增加多路venc编码demo,  增加vi-\>venc-\>MAPI-\>小核存文件demo； 更新VICAP使用说明，支持多路输出及输出图像的缩放裁剪功能； 现有demo均支持sharefs方式加载或保存音频文件； 增加编码demo:ai-\>aenc-\>file 增加解码demo:file-\>adec-\>ao； 增加音频综合demo:ai-\>aenc adec-\>ao； UVC demo大核端执行命令修改； 增加MAPI视频编码demo运行描述； 增加VICAP、KPU、VO联调demo； | 系统软件部 | 2023-05-06 |
-| V1.3     | 修改venc demo、vdec demo、nonai_2d demo使用说明; 增加rtsp推流demo说明 | 系统软件部 | 2023-5-31 |
-| V1.4     | 添加sharefs使用说明 | SDK部 | 2023-6-1 |
-| V1.5     | 增加语音对讲Demo说明 | SDK部 | 2023-6-12 |
-| V1.6     | 增加DRM demo，增加LVGL demo | SDK部 | 2023-6-29 |
-| V1.7     | 修改venc demo中的sensor参数，vdec demo中增加MAPI VDEC绑定VO解码显示 | SDK部 | 2023-6-30 |
-| V1.8     | 修改mapi sample_venc和rtsp_demo的使用说明 | SDK部 | 2023-7-1 |
-| V1.9 | 修改vicap demo使用说明，支持多路sensor输入 | SDK部 | 2023-8-1 |
-| V2.0 | 修改uvc demo的测试命令 | SDK部 | 2023-8-30 |
+| V1.0       | 初版 | 系统软件部 | 2023-10-11 |
 
 ## 1. 概述
 
@@ -619,48 +609,6 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
-### 2.8 DPU_demo
-
-#### 2.8.1 dpu_demo简介
-
-##### 2.8.1.1 非绑定模式
-
-从配置文件解析参数并配置 dpu 的设备属性和通道属性，从指定路径读取并配置参考图和模板图，循环输入红外图和散斑图，获取结果并检测计算是否正确。
-
-##### 2.8.1.2 绑定模式
-
-从配置文件解析参数并配置 dpu 的设备属性和通道属性，从指定路径读取并配置参考图和模板图，以 vvi 作为模拟前级进行 pipeline 绑定，输入红外图和散斑图，dpu 计算结果，用户态获取结果并把深度图以文件的形式保存下来（可以使用相应软件打开深度图），按 q 退出程序。
-
-#### 2.8.2 Feature说明
-
-包括配置文件解析，设备和通道的属性配置，设备和通道的启动暂停，用户态输入数据、输出结果、释放结果，pipeline 绑定的输入输出。
-
-#### 2.8.3 依赖资源
-
-无
-
-#### 2.8.4 使用说明
-
-##### 2.8.4.1 编译
-
-软件编译环境参考SDK中的README.md。由于本模块需要依赖文件，在编译时需要执行以下步骤：
-
-##### 2.8.4.2 执行
-
-1. demo 所需的配置文件和输入输出的 golden 数据存放在 `k230_sdk/test_resource/dpu` 目录下，为了方便使用可以将整个`dpu`文件夹拷贝到`/sharefs/`目录下（关于`sharefs`的使用请参考对应文档），拷贝完之后在大核中会存在`/sharefs/dpu/`目录。
-1. 将`k230_sdk/src/big/mpp/userapps/sample/elf/sample_dpu.elf`拷贝到`/sharefs/`目录下。
-1. 非绑定模式 demo 运行
-
-    `/sharefs/sample_dpu.elf /sharefs/dpu/`
-
-    会有测试信息在屏幕上显示出来，运行 10 帧后结束。上面的命令中，参数`/sharefs/dpu/`可以根据用户配置文件实际存放的路径来设置。
-
-1. 绑定模式 demo 运行
-
-    `/sharefs/sample_dpu.elf /sharefs/dpu/ BOUND`
-
-    会有测试信息在屏幕上显示出来，输入 q 结束运行。上面的命令中，参数`/sharefs/dpu/`可以根据用户配置文件实际存放的路径来设置。
-
 ### 2.9 UVC_demo
 
 #### 2.9.1 uvc_demo简介
@@ -1044,143 +992,6 @@ cd /sharefs
 执行成功后，会打印每一帧图像的物理地址
 ```
 
-### 2.16 DPU_Vicap_demo
-
-#### 2.16.1 demo 简介
-
-demo 流程如下：
-
-1. 启动 vicap；
-1. 在用户态 dump 一帧散斑图；
-1. 把从 vicap 处获取的散斑图送给 dma 进行旋转九十度的处理；
-1. 在用户态获取 dma 旋转后的图像；
-1. 将 dma 旋转后的图像送给 dpu 进行深度处理；
-1. 在用户态获取 dpu 处理后的深度图；
-1. 以文件的形式保存到大小核共享目录`/sharefs`下，可以通过`mnt`操作将该文件共享到服务器上并使用工具查看深度图。
-
-#### 2.16.2 Feature 说明
-
-isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
-
-#### 2.16.3 依赖资源
-
-需要标定文件，包括配置文件和参考图文件。配置文件和参考图文件需要和 sensor 配套。配置文件和参考图文件路径在`k230_sdk/test_resource/dpu`目录下，该配置文件和参考图文件仅和 sensor1 对应。
-
-#### 2.16.4 使用说明
-
-##### 2.16.4.1 编译
-
-1. 将配置文件和参考图文件放在`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`目录下，如下图所示：
-    ![conf_file](./images/demo_dpu_conf_ref_file_02140401.png)
-
-1. 在`k230_sdk`目录下执行编译命令`make`
-
-1. 编译完成后在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下会有 demo 对应的`sample_dpu_vicap.elf`文件。在`k230_sdk/output/k230_evb_defconfig/images`目录下会有系统镜像文件`sysimage-sdcard.img`。
-
-  更详细的编译过程可以参考release sdk软件包中的README.md。
-
-##### 2.16.4.2 执行
-
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
-
-1. 挂载 nfs，使用如下命令：
-
-    ```shell
-    ifconfig eth0 up
-    udhcpc
-    # 下面的 ip 地址和路径换成自己服务器的 ip 和路径
-    mount -t nfs 10.10.1.94:/home/user/nfs  /sharefs -o nolock
-    ```
-
-    挂载成功以后在大小核都可以看到`/sharefs`目录，将编译出来的 demo `sample_dpu_vicap.elf`拷贝到服务器的 nfs 目录下（在这里是`/home/user/nfs`），此时在大核 rtt 的`/sharefs`下也能看到对应的 elf 文件
-
-1. 使用命令`./sample_dpu_vicap.elf -dev 0 -sensor 2 -chn 0  -preview 1 -rotation 1`启动 demo，输出打印信息如下所示：
-
-    ![run](./images/dpu_demo_run_02140401.png)
-
-1. 输入`d`，输出打印信息如下所示：
-
-    ![save](./images/dpu_demo_save_02140401.png)
-
-1. 输入`q`，退出程序。
-
-1. 此时在`/sharefs`目录下有`depth_out.bin`文件，此文件即是 dpu 输出的深度图文件，可以用相应软件打开查看。
-
-##### 2.16.4.3 效果如下
-
-1. 实际场景如下：
-
-    ![real](./images/dpu_demo_real_02140401.jpg)
-
-1. sensor 拍摄出来的散斑图如下：
-
-    ![vicap](./images/dpu_demp_vicap_02140401.jpg)
-
-1. dma 顺时针旋转九十度以后的散斑图如下：
-
-    ![dma](./images/dpu_demo_dma_02140401.jpg)
-
-1. dpu 输出的深度图结果如下：
-
-    ![dpu](./images/dpu_demo_dpu_02140401.jpg)
-
-### 2.17 VICAP_DMA_DPU_demo
-
-#### 2.17.1 demo 简介
-
-demo 流程如下：
-
-1. 将 vicap 绑定 dma，dma 绑定 dpu；
-1. 启动 dpu，dma，vicap；
-1. isp 把散斑图送给 dma，dma 旋转九十度以后送给 dpu，dpu 进行深度处理以后将深度图地址打印在屏幕上；
-
-#### 2.17.2 Feature 说明
-
-isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
-
-#### 2.17.3 依赖资源
-
-需要标定文件，包括配置文件和参考图文件。配置文件和参考图文件需要和 sensor 配套。配置文件和参考图文件路径在`k230_sdk/test_resource/dpu`目录下，该配置文件和参考图文件仅和 sensor1 对应。
-
-#### 2.17.4 使用说明
-
-##### 2.17.4.1 编译
-
-1. 将配置文件和参考图文件放在`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`目录下，如下图所示：
-
-    ![conf_file](./images/demo_dpu_conf_ref_file_02140401.png)
-
-1. 在`k230_sdk`目录下执行编译命令`make`
-
-1. 编译完成后在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下会有 demo 对应的`sample_vdd_r.elf`文件。在`k230_sdk/output/k230_evb_defconfig/images`目录下会有系统镜像文件`sysimage-sdcard.img`。
-
-> 更详细的编译过程可以参考release sdk软件包中的README.md。
-
-##### 2.17.4.2 执行
-
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
-
-1. 挂载 nfs，使用如下命令：
-
-    ```shell
-    ifconfig eth0 up
-    udhcpc
-    # 下面的 ip 地址和路径换成自己服务器的 ip 和路径
-    mount -t nfs 10.10.1.94:/home/user/nfs  /sharefs -o nolock
-    ```
-
-    挂载成功以后在大小核都可以看到`/sharefs`目录，将编译出来的 demo `sample_vdd_r.elf`拷贝到服务器的 nfs 目录下（在这里是`/home/user/nfs`），此时在大核 rtt 的`/sharefs`下也能看到对应的 elf 文件
-
-1. 使用命令`./sample_vdd_r.elf`启动 demo；
-
-1. 输入`q`停止 demo 运行，并将深度图以文件的形式保存到`/sharefs`下面，名字为`depthout.bin`
-
-1. 可以使用相应软件查看该深度图。
-
-1. 效果如下：
-
-    ![depth](./images/dpu_demo_bind_depth_02150402.png)
-
 ### 2.18 语音对讲Demo
 
 #### 2.18.1 Demo简介
@@ -1247,41 +1058,6 @@ sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配�
 1. 在小核上执行：`./backclient_test rtsp：<server_ip>：8554/BackChannelTest`）
 
 backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
-
-### 2.19 深度图显示 Demo
-
-#### 2.19.1 Demo 简介
-
-本 demo 用于将 dpu 处理的深度图显示在屏幕上。
-
-#### 2.19.2 Feature说明
-
-1. 将 vicap 绑定 dma，dma 绑定 dpu；
-1. 启动 dpu，dma，vicap，vo；
-1. isp 把散斑图送给 dma，dma 旋转九十度以后送给 dpu，dpu 进行深度处理；
-1. 在用户态获取深度结果；
-1. 将深度图送给 vo 进行显示。
-
-#### 2.19.3 依赖资源
-
-需要标定文件，包括配置文件和参考图文件。配置文件和参考图文件需要和 sensor 配套。配置文件和参考图文件路径在`k230_sdk/test_resource/dpu`目录下，该配置文件和参考图文件仅和 sensor1 对应。
-
-#### 2.19.4 使用说明
-
-##### 2.19.4.1 编译
-
-1. 将配置文件和参考图文件放在`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`目录下。
-1. 在`k230_sdk`目录下执行编译命令`make`
-1. 编译完成后在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下会有 demo 对应的`sample_dpu_vo.elf`文件。在`k230_sdk/output/k230_evb_defconfig/images`目录下会有系统镜像文件`sysimage-sdcard.img`。
-
-> 更详细的编译过程可以参考release sdk软件包中的README.md。
-
-##### 2.19.4.2 执行
-
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
-1. 挂载 nfs，挂载成功以后在大小核都可以看到`/sharefs`目录，将编译出来的 demo `sample_dpu_vo.elf`拷贝到服务器的 nfs 目录下，此时在大核 rtt 的`/sharefs`下也能看到对应的 elf 文件.
-1. 使用命令`./sample_dpu_vo.elf`启动 demo，此时会在屏幕上显示 dpu 处理后的深度图。
-1. 按'q'退出 demo。
 
 ### 2.20 OTA远程升级 Demo
 
