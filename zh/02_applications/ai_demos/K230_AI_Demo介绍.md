@@ -29,15 +29,14 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 
 ### 硬件环境
 
-- K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
-- K230-USIP-IMX335-SENSOR-V1.1模组
-- 个别AI Demo（segment_yolov8n）需要K230-UNSIP-LP4-EVB-V1.0环境
+- K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1/CanMV-K230（默认支持）
 
 ### 源码位置
 
 源码路径位于`src/reference/ai_poc`，目录结构如下：
 
 ```shell
+# AI Demo子目录（eg：bytetrack、face_detection等）中有详细的Demo说明文档
 .
 ├── build_app.sh
 ├── bytetrack
