@@ -1,0 +1,49 @@
+{% extends "sphinx_rtd_theme/layout.html" %}
+
+{%block extrabody %}
+<style>
+  /*@import url('/topbar.css');*/
+</style>
+<nav class="navbar">
+  <div class="jn_container-view">
+    <div class="jn_menu-container">
+      <span class="logo"></span>
+      <ul class="menu-list">
+        <li class="menu-item"><a href="/resource" class="menu-router">资料下载</a></li>
+        <li class="menu-item menu-doc">
+          <a class="menu-router">文档</a>
+          <div class="model-list">
+            <div class="document-select expanded-menu">
+              <span>K210</span>
+              <div class="expanded-menu-container">
+                <a href="/canmv/main/canmv/index.html" class="document-select">CanMV</a>
+                <a href="/arduino/main/index.html" class="document-select">Arduino</a>
+              </div>
+            </div>
+            <div class="document-select expanded-menu">
+              <span>K510</span>
+              <div class="expanded-menu-container">
+                <a href="https://github.com/kendryte/k510_docs" class="document-select" target="_blank">SDK</a>
+              </div>
+            </div>
+            <div class="document-select expanded-menu">
+              <span>K230</span>
+              <div class="expanded-menu-container">
+                <a href="https://github.com/kendryte/k230_docs" class="document-select" target="_blank">SDK</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="menu-item"><a href="/model/library" class="menu-router">模型库</a></li>
+        <li class="menu-item"><a href="/model/training" class="menu-router">模型训练</a></li>
+        <li class="menu-item"><a href="/home/0" class="menu-router">BBS</a></li>
+        <li class="menu-item"><a href="/blog" class="menu-router">Blog</a></li>
+      </ul>
+      <div class="jn_phone-menu"></div>
+    </div>
+  </div>
+</nav>
+
+{{ super() }}
+
+{% endblock extrabody %}
