@@ -258,7 +258,7 @@ Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显�
 
 #### 2.5.1 audio_demo简介
 
-audio demo通过调用api接口来实现音频输入和输出功能。音频输入包括i2s和pdm模块，音频输出包括i2s模块。demo中包含了可以单独测试音频输入或音频输出用例，也包含音频输入和输出同时测试的用例。
+audio demo通过调用api接口来实现音频输入和输出功能。音频输入输出均使用i2s模块。demo中包含了可以单独测试音频输入或音频输出用例，也包含音频输入和输出同时测试的用例。
 
 #### 2.5.2 Feature说明
 
@@ -266,77 +266,32 @@ audio demo通过调用api接口来实现音频输入和输出功能。音频输�
 
 音频输入通过采集环境中的声音并将其保存成文件来分析是否正常。
 
-音频输入包括i2s和pdm两个模块的测试，demo中采集15s钟的音频数据，采集到的文件格式为wav，可使用vlc直接播放。i2s 音频输入有2组，demo中默认使用第0组作为音频输入。pdm音频输入一共有4组，demo中默认使用第0组作为音频输入。
+demo中采集15s钟的音频数据，采集到的文件格式为wav，可使用vlc直接播放。
 
 ##### 2.5.2.2 音频输出
 
 音频输出通过播放wav文件，插上耳机听声音来判断是否正常。
 
-音频输出只包括i2s模块测试，demo中通过播放wav来测试音频输出功能,可上传不同音频格式的wav文件来测试音频输出功能。i2s 音频输出有2组，demo中默认使用第0组作为音频输出。
+demo中通过播放wav来测试音频输出功能,可上传不同音频格式的wav文件来测试音频输出功能。
 
 ##### 2.5.2.3 音频输入输出
 
 音频输入和输出可同时测试。
 
 1. 测试i2s模块功能，即:通过i2s音频输入实时采集环境中声音并通过i2s音频输出，接上耳机可实时听到环境中的声音。
-1. 测试pdm模块功能，即:通过pdm音频输入实时采集环境中声音并通过i2s音频输出，接上耳机可实时听到环境中的声音。
 
 ##### 2.5.2.4 音频编解码
 
 内置g711a/u 16bit 音频编解码器，用户可以注册其他外置编解码器。
 
-##### 2.5.2.5 数据链路
+#### 2.5.3 使用说明
 
-1. audio codec从模拟麦克风接收到的信号，转变为I2S格式的PCM数据后，输入到audio中的I2S中；I2S输出的PCM数据，经过audio codec后，变为模拟信号发出，该模式不使用数字IO，固定使用I2S的sdi0和sdo0接口。
-1. I2S的直接与片外的数字麦克风和PA连接。共有两组接口可以选择:sdi0、sdo0及sdi1、sdo1。
-1. 片外的PDM麦克风，输入最多8路PDM数据到audio的4个输入数据接口。
-
-可以使用内置codec或外接设备(音频子板)来测试音频相关功能。使用内置codec可以测试一组I2S音频输入和输出及audio codec相关功能，使用音频子板可以测试2组i2s音频输入输出和4组pdm音频输入功能。
-
-![audio hw](images/173605eb81594328bcb17479f8ea0525.png)
-
-##### 2.5.2.6 注意事项
-
-1. 内置codec最大采样精度支持24bit，32bit不支持；因此使用内置codec测试i2s音频输入输出时，只支持16/24 bit采样精度。
-
-1. 音频子板i2s收发回环测试，只支持32bit采样精度。原因如下：
-
-    音频子板采集使用MSM261S3526Z0CM硅麦克风，为I2S Philips格式；音频子板输出使用codec tm8211，为i2s 右对齐格式，16bit采样。右因 i2s模块收发使用同一个ws，收发同时运行只能配置一种i2s 对齐格式。为正确获取音频数据，需适配MSM261S3526Z0CM硅麦克风，因此i2s收发配置为I2S Philips格式。但是此时输出为右对齐格式，所以输出数据就会损失精度。但使用32bit精度收发时，不受i2s对齐格式显示，因此无影响。
-
-    如果单独测试音频输入或者音频输出，不受采样精度影响，16/24/32bit都支持。
-
-1. 使用音频子板采集音频时，采样率支持范围(8k~48k).
-
-    音频子板采集模块使用MSM261S3526Z0CM硅麦克风，最大时钟为4MHZ。当采样率为96k(6.144MHZ)和192k(12.288MHZ)时，从音频子板上采集到的声音会异常。
-
-#### 2.5.3 依赖资源
-
-1. 音频测试依赖音频子板。
-
-音频子板原理图如下：
-
-![图示, 示意图 描述已自动生成](images/e5a812cf93366dad91283fce4aea1008.png)
-
-![图示, 示意图 描述已自动生成](images/c2aafa076e1f78c99c824ed37f29592d.png)
-
-当测试i2s输入输出时，音频子板可通过跳线帽如下连接:
-
-![Jumper caps for i2s](images/818c74d25d2fb4e277bd8cab41863b56.png)
-
-pdm音频采集，当采集第0组pdm通道或第1组pdm通道数据时，使用引脚与i2s引脚没有冲突。
-
-当使用第2组和第3组pdm通道时，需要使用跳线帽切换到pdm通道模式，具体如下：
-
-![Jumper caps for pdm](images/d655177a42702226fff924fd4c150aa2.png)
-
-#### 2.5.4 使用说明
-
-##### 2.5.4.1 编译
+##### 2.5.3.1 编译
 
 1. 软件编译环境参考SDK中的`README.md`。
 1. 搭建好sharefs环境，读写文件均依赖sharefs。
 
-##### 2.5.4.2 执行
+##### 2.5.3.2 执行
 
 进入rt-smart系统后，进入/sharefs目录下，`sample_audio.elf`为测试demo。
 
@@ -350,7 +305,7 @@ pdm音频采集，当采集第0组pdm通道或第1组pdm通道数据时，使用
 
 ![文本 描述已自动生成](images/e73b403fe42ae077746ee4e5928a1d86.png)
 
-###### 2.5.4.2.1 I2S音频输入测试
+###### 2.5.3.2.1 I2S音频输入测试
 
 - 输入`./sample_audio.elf -type 0`来采集15s中的pcm音频数据，
 - `-samplerate`选项来选择采集不同采样率的音频,
@@ -362,18 +317,7 @@ demo实现思路:该测试通过循环调用api函数:`kd_mpi_ai_get_frame`和`k
 
 ![i2s input](images/100ece476c397937609fc134d00b06f4.png)
 
-###### 2.5.4.2.2 pdm音频输入测试
-
-- 输入`./sample_audio.elf -type 1`来采集15s中的pcm音频数据
-- `-samplerate`选项来选择采集不同采样率的音频
-- `-bitwidth` 来来设置不同的采样精度
-- `-enablecodec`设置是否使用内置codec。采集15s数据后，demo自动退出，并保存数据到文件中。
-
-demo实现思路:该测试通过循环调用api函数:`kd_mpi_ai_get_frame`和`kd_mpi_ai_release_frame`来采集数据。注意pdm对应的ai dev号为1.
-
-![pdm in log](images/f3da90949599f726a60f56b35b69f7cb.png)
-
-###### 2.5.4.2.3 I2S音频输出测试
+###### 2.5.3.2.2 I2S音频输出测试
 
 支持播放wav文件，需将wav文件拷贝到sharefs路径下。该demo会循环播放wav文件（其他任意wav文件也可），用户可以按任意键来退出该功能测试。
 
@@ -381,17 +325,15 @@ demo实现思路:该测试通过循环调用api函数：`kd_mpi_ao_send_frame`�
 
 ![文本 描述已自动生成](images/09cbde8d64c0df2f2cb4f7c96e00ec99.png)
 
-###### 2.5.4.2.4 I2S音频输入输出api接口测试
+###### 2.5.3.2.3 I2S音频输入输出api接口测试
 
-输入`./sample_audio.elf -type 3 -bitwidth 32`，通过api接口实时测试音频输入输出功能。
+输入`./sample_audio.elf -type 3 -bitwidth 16`，通过api接口实时测试音频输入输出功能。
 
 通过调用api接口：`kd_mpi_ai_get_frame`获取音频数据并调用`kd_mpi_ao_send_frame`输出音频数据来测试音频输入和输出整体功能。用户可以按任意键来退出该功能测试。测试过程中会实时输出ai采集到的时间戳信息。
 
-![文本 描述已自动生成](images/8438ab40fd6e987e1a8878660364143a.png)
-
 ![图片描述](images/d8f4d2a4c90f58fe67a7343a836f1b18.png)
 
-###### 2.5.4.2.5 I2S音频输入和输出模块的系统绑定测试
+###### 2.5.3.2.4 I2S音频输入和输出模块的系统绑定测试
 
 输入`./sample_audio.elf -type 4`，通过ai和ao模块绑定实时测试音频输入输出功能。
 
@@ -399,21 +341,7 @@ demo实现思路:该测试通过循环调用api函数：`kd_mpi_ao_send_frame`�
 
 ![文本 描述已自动生成](images/2bd93e4768f76c6af98aa69137156f09.png)
 
-###### 2.5.4.2.6 pdm音频输入，i2s输出api接口测试
-
-输入`./sample_audio.elf -type 5 -bitwidth 32`，通过api接口实时测试音频输入输出功能。
-
-通过调用api接口：kd_mpi_ai_get_frame获取音频数据并调用`kd_mpi_ao_send_frame`输出音频数据来测试音频输入和输出整体功能。用户可以按任意键来退出该功能测试。测试过程中会实时输出ai采集到的时间戳信息。![pdm in i2s out log](images/b7e6e2c2a324b2f5fd97cdafed0a1816.png)
-
-###### 2.5.4.2.7 pdm音频输入，i2s输出系统绑定测试
-
-输入`./sample_audio.elf -type 6 -bitwidth 32`，通过ai和ao模块绑定实时测试音频输入输出功能。
-
-通过调用系统绑定api接口：`kd_mpi_sys_bind`将ai和ao模块绑定，来测试音频输入和输出整体功能。用户可以按任意键来退出该功能测试。
-
-![pdm in is2 out bind](images/db1519081e96825e6bf20f520a28ebb8.png)
-
-###### 2.5.4.2.8 编码测试
+###### 2.5.3.2.5 编码测试
 
 获取ai数据并编码保存到文件。编解码只支持g711a/u，16bit。
 
@@ -425,7 +353,7 @@ api接口方式:`./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filenam
 
 ![audio enc log](images/8c32c668277867b2ab314e47c2d96d03.png)
 
-###### 2.5.4.2.9 解码测试
+###### 2.5.3.2.6 解码测试
 
 读取文件数据并解码播放。编解码只支持g711a/u，16bit。
 
@@ -437,7 +365,7 @@ api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enabl
 
 ![audio dec](images/48a50a418c0daae2a69d6bb70306b0b8.png)
 
-###### 2.5.4.2.10 音频全流程测试
+###### 2.5.3.2.7 音频全流程测试
 
 1)录制模块ai-\>aenc-\>file 和播放模块 file-\>adec-\>ao 两条链路同时运行，模拟语音对讲的场景。使用内置codec，16bit精度来模拟。`-filename`来选择待播放的文件，为g711a格式，`-samplerate`选择采样精度。录制文件名称:为播放文件名称后+`_rec`:如-filename为`/sharefs/test.g711a`,则录制文件名为:`/sharefs/test.g711a_rec`.
 
@@ -453,7 +381,7 @@ api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enabl
 
 ![图片描述](images/23f111756ad924f5538cce7c691da0df.png)
 
-###### 2.5.4.2.11 mapi音频测试
+###### 2.5.3.2.8 mapi音频测试
 
 确保大核已启动核间通信进程：大核上执行：`/bin/sample_sys_init.elf &`
 确保小核加载核间通信驱动模块:`insmod /mnt/k_ipcm.ko`
