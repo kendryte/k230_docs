@@ -47,6 +47,7 @@
 | 文档版本号  | 修改说明                           | 修改者 | 日期       |
 |------------|-----------------------------------|--------|------------|
 | V1.0       | 初版                              | jiangxiangbing | 2023-08-01 |
+| V2.0       | 删除完整镜像烧录页，增加loader_sip.bin支持SIP烧录     | jiangxiangbing | 2023-10-12 |
 
 ## 1. Burntool烧录机制
 
@@ -63,7 +64,7 @@
 
 ### 2.1 软件获取
 
-[下载链接](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v1.7z)
+[下载链接](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v2.7z)
 
 ### 2.2 Windows系统环境安装
 
@@ -71,27 +72,31 @@
 
 ![zadig](images/zadig.png)
 
-## 3. 完整镜像烧录
+## 3. 分区镜像烧录
 
-烧录由SDK编译生成的sysimage-sdcard.img和sysimage-spinor32m.img
-
-![full_image](images/full_image.png)
-
-## 4. 分区镜像烧录
-
-### 4.1 界面展示
-
-分区对应的起始地址和文件由配置文件决定。
-
-![image_config](images/image_config.png)    ![interface](images/interface.png)
-
-### 4.2 界面各项说明
+### 3.1 界面各项说明
 
 ![interface_disc](images/interface_disc.png)
 
 1. 选择是否烧录该分区
-1. 配置分区起始地址，双击修改，地址都是字节偏移。分区地址与SDK编译时的固件产生配置有关(tools\gen_image_cfg)
-1. 配置分区名称，不重复即可，双击修改。
+1. 配置分区起始地址，双击修改，地址都是字节偏移。地址与genimage的配置文件一致，例如emmc的镜像，镜像配置路径：k230_sdk/board/common/genimage-sdcard.cfg
+
+    ```shell
+        partition linux {
+            #50M@30M   0x800@0x800
+            offset = 30M
+            image = "little-core/linux_system.bin"
+            size = 50M
+        }
+    ```
+
+    linux_system.bin 分区的起始地址为30MB，0x1E00000
+
+    烧录由SDK编译生成的sysimage-sdcard.img和sysimage-spinor32m.img完整镜像，分区起始地址配置为0。
+
+1. 配置分区名称，除了loader，其他名称可以随意，只要不重复即可，双击修改。
 1. 分区镜像文件路径。
-1. 选择分区镜像文件。
-1. 分区烧录需要loader.bin，目前使用压缩包内提供的即可（doc/loader.bin），需配置其分区名称为loader
+1. 选择分区镜像文件。loader使用压缩包内doc目录下提供的即可，需配置其分区名称固定为“loader”。loader的种类是由于DDR training程序不一样导致的。如果是SIP芯片设备，ddr training一样，loader选择k230_burntool_v2/doc/loader_sip.bin，如果是EVB LP3设备，loader选择k230_burntool_v2/doc/loader_evb_lp3.bin，如果使用unsip芯片的其他板子，则loader程序需要根据ddr training代码重新编译。
+1. 选择emmc或norflash
+1. 开始烧录，烧录单个设备可以采用这种方式。
+1. 自动烧录，电脑可以通过USB连接多台K230设备，自动并行烧录。
