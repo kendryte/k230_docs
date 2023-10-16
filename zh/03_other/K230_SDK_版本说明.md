@@ -216,6 +216,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 22 | K230 SDK V0.9 | 功耗控制        | uboot 中增加对芯片时钟/电源域管理，大核 rt-smart 中增加对 CPU1，DPU，VPU，KPU，display 的功耗控制，小核 linux 中增加对 display 的功耗控制                                                                                                |                                     |
 | 23 | K230 SDK V1.0 | 门锁POC        | 添加人脸特征值加解密功能 |                                     |
 | 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
+| 25 | K230 SDK V1.1 | 大核加解密驱动        | 增加了大核硬件 AES-GCM 驱动和 SM4-ECB/CBC/CFB/OFB/CTR 驱动 |                                     |
 
 ### 4.5 其它
 
