@@ -187,6 +187,9 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 31 | K230 SDK V0.9 | OTA | 支持OTA升级 | |
 | 32 | K230 SDK V1.0 | 大核FFT | 支持FFT驱动 | |
 | 33 | K230 SDK V1.0.1 | 支持CanMV-K230开发板 | SDK支持CanMV-K230开发板（SD卡启动）| |
+| 34 | K230 SDK V1.1 | 小核Wifi驱动 | 小核支持AP6256驱动| |
+| 35 | K230 SDK V1.1 | 小核三色灯驱动 | 小核支持I2S接口WS2812驱动| |
+| 35 | K230 SDK V1.1 | 小核SPI LCD驱动 | 小核支持SPI接口ST7735S 0.96寸LCD屏驱动| |
 
 ### 4.4 架构
 
