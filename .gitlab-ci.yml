@@ -62,6 +62,7 @@ markdown-link-check:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   stage: lint
   timeout: 10m
+  retry: 2
   tags:
     - k230
   image: ai.b-bug.org:5000/markdown:latest
