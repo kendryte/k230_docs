@@ -679,7 +679,7 @@ uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播�
 
 摄像头模组，OV9732/IMX335摄像头。
 
-type c线连接USB1与PC
+type c线连接USB0与PC
 
 PC的相机应用或安装PotPlayer软件
 
@@ -711,19 +711,19 @@ msh /sharefs/app>./sample_sys_init.elf
 进入小核linux系统后，进入`/mnt`目录下，执行
 
 ```shell
-./canaan-camera.sh start otg1
+./canaan-camera.sh start otg0
 
 ./camera
 ```
 
-typec USB线连接USB1与PC，potplayer播放器播放摄像头。
+typec USB线连接USB0与PC，potplayer播放器播放摄像头。
 
 默认使用BULK传输，使用以下命令可以更改为ISO传输。
 
 ```shell
 ./canaan-camera.sh stop
 
-./canaan-camera.sh start otg1 iso
+./canaan-camera.sh start otg0 iso
 
 ./camera -i
 ```
@@ -742,9 +742,9 @@ PotPlayer -> `打开` -> `摄像头/其他设备`
 
 USB demo目前调试了4个功能，
 
-作为device，模拟U盘，模拟鼠标键盘。
+由于K230的升级功能只能使用USB0，所以把USB0作为device，模拟U盘，模拟鼠标键盘。跳线帽不能连接J5的pin1/pin2，作为device不能使能5V供电。
 
-作为host，连接U盘，连接鼠标键盘。需要使用跳线帽连接J5的pin1/pin2，使能5V供电。
+作为host，连接U盘，连接鼠标键盘。需要使用跳线帽连接J5的pin3/pin4，使能5V供电。
 
 #### 2.10.2 Feature说明
 
@@ -766,28 +766,28 @@ typeC线，typeC转typeA。
 mkfs.fat 4.1 (2017-01-24)
 [ 1218.882053] Mass Storage Function, version: 2009/09/11
 [ 1218.887308] LUN: removable file: (no medium)
-[ 1218.895464] dwc2 91540000.usb-otg: bound driver configfs-gadget
-[root@canaan / ]#[ 1219.019554] dwc2 91540000.usb-otg: new device is high-speed
-[ 1219.056629] dwc2 91540000.usb-otg: new address 5
+[ 1218.895464] dwc2 91500000.usb-otg: bound driver configfs-gadget
+[root@canaan / ]#[ 1219.019554] dwc2 91500000.usb-otg: new device is high-speed
+[ 1219.056629] dwc2 91500000.usb-otg: new address 5
 
 ##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
 [root@canaan ~ ]#gadget-storage.sh
 [  359.995510] Mass Storage Function, version: 2009/09/11
 [  360.000762] LUN: removable file: (no medium)
-[  360.013138] dwc2 91540000.usb-otg: bound driver configfs-gadget
-[root@canaan ~ ]#[  360.136809] dwc2 91540000.usb-otg: new device is high-speed
-[  360.173543] dwc2 91540000.usb-otg: new address 43
+[  360.013138] dwc2 91500000.usb-otg: bound driver configfs-gadget
+[root@canaan ~ ]#[  360.136809] dwc2 91500000.usb-otg: new device is high-speed
+[  360.173543] dwc2 91500000.usb-otg: new address 43
 ```
 
-连接开发板的USB1，typeC连接PC，PC上显示U盘连接。
+连接开发板的USB0，typeC连接PC，PC上显示U盘连接。
 
 ##### 2.10.4.2 作为HOST连接U盘
 
-K230开发板USB0通过typeC转typeA连接U盘。
+K230开发板USB1通过typeC转typeA连接U盘。
 
 ##### 2.10.4.3 作为device模拟鼠标键盘
 
-K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
+K230开发板USB0通过typeC连接另外一台电脑设备来进行测试
 
 ```shell
 [root@canaan / ]#gadget-hid.sh
@@ -801,7 +801,7 @@ K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
 
 ##### 2.10.4.4 作为HOST连接鼠标键盘
 
-K230开发板USB0通过typeC转typeA连接鼠标或键盘。
+K230开发板USB1通过typeC转typeA连接鼠标或键盘。
 
 ```shell
 #通过以下命令确定input设备对应的event。K230开发板如果没有连接屏幕，连接鼠标键盘对应的event会改变。
