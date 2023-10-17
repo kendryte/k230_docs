@@ -2,3 +2,4 @@
 **/.DS_Store
 _build
 venc
+__pycache__
