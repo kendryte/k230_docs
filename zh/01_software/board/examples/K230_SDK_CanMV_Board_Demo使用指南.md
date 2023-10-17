@@ -912,76 +912,27 @@ sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配�
 
 backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
 
-### 2.15 OTA远程升级 Demo
+### 2.15 FFT Demo
 
 #### 2.15.1 Demo 简介
 
-OTA为空中下载技术(Over The Air)，区别于现场刷机，通过网络对设备固件进行更新。
+本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
 #### 2.15.2 Feature说明
 
-1. 烧录方式与更新固件都存放在远端服务器上，方便修改。
-1. 支持升级包验签加密，保证数据完整性以及安全性；
-1. 未支持灾难恢复方案。常见的OTA灾难恢复机制有A/B备份方案，或Recovery方案。K230的应用场景可能使用容量小的Norflash，也可能使用容量大的eMMC。具体的使用场景可以基于此Demo进行开发。
+先进行fft计算，在进行ifft计算
 
 #### 2.15.3 依赖资源
 
-搭建http服务器，如使用hfs网络文件服务器。
+无
 
 #### 2.15.4 使用说明
 
-##### 2.15.4.1 制作升级包
-
-```shell
-xxx@develop:~/k230/k230_sdk/tools/ota$ tree
-.
-├── ota_package
-│   ├── rootfs
-│   │   ├── etc
-│   │   └── mnt
-│   └── rtt_system.bin
-├── ota_private.pem
-├── ota_public.pem
-├── ota_upgrade.sh
-├── package_kpk.sh
-└── README
-```
-
-1. 升级包制作方法：进入k230_sdk/tools/ota目录，执行./package_kpk.sh ota_package会产生ota_package.kpk即为升级包。ota_package目录自行创建，包含了需要升级的分区固件(如rtt_system.bin)，以及小核linux的文件系统的文件。值得注意的是，升级的机制是把升级包下载到内存然后解压缩进行烧录，受限于内存容量限制，ota_package 包含的分区文件大小不能太大，不超过20MB。可以分多次烧录。
-1. 不同介质的分区固件参考k230_sdk/tools/gen_image_cfg/xxx.cfg文件，即使有的分区在小核linux系统上看不到，也可以通过offset偏移地址对整个磁盘空间进行擦写升级。
-1. ota_upgrade.sh 是设备端执行的升级脚本，如果分区有修改，需要对这个脚本做对应的修改。
-1. ota_private.pem 升级包签名的私钥，需要把公钥编译或拷贝到设备的/etc/目录下。参考README
-
-##### 2.15.4.2 编译设备端程序
-
-1. 设备端的ota程序位于buildroot-ext/package/ota，编译buildroot会把ota程序安装到文件系统的/usr/bin目录下，ota.cfg安装到/etc/目录下。ota.cfg可配置服务器端升级包的下载链接以及公钥的路径。
-
-##### 2.15.4.3 执行
-
-1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
-1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
-
-### 2.16 FFT Demo
-
-#### 2.16.1 Demo 简介
-
-本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
-
-#### 2.16.2 Feature说明
-
-先进行fft计算，在进行ifft计算
-
-#### 2.16.3 依赖资源
-
-无
-
-#### 2.16.4 使用说明
-
-##### 2.16.4.1 编译
+##### 2.15.4.1 编译
 
 > 请参考release sdk软件包中的README.md。
 
-##### 2.16.4.2 执行
+##### 2.15.4.2 执行
 
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
