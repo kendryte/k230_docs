@@ -537,102 +537,27 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
-### 2.9 UVC_demo
+### 2.8 USB_demo
 
-#### 2.9.1 uvc_demo简介
-
-uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播放器可以播放真实摄像头的图像。
-
-#### 2.9.2 Feature说明
-
-当前版本支持bulk传输与ISO传输。
-
-当前版本只支持640x480 NV12格式图像 1280x720 H264/MJPEG格式图像。
-
-支持PID、VID以及设备名称通过修改shell脚本配置。
-
-#### 2.9.3 依赖资源
-
-摄像头模组，OV9732/IMX335摄像头。
-
-type c线连接USB1与PC
-
-PC的相机应用或安装PotPlayer软件
-
-#### 2.9.4 使用说明
-
-##### 2.9.4.1 编译
-
-软件编译环境参考SDK中的README.md。
-
-1. 小核用户程序源码位于`cdk/user/mapi/sample/camera`
-1. 小核驱动程序位于`linux/drivers/usb/dwc2`
-1. 小核驱动程序位于`linux/drivers/usb/gadget`
-1. 大核程序涉及到mpp仓库以及cdk
-
-大核rtt实现摄像头驱动功能。
-
-小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
-
-参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
-
-##### 2.9.4.2 执行
-
-进入大核rt-smart系统后，进入/bin目录下，执行
-
-```shell
-msh /sharefs/app>./sample_sys_init.elf
-```
-
-进入小核linux系统后，进入`/mnt`目录下，执行
-
-```shell
-./canaan-camera.sh start otg1
-
-./camera
-```
-
-typec USB线连接USB1与PC，potplayer播放器播放摄像头。
-
-默认使用BULK传输，使用以下命令可以更改为ISO传输。
-
-```shell
-./canaan-camera.sh stop
-
-./canaan-camera.sh start otg1 iso
-
-./camera -i
-```
-
-默认为IMX335摄像头。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试。
-
-进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
-`视频录制设备`->`设备`，选择`UVC Camera`
-`视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
-
-PotPlayer -> `打开` -> `摄像头/其他设备`
-
-### 2.10 USB_demo
-
-#### 2.10.1 USB_demo简介
+#### 2.8.1 USB_demo简介
 
 USB demo目前调试了4个功能，
 
 作为device，模拟U盘，模拟鼠标键盘。
 
-作为host，连接U盘，连接鼠标键盘。需要使用跳线帽连接J5的pin1/pin2，使能5V供电。
+作为host，连接U盘，连接鼠标键盘。
 
-#### 2.10.2 Feature说明
+#### 2.8.2 Feature说明
 
 USB demo的功能是linux系统原始集成的功能。
 
-#### 2.10.3 依赖资源
+#### 2.8.3 依赖资源
 
 typeC线，typeC转typeA。
 
-#### 2.10.4 使用说明
+#### 2.8.4 使用说明
 
-##### 2.10.4.1 作为device模拟U盘
+##### 2.8.4.1 作为device模拟U盘
 
 ```shell
 #规划一块内存空间作为模拟U盘的磁盘空间。
@@ -642,28 +567,28 @@ typeC线，typeC转typeA。
 mkfs.fat 4.1 (2017-01-24)
 [ 1218.882053] Mass Storage Function, version: 2009/09/11
 [ 1218.887308] LUN: removable file: (no medium)
-[ 1218.895464] dwc2 91540000.usb-otg: bound driver configfs-gadget
-[root@canaan / ]#[ 1219.019554] dwc2 91540000.usb-otg: new device is high-speed
-[ 1219.056629] dwc2 91540000.usb-otg: new address 5
+[ 1218.895464] dwc2 91500000.usb-otg: bound driver configfs-gadget
+[root@canaan / ]#[ 1219.019554] dwc2 91500000.usb-otg: new device is high-speed
+[ 1219.056629] dwc2 91500000.usb-otg: new address 5
 
 ##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
 [root@canaan ~ ]#gadget-storage.sh
 [  359.995510] Mass Storage Function, version: 2009/09/11
 [  360.000762] LUN: removable file: (no medium)
-[  360.013138] dwc2 91540000.usb-otg: bound driver configfs-gadget
-[root@canaan ~ ]#[  360.136809] dwc2 91540000.usb-otg: new device is high-speed
-[  360.173543] dwc2 91540000.usb-otg: new address 43
+[  360.013138] dwc2 91500000.usb-otg: bound driver configfs-gadget
+[root@canaan ~ ]#[  360.136809] dwc2 91500000.usb-otg: new device is high-speed
+[  360.173543] dwc2 91500000.usb-otg: new address 43
 ```
 
-连接开发板的USB1，typeC连接PC，PC上显示U盘连接。
+连接开发板的USB口，typeC连接PC，PC上显示U盘连接。
 
-##### 2.10.4.2 作为HOST连接U盘
+##### 2.8.4.2 作为HOST连接U盘
 
-K230开发板USB0通过typeC转typeA连接U盘。
+K230开发板USB口通过typeC转typeA连接U盘。
 
-##### 2.10.4.3 作为device模拟鼠标键盘
+##### 2.8.4.3 作为device模拟鼠标键盘
 
-K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
+K230开发板USB口通过typeC连接另外一台电脑设备来进行测试
 
 ```shell
 [root@canaan / ]#gadget-hid.sh
@@ -675,9 +600,9 @@ K230开发板USB1通过typeC连接另外一台电脑设备来进行测试
 #根据提示输入相应的操作，可以看到PC上的类似键盘输入。比如a b c --return
 ```
 
-##### 2.10.4.4 作为HOST连接鼠标键盘
+##### 2.8.4.4 作为HOST连接鼠标键盘
 
-K230开发板USB0通过typeC转typeA连接鼠标或键盘。
+K230开发板USB通过typeC转typeA连接鼠标或键盘。
 
 ```shell
 #通过以下命令确定input设备对应的event。K230开发板如果没有连接屏幕，连接鼠标键盘对应的event会改变。
@@ -704,9 +629,9 @@ B: MSC=10
 #按下键盘不同的按键，串口会有对应的显示。
 ```
 
-### 2.11 GPU_demo
+### 2.9 GPU_demo
 
-#### 2.11.1 GPU_demo简介
+#### 2.9.1 GPU_demo简介
 
 GPU demo共包含三个可执行程序
 
@@ -714,31 +639,31 @@ GPU demo共包含三个可执行程序
 - `linearGrad`: 绘制线性渐变示例
 - `imgIndex`: 绘制颜色查找表示例
 
-#### 2.11.2 Feature说明
+#### 2.9.2 Feature说明
 
 GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）、颜色查找表三个功能。
 
-#### 2.11.3 依赖资源
+#### 2.9.3 依赖资源
 
 文件系统可写。
 
-#### 2.11.4 使用说明
+#### 2.9.4 使用说明
 
 进入一个可写的目录，执行程序
 
-##### 2.11.4.1 tiger
+##### 2.9.4.1 tiger
 
 运行`tiger`命令，执行完成后在当前目录下生成tiger.png，如下图所示
 
 ![老虎图像](images/e54764629a9e9fb63ec4340d316e4f42.png)
 
-##### 2.11.4.2 linearGrad
+##### 2.9.4.2 linearGrad
 
 运行`linearGrad`命令，执行完成后在当前目录生成linearGrad.png，如下图所示
 
 ![线性渐变](images/24db1c231608cd26a5a981e055aa6910.png)
 
-##### 2.11.4.3 imgIndex
+##### 2.9.4.3 imgIndex
 
 运行`imgIndex`命令，执行完成后在当前目录生成4个图片文件，如下图所示
 
@@ -758,7 +683,7 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 
 ![index8](images/1f24a6530d8c0d1ed22bb3eea26a33fb.png)
 
-##### 2.11.4.4 vglite_drm
+##### 2.9.4.4 vglite_drm
 
 运行`vglite_drm`命令，会在LCD屏幕上显示由GPU绘制的图案，再按一次`Enter`键显示下一个图案，如图所示
 
@@ -766,7 +691,7 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 
 ![第二个图案](../../../02_applications/tutorials/images/gpu-3.jpg)
 
-##### 2.11.4.5 vglite_cube
+##### 2.9.4.5 vglite_cube
 
 运行`vglite_cube`命令，会在LCD屏幕上显示由GPU绘制的旋转的正方体，如下图所示
 
@@ -778,29 +703,29 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 sysctl -w kernel.printk=6
 ```
 
-### 2.12 DRM显示demo
+### 2.10 DRM显示demo
 
-#### 2.12.1 demo使用简介
+#### 2.10.1 demo使用简介
 
 该demo运行在K230小核的Linux系统上，具体是将图片显示到屏幕上。
 
-#### 2.12.2 Features说明
+#### 2.10.2 Features说明
 
 1. DRM支持5个图层操作，具体包括：1个video层和4个OSD层；
 1. video层支持NV12、NV21、NV16、NV61颜色空间
 1. OSD层支持ARGB8888、ARGB4444、RGB888、RGB565颜色空间
 
-#### 2.12.3 依赖资源
+#### 2.10.3 依赖资源
 
 LCD屏幕
 
-#### 2.12.4 使用说明
+#### 2.10.4 使用说明
 
-##### 2.12.4.1 编译
+##### 2.10.4.1 编译
 
 软件编译参考release sdk软件包中的README.md
 
-##### 2.12.4.2 执行
+##### 2.10.4.2 执行
 
 ```shell
 modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30  -P 31@36:1080x1920@NV12 -v -F smpte
@@ -810,28 +735,28 @@ modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30  -P 31@36:1080x1920@NV12 -v
 
 ![图片描述](images/modetest_video0_nv12.jpg)
 
-### 2.13 LVGL demo
+### 2.11 LVGL demo
 
-#### 2.13.1 demo使用简介
+#### 2.11.1 demo使用简介
 
 该demo运行在K230小核的Linux系统上，会在屏幕上显示一个配置界面，该界面支持触摸操作。
 
-#### 2.13.3 依赖资源
+#### 2.11.3 依赖资源
 
 LCD屏幕
 
-#### 2.13.2 Features说明
+#### 2.11.2 Features说明
 
 1. 支持按钮、滑动条功能
 1. 支持触摸功能
 
-#### 2.13.4 使用说明
+#### 2.11.4 使用说明
 
-##### 2.13.4.1 编译
+##### 2.11.4.1 编译
 
 软件编译参考release sdk软件包中的README.md
 
-##### 2.13.4.2 执行
+##### 2.11.4.2 执行
 
 ```shell
 lvgl_demo_widgets
@@ -841,27 +766,27 @@ lvgl_demo_widgets
 
 ![图片描述](images/lvgl_demo_widgets.png)
 
-### 2.14 Rtsp推流Demo
+### 2.12 Rtsp推流Demo
 
-#### 2.14.1 Demo简介
+#### 2.12.1 Demo简介
 
 该demo实现rtsp推流。
 
-#### 2.14.2 Feature说明
+#### 2.12.2 Feature说明
 
 该demo支持音视频码流同时推流到rtsp server上，其中通过`mapi venc&aenc`接口实现对音视频的编码；推流之后通过url进行拉取，目前该demo支持3路url推拉流。
 
-#### 2.14.3 依赖资源
+#### 2.12.3 依赖资源
 
 需要usb转eth网口转换器，将开发板连接网线
 
-#### 2.14.4 使用说明
+#### 2.12.4 使用说明
 
-##### 2.14.4.1 编译
+##### 2.12.4.1 编译
 
 参考release sdk软件包中的`README.md`中介绍，在docker环境编译cdk-user即可，编译完成后在`k230_sdk/src/common/cdk/user/out/little`下生成可执行程序rtsp_demo
 
-##### 2.14.4.2 执行
+##### 2.12.4.2 执行
 
 rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR，可通过命令行传参的方式修改sensor类型以及其他参数，具体说明如下：
 
@@ -885,19 +810,19 @@ Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720
 
 小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放；如需停止运行，请先停止vlc拉流，然后执行` ctrl+c `停止运行 rtsp_demo。
 
-### 2.15 FaceAeDemo
+### 2.13 FaceAeDemo
 
-#### 2.15.1 Demo介绍
+#### 2.13.1 Demo介绍
 
 该demo在大核使用，是VICAP、KPU、VO（视频输出）、AERoi联调的demo，可通过人脸检测的接口适当调节人脸曝光亮度。
 
-#### 2.15.2 编译
+#### 2.13.2 编译
 
 1. 首先参考release sdk软件包中的README.md，使用docker编译镜像。
 1. 编译完成后，默认将该sample（sample_face_ae.elf）存放在该路径下`k230_sdk/src/big/mpp/userapps/sample/elf`
 1. 由于KPU联动需要使用检测模型test.kmodel，编译后存放路径`k230_sdk/src/big/mpp/userapps/sample/elf`
 
-#### 2.15.3 执行
+#### 2.13.3 执行
 
 启动开发板进入小核/mnt下添加核间通信模块启动核间通信，创建共享文件系统，将`sample_face_ae.elf`与`test.kmodel`通过小核共享文件系统共享给大核执行。将文件放入小核文件系统的方式可通过挂载、tftp等方式传输。当前默认文件已经存放在小核~目录下。
 
@@ -920,13 +845,13 @@ cd /sharefs
 执行成功后，会打印每一帧图像的物理地址
 ```
 
-### 2.18 语音对讲Demo
+### 2.14 语音对讲Demo
 
-#### 2.18.1 Demo简介
+#### 2.14.1 Demo简介
 
 本Demo用于演示音频数据的双向传输和处理（当前版本实现了语音对讲的部分功能）
 
-#### 2.18.2 Feature说明
+#### 2.14.2 Feature说明
 
 语音对讲涉及到两端，两端均能实时采集编码发送音频数据到对端，同时也能接收对端来的音频数据进行解码和输出。
 当前实现参照了ONVIF，在rtsp协议的基础上扩展backchannel，从而支持从client向server发送音频数据；下文使用server和client分别代指语音对讲的两端。
@@ -939,17 +864,17 @@ cd /sharefs
 1. 仅支持一对一的对讲  （仅支持一路backchannel）；
 1. 不支持回声消除等处理 （设备侧需要音频输出到耳机，不能使用外放speaker）；
 
-#### 2.18.3 依赖资源
+#### 2.14.3 依赖资源
 
 需要两台K230设备， 通过usb转eth网口转换器，将开发板接入同一个局域网
 
-#### 2.18.4 使用说明
+#### 2.14.4 使用说明
 
-##### 2.18.4.1 编译
+##### 2.14.4.1 编译
 
 参考release sdk软件包中的`README.md`中介绍，在docker环境编译cdk-user即可，编译完成后在`k230_sdk/src/common/cdk/user/out/little`下生成可执行程序rtsp_server, backchannel_client
 
-##### 2.18.4.2 rtsp_server参数说明
+##### 2.14.4.2 rtsp_server参数说明
 
 | 参数名 | 描述 |参数范围 | 默认值 |
 |:--|:--|:--|:--|
@@ -964,7 +889,7 @@ cd /sharefs
 
 sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
 
-##### 2.18.4.3 执行
+##### 2.14.4.3 执行
 
 为描述方便，运行server的板子命名为板A， 运行client的命名为板B：
 
@@ -987,25 +912,25 @@ sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配�
 
 backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
 
-### 2.20 OTA远程升级 Demo
+### 2.15 OTA远程升级 Demo
 
-#### 2.20.1 Demo 简介
+#### 2.15.1 Demo 简介
 
 OTA为空中下载技术(Over The Air)，区别于现场刷机，通过网络对设备固件进行更新。
 
-#### 2.20.2 Feature说明
+#### 2.15.2 Feature说明
 
 1. 烧录方式与更新固件都存放在远端服务器上，方便修改。
 1. 支持升级包验签加密，保证数据完整性以及安全性；
 1. 未支持灾难恢复方案。常见的OTA灾难恢复机制有A/B备份方案，或Recovery方案。K230的应用场景可能使用容量小的Norflash，也可能使用容量大的eMMC。具体的使用场景可以基于此Demo进行开发。
 
-#### 2.20.3 依赖资源
+#### 2.15.3 依赖资源
 
 搭建http服务器，如使用hfs网络文件服务器。
 
-#### 2.20.4 使用说明
+#### 2.15.4 使用说明
 
-##### 2.20.4.1 制作升级包
+##### 2.15.4.1 制作升级包
 
 ```shell
 xxx@develop:~/k230/k230_sdk/tools/ota$ tree
@@ -1027,36 +952,36 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 1. ota_upgrade.sh 是设备端执行的升级脚本，如果分区有修改，需要对这个脚本做对应的修改。
 1. ota_private.pem 升级包签名的私钥，需要把公钥编译或拷贝到设备的/etc/目录下。参考README
 
-##### 2.20.4.2 编译设备端程序
+##### 2.15.4.2 编译设备端程序
 
 1. 设备端的ota程序位于buildroot-ext/package/ota，编译buildroot会把ota程序安装到文件系统的/usr/bin目录下，ota.cfg安装到/etc/目录下。ota.cfg可配置服务器端升级包的下载链接以及公钥的路径。
 
-##### 2.20.4.3 执行
+##### 2.15.4.3 执行
 
 1. 打开hfs.exe，Add folder from disk添加一个目录，把升级包拷贝到这个目录。
 1. 先确保开发板网络与服务器可以正常通信。开发板上执行ota即可完成升级包的下载以及升级操作。
 
-### 2.21 FFT Demo
+### 2.16 FFT Demo
 
-#### 2.21.1 Demo 简介
+#### 2.16.1 Demo 简介
 
 本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
-#### 2.21.2 Feature说明
+#### 2.16.2 Feature说明
 
 先进行fft计算，在进行ifft计算
 
-#### 2.21.3 依赖资源
+#### 2.16.3 依赖资源
 
 无
 
-#### 2.21.4 使用说明
+#### 2.16.4 使用说明
 
-##### 2.21.4.1 编译
+##### 2.16.4.1 编译
 
 > 请参考release sdk软件包中的README.md。
 
-##### 2.21.4.2 执行
+##### 2.16.4.2 执行
 
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
