@@ -681,15 +681,13 @@ GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）�
 
 运行`vglite_drm`命令，会在LCD屏幕上显示由GPU绘制的图案，再按一次`Enter`键显示下一个图案，如图所示
 
-![第一个图案](../../../02_applications/tutorials/images/gpu-1.jpg)
-
-![第二个图案](../../../02_applications/tutorials/images/gpu-3.jpg)
+![第一个图案](../../../02_applications/tutorials/images/gpu-hdmi-2.jpg)
 
 ##### 2.9.4.5 vglite_cube
 
 运行`vglite_cube`命令，会在LCD屏幕上显示由GPU绘制的旋转的正方体，如下图所示
 
-![Cube](images/gpu-1.jpg)
+![Cube](../../../02_applications/tutorials/images/gpu-hdmi-1.jpg)
 
 这个demo运行时内核会有大量的打印消息，如果不希望显示这些消息可以降低内核打印级别
 
