@@ -151,9 +151,13 @@ markdownlint:
 build-web-docs:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
   image: ai.b-bug.org:5000/python:web-docs
   tags:
     - k230
+  environment:
+    name: dev
+    url: https://ai.b-bug.org/k230/docs/dev/
   script:
     - make mhtml
+    - cp -r _build /data1/k230/docs
