@@ -66,7 +66,7 @@ VO（Video Output，视频输出）模块主动从内存相应位置读取视频
 
 #### 2.1.2 Feature说明
 
-video ouput 包含了三个用例、一个是dsi 的自测模式、vo 和 vvi 的绑定测试、vo layer 层插入帧的测试
+video ouput 包含了一个用例，即vo osd层插入帧的测试
 
 #### 2.1.3 依赖资源
 
@@ -80,33 +80,15 @@ video ouput 包含了三个用例、一个是dsi 的自测模式、vo 和 vvi �
 
 ##### 2.1.4.2 执行
 
-dsi 自测模式demo 运行
+vo osd 层插入帧
 
-`./sample_vo.elf 2`
+`./sample_vo.elf 15`
 
-会在屏幕上显示color bar 的图像，具体如下：
+执行完命令后、按一次回车会插入一张纯绿色图片、再按一次回车程序退出
 
-![背景图案 描述已自动生成](images/30666ad0db223389adabf15fe92e1e80.png)
+显示效果如下：
 
-1. vo 和 vvi 绑定demo运行
-
-    `./sample_vo.elf 9`
-
-    然后按一次回车vvi 开始发送argb 的数据，在按一次回车，程序退出
-
-    显示效果为红绿蓝三原色交替显示，效果如下：
-
-    ![图片描述](images/fa40ad5ac1c894a2243c684096dcd8b.png)
-
-1. vo layer 层插入帧demo运行
-
-    `./sample_vo.elf 7`
-
-    执行完命令后、按一次回车用户层插入一张图片、再按一次回车程序退出
-
-    显示效果如下：
-
-    ![图片描述](images/965a442d281e6cc9d3ecbbedad808f10.png)
+![图片描述](images/sample_vo_hdmi_15.png)
 
 ### 2.2 Venc_demo
 
@@ -709,7 +691,7 @@ sysctl -w kernel.printk=6
 
 #### 2.10.3 依赖资源
 
-LCD屏幕
+HDMI显示器
 
 #### 2.10.4 使用说明
 
@@ -720,43 +702,38 @@ LCD屏幕
 ##### 2.10.4.2 执行
 
 ```shell
-modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30  -P 31@36:1080x1920@NV12 -v -F smpte
+modetest -M canaan-drm -D 0 -a -s 38@36:1920x1080-30  -P 32@36:1920x1080@AR24 -v -F smpte
 ```
 
-执行完上述命令，会在LCD屏幕上显示彩条，具体如下所示：
+执行完上述命令，会在HDMI显示器上显示彩条，具体如下所示：
 
-![图片描述](images/modetest_video0_nv12.jpg)
+![图片描述](images/modetest_ar24_smpte_hdmi.png)
 
 ### 2.11 LVGL demo
 
 #### 2.11.1 demo使用简介
 
-该demo运行在K230小核的Linux系统上，会在屏幕上显示一个配置界面，该界面支持触摸操作。
+该demo运行在K230小核的Linux系统上，会在HDMI显示器上显示一个配置界面。
 
 #### 2.11.3 依赖资源
 
-LCD屏幕
+HDMI显示器
 
-#### 2.11.2 Features说明
+#### 2.11.3 使用说明
 
-1. 支持按钮、滑动条功能
-1. 支持触摸功能
-
-#### 2.11.4 使用说明
-
-##### 2.11.4.1 编译
+##### 2.11.3.1 编译
 
 软件编译参考release sdk软件包中的README.md
 
-##### 2.11.4.2 执行
+##### 2.11.3.2 执行
 
 ```shell
 lvgl_demo_widgets
 ```
 
-执行完上述命令，会在LCD屏幕上显示配置界面，可以通过触摸屏进行相关配置，具体如下所示：
+执行完上述命令，会在HDMI显示器上显示配置界面，具体如下所示：
 
-![图片描述](images/lvgl_demo_widgets.png)
+![图片描述](images/lvgl_demo_widgets_hdmi.png)
 
 ### 2.12 Rtsp推流Demo
 
