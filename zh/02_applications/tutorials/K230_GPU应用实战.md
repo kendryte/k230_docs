@@ -93,7 +93,7 @@ VGLite API 主要包含两个部分，头文件和库文件，其中头文件的
 
 #### make
 
-将代码的源文件放到 `src` 目录下，创建一个 Makefile 并将如下内容粘贴进去即可使用`make`命令进行构建，构建完成后将在 Makefile 同级目录下生成可执行文件，将其拷贝到小核 linux 上运行即可，也可以使用 `make install` 将其拷贝到 K230 SDK，再到 K230 SDK 目录下构建镜像，再烧录到 SD 卡或 eMMC 启动。
+将代码的源文件放到 `src` 目录下，创建一个 Makefile 并将如下内容粘贴进去，设置`K230SDK`环境变量为存放 K230 SDK 的路径（或者将第一行的 `/path/to/k230_sdk`改为存放K230 SDK的路径），即可使用`make`命令进行构建，构建完成后将在 Makefile 同级目录下生成可执行文件，将其拷贝到小核 linux 上运行即可，也可以使用 `make install` 将其拷贝到 K230 SDK，再到 K230 SDK 目录下构建镜像，再烧录到 SD 卡或 eMMC 启动。
 
 ```Makefile
 K230SDK ?= /path/to/k230_sdk
@@ -148,7 +148,7 @@ uninstall:
 
 #### CMake
 
-将代码的源文件放到 `src` 目录下，创建一个 `CMakeLists.txt` 文件并粘贴如下内容进去即可使用 cmake 构建。
+将代码的源文件放到 `src` 目录下，创建一个 `CMakeLists.txt` 文件并粘贴如下内容进去，将第三行的`/path/to/k230_sdk`修改为存放 K230 SDK 的目录，即可使用 cmake 构建。
 
 ```CMakeLists.txt
 cmake_minimum_required(VERSION 3.0)
@@ -161,8 +161,8 @@ set(CMAKE_C_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS "-Wall")
 
 include_directories(
-    "$(K230SDK)/output/k230_evb_defconfig/little/buildroot-ext/host/riscv64-buildroot-linux-gnu/sysroot/usr/include"
-    "$(K230SDK)/src/little/buildroot-ext/package/vg_lite/inc"
+    "${K230SDK}/output/k230_evb_defconfig/little/buildroot-ext/host/riscv64-buildroot-linux-gnu/sysroot/usr/include"
+    "${K230SDK}/src/little/buildroot-ext/package/vg_lite/inc"
 )
 
 link_directories("${K230SDK}/output/k230_evb_defconfig/little/buildroot-ext/target/usr/lib")
@@ -172,7 +172,7 @@ file(GLOB SOURCES "src/*.c" "src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-install(TARGETS ${PROJECT_NAME} DESTINATION "$(K230SDK)/output/k230_evb_defconfig/little/buildroot-ext/target/usr/bin")
+install(TARGETS ${PROJECT_NAME} DESTINATION "${K230SDK}/output/k230_evb_defconfig/little/buildroot-ext/target/usr/bin")
 
 ```
 

@@ -49,12 +49,17 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── face_glasses
 ├── face_landmark
 ├── face_mask
+├── face_parse
 ├── face_pose
 ├── falldown_detect
+├── finger_guessing
 ├── fitness
+├── head_detection
+├── k230_bin
 ├── licence_det
 ├── licence_det_rec
 ├── llamac
+├── nanotracker
 ├── object_detect_yolov8n
 ├── person_attr
 ├── person_detect
@@ -62,11 +67,14 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── pphumanseg
 ├── segment_yolov8n
 ├── shell
+├── smoke_detect
+├── space_resize
 ├── sq_hand_det
 ├── sq_handkp_class
 ├── sq_handkp_det
 ├── sq_handkp_ocr
 ├── sq_handreco
+├── traffic_light_detect
 ├── vehicle_attr
 └── version
 ```
@@ -80,6 +88,7 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── 1024x1331.jpg
 │   ├── 1024x624.jpg
 │   ├── 1024x768.jpg
+│   ├── 640x340.jpg
 │   ├── bus.jpg
 │   ├── bytetrack_data
 │   ├── car.jpg
@@ -87,9 +96,12 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── hrnet_demo.jpg
 │   ├── input_hd.jpg
 │   ├── input_ocr.jpg
-│   └── licence.jpg
+│   ├── licence.jpg
+│   ├── smoke1.jpg
+│   └── traffic.jpg
 ├── kmodel
 │   ├── bytetrack_yolov5n.kmodel
+│   ├── cropped_test127.kmodel
 │   ├── face_detection_320.kmodel
 │   ├── face_detection_640.kmodel
 │   ├── face_emotion.kmodel
@@ -97,21 +109,27 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── face_glasses.kmodel
 │   ├── face_landmark.kmodel
 │   ├── face_mask.kmodel
+│   ├── face_parse.kmodel
 │   ├── face_pose.kmodel
 │   ├── hand_det.kmodel
 │   ├── handkp_det.kmodel
 │   ├── hand_reco.kmodel
+│   ├── head_detection.kmodel
 │   ├── human_seg_2023mar.kmodel
 │   ├── licence_reco.kmodel
 │   ├── LPD_640.kmodel
+│   ├── nanotrack_backbone_sim.kmodel
+│   ├── nanotracker_head_calib_k230.kmodel
 │   ├── ocr_det.kmodel
 │   ├── ocr_rec.kmodel
 │   ├── person_attr_yolov5n.kmodel
 │   ├── person_detect_yolov5n.kmodel
 │   ├── person_pulc.kmodel
+│   ├── traffic_detect_yolov5s_best.kmodel
 │   ├── vehicle_attr_yolov5n.kmodel
 │   ├── vehicle.kmodel
 │   ├── yolov5n-falldown.kmodel
+│   ├── yolov5s_smoke_best.kmodel
 │   ├── yolov8n_320.kmodel
 │   ├── yolov8n_640.kmodel
 │   ├── yolov8n-pose.kmodel
@@ -119,8 +137,12 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   └── yolov8n_seg_640.kmodel
 └── utils
     ├── Asci0816.zf
+    ├── bu.bin
+    ├── dict_6625.txt
     ├── HZKf2424.hz
+    ├── jiandao.bin
     ├── llama.bin
+    ├── shitou.bin
     └── tokenizer.bin
 ```
 

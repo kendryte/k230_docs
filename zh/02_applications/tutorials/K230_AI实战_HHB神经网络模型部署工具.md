@@ -106,7 +106,7 @@ SHL 提供了完成的接口声明和接口的参考实现，各个设备提供�
 
 > 前置条件: 本地PC已安装docker
 
-- 去[HHB](https://occ.t-head.cn/product?id=3865005559921381376&type=soft)下载hhb-2.2.35 docker image
+- 去[HHB](https://xuantie.t-head.cn/community/download?id=4212696449735004160)下载hhb-2.2.35 docker image
 
 - 解压/加载/启动docker image
 

@@ -12,6 +12,7 @@
 | ------ | ---- |
 | [K230 SDK](https://github.com/kendryte/k230_sdk) | Kendryte K230 SDK Github Repo |
 |[K230 Docs](https://github.com/kendryte/k230_docs)| Kendryte K230 Docs Github Repo |
+|[K230_training_scripts](https://github.com/kendryte/K230_training_scripts/)| Kendryte K230 Training Scripts Github Repo |
 | [K230 SDK Gitee mirror](https://gitee.com/kendryte/k230_sdk) | Kendryte K230 SDK Gitee mirror Repo |
 |[K230 Docs Gitee mirror](https://gitee.com/kendryte/k230_docs)| Kendryte K230 Docs Gitee mirror Repo |
 |[K230 SDK Release mirror](https://kendryte-download.canaan-creative.com/k230/release/sdk/k230_sdk.tar.gz)| 嘉楠勘智K230 SDK release k230_sdk.tar.gz下载 |
@@ -132,6 +133,7 @@
 | [K230_SDK_Tuning_Tool使用指南.md](zh/01_software/pc/pqtools/K230_SDK_Tuning_Tool使用指南.md) | K230 SDK Tuning Tool 使用指南|
 | [K230_SDK_Dewarp使用指南.md](zh/01_software/pc/dewarp/K230_SDK_Dewarp使用指南.md) | K230 SDK Dewarp 使用指南 |
 | [K230_SDK_Burntool使用指南.md](zh/01_software/pc/burntool/K230_SDK_Burntool使用指南.md) | K230 SDK Burntool 使用指南 |
+| [K230_ISP图像调优指南.md](zh/01_software/pc/ISP_tuning/K230_ISP图像调优指南.md) | K230 ISP图像调优指南 |
 
 ## K230 SDK 使用教程
 
@@ -165,6 +167,7 @@
 | 文档名称 | 文档概要 |
 | --- | --- |
 | [K230_AI_Demo介绍.md](zh/02_applications/ai_demos/K230_AI_Demo介绍.md) | K230 AI Demo介绍|
+| [K230_Fancy_Poc介绍.md](zh/02_applications/fancy_poc/K230_Fancy_Poc介绍.md) | K230 Fancy Poc介绍 |
 
 ## K230 SDK 其它文档
 
@@ -174,7 +177,7 @@
 
 ## 贡献指南
 
-如果您对本项目感兴趣，想要反馈问题或提交文档，请参考[CONTRIBUTING](/.github/CONTRIBUTING.md)
+如果您对本项目感兴趣，想要反馈问题或提交文档，请参考[CONTRIBUTING](.github/CONTRIBUTING.md)
 
 ## 联系我们
 
