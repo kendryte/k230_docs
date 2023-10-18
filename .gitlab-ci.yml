@@ -159,5 +159,8 @@ build-web-docs:
     name: dev
     url: https://ai.b-bug.org/k230/docs/dev/
   script:
+    - git fetch
+    - git checkout dev
     - make mhtml
-    - cp -r _build /data1/k230/docs
+    - rm -rf /data1/k230/docs/*
+    - cp -r _build/* /data1/k230/docs
