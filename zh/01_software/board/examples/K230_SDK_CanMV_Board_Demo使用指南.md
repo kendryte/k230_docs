@@ -226,11 +226,11 @@ Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显�
 
 ###### 2.4.4.1.1 VDEC绑定VO解码显示
 
-`./sample_vdec.elf -i canaan.264`
+`./sample_vdec.elf -type 1 -i canaan.264`
 
 ###### 2.4.4.1.2 MAPI VDEC绑定VO解码显示
 
-`./sample_vdec.elf -i canaan.264`
+`./sample_vdec.elf -type 1 -i canaan.264`
 
 ##### 2.4.4.2 查看结果
 
@@ -271,11 +271,10 @@ demo中通过播放wav来测试音频输出功能,可上传不同音频格式的
 ##### 2.5.3.1 编译
 
 1. 软件编译环境参考SDK中的`README.md`。
-1. 搭建好sharefs环境，读写文件均依赖sharefs。
 
 ##### 2.5.3.2 执行
 
-进入rt-smart系统后，进入/sharefs目录下，`sample_audio.elf`为测试demo。
+进入rt-smart系统后，进入/sharefs/app目录下，`sample_audio.elf`为测试demo。
 
 - 可输入`./sample_audio.elf -help`查看demo使用方法。
 - `-type`选项来测试不同模块功能；
@@ -365,8 +364,7 @@ api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enabl
 
 ###### 2.5.3.2.8 mapi音频测试
 
-确保大核已启动核间通信进程：大核上执行：`/bin/sample_sys_init.elf &`
-确保小核加载核间通信驱动模块:`insmod /mnt/k_ipcm.ko`
+确保大核已启动核间通信进程：先确认小核加载k_ipcm.ko模块，再确认大核启动:`/sharefs/app/sample_sys_init.elf &`
 
 - 可输入`/mnt/sample_audio -help`查看demo使用方法。
 - `-type`选项来测试不同模块功能。
@@ -503,13 +501,13 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 1. 非绑定模式 demo 运行
 
-`/bin/sample_dma.elf`
+`/sharefs/app/sample_dma.elf`
 
-会有测试信息在屏幕上显示出来，输入 e 结束运行。
+会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
 1. 绑定模式 demo 运行
 
-`/bin/sample_dma_bind.elf`
+`/sharefs/app/sample_dma_bind.elf`
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
@@ -814,94 +812,27 @@ cd /sharefs
 执行成功后，会打印每一帧图像的物理地址
 ```
 
-### 2.14 语音对讲Demo
+### 2.14 FFT Demo
 
-#### 2.14.1 Demo简介
+#### 2.14.1 Demo 简介
 
-本Demo用于演示音频数据的双向传输和处理（当前版本实现了语音对讲的部分功能）
+本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
 #### 2.14.2 Feature说明
 
-语音对讲涉及到两端，两端均能实时采集编码发送音频数据到对端，同时也能接收对端来的音频数据进行解码和输出。
-当前实现参照了ONVIF，在rtsp协议的基础上扩展backchannel，从而支持从client向server发送音频数据；下文使用server和client分别代指语音对讲的两端。
-
-目前实现的功能如下：
-
-1. 音频码流格式为G711 mu-Law；
-1. sever端实现了实时的音频采集编码和发送，以及通过backchannel接收来自client的音频数据进行解码和输出； 接收端未实现jitter buffer；
-1. client端实现了音频码流的接收,解码和播放，以及实时采集音频，G711 mu-Law编码，并通过backchannel发送到server端； 接收端未实现jitter buffer；
-1. 仅支持一对一的对讲  （仅支持一路backchannel）；
-1. 不支持回声消除等处理 （设备侧需要音频输出到耳机，不能使用外放speaker）；
+先进行fft计算，在进行ifft计算
 
 #### 2.14.3 依赖资源
 
-需要两台K230设备， 通过usb转eth网口转换器，将开发板接入同一个局域网
+无
 
 #### 2.14.4 使用说明
 
 ##### 2.14.4.1 编译
 
-参考release sdk软件包中的`README.md`中介绍，在docker环境编译cdk-user即可，编译完成后在`k230_sdk/src/common/cdk/user/out/little`下生成可执行程序rtsp_server, backchannel_client
-
-##### 2.14.4.2 rtsp_server参数说明
-
-| 参数名 | 描述 |参数范围 | 默认值 |
-|:--|:--|:--|:--|
-| h | 打印命令行参数信息 | - | - |
-| v | 是否创建video session | - | - |
-| t | 编码类型 | h264、h265 | h265 |
-| w | 视频编码宽度 | `[640, 1920]` | 1280 |
-| h | 视频编码高度 | `[480, 1080]` |720 |
-| b | 视频编码码率 | - | 2000 |
-| a | 变声设置 | `[-12, 12]`| 0 |
-| s | sensor类型| 查看camera sensor文档 | 7 |
-
-sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
-
-##### 2.14.4.3 执行
-
-为描述方便，运行server的板子命名为板A， 运行client的命名为板B：
-
-1. 首先板A运行rtsp_server，麦克输入，耳机输出；
-1. 然后板B运行backchannel_client，麦克输入，耳机输出；
-
-板A上的具体的执行步骤：
-
-1. 启动开发板后，进入小核/mnt目录下：
-1. 在小核上执行：`insmod k_ipcm.ko`
-1. 在大核上执行：`cd /bin; ./sample_sys_init.elf`
-1. 在小核上执行：`./rtsp_server`（运行rtsp_server后，会打印出形如：`rtsp://<server_ip>:8554/BackChannelTest` 的url地址）
-
-板B上的具体的执行步骤：
-
-1. 启动开发板后，进入小核/mnt目录下：
-1. 在小核上执行：`insmod k_ipcm.ko`
-1. 在大核上执行：`cd /bin; ./sample_sys_init.elf`
-1. 在小核上执行：`./backclient_test rtsp：<server_ip>：8554/BackChannelTest`）
-
-backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
-
-### 2.15 FFT Demo
-
-#### 2.15.1 Demo 简介
-
-本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
-
-#### 2.15.2 Feature说明
-
-先进行fft计算，在进行ifft计算
-
-#### 2.15.3 依赖资源
-
-无
-
-#### 2.15.4 使用说明
-
-##### 2.15.4.1 编译
-
 > 请参考release sdk软件包中的README.md。
 
-##### 2.15.4.2 执行
+##### 2.14.4.2 执行
 
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
