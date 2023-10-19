@@ -764,16 +764,18 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944，最小分辨率为640x480.
 
 ```shell
-Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720
+Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720 -a 0
                     -s: the sensor type:
                         see vicap doc
                     -n: the session number, range: 1, 2，3
                     -t: the video encoder type: h264/h265/mjpeg
                     -w: the video encoder width
                     -h: the video encoder height
+                    -a: audio input type(0:mic input  1:headphone input):default 0.
 ```
 
 其中sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
+音频输入类型可选择：板载mic或者耳机输入。
 
 小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放；如需停止运行，请先停止vlc拉流，然后执行` ctrl+c `停止运行 rtsp_demo。
 
