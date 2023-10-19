@@ -70,7 +70,7 @@ video ouput 包含了一个用例，即vo osd层插入帧的测试
 
 #### 2.1.3 依赖资源
 
-需要屏幕
+带HDMI接口的显示器及HDMI连接线，显示器要求支持1080P30，否则无法显示
 
 #### 2.1.4 使用说明
 
@@ -201,7 +201,7 @@ Nonai_2d通过读取yuv(I420格式）文件，进行图像叠加运算。
 
 #### 2.4.1 Vdec_demo简介
 
-Vdec demo实现视频解码的功能。解码功能支持H.264/H.265/JPEG解码。支持的输入数据格式为.264/.264/.jpeg。
+Vdec demo实现视频解码的功能。解码功能支持H.264/H.265/JPEG解码。支持的输入数据格式为.264/.265/.jpeg。
 
 #### 2.4.2 Feature说明
 
@@ -463,7 +463,7 @@ Options:
 
 `./sample_vicap -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480`
 
-说明：将ov5647@1920x108 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
+说明：将ov5647@1920x1080 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
 
 ### 2.7 DMA_demo
 
@@ -793,21 +793,8 @@ Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720 -a 0
 
 #### 2.13.3 执行
 
-启动开发板进入小核/mnt下添加核间通信模块启动核间通信，创建共享文件系统，将`sample_face_ae.elf`与`test.kmodel`通过小核共享文件系统共享给大核执行。将文件放入小核文件系统的方式可通过挂载、tftp等方式传输。当前默认文件已经存放在小核~目录下。
-
 ```shell
-cd /mnt
-insmod k_ipcm.ko
-mkdir /sharefs
-cp ~/sample_face_ae.elf /sharefs/
-cp test.kmodel /sharefs/
-./sharefs &
-```
-
-小核启动sharefs后，大核共享文件系统得到sample与kmodel
-
-```shell
-cd /sharefs
+cd /sharefs/app
 ./sample_face_ae.elf test.kmodel 1 # arg1: 模型名称， arg2： 开启face ae
 等待初始化完成提示任意字母+enter
 键入a，键入回车，运行face ae demo
