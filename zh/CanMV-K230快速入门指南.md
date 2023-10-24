@@ -1,4 +1,4 @@
-# K230 SDK使用说明
+# CanMV-K230快速入门指南
 
 ![cover](images/canaan-cover.png)
 
