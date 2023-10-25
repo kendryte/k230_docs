@@ -516,3 +516,571 @@ void Model::kpu_run()
 >
 
 ## AI开发
+
+AI开发需要实现环境搭建、数据准备、模型训练和测试、CANMV k230镜像编译和烧录、C++代码编译、网络配置和文件传输、k230端部署等环节。以水果目标检测场景为例，代码参见:<https://github.com/kendryte/K230_training_scripts/tree/main/end2end_det_doc>。
+
+### 环境搭建
+
+（1）Linux系统；
+
+（2）安装显卡驱动；
+
+（3）安装Anaconda，用于创建模型训练环境；
+
+（4）安装Docker，用于创建SDK镜像编译环境；
+
+（5）安装dotnet SDK;
+
+### 数据准备
+
+目标检测任务自定义数据集按照如下图格式组织：
+
+![dataset_frame](images/dataset_frame.png)
+
+注意：
+
+目标检测数据集采用COCO格式标注；
+
+数据集根目录下包括IMAGES文件夹和labels.json文件，IMAGES文件夹下存放所有图片；
+
+### 模型训练和测试
+
+本节内容在训练环境中实现。
+
+#### 创建虚拟环境
+
+开启命令终端：
+
+```Shell
+conda create -n myenv python=3.9
+conda activate myenv
+```
+
+#### 安装python库
+
+按照项目内的requriements.txt安装训练所用的python库,等待安装：
+
+```Shell
+pip install -r requriements.txt
+```
+
+在requriments.txt中会安装模型转换的包nncase和nncase-kpu，nncase 是一个为 AI 加速器设计的神经网络编译器。
+
+#### 配置训练参数
+
+给出的训练脚本中配置文件yaml/config.yaml设置如下：
+
+```YAML
+dataset:
+   root_folder: ../data/fruit # 目标检测数据集路径
+   origion_json: labels.json # 目标检测数据集标注json文件
+   split: true # 是否重新执行拆分，第一次执行必须为true
+   val_ratio: 0.1 # 验证集比例
+   test_ratio: 0.1 # 测试集比例
+
+ train_val_test:
+   json_dir: ../gen # 拆分过程生成的训练集、验证集、测试集json文件，标签名称文件、校正集文件
+   model_save_dir: ../checkpoints # 模型保存路劲
+   gpu_index: 0 # 调用的gpu索引，如果gpu不可用，会使用cpu
+   img_size: 640 # 分辨率
+   learningrate: 0.001 #学习率
+   mean: [ 0.485, 0.456, 0.406 ] # 图像标准化均值
+   std: [ 0.229, 0.224, 0.225 ] # 图像标准化标准差
+   epochs: 300 # 训练迭代次数
+   nms_option: false #类内或者类间做nms false代表类内
+   pre_train_dir: pre_pth # 预训练模型存放路径
+   train_batch_size: 32 # 训练迭代batch
+   val_batch_size: 8 # 验证迭代batch
+   test_batch_size: 8 # 测试迭代batch
+
+ inference:
+   mode: image # 推理模式，分为image和video; image模式下可推理单张图片和目录下所有图片，video调用摄像头实现推理
+   inference_model: best # 分为best和last，分别调用checkpoints下的best.pth和last.pth进行推理
+   image_path: ../data/fruit/test.jpg # 如果该路径为图片路径，则进行单张图片推理；如果该路径为目录，则对目录下所有图片进行推理
+   deploy_json: deploy.json # 后续kmodel需要读取的参数文件
+   confidence_threshold: 0.55 # 检测框阈值
+   nms_threshold: 0.2 # 最大值抑制阈值
+
+ deploy:
+   onnx_img_size: [640,640] # 转onnx输入分辨率 [w , h]  必须是32的倍数
+   chip: k230 # 芯片类型，分为“k230”和“cpu”两种
+   ptq_option: 0 # 量化类型，0为uint8，1，2，3，4为uint16的不同形式
+```
+
+#### 模型训练
+
+进入到工程的scripts目录，执行训练代码：
+
+```Shell
+python3 main.py
+```
+
+如果训练成功，在配置文件的model_save_dir目录下可以找到训练好的last.pth、best.pth、best.onnx、best.kmodel。
+
+#### 模型测试
+
+设置配置文件中的inference部分，设置测试配置，执行测试代码：
+
+```shell
+python3 inference.py
+```
+
+#### 准备文件
+
+后面部署步骤需要用到的文件包括：
+
+（1）checkpoints/best.kmodel;
+
+（2）gen/deploy.json;
+
+（3）待测试图片test.jpg;
+
+### CANMV K230镜像编译和烧录
+
+#### Docker环境搭建
+
+```Shell
+# 下载docker编译镜像
+docker pull ghcr.io/kendryte/k230_sdk
+# 可以使用以下命令确认docker镜像是否拉取成功
+docker images | grep ghcr.io/kendryte/k230_sdk
+# 下载1.0.1版本sdk
+git clone -b v1.0.1 --single-branch https://github.com/kendryte/k230_sdk.git
+cd k230_sdk
+# 下载工具链Linux和RT-Smart toolchain, buildroot package, AI package等
+make prepare_sourcecode
+# 创建docker容器，$(pwd):$(pwd)表示系统当前目录映射到docker容器内部的相同目录下，将系统下的工具链目录映射到docker容器内部的/opt/toolchain目录下
+docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) ghcr.io/kendryte/k230_sdk /bin/bash
+```
+
+#### 镜像编译
+
+```Shell
+# 在docker容器中编译镜像耗时较长，请耐心等待完成
+make CONF=k230_canmv_defconfig
+```
+
+#### 镜像烧录
+
+编译结束后在output/k230_canmv_defconfig/images目录下可以找到编译好的镜像文件：
+
+```shell
+k230_evb_defconfig/images
+ ├── big-core
+ ├── little-core
+ ├── sysimage-sdcard.img    # SD卡启动镜像
+ └──  sysimage-sdcard.img.gz # SD卡启动镜像压缩包
+```
+
+CANMV K230 支持SDCard启动方式。为方便开发，建议您准备一张TF卡(Micro SD卡)。
+
+**Linux:** 如使用Linux烧录TF卡,需要先确认SD卡在系统中的名称/dev/sdx, 并替换如下命令中的/dev/sdx
+
+sudo dd if=sysimage-sdcard.img of=/dev/sdx bs=1M oflag=sync
+
+**Windows:** 如使用Windows烧录, 建议使用[the balena Etcher](https://etcher.balena.io/)工具。将生成的sysimage-sdcard.img下载到本地，使用烧录工具the balena Etcher进行烧录。
+
+![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
+
+烧录成功后会弹出通知消息。在烧录前最好将SD卡格式化。
+
+### 上电启动开发板
+
+安装MobaXterm实现串口通信，MobaXterm下载地址:<https://mobaxterm.mobatek.net>。
+
+![CanMV-K230_debug](images/CanMV-K230_debug.png)
+
+将烧录完成的SD卡插入进开板板卡槽中，HDMI输出连显示器，百兆网口连以太网，POWER连串口并供电。
+
+系统上电后，默认会有**两个串口设备**，可分别用于访问小核Linux和大核RTSmart
+
+小核Linux默认用户名root，密码为空。大核RTSmart系统中开机会自动启动一个应用程序，可按`q`键退出至命令提示符终端。
+
+### C++代码编译
+
+完成上述开发板的准备工作后，我们可以使用C++编写自己的代码，下面以目标检测任务为例，给出相关目标检测任务的示例代码，并进行简单解析。示例代码参考:<https://github.com/kendryte/K230_training_scripts/tree/main/end2end_det_doc/k230_code>。
+
+#### 代码结构
+
+```shell
+k230_code
+ ├──cmake
+     ├──link.lds #链接脚本
+     ├──Riscv64.cmake
+ ├──k230_deploy
+     ├──ai_base.cc # 模型部署基类实现
+     ├──ai_base.h # 模型部署基类，封装了nncase加载、input设置、模型推理、获取output操作，后续具体任务开发只需关注模型的前处理、后处理即可
+     ├──anchorbase_det.cc # 目标检测code类实现
+     ├──anchorbase_det.h # 目标检测类定义，继承AIBase，用于加载kmodel实现目标检测任务,封装模型推理的前后处理
+     ├──main.cc # 主函数，参数解析，初始化AnchorBaseDet类示例，实现上板功能
+     ├──scoped_timing.hpp # 时间测试工具
+     ├──utils.cc # 工具类实现
+     ├──utils.h # 工具类, 封装了图像预处理和目标检测任务的常用函数，包括读取二进制文件、保存图片、图像处理、结果绘制等，用户可根据自己需求丰富该文件
+     ├──vi_vo.h # 视频输入输出头文件
+     ├──CMakeLists.txt # CMake脚本用于构建一个使用C/C++源文件的可执行文件，并链接到各种库
+ ├──build_app.sh # 编译脚本，使用交叉编译工具链编译k230_deploy工程
+ ├──CMakeLists.txt # CMake脚本用于构建 nncase_sdk 的项目工程
+```
+
+#### 核心代码
+
+- ai_base.h文件中AIBase类的定义代码。主要定义了kmodel解释器，kmodel的相关信息，以及输入输出设置、推理过程的接口定义。具体实现在ai_base.cc中。
+- anchorbase_det.h中的AnchorBaseDet是实现目标检测任务的类定义，主要定义目标检测模型推理的前处理、推理、后处理接口。初始化ai2d构建器实现用于图像预处理。还定义了一些目标检测任务的变量，比如类别数、标签列表、检测阈值等。具体实现在anchorbase_det.cc中。
+- main.cc文件是实现板端推理的主要代码，主要实现解析传入参数，打印使用说明，实现两个不同分支的推理。如果输入的第二个参数是推理图像路径，则调用image_proc函数进行图像推理；如果传入的是None，则调用video_proc函数进行视频流推理。
+- 静态图推理代码
+
+```C++
+void image_proc_ob_det(config_args args, char *argv[])
+ {
+     cv::Mat ori_img = cv::imread(argv[3]);
+     int ori_w = ori_img.cols;
+     int ori_h = ori_img.rows;
+     vector<ob_det_res> results;
+     AnchorBaseDet ob_det(args, argv[2], atoi(argv[4]));
+     ob_det.pre_process(ori_img);
+     ob_det.inference();
+     ob_det.post_process({ori_w, ori_h}, results);
+     Utils::draw_ob_det_res(ori_img,results);
+     cv::imwrite("result_ob_det.jpg", ori_img);
+ }
+```
+
+上述代码是main.cc中的图像推理代码部分，首先从图片路径初始化cv::Mat对象ori_img，然后初始化AnchorBaseDet实例ob_det，调用obdet预处理函数pre_process，推理函数reference，后处理函数post_process，最后调用utils.h中的draw_ob_det_res将结果绘制在图片上并保存为result_ob_det.jpg。如您需要修改前后处理部分，可在AnchorBaseDet.cc中进行修改，如您想添加其他工具方法，可在utils中定义，并在utils.cc中实现。
+
+- 视频流推理代码
+
+```c++
+void video_proc_ob_det(config_args args, char *argv[])
+ {
+     vivcap_start();
+     k_video_frame_info vf_info;
+     void *pic_vaddr = NULL;       //osd
+     memset(&vf_info, 0, sizeof(vf_info));
+     vf_info.v_frame.width = osd_width;
+     vf_info.v_frame.height = osd_height;
+     vf_info.v_frame.stride[0] = osd_width;
+     vf_info.v_frame.pixel_format = PIXEL_FORMAT_ARGB_8888;
+     block = vo_insert_frame(&vf_info, &pic_vaddr);
+     // alloc memory
+     size_t paddr = 0;
+     void *vaddr = nullptr;
+     size_t size = SENSOR_CHANNEL * SENSOR_HEIGHT * SENSOR_WIDTH;
+     int ret = kd_mpi_sys_mmz_alloc_cached(&paddr, &vaddr, "allocate", "anonymous", size);
+     if (ret)
+     {
+         std::cerr << "physical_memory_block::allocate failed: ret = " << ret << ", errno = " << strerror(errno) << std::endl;
+         std::abort();
+     }
+     vector<ob_det_res> results;
+     AnchorBaseDet ob_det(args, argv[2], {SENSOR_CHANNEL, SENSOR_HEIGHT, SENSOR_WIDTH}, reinterpret_cast<uintptr_t(vaddr), reinterpret_cast<uintptr_t(paddr), atoi(argv[4]));
+     while (!isp_stop)
+     {
+         ScopedTiming st("total time", 1);
+
+         {
+             ScopedTiming st("read capture", atoi(argv[4]));
+             // VICAP_CHN_ID_1 out rgb888p
+             memset(&dump_info, 0 , sizeof(k_video_frame_info));
+             ret = kd_mpi_vicap_dump_frame(vicap_dev, VICAP_CHN_ID_1, VICAP_DUMP_YUV, &dump_info, 1000);
+             if (ret) {
+                 printf("sample_vicap...kd_mpi_vicap_dump_frame failed.\n");
+                 continue;
+             }
+         }
+         {
+             ScopedTiming st("isp copy", atoi(argv[4]));
+             // 从vivcap中读取一帧图像到dump_info
+             auto vbvaddr = kd_mpi_sys_mmap_cached(dump_info.v_frame.phys_addr[0], size);
+             memcpy(vaddr, (void *)vbvaddr, SENSOR_HEIGHT * SENSOR_WIDTH * 3);  
+             kd_mpi_sys_munmap(vbvaddr, size);
+         }
+         results.clear();
+         ob_det.pre_process();
+         ob_det.inference();
+         ob_det.post_process({SENSOR_WIDTH, SENSOR_HEIGHT},results);
+
+         cv::Mat osd_frame(osd_height, osd_width, CV_8UC4, cv::Scalar(0, 0, 0, 0));
+         cv::Mat osd_frame_tmp;
+
+         {
+             ScopedTiming st("osd draw", atoi(argv[4]));
+             Utils::draw_ob_det_res(osd_frame, results, {osd_width, osd_height}, {SENSOR_WIDTH, SENSOR_HEIGHT});
+         }
+
+
+         {
+             ScopedTiming st("osd copy", atoi(argv[4]));
+             memcpy(pic_vaddr, osd_frame.data, osd_width * osd_height * 4);
+             //显示通道插入帧
+             kd_mpi_vo_chn_insert_frame(osd_id+3, &vf_info);  //K_VO_OSD0
+             printf("kd_mpi_vo_chn_insert_frame success \n");
+             ret = kd_mpi_vicap_dump_release(vicap_dev, VICAP_CHN_ID_1, &dump_info);
+             if (ret) {
+                 printf("sample_vicap...kd_mpi_vicap_dump_release failed.\n");
+             }
+         }
+     }
+     vo_osd_release_block();
+     vivcap_stop();
+
+
+     // free memory
+     ret = kd_mpi_sys_mmz_free(paddr, vaddr);
+     if (ret)
+     {
+         std::cerr << "free failed: ret = " << ret << ", errno = " << strerror(errno) << std::endl;
+         std::abort();
+     }
+ }
+```
+
+上述代码是main.cc中对视频流进行目标检测操作的部分。下面是详细解析：
+
+- vivcap_start()和 vivcap_stop()函数用于开始和停止视频捕获；
+- k_video_frame_info vf_info定义一个 k_video_frame_info 结构体变量 vf_info，用于存储视频帧的信息；
+- void *pic_vaddr = NULL定义一个 void 指针 pic_vaddr，用于存储 OSD（On-Screen Display）图像数据；
+- memset(&vf_info, 0, sizeof(vf_info))将 vf_info 结构体的内存初始化为零，然后设置视频帧的信息，包括宽度、高度、stride 和像素格式等；
+- block = vo_insert_frame(&vf_info, &pic_vaddr)调用 vo_insert_frame 函数插入帧数据；kd_mpi_sys_mmz_alloc_cached 函数分配一块内存，用于存储图像数据，paddr 存储物理地址，vaddr 存储虚拟地址，size 是内存块大小；
+- 创建 AnchorBaseDet 对象 ob_det，用于实现目标检测任务；
+- 创建一个空的 results 向量，用于存储目标检测结果。
+- 只要 isp_stop 标志不为真时，进入循环：
+  - a. 使用 kd_mpi_vicap_dump_frame 从视频捕获设备中获取一帧图像数据，存储在 dump_info 中；
+  - b. 通过 kd_mpi_sys_mmap_cached 和 memcpy 将捕获的图像数据复制到之前分配的内存块中；
+  - c. 清空 results 向量， 调用 ob_det 的预处理方法、推理方法和后处理方法，对图像进行目标检测；
+  - d. 利用目标检测结果，在 OSD 图像上绘制检测信息;
+  - e. 使用 memcpy 将 OSD 图像数据复制到之前分配的 OSD 数据块中;
+  - f. 通过 kd_mpi_vo_chn_insert_frame 将 OSD 图像插入到显示通道;
+  - g. 通过 kd_mpi_vicap_dump_release 释放之前捕获的图像。
+- 循环结束后，释放 OSD 相关的资源，通过 vo_osd_release_block() 和 vivcap_stop() 函数;
+- 使用 kd_mpi_sys_mmz_free 释放之前分配的内存块。
+
+通过上述代码实现目标检测任务的视频流推理。
+
+k230_code/k230_deploy/CMakeLists.txt说明
+
+这是k230*code/k230*deploy目录下的CMakeLists.txt脚本，设置编译的C++文件和生成的elf可执行文件名称，由下面：
+
+```Shell
+set(src main.cc utils.cc ai_base.cc anchorbase_det.cc) 
+set(bin main.elf)
+
+include_directories(${PROJECT_SOURCE_DIR})：添加项目的根目录到头文件搜索路径中。
+include_directories(${nncase_sdk_root}/riscv64/rvvlib/include)：添加 nncase RISC-V 向量库的头文件目录。
+include_directories(${k230_sdk}/src/big/mpp/userapps/api/)：添加 k230 SDK 中的用户应用程序 API 头文件目录。
+include_directories(${k230_sdk}/src/big/mpp/include)：添加 k230 SDK 的一般头文件目录。
+include_directories(${k230_sdk}/src/big/mpp/include/comm)：添加与通信相关的头文件目录。
+include_directories(${k230_sdk}/src/big/mpp/userapps/sample/sample_vo)：添加示例 VO（视频输出）应用程序头文件目录。
+
+link_directories(${nncase_sdk_root}/riscv64/rvvlib/): 添加链接器搜索路径，指向 nncase RISC-V 向量库的目录。
+add_executable(${bin} ${src}): 创建一个可执行文件，将之前设置的源文件列表作为输入。
+target_link_libraries(${bin} ...)：设置可执行文件需要链接的库。列表中列出了各种库，包括 nncase 相关的库、k230 SDK 的库，以及其他一些库。
+target_link_libraries(${bin} opencv_imgproc opencv_imgcodecs opencv_core zlib libjpeg-turbo libopenjp2 libpng libtiff libwebp csi_cv): 将一些 OpenCV 相关的库和其他一些库链接到可执行文件中。
+install(TARGETS ${bin} DESTINATION bin): 安装生成的可执行文件到指定的目标路径（bin 目录）中。
+```
+
+k230_code/CMakeLists.txt说明
+
+```Shell
+cmake_minimum_required(VERSION 3.2)
+project(nncase_sdk C CXX)
+
+set(nncase_sdk_root "${PROJECT_SOURCE_DIR}/../../nncase/")
+set(k230_sdk ${nncase_sdk_root}/../../../)
+set(CMAKE_EXE_LINKER_FLAGS "-T ${PROJECT_SOURCE_DIR}/cmake/link.lds --static")
+
+# set opencv
+set(k230_opencv ${k230_sdk}/src/big/utils/lib/opencv)
+include_directories(${k230_opencv}/include/opencv4/)
+link_directories(${k230_opencv}/lib ${k230_opencv}/lib/opencv4/3rdparty)
+
+# set mmz
+link_directories(${k230_sdk}/src/big/mpp/userapps/lib)
+
+# set nncase
+include_directories(${nncase_sdk_root}/riscv64)
+include_directories(${nncase_sdk_root}/riscv64/nncase/include)
+include_directories(${nncase_sdk_root}/riscv64/nncase/include/nncase/runtime)
+link_directories(${nncase_sdk_root}/riscv64/nncase/lib/)
+
+add_subdirectory(k230_deploy)
+```
+
+这是k230_code目录下的CMakeLists.txt脚本。该脚本重点关注如下部分:
+
+```Shell
+set(nncase_sdk_root "${PROJECT_SOURCE_DIR}/../../nncase/"):设置nncase目录
+set(k230_sdk ${nncase_sdk_root}/../../../):设置k230_sdk的目录，当前是从nncase目录的三级父目录得到
+set(CMAKE_EXE_LINKER_FLAGS "-T ${PROJECT_SOURCE_DIR}/cmake/link.lds --static"):设置链接脚本路径，链接脚本放于k230_code/cmake下
+...
+add_subdirectory(k230_deploy): 添加待编译的工程子目录，如您要编译自己的工程，可以更换该行
+```
+
+k230_code/build_app.sh说明
+
+```Shell
+#!/bin/bash
+set -x
+
+# set cross build toolchain
+# 将交叉编译工具链的路径添加到系统的 PATH 环境变量中，以便在后续的命令中使用。该工具链是使用的大核编译工具链。
+export PATH=$PATH:/opt/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/
+
+clear
+rm -rf out
+mkdir out
+pushd out
+cmake -DCMAKE_BUILD_TYPE=Release                 \
+      -DCMAKE_INSTALL_PREFIX=`pwd`               \
+      -DCMAKE_TOOLCHAIN_FILE=cmake/Riscv64.cmake \
+      ..
+
+make -j && make install
+popd
+
+# 生成的main.elf可以在k230_code目录下的k230_bin文件夹下找到
+k230_bin=`pwd`/k230_bin
+rm -rf ${k230_bin}
+mkdir -p ${k230_bin}
+
+if [ -f out/bin/main.elf ]; then
+      cp out/bin/main.elf ${k230_bin}
+fi
+```
+
+#### 代码编译
+
+将项目中的k230_code文件夹拷贝到k230_sdk目录下的src/big/nncase下，执行编译脚本，将C++代码编译成main.elf可执行文件。
+
+```Shell
+# 在k230_SDK根目录下执行
+make CONF=k230_canmv_defconfig prepare_memory
+# 回到当前项目目录，赋予权限
+chmod +x build_app.sh
+./build_app.sh
+```
+
+#### 准备ELF文件
+
+后面部署步骤需要用到的文件包括：
+
+1. k230_code/k230_bin/main.elf;
+
+### 网络配置与文件传输
+
+将待使用文件拷贝到开发板上有两种方式可供选择。一种是tftp传输方法，一种是scp传输方法。
+
+#### tftp文件传输
+
+- Windows系统PC端网络配置
+
+控制面板->网络和共享中心->更改适配器设置->以太网网卡->右键属性->选中(TCP/IPv4)->属性
+
+配置IP地址、掩码、网关，配置DNS服务器地址：
+
+![net_config_0](images/net_config_0.png)
+
+- 开发板网络配置
+
+进入小核命令行，执行：
+
+```Shell
+# 查看是否有eth0
+ifconfig
+# 配置开发板IP，和PC在同一网段下
+ifconfig eth0 192.168.1.22
+# 查看IP配置
+ifconfig
+```
+
+- 工具：tftpd64
+
+安装tftp通信工具，下载地址：<https://bitbucket.org/phjounin/tftpd64/downloads/>
+
+启动tftpd64，配置待传输文件存放目录和服务网卡
+
+![net_config_1](images/net_config_1.png)
+
+- sharefs说明
+
+```Shell
+# 进入小核根目录
+cd /
+# 查看目录
+ls
+# sharefs目录是大小核共用目录，因此从小核拷贝到sharefs目录下的文件对大核也可见
+```
+
+- 文件传输
+
+```Shell
+# 以下代码在小核串口执行
+# 将PC上tftpd64配置文件存放目录中的文件传输至开发板的当前目录
+tftp -g -r your_file 192.168.1.2
+# 将开发板当前目录下的文件传输至tftpd64配置文件存放目录
+tftp -p -r board_file 192.168.1.2
+```
+
+#### scp文件传输
+
+在Linux系统中，PC正常连接网络，开发板可以通过网线连接PC所在网关下其他网口，通过scp命令实现文件传输。
+
+开发板上电，进入大小核COM界面，在小核执行scp传输命令：
+
+```Shell
+# 从PC拷贝文件至开发板
+scp 用户名@域名或IP:文件所在目录 开发板目的目录
+#拷贝文件夹
+scp -r 用户名@域名或IP:文件所在目录 开发板目的目录
+# 从开发板拷贝文件至PC
+scp 开发板待拷贝目录 用户名@域名或IP:PC目的目录
+# 拷贝文件夹
+scp -r 开发板待拷贝目录 用户名@域名或IP:PC目的目录
+```
+
+### K230端部署
+
+#### 板端部署过程
+
+按照上节配置好的文件传输过程，在MobaXterm上的小核界面进入/sharefs，创建测试文件夹：
+
+```Shell
+cd /sharefs
+mkdir test_det
+cd test_det
+```
+
+将模型训练和测试一节准备好的文件和C++代码编译一节准备好的elf文件拷贝到开发板。
+
+```shell
+test_det
+ ├──best.kmodel
+ ├──deploy.json
+ ├──main.elf
+ ├──test.jpg
+```
+
+在大核COM口进入到/sharefs/test_det目录下，
+
+执行静态图推理，执行下述代码(注意：代码需在大核下执行，文件拷贝需在小核下完成)：
+
+```Shell
+"模型推理时传参说明：<config_file> <kmodel_det> <input_mode> <debug_mode>"
+"Options:"
+"  config_file     部署所用json配置文件,默认为 deploy_config.json"
+"  kmodel_det      kmodel路径"
+"  input_mode      本地图片(图片路径)/ 摄像头(None)"
+"  debug_mode      是否需要调试，0、1、2分别表示不调试、简单调试、详细调试"
+main.elf deploy.json best.kmodel test.jpg 2 
+```
+
+如执行摄像头视频流推理，执行下述代码：
+
+```Shell
+main.elf deploy.json best.kmodel None 2 
+```
+
+#### 上板部署效果
+
+静态图推理效果：
+
+![img](images/apple_det.jpg)
