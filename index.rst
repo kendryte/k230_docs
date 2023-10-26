@@ -9,4 +9,4 @@ Welcome to K230's documentation!
 .. toctree::
    :maxdepth: 1
 
-   zh/01_software/board/K230_SDK_使用说明.md
+   zh/CanMV_K230_教程.md
