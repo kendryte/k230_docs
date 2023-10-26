@@ -724,10 +724,10 @@ k230_code
 
 #### 核心代码
 
-- ai_base.h文件中AIBase类的定义代码。主要定义了kmodel解释器，kmodel的相关信息，以及输入输出设置、推理过程的接口定义。具体实现在ai_base.cc中。
-- anchorbase_det.h中的AnchorBaseDet是实现目标检测任务的类定义，主要定义目标检测模型推理的前处理、推理、后处理接口。初始化ai2d构建器实现用于图像预处理。还定义了一些目标检测任务的变量，比如类别数、标签列表、检测阈值等。具体实现在anchorbase_det.cc中。
-- main.cc文件是实现板端推理的主要代码，主要实现解析传入参数，打印使用说明，实现两个不同分支的推理。如果输入的第二个参数是推理图像路径，则调用image_proc函数进行图像推理；如果传入的是None，则调用video_proc函数进行视频流推理。
-- 静态图推理代码
+* ai_base.h文件中AIBase类的定义代码。主要定义了kmodel解释器，kmodel的相关信息，以及输入输出设置、推理过程的接口定义。具体实现在ai_base.cc中。
+* anchorbase_det.h中的AnchorBaseDet是实现目标检测任务的类定义，主要定义目标检测模型推理的前处理、推理、后处理接口。初始化ai2d构建器实现用于图像预处理。还定义了一些目标检测任务的变量，比如类别数、标签列表、检测阈值等。具体实现在anchorbase_det.cc中。
+* main.cc文件是实现板端推理的主要代码，主要实现解析传入参数，打印使用说明，实现两个不同分支的推理。如果输入的第二个参数是推理图像路径，则调用image_proc函数进行图像推理；如果传入的是None，则调用video_proc函数进行视频流推理。
+* 静态图推理代码
 
 ```C++
 void image_proc_ob_det(config_args args, char *argv[])
@@ -747,7 +747,7 @@ void image_proc_ob_det(config_args args, char *argv[])
 
 上述代码是main.cc中的图像推理代码部分，首先从图片路径初始化cv::Mat对象ori_img，然后初始化AnchorBaseDet实例ob_det，调用obdet预处理函数pre_process，推理函数reference，后处理函数post_process，最后调用utils.h中的draw_ob_det_res将结果绘制在图片上并保存为result_ob_det.jpg。如您需要修改前后处理部分，可在AnchorBaseDet.cc中进行修改，如您想添加其他工具方法，可在utils中定义，并在utils.cc中实现。
 
-- 视频流推理代码
+* 视频流推理代码
 
 ```c++
 void video_proc_ob_det(config_args args, char *argv[])
@@ -836,23 +836,23 @@ void video_proc_ob_det(config_args args, char *argv[])
 
 上述代码是main.cc中对视频流进行目标检测操作的部分。下面是详细解析：
 
-- vivcap_start()和 vivcap_stop()函数用于开始和停止视频捕获；
-- k_video_frame_info vf_info定义一个 k_video_frame_info 结构体变量 vf_info，用于存储视频帧的信息；
-- void *pic_vaddr = NULL定义一个 void 指针 pic_vaddr，用于存储 OSD（On-Screen Display）图像数据；
-- memset(&vf_info, 0, sizeof(vf_info))将 vf_info 结构体的内存初始化为零，然后设置视频帧的信息，包括宽度、高度、stride 和像素格式等；
-- block = vo_insert_frame(&vf_info, &pic_vaddr)调用 vo_insert_frame 函数插入帧数据；kd_mpi_sys_mmz_alloc_cached 函数分配一块内存，用于存储图像数据，paddr 存储物理地址，vaddr 存储虚拟地址，size 是内存块大小；
-- 创建 AnchorBaseDet 对象 ob_det，用于实现目标检测任务；
-- 创建一个空的 results 向量，用于存储目标检测结果。
-- 只要 isp_stop 标志不为真时，进入循环：
-  - a. 使用 kd_mpi_vicap_dump_frame 从视频捕获设备中获取一帧图像数据，存储在 dump_info 中；
-  - b. 通过 kd_mpi_sys_mmap_cached 和 memcpy 将捕获的图像数据复制到之前分配的内存块中；
-  - c. 清空 results 向量， 调用 ob_det 的预处理方法、推理方法和后处理方法，对图像进行目标检测；
-  - d. 利用目标检测结果，在 OSD 图像上绘制检测信息;
-  - e. 使用 memcpy 将 OSD 图像数据复制到之前分配的 OSD 数据块中;
-  - f. 通过 kd_mpi_vo_chn_insert_frame 将 OSD 图像插入到显示通道;
-  - g. 通过 kd_mpi_vicap_dump_release 释放之前捕获的图像。
-- 循环结束后，释放 OSD 相关的资源，通过 vo_osd_release_block() 和 vivcap_stop() 函数;
-- 使用 kd_mpi_sys_mmz_free 释放之前分配的内存块。
+* vivcap_start()和 vivcap_stop()函数用于开始和停止视频捕获；
+* k_video_frame_info vf_info定义一个 k_video_frame_info 结构体变量 vf_info，用于存储视频帧的信息；
+* void *pic_vaddr = NULL定义一个 void 指针 pic_vaddr，用于存储 OSD（On*Screen Display）图像数据；
+* memset(&vf_info, 0, sizeof(vf_info))将 vf_info 结构体的内存初始化为零，然后设置视频帧的信息，包括宽度、高度、stride 和像素格式等；
+* block = vo_insert_frame(&vf_info, &pic_vaddr)调用 vo_insert_frame 函数插入帧数据；kd_mpi_sys_mmz_alloc_cached 函数分配一块内存，用于存储图像数据，paddr 存储物理地址，vaddr 存储虚拟地址，size 是内存块大小；
+* 创建 AnchorBaseDet 对象 ob_det，用于实现目标检测任务；
+* 创建一个空的 results 向量，用于存储目标检测结果。
+* 只要 isp_stop 标志不为真时，进入循环：
+  * a. 使用 kd_mpi_vicap_dump_frame 从视频捕获设备中获取一帧图像数据，存储在 dump_info 中；
+  * b. 通过 kd_mpi_sys_mmap_cached 和 memcpy 将捕获的图像数据复制到之前分配的内存块中；
+  * c. 清空 results 向量， 调用 ob_det 的预处理方法、推理方法和后处理方法，对图像进行目标检测；
+  * d. 利用目标检测结果，在 OSD 图像上绘制检测信息;
+  * e. 使用 memcpy 将 OSD 图像数据复制到之前分配的 OSD 数据块中;
+  * f. 通过 kd_mpi_vo_chn_insert_frame 将 OSD 图像插入到显示通道;
+  * g. 通过 kd_mpi_vicap_dump_release 释放之前捕获的图像。
+* 循环结束后，释放 OSD 相关的资源，通过 vo_osd_release_block() 和 vivcap_stop() 函数;
+* 使用 kd_mpi_sys_mmz_free 释放之前分配的内存块。
 
 通过上述代码实现目标检测任务的视频流推理。
 
@@ -971,7 +971,7 @@ chmod +x build_app.sh
 
 #### tftp文件传输
 
-- Windows系统PC端网络配置
+* Windows系统PC端网络配置
 
 控制面板->网络和共享中心->更改适配器设置->以太网网卡->右键属性->选中(TCP/IPv4)->属性
 
@@ -979,7 +979,7 @@ chmod +x build_app.sh
 
 ![net_config_0](images/net_config_0.png)
 
-- 开发板网络配置
+* 开发板网络配置
 
 进入小核命令行，执行：
 
@@ -992,7 +992,7 @@ ifconfig eth0 192.168.1.22
 ifconfig
 ```
 
-- 工具：tftpd64
+* 工具：tftpd64
 
 安装tftp通信工具，下载地址：<https://bitbucket.org/phjounin/tftpd64/downloads/>
 
@@ -1000,7 +1000,7 @@ ifconfig
 
 ![net_config_1](images/net_config_1.png)
 
-- sharefs说明
+* sharefs说明
 
 ```Shell
 # 进入小核根目录
@@ -1010,7 +1010,7 @@ ls
 # sharefs目录是大小核共用目录，因此从小核拷贝到sharefs目录下的文件对大核也可见
 ```
 
-- 文件传输
+* 文件传输
 
 ```Shell
 # 以下代码在小核串口执行
