@@ -25,9 +25,295 @@
 
 [toc]
 
+## 前言
+
+本文基于CanMV-K230开发板，介绍K230 SDK、nncase及AI的开发流程。
+
 ## 快速上手
 
+### 开发板概况
+
+CanMV-K230开发板采用的是嘉楠科技Kendryte®系列AIoT芯片中的最新一代SoC芯片K230。该芯片采用全新的多异构单元加速计算架构，集成了2个RISC-V高能效计算核心，内置新一代KPU（Knowledge Process Unit）智能计算单元，具备多精度AI算力，广泛支持通用的AI计算框架，部分典型网络的利用率超过了70%。
+
+该芯片同时具备丰富多样的外设接口，以及2D、2.5D等多个标量、向量、图形等专用硬件加速单元，可以对多种图像、视频、音频、AI等多样化计算任务进行全流程计算加速，具备低延迟、高性能、低功耗、快速启动、高安全性等多项特性。
+
+![K230_block_diagram](images/K230_block_diagram.png)
+
+CanMV-K230采用单板设计，扩展接口丰富，极大程度的发挥K230高性能的优势，可直接用于各种智能产品的开发，加速产品落地。
+
+![board-front](images/CanMV-K230_front.png)
+![board-behind](images/CanMV-K230_behind.png)
+
+### CanMV-K230默认套件
+
+CanMV-K230开发板默认套件包含以下物品：
+
+1、CanMV-K230主板 x 1
+
+2、OV5647摄像头 x 1
+
+3、Type-C数据线 x 1
+
+另外，需要用户准备以下配件：
+
+1、TF卡， 用于烧写固件，启动系统（必须）
+
+2、带HDMI接口的显示器及HDMI连接线，显示器要求支持1080P30，否则无法显示
+
+3、100M/1000M 以太网线缆，及有线路由器
+
+### 调试说明
+
+#### 串口连接
+
+使用Type-C线连接CanMV-K230如下图的位置，线另一端连接至电脑。
+
+![debug](images/CanMV-K230_debug.png)
+
+#### 串口调试
+
+##### Windows
+
+安装驱动
+
+CanMV-K230自带usb转串口芯片 CH342，驱动下载地址<https://www.wch.cn/downloads/CH343SER_EXE.html>。
+
+查看串口号
+
+![windows-serial](images/windows-serial.png)
+
+这里显示两个串口，COM80为小核Linux的调试串口，COM81为大核rt-smart的调试串口。
+
+配置串口信息
+
+打开工具Xshell（也可以使用其它串口工具）。
+
+1、端口号选择设备管理器显示的端口号
+
+2、波特率 115200
+
+3、数据位 8
+
+4、停止位 1
+
+5、奇偶检验 无
+
+6、流控制 无
+
+![serial_setting.png](images/serial_setting.png)
+
+##### linux
+
+Linux串口显示如下：
+
+- `/dev/ttyACM0`为小核linux调试串口
+- `/dev/ttyACM1`为大核rt-smart调试串口
+
+可以使用linux的minicom或其它串口工具进行连接调试，串口配置信息与windows一致。
+
+### 固件获取及烧录
+
+#### 固件获取
+
+CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/developer/k230>
+
+请下载“k230_canmv”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230的固件。
+
+#### 固件烧录
+
+将固件通过电脑烧写至TF卡中。
+
+##### Linux下烧录
+
+在TF卡插到宿主机之前，输入：
+
+`ls -l /dev/sd\*`
+
+查看当前的存储设备。
+
+将TF卡插入宿主机后，再次输入：
+
+`ls -l /dev/sd\*`
+
+查看此时的存储设备，新增加的就是TF卡设备节点。
+
+假设/dev/sdc就是TF卡设备节点，执行如下命令烧录TF卡：
+
+`sudo dd if=sysimage-sdcard.img of=/dev/sdc bs=1M oflag=sync`
+
+##### Windows下烧录
+
+Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。
+
+1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件。
+
+![balena-Etcher-flash-from-file](images/balena-Etcher-flash-from-file.jpg)
+
+2）点击工具界面的“Select target”按钮，选择目标sdcard卡。
+
+![balena-Etcher-select-target](images/balena-Etcher-select-target.jpg)
+
+3）点击“Flash”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示Flash Finish。
+
+![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
+![balena-Etcher-finish](images/balena-Etcher-finish.jpg)
+
+### 启动系统
+
+将烧好固件的TF卡插入CanMV-K230 TF卡插槽，Type-C线连接电脑和板端的POWER口，板子即上电，系统开始启动。
+![CanMV-K230-poweron](images/CanMV-K230-poweron.png)
+
+红框的中红灯亮，则说明开发板正常上电。此时查看串口信息。
+
+![CanMV-K230-run](images/CanMV-K230-run.png)
+
+系统启动后默认运行人脸检测程序，将摄像头对准人脸，在显示器上会将人脸框出。
+
+![CanMV-K230-aidemo](images/CanMV-K230-aidemo.png)
+
 ## Linux+RT-smart双系统开发
+
+本章节介绍如何使用K230 SDK进行Linux、RT-smart系统的开发。K230 SDK 包含了基于Linux和RT-smart 双核异构系统开发需要用到的源代码，工具链和其他相关资源。
+
+### 开发环境搭建
+
+#### 编译环境
+
+| 主机环境                    | 描述                                                 |
+|-----------------------------|------------------------------------------------------|
+| Docker编译环境              | SDK提供了dockerfile，可以生成docker镜像，用于编译SDK |
+| Ubuntu 20.04.4 LTS (x86_64) | SDK可以在ubuntu 20.04环境下编译                      |
+
+K230 SDK需要在linux环境下编译，SDK支持docker环境编译，SDK开发包中发布了docker file（`tools/docker/Dockerfile`），可以生成docker镜像。具体dockerfile使用和编译步骤，在后面的编译章节会有详细介绍。
+
+SDK使用的Docker 镜像以ubuntu 20.04 为基础，如果不使用docker编译环境，可以在ubuntu 20.04 主机环境下参考dockerfile的内容，安装相关HOST package和工具链后，编译SDK。
+
+K230 SDK没有在其他Linux版本的主机环境下验证过，不保证SDK可以在其他环境下编译通过。
+
+#### SDK开发包获取
+
+SDK目前在github和gitee同步发布
+
+<https://github.com/kendryte/k230_sdk>
+
+<https://gitee.com/kendryte/k230_sdk>
+
+用户可以直接下载压缩包，下载地址 [github](https://github.com/kendryte/k230_sdk/releases)或者[gitee](https://gitee.com/kendryte/k230_sdk/releases)，或者使用`git clone https://github.com/kendryte/k230_sdk`或者 `git clone https://gitee.com/kendryte/k230_sdk.git`
+
+用户可以根据自己的网络状况选择使用github或者gitee。
+
+### SDK编译
+
+#### 编译介绍
+
+K230 SDK支持一键编译大小核操作系统和公共组件，生成可以烧写的镜像文件，用于部署到开发板启动运行。设备上linux系统的用户名是root无密码；
+
+Setp 1：参考上文获取 SDK开发包
+
+Step 2：进入SDK根目录
+
+`cd k230_sdk`
+
+Step 3：下载toolchain
+
+`source tools/get_download_url.sh && make prepare_sourcecode`
+
+>`make prepare_sourcecode` will download both Linux and RT-Smart toolchain, buildroot package and AI package from Microsoft Azure cloud server with CDN, the download cost time may based on your network connection speed.
+
+Step 4：生成docker镜像（第一次编译需要，已经生成docker镜像后跳过此步骤）
+
+`docker build -f tools/docker/Dockerfile -t k230_docker tools/docker`
+
+Step 5: 进入docker环境，
+
+`docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) k230_docker /bin/bash`
+
+Step 6: Docker环境下执行下面命令编译SDK
+
+make CONF=k230_canmv_defconfig  #编译CanMV-K230板子镜像
+
+sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
+
+#### 编译输出产物
+
+编译完成后，在`output/k230_canmv_defconfig/images`目录下可以看到编译输出产物
+
+`images`目录下镜像文件说明如下：
+
+`sysimage-sdcard.img` -------------是TF卡的启动镜像；
+
+`sysimage-sdcard.img.gz` ---------是TF卡的启动镜像压缩包(sysimage-sdcard.img文件的gzip压缩包)，烧录时需要先解压缩。
+
+至此整个SDK编译完成，成生镜像sysimage-sdcard.img，可烧录到TF卡启动系统。
+
+#### 示例
+
+基础的hello world请参考 [K230_实战基础篇_hello_world](https://github.com/kendryte/k230_docs/blob/main/zh/02_applications/tutorials/K230_%E5%AE%9E%E6%88%98%E5%9F%BA%E7%A1%80%E7%AF%87_hello_world.md)
+
+以Vicap_demo为例，代码位于 /home/zhaozhongxiang/maix3/k230_canmv/k230_sdk/src/big/mpp/userapps/sample/sample_vicap
+
+vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV开发板默认使用OV5647摄像头模组，支持单个摄像头最多输出三路数据流。
+
+##### 编译
+
+在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_evb_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+
+对应的程序位于src/big/mpp/userapps/sample/elf/sample_vicap.elf
+
+##### 执行
+
+大核端进入 /sharefs/app，在该目录下执行`./sample_vicap`命令获取命令帮助信息
+当输入：`sample_vicap`命令后打印如下提示信息：
+
+```shell
+usage: ./sample_vicap -mode 0 -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1
+Options:
+ -mode:         vicap work mode[0: online mode, 1: offline mode. only offline mode support multiple sensor input]     default 0
+ -dev:          vicap device id[0,1,2]        default 0
+ -dw:           enable dewarp[0,1]    default 0
+ -sensor:       sensor type[0: ov9732@1280x720, 1: ov9286_ir@1280x720], 2: ov9286_speckle@1280x720]
+ -ae:           ae status[0: disable AE, 1: enable AE]        default enable
+ -awb:          awb status[0: disable AWB, 1: enable AWb]     default enable
+ -chn:          vicap output channel id[0,1,2]        default 0
+ -ow:           the output image width, default same with input width
+ -oh:           the output image height, default same with input height
+ -ox:           the output image start position of x
+ -oy:           the output image start position of y
+ -crop:         crop enable[0: disable, 1: enable]
+ -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
+ -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
+ -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion]
+ -help:         print this help
+```
+
+参数说明如下：
+
+| **参数名称** | **可选参数值** | **参数说明** |
+|---|---|---|
+| -dev         | 0：vicap设备0 1：vicap设备1 2：vicap设备2.                             | 指定当前使用的vicap设备，系统最多支持三个vicap设备。通过指定设备号实现sensor与不同vicap设备之间的绑定关系。 例如： -dev 1 -sensor 0即表示将ov9732 1280x720 RGB图像输出绑定到vicap设备1.                   |
+| -mode | 0：在线模式；1：离线模式 | 指定vicap设备工作模式，当前之前在线模式和离线模式。对于多个sensor输入，必须指定为离线模式。 |
+| -sensor      | 23：OV5647（CanMV开发板仅支持该sensor） | 指定当前使用的sensor类型                                                         |
+| -chn         | 0：vicap设备输出通道0 1：vicap设备输出通道1 2：vicap设备输出通道2.     | 指定当前使用的vicap设备的输出通道，一个vicap设备最多支持三路输出，仅通道0支持RAW图像格式输出  |
+| -ow          |                                                                         | 指定输出图像宽度，默认为输入图像宽度。宽度需要16字节对齐。 如果默认宽度超过显示屏输出最大宽度，则使用显示输出宽度作为图像最终输出宽度 如果输出宽度小于输入图像宽度，且未指定ox或者oy参数，则默认为缩放输出 |
+| -oh          |                                                                         | 指定输出图像高度，默认为输入图像高度。 如果默认高度超过显示屏输出最大高度，则使用显示输出高度作为图像最终输出高度 如果输出高度小于输入图像高度，且未指定ox或者oy参数，则默认为缩放输出  |
+| -ox          |                                                                         | 指定图像输出水平起始位置，该参数大于0将执行输出裁剪操作  |
+| -oy          |                                                                         | 指定图像输出垂直起始位置，该参数大于0将执行输出裁剪操作 |
+| -crop        | 0：禁用裁剪功能 1：使能裁剪功能                                         | 当输出图像尺寸小于输入图像尺寸时，默认未缩放输出，如果指定了该标志，则为裁剪输出  |
+| -ofmt        | 0：yuv格式输出 1：rgb格式输出 2：raw格式输出                            | 指定输出图像格式，默认为yuv输出。  |
+| -preview     | 0：禁用预览显示 1：使能预览显示                                         | 指定输出图像预览显示功能。默认为使能。当前最多支持2路输出图像同时预览。 |
+| -rotation    | 0：旋转0度 1：旋转90度 2：旋转180度 3：旋转270度 4：不支持旋转          | 指定预览显示窗口旋转角度。默认仅第一路输出图像窗口支持旋转功能。 |
+
+示例1：
+
+`./sample_vicap -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480`
+
+说明：将ov5647@1920x1080 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
+
+该示例使用的API请参考 [K230_VICAP_API参考.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_VICAP_API%E5%8F%82%E8%80%83.md) [K230_视频输出_API参考.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_%E8%A7%86%E9%A2%91%E8%BE%93%E5%87%BA_API%E5%8F%82%E8%80%83.md)
+
+CanMV-K230开发板支持的其它demo请参考 [K230_SDK_CanMV_Board_Demo使用指南](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)
+
+其它SDK相关的文档请访问 [K230 SDK 文档](https://github.com/kendryte/k230_docs)
 
 ## nncase开发
 
@@ -49,7 +335,7 @@
 
 nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安装才可以编译出CanMV-K230所支持的模型文件。`nncase`和 `nncase-kpu`插件包均在[nncase github release](https://github.com/kendryte/nncase/releases)发布，并且依赖dotnet-7.0。
 
-* `Linux`平台可以直接使用pip进行 `nncase`和 `nncase-kpu`插件包在线安装，Ubuntu环境下可使用 `apt`安装 `dotnet`。
+- `Linux`平台可以直接使用pip进行 `nncase`和 `nncase-kpu`插件包在线安装，Ubuntu环境下可使用 `apt`安装 `dotnet`。
 
     ```Python
     pip install --upgrade pip
@@ -62,8 +348,8 @@ nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安�
 
     >Tips：如果使用官方提供的CanMV镜像，必须使用2.3.0版本进行模型编译
 
-* **`Windows`平台仅支持`nncase`在线安装，`nncase-kpu`需要在[nncase github release](https://github.com/kendryte/nncase/releases)手动下载安装。**
-* 用户若没有Ubuntu环境, 可使用 `nncase docker`(Ubuntu 20.04 + Python 3.8 + dotnet-7.0)
+- **`Windows`平台仅支持`nncase`在线安装，`nncase-kpu`需要在[nncase github release](https://github.com/kendryte/nncase/releases)手动下载安装。**
+- 用户若没有Ubuntu环境, 可使用 `nncase docker`(Ubuntu 20.04 + Python 3.8 + dotnet-7.0)
 
     ```Python
     cd /path/to/nncase_sdk
@@ -101,13 +387,13 @@ export PATH=$PATH:/path/to/python/site-packages/
 
 本[Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/user_guide/k230_simulate-ZH.ipynb)分步骤详细描述了使用nncase编译、推理kmodel的流程，notebook内容涵盖:
 
-* 参数配置:介绍如何正确配置编译参数,以满足实际部署需求；
-* 获取模型信息:说明从原始模型中获取网络结构、层信息等关键数据的方法；
-* 设置校正集数据:阐述如何准备好校正集样本数据，包括单输入和多输入模型两种情况，以用于量化校准过程；
-* 设置推理数据格式:讲解推理部署时如何配置输入数据，支持不同需求场景；
-* 配置多输入模型:介绍处理多输入模型时,如何正确设置每个输入的形状、数据格式等信息；
-* PC模拟器推理:说明如何在PC上利用模拟器进行编译后的kmodel推理,是验证编译效果的关键步骤；
-* 比较推理结果:通过与不同框架(TensorFlow、PyTorch等)的推理结果比较,验证kmodel的正确性；
+- 参数配置:介绍如何正确配置编译参数,以满足实际部署需求；
+- 获取模型信息:说明从原始模型中获取网络结构、层信息等关键数据的方法；
+- 设置校正集数据:阐述如何准备好校正集样本数据，包括单输入和多输入模型两种情况，以用于量化校准过程；
+- 设置推理数据格式:讲解推理部署时如何配置输入数据，支持不同需求场景；
+- 配置多输入模型:介绍处理多输入模型时,如何正确设置每个输入的形状、数据格式等信息；
+- PC模拟器推理:说明如何在PC上利用模拟器进行编译后的kmodel推理,是验证编译效果的关键步骤；
+- 比较推理结果:通过与不同框架(TensorFlow、PyTorch等)的推理结果比较,验证kmodel的正确性；
 
   以上步骤系统地介绍了模型编译的全流程,既适合初学者从零开始学习,也可作为经验丰富用户的参考指南。
 
@@ -319,13 +605,13 @@ if __name__ == "__main__":
 
 目前 `CanMV`支持两套开发API，`C++`和 `MicroPython`，您可以根据您的需求进行选择。
 
-* `MicroPython`具有较低的开发门槛，用户可以直接编写类似于 `Python`的代码进行应用开发；
-* `C++`具有较高的门槛，但是更具灵活性，有着更好的性能（芯片的推理性能不受语言的影响）。
+- `MicroPython`具有较低的开发门槛，用户可以直接编写类似于 `Python`的代码进行应用开发；
+- `C++`具有较高的门槛，但是更具灵活性，有着更好的性能（芯片的推理性能不受语言的影响）。
 
 在开发板上推理时，我们提供两个模块用于加速模型推理
 
-* 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#5-ai2d-%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
-* 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#4-kpu%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
+- 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#5-ai2d-%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
+- 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#4-kpu%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
 
 接下来，我们将在C++代码示例中说明这两个模块如何使用，有哪些需要注意的地方。
 
@@ -352,9 +638,9 @@ k230_sdk/src/big/nncase/examples/
 └── README.md
 ```
 
-* build_app.sh：编译生成可执行文件 `image_face_detect.elf`的脚本，输出到out目录。
-* CMakeLists.txt：设置编译时需要链接的库：`opencv`、`mmz`、`nncase`，在工程中仅需要修改 `add_subdirectory()`即可。
-* image_face_detect：完整的人脸检测demo，其中包含了 `AI2D`、`KPU`、模型后处理等功能。
+- build_app.sh：编译生成可执行文件 `image_face_detect.elf`的脚本，输出到out目录。
+- CMakeLists.txt：设置编译时需要链接的库：`opencv`、`mmz`、`nncase`，在工程中仅需要修改 `add_subdirectory()`即可。
+- image_face_detect：完整的人脸检测demo，其中包含了 `AI2D`、`KPU`、模型后处理等功能。
 
 #### AI2D 配置
 
@@ -724,10 +1010,10 @@ k230_code
 
 #### 核心代码
 
-* ai_base.h文件中AIBase类的定义代码。主要定义了kmodel解释器，kmodel的相关信息，以及输入输出设置、推理过程的接口定义。具体实现在ai_base.cc中。
-* anchorbase_det.h中的AnchorBaseDet是实现目标检测任务的类定义，主要定义目标检测模型推理的前处理、推理、后处理接口。初始化ai2d构建器实现用于图像预处理。还定义了一些目标检测任务的变量，比如类别数、标签列表、检测阈值等。具体实现在anchorbase_det.cc中。
-* main.cc文件是实现板端推理的主要代码，主要实现解析传入参数，打印使用说明，实现两个不同分支的推理。如果输入的第二个参数是推理图像路径，则调用image_proc函数进行图像推理；如果传入的是None，则调用video_proc函数进行视频流推理。
-* 静态图推理代码
+- ai_base.h文件中AIBase类的定义代码。主要定义了kmodel解释器，kmodel的相关信息，以及输入输出设置、推理过程的接口定义。具体实现在ai_base.cc中。
+- anchorbase_det.h中的AnchorBaseDet是实现目标检测任务的类定义，主要定义目标检测模型推理的前处理、推理、后处理接口。初始化ai2d构建器实现用于图像预处理。还定义了一些目标检测任务的变量，比如类别数、标签列表、检测阈值等。具体实现在anchorbase_det.cc中。
+- main.cc文件是实现板端推理的主要代码，主要实现解析传入参数，打印使用说明，实现两个不同分支的推理。如果输入的第二个参数是推理图像路径，则调用image_proc函数进行图像推理；如果传入的是None，则调用video_proc函数进行视频流推理。
+- 静态图推理代码
 
 ```C++
 void image_proc_ob_det(config_args args, char *argv[])
@@ -747,7 +1033,7 @@ void image_proc_ob_det(config_args args, char *argv[])
 
 上述代码是main.cc中的图像推理代码部分，首先从图片路径初始化cv::Mat对象ori_img，然后初始化AnchorBaseDet实例ob_det，调用obdet预处理函数pre_process，推理函数reference，后处理函数post_process，最后调用utils.h中的draw_ob_det_res将结果绘制在图片上并保存为result_ob_det.jpg。如您需要修改前后处理部分，可在AnchorBaseDet.cc中进行修改，如您想添加其他工具方法，可在utils中定义，并在utils.cc中实现。
 
-* 视频流推理代码
+- 视频流推理代码
 
 ```c++
 void video_proc_ob_det(config_args args, char *argv[])
@@ -836,23 +1122,23 @@ void video_proc_ob_det(config_args args, char *argv[])
 
 上述代码是main.cc中对视频流进行目标检测操作的部分。下面是详细解析：
 
-* vivcap_start()和 vivcap_stop()函数用于开始和停止视频捕获；
-* k_video_frame_info vf_info定义一个 k_video_frame_info 结构体变量 vf_info，用于存储视频帧的信息；
-* void *pic_vaddr = NULL定义一个 void 指针 pic_vaddr，用于存储 OSD（On*Screen Display）图像数据；
-* memset(&vf_info, 0, sizeof(vf_info))将 vf_info 结构体的内存初始化为零，然后设置视频帧的信息，包括宽度、高度、stride 和像素格式等；
-* block = vo_insert_frame(&vf_info, &pic_vaddr)调用 vo_insert_frame 函数插入帧数据；kd_mpi_sys_mmz_alloc_cached 函数分配一块内存，用于存储图像数据，paddr 存储物理地址，vaddr 存储虚拟地址，size 是内存块大小；
-* 创建 AnchorBaseDet 对象 ob_det，用于实现目标检测任务；
-* 创建一个空的 results 向量，用于存储目标检测结果。
-* 只要 isp_stop 标志不为真时，进入循环：
-  * a. 使用 kd_mpi_vicap_dump_frame 从视频捕获设备中获取一帧图像数据，存储在 dump_info 中；
-  * b. 通过 kd_mpi_sys_mmap_cached 和 memcpy 将捕获的图像数据复制到之前分配的内存块中；
-  * c. 清空 results 向量， 调用 ob_det 的预处理方法、推理方法和后处理方法，对图像进行目标检测；
-  * d. 利用目标检测结果，在 OSD 图像上绘制检测信息;
-  * e. 使用 memcpy 将 OSD 图像数据复制到之前分配的 OSD 数据块中;
-  * f. 通过 kd_mpi_vo_chn_insert_frame 将 OSD 图像插入到显示通道;
-  * g. 通过 kd_mpi_vicap_dump_release 释放之前捕获的图像。
-* 循环结束后，释放 OSD 相关的资源，通过 vo_osd_release_block() 和 vivcap_stop() 函数;
-* 使用 kd_mpi_sys_mmz_free 释放之前分配的内存块。
+- vivcap_start()和 vivcap_stop()函数用于开始和停止视频捕获；
+- k_video_frame_info vf_info定义一个 k_video_frame_info 结构体变量 vf_info，用于存储视频帧的信息；
+- void *pic_vaddr = NULL定义一个 void 指针 pic_vaddr，用于存储 OSD（On*Screen Display）图像数据；
+- memset(&vf_info, 0, sizeof(vf_info))将 vf_info 结构体的内存初始化为零，然后设置视频帧的信息，包括宽度、高度、stride 和像素格式等；
+- block = vo_insert_frame(&vf_info, &pic_vaddr)调用 vo_insert_frame 函数插入帧数据；kd_mpi_sys_mmz_alloc_cached 函数分配一块内存，用于存储图像数据，paddr 存储物理地址，vaddr 存储虚拟地址，size 是内存块大小；
+- 创建 AnchorBaseDet 对象 ob_det，用于实现目标检测任务；
+- 创建一个空的 results 向量，用于存储目标检测结果。
+- 只要 isp_stop 标志不为真时，进入循环：
+  - a. 使用 kd_mpi_vicap_dump_frame 从视频捕获设备中获取一帧图像数据，存储在 dump_info 中；
+  - b. 通过 kd_mpi_sys_mmap_cached 和 memcpy 将捕获的图像数据复制到之前分配的内存块中；
+  - c. 清空 results 向量， 调用 ob_det 的预处理方法、推理方法和后处理方法，对图像进行目标检测；
+  - d. 利用目标检测结果，在 OSD 图像上绘制检测信息;
+  - e. 使用 memcpy 将 OSD 图像数据复制到之前分配的 OSD 数据块中;
+  - f. 通过 kd_mpi_vo_chn_insert_frame 将 OSD 图像插入到显示通道;
+  - g. 通过 kd_mpi_vicap_dump_release 释放之前捕获的图像。
+- 循环结束后，释放 OSD 相关的资源，通过 vo_osd_release_block() 和 vivcap_stop() 函数;
+- 使用 kd_mpi_sys_mmz_free 释放之前分配的内存块。
 
 通过上述代码实现目标检测任务的视频流推理。
 
@@ -971,7 +1257,7 @@ chmod +x build_app.sh
 
 #### tftp文件传输
 
-* Windows系统PC端网络配置
+- Windows系统PC端网络配置
 
 控制面板->网络和共享中心->更改适配器设置->以太网网卡->右键属性->选中(TCP/IPv4)->属性
 
@@ -979,7 +1265,7 @@ chmod +x build_app.sh
 
 ![net_config_0](images/net_config_0.png)
 
-* 开发板网络配置
+- 开发板网络配置
 
 进入小核命令行，执行：
 
@@ -992,7 +1278,7 @@ ifconfig eth0 192.168.1.22
 ifconfig
 ```
 
-* 工具：tftpd64
+- 工具：tftpd64
 
 安装tftp通信工具，下载地址：<https://bitbucket.org/phjounin/tftpd64/downloads/>
 
@@ -1000,7 +1286,7 @@ ifconfig
 
 ![net_config_1](images/net_config_1.png)
 
-* sharefs说明
+- sharefs说明
 
 ```Shell
 # 进入小核根目录
@@ -1010,7 +1296,7 @@ ls
 # sharefs目录是大小核共用目录，因此从小核拷贝到sharefs目录下的文件对大核也可见
 ```
 
-* 文件传输
+- 文件传输
 
 ```Shell
 # 以下代码在小核串口执行
