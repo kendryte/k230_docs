@@ -250,7 +250,7 @@ sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
 基础的hello world请参考 [K230_实战基础篇_hello_world](https://github.com/kendryte/k230_docs/blob/main/zh/02_applications/tutorials/K230_%E5%AE%9E%E6%88%98%E5%9F%BA%E7%A1%80%E7%AF%87_hello_world.md)
 
-以Vicap_demo为例，代码位于 /home/zhaozhongxiang/maix3/k230_canmv/k230_sdk/src/big/mpp/userapps/sample/sample_vicap
+以Vicap_demo为例，代码位于 k230_sdk/src/big/mpp/userapps/sample/sample_vicap
 
 vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV开发板默认使用OV5647摄像头模组，支持单个摄像头最多输出三路数据流。
 
@@ -258,7 +258,7 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV�
 
 在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_evb_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
-对应的程序位于src/big/mpp/userapps/sample/elf/sample_vicap.elf
+对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
 ##### 执行
 
