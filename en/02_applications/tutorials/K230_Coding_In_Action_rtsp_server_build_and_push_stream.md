@@ -28,7 +28,7 @@ Without the written permission of the company, no unit or individual may extract
 - K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
 - Typec USB cable * 2.
-  - One is connected to UART0/3 for serial port transceiving, UART0 corresponds to small cores, and UART3 corresponds to large cores.
+  - One is connected to UART0/3 for serial port transceiving, UART0 corresponds to little core, and UART3 corresponds to big core.
   - One is connected to the DC: 5V interface for power supply.
 - USB TypeC to Ethernet, connect to USB0.
 - One network cable
@@ -62,9 +62,9 @@ The rtsp-related demos included in the SDK are located in the`k230_sdk/src/commo
 
 ### 2.2 Source code introduction
 
-The K230 SDK adopts a dual-core architecture, and the small core runs the Linux system to implement network control services. The large core runs the RTT system to control the audio and video hardware. The small core is responsible for guiding the large core during the start-up process. Large and small cores communicate messages and memory sharing through inter-core communication.
+The K230 SDK adopts a dual-core architecture, and the little core runs the Linux system to implement network control services. The big core runs the RTT system to control the audio and video hardware. The little core is responsible for guiding the big core during the start-up process. Big and little cores communicate messages and memory sharing through inter-core communication.
 
-The small core network service has migrated the live source code to`k230_sdk/src/common/cdk/user/thirdparty/live`
+ The little core network service has migrated the live source code in the `k230_sdk/src/common/cdk/user/thirdparty/live`
 Audio is encoded using G711.
 In audio and video streaming, the default maximum resolution of a video is related to the configured sensor_type, and the default maximum resolution is 1920x1080.
 
@@ -126,9 +126,9 @@ Program source directory`k230_sdk/src/common/cdk/user/samples/rtsp_demo`
 
 Supports simultaneous push of audio and video streams to RTSP Server, where audio and video are encoded through `mapi venc&aenc` interfaces, pull the stream through the url after the push, currently supports two url push and pull streams.
 
-1. Execute on large cores:`cd /sharefs; ./sample_sys_init.elf`
-1. Execute on the small core:`./rtsp_demo`
-1. After running rtsp_demo on the small core, URL addresses in the form :`rtsp://ip:8554/session0` and  will be printed, which can be played by pulling the corresponding stream through VLC.
+1. Execute on big core:`cd /sharefs; ./sample_sys_init.elf`
+1. Execute on the little core:`./rtsp_demo`
+1. After running rtsp_demo on the little core, URL addresses in the form :`rtsp://ip:8554/session0` and  will be printed, which can be played by pulling the corresponding stream through VLC.
    VLC streaming mode: Media-> Open Network Streaming-> Enter the corresponding URL in the window that opens.
    ![vlc](../../images/vlc.png)
 
@@ -168,23 +168,23 @@ The sensor type value is described in the `k230_docs/zh/01_software/board/mpp/K2
 
 #### 3.2.3 Run the program
 
-Two EVBs are connected to the same network segment, one as server and one as client. After the large and small cores are fully booted.
+Two EVBs are connected to the same network segment, one as server and one as client. After the big and little cores are fully booted.
 
 Run the following command on the server side:
 
-- Execute on the large core:`cd /sharefs; ./sample_sys_init.elf`
-- Execute on the small core: `cd /mnt; ./rtsp_server`(after running the rtsp_server, the URL address of the form : `rtsp://<server_ip>:8554/BackChannelTest` will be printed).
+- Execute on the big core:`cd /sharefs; ./sample_sys_init.elf`
+- Execute on the little core: `cd /mnt; ./rtsp_server`(after running the rtsp_server, the URL address of the form : `rtsp://<server_ip>:8554/BackChannelTest` will be printed).
 
 Run the following command on the client side:
 
-- Execute on the large core:`cd /sharefs; ./sample_sys_init.elf`
-- Execute on the small core :`./backclient_test rtsp://<server_ip>:8554/BackChannelTest`)
+- Execute on the big core:`cd /sharefs; ./sample_sys_init.elf`
+- Execute on the little core :`./backclient_test rtsp://<server_ip>:8554/BackChannelTest`)
 
 backclient_test execute the command description: `./backclient_test <rtsp_url> <out_type>`, where rtsp_url is the RTSP address and out_type is the VO output connect type, see the description of k_connector_type in `k230_docs/zh/01_software/board/mpp/K230_Video_Output_API_Reference.md`, out_type is set to 0 by default.
 
 ## 4. Run sharefs
 
-Large cores `sample_sys_init.elf`are not loaded to large cores by default. It can be run in large cores in the following two ways.
+The `sample_sys_init.elf`are not loaded to big core by default. It can be run in big core in the following two ways.
 
 1. Modify the build script of `mpp-apps` in `k230_sdk/Makefile` by adding the following command before `cd -;` and execute `make rt-smart;make build-image` in `k230_sdk` directory, and then the image file generated will contain `sample_sys_init.elf` in the `/bin` directory of the core.
 
@@ -192,8 +192,8 @@ Large cores `sample_sys_init.elf`are not loaded to large cores by default. It ca
     cp userapps/sample/elf/sample_sys_init.elf $(RTSMART_SRC_DIR)/userapps/root/bin/; \
     ```
 
-1. After booting the large and small cores, the executable program is transferred to the EVB board via sharefs and tftp to run.
-/sharefs is used to share files between large and small cores, and both large and small cores can realize the function of sharing file systems by accessing their respective /sharefs directories. The file system of the large core itself is read-only. You can mount the /sharefs directory to the SD card partition or the nfs directory of the PC on the small core, and the file transfer function can be realized through tftp.
+1. After booting the big and little cores, the executable program is transferred to the EVB board via sharefs and tftp to run.
+/sharefs is used to share files between big and little cores, and both big and little cores can realize the function of sharing file systems by accessing their respective /sharefs directories. The file system of the big core itself is read-only. You can mount the /sharefs directory to the SD card partition or the nfs directory of the PC on the little core, and the file transfer function can be realized through tftp.
 
     ```sh
     mount /dev/mmcblk1p4 /sharefs # Mount /sharefs to the SD card partition
