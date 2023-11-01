@@ -65,7 +65,7 @@ This document describes how to create a parameter partition and how VICAP uses i
 
 The production flow chart is as follows:
 
-![ISP STOP](../../../../zh/01_software/board/mpp/images/ISP_param.png)
+![ISP-parse-database](images/isp_database_parameter_partition.png)
 
 Figure 2-1 Parameter partition production flowchart
 
