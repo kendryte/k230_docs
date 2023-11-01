@@ -63,7 +63,7 @@ According to the characteristics of the k230 chip, the system control completes 
 
 A video buffer pool is a set of buffers (rather than one) that are primarily used by multimedia hardware devices and flow between multimedia hardware devices. The cache pool is divided into public cache pool and private cache pool, the public cache pool is mainly for VI, before using to determine the size of the cache block according to the image parameters of the VI, and then apply for a certain number of cache blocks to form a cache pool. In general, for the original picture input by the VI, the size of one frame corresponds to the size of a cache block, and multiple cache blocks are equivalent to providing the VI with a mechanism for multi-frame buffering. These public cache blocks can also be used by VO or VENC. Private cache pools often represent that the data stored in memory is closely related to the multimedia device itself, for example, the encoded stream data is still very different from the actual image pixel composition of the video stream, these streams are only available codecs, and VB provides a dedicated buffer pool for these devices. The following figure shows the process of virtual VI and virtual VO using VB for cache block circulation.
 
-![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/4c6fbf213dcaf35f8d035d69fcc43750.png)
+![The Illustrative description has been automatically generated](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
 
 #### 1.2.2 System binding
 
