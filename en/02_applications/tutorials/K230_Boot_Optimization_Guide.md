@@ -25,7 +25,7 @@ Without the written permission of the company, no unit or individual may extract
 
 The overall startup process of the K230 is shown in the figure below
 
-![K230 overall startup flowchart](../../../zh/02_applications/tutorials/images/boot.png)
+![K230 overall startup flowchart](images/boot.png)
 
 ## Start-up time measurement
 
@@ -50,12 +50,12 @@ The obtained value is the number of clock cycles that the current CPU is running
 
 Adding GPIO edge changes at the point that needs to be measured allows for more accurate timing with a logic analyzer or oscilloscope.
 The power signal on the development board can be detected by the 14th pin of the K230_EVB_LPDDR3_UNSIP board J1 (15 and 16 pins need to be shorted with jumper caps).
-![The logic analyzer counts the startup time](../../../zh/02_applications/tutorials/images/boot_time_edge.jpg)
+![The logic analyzer counts the startup time](images/boot_time_edge.jpg)
 
 ### External observations
 
 Video recording of the entire system boot process, the on-board power light on means that the system is powered on, and the VO display VI image represents that the video pipeline has been established and can be displayed. A frame appears to frame the face to indicate that face recognition is completed.
-![Editing software analyzes start time](../../../zh/02_applications/tutorials/images/boot_time_video.jpg)
+![Editing software analyzes start time](images/boot_time_video.jpg)
 
 ## System cropping
 
@@ -218,4 +218,4 @@ Applications can initialize devices in a multithreaded and parallel manner. For 
 
 ## Optimize performance
 
-Door lock POC start time statistics, the measurement time of this statistic is June 9, and there may be errors with the current latest SDK version data door lock [POC start time!](../../../zh/02_applications/tutorials/images/door_lock_boot_time.png)
+Door lock POC start time statistics, the measurement time of this statistic is June 9, and there may be errors with the current latest SDK version data door lock ![POC start time](images/door_lock_boot_time.png)

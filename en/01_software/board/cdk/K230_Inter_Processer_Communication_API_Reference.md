@@ -59,7 +59,7 @@ This document describes the K230 heterogeneous internuclear communication.
 
 #### 1.1.1 Internuclear communication implementation principle
 
-![Timeline Low-confidence descriptions have been automatically generated](../../../../zh/01_software/board/cdk/images/91c0f5a20c9460bd6c865a704f7b9404.png)
+![Timeline Low-confidence descriptions have been automatically generated](images/Dingtalk_20231101193221.jpg)
 
 - Shared memory is used for large and little cores to send the specific content of communication messages
 - Shared memory management is used to identify the properties of communication messages such as address, size, port number, etc
