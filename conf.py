@@ -20,13 +20,14 @@ author = 'Canaan'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'sphinx_copybutton',
     'myst_parser',
     'sphinx_rtd_dark_mode',
     'sphinx_multiversion'
 ]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['venv']
 
 language = 'zh_CN'
 

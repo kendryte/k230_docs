@@ -7,6 +7,11 @@ Welcome to K230's documentation!
 ================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    zh/CanMV_K230_教程.md
+   zh/00_hardware/index.rst
+   zh/01_software/index.rst
+   zh/01_software/pc/index.rst
+   zh/02_applications/index.rst
+   zh/03_other/index.rst
