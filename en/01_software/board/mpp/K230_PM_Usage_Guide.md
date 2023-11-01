@@ -53,8 +53,8 @@ This document (this guide) is intended primarily for:
 
 ## 1. Overview
 
-The K230 platform power management framework is divided into large-core power management and small-core power management, and the two cores are independently controlled.
-The large core (rt-smart) mainly controls CPU1, AI module, display module, multimedia module, etc., and the small core (linux) mainly controls CPU0.
+The K230 platform power management framework is divided into big-core power management and little-core power management, and the two cores are independently controlled.
+The big core (rt-smart) mainly controls CPU1, AI module, display module, multimedia module, etc., and the little core (linux) mainly controls CPU0.
 All power domains and clocks are enabled by default after the chip is powered on, and in order to reduce power consumption, the following power domains and clocks are turned off during the uboot-SPL phase:
 
 1. KPU Power、KPU clk、KPU aclk
@@ -65,13 +65,13 @@ All power domains and clocks are enabled by default after the chip is powered on
 
 At the same time, each device driver is responsible for the corresponding clock and power domain management, when the user turns on the device, the driver should open the power domain and clock, when the user turns off the device, the driver should turn off the clock and power domain. For devices that do not support power domain management, only the clock needs to be controlled.
 
-## 2. Large core power consumption control
+## 2. Big core power consumption control
 
 ### 2.1 Introduction to the control framework
 
 #### 2.1.1 Power Management Domains
 
-The power control of large cores mainly revolves around several power management domains:
+The power control of big cores mainly revolves around several power management domains:
 
 1. CPU1
 1. KPU
@@ -1004,11 +1004,11 @@ None
 | 0xa0178011 | K_ERR_PM_BADADDR | Error address |
 | 0xa0178012 | K_ERR_PM_BUSY | The device is busy |
 
-## 3. Small core power consumption control
+## 3. Little core power consumption control
 
 ### 3.1 Introduction to the control framework
 
-The small core control is mainly for CPU0, and supports Linux cpu_freq, temperature protection, and cooling control.
+The little core control is mainly for CPU0, and supports Linux cpu_freq, temperature protection, and cooling control.
 
 ### 3.1.1 cpu_freq
 
