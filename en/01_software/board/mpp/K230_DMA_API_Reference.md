@@ -47,7 +47,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description                                                  | Modified by | date      |
+| Document version number | Modify the description                                                  | Author | date      |
 |------------|-----------------------------------------------------------|--------|-----------|
 | V1.0       | Initial                                                     | Liu Suntao | 2023/3/7  |
 | V1.1       | Modified some descriptions of binding modes; Added function interface description to release frame number. | Liu Suntao | 2023/3/31 |
@@ -64,11 +64,7 @@ The software code provides the various functions of the GSDMA hardware to the us
 
 ### 1.2 Function Description
 
-The DMA driver call process is shown in the following figure:
-
-![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/5eb26853f9444bbda3a54cdb33688a12.png)
-
-Abstracts the DMA hardware as a device, eight channels, where channel 0\~3 is the GDMA channel and channel 4\~7 is the SDMA channel.
+DMA hardware is a device, eight channels, where channel 0\~3 is the GDMA channel and channel 4\~7 is the SDMA channel.
 
 #### 1.2.1 gdma
 
@@ -708,8 +704,8 @@ None.
 
 【Related data types and interfaces】
 
-[](#211-kd_mpi_dma_set_dev_attr)
- kd_mpi_dma_set_dev_attr[kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
+[kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
+[kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
 
 #### 3.1.5 k_dma_chn_attr_u
 
