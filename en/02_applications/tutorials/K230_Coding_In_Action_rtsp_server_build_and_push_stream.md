@@ -37,7 +37,7 @@ Without the written permission of the company, no unit or individual may extract
 - Headset (for voice intercom)
 - One DuPont wire, connect USB0_OTG_EN and high level as shown below
 
-![usb_ethnet_pin](../../../zh/02_applications/tutorials/images/usb_ethnet_pin.png)
+![usb_ethnet_pin](../../images/usb_ethnet_pin.png)
 
 Note: Audio intercom requires two sets of equipment.
 
@@ -62,9 +62,7 @@ The rtsp-related demos included in the SDK are located in the`k230_sdk/src/commo
 
 ### 2.2 Source code introduction
 
-The K230 SDK adopts a dual-core architecture, and the small core runs the Linux system to implement network control services. The large core runs the RTT system to control the audio and video hardware. The small core is responsible for guiding the large core during the start-up process. Large and small cores communicate messages and memory sharing through inter-core communication. The multimedia software architecture is as follows:
-
-![mpp_sturcture](../../../zh/02_applications/tutorials/images/mpp_structure.png)
+The K230 SDK adopts a dual-core architecture, and the small core runs the Linux system to implement network control services. The large core runs the RTT system to control the audio and video hardware. The small core is responsible for guiding the large core during the start-up process. Large and small cores communicate messages and memory sharing through inter-core communication.
 
 The small core network service has migrated the live source code to`k230_sdk/src/common/cdk/user/thirdparty/live`
 Audio is encoded using G711.
@@ -132,7 +130,7 @@ Supports simultaneous push of audio and video streams to RTSP Server, where audi
 1. Execute on the small core:`./rtsp_demo`
 1. After running rtsp_demo on the small core, URL addresses in the form :`rtsp://ip:8554/session0` and  will be printed, which can be played by pulling the corresponding stream through VLC.
    VLC streaming mode: Media-> Open Network Streaming-> Enter the corresponding URL in the window that opens.
-   ![vlc](../../../zh/02_applications/tutorials/images/vlc.png)
+   ![vlc](../../images/vlc.png)
 
 ### 3.2 Voice intercom
 
