@@ -47,10 +47,10 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description                                                                                                                                | Modified by | date      |
+| Document version number | Modify the description                                                                                                                                | Author | date      |
 |------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------|-----------|
 | v1.0       | Initial                                                                                                                                   | Liu Suntao | 2023/3/30 |
-| v1.1       | Added  interface function kd_mpi_dpu_set_processed_ref_image for configuring the reference graph after offline processing[](#217-kd_mpi_dpu_set_processed_ref_image); Added module debugging information. | Liu Suntao | 2023/4/20 |
+| v1.1       | Added  interface function  [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image); Added module debugging information. | Liu Suntao | 2023/4/20 |
 | V1.2       | Added configurable functionality of buffer                             | Liu Suntao | 2023/5/31 |
 
 ## 1. Overview
@@ -63,9 +63,13 @@ The DPU is mainly responsible for the depth calculation of 3D structured light, 
 
 #### 1.2.1 Binding mode invokes the process
 
+The first step is to initialize vb pool. The last step is to release vb pool.
+
 ![Illustrative, Schematic description is automatically generated](../../../../zh/01_software/board/mpp/images/b85b814d3911bf8b3802ba97751ff941.png)
 
 #### 1.2.2 Invoke the process in unbound mode
+
+The first step is to initialize vb pool. The last step is to release vb pool.
 
 ![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/dca3cfa887a526c493abced31b59afd2.png)
 
@@ -1168,7 +1172,7 @@ typedef struct {
 | disp_out  | The disparity plot outputs the resulting structure.                                                                                                                                                                                                 |
 | depth_out | The depth image outputs the resulting structure.                                                                                                                                                                                                 |
 | qlt_out   | Quality inspection output result structure. Includes quality test results, thickness_column parallax (initial resolution) results, and initial determinant difference results.                                                                                                                            |
-| flag      | This structure is used to mark the frame at which the user-configured parameters took effect. The struct contains [param_valid variables in k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t), k_dpu_chn_ir_attr_t[](#318-k_dpu_chn_ir_attr_t). |
+| flag      | This structure is used to mark the frame at which the user-configured parameters took effect. The struct contains param_valid variables in [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t). |
 
 【Precautions】
 
