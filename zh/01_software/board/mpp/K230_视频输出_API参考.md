@@ -1557,6 +1557,99 @@ k_s32 kd_mpi_connector_init(k_s32 fd, [k_connector_info](#3125-k_connector_info)
 
 无
 
+#### 2.3.23 kd_mpi_connector_get_negotiated_data
+
+【描述】
+
+Display驱动和显示器自动协商分辨率，协商成功后会将协商后的数据保存到negotiated_data变量
+
+【语法】
+
+k_s32 kd_mpi_connector_get_negotiated_data(k_s32 fd, [k_connector_negotiated_data](#3126-k_connector_negotiated_data) *negotiated_data);
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+| ----------------|----------------|-----------|
+| fd | 文件描述符 | 输入 |
+| negotiated_data | Display驱动和HDMI显示器协商后的数据 | 输入 |
+
+【返回值】
+
+| 返回值 | 描述               |
+|--------|--------------------|
+| >= 1 | 成功，自适应成功后Display驱动支持的分辨率数量 |
+| -1 | 失败，参见错误码 |
+
+【芯片差异】
+
+无
+
+【需求】
+
+- 头文件：mpi_vo_api.h k_vo_comm.h k_connector_comm.h
+- 库文件：libvo.a libconnector.a
+
+【注意】
+
+kd_mpi_connector_get_negotiated_data()仅仅只会和显示器进行协商，协商成功后不会将最佳分辨率设置到VO、DSI、HDMI模块上
+
+【举例】
+
+无
+
+【相关主题】
+
+无
+
+#### 2.3.24 kd_mpi_connector_adapt_resolution
+
+【描述】
+
+Display驱动和显示器自动协商分辨率，协商成功后会将协商后的数据保存到negotiated_data变量，同时会将最佳的分辨率设置到VO、DSI、HDMI模块
+
+【语法】
+
+k_s32 kd_mpi_connector_adapt_resolution(k_connector_type type, [k_connector_negotiated_data](#3126-k_connector_negotiated_data) *negotiated_data)
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+| ----------------|----------------|-----------|
+| type | 连接器的设备节点，HDMI接口通常设置为LT9611_MIPI_ADAPT_RESOLUTION | 输入 |
+| negotiated_data | Display驱动和HDMI显示器协商后的数据 | 输入 |
+
+【返回值】
+
+| 返回值 | 描述               |
+|--------|--------------------|
+| 0 | 成功 |
+| -1 | 失败，参见错误码 |
+
+【芯片差异】
+
+无
+
+【需求】
+
+- 头文件：mpi_vo_api.h k_vo_comm.h k_connector_comm.h
+- 库文件：libvo.a libconnector.a
+
+【注意】
+
+1 kd_mpi_connector_adapt_resolution()内部通过调用kd_mpi_connector_get_negotiated_data()和显示器进行协商
+
+2 当应用程序调用kd_mpi_connector_adapt_resolution()函数完成自适应设置后，仍然可以调用
+kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_set()、kd_mpi_connector_init()重新设置输出分辨率
+
+【举例】
+
+无
+
+【相关主题】
+
+无
+
 ## 3. 数据类型
 
 ### 3.1 VO
@@ -2185,8 +2278,9 @@ typedef struct {
 【定义】
 
 typedef enum {  
-&emsp;HX8377_V2_MIPI_4LAN_1080X1920_30FPS;  
-&emsp;LT9611_MIPI_4LAN_1920X1080_30FPS;  
+&emsp;HX8377_V2_MIPI_4LAN_1080X1920_30FPS;
+&emsp;LT9611_MIPI_4LAN_1920X1080_60FPS;
+&emsp;LT9611_MIPI_4LAN_1920X1080_30FPS;
 } k_connector_type;
 
 【成员】
@@ -2195,7 +2289,8 @@ typedef enum {
 |----------|-----------------------------------------------|
 | v_frame  | 帧的信息                                      |
 | HX8377_V2_MIPI_4LAN_1080X1920_30FPS  | hx8377屏幕初始化  |
-| LT9611_MIPI_4LAN_1920X1080_30FPS   | hdmi 1080p 初始化 |
+| LT9611_MIPI_4LAN_1920X1080_60FPS   | hdmi 1080p60 初始化 |
+| LT9611_MIPI_4LAN_1920X1080_30FPS   | hdmi 1080p30 初始化 |
 
 【注意事项】
 
@@ -2354,6 +2449,40 @@ typedef struct {
 | v_frame  | 帧的信息    |
 | pool_id  | VB pool ID  |
 | mod_id   | Video帧的id |
+
+【注意事项】
+
+无
+
+【相关数据类型及接口】
+
+无
+
+#### 3.1.26 k_connector_negotiated_data
+
+【说明】
+
+Display驱动和HDMI显示器协商后的数据
+
+【定义】
+
+```C
+
+typedef struct {  
+k_u32 connection_status;  
+k_u32 negotiated_count;  
+k_connector_type negotiated_types[256];
+} k_connector_negotiated_data;
+
+```
+
+【成员】
+
+| 成员名称 | 描述        |
+| --- | --- |
+| connection_status | HDMI接口连接状态    |
+| negotiated_count  | Display驱动和HDMI显示器协商后，Display驱动支持的分辨率数量 |
+| negotiated_types[256] | Display驱动和HDMI显示器协商后，Display驱动支持的分辨率列表, negotiated_types[0]表示最佳分辨率 |
 
 【注意事项】
 
