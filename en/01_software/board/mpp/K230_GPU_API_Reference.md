@@ -48,9 +48,9 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Version version number | Modify the description | Modified by | date       |
+| Version version number | Modify the description | Author | date       |
 |------------|----------|--------|------------|
-| V1.0       | Official release | Huang Ziyi | 2023/04/06 |
+| V1.0       | Initial | Huang Ziyi | 2023/04/06 |
 | V1.1       | Adjust the formatting | Huang Ziyi | 2023/05/06 |
 
 ## 1. Function introduction
