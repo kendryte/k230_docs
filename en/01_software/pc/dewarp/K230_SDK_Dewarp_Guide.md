@@ -46,9 +46,9 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by     | date       |
+| Document version number | Modify the description | Author     | date       |
 | ---------- | -------- | ---------- | ---------- |
-| V1.0       | first edition     | Liu Jia'an, Huang Ziyi | 2023-06-08 |
+| V1.0       | Initial     | Liu Jia'an, Huang Ziyi | 2023-06-08 |
 
 ## 1. Introduction to Dewarp calibration
 
