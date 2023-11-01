@@ -1,4 +1,4 @@
-# K230 AI Demo介绍
+# K230 Fancy POC介绍
 
 ![cover](../tutorials/images/canaan-cover.png)
 
@@ -21,7 +21,7 @@
 
 <div style="page-break-after:always"></div>
 
-## K230 AI Demo
+## K230 Fancy POC
 
 ### 概述
 
