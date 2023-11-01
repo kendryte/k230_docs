@@ -76,7 +76,7 @@ Neural network model formats supported by nncase
 
 ### 1.2 nncase architecture
 
-![nncase architecture](../../../../zh/01_software/board/ai/images//185762ac17039d6c4961faa2fba0d66e.png)
+![nncase architecture](../../../../zh/01_software/board/ai/images/185762ac17039d6c4961faa2fba0d66e.png)
 
 The nncase software stack consists of two parts: compiler and runtime.
 
@@ -557,7 +557,7 @@ Set the tensor data
 
 【Return value】
 
-not
+None
 
 【Example】
 
