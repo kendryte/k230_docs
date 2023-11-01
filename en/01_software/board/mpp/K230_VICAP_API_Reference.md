@@ -81,7 +81,7 @@ The VICAP software architecture is shown in Figure 1-2, from top to bottom: appl
 
 Hardware layer: A collection of specific hardware modules of VICAP, including sensors.
 
-![Graphical user interface, text, application description is automatically generated](../../../../zh/01_software/board/mpp/images/250b6c36cbd4447bd8c734548fc3b890.png)
+![vicap_sys_arch](../../../images/vicap_sysarch_en.png)
 
 #### 1.2.2 Sensor
 
@@ -89,7 +89,7 @@ The Sensor module is one of the data sources for VICAP to capture images and is 
 
 The K230 platform supports a variety of interface types of sensors, and we take the most commonly used MIPI CSI interface Sensor as an example. The schematic diagram of the hardware connection between the sensor and the main control platform is as follows:
 
-![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/e20100e34c268ad615e69966cb28e5a6.png)
+![The Illustrative description has been automatically generated](../../../images/sensor_conn.png)
 
 Figure 1-3
 
@@ -97,7 +97,7 @@ The master sends configuration registers through the I2C interface to control th
 
 The system architecture of the sensor module is shown in Figure 1-4 below:
 
-![camera_sensor_arch](../../../../zh/01_software/board/mpp/images/camera_sensor_arch.png)
+![camera_sensor_arch](../../../images/camera_sensor_arch.png)
 
 Figure 1-4 Sensor system architecture
 

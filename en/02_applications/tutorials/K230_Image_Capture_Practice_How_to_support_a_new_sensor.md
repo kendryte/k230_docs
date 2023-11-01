@@ -59,7 +59,7 @@ This document mainly describes the basic framework of the K230 platform Camera S
 
 The K230 platform supports a variety of interface types of sensors, and we take the most commonly used MIPI CSI interface Sensor as an example. The schematic diagram of the hardware connection between the sensor and the main control platform is as follows:
 
-![Camera sensor connection diagram](../../../zh/02_applications/tutorials/images/camer_sensor_connect.png)
+![Camera sensor connection diagram](../../images/sensor_conn.png)
 
 The master sends configuration registers through the I2C interface to control the working method of the sensor, and the sensor sends image data to the master SOC through the MIPI CSI interface.
 
@@ -69,7 +69,7 @@ The master sends configuration registers through the I2C interface to control th
 
 The Camera Sensor framework is shown in Figure 2-1, and the lowest layer is the sensor driver layer
 
-![camera sensor framework](../../../zh/02_applications/tutorials/images/camera_sensor_arch.png)
+![camera sensor framework](../../images/camera_sensor_arch.png)
 
 Figure 2-1 Camera sensor framework
 
