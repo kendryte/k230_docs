@@ -77,7 +77,7 @@ This document (this guide) is intended primarily for:
 
 ## 1.Module software architecture
 
-![arch](../../../../zh/01_software/pc/pqtools/images/28a799580bb5670cb8d29dc709a4dcc6.png)
+![arch](../images/tuning-server.png)
 
 Figure 1-1
 
@@ -92,16 +92,16 @@ Figure 1-1
 | run_tuning_server.sh              | little core file system /app/tuning-server/        | Start the tuning-server script |
 | 3aconfig.json                     | little core file system /app/tuning-server/        | Configuration parameters of the 3a module      |
 | Tuning Server                     | little core file system /app/tuning-server/        | tuning-server executable program,invoked by run_tuning_server.sh |
-| sample_sys_init.elf               | big Core/bin/                               | ISP demo (contains a small number of ISP functions,used in RTSP mode)       |
+| sample_sys_init.elf               | big Core/bin/                               | ISP demo (contains a little number of ISP functions,used in RTSP mode)       |
 | sample_vicap_dump.elf             | big Core/bin/                               | VICAP-based ISP demo (including basic ISP pipeline)         |
 |**Table 2-1 List of files**|||
 
 ### 2.2 Environment compilation
 
-Tuning-tool relies on the tuning-server program communication of the board-end small core system,and relies on the ISP demo of the board-side large core system,which is currently sample_sys_init.elf and sample_vicap_dump.elf,including basic ISP pipeline functions.When using RTSP mode,the big core boots sample_sys_init.elf,and when using non-RTSP mode,the big core boots sample_vicap_dump.elf
+Tuning-tool relies on the tuning-server program communication of the board-end little core system,and relies on the ISP demo of the board-side big core system,which is currently sample_sys_init.elf and sample_vicap_dump.elf,including basic ISP pipeline functions.When using RTSP mode,the big core boots sample_sys_init.elf,and when using non-RTSP mode,the big core boots sample_vicap_dump.elf
 
-According to the README.md in the release source code package,compile the image and flash it to the board end.Tuning-server related components and applications will reside in the small core/app/tuning-server and /lib/tuning-server.
-The following table describes the capabilities of large cores to start sample_sys_init.elf and sample_vicap_dump.elf,respectively.
+According to the README.md in the release source code package,compile the image and flash it to the board end.Tuning-server related components and applications will reside in the little core/app/tuning-server and /lib/tuning-server.
+The following table describes the capabilities of big cores to start sample_sys_init.elf and sample_vicap_dump.elf,respectively.
 
 | **Big core demo**          | **On-screen display**  | **RTSP** | **dump raw** | **dump yuv** | **Switch sensors** online| **Switch the resolution** online|
 |-----------------------|-----------|----------|--------------|--------------|---------------------|--------------------|
@@ -111,9 +111,9 @@ The following table describes the capabilities of large cores to start sample_sy
 
 ### 2.3 Initiation Process
 
-1.Configure the IP of the small core on the board end
+1.Configure the IP of the little core on the board end
 1.After waiting for sharefs to start,put sample_vicap_dump.elf and sample_sys_init.elf into /sharefs,which can be completed by NFS and TFTP methods,refer to the use of sharefs for details
-1.The board-end small core starts tuning-server
+1.The board-end little core starts tuning-server
 1.In RTSP mode,the board-end big core starts the ISP demo,cd /sharefs/; ./sample_sys_init.elf
 1.Start the ISP demo on the board-end big core,cd /sharefs/; ./sample_vicap_dump.elf -dev \<dev_num\> -sensor \<sensor_num\> -chn \<chn_num\> -ofmt \<out_format\> -preview \<display_enable\>
 1.The PC side starts tuning-tool-client
@@ -143,7 +143,7 @@ When the convert_to_Bmp is changed to 0,the original data (yuvNV12) of dump is s
 | dev_num        | 0                         | Device ID number,default 0,0:sensor0,1:sensor1 |
 | chn_num        | 0                         | Bind channel number,default 0                    |
 | exp_type       | 0                         | The sensor exposure mode,which is not currently in effect,defaults to 0    |
-| rtsp_mode      | 1                         | 0:Use non-RTSP mode,large core boot uses RTSP mode,big core boot sample_vicap_dump.elf,1:Use RTSP mode,big core boot sample_sys_init.elf |
+| rtsp_mode      | 1                         | 0:Use non-RTSP mode,big core boot uses RTSP mode,big core boot sample_vicap_dump.elf,1:Use RTSP mode,big core boot sample_sys_init.elf |
 | video_index    | 2                         |rtsp encoding method,0:kVideoTypeH264,1:kVideoTypeH265,2:kVideoTypeMjpeg|
 | sensor_index   | 3                         |rtsp uses a switched sensor configuration and supports index 0-8,0:ov9732,1:ov9286 ir,2:ov9286 speckl,3-8:imx335,see tsconfig.json key:HELP for sensor_index|
 |**Table 2-3 Configuration parameters**|||
@@ -366,7 +366,7 @@ The tsconfig.json file can be modified directly,save and execute the sync comman
 
 #### 3.3.3 RTSP push
 
-In RTSP mode,http push to PC is supported,after tuning-tool and tuning-server establish a connection,click![cam](../../../../zh/01_software/pc/pqtools/images/start_preview.png)wait for the small core to load the push function,and print the address of the push stream after completion.
+In RTSP mode,http push to PC is supported,after tuning-tool and tuning-server establish a connection,click![cam](../../../../zh/01_software/pc/pqtools/images/start_preview.png)wait for the little core to load the push function,and print the address of the push stream after completion.
 ![cam](../../../../zh/01_software/pc/pqtools/images/rtsp_print_log.png)
 Copy the printed URL into the URL of the VLC network streaming device,play and wait.
 To modify the image parameters online and apply,you need to stop pushing the stream first,click![cam](../../../../zh/01_software/pc/pqtools/images/stop_preview.png)wait for the stop success prompted in the serial port printing,modify tsconfig.json,save,sync.Just click ![Cam](../../../../zh/01_software/pc/pqtools/images/start_preview.png) again.
