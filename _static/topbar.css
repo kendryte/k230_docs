@@ -1,5 +1,9 @@
 /* Customize for top bar (testing and outdated docs)*/
 
+:target {
+    scroll-margin-top: 50px;
+}
+
 .wy-nav-side
 {
     min-height: calc(100% - 50px);
