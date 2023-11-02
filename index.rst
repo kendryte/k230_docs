@@ -10,8 +10,9 @@ Welcome to K230's documentation!
    :maxdepth: 2
 
    zh/CanMV_K230_教程.md
+   zh/01_software/board/K230_SDK_使用说明.md
+   index_normal_tutorial.rst
+   index_dev_guide.rst
    zh/00_hardware/index.rst
-   zh/02_applications/index.rst
-   zh/01_software/pc/index.rst
-   zh/01_software/index.rst
+   index_api.rst
    zh/03_other/index.rst
