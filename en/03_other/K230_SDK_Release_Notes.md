@@ -127,7 +127,7 @@ Memory configuration of parameter areas and intercore communication areas
 
 | ID | Supported versions      | Functional overview      | Feature description                                                                                                                              | remark |
 |----|---------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------|------|
-| 1  | K230 SDK V0.5 | Vicap         | Support sensor image acquisition (OV9732, OV9286)                                                                                                  |      |
+| 1  | K230 SDK V0.5 | Vicap         | Support capture sensor image (OV9732, OV9286)                                                                                                  |      |
 | 2  | K230 SDK V0.5 | AE            | AE auto exposure is supported                                                                                                                        |      |
 | 3  | K230 SDK V0.5 | Vicap Bind VO | vicap is bound to the VO output image                                                                                                               |      |
 | 4  | K230 SDK V0.5 | GPU drawing       | Vector drawing fills (straight line, quadratic Bezier curve, cubic Bezier curve, elliptic curve) Linear gradient Color lookup table Image compositing/blending, BLIT                                     |      |
@@ -136,7 +136,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 7  | K230 SDK V0.5 | display display  | Support OSD and YUV display, support dump frame function, support DSI and VO timing, can be configured, support interpolation frame function                                                                 |      |
 | 8  | K230 SDK V0.6 | Image tuning       | The tuning tool configures the sensor register                                                                                                       |      |
 | 9  | K230 SDK V0.6 | Timestamp, frame number   | Supports timestamp and frame number                                                                                                                      |      |
-| 10 | K230 SDK V0.6 | ISP+KPU Demo  | Face detection linkage demo                                                                                                                      |      |
+| 10 | K230 SDK V0.6 | ISP+KPU Demo  | Face detection demo                                                                                                                      |      |
 | 11 | K230 SDK V0.7 | dewarp        | Add the dewarp function to achieve distortion correction                                                                                                       |      |
 | 12 | K230 SDK V0.7 | AE Side       | Added FaceAE function and corresponding FaceAE demo                                                                                                  |      |
 | 13 | K230 SDK V0.7 | Add Imx335    | Add Imx335 sensor driver and demo                                                                                                            |      |
@@ -149,7 +149,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 20 | K230 SDK V1.0 | Commissioning - frame count statistics             | Support total input and output frame count function                                                                                                 |      |
 | 21 | K230 SDK V1.0 | dewarp -分屏             | Support 2, 4 split screen output                                                                                                            |      |
 | 22 | K230 SDK V1.0 | HDR                      | Support HDR function, support Imx335 2dol HDR                                                                                            |      |
-| 23 | K230 SDK V1.1 | MAPI                     | Increase vicap's MAPI                                                                                                             |      |
+| 23 | K230 SDK V1.1 | MAPI                     | Add vicap's MAPI                                                                                                             |      |
 | 24 | K230 SDK V1.1 | HDR frequency conversion               | Supports HDR frequency conversion                                                                                                            |      |
 | 25 | K230 SDK V1.1 | Parameter export                  | Support ISP Dewarp parameter export                                                                                                      |      |
 
