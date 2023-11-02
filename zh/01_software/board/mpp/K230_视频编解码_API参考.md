@@ -729,7 +729,7 @@ k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](#3112-k_rotation) \*ro
 
 【描述】
 
-设置编码图像旋转角度。
+设置编码图像镜像方式。
 
 【语法】
 
@@ -771,7 +771,7 @@ k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_m
 
 【描述】
 
-设置编码图像旋转角度。
+设置编码图像镜像方式。
 【语法】
 
 | k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror) mirror);|
@@ -3037,8 +3037,8 @@ typedef struct {
 | stream_buf_size | 码流buffer大小。 |
 | stream_buf_cnt  | 码流buffer个数。|
 | profile         | 编码的等级枚举。|
-| pic_width       | 编码图像宽度。 取值范围： `[MIN_WIDTH, MAX_WIDTH]`，以像素为单 位。 必须是MIN_ALIGN的整数倍。   |
-| pic_height      | 编码图像高度。 取值范围： `[MIN_HEIGHT, MAX_HEIGHT]`，以像素为 单位。 必须是MIN_ALIGN的整数倍。 |
+| pic_width       | 编码图像宽度。 取值范围： `[MIN_WIDTH, MAX_WIDTH]`，以像素为单位。 必须是MIN_ALIGN的整数倍。   |
+| pic_height      | 编码图像高度。 取值范围： `[MIN_HEIGHT, MAX_HEIGHT]`，以像素为单位。 必须是MIN_ALIGN的整数倍。 |
 
 【注意事项】
 
@@ -3071,7 +3071,7 @@ typedef struct {
 |--------------|---------------------------------------------|
 | rc_mode      | RC模式。                                    |
 | cbr          | H.264/H.265协议编码通道固定比特率模式属性。 |
-| Vbr          | H.264/H.265协议编码通道可变比特率模式属性。 |
+| vbr          | H.264/H.265协议编码通道可变比特率模式属性。 |
 | fixqp        | H.264/H.265协议编码通道固定qp模式属性。     |
 | mjpeg_fixqp  | Mjpeg协议编码通道Fixqp模式属性。            |
 
@@ -3902,7 +3902,7 @@ MAPI是在小核调用，用以获取venc的码流数据。
 
 典型的编码流程包括了输入图像的接收、图像的编码、数据流的跨核传输以及码流的输出等过程。
 
-上图编码模块（VENC）由VENC接收通道、编码通道、2D接收通道、2D运算模块组成，详见[1.2.1](#121-视频编码) 。
+上图编码模块（VENC）由VENC接收通道、编码通道、2D接收通道、2D运算模块组成，详见[1.2.1 视频编码](#121-视频编码) 。
 
 #### 4.1.3 API
 
