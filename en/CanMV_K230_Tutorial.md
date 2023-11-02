@@ -1400,19 +1400,19 @@ When perf, you can use the RAW event, such as perf stat -e r12, and the perf too
 ```bash
 cd src/little/linux/tools
 make CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv perf V=1 WERROR=0
-#目标文件是  perf/perf ，把这个文件复制到板子上就可以了。
+#copy perf/perf file to board 
 ```
 
 Special note: Versions prior to 1.1 have the following modifications
 
 ```bash
-#src/little/linux/arch/riscv/boot/dts/kendryte/k230_evb.dtsi 添加如下内容
+#src/little/linux/arch/riscv/boot/dts/kendryte/k230_evb.dtsi add 
 pmu_thead: pmu_thead {
     interrupt-parent = <&cpu0_intc>;
     interrupts = <17>;
     compatible = "thead,c900_pmu";
 };
-#src/little/linux/arch/riscv/configs/k230_evb_defconfig  文件增加如下配置
+#src/little/linux/arch/riscv/configs/k230_evb_defconfig  add 
 CONFIG_KALLSYMS=y
 CONFIG_KALLSYMS_ALL=y
 CONFIG_PERF_EVENTS=y
@@ -1490,7 +1490,7 @@ parted   -l /dev/mmcblk1
 parted  -a minimal  /dev/mmcblk1  resizepart 4  31.3GB
 mkfs.ext2 /dev/mmcblk1p4
 mount /dev/mmcblk1p4 /sharefs
-#参考操作log如下
+#reference log
 [root@canaan ~ ]#parted   -l /dev/mmcblk1
 Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
@@ -1647,9 +1647,9 @@ Modification 3: Modify bootargs using env files (see 2.10).
 bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS2,115200 earlycon=sbi；
 ```
 
-### How to completely reprogram the SDK
+### How to completely recompile the SDK
 
-Answer: After updating and modifying the SDK source code, or after modifying the SDK source code, it is recommended to enter the following command to completely reprogram the SDK.
+Answer: After updating and modifying the SDK source code, or after modifying the SDK source code, it is recommended to enter the following command to completely recompile the SDK.
 
 ```bash
 make clean; make;
