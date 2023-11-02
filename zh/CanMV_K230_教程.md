@@ -246,7 +246,7 @@ sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
 至此整个SDK编译完成，成生镜像sysimage-sdcard.img，可烧录到TF卡启动系统。
 
-#### 示例
+#### 示例1
 
 基础的hello world请参考 [K230_实战基础篇_hello_world](https://github.com/kendryte/k230_docs/blob/main/zh/02_applications/tutorials/K230_%E5%AE%9E%E6%88%98%E5%9F%BA%E7%A1%80%E7%AF%87_hello_world.md)
 
@@ -256,7 +256,7 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV�
 
 ##### 编译
 
-在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_evb_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
 对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
@@ -314,6 +314,297 @@ Options:
 CanMV-K230开发板支持的其它demo请参考 [K230_SDK_CanMV_Board_Demo使用指南](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)
 
 其它SDK相关的文档请访问 [K230 SDK 文档](https://github.com/kendryte/k230_docs)
+
+#### 示例2
+
+快起程序，源码位于k230_sdk/src/big/mpp/userapps/sample/fastboot_app，该程序为简单的人脸检测程序，是快述入门指南里面最后系统启动默认运行的程序。
+
+##### 编译程序
+
+在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+
+对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/fastboot_elf/fastboot_app.elf
+
+##### 执行程序
+
+大核端进入 /bin，在该目录下执行`./fastboot_app.elf test.kmodel`
+
+代码分析
+
+```c
+/* ov5647 sensor 输出1920x1080分辨率的raw图给isp，输出1920x1080YUV用于显示，1280x720的RGB图给KPU用于人脸检测 */
+#define ISP_INPUT_WIDTH (1920)
+#define ISP_INPUT_HEIGHT (1080)
+#define ISP_CHN1_HEIGHT (720)
+#define ISP_CHN1_WIDTH  (1280)
+#define ISP_CHN0_WIDTH  (1920)
+#define ISP_CHN0_HEIGHT (1080)
+
+k_vicap_dev vicap_dev;  /* vicap的设备，负责抓取图像 */
+k_vicap_chn vicap_chn;  /* vicap的输出通道，ISP输出的图像，这一路跟显示器显示 */
+k_vicap_dev_attr dev_attr; /* vicap的设备属性 */
+k_vicap_chn_attr chn_attr; /* vicap输出的通道属性，用于配置输出给显示和AI的图像参数 */
+k_vicap_sensor_info sensor_info; /* sensor 驱动相关的配置信息 */
+k_vicap_sensor_type sensor_type; /* 使用的sensor 类型，CanMV-K230默认使用的OV5647 */
+k_video_frame_info dump_info;    /* dump图像的信息，用于AI运算 */
+
+/* 首先配置缓存池 */
+int sample_vb_init(void)
+{
+    k_s32 ret;
+    k_vb_config config;
+    memset(&config, 0, sizeof(config));
+    config.max_pool_cnt = 64;
+    //VB for YUV420SP output
+    config.comm_pool[0].blk_cnt = 5;  /* 缓存5个buffer */
+    config.comm_pool[0].mode = VB_REMAP_MODE_NOCACHE;
+    config.comm_pool[0].blk_size = VICAP_ALIGN_UP((ISP_CHN0_WIDTH * ISP_CHN0_HEIGHT * 3 / 2), VICAP_ALIGN_1K);  /* 缓存块大小，用于显示 */
+
+    //VB for RGB888 output
+    config.comm_pool[1].blk_cnt = 5;  /* 缓存5个buffer */
+    config.comm_pool[1].mode = VB_REMAP_MODE_NOCACHE;
+    config.comm_pool[1].blk_size = VICAP_ALIGN_UP((ISP_CHN1_HEIGHT * ISP_CHN1_WIDTH * 3 ), VICAP_ALIGN_1K);  /* 缓存块大小，用于AI */
+
+    ret = kd_mpi_vb_set_config(&config); /* 配置缓存 */
+    if (ret) {
+        printf("vb_set_config failed ret:%d\n", ret);
+        return ret;
+    }
+
+    ret = kd_mpi_vb_init(); /* 创建缓存池 */
+    if (ret) {
+        printf("vb_init failed ret:%d\n", ret);
+    }
+    return ret;
+}
+
+/* 其次配置显示相关的参数，我们使用的HDMI */
+k_s32 sample_connector_init(void)
+{
+    k_u32 ret = 0;
+    k_s32 connector_fd;
+
+    k_connector_type connector_type = LT9611_MIPI_4LAN_1920X1080_30FPS; /* CanMV-K230使用的HDMI类型 */
+
+    k_connector_info connector_info;
+
+    memset(&connector_info, 0, sizeof(k_connector_info));
+
+    //获取HDMI相对应的配置信息
+    ret = kd_mpi_get_connector_info(connector_type, &connector_info);
+    if (ret) {
+        printf("sample_vicap, the sensor type not supported!\n");
+        return ret;
+    }
+
+    /* 打开显示设备 */
+    connector_fd = kd_mpi_connector_open(connector_info.connector_name);
+    if (connector_fd < 0) {
+        printf("%s, connector open failed.\n", __func__);
+        return K_ERR_VO_NOTREADY;
+    }
+
+    /* 上电 */
+    kd_mpi_connector_power_set(connector_fd, K_TRUE);
+    /* 初始化HDMI */
+    kd_mpi_connector_init(connector_fd, connector_info);
+
+    return 0;
+}
+
+/* 配置vicap，用于采集sensor的图像 */
+int sample_vivcap_init( void )
+{
+    k_s32 ret = 0;
+    /* OV5647 1920x1080 30fps raw10 linear 模式 */
+    sensor_type = OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR;
+    /* 使用vicap的设备0 */
+    vicap_dev = VICAP_DEV_ID_0;
+
+    memset(&sensor_info, 0, sizeof(k_vicap_sensor_info));
+    /* 获取sensor的信息 */
+    ret = kd_mpi_vicap_get_sensor_info(sensor_type, &sensor_info);
+    if (ret) {
+        printf("sample_vicap, the sensor type not supported!\n");
+        return ret;
+    }
+
+    /* 配置sensor的设备属性，为初始化ISP做准备 */
+    memset(&dev_attr, 0, sizeof(k_vicap_dev_attr));
+    dev_attr.acq_win.h_start = 0; /* ISP输入框水平无偏移 */
+    dev_attr.acq_win.v_start = 0; /* ISP输入框垂直无偏移 */
+    dev_attr.acq_win.width = ISP_INPUT_WIDTH; /* ISP输入图像宽度 */
+    dev_attr.acq_win.height = ISP_INPUT_HEIGHT; /* ISP输入图像高度 */
+    dev_attr.mode = VICAP_WORK_ONLINE_MODE; /* 在线模式，Sensor输入的raw数据不需要内存缓存 */
+
+    dev_attr.pipe_ctrl.data = 0xFFFFFFFF;
+    dev_attr.pipe_ctrl.bits.af_enable = 0; /* 无AF功能 */
+    dev_attr.pipe_ctrl.bits.ahdr_enable = 0; /* 非HDR */
+
+
+    dev_attr.cpature_frame = 0; /* 持续采集图像 */
+    memcpy(&dev_attr.sensor_info, &sensor_info, sizeof(k_vicap_sensor_info));
+
+    /* 配置vicap的设备属性 */
+    ret = kd_mpi_vicap_set_dev_attr(vicap_dev, dev_attr);
+    if (ret) {
+        printf("sample_vicap, kd_mpi_vicap_set_dev_attr failed.\n");
+        return ret;
+    }
+
+    memset(&chn_attr, 0, sizeof(k_vicap_chn_attr));
+
+    /* 配置输出通道0的参数 */
+    chn_attr.out_win.h_start = 0; /* 输出图像水平偏移 */
+    chn_attr.out_win.v_start = 0; /* 输出图像垂直偏移 */
+    chn_attr.out_win.width = ISP_CHN0_WIDTH; /* 输出图像的宽度 */
+    chn_attr.out_win.height = ISP_CHN0_HEIGHT; /* 输出图像的高度 */
+    chn_attr.crop_win = dev_attr.acq_win; /* 裁剪参数与输入的参数相同 */
+    chn_attr.scale_win = chn_attr.out_win; /* 缩放参数与输出参数相同，既不缩放 */
+    chn_attr.crop_enable = K_FALSE; /* 不裁剪 */
+    chn_attr.scale_enable = K_FALSE; /* 不缩放 */
+    chn_attr.chn_enable = K_TRUE; /* 通道使能，通道参数配置会生效 */
+    chn_attr.pix_format = PIXEL_FORMAT_YVU_PLANAR_420; /* 输出的格式YUV420 */
+    chn_attr.buffer_num = VICAP_MAX_FRAME_COUNT; /* 配置缓存个数 */
+    chn_attr.buffer_size = VICAP_ALIGN_UP((ISP_CHN0_WIDTH * ISP_CHN0_HEIGHT * 3 / 2), VICAP_ALIGN_1K); /* 缓存大小，会在缓存池中拿buffer */
+    vicap_chn = VICAP_CHN_ID_0; /* 配置ISP输出第0通道的属性 */
+
+    /* 配置输出通道参数 */
+    ret = kd_mpi_vicap_set_chn_attr(vicap_dev, vicap_chn, chn_attr);
+    if (ret) {
+        printf("sample_vicap, kd_mpi_vicap_set_chn_attr failed.\n");
+        return ret;
+    }
+
+    /* 配置输出通道1的参数 */
+    chn_attr.out_win.h_start = 0;
+    chn_attr.out_win.v_start = 0;
+    chn_attr.out_win.width = ISP_CHN1_WIDTH ;
+    chn_attr.out_win.height = ISP_CHN1_HEIGHT;
+
+    chn_attr.crop_win = dev_attr.acq_win;
+    chn_attr.scale_win = chn_attr.out_win;
+    chn_attr.crop_enable = K_FALSE;
+    chn_attr.scale_enable = K_FALSE;
+    chn_attr.chn_enable = K_TRUE;
+    chn_attr.pix_format = PIXEL_FORMAT_BGR_888_PLANAR; /* 输出的格式为RGB888Planar */
+    chn_attr.buffer_num = VICAP_MAX_FRAME_COUNT;//at least 3 buffers for isp
+    chn_attr.buffer_size = VICAP_ALIGN_UP((ISP_CHN1_HEIGHT * ISP_CHN1_WIDTH * 3 ), VICAP_ALIGN_1K);
+
+    ret = kd_mpi_vicap_set_chn_attr(vicap_dev, VICAP_CHN_ID_1, chn_attr);
+    if (ret) {
+        printf("sample_vicap, kd_mpi_vicap_set_chn_attr failed.\n");
+        return ret;
+    }
+
+    /* 初始化vicap，初始化ISP */
+    ret = kd_mpi_vicap_init(vicap_dev);
+    if (ret) {
+        printf("sample_vicap, kd_mpi_vicap_init failed.\n");
+        return ret;
+    }
+    /* 启动sensor，ISP可以出图，后面可以使用dump函数获取图像 */
+    ret = kd_mpi_vicap_start_stream(vicap_dev);
+    if (ret) {
+        printf("sample_vicap, kd_mpi_vicap_start_stream failed.\n");
+        return ret;
+    }
+    return ret;
+}
+
+/* 设置绑定关系，ISP输出0通道与VO绑定，图像直接从ISP给显示器显示，不需要用户态程序操作 */
+int sample_sys_bind_init(void)
+{
+    k_s32 ret = 0;
+    k_mpp_chn vicap_mpp_chn;
+    k_mpp_chn vo_mpp_chn;
+    vicap_mpp_chn.mod_id = K_ID_VI; /*  */
+    vicap_mpp_chn.dev_id = vicap_dev;
+    vicap_mpp_chn.chn_id = vicap_chn;
+
+    vo_mpp_chn.mod_id = K_ID_VO; /* 视频输出，CanMV-K230是HDMI */
+    vo_mpp_chn.dev_id = K_VO_DISPLAY_DEV_ID;
+    vo_mpp_chn.chn_id = K_VO_DISPLAY_CHN_ID1;
+
+    ret = kd_mpi_sys_bind(&vicap_mpp_chn, &vo_mpp_chn);
+    if (ret) {
+        printf("kd_mpi_sys_unbind failed:0x%x\n", ret);
+    }
+    return ret;
+}
+
+int main(int argc, char *argv[])
+{
+    while(app_run)
+    {
+        /* Dump ISP输出通道1，既RGB图，用于AI */
+        memset(&dump_info, 0 , sizeof(k_video_frame_info));
+        ret = kd_mpi_vicap_dump_frame(vicap_dev, VICAP_CHN_ID_1, VICAP_DUMP_YUV, &dump_info, 1000);
+        if (ret) {
+            quit.store(false);
+            printf("sample_vicap...kd_mpi_vicap_dump_frame failed.\n");
+            break;
+        }
+
+        /* 调用mmap获取虚拟地址 */
+        auto vbvaddr = kd_mpi_sys_mmap(dump_info.v_frame.phys_addr[0], size);
+
+        boxes.clear();
+
+        // 运行KPU，进行AI运算
+        model.run(reinterpret_cast<uintptr_t>(vbvaddr), reinterpret_cast<uintptr_t>(dump_info.v_frame.phys_addr[0]));
+
+        /* 调用munmap释放虚地址 */
+        kd_mpi_sys_munmap(vbvaddr, size);
+        // 获取AI运算的结果，这里是有脸坐标
+        box_result = model.get_result();
+        boxes = box_result.boxes;
+
+        if(boxes.size() > 0)
+        {
+            num++;
+            if(num == 1)
+            {
+                TEST_BOOT_TIME_TRIGER();
+            }
+            printf("boxes %llu \n",(perf_get_smodecycles()));
+        }
+
+        if(boxes.size() < face_count)
+        {
+            for (size_t i = boxes.size(); i < face_count; i++)
+            {
+                vo_frame.draw_en = 0;
+                vo_frame.frame_num = i + 1;
+                kd_mpi_vo_draw_frame(&vo_frame);
+            }
+        }
+
+        /* 根据人脸坐标画框，此时可以显示器上显示人脸框 */
+        for (size_t i = 0, j = 0; i < boxes.size(); i += 1)
+        {
+            // std::cout << "[" << boxes[i] << ", " << boxes[i + 1] << ", " << boxes[i + 2] <<", " << boxes[i + 3] << "]" << std::endl;
+            vo_frame.draw_en = 1;
+            vo_frame.line_x_start = ((uint32_t)boxes[i].x1) * ISP_CHN0_WIDTH / ISP_CHN1_WIDTH;
+            vo_frame.line_y_start = ((uint32_t)boxes[i].y1) * ISP_CHN0_HEIGHT / ISP_CHN1_HEIGHT;
+            vo_frame.line_x_end = ((uint32_t)boxes[i].x2) * ISP_CHN0_WIDTH / ISP_CHN1_WIDTH;
+            vo_frame.line_y_end = ((uint32_t)boxes[i].y2) * ISP_CHN0_HEIGHT / ISP_CHN1_HEIGHT;
+            vo_frame.frame_num = ++j;
+            kd_mpi_vo_draw_frame(&vo_frame);
+        }
+
+        face_count = boxes.size();
+
+        /* 调用dump_release释放前面dump的图像 */
+        ret = kd_mpi_vicap_dump_release(vicap_dev, VICAP_CHN_ID_1, &dump_info);
+        if (ret) {
+            printf("sample_vicap...kd_mpi_vicap_dump_release failed.\n");
+        }
+    }
+}
+```
+
+上面的代码及注释详细介绍了sensor、显示的初始化过程，也介绍了如何获取图像用于AI计算，后面的AI开发也是基于此进行的开发，更详细的AI开发请参考 “AI开发”章节。
 
 ## nncase开发
 
