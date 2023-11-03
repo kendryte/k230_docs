@@ -1367,7 +1367,7 @@ main.elf deploy.json best.kmodel None 2
 
 Static graph reasoning effect:
 
-![img](../zh/images/apple_det.jpg)
+![image_inference](../zh/images/image_inference.jpg)
 
 ## Frequently Asked Questions (FAQs)
 
