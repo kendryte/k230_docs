@@ -221,7 +221,7 @@ Execute, `./sample_vdec.elf -help`you can see the configurable parameters and de
 | i      | Enter a file name, which needs to be suffixed .264/.265/.jpg | -    |
 | type | vo connector type, please refer to vo document | 0 |
 
-The type value is set to 0 in the`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md` description of the k_connector_type
+The type value is set to 0 in the`k230_docs/en/01_software/board/mpp/K230_video_output_API_reference.md` description of the k_connector_type
 
 ###### 2.4.4.1.1 VDEC bound VO decoding display
 
