@@ -33,15 +33,15 @@ A set of programs developed on the K230 platform that integrate UI, face detecti
 
 ### overview
 
-As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, large and small core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the large core terminal program mainly completes video input and output, AI processing and other related functions, the small core end completes the function of UI and face feature value management, the large and small cores communicate through IPCMSG, and the development board is started by norflash.
+As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, big and little core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the big core terminal program mainly completes video input and output, AI processing and other related functions, the little core end completes the function of UI and face feature value management, the big and little cores communicate through IPCMSG, and the development board is started by norflash.
 
 ### remark
 
-1. Before powering down and reset, the small core serial port should be input now`halt` to protect the file system from being damaged.
+1. Before powering down and reset, the little core serial port should be input now`halt` to protect the file system from being damaged.
 
 ### Source code location
 
-The source code path of the large kernel program is located in the`src/reference/business_poc/doorlock/big` directory structure as follows:
+The source code path of the big kernel program is located in the`src/reference/business_poc/doorlock/big` directory structure as follows:
 
 ```sh
 .
@@ -62,7 +62,7 @@ The source code path of the large kernel program is located in the`src/reference
 
 ```
 
-The source code path of the small core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
+The source code path of the little core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
 
 ```sh
 .
@@ -105,18 +105,18 @@ The source code path of the small core program is located in the`src/little/buil
 #### Compile the program
 
 K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 Development Board Compiler:
-Execute under the`k230_sdk` directory, generate large core programs`make CONF=k230_evb_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate small core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_defconfig/little/buildroot-ext/target``app`.
+Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230_evb_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_defconfig/little/buildroot-ext/target``app`.
 
 K230-SIP-EVB-V1.0 development board compiler:
-Execute under the`k230_sdk` directory, generate large core programs`make CONF=k230d_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate small core program`door_lock.elf` directories under the directory`k230_sdk/output/k230d_doorlock_defconfig/little/buildroot-ext/target``app`.
+Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230d_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230d_doorlock_defconfig/little/buildroot-ext/target``app`.
 
 #### Run the program
 
-The smart door lock is in the NOR flash image, the large and small core programs start automatically, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate an image in`output/k230_evb_doorlock_defconfig/images/` the directory after compilation, and the K230-SIP-LP3-EVB-V1.0 development board will`sysimage-spinor32m.img` be generated in the directory`output/k230d_doorlock_defconfig/images/` after compilation`sysimage-spinor32m.img`Image, flash flash image, development board DIP switch set to NOR flash start
+The smart door lock is in the NOR flash image, the big and little core programs start automatically, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate an image in`output/k230_evb_doorlock_defconfig/images/` the directory after compilation, and the K230-SIP-LP3-EVB-V1.0 development board will`sysimage-spinor32m.img` be generated in the directory`output/k230d_doorlock_defconfig/images/` after compilation`sysimage-spinor32m.img`Image, flash flash image, development board DIP switch set to NOR flash start
 
 #### Feature demo
 
-1. After the large and small core programs are started, the interface is displayed as follows:![ door_lock_menu](../../../zh/02_applications/business_poc/images/door_lock_menu.png)
+1. After the big and little core programs are started, the interface is displayed as follows:![ door_lock_menu](../../../zh/02_applications/business_poc/images/door_lock_menu.png)
 
 1. SD face picture import function, must be put in the picture under /sharefs/pic, in order to ensure the recognition effect, the format of the imported picture is required to be jpg, the resolution is 720*1280, the user puts the face picture that needs to be imported down`/sharefs/pic`, press the picture import key, the program will automatically complete the extraction of feature value function, and the file name of the picture is lable after successful recognition, the operation effect is as follows:![ door_lock_ import](../../../zh/02_applications/business_poc/images/door_lock_import.png)
 

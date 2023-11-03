@@ -33,13 +33,13 @@ A set of programs developed on the K230 platform that integrate UI, face detecti
 
 ### overview
 
-As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, large and small core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the large core terminal program mainly completes video input and output, AI processing and other related functions, the small core end completes the function of UI and face feature value management, the large and small cores communicate through IPCMSG, and the development board is started by norflash.
+As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, big and little core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the big core terminal program mainly completes video input and output, AI processing and other related functions, the little core end completes the function of UI and face feature value management, the big and little cores communicate through IPCMSG, and the development board is started by norflash.
 
 ### remark
 
 1. In order to ensure the recognition effect, the configuration file and reference frame file used by the DPU must be matched with the sensor used, if they do not match, please`src/reference/business_poc/doorlock_ov9286/big/bin/` replace the matching sum under the path`H1280W720_conf.bin``H1280W720_ref.bin`, replace and recompile the image.
 
-1. Before powering down and reset, the small core serial port should be input now`halt` to protect the file system from being damaged.
+1. Before powering down and reset, the little core serial port should be input now`halt` to protect the file system from being damaged.
 
 1. In the door lock POC scenario, personal private information such as face feature values must be stored in ciphertext to avoid private information being stolen by attackers and leaving potential security risks. In the K230 smart door lock POC scenario, the face feature value is encrypted and stored in norflash, and the uboot stage will move the ciphertext data from flash to DDR and complete data decryption. This project uses AES-GCM encryption and decryption algorithm to complete the feature value encryption and decryption, and the key used for encryption and decryption is hardcoded into the app in clear text, so that customers can experience the door lock POC function more conveniently. However, encoding the key into the app in plaintext itself is an insecure behavior, if there is a demand, we will provide a complete set of face feature value encryption and decryption storage scheme, the specific process is as follows:
 
@@ -51,7 +51,7 @@ As a POC project, the smart door lock program provides customers with a referenc
 
 ### Source code location
 
-The source code path of the large kernel program is located in the`src/reference/business_poc/doorlock_ov9286/big` directory structure as follows:
+The source code path of the big kernel program is located in the`src/reference/business_poc/doorlock_ov9286/big` directory structure as follows:
 
 ```sh
 .
@@ -79,7 +79,7 @@ The source code path of the large kernel program is located in the`src/reference
 
 ```
 
-The source code path of the small core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
+The source code path of the little core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
 
 ```sh
 .
@@ -122,15 +122,15 @@ The source code path of the small core program is located in the`src/little/buil
 #### Compile the program
 
 K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 Development Board Compiler:
-Execute under the`k230_sdk` directory, generate large core programs`make CONF=k230_evb_doorlock_ov9286_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock_ov9286/big/out` generate small core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_ov9286_defconfig/little/buildroot-ext/target``app`.
+Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230_evb_doorlock_ov9286_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock_ov9286/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_ov9286_defconfig/little/buildroot-ext/target``app`.
 
 #### Run the program
 
-The smart door lock is in the NOR flash image, the large and small core programs are self-starting, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate`output/k230_evb_doorlock_ov9286_defconfig/images/` an image in the directory after compilation, burn the NOR flash `sysimage-spinor32m.img`image, and the development board DIP switch is set to NOR flash startup
+The smart door lock is in the NOR flash image, the big and little core programs are self-starting, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate`output/k230_evb_doorlock_ov9286_defconfig/images/` an image in the directory after compilation, burn the NOR flash `sysimage-spinor32m.img`image, and the development board DIP switch is set to NOR flash startup
 
 #### Feature demo
 
-1. After the large and small core programs are started, the interface is displayed as follows:![ ov9286_door_lock_menu](../../../zh/02_applications/business_poc/images/ov9286_door_lock_menu.png)
+1. After the big and little core programs are started, the interface is displayed as follows:![ ov9286_door_lock_menu](../../../zh/02_applications/business_poc/images/ov9286_door_lock_menu.png)
 
 1. SD face picture import function, must be put in the picture under /sharefs/pic, in order to ensure the recognition effect, the format of the imported picture is required to be jpg, the resolution is 720*1280, the ratio is 9:16, the user puts the face picture that needs to be imported down `/sharefs/pic`, press the picture import key, the program will automatically complete the function of extracting feature values, and the file name of the picture is lable after successful recognition, the operation effect is as follows:![ov9286_door_lock_import](../../../zh/02_applications/business_poc/images/ov9286_door_lock_import.png)
 
