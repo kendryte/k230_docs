@@ -161,6 +161,7 @@ build-web-docs:
   script:
     - git fetch
     - git checkout dev
+    - git pull
     - make mhtml
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
