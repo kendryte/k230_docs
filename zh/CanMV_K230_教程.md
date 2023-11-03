@@ -630,14 +630,14 @@ nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安�
 
     ```Python
     pip install --upgrade pip
-    pip install nncase==2.3.0
-    pip install nncase-kpu==2.3.0
+    pip install nncase
+    pip install nncase-kpu
     # nncase-2.x need dotnet-7
     sudo apt-get update
     sudo apt-get install -y dotnet-sdk-7.0
     ```
 
-    >Tips：如果使用官方提供的CanMV镜像，必须使用2.3.0版本进行模型编译
+    >Tips：如果使用官方提供的CanMV镜像，必须检查SDK中nncase的版本和使用pip安装的nncase版本是否一致。
 
 - **`Windows`平台仅支持`nncase`在线安装，`nncase-kpu`需要在[nncase github release](https://github.com/kendryte/nncase/releases)手动下载安装。**
 - 用户若没有Ubuntu环境, 可使用 `nncase docker`(Ubuntu 20.04 + Python 3.8 + dotnet-7.0)
@@ -683,7 +683,7 @@ export PATH=$PATH:/path/to/python/site-packages/
 - 设置校正集数据:阐述如何准备好校正集样本数据，包括单输入和多输入模型两种情况，以用于量化校准过程；
 - 设置推理数据格式:讲解推理部署时如何配置输入数据，支持不同需求场景；
 - 配置多输入模型:介绍处理多输入模型时,如何正确设置每个输入的形状、数据格式等信息；
-- PC模拟器推理:说明如何在PC上利用模拟器进行编译后的kmodel推理,是验证编译效果的关键步骤；
+- PC模拟器推理:说明如何在PC上利用模拟器推理`kmodel`，这是验证编译效果的关键步骤；
 - 比较推理结果:通过与不同框架(TensorFlow、PyTorch等)的推理结果比较,验证kmodel的正确性；
 
   以上步骤系统地介绍了模型编译的全流程,既适合初学者从零开始学习,也可作为经验丰富用户的参考指南。
@@ -994,7 +994,7 @@ k230_sdk/src/big/nncase/examples/
 
 #### KPU 配置
 
-在 `model.cc`中进行了 `KPU`相关的配置，主要是提前分配输入tensor的内存分配及设置。我们来看类 `Model`的构造函数：
+在 `model.cc`中进行了 `KPU`相关的配置，主要是提前分配输入tensor的内存。我们来看类 `Model`的构造函数：
 
 ```C++
 Model::Model(const char *model_name, const char *kmodel_file): model_name_(model_name)
