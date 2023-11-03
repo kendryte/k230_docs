@@ -193,7 +193,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 34 | K230 SDK V1.1 | little core Wifi driver | The little core supports AP6256 drivers| |
 | 35 | K230 SDK V1.1 | little core three-color lamp driven | The little core supports the I2S interface WS2812 driver| |
 | 35 | K230 SDK V1.1 | little core SPI LCD driver | The little core supports SPI interface ST7735S 0.96 inch LCD screen driver| |
-| 36  | K230 SDK V1.1 | BurnTool Burning Tool V2           | Delete the full image burning page and add loader_sip.bin support for SIP burning, see [K230_SDK_Burntool User Guide.md](../../zh/01_software/pc/burntool/K230_SDK_Burntool使用指南.md) for details|      |
+| 36  | K230 SDK V1.1 | BurnTool Burning Tool V2           | Delete the full image burning page and add loader_sip.bin support for SIP burning, see [K230_SDK_Burntool User Guide.md](../../en/01_software/pc/burntool/K230_SDK_Burntool_User_Guide.md) for details|      |
 | 37  | K230 SDK V1.1 | USB port use           | USB1 is fixed in host mode, which can be connected to peripherals such as USB-ETH or U disk, and EVB's J5 pin pin 3 is connected to pin4 jumper cap to enable power supply to peripherals. USB0 is used for USB gadget testing and USB upgrades, and EVB's J5 pin headers, pins 1 and pin2, are no longer connected using jumper caps. |      |
 
 ### 4.4 Architecture

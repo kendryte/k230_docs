@@ -29,7 +29,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document describes instructions for using the Tuning Tool.
+This document describes instructions for using the Burnool.
 
 ### Reader Object
 
