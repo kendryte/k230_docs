@@ -41,9 +41,6 @@ The chip also has a variety of peripheral interfaces, as well as 2D, 2.5D and ot
 
 CanMV-K230 adopts a single board design and rich expansion interfaces, which greatly exerts the advantages of K230's high performance, and can be directly used in the development of various intelligent products to accelerate product landing.
 
-![board-front](../zh/images/CanMV-K230_front.png)
-![board-behind](../zh/images/CanMV-K230_behind.png)
-
 ### CanMV-K230 default kit
 
 The CanMV-K230 board default kit contains the following items:
@@ -68,8 +65,6 @@ In addition, the user needs to prepare the following accessories:
 
 Use the Type-C cable to connect the CanMV-K230 to the position shown below, and connect the other end of the cable to the computer.
 
-![debug](../zh/images/CanMV-K230_debug.png)
-
 #### Serial port debugging
 
 ##### Windows
@@ -79,8 +74,6 @@ Install the driver
 CanMV-K230 comes with USB to serial port chip CH342, driver download address<https://www.wch.cn/downloads/CH343SER_EXE.html>.
 
 Check the serial port number
-
-![windows-serial](../zh/images/windows-serial.png)
 
 Two serial ports are shown here, COM80 is the debugging serial port of small-core Linux, and COM81 is the debugging serial port of large-core rt-smart.
 
@@ -99,8 +92,6 @@ Open the tool Xshell (you can also use other serial port tools).
 5 Not Parity test
 
 6 Not Flow control
-
-![serial_setting.png](../zh/images/serial_setting.png)
 
 ##### linux
 
