@@ -249,7 +249,7 @@ Execute, `./sample_vdec.elf -help`you can see the configurable parameters and de
 | i      | Enter a file name, which needs to be suffixed .264/.265/.jpg | -    |
 | type | vo connector type, please refer to vo document | 0 |
 
-The type value is set to 0 in the`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md` description of the k_connector_type
+The type value is set to 0 in the`k230_docs/en/01_software/board/mpp/K230_video_output_API_reference` description of the k_connector_type
 
 ###### 2.4.4.1.1 VDEC bound VO decoding display
 
@@ -1060,7 +1060,7 @@ The demo process is as follows:
 1. Depth map after DPU processing acquired in user mode;
 1. Save as a file to the big and little core shared directory`/sharefs`, which can be shared `mnt`to the server and view the depth map using tools.
 
-#### 2.16.2 Feature 说明
+#### 2.16.2 Feature description
 
 ISP captures images, DMA rotates images, and DPUs do depth processing.
 
@@ -1082,8 +1082,6 @@ Calibration files, including configuration files and reference drawing files, ar
   For a more detailed compilation process, refer to the README.md in the release SDK package.
 
 ##### 2.16.4.2 Execution
-
-1. Use sharefs, refer to the specific steps`K230 SDK 开发使用流程`;
 
 1. To mount nfs, use the following command:
 
@@ -1136,7 +1134,7 @@ The demo process is as follows:
 1. Start dpu, dma, vicap;
 1. ISP sends the speckle map to DMA, DMA rotates 90 degrees to the DPU, and the DPU prints the depth map address on the screen after depth processing;
 
-#### 2.17.2 Feature 说明
+#### 2.17.2 Feature description
 
 ISP captures images, DMA rotates images, and DPUs do depth processing.
 
@@ -1160,14 +1158,12 @@ Calibration files, including configuration files and reference drawing files, ar
 
 ##### 2.17.4.2 Execution
 
-1. Use sharefs, refer to the specific steps`K230 SDK 开发使用流程`;
-
 1. To mount nfs, use the following command:
 
     ```shell
     ifconfig eth0 up
     udhcpc
-    # 下面的 ip 地址和路径换成自己服务器的 ip 和路径
+    # Replace the following IP address and path with your own server’s IP address and path.
     mount -t nfs 10.10.1.94:/home/user/nfs  /sharefs -o nolock
     ```
 
@@ -1248,7 +1244,7 @@ Specific execution steps on plate B:
 1. Execute on big cores:`cd /bin; ./sample_sys_init.elf`
 1. Execute on small nuclei :`./backclient_test rtsp：<server_ip>：8554/BackChannelTest`)
 
-backclient_test execute the command description: `./backclient_test <rtsp_url> <out_type>`where rtsp_url is the RTSP address and out_type is the VO output connect type, see the `k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`description of the k_connector_type in , out_type the default setting is 0
+backclient_test execute the command description: `./backclient_test <rtsp_url> <out_type>`where rtsp_url is the RTSP address and out_type is the VO output connect type, see the `k230_docs/en/01_software/board/mpp/K230_video_output_API_reference.md`description of the k_connector_type in , out_type the default setting is 0
 
 ### 2.19 Depth map display demo
 
@@ -1280,7 +1276,6 @@ Calibration files, including configuration files and reference drawing files, ar
 
 ##### 2.19.4.2 Execution
 
-1. Use sharefs, refer to the specific steps`K230 SDK 开发使用流程`;
 1. Mount NFS, after successful mounting, you can see the directory on both large and little cores`/sharefs`, copy the compiled demo `sample_dpu_vo.elf`to the NFS directory of the server, and the `/sharefs`corresponding ELF file can also be seen under the big core rtt
 1. Use the command `./sample_dpu_vo.elf`to start demo, and the depth map after DPU processing is displayed on the screen.
 1. Press 'q' to exit the demo.
