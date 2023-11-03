@@ -377,7 +377,7 @@ Before compiling a model, you need to know the following key information:
 
 #### Description of compilation script
 
-This [Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/user_guide/k230_simulate-ZH.ipynb) describes in detail the process of compiling and infering kmodels using nncase. It contains the following information。
+This [Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/user_guide/k230_simulate-EN.ipynb) describes in detail the process of compiling and infering kmodels using nncase. It contains the following information。
 
 - Parameter configuration: describes how to correctly configure compilation parameters in order to satisfy the demands of actual deployment.
 - Obtain model information: explain the method of obtaining key data such as network structure and layer information from the original model.
@@ -502,7 +502,7 @@ def compile_kmodel(model_path, dump_path, calib_data):
     import_options = nncase.ImportOptions()
 
     ############################################
-    # 你需要修改下面这段代码中的参数来适配你的模型。
+    # The code below, you need to modify to fit your model.
     ############################################
     # compile_options
     compile_options = nncase.CompileOptions()
@@ -559,7 +559,6 @@ def compile_kmodel(model_path, dump_path, calib_data):
     compiler.compile()
     kmodel = compiler.gencode_tobytes()
 
-    # 可自行修改kmodel_path,在推理时需要传入正确的kmodel_path
     kmodel_path = os.path.join(dump_path, "test.kmodel")
     with open(kmodel_path, 'wb') as f:
         f.write(kmodel)
@@ -571,7 +570,7 @@ if __name__ == "__main__":
     model_path = "./test.tflite"
     dump_path = "./tmp_tflite"
 
-    # 校正集的数量为2
+    # sample_count is 2
     calib_data = [[np.random.rand(1, 240, 320, 3).astype(np.float32), np.random.rand(1, 240, 320, 3).astype(np.float32)]]
     kmodel_path = compile_kmodel(model_path, dump_path, calib_data)
 
