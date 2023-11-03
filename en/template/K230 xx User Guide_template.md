@@ -47,7 +47,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by     | date       |
+| Document version number |  Author| Modify the description  | date       |
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | first edition     | System Software Department | 2023-03-10 |
 | V1.1       |          |            |            |

@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,7 +21,7 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [toc]
 
@@ -206,7 +206,7 @@ Users can choose to use GitHub or GitHub according to their network conditions.
 
 #### Compile the introduction
 
-The K230 SDK supports one-click compilation of large and small core operating systems and common components, and generates image files that can be programmed for deployment to the development board and start running. The username of the Linux system on the device is root without password;
+The K230 SDK supports one-click compilation of large and little core operating systems and common components, and generates image files that can be programmed for deployment to the development board and start running. The username of the Linux system on the device is root without password;
 
 Setp 1: Refer to the above to get the SDK development package
 
@@ -256,7 +256,7 @@ VICAP Demo implements the camera data acquisition preview function by calling th
 
 ##### compile
 
-Execute make rt-smart-clean && rt-smart && make build-image in the k230_sdk directory, compile the changes of the large core into the sd card image, and generate the image file sysimage-sdcard.img in the k230_sdk/output/k230_evb_defconfig/images/ directory
+Execute make rt-smart-clean && rt-smart && make build-image in the k230_sdk directory, compile the changes of the big core into the sd card image, and generate the image file sysimage-sdcard.img in the k230_sdk/output/k230_evb_defconfig/images/ directory
 
 The corresponding program is located at k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
@@ -354,7 +354,7 @@ The nncase toolchain includes `nncase`  both `nncase-kpu`and plugin packages, bo
     ```Python
     cd /path/to/nncase_sdk
     docker pull ghcr.io/kendryte/k230_sdk
-    docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/  bin/bash"  
+    docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/  bin/bash"
     ```
 
     > Tips: Currently only support py3.6-3.10, if pip installation fails, please check the Python version corresponding to pip.
@@ -519,7 +519,7 @@ def compile_kmodel(model_path, dump_path, calib_data):
     compile_options.dump_asm = True
     compile_options.dump_dir = dump_path
     compile_options.input_file = ""
-  
+
     # preprocess args
     compile_options.preprocess = False
     if compile_options.preprocess:
@@ -548,10 +548,10 @@ def compile_kmodel(model_path, dump_path, calib_data):
     ptq_options.export_quant_scheme = False
     ptq_options.export_weight_range_by_channel = False
     ############################################
-  
+
     ptq_options.samples_count = len(calib_data[0])
     ptq_options.set_tensor_data(calib_data)
-  
+
     print("Compiling...")
     compiler = nncase.Compiler(compile_options)
     # import
@@ -560,13 +560,13 @@ def compile_kmodel(model_path, dump_path, calib_data):
         compiler.import_onnx(model_content, import_options)
     elif model_path.split(".")[-1] == "tflite":
         compiler.import_tflite(model_content, import_options)
-  
+
     compiler.use_ptq(ptq_options)
-  
+
     # compile
     compiler.compile()
     kmodel = compiler.gencode_tobytes()
-  
+
     # 可自行修改kmodel_path,在推理时需要传入正确的kmodel_path
     kmodel_path = os.path.join(dump_path, "test.kmodel")
     with open(kmodel_path, 'wb') as f:
@@ -587,9 +587,9 @@ if __name__ == "__main__":
     kmodel_path = "./tmp_tflite/test.kmodel"
     input_data = [np.random.rand(1, 240, 320, 3).astype(np.float32)]
     input_data[0].tofile(os.path.join(dump_path,"input_0.bin"))
-  
+
     result = run_kmodel(kmodel_path, input_data)
-  
+
     for idx, i in enumerate(result):
         print(i.shape)
         i.tofile(os.path.join(dump_path,"nncase_result_{}.bin".format(idx)))
@@ -980,7 +980,7 @@ Insert the flashed SD card into the open board card slot, HDMI output to display
 
 After the system is powered on, there will be**two serial devices by default**, which can be used to access small-core Linux and large-core RTSmart
 
-The default user name of small core Linux is root, and the password is empty. The RTSmart system automatically launches an application and can exit`q` to the Command Prompt terminal by pressing the key.
+The default user name of little core Linux is root, and the password is empty. The RTSmart system automatically launches an application and can exit`q` to the Command Prompt terminal by pressing the key.
 
 ### C++ code compilation
 
@@ -1075,7 +1075,7 @@ void video_proc_ob_det(config_args args, char *argv[])
              ScopedTiming st("isp copy", atoi(argv[4]));
              // 从vivcap中读取一帧图像到dump_info
              auto vbvaddr = kd_mpi_sys_mmap_cached(dump_info.v_frame.phys_addr[0], size);
-             memcpy(vaddr, (void *)vbvaddr, SENSOR_HEIGHT * SENSOR_WIDTH * 3);  
+             memcpy(vaddr, (void *)vbvaddr, SENSOR_HEIGHT * SENSOR_WIDTH * 3);
              kd_mpi_sys_munmap(vbvaddr, size);
          }
          results.clear();
@@ -1145,7 +1145,7 @@ k230_code/k230_deploy/CMakeLists.txt description
 This is*the CMakeLists script in the k230 code/k230*deploy directory .txt set the compiled C++ file and the generated elf executable name, as follows:
 
 ```Shell
-set(src main.cc utils.cc ai_base.cc anchorbase_det.cc) 
+set(src main.cc utils.cc ai_base.cc anchorbase_det.cc)
 set(bin main.elf)
 
 include_directories(${PROJECT_SOURCE_DIR})：添加项目的根目录到头文件搜索路径中。
@@ -1265,7 +1265,7 @@ Configure the IP address, mask, gateway, and DNS server address:
 
 - Development board network configuration
 
-Go to the small core command line and execute:
+Go to the little core command line and execute:
 
 ```Shell
 # 查看是否有eth0
@@ -1308,7 +1308,7 @@ tftp -p -r board_file 192.168.1.2
 
 In the Linux system, the PC is normally connected to the network, and the development board can be connected to other network ports under the gateway where the PC is located through the network cable, and file transfer can be realized through the scp command.
 
-Power on the development board, enter the COM interface of large and small cores, and execute the scp transmission command on the small core:
+Power on the development board, enter the COM interface of large and small cores, and execute the scp transmission command on the little core:
 
 ```Shell
 # 从PC拷贝文件至开发板
@@ -1325,7 +1325,7 @@ scp -r 开发板待拷贝目录 用户名@域名或IP:PC目的目录
 
 #### Board-side deployment process
 
-Follow the file transfer process configured in the previous section, enter /sharefs on the small core interface on MobaXterm, and create a test folder:
+Follow the file transfer process configured in the previous section, enter /sharefs on the little core interface on MobaXterm, and create a test folder:
 
 ```Shell
 cd /sharefs
@@ -1343,9 +1343,9 @@ test_det
  ├──test.jpg
 ```
 
-Enter the /sharefs/test_det directory at the large core COM port,
+Enter the /sharefs/test_det directory at the big core COM port,
 
-To perform static graph inference, execute the following code (note: the code needs to be executed under the large core, and the file copy needs to be completed under the small core):
+To perform static graph inference, execute the following code (note: the code needs to be executed under the big core, and the file copy needs to be completed under the little core):
 
 ```Shell
 "模型推理时传参说明：<config_file> <kmodel_det> <input_mode> <debug_mode>"
@@ -1354,13 +1354,13 @@ To perform static graph inference, execute the following code (note: the code ne
 "  kmodel_det      kmodel路径"
 "  input_mode      本地图片(图片路径)/ 摄像头(None)"
 "  debug_mode      是否需要调试，0、1、2分别表示不调试、简单调试、详细调试"
-main.elf deploy.json best.kmodel test.jpg 2 
+main.elf deploy.json best.kmodel test.jpg 2
 ```
 
 To perform camera video stream inference, execute the following code:
 
 ```Shell
-main.elf deploy.json best.kmodel None 2 
+main.elf deploy.json best.kmodel None 2
 ```
 
 #### Effect of deployment on the board
@@ -1400,19 +1400,19 @@ When perf, you can use the RAW event, such as perf stat -e r12, and the perf too
 ```bash
 cd src/little/linux/tools
 make CROSS_COMPILE=riscv64-unknown-linux-gnu- ARCH=riscv perf V=1 WERROR=0
-#copy perf/perf file to board 
+#copy perf/perf file to board
 ```
 
 Special note: Versions prior to 1.1 have the following modifications
 
 ```bash
-#src/little/linux/arch/riscv/boot/dts/kendryte/k230_evb.dtsi add 
+#src/little/linux/arch/riscv/boot/dts/kendryte/k230_evb.dtsi add
 pmu_thead: pmu_thead {
     interrupt-parent = <&cpu0_intc>;
     interrupts = <17>;
     compatible = "thead,c900_pmu";
 };
-#src/little/linux/arch/riscv/configs/k230_evb_defconfig  add 
+#src/little/linux/arch/riscv/configs/k230_evb_defconfig  add
 CONFIG_KALLSYMS=y
 CONFIG_KALLSYMS_ALL=y
 CONFIG_PERF_EVENTS=y
@@ -1460,11 +1460,11 @@ Question: How does Big Core run Linux with Vector?
 
 Answer: make CONF=k230_evb_only_linux_defconfig ; The compiled image, the big core runs Linux with vector by default.
 
-### Large core serial port ID
+### Big core serial port ID
 
-Question: How to modify the serial port ID of the large core?
+Question: How to modify the serial port ID of the big core?
 
-Answer: The configuration file below configs CONFIG_RTT_CONSOLE_ID stands for the large core serial port ID, modify it to the correct value.
+Answer: The configuration file below configs CONFIG_RTT_CONSOLE_ID stands for the big core serial port ID, modify it to the correct value.
 
 ### uboot command line
 
@@ -1496,33 +1496,33 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   487MB   268MB   fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#umount /sharefs/
 [root@canaan ~ ]#parted  -a minimal  /dev/mmcblk1  resizepart 4  31.3GB
 Information: You may need to update /etc/fstab.
- 
+
 [root@canaan ~ ]#parted   -l /dev/mmcblk1
 Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mkfs.ext2 /dev/mmcblk1p4
 Filesystem label=
 OS type: Linux
@@ -1542,15 +1542,15 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  ext2         fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mount /dev/mmcblk1p4 /sharefs/
 [  332.688642] EXT4-fs (mmcblk1p4): mounted filesystem without journal. Opts: (null)
 [root@canaan ~ ]#df -h
@@ -1562,7 +1562,7 @@ tmpfs                    51.8M     56.0K     51.7M   0% /tmp
 tmpfs                    51.8M     36.0K     51.7M   0% /run
 /dev/mmcblk1p4           28.5G     20.0K     27.0G   0% /sharefs
 [root@canaan ~ ]#
- 
+
 ```
 
 ### How to modify bootargs
@@ -1584,7 +1584,7 @@ setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 
 Answer: Method 1: Under linux, enter cat /proc/cmdline to view
 
 ```bash
-[root@canaan ~ ]#cat /proc/cmdline 
+[root@canaan ~ ]#cat /proc/cmdline
 root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
 [root@canaan ~ ]#
 
@@ -1595,12 +1595,12 @@ Method 2: Linux command line input dmesg | grep command view
 ```bash
 [root@canaan ~ ]#dmesg | grep  command
 [    0.000000] Kernel command line: root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
-[root@canaan 
+[root@canaan
 ```
 
-### The small core is modified by default serial port
+### The little core is modified by default serial port
 
-Answer: At present, the small core serial port in the SDK defaults to 0, if you need to modify it to other serial ports (such as serial port 2), please refer to the following to modify:
+Answer: At present, the little core serial port in the SDK defaults to 0, if you need to modify it to other serial ports (such as serial port 2), please refer to the following to modify:
 
 Modification 1: Refer to the following to modify the uboot device tree (e.g. arch/riscv/dts/k230_evb.dts):
 
@@ -1612,7 +1612,7 @@ aliases {
     chosen {
         stdout-path = "uart2:115200n8";
     };
-    
+
     serial2: serial@91402000 {
     compatible = "snps,dw-apb-uart";
     reg = <0x0 0x91402000 0x0 0x400>;
@@ -1633,7 +1633,7 @@ aliases {
 chosen {
         stdout-path = "serial2";
     };
-    
+
 &uart2 {
     status = "okay";
 };

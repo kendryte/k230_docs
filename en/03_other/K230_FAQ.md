@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly describes the content related to the release of K230 SDK V0.9.0, including the hardware, features, and usage restrictions supported by the current version.
 
@@ -211,33 +211,33 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   487MB   268MB   fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#umount /sharefs/
 [root@canaan ~ ]#parted  -a minimal  /dev/mmcblk1  resizepart 4  31.3GB
 Information: You may need to update /etc/fstab.
- 
+
 [root@canaan ~ ]#parted   -l /dev/mmcblk1
 Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mkfs.ext2 /dev/mmcblk1p4
 Filesystem label=
 OS type: Linux
@@ -257,15 +257,15 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  ext2         fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mount /dev/mmcblk1p4 /sharefs/
 [  332.688642] EXT4-fs (mmcblk1p4): mounted filesystem without journal. Opts: (null)
 [root@canaan ~ ]#df -h
@@ -277,7 +277,7 @@ tmpfs                    51.8M     56.0K     51.7M   0% /tmp
 tmpfs                    51.8M     36.0K     51.7M   0% /run
 /dev/mmcblk1p4           28.5G     20.0K     27.0G   0% /sharefs
 [root@canaan ~ ]#
- 
+
 ```
 
 ### 2.10 How to modify bootargs
@@ -299,7 +299,7 @@ setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 
 Answer: Method 1: Under linux, enter cat /proc/cmdline to view
 
 ```bash
-[root@canaan ~ ]#cat /proc/cmdline 
+[root@canaan ~ ]#cat /proc/cmdline
 root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
 [root@canaan ~ ]#
 
@@ -310,7 +310,7 @@ Method 2: Linux command line input dmesg | grep command view
 ```bash
 [root@canaan ~ ]#dmesg | grep  command
 [    0.000000] Kernel command line: root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
-[root@canaan 
+[root@canaan
 ```
 
 ### 2.12 The default serial port modification of little core
@@ -327,7 +327,7 @@ aliases {
     chosen {
         stdout-path = "uart2:115200n8";
     };
-    
+
     serial2: serial@91402000 {
     compatible = "snps,dw-apb-uart";
     reg = <0x0 0x91402000 0x0 0x400>;
@@ -348,7 +348,7 @@ aliases {
 chosen {
         stdout-path = "serial2";
     };
-    
+
 &uart2 {
     status = "okay";
 };

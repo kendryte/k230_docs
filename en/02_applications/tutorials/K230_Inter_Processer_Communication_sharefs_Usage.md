@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -23,7 +23,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ## overview
 
-ShareFs provides large cores with access to the small kernel file system through access to the respective /sharefs directories of large and small cores. In actual use, the executable programs of the large core are usually stored in the /sharefs directory, and the large core executes these programs through the sharefs function to facilitate the development and debugging of applications on the large core.
+ShareFs provides large cores with access to the small kernel file system through access to the respective /sharefs directories of large and small cores. In actual use, the executable programs of the big core are usually stored in the /sharefs directory, and the big core executes these programs through the sharefs function to facilitate the development and debugging of applications on the big core.
 
 ## Environment preparation
 
@@ -71,7 +71,7 @@ Under the msh command line of the big core rt-smart, create a directory through 
 msh /sharefs>mkdir test
 ```
 
-In the Linux shell of the small core, use ls to view the newly added directories
+In the Linux shell of the little core, use ls to view the newly added directories
 
 ``` shell
 [root@canaan /sharefs ]#ls
@@ -95,7 +95,7 @@ hello world this is linux
 
 ### File loading
 
-Copy the compiled rt-smart user-mode executable elf file to the /sharefs directory of the small core, and then execute it through the msh command line of the large kernel rt-smart
+Copy the compiled rt-smart user-mode executable elf file to the /sharefs directory of the little core, and then execute it through the msh command line of the large kernel rt-smart
 
 ``` shell
 msh /sharefs>./hello.elf
@@ -104,7 +104,7 @@ Hello world
 
 ### File deletion
 
-Under the msh command line of the large core rt-smart, use rm to delete the file
+Under the msh command line of the big core rt-smart, use rm to delete the file
 
 ``` shell
 
@@ -157,4 +157,4 @@ Interested readers can write their own file IO read and write related test code 
 
 - ShareFS is not suitable for scenarios where high-frequency real-time reads and writes, such as encoding and saving
 - Files created by large cores under sharefs, read and write executable permissions on linux are present
-- sharefs is not suitable for multi-process use, that is, avoid starting multiple processes on the large core to read and write files in the /sharefs directory at the same time
+- sharefs is not suitable for multi-process use, that is, avoid starting multiple processes on the big core to read and write files in the /sharefs directory at the same time

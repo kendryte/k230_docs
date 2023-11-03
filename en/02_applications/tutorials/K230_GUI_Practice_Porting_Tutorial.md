@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,7 +21,7 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
@@ -44,7 +44,7 @@ This document is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date |
+| Document version number | Modify the description | Author | date |
 | --- | --- | --- | --- |
 | V1.0 | Initial edition | Author | 2023/06/25 |
 
@@ -57,7 +57,7 @@ LVGL is a popular free and open source embedded graphics library that can be use
 - K230-USIP-LP3-EVB-V1.1
 - LCD screen
 
-### overview
+### Overview
 
 The k230 uses DRM as a display driver, DRM (Direct Rendering Manager) is a subsystem in the Linux kernel that can support complex GPU operations such as hardware-accelerated graphics rendering compared to the outdated Framebuffer. lvgl can draw GUIs based on the interface provided by libdrm.
 
@@ -108,9 +108,9 @@ in the header file src/little/buildroot-ext/package/lvgl/port_src/lv_drv_conf.h
     `define DRM_CARD  "/dev/dri/card0"`
 
 #### Specific introduction to DRM driver source code
-  
+
 LVGL's DRM driver is located src/little/buildroot-ext/package/lvgl/port_src/lv_drivers/display/drm.c
-to operate on DRM, you need to open the file node first.  
+to operate on DRM, you need to open the file node first.
 The following functions are mainly used in the use of LVGL:
 
 - drm_init() DRM initialization.
@@ -181,7 +181,7 @@ The following are a few commonly used configuration items:
     disp_drv.ver_res    = lcd_h;
     disp_drv.screen_transp = 1;
     lv_disp_drv_register(&disp_drv);
-    ```  
+    ```
 
 1. Touch Drive:
 

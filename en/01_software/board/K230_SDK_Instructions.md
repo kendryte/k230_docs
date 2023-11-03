@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document describes the installation and use of the K230 SDK.
 
@@ -52,9 +52,9 @@ This document (this guide) is intended primarily for:
 | V1.1       | Added security image and EMMC burning instructions    | Wang Jianxin | 2023-04-07 |
 | V1.2       | Added spinor image burning instructions       | Wang Jianxin | 2023-05-05 |
 | V1.3       | Quick up and secure image instructions           | Wang Jianxin | 2023-05-29 |
-| V1.4       | Description of the large core auto-starter procedure           | Haibo Hao | 2023-06-1  |
+| V1.4       | Description of the big core auto-starter procedure           | Haibo Hao | 2023-06-1  |
 | v1.5       | USIP LP4                  | Wang Jianxin | 2023-06-12 |
-| V1.6       | Modify the description of the large core auto-starter           | Zhao Zhongxiang | 2023-06-28  |
+| V1.6       | Modify the description of the big core auto-starter           | Zhao Zhongxiang | 2023-06-28  |
 | v1.7 | Added the section on the partition of the boot medium and adjusted the chapter on image burning | Wang Jianxin | 2023-07-05 |
 | v1.8 | Added CanMV-K230 motherboard information | Chen Haibin | 2023-10-11 |
 
@@ -146,7 +146,7 @@ After installing the driver, the board is powered on, and the PC uses the type C
 
 Figure 2-1 USB serial device
 
-The above figure is an example of the debugging serial port `COM47`of the small core and the debugging serial port`COM48` of the large core.
+The above figure is an example of the debugging serial port `COM47`of the little core and the debugging serial port`COM48` of the big core.
 
 Serial port baud rate setting: `115200 8N1`
 
@@ -210,13 +210,13 @@ The purpose of each directory is described below:
 
     Memory layout planning, storage planning configuration, etc
 
-- `src`: Source code directory, divided into three directories: large core code (`big`), common combponents (`common`), and small core code (`little`).
+- `src`: Source code directory, divided into three directories: big core code (`big`), common combponents (`common`), and little core code (`little`).
 
    Big core code contains:`rt-smart` operating system,`mpp` , `unittest`
 
    Common components contain:`cdk` code and `opensbi`code
 
-   Small core code contains:`linux` kernel code, `buildroot` code, `uboot`code
+   Little core code contains:`linux` kernel code, `buildroot` code, `uboot`code
 
 - `tools`: Stores various tools, scripts, etc. For example`kconfig`, `doxygen`, , `dockerfile`and so on
 - `board`: Environment variables, image configuration files, file systems, etc
@@ -225,7 +225,7 @@ The purpose of each directory is described below:
 
 ### 4.1 Introduction to SDK compilation
 
-The K230 SDK supports one-click compilation of large and small core operating systems and common components, and generates image files that can be programmed for deployment to the development board and start running. The username of the Linux system on the device is root without password;
+The K230 SDK supports one-click compilation of large and little core operating systems and common components, and generates image files that can be programmed for deployment to the development board and start running. The username of the Linux system on the device is root without password;
 
 ### 4.2 SDK configuration
 
@@ -309,9 +309,9 @@ Figure 4-1 Compilation product
 
 If you need a security image, refer to 4.3.4 to enable secure images.
 
-The compilation products of the large core system are placed in`images/big-core` the directory.
+The compilation products of the big core system are placed in`images/big-core` the directory.
 
-The compilation products of the small core system are placed in`images/little-core` the directory.
+The compilation products of the little core system are placed in`images/little-core` the directory.
 
 #### 4.3.3 can enter uboot command image
 
@@ -608,7 +608,7 @@ At present, the data partitioned by parameters such as fast boot parameters, fac
 The main build scripts are as follows:
 
 ```bsh
-# For more detailed generation details, please read board/common/gen_image_script/gen_image_comm_func.sh file gen_cfg_part_bin 
+# For more detailed generation details, please read board/common/gen_image_script/gen_image_comm_func.sh file gen_cfg_part_bin
 ${k230_gzip} -f -k ${filename}  #gzip
 sed -i -e "1s/\x08/\x09/"  ${filename}.gz
 #add uboot head
@@ -645,7 +645,7 @@ The app of the RTAPP partition cannot be executed repeatedly, the purpose of des
 When compiling, the pointer to the model file in the large-core romfs file system will be modified to the AI model area (see the script below), and the use method is the same as a normal file.
 
 ```bash
-#board/common/gen_image_script/gen_image.sh 
+#board/common/gen_image_script/gen_image.sh
 for f in ${all_kmode};
     do
         eval fstart="\${${f%%\.*}_start}"
@@ -759,7 +759,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #isolation area     can not modi
 
 ## 9. The SDK starts
 
-The current version compiles the generated image by default, and after burning it to the board, the big core will automatically run a face detection program, and the picture collected by the camera will be displayed on the display; After startup, you can exit the program by typing 'q' on the console side of the large core.
+The current version compiles the generated image by default, and after burning it to the board, the big core will automatically run a face detection program, and the picture collected by the camera will be displayed on the display; After startup, you can exit the program by typing 'q' on the console side of the big core.
 
 > 1. If the IMX335 camera is not connected to the EVB series motherboard, the program will report an error when starting the program, the program will automatically exit, and press Enter to return to the console.
-> 1. If you need to cancel the auto-start function of the large core, you need to `k230_sdk/src/big/rt-smart/init.sh` comment out the contents of .
+> 1. If you need to cancel the auto-start function of the big core, you need to `k230_sdk/src/big/rt-smart/init.sh` comment out the contents of .

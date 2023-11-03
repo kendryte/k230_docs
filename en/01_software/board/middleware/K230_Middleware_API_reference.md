@@ -446,7 +446,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -1039,7 +1039,7 @@ None
 
 Creates a track for MP4
 
-【Grammar】
+【Syntax】
 
 int kd_mp4_create_track(KD_HANDLE mp4_handle, KD_HANDLE \*track_handle, k_mp4_track_info_s \*mp4_track_info);
 

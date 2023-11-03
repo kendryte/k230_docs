@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly describes the content related to the release of K230 SDK V1.1.0, including the hardware, features, and usage restrictions supported by the current version.
 
@@ -200,7 +200,7 @@ Memory configuration of parameter areas and intercore communication areas
 
 | ID | Supported versions      | Functional overview       | Feature description                                                                                                                            | remark                                |
 |----|---------------|----------------|-------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
-| 1  | K230 SDK V0.5 | Multimedia memory management | Multimedia area memory management driver, MPI, MAPI; video cache pool driver, MPI, MAPI                                                                        |                                     |
+| 1  | K230 SDK V0.5 | Multimedia memory management | Multimedia area memory management driver, MPI, MAPI; video buffer pool driver, MPI, MAPI                                                                        |                                     |
 | 2  | K230 SDK V0.5 | Log management       | Multimedia log management driver, MPI, MAPI                                                                                                       |                                     |
 | 3  | K230 SDK V0.5 | System binding       | Multimedia system binding driver, MPI                                                                                                             |                                     |
 | 4  | K230 SDK V0.5 | Large-core multimedia debugging | The proc file system is provided for debugging                                                                                                            |                                     |

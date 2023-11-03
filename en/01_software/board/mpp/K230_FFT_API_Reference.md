@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the API of K230 FFT, including API usage and test program introduction.
 
@@ -83,7 +83,7 @@ FFT or IFFT computes core functions.
 【SYNOPSIS】
 
 ```c
-int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);  
+int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 ```
 
 【Parameters】
@@ -99,11 +99,11 @@ int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 | 0      | Succeed. |
 | other   | fail   |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_fft_api.h
 - Library file: libfft.a
@@ -120,7 +120,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -129,7 +129,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 }
 ```
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -142,7 +142,7 @@ fft_args initialization (helper functions)
 【SYNOPSIS】
 
 ```c
-int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im, 
+int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im,
                           k_fft_out_mode_e om,    k_u32 timeout ,    k_u16 shift,
                           short *real, short *imag, k_fft_args_st *fft_args );
 ```
@@ -168,11 +168,11 @@ int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im,
 | 0      | Succeed. |
 | other   | fail   |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_fft_api.h
 - Library file: libfft.a
@@ -189,7 +189,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -198,7 +198,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 }
 ```
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -211,7 +211,7 @@ Convert FFT output to arrays (auxiliary functions for easy printing).
 【SYNOPSIS】
 
 ```c
-int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);    
+int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 ```
 
 【Parameters】
@@ -229,11 +229,11 @@ int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 | 0      | Succeed. |
 | other   | fail   |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_fft_api.h
 - Library file: libfft.a
@@ -250,7 +250,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    fft_args_st fft_args;   
+    fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift, dma_ch,  rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -259,7 +259,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
 }
 ```
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -267,7 +267,7 @@ None
 
 【Description】
 
-FFT calculation,  
+FFT calculation,
 
 The core is kd_mpi_fft_args_init, kd_mpi_fft_or_ifft, and kd_mpi_fft_args_2_arra three functions packaged together for easy use.
 
@@ -275,7 +275,7 @@ The core is kd_mpi_fft_args_init, kd_mpi_fft_or_ifft, and kd_mpi_fft_args_2_arra
 
 ```c
 int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
+                k_u32 timeout , k_u16 shift ,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
@@ -300,11 +300,11 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 | 0       | Succeed.                          |
 | other    | fail |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_fft_api.h
 - Library file: libfft.a
@@ -319,7 +319,7 @@ None
 static int fft_test(int point)
 {
 
-    test_build_fft_org_data(point, i_real, i_imag);    
+    test_build_fft_org_data(point, i_real, i_imag);
 
     //soft_fft_ifft_calc(point);
     clock_gettime(CLOCK_MONOTONIC, &begain_time);
@@ -333,7 +333,7 @@ static int fft_test(int point)
 }
 ```
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -349,8 +349,8 @@ The core is kd_mpi_fft_args_init, kd_mpi_fft_or_ifft, and kd_mpi_fft_args_2_arra
 
 ```c
 int kd_mpi_ifft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
-                short *rx_in, short *iy_in, short *rx_out, short *iy_out);    
+                k_u32 timeout , k_u16 shift ,
+                short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
 【Parameters】
@@ -375,11 +375,11 @@ int kd_mpi_ifft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 | 0      | Succeed. |
 | other   | fail   |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_fft_api.h
 - Library file: libfft.a
@@ -408,7 +408,7 @@ static int fft_test(int point)
 }
 ```
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -436,7 +436,7 @@ typedef union
         volatile k_fft_input_mode_e im:2; //5:4 0:RIRI....;1:RRRR...;2:RRRR...IIII..
         volatile k_fft_out_mode_e om:1; //6 0:RIRI....;1:RRRR...IIII...
         volatile k_u64 fft_intr_mask : 1;//7 0:not mask intr; 1:mask intr
-        volatile k_u16 shift:12; //19:8  
+        volatile k_u16 shift:12; //19:8
         volatile k_u32 fft_disable_cg : 1;//20 write 1 disable fft clock gating
         volatile k_u32 reserv : 11 ;//31:21
         volatile k_u32 time_out:32;//63:32
@@ -459,7 +459,7 @@ typedef struct {
 | reg          | The configuration register value of the FFT |
 | data         | Input and output data of FFT |
 
-【Precautions】
+【Note】
 
 None
 
@@ -483,7 +483,7 @@ typedef enum  {
 | FFT_MODE     | fft      |
 | IFFT_MODE    | ifft     |
 
-【Precautions】
+【Note】
 
 None
 
@@ -509,9 +509,9 @@ typedef enum {
 | RRRR         | RRRR solid data |
 | RR_II        | RR_II format data  |
 
-【Precautions】
+【Note】
 
-not
+none
 
 ### 3.4 k_fft_out_mode_e
 
@@ -533,6 +533,6 @@ typedef enum {
 | RIRI_OUT     | RIRI format data  |
 | RR_II_OUT    | RR_II format data |
 
-【Precautions】
+【Note】
 
 None

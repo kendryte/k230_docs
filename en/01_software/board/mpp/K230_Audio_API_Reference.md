@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 The AUDIO module includes four sub-modules of audio input, audio output, audio encoding, audio decoding, and control of the built-in audio codec.
 
@@ -49,9 +49,9 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description                                                     | Modified by      | date      |
+| Document version number | Modify the description                                                     | Author      | date      |
 | ---------- | ------------------------------------------------------------ | ----------- | --------- |
-| V1.0       | first edition                                                         | Sun Xiaopeng      | 2023/3/7  |
+| V1.0       | Initial edition                                                         | Sun Xiaopeng      | 2023/3/7  |
 | V1.1       | 1) Add support for I2S built-in codec 2) Add PDM single/dual channel support 3) Add AI and AO different sampling accuracy support (16/24/32) 4) The API interface remains unchanged, and parameter properties are added, and the documentation is improved. | Sun Xiaopeng      | 2023/3/27 |
 | V1.1.1     | Add audio codec API interface Add sound quality enhancement API[interface kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr), and description. | Sun Xiaopeng/Cui Yan | 2023/4/12 |
 | V1.2       | Modify the sound quality enhancement API[kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)kd_mpi_ai_set_vqe_attr/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr) Add audio codec mapi interface function | Sun Xiaopeng/Cui Yan | 2023/4/27 |
@@ -149,7 +149,7 @@ This function module provides the following APIs:
 
 Set AI device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) \*attr);
 
@@ -167,14 +167,14 @@ k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, const [k_ai
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
 【Note】
 
-not
+none
 
 【Example】
 
@@ -211,7 +211,7 @@ return K_FAILED;
 
 Get AI device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) \*attr);
 
@@ -229,7 +229,7 @@ k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -240,7 +240,7 @@ k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_
 
 Enable AI devices.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
@@ -257,7 +257,7 @@ k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -268,7 +268,7 @@ k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
 Disable the AI device.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
@@ -285,7 +285,7 @@ k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -296,7 +296,7 @@ k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
 Enable the AI channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#313-k_ai_chn) ai_chn);
 
@@ -314,7 +314,7 @@ k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#31
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -325,7 +325,7 @@ k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#31
 
 Disable the AI channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#313-k_ai_chn) ai_chn);
 
@@ -343,7 +343,7 @@ k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#3
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -354,7 +354,7 @@ k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#3
 
 Gets the audio frame.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_get_frame([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#313-k_ai_chn) ai_chn.k_audio_frame[](#3114-k_audio_frame)\*frame, k_u32 milli_sec);
 
@@ -374,7 +374,7 @@ k_s32 kd_mpi_ai_get_frame([k_audio_dev](#312-k_audio_dev) ai_dev.k_ai_chn[](#313
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -412,7 +412,7 @@ kd_mpi_ai_release_frame(dev_num, channel, &audio_frame);
 
 Release audio frames.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,k_ai_chn[](#313-k_ai_chn) ai_chn,const [k_audio_frame](#3114-k_audio_frame) *frame);【参数】
 
@@ -429,7 +429,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,k_ai_chn[](
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -440,7 +440,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,k_ai_chn[](
 
 Set properties related to the AI's sound quality enhancements.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev[k_ai_chn](#313-k_ai_chn) k_ai_chn ai_chn, const k_bool \*vqe_enable);
 
@@ -459,7 +459,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev[k_ai_chn](#3
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 
@@ -475,7 +475,7 @@ Currently, the supported sampling accuracy is 16bit, and the supported sampling 
 
 Get AI's sound quality enhancement related attributes.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, k_bool \*vqe_enable);
 
@@ -494,7 +494,7 @@ k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -517,7 +517,7 @@ This function module provides the following APIs:
 
 Set the AO device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
 
@@ -535,14 +535,14 @@ k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, const [k_ai
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
 【Note】
 
-not
+none
 
 【Example】
 
@@ -581,7 +581,7 @@ return K_FAILED;
 
 Gets the AO device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
 
@@ -599,7 +599,7 @@ k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
@@ -610,7 +610,7 @@ k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_
 
 Enable the AO device.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
@@ -627,7 +627,7 @@ k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
@@ -638,7 +638,7 @@ k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
 Disable the AO device.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
@@ -655,7 +655,7 @@ k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
@@ -666,7 +666,7 @@ k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
 Enable the AO channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#314-k_ao_chn) ao_chn);
 
@@ -684,7 +684,7 @@ k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#31
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
@@ -695,7 +695,7 @@ k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#31
 
 Disable the AO channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#314-k_ao_chn) ao_chn);
 
@@ -713,7 +713,7 @@ k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#3
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ao_api.h
 - Library file: libao.a
@@ -724,7 +724,7 @@ k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev.k_ao_chn[](#3
 
 Send AO frame data.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_ao_send_frame
 
@@ -746,7 +746,7 @@ k_s32 kd_mpi_ao_send_frame
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_ai_api.h
 - Library file: libai.a
@@ -804,7 +804,7 @@ This function module provides the following APIs:
 
 Register the encoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_register_encoder(k_s32 \*handle, const [k_aenc_encoder](#322-k_aenc_encoder) \*encoder);
 
@@ -836,7 +836,7 @@ Register another G711 encoder
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -847,7 +847,7 @@ Register another G711 encoder
 
 Unregister the encoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 
@@ -864,7 +864,7 @@ k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -875,7 +875,7 @@ k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 
 Create an audio encoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_create_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_aenc_chn_attr](#323-k_aenc_chn_attr) \*attr);
 
@@ -895,7 +895,7 @@ The buffer size is measured in frames, the value range is [2,[K_MAX_AUDIO_FRAME_
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -906,7 +906,7 @@ The buffer size is measured in frames, the value range is [2,[K_MAX_AUDIO_FRAME_
 
 Destroy the audio encoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
 
@@ -916,7 +916,7 @@ k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
 
 - 【Description】
 
-not
+none
 
 - 【Return value】
 
@@ -925,7 +925,7 @@ not
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -936,7 +936,7 @@ not
 
 Send audio encoded frames.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#326-k_aenc_chn) aenc_chn,const [k_audio_frame](#3114-k_audio_frame) \*frame);
 
@@ -958,7 +958,7 @@ The audio encoding sending stream is a non-blocking interface, and if the audio 
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -969,7 +969,7 @@ The audio encoding sending stream is a non-blocking interface, and if the audio 
 
 Gets the audio encoding stream.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_get_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, [k_audio_stream](#327-k_audio_stream) \*stream, k_s32 milli_sec);
 
@@ -1000,7 +1000,7 @@ and report an error.
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -1011,7 +1011,7 @@ and report an error.
 
 Release the audio encoding stream.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_audio_stream](#327-k_audio_stream) \*stream);
 
@@ -1024,7 +1024,7 @@ k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [
 
 - 【Description】
 
-not
+none
 
 - 【Return value】
 
@@ -1033,7 +1033,7 @@ not
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
@@ -1061,7 +1061,7 @@ This function module provides the following APIs:
 
 Register the decoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_register_decoder(k_s32 \*handle, const [k_adec_decoder](#329-k_adec_decoder) \*decoder);
 
@@ -1083,7 +1083,7 @@ The user registers a decoder with the ADEC module by passing in the decoder attr
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1095,7 +1095,7 @@ Library file: libadec.a
 
 Log out of the decoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 
@@ -1112,7 +1112,7 @@ k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
@@ -1122,7 +1122,7 @@ k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 
 Create an audio decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_create_chn([k_adec_chn](#3212-k_adec_chn) adec_chn, const [k_adec_chn_attr](#328-k_adec_chn_attr) \*attr);
 
@@ -1144,7 +1144,7 @@ The protocol type specifies the decoding protocol for that channel and currently
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Demand】
+【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1156,7 +1156,7 @@ Library file: libadec.a
 
 Destroy the audio decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#3212-k_adec_chn) adec_chn);
 
@@ -1168,7 +1168,7 @@ k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#3212-k_adec_chn) adec_chn);
 
 - 【Description】
 
-not
+none
 
 - 【Return value】
 
@@ -1177,7 +1177,7 @@ not
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
@@ -1187,7 +1187,7 @@ not
 
 Send an audio stream to the audio decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_send_stream(k_adec_chn adec_chn,const k_audio_stream \*stream,k_bool block);
 
@@ -1210,7 +1210,7 @@ When sending data, you must ensure that the channel has been created, otherwise 
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1222,7 +1222,7 @@ Library file: libadec.a
 
 Clears the current audio data cache in the ADEC channel.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#3212-k_adec_chn) adec_chn);
 
@@ -1243,7 +1243,7 @@ It is required that the decoding channel has already been created, and if the ch
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1255,7 +1255,7 @@ Library file: libadec.a
 
 Gets the audio decoded frame data.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_frame](#3114-k_audio_frame) \*frame, k_s32 milli_sec);
 
@@ -1274,7 +1274,7 @@ k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_fr
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1286,7 +1286,7 @@ Library file: libadec.a
 
 Release the obtained audio decoded frame data.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k_audio_frame](#3114-k_audio_frame) \*frame);
 
@@ -1304,7 +1304,7 @@ k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: mpi_adec_api.h
 
@@ -1352,7 +1352,7 @@ Built-in Audio Codec standard function cmd:
 
 Left channel input analog gain control
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_gain_micl, k_u32 \*arg);
 
@@ -1371,7 +1371,7 @@ int ioctl (int fd, k_acodec_set_gain_micl, k_u32 \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1387,7 +1387,7 @@ The analog gain ranges are 0db, 6db, 20db, 30db.
 
 Right channel input analog gain control
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_gain_micr, k_u32 \*arg);
 
@@ -1406,7 +1406,7 @@ int ioctl (int fd, k_acodec_set_gain_micr, k_u32 \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1422,7 +1422,7 @@ The analog gain ranges are 0db, 6db, 20db, 30db.
 
 Left channel input digital gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_adcl_volume, float \*arg);
 
@@ -1441,7 +1441,7 @@ int ioctl (int fd, k_acodec_set_adcl_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1457,7 +1457,7 @@ Analog gain range, the `[-97,30]`larger the assignment, the louder the volume, i
 
 Right channel input digital gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_adcr_volume, float \*arg);
 
@@ -1476,7 +1476,7 @@ int ioctl (int fd, k_acodec_set_adcr_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1492,7 +1492,7 @@ Analog gain range, the `[-97,30]`larger the assignment, the louder the volume, i
 
 Left channel ALC input analog gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 
@@ -1511,7 +1511,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1527,7 +1527,7 @@ Analog gain range, the larger the assignment, the `[-18,28.5]`louder the volume,
 
 Right-channel ALC input analog gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_alc_gain_micr, float \*arg);
 
@@ -1546,7 +1546,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micr, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1562,7 +1562,7 @@ Analog gain range, the larger the assignment, the `[-18,28.5]`louder the volume,
 
 Left channel output analog gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_gain_hpoutl, float \*arg);
 
@@ -1581,7 +1581,7 @@ int ioctl (int fd, k_acodec_set_gain_hpoutl, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1597,7 +1597,7 @@ Analog gain range, the larger the assignment, the `[-39,6]`louder the volume, in
 
 The right channel outputs analog gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_gain_hpoutr, float \*arg);
 
@@ -1616,7 +1616,7 @@ int ioctl (int fd, k_acodec_set_gain_hpoutr, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1632,7 +1632,7 @@ Analog gain range, the larger the assignment, the `[-39,6]`louder the volume, in
 
 Left channel output digital gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_dacl_volume, float \*arg);
 
@@ -1651,7 +1651,7 @@ int ioctl (int fd, k_acodec_set_dacl_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1667,7 +1667,7 @@ Analog gain range, the `[-120,7]`larger the assignment, the louder the volume, i
 
 The right channel outputs digital gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_dacr_volume, float \*arg);
 
@@ -1686,7 +1686,7 @@ int ioctl (int fd, k_acodec_set_dacr_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1702,7 +1702,7 @@ Analog gain range, the `[-120,7]`larger the assignment, the louder the volume, i
 
 Left channel input mute control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_micl_mute, k_bool \*arg);
 
@@ -1721,7 +1721,7 @@ int ioctl (int fd, k_acodec_set_micl_mute, k_bool \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1737,7 +1737,7 @@ Value range: K_TRUE mute, K_FALSE unmute.
 
 Right channel input mute control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_micr_mute, k_bool \*arg);
 
@@ -1756,7 +1756,7 @@ int ioctl (int fd, k_acodec_set_micr_mute, k_bool \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1772,7 +1772,7 @@ Value range: K_TRUE mute, K_FALSE unmute.
 
 Left channel output mute control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_dacl_mute, k_bool \*arg);
 
@@ -1791,7 +1791,7 @@ int ioctl (int fd, k_acodec_set_dacl_mute, k_bool \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1807,7 +1807,7 @@ Value range: K_TRUE mute, K_FALSE unmute.
 
 Right channel output mute control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_dacr_mute, k_bool \*arg);
 
@@ -1826,7 +1826,7 @@ int ioctl (int fd, k_acodec_set_dacr_mute, k_bool \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1842,7 +1842,7 @@ Value range: K_TRUE mute, K_FALSE unmute.
 
 Gets the analog gain value for the left channel input.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_gain_micl, k_u32 \*arg);
 
@@ -1861,7 +1861,7 @@ int ioctl (int fd, k_acodec_get_gain_micl, k_u32 \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1877,7 +1877,7 @@ The obtained analog gain ranges are 0dB, 6dB, 20dB, 30dB.
 
 Gets the right channel input analog gain value.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_gain_micr, k_u32 \*arg);
 
@@ -1896,7 +1896,7 @@ int ioctl (int fd, k_acodec_get_gain_micr, k_u32 \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1912,7 +1912,7 @@ The obtained analog gain ranges are 0dB, 6dB, 20dB, 30dB.
 
 Gets the left channel input digital volume value
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_adcl_volume, float \*arg);
 
@@ -1931,7 +1931,7 @@ int ioctl (int fd, k_acodec_get_adcl_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1947,7 +1947,7 @@ Analog gain range, the `[-97,30]`larger the assignment, the louder the volume, i
 
 Gets the right channel input digital gain control value.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_adcr_volume, float \*arg);
 
@@ -1966,7 +1966,7 @@ int ioctl (int fd, k_acodec_get_adcr_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -1982,7 +1982,7 @@ Analog gain range, the `[-97,30]`larger the assignment, the louder the volume, i
 
 Obtain the analog gain value for the left channel ALC input.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 
@@ -2001,7 +2001,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2017,7 +2017,7 @@ Analog gain range, the larger the assignment, the `[-18,28.5]`louder the volume,
 
 Obtain the analog gain value of the right channel ALC input.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_alc_gain_micr, float \*arg);
 
@@ -2036,7 +2036,7 @@ int ioctl (int fd, k_acodec_get_alc_gain_micr, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2052,7 +2052,7 @@ Analog gain range, the larger the assignment, the `[-18,28.5]`louder the volume,
 
 Gets the analog gain value of the left channel output.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_gain_hpoutl, float \*arg);
 
@@ -2071,7 +2071,7 @@ int ioctl (int fd, k_acodec_get_gain_hpoutl, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2087,7 +2087,7 @@ Analog gain range, the larger the assignment, the `[-39,6]`louder the volume, in
 
 Get right channel output analog gain control.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_gain_hpoutr, float \*arg);
 
@@ -2106,7 +2106,7 @@ int ioctl (int fd, k_acodec_get_gain_hpoutr, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2122,7 +2122,7 @@ Analog gain range, the larger the assignment, the `[-39,6]`louder the volume, in
 
 Gets the digital gain value of the left channel output.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_dacl_volume, float \*arg);
 
@@ -2141,7 +2141,7 @@ int ioctl (int fd, k_acodec_get_dacl_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2157,7 +2157,7 @@ Analog gain range, the `[-120,7]`larger the assignment, the louder the volume, i
 
 Gets the digital gain value of the right channel output.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_get_dacr_volume, float \*arg);
 
@@ -2176,7 +2176,7 @@ int ioctl (int fd, k_acodec_get_dacr_volume, float \*arg);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2192,7 +2192,7 @@ Analog gain range, the `[-120,7]`larger the assignment, the louder the volume, i
 
 Volume reset: Includes ADC, DAC, ALC digital and analog gain.
 
-- 【Grammar】
+- 【Syntax】
 
 int ioctl (int fd, k_acodec_reset, ...);
 
@@ -2210,7 +2210,7 @@ int ioctl (int fd, k_acodec_reset, ...);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-- 【Demand】
+- 【Requirement】
 
 Header file: k_acodec_comm.h
 
@@ -2218,7 +2218,7 @@ Library file: libacodec.a
 
 - 【Note】
 
-not
+none
 
 ### 2.6 Audio coding MAPI
 
@@ -2242,7 +2242,7 @@ The Audio Coding feature module provides the following MAPIs:
 
 Initialize the encoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_aenc_init([k_handle](#331-k_handle) aenc_hdl,const [k_aenc_chn_attr](#323-k_aenc_chn_attr) \*attr);
 
@@ -2252,7 +2252,7 @@ kd_mapi_aenc_init([k_handle](#331-k_handle) aenc_hdl,const [k_aenc_chn_attr](#32
 
 Go to initialize the encoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_aenc_deinit([k_handle](#331-k_handle) aenc_hdl);
 
@@ -2262,7 +2262,7 @@ kd_mapi_aenc_deinit([k_handle](#331-k_handle) aenc_hdl);
 
 Start the encoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_aenc_start([k_handle](#331-k_handle) aenc_hdl);
 
@@ -2272,7 +2272,7 @@ kd_mapi_aenc_start([k_handle](#331-k_handle) aenc_hdl);
 
 Stop encoding the channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_aenc_stop([k_handle](#331-k_handle) aenc_hdl);
 
@@ -2282,7 +2282,7 @@ kd_mapi_aenc_stop([k_handle](#331-k_handle) aenc_hdl);
 
 Registers the encoding callback function.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_aenc_registercallback([k_handle](#331-k_handle) aenc_hdl.k_aenc_callback_s \*aenc_cb);
 
@@ -2292,7 +2292,7 @@ k_s32 kd_mapi_aenc_registercallback([k_handle](#331-k_handle) aenc_hdl.k_aenc_ca
 
 Registers the encoding callback function.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_aenc_unregistercallback([k_handle](#331-k_handle) aenc_hdl);
 
@@ -2302,7 +2302,7 @@ k_s32 kd_mapi_aenc_unregistercallback([k_handle](#331-k_handle) aenc_hdl);
 
 Bind AI.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_aenc_bind_ai([k_handle](#331-k_handle) ai_hdl.k_handle[](#331-k_handle) aenc_hdl);
 
@@ -2312,7 +2312,7 @@ k_s32 kd_mapi_aenc_bind_ai([k_handle](#331-k_handle) ai_hdl.k_handle[](#331-k_ha
 
 Unbind AI.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_aenc_unbind_ai([k_handle](#331-k_handle) ai_hdl.k_handle[](#331-k_handle) aenc_hdl);
 
@@ -2322,7 +2322,7 @@ k_s32 kd_mapi_aenc_unbind_ai([k_handle](#331-k_handle) ai_hdl.k_handle[](#331-k_
 
 Register an external encoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#322-k_aenc_encoder) \*encoder,k_handle[](#331-k_handle) \* aencoder_hdl);
 
@@ -2332,7 +2332,7 @@ k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#322-k_aenc_enco
 
 Unregister the external audio encoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_unregister_ext_audio_encoder( [k_handle](#331-k_handle) aencoder_hdl);
 
@@ -2342,7 +2342,7 @@ k_s32 kd_mapi_unregister_ext_audio_encoder( [k_handle](#331-k_handle) aencoder_h
 
 Send audio encoded audio frames
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_aenc_send_frame([k_handle](#331-k_handle) ai_hdl,const [k_audio_frame](#3114-k_audio_frame) \*frame);
 
@@ -2368,7 +2368,7 @@ The Audio Decoding feature module provides the following MAPIs:
 
 Initialize the decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_adec_init([k_handle](#331-k_handle) adec_hdl,const [k_adec_chn_attr](#323-k_aenc_chn_attr) \*attr);
 
@@ -2378,7 +2378,7 @@ kd_mapi_adec_init([k_handle](#331-k_handle) adec_hdl,const [k_adec_chn_attr](#32
 
 Deinitialize the decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_adec_deinit([k_handle](#331-k_handle) adec_hdl);
 
@@ -2388,7 +2388,7 @@ kd_mapi_adec_deinit([k_handle](#331-k_handle) adec_hdl);
 
 Start the decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_adec_start([k_handle](#331-k_handle) adec_hdl);
 
@@ -2398,7 +2398,7 @@ kd_mapi_adec_start([k_handle](#331-k_handle) adec_hdl);
 
 Stop the decoding channel.
 
-- 【Grammar】
+- 【Syntax】
 
 kd_mapi_adec_stop([k_handle](#331-k_handle) adec_hdl);
 
@@ -2408,7 +2408,7 @@ kd_mapi_adec_stop([k_handle](#331-k_handle) adec_hdl);
 
 Register the decode callback function.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_adec_registercallback([k_handle](#331-k_handle) adec_hdl.k_adec_callback_s \*adec_cb);
 
@@ -2418,7 +2418,7 @@ k_s32 kd_mapi_adec_registercallback([k_handle](#331-k_handle) adec_hdl.k_adec_ca
 
 Register the decode callback function.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_adec_unregistercallback([k_handle](#331-k_handle) adec_hdl);
 
@@ -2428,7 +2428,7 @@ k_s32 kd_mapi_adec_unregistercallback([k_handle](#331-k_handle) adec_hdl);
 
 Bind ao.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_adec_bind_ao([k_handle](#331-k_handle) ao_hdl.k_handle[](#331-k_handle) adec_hdl);
 
@@ -2438,7 +2438,7 @@ k_s32 kd_mapi_adec_bind_ao([k_handle](#331-k_handle) ao_hdl.k_handle[](#331-k_ha
 
 Unbind ao.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_adec_unbind_ao([k_handle](#331-k_handle) ao_hdl.k_handle[](#331-k_handle) adec_hdl);
 
@@ -2448,7 +2448,7 @@ k_s32 kd_mapi_adec_unbind_ao([k_handle](#331-k_handle) ao_hdl.k_handle[](#331-k_
 
 Register the external decoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#329-k_adec_decoder) \*decoder,k_handle[](#331-k_handle) \* adecoder_hdl);
 
@@ -2458,7 +2458,7 @@ k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#329-k_adec_deco
 
 Unregister the external audio decoder.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_unregister_ext_audio_decoder( [k_handle](#331-k_handle) adecoder_hdl);
 
@@ -2468,7 +2468,7 @@ k_s32 kd_mapi_unregister_ext_audio_decoder( [k_handle](#331-k_handle) adecoder_h
 
 Send audio to decode audio frames.
 
-- 【Grammar】
+- 【Syntax】
 
 k_s32 kd_mapi_adec_send_stream([k_handle](#331-k_handle) ai_hdl,const [k_audio_stream](#327-k_audio_stream) \*stream);
 
@@ -2512,13 +2512,13 @@ KD_AUDIO_OUTPUT_TYPE_I2S = 2,//i2s out
 } k_audio_type;
 ```
 
-【Precautions】
+【Note】
 
 The audio input includes I2S and PDM, and the audio output is only I2S.
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.2 k_audio_dev
 
@@ -2530,7 +2530,7 @@ Define an audio device.
 
 **typedef k_u32 k_audio_dev;**
 
-【Precautions】
+【Note】
 
 AI module, k_audio_dev values are 0 and 1, where 0 is the I2S audio input and 1 is the PDM audio input.
 
@@ -2546,7 +2546,7 @@ Define AI audio channels.
 
 **typedef k_u32 k_ai_chn;**
 
-【Precautions】
+【Note】
 
 I2S audio input, there are 2 groups, the value range is .`[0,1]`
 
@@ -2562,7 +2562,7 @@ Define the AO audio channel.
 
 **typedef k_u32 k_ao_chn;**
 
-【Precautions】
+【Note】
 
 I2S audio output, there are 2 groups, the value range is .`[0,1]`
 
@@ -2592,13 +2592,13 @@ KD_AUDIO_BIT_WIDTH_32 = 2, /* 32bit width */
 } k_audio_bit_width;
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.7 k_audio_snd_mode
 
@@ -2664,13 +2664,13 @@ k_u32 point_num_per_frame;
 | frame_num           | The number of cached frames`[2,K_MAX_AUDIO_FRAME_NUM]`.               |
 | point_num_per_frame | The number of sample points per frame.                                  |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.10 k_audio_i2s_attr
 
@@ -2707,7 +2707,7 @@ k_aio_i2s_type type;
 | point_num_per_frame | The number of sample points per frame`[sample_rate/100,sample_rate]`.    |
 | i2s_type            | I2S docking device type: built-in codec or external device.                |
 
-【Precautions】
+【Note】
 
 The number of sample points per frame point_num_per_frame and the value of the sample rate sample_rate determine the hardware generation
 
@@ -2717,9 +2717,9 @@ The value of the number satisfies the formula: (point_num_per_frame * 1000) / sa
 
 When the rate is 16000Hz, it is recommended that the number of sampling points be greater than or equal to 160.
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.11 k_i2s_work_mode
 
@@ -2738,13 +2738,13 @@ K_LEFT_JUSTIFYING_MODE = 4
 } k_i2s_work_mode;
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.12 k_aio_dev_attr
 
@@ -2772,13 +2772,13 @@ k_audio_i2s_attr i2s_attr;
 | audio_type    | Audio type.   |
 | kd_audio_attr | Audio property settings |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.13 k_aio_i2s_type
 
@@ -2796,13 +2796,13 @@ K_AIO_I2STYPE_EXTERN,/* AIO I2S connect extern hardware */
 } k_aio_i2s_type;
 ```
 
-【Precautions】
+【Note】
 
 The built-in audio codec uses the group 0 I2S path, and the group 1 I2S path still uses an external codec.
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.14 k_audio_frame
 
@@ -2838,13 +2838,13 @@ k_u32 pool_id;
 | only        | Audio frame length, in bytes. |
 | pool_id    | Audio framebuffer pool ID.           |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.15 k_audio_anr_cfg
 
@@ -2868,13 +2868,13 @@ k_bool anr_switch;
 |------------|------------------------|
 | anr_switch | Audio voice noise reduction function enabled. |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.16 k_audio_agc_cfg
 
@@ -2897,13 +2897,13 @@ k_bool agc_switch;
 |------------|------------------------|
 | agc_switch | Audio auto-gain is enabled. |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.17 k_ai_vqe_cfg
 
@@ -2926,13 +2926,13 @@ k_audio_agc_cfg agc_cfg;
 | anr_cfg  | Audio voice noise reduction function configuration parameters. |
 | agc_cfg  | Audio automatic gain control configuration parameters. |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.2 Audio codec
 
@@ -3052,13 +3052,13 @@ K_PT_BUTT
 } k_payload_type;
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.2 k_aenc_encoder
 
@@ -3090,13 +3090,13 @@ k_s32 (*func_close_encoder)(void *encoder);
 | func_enc_frame     | The function pointer to be encoded.    |
 | func_close_encoder | Turn off the encoder's function pointer.  |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.3 k_aenc_chn_attr
 
@@ -3122,13 +3122,13 @@ k_u32 buf_size; // buf size[2,K_MAX_AUDIO_FRAME_NUM]
 | point_num_per_frame | The corresponding frame length of the audio coding protocol (the audio frame length received when encoding is less than or equal to that frame length can be encoded).                          |
 | buf_size            | Audio encoding cache size.  Value range:`[2, K_MAX_AUDIO_FRAME_NUM]` in frames. |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.4 AENC_MAX_CHN_NUMS
 
@@ -3140,13 +3140,13 @@ Defines the maximum number of encoded channels.
 
 \#define AENC_MAX_CHN_NUMS 4
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.5 K_MAX_ENCODER_NAME_LEN
 
@@ -3158,13 +3158,13 @@ Defines the audio encoder name maximum length.
 
 \#define K_MAX_ENCODER_NAME_LEN 25
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.6 k_aenc_chn
 
@@ -3176,13 +3176,13 @@ Defines the encoding channel type.
 
 typedef k_u32 k_aenc_chn;
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.7 k_audio_stream
 
@@ -3212,13 +3212,13 @@ k_u32 seq; /* frame seq, if stream is not a valid frame,seq is 0 */
 | time_stamp | Audio stream timestamp.             |
 | seq        | Audio stream sequence number.               |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.8 k_adec_chn_attr
 
@@ -3244,15 +3244,15 @@ k_u32 buf_size; /* buf size[2~K_MAX_AUDIO_FRAME_NUM] */
 | point_num_per_frame | The frame length corresponding to the audio decoding protocol                                                                                  |
 | buf_size            | Audio encoding cache size.  Value range:`[2, K_MAX_AUDIO_FRAME_NUM]` in frames. |
 
-【Precautions】
+【Note】
 
 Some properties of audio decoding need to match output device properties, such as sample rate, frame length (samples per frame
 
 Number of points), etc.
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.9 k_adec_decoder
 
@@ -3285,13 +3285,13 @@ k_s32 (*func_reset_decoder)(void *decoder);
 | func_close_decoder  | Turns off the function pointer for the decoder.                  |
 | func_reset_decoder  | Empty the buffer buffer, reset the decoder's function pointer.  |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.10 K_MAX_DECODER_NAME_LEN
 
@@ -3303,13 +3303,13 @@ Defines the maximum length of the audio decoder name.
 
 \#define K_MAX_DECODER_NAME_LEN 25
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.11 ADEC_MAX_CHN_NUMS
 
@@ -3321,13 +3321,13 @@ Defines the maximum number of decoding channels.
 
 \#define ADEC_MAX_CHN_NUMS 4
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.12 k_adec_chn
 
@@ -3339,13 +3339,13 @@ Defines the decoding channel type.
 
 typedef k_u32 k_adec_chn;
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.3 MAPI
 
@@ -3363,9 +3363,9 @@ Define the operation handle.
 
 typedef k_u32 k_handle;
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ## 4. Error codes
 

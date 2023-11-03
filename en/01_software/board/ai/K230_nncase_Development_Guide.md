@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document is the K230 nncase user description document, providing users with how to install nncase, how to call compiler APIs to compile neural network models and runtime APIs to write AI inference programs.
 
@@ -47,7 +47,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description                                            | Modified by             | date     |
+| Document version number | Modify the description                                            | Author             | date     |
 | ---------- | --------------------------------------------------- | ------------------ | -------- |
 | V1.0       | First version of the document                                            | Yang Zhang/Chenghai Huo | 2023/4/7 |
 | V1.1       | Uniformly change to word format, improve AI2D                         | Yang Zhang/Chenghai Huo | 2023/5/5 |
@@ -429,20 +429,20 @@ The pre-processing process is as follows (all green nodes in the figure are opti
 Instantiate CompileOptions to configure the values of each property
 
 ```python
-# compile_options                                                                
-compile_options = nncase.CompileOptions()                                           
-compile_options.target = args.target                                                
-compile_options.preprocess = True                                                   
-compile_options.swapRB = False                                                      
-compile_options.input_shape = input_shape                                           
-compile_options.input_type = 'uint8'                                                
-compile_options.input_range = [0, 255]                                              
-compile_options.mean = [127.5, 127.5, 127.5]                                        
-compile_options.std = [127.5, 127.5, 127.5]                                         
-compile_options.input_layout = 'NCHW'                                               
-compile_options.dump_ir = True                                                      
-compile_options.dump_asm = True                                                     
-compile_options.dump_dir = dump_dir                                                 
+# compile_options
+compile_options = nncase.CompileOptions()
+compile_options.target = args.target
+compile_options.preprocess = True
+compile_options.swapRB = False
+compile_options.input_shape = input_shape
+compile_options.input_type = 'uint8'
+compile_options.input_range = [0, 255]
+compile_options.mean = [127.5, 127.5, 127.5]
+compile_options.std = [127.5, 127.5, 127.5]
+compile_options.input_layout = 'NCHW'
+compile_options.dump_ir = True
+compile_options.dump_asm = True
+compile_options.dump_dir = dump_dir
 ```
 
 #### 2.2.2 ImportOptions
@@ -2270,15 +2270,15 @@ None
 【Example】
 
 ```cpp
-dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };          
-auto out_span = ai2d_out_tensor_.shape();                                    
-dims_t out_shape { out_span.begin(), out_span.end() };                       
+dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };
+auto out_span = ai2d_out_tensor_.shape();
+dims_t out_shape { out_span.begin(), out_span.end() };
 ai2d_datatype_t ai2d_dtype { ai2d_format::NCHW_FMT, ai2d_format::NCHW_FMT, typecode_t::dt_uint8, typecode_t::dt_uint8 };
-ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };                          
-ai2d_shift_param_t shift_param { false, 0 };                                 
+ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };
+ai2d_shift_param_t shift_param { false, 0 };
 ai2d_pad_param_t pad_param { true, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 70, 70 } }, ai2d_pad_mode::constant, { 0, 0, 0 } };
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
-ai2d_affine_param_t affine_param { false };                                  
+ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
@@ -2334,7 +2334,7 @@ result\<void\>
 【Example】
 
 ```c++
-// run ai2d                                                                  
+// run ai2d
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 

@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,7 +21,7 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [toc]
 
@@ -29,7 +29,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ## preface
 
-### overview
+### Overview
 
 This document describes the impact of RVV on model inference performance.
 
@@ -128,7 +128,7 @@ pie
     "LDARG" : 0.000405381
     "RET" : 0.000202691
     "LDTUPLE" : 0.000152018
- 
+
 ```
 
 ```mermaid
@@ -192,7 +192,7 @@ The following is the description of the function `get_mean`, which implements th
 "add a1, a1, t1;"      // a1 + = t1, update the loading address.
 "bnez a0, XXXXXX%=;"   // If a0 ! = 0, jump to the loop start address.
 "vfmv.f.s f0, v0;"     // Move the v0 vector accumulation result to f0.
-"fcvt.s.w f1, %[avl];"  // Convert avl to float and save to f1. 
+"fcvt.s.w f1, %[avl];"  // Convert avl to float and save to f1.
 "fdiv.s %[ret], f0, f1;" // ret = f0 / f1, get the average value.
 ```
 

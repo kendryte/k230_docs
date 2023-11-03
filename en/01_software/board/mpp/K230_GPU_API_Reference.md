@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document describes the usage guide for the K230 chip 2.5D GPU module.
 
@@ -1090,10 +1090,10 @@ This is an example that uses a color lookup table that, when run, generates , an
 
 Here is an example of GPU + DRM display linkage,
 
-Note: Since the video output driver under Linux does not**include**initialization, you need to make sure that the screen is already in use before running, for example, it can be run on a large core`sample_vo.elf 3`.
+Note: Since the video output driver under Linux does not**include**initialization, you need to make sure that the screen is already in use before running, for example, it can be run on a big core`sample_vo.elf 3`.
 
 ### 6.5 vglite_cube
 
 This is an example of a GPU + DRM display linkage, drawing a constantly rotating cube on the screen.
 
-Note: Since the video output driver under Linux does not**include**initialization, you need to make sure that the screen is already in use before running, for example, it can be run on a large core`sample_vo.elf 3`.
+Note: Since the video output driver under Linux does not**include**initialization, you need to make sure that the screen is already in use before running, for example, it can be run on a big core`sample_vo.elf 3`.

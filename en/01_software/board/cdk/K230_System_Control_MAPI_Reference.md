@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the functions and usage of the system control module in MAPI, and the functions and usage of other modules will be discussed in their own special documents.
 
@@ -47,9 +47,9 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date     |
+| Document version number | Modify the description | Author | date     |
 |------------|----------|--------|----------|
-| V1.0       | first edition     | Haibo Hao | 2023/5/4 |
+| V1.0       | Initial edition     | Haibo Hao | 2023/5/4 |
 
 ## 1. Overview
 
@@ -100,7 +100,7 @@ This function module provides the following APIs:
 
 Initialize system resources and establish a message communication pipeline between the two cores. In order to establish a dual-core connection, services running on each operating system need to call this interface during initialization to establish a connection before intercore communication can take place.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_sys_init(void );
@@ -108,7 +108,7 @@ k_s32 kd_mapi_sys_init(void );
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
@@ -117,11 +117,11 @@ not
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
@@ -132,11 +132,11 @@ This function needs to be called before calling the kd_mapi_media_init
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.2 kd_mapi_sys_deinit
 
@@ -144,7 +144,7 @@ not
 
 To initialize system resources, disconnect the message communication pipeline between the two cores.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_sys_deinit(void );
@@ -152,7 +152,7 @@ k_s32 kd_mapi_sys_deinit(void );
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
@@ -161,11 +161,11 @@ not
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
@@ -176,11 +176,11 @@ When the kd_mapi_sys_init is not called, the call to this MAPI returns success.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.3 kd_mapi_media_init
 
@@ -188,7 +188,7 @@ not
 
 Initialize multimedia related resources. Configure the number and size of VBs
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_media_init(const [k_mapi_media_attr_t](#33-k_mapi_media_attr_t) *media_attr);
@@ -207,26 +207,26 @@ k_s32 kd_mapi_media_init(const [k_mapi_media_attr_t](#33-k_mapi_media_attr_t) *m
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.4 kd_mapi_media_deinit
 
@@ -234,7 +234,7 @@ not
 
 Go and initialize multimedia related resources.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_media_deinit(void);
@@ -242,7 +242,7 @@ k_s32 kd_mapi_media_deinit(void);
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
@@ -251,26 +251,26 @@ not
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.5 kd_mapi_alloc_buffer
 
@@ -278,7 +278,7 @@ not
 
 Allocate memory for MMZ in user mode (with cache)
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const k_char *name);
@@ -300,11 +300,11 @@ k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const 
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
@@ -316,11 +316,11 @@ Not.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.6 kd_mapi_free_buffer
 
@@ -328,7 +328,7 @@ not
 
 Frees the memory of the MMZ in user mode.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
@@ -349,11 +349,11 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
@@ -364,19 +364,19 @@ After freeing the memory, check whether the buffer is successfully freed under t
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.7 kd_mapi_sys_get_vb_block
 
 【Description】
 
-Gets a cache block in user mode.
+Gets a vb block in user mode.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_size, const char\* mmz_name);
@@ -386,10 +386,10 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_siz
 
 | **Parameter name**  | **Description**                   | **Input/output** |
 |-----------|------------------------|-----------|
-| pool_id   | The ID number of the cache pool where the cache block resides | output      |
-| phys_addr | The physical address of the cache block       | output      |
-| blk_size  | The size of the cache block           | input      |
-| mmz_name  | The name of the DDR where the cache pool resides  | input      |
+| pool_id   | The ID number of the vb pool where the vb block resides | output      |
+| phys_addr | The physical address of the vb block       | output      |
+| blk_size  | The size of the vb block           | input      |
+| mmz_name  | The name of the DDR where the vb pool resides  | input      |
 
 【Return value】
 
@@ -398,35 +398,35 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_siz
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
 
 【Note】
 
-- If the user needs to fetch a block of the specified size from any of the public cache pools, set parameter 2 blk_size to the desired cache block size and specify the public cache pool on which DDR to obtain the cache block from. If there is no public cache pool on the specified DDR, the cache block will not be fetched. If mmz_name equals NULL, it means that the public cache pool on an unnamed DDR fetches cache blocks
-- When media initializes, if VB creates a cache pool in an unnamed DDR, it obtains a block of the specified size from any public cache pool, mmz_name set to NULL
+- If the user needs to fetch a block of the specified size from any of the public vb pools, set parameter 2 blk_size to the desired vb block size and specify the public vb pool on which DDR to obtain the vb block from. If there is no public vb pool on the specified DDR, the vb block will not be fetched. If mmz_name equals NULL, it means that the public vb pool on an unnamed DDR fetches vb blocks
+- When media initializes, if VB creates a vb pool in an unnamed DDR, it obtains a block of the specified size from any public vb pool, mmz_name set to NULL
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.8 kd_mapi_sys_release_vb_block
 
 【Description】
 
-A cache block is released in user mode.
+A vb block is released in user mode.
 
-【Grammar】
+【Syntax】
 
 ```c
 k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
@@ -436,8 +436,8 @@ k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
 
 | **Parameter name**  | **Description**             | **Input/output** |
 |-----------|------------------|-----------|
-| phys_addr | The physical address of the cache block | output      |
-| blk_size  | The size of the cache block     | input      |
+| phys_addr | The physical address of the vb block | output      |
+| blk_size  | The size of the vb block     | input      |
 
 【Return value】
 
@@ -446,26 +446,26 @@ k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
 | 0      | succeed                            |
 | Non-0    | Failed, the value of which is described in [error code](#4-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mapi_sys_api.h
 - Library file: libmapi.a
 
 【Note】
 
-After the obtained cache block is exhausted, this interface should be called to free the cache block.
+After the obtained vb block is exhausted, this interface should be called to free the vb block.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ## 3. Data Type
 
@@ -526,15 +526,15 @@ K_MAPI_MOD_BUTT,
 
 【Members】
 
-not
+none
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.2 k_mapi_media_config_t
 
@@ -562,13 +562,13 @@ k_vb_config vb_config;
 | vb_supp      | VB Additional Information Structure, see K230 System Control API Reference    |
 | vb_config    | For the video buffer pool attribute structure, see K230 System Control API Reference |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.3 k_mapi_media_attr_t
 
@@ -593,13 +593,13 @@ k_mapi_media_config_t media_config;
 |--------------|--------------------|
 | media_config | Media configuration attribute struct |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ## 4. Error codes
 
