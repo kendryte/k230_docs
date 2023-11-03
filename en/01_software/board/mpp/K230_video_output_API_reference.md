@@ -1,6 +1,6 @@
 # K230 Video Output API Reference
 
-![cover](images/canaan-cover.png)
+![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
 Copyright 2023 Canaan Inc. ©
 
@@ -14,7 +14,7 @@ Due to product version upgrades or other reasons, the content of this document m
 
 ## Trademark Notice
 
-![The logo](images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
 
 **Copyright 2023 Canaan Inc.. © All Rights Reserved.**
 Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
@@ -86,7 +86,7 @@ This hardware introduction is based on EVBLP3
 
 The hardware pins on EVBLP3 are as follows:
 
-![The image contains an illustrated description that has been automatically generated](images/d7197713d3821fdd3e5c0f2b10dfd5b1.png)
+![The image contains an illustrated description that has been automatically generated](../../../../zh/01_software/board/mpp/images/d7197713d3821fdd3e5c0f2b10dfd5b1.png)
 
 - screen touch is I2C4  (SCL: GPIO7, SDA GPIO8)
 - screen touch rst：gpio29， int：gpio30
@@ -95,7 +95,7 @@ The hardware pins on EVBLP3 are as follows:
 
 #### 1.1.2 Physical drawings
 
-![Image contains game console, electronics, circuit description has been automatically generated](images/69dbfc0ef3144c90f5978f1019482030.png)
+![Image contains game console, electronics, circuit description has been automatically generated](../../../../zh/01_software/board/mpp/images/69dbfc0ef3144c90f5978f1019482030.png)
 
 - Figure 1 is the MIPI interface, using a flexible cable
 - Figure 2 is the MIPI signal test point, including four data lines and one CLK line
@@ -119,25 +119,25 @@ The data rate is given by twice the PLL output clock phase frequency: data rate 
 
 For：
 
-![Text, letter description is automatically generated](images/e99b3eec46b58875ae936ea4ab23d86b.png)
+![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/e99b3eec46b58875ae936ea4ab23d86b.png)
 
 However in this need to follow the following restrictions:
 
-![The image contains a text description that has been automatically generated](images/cfd696fc1b6157fbf0220a4f1545a963.png)
+![The image contains a text description that has been automatically generated](../../../../zh/01_software/board/mpp/images/cfd696fc1b6157fbf0220a4f1545a963.png)
 
 For：
 
-![Text, letter description is automatically generated](images/e0df5cfd79b26cd1c688cb8f82000188.png)
+![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/e0df5cfd79b26cd1c688cb8f82000188.png)
 
 For：
 
-![Text, letter description is automatically generated](images/fb853b016887c1d58cc45f4507d9276c.png)
+![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/fb853b016887c1d58cc45f4507d9276c.png)
 
-![The Text description is automatically generated](images/9cd0c8d3bd975f1f19a5eec9b846d00b.png)
+![The Text description is automatically generated](../../../../zh/01_software/board/mpp/images/9cd0c8d3bd975f1f19a5eec9b846d00b.png)
 
 For：
 
-![The text Medium confidence description has been automatically generated](images/659e3d039a5c3c623b3ffd6fb24ee777.png)
+![The text Medium confidence description has been automatically generated](../../../../zh/01_software/board/mpp/images/659e3d039a5c3c623b3ffd6fb24ee777.png)
 
 Each of the above for corresponds to a PLL level, and different levels correspond to different calculation formulas and limits, and the calculation example is as follows:
 
@@ -149,7 +149,7 @@ The rate of mipi is 445.5M: so the rate of pll is 222.75M, and the second formul
 
 222.75n + 198.75 = 12m is calculated by excel as follows:
 
-![The table description is automatically generated](images/8ff8dac9c9f9b815001733e37e44e4cc.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/8ff8dac9c9f9b815001733e37e44e4cc.png)
 
 The resulting m = 295 and n = 15.
 
@@ -159,9 +159,9 @@ Configure the m and n in the PLL are integer values, if all the values are not i
 
 The VOC configured with PHY can be queried according to the table:
 
-![The table description is automatically generated](images/174b1b96f4a280ab5350f4ed5452d43f.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/174b1b96f4a280ab5350f4ed5452d43f.png)
 
-![The table description is automatically generated](images/8e1970bbd7ffb862547feaf8a59cab48.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/8e1970bbd7ffb862547feaf8a59cab48.png)
 
 Example：
 
@@ -171,11 +171,11 @@ The rate of mipi is 445.5M: so the rate of the pll is 222.75M, and VOC = 010111 
 
 The FREQ of the configured PHY can be queried according to the table:
 
-![The table description is automatically generated](images/95941399975cca1c16253927129d8e19.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/95941399975cca1c16253927129d8e19.png)
 
-![The table description is automatically generated](images/22628c5b4acf510370e51188734fe172.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/22628c5b4acf510370e51188734fe172.png)
 
-![The table description is automatically generated](images/4a233637850b4e84b5208317666c4314.png)
+![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/4a233637850b4e84b5208317666c4314.png)
 
 Example：
 
@@ -191,9 +191,9 @@ DSI mainly configures the screen in the software to display functions with timin
 
 Each manufacturer's screen will have a set of timing for screen control, mainly including the control timing of the frame and the control timing of a line, as shown in the following figure:
 
-![The Illustrative description has been automatically generated](images/01cabbb3d5c1dc60d0baa95a0f87104f.png)
+![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/01cabbb3d5c1dc60d0baa95a0f87104f.png)
 
-![Illustrative, Schematic description is automatically generated](images/507a7bd277508dc177ebb0c4cfb49b9e.png)
+![Illustrative, Schematic description is automatically generated](../../../../zh/01_software/board/mpp/images/507a7bd277508dc177ebb0c4cfb49b9e.png)
 
 These parameters are also used in DSI, and the configured timing and screen are consistent.
 
@@ -210,7 +210,7 @@ The data sent is sent in 8 bits, and the long or short packet will be automatica
 
 The DSI self-test mode will send the data of the color bar according to the self-configured DSI timing to be sent, so that it does not rely on VO to read data from the DDR, and the test mode is shown as follows:
 
-![Background pattern The medium confidence description has been automatically generated](images/25246d8f3ff85d6e9b1de1b03369fbb3.png)
+![Background pattern The medium confidence description has been automatically generated](../../../../zh/01_software/board/mpp/images/25246d8f3ff85d6e9b1de1b03369fbb3.png)
 
 The 24-bit interface is used between DSI and vo, so the configured color bar is the effect shown above, and the use method only needs to enable the color bar after configuring DSI, and the API is as follows
 
