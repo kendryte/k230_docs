@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the driver APIs of K230 small-core Linux, mainly including uart, i2c, gpio, watchdog, hardlock, OTP, Tsensor, TRNG, etc.
 
@@ -129,13 +129,13 @@ The OTP is integrated into the security module PUF, providing secure storage cap
 
 #### 1.2.7 TS module
 
-The large core-side TS driver mainly provides the read function, and before reading the TS, it is necessary to configure the TS register enable signal, output mode, and then read the junction temperature of the chip. In addition, the TS register reads the die junction temperature every 2.6s. The structure of the TS driver on the RT-smart side is shown in the following figure:
+The big core-side TS driver mainly provides the read function, and before reading the TS, it is necessary to configure the TS register enable signal, output mode, and then read the junction temperature of the chip. In addition, the TS register reads the die junction temperature every 2.6s. The structure of the TS driver on the RT-smart side is shown in the following figure:
 
 ![ts](../../../../zh/01_software/board/osdrv/images/ts_linux.png)
 
 #### 1.2.8 TRNG module
 
-Integrated in the security module PUF, TRNG provides true random number functionality to the entire SoC, protecting critical data such as root key and boot code from attackers. The small core side TRNG driver mainly provides read function, and the TRNG driver is mounted on the HW random framework, and the specific framework structure is shown in the following figure:
+Integrated in the security module PUF, TRNG provides true random number functionality to the entire SoC, protecting critical data such as root key and boot code from attackers. The little core side TRNG driver mainly provides read function, and the TRNG driver is mounted on the HW random framework, and the specific framework structure is shown in the following figure:
 
 ![trng](../../../../zh/01_software/board/osdrv/images/trng_linux.png)
 
@@ -203,7 +203,7 @@ echo 1 > /sys/class/gpio/gpioN/value     //Port output high level
 echo 0 > /sys/class/gpio/gpioN/value     //Port output low level
 
 gpio interrupte:
-echo rising > /sys/class/gpio/gpioN/edge    //Rising edge, interrupts can only be set if the direction is in 
+echo rising > /sys/class/gpio/gpioN/edge    //Rising edge, interrupts can only be set if the direction is in
 
 echo falling > /sys/class/gpio/gpioN/edge   //Falling edge
 
@@ -394,7 +394,7 @@ The steps to run are as follows:
 1. Execute the OTP demo.
 1. Change the read length (length range: 1~768) and re-execute the OTP demo.
 
-After starting the small core Linux, run the following command:
+After starting the little core Linux, run the following command:
 
 ```shell
 [root@canaan ~ ]#cd /usr/bin/
@@ -556,7 +556,7 @@ The steps to run are as follows:
 1. Execute the ts demo.
 1. Change the number of loops and re-execute the ts demo.
 
-After starting the small core Linux, run the following command:
+After starting the little core Linux, run the following command:
 
 ```shell
 [root@canaan ~ ]#cd /usr/bin/
@@ -614,7 +614,7 @@ The steps to run are as follows:
 1. Execute the trng demo.
 1. Run the trng demo repeatedly to see if the random numbers read are consistent each time.
 
-After starting the small core Linux, run the following command:
+After starting the little core Linux, run the following command:
 
 ```text
 [root@canaan ~ ]#cd /usr/bin/

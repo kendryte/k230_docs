@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly guides application developers on how to obtain image data through the VICAP module, and describes the basic functions of each module API.
 
@@ -46,7 +46,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description                                                                                                                                   | Modified by        | date      |
+| Document version number | Modify the description                                                                                                                                   | Author        | date      |
 |------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------|-----------|
 | V1.0       | Initial                                                                                                                               | Wang Chenggen        | 2023/4/4  |
 | V1.1       | Modify VICAP Overview; Add APIs and data type jumps                                                                              | Zhao Zhongxiang      | 2023/4/6  |
@@ -133,7 +133,7 @@ This function module provides the following APIs:
 
 Gets sensor configuration information based on the specified sensor configuration type
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_get_sensor_info(k_vicap_sensor_type sensor_type, k_vicap_sensor_info \*sensor_info)
 
@@ -151,11 +151,11 @@ k_s32 kd_mpi_vicap_get_sensor_info(k_vicap_sensor_type sensor_type, k_vicap_sens
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -168,7 +168,7 @@ Application developers need to call this API to obtain sensor configuration info
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.2 kd_mpi_vicap_set_dev_attr
 
@@ -176,7 +176,7 @@ None.
 
 Set the VICAP device properties
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_set_dev_attr(k_vicap_dev dev_num, k_vicap_dev_attr dev_attr)
 
@@ -194,11 +194,11 @@ k_s32 kd_mpi_vicap_set_dev_attr(k_vicap_dev dev_num, k_vicap_dev_attr dev_attr)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -211,7 +211,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.3 kd_mpi_vicap_get_dev_attr
 
@@ -219,7 +219,7 @@ None.
 
 Gets the VICAP device properties
 
-【Grammar】
+【Syntax】
 
 k_s23 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev, k_vicap_chn_attr chn_attr)
 
@@ -237,11 +237,11 @@ k_s23 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev, k_vicap_chn_attr chn_attr)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -254,7 +254,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.4 kd_mpi_vicap_set_chn_attr
 
@@ -262,7 +262,7 @@ None.
 
 Set the VICAP device properties
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vicap_chn_attr chn_attr)
 
@@ -281,11 +281,11 @@ k_s32 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vica
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -298,7 +298,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.5 kd_mpi_vicap_get_chn_attr
 
@@ -306,7 +306,7 @@ None.
 
 Gets the VICAP device properties
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_get_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vicap_chn_attr \*chn_attr)
 
@@ -325,11 +325,11 @@ k_s32 kd_mpi_vicap_get_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vica
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -342,7 +342,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.6 kd_mpi_vicap_init
 
@@ -350,7 +350,7 @@ None.
 
 VICAP device initialization
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_init(k_vicap_dev dev_num)
 
@@ -367,11 +367,11 @@ k_s32 kd_mpi_vicap_init(k_vicap_dev dev_num)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -382,9 +382,9 @@ Before using this interface, you need to call kd_mpi_vicap_set_dev_attr set devi
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 #### 2.1.7 kd_mpi_vicap_deinit
 
@@ -392,7 +392,7 @@ not
 
 VICAP device deinitialization
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_deinit(k_vicap_dev dev_num)
 
@@ -409,11 +409,11 @@ k_s32 kd_mpi_vicap_deinit(k_vicap_dev dev_num)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -426,7 +426,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.8 kd_mpi_vicap_start_stream
 
@@ -434,7 +434,7 @@ None.
 
 Start the VICAP device output data stream
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_start_stream(k_vicap_dev dev_num)
 
@@ -451,11 +451,11 @@ k_s32 kd_mpi_vicap_start_stream(k_vicap_dev dev_num)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -468,7 +468,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.9 kd_mpi_vicap_stop_stream
 
@@ -476,7 +476,7 @@ None.
 
 Stop the VICAP device data stream output
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_stop_stream(k_vicap_dev dev_num)
 
@@ -493,24 +493,24 @@ k_s32 kd_mpi_vicap_stop_stream(k_vicap_dev dev_num)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
 
 【Note】
 
-not
+none
 
 【Example】
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.10 kd_mpi_vicap_dump_frame
 
@@ -518,7 +518,7 @@ None.
 
 Dump vicap data according to the specified device and output channel
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_dump_frame(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vicap_dump_format foramt,
 
@@ -541,11 +541,11 @@ k_video_frame_info \*vf_info, k_u32 milli_sec)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -558,7 +558,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.1.11 kd_mpi_vicap_dump_release
 
@@ -566,7 +566,7 @@ None.
 
 Release the dump data frame
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_dump_release(k_vicap_dev dev_num, k_vicap_chn chn_num, const k_video_frame_info \*vf_info)
 
@@ -585,11 +585,11 @@ k_s32 kd_mpi_vicap_dump_release(k_vicap_dev dev_num, k_vicap_chn chn_num, const 
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
@@ -602,7 +602,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 ### 2.2 Sensor
 
@@ -631,7 +631,7 @@ This function module provides the following APIs:
 
 Open the sensor device according to the sensor device name
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_open(const char \*sensor_name)
 
@@ -648,11 +648,11 @@ k_s32 kd_mpi_sensor_open(const char \*sensor_name)
 | positive value       | Succeed. Returns the device descriptor   |
 | Negative       | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -665,7 +665,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.2 kd_mpi_sensor_close
 
@@ -673,7 +673,7 @@ None.
 
 Turn off the sensor device
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_close (k_s32 fd)
 
@@ -690,11 +690,11 @@ k_s32 kd_mpi_sensor_close (k_s32 fd)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -707,7 +707,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.3 kd_mpi_sensor_power_set
 
@@ -715,7 +715,7 @@ None.
 
 Set the sensor power state
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_power_set(k_s32 fd, k_bool is)
 
@@ -733,11 +733,11 @@ k_s32 kd_mpi_sensor_power_set(k_s32 fd, k_bool is)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -750,7 +750,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.4 kd_mpi_sensor_id_get
 
@@ -758,7 +758,7 @@ None.
 
 Get the sensor ID
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_id_get(k_s32 fd, k_u32 \*sensor_id)
 
@@ -776,11 +776,11 @@ k_s32 kd_mpi_sensor_id_get(k_s32 fd, k_u32 \*sensor_id)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -793,7 +793,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.5 kd_mpi_sensor_init
 
@@ -801,7 +801,7 @@ None.
 
 Sensor initialization
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_init(k_s32 fd, k_sensor_mode mode)
 
@@ -819,11 +819,11 @@ k_s32 kd_mpi_sensor_init(k_s32 fd, k_sensor_mode mode)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -836,7 +836,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.6 kd_mpi_sensor_reg_read
 
@@ -844,7 +844,7 @@ None.
 
 Read the contents of the sensor register
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_reg_read(k_s32 fd, k_u32 reg_addr, k_u32 \*reg_val)
 
@@ -863,11 +863,11 @@ k_s32 kd_mpi_sensor_reg_read(k_s32 fd, k_u32 reg_addr, k_u32 \*reg_val)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -880,7 +880,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.7 kd_mpi_sensor_reg_write
 
@@ -888,7 +888,7 @@ None.
 
 Write the contents of the sensor register
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_reg_write(k_s32 fd, k_u32 reg_addr, k_u32 reg_val)
 
@@ -907,11 +907,11 @@ k_s32 kd_mpi_sensor_reg_write(k_s32 fd, k_u32 reg_addr, k_u32 reg_val)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -924,7 +924,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.8 kd_mpi_sensor_mode_get
 
@@ -932,7 +932,7 @@ None.
 
 Get the sensor mode configuration
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode \*mode)
 
@@ -950,11 +950,11 @@ k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode \*mode)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -967,7 +967,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.9 kd_mpi_sensor_mode_set
 
@@ -975,7 +975,7 @@ None.
 
 Set the sensor mode configuration
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode mode)
 
@@ -993,11 +993,11 @@ k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode mode)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1010,7 +1010,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.10 kd_mpi_sensor_stream_enable
 
@@ -1018,7 +1018,7 @@ None.
 
 Set the sensor mode configuration
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_stream_enable(k_s32 fd, k_s32 enable)
 
@@ -1036,11 +1036,11 @@ k_s32 kd_mpi_sensor_stream_enable(k_s32 fd, k_s32 enable)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1053,7 +1053,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.11 kd_mpi_sensor_again_set
 
@@ -1061,7 +1061,7 @@ None.
 
 Set the sensor analog gain
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain gain)
 
@@ -1079,11 +1079,11 @@ k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain gain)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1096,7 +1096,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.12 kd_mpi_sensor_again_get
 
@@ -1104,7 +1104,7 @@ None.
 
 Get the sensor analog gain
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain \*gain)
 
@@ -1122,11 +1122,11 @@ k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain \*gain)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1139,7 +1139,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.13 kd_mpi_sensor_dgain_set
 
@@ -1147,7 +1147,7 @@ None.
 
 Set the sensor digital gain
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_dgain_set(k_s32 fd, k_sensor_gain gain)
 
@@ -1165,11 +1165,11 @@ k_s32 kd_mpi_sensor_dgain_set(k_s32 fd, k_sensor_gain gain)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1182,7 +1182,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.14 kd_mpi_sensor_dgain_get
 
@@ -1190,7 +1190,7 @@ None.
 
 Get the sensor digital gain
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_dgain_get(k_s32 fd, k_sensor_gain \*gain)
 
@@ -1208,11 +1208,11 @@ k_s32 kd_mpi_sensor_dgain_get(k_s32 fd, k_sensor_gain \*gain)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1225,7 +1225,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.15 kd_mpi_sensor_intg_time_set
 
@@ -1233,7 +1233,7 @@ None.
 
 Set the sensor integration time
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_intg_time_set(k_s32 fd, k_sensor_intg_time time)
 
@@ -1251,11 +1251,11 @@ k_s32 kd_mpi_sensor_intg_time_set(k_s32 fd, k_sensor_intg_time time)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1268,7 +1268,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 #### 2.2.16 kd_mpi_sensor_intg_time_get
 
@@ -1276,7 +1276,7 @@ None.
 
 Get sensor integration time
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 
@@ -1294,11 +1294,11 @@ k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 | 0          | Succeed.                 |
 | Non-0        | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sensor_api.h
 - Library file: libsensor.a
@@ -1311,7 +1311,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 ## 3. Data Type
 
@@ -1366,7 +1366,7 @@ SENSOR_TYPE_MAX,
 | OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR      | OV9286 720P 10bit 30 fps linear output IR configuration |
 | OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE | OV9286 720P 10bit 30 fps linear output speckle configuration |
 
-【Precautions】
+【Note】
 
 1. This list needs to be maintained by the sensor driver developer, and the application developer opens the specified type of sensor device through the sensor type defined here
 1. The current version supports the following types:
@@ -1445,7 +1445,7 @@ VICAP_CSI2 = 3,
 | VICAP_CSI1   | CSI1     |
 | VICAP_CSI2   | CSI2     |
 
-【Precautions】
+【Note】
 
 The CSI number of the sensor connection is determined by the hardware physical connection.
 
@@ -1471,7 +1471,7 @@ VICAP_MIPI_4LANE = 3,
 | VICAP_MIPI_2LANE | 2 lane   |
 | VICAP_MIPI_4LANE | 4 lane   |
 
-【Precautions】
+【Note】
 
 The number of MIPI channels used for the sensor connection is determined by the hardware physical connection, and when using 4lane, only a maximum of two sensors can be connected.
 
@@ -1499,9 +1499,9 @@ VICAP_CSI_DATA_TYPE_RAW14 = 0x2D,
 | VICAP_CSI_DATA_TYPE_RAW12 | RAW12    |
 | VICAP_CSI_DATA_TYPE_RAW14 | RAW14    |
 
-【Precautions】
+【Note】
 
-not
+none
 
 #### 3.1.7 k_vicap_data_source
 
@@ -1529,7 +1529,7 @@ VICAP_SOURCE_CSI2 = 4, /**< vicap acquire data from the csi2*/
 | VICAP_SOURCE_CSI1_FS_TR1 | VICAP data source is CSI1 Flash trigger 1 |
 | VICAP_SOURCE_CSI2        | VICAP data source is CSI2                 |
 
-【Precautions】
+【Note】
 
 #### 3.1.8 k_vicap_vi_dvp_port
 
@@ -1554,7 +1554,7 @@ VICAP_VI_DVP_PORT_MAX,
 | VICAP_VI_DVP_PORT1 | DVP port 1  |
 | VICAP_VI_DVP_PORT2 | DVP port 2  |
 
-【Precautions】
+【Note】
 
 1. The default port 0 corresponds to CSI0, port 1 corresponds to CSI1, and port 2 corresponds to CSI2
 1. Only port 0 supports HDR sensor, and when the user needs to use HDR mode, it must be bound to DVP port 0.
@@ -1584,7 +1584,7 @@ VICAP_FLASH_DISABLE = 3, /**< disable flash light*/
 | VICAP_FLASH_NORMAL_PWM             | Controlled by PWM signals               |
 | VICAP_FLASH_DISABLE                | disable                        |
 
-【Precautions】
+【Note】
 
 #### 3.1.10 k_vicap_img_window
 

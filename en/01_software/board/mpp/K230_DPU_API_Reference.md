@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the use of K230 DPU software, including the use of DPU API and demo introduction.
 
@@ -102,7 +102,7 @@ This function module provides the following APIs:
 
 Initialize the DPU device
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_init(k_dpu_init_t \*init);
 
@@ -119,11 +119,11 @@ k_s32 kd_mpi_dpu_init(k_dpu_init_t \*init);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -136,7 +136,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_init_t](#311-k_dpu_init_t)
 
@@ -146,7 +146,7 @@ None
 
 Delete the DPU device that has been initialized.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_delete();
 
@@ -163,11 +163,11 @@ k_s32 kd_mpi_dpu_delete();
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -180,7 +180,7 @@ This function can only be called after the DPU device is initialized.
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -190,7 +190,7 @@ None
 
 Extract DPU configuration parameters from the DPU configuration file.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_parse_file(const k_char \*param_path, k_dpu_dev_param_t \*param, k_dpu_lcn_param_t \*lcn_param, k_dpu_ir_param_t \*ir_param, k_dpu_user_space_t \*g_temp_space);
 
@@ -211,11 +211,11 @@ k_s32 kd_mpi_dpu_parse_file(const k_char \*param_path, k_dpu_dev_param_t \*param
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -230,7 +230,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
 
@@ -240,7 +240,7 @@ None
 
 Configure DPU device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 
@@ -257,11 +257,11 @@ k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -275,7 +275,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
 
@@ -285,7 +285,7 @@ None
 
 Gets the dpu device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 
@@ -302,11 +302,11 @@ k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -319,7 +319,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
 
@@ -329,7 +329,7 @@ None
 
 Configure the DPU reference image.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_ref_image(const k_char \*ref_path);
 
@@ -346,11 +346,11 @@ k_s32 kd_mpi_dpu_set_ref_image(const k_char \*ref_path);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -363,7 +363,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -373,7 +373,7 @@ None
 
 Configure the DPU reference picture after offline processing.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_processed_ref_image(const k_char \*ref_path);
 
@@ -390,11 +390,11 @@ k_s32 kd_mpi_dpu_set_processed_ref_image(const k_char \*ref_path);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -407,7 +407,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -417,7 +417,7 @@ None
 
 Configure the DPU template image
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_template_image(k_dpu_user_space_t \*temp_space);
 
@@ -434,11 +434,11 @@ k_s32 kd_mpi_dpu_set_template_image(k_dpu_user_space_t \*temp_space);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -452,7 +452,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_user_space_t](#315-k_dpu_user_space_t)
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
@@ -463,7 +463,7 @@ None
 
 Start the DPU device
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_start_dev();
 
@@ -480,11 +480,11 @@ k_s32 kd_mpi_dpu_start_dev();
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -497,7 +497,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -507,7 +507,7 @@ None
 
 Configure DPU channel properties
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_set_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr_t \*ir_attr);
 
@@ -525,11 +525,11 @@ k_s32 kd_mpi_dpu_set_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -544,7 +544,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
 [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
@@ -555,7 +555,7 @@ None
 
 Gets the DPU channel properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_get_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr_t \*ir_attr);
 
@@ -573,11 +573,11 @@ k_s32 kd_mpi_dpu_get_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -590,7 +590,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
 [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
@@ -601,7 +601,7 @@ None
 
 Start the DPU channel
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_start_chn(k_u32 chn_num);
 
@@ -618,11 +618,11 @@ k_s32 kd_mpi_dpu_start_chn(k_u32 chn_num);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -635,7 +635,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -645,7 +645,7 @@ None
 
 Stop the DPU channel
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_stop_chn(k_u32 chn_num);
 
@@ -662,11 +662,11 @@ k_s32 kd_mpi_dpu_stop_chn(k_u32 chn_num);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -679,7 +679,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -689,7 +689,7 @@ None
 
 In unbound mode, one frame of data is sent to the DPU.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_send_frame(k_u32 chn_num, k_u64 addr, k_s32 s32_millisec);
 
@@ -708,11 +708,11 @@ k_s32 kd_mpi_dpu_send_frame(k_u32 chn_num, k_u64 addr, k_s32 s32_millisec);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -725,7 +725,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -735,7 +735,7 @@ None
 
 Get one frame from the DPU.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_get_frame(k_u32 chn_num, k_dpu_chn_result_u \*result, k_s32 s32_millisec);
 
@@ -754,11 +754,11 @@ k_s32 kd_mpi_dpu_get_frame(k_u32 chn_num, k_dpu_chn_result_u \*result, k_s32 s32
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -771,7 +771,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 [k_dpu_chn_result_u](#319-k_dpu_chn_result_u)
 [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
@@ -787,7 +787,7 @@ None
 
 In unbound mode, release the results that have already been obtained.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dpu_release_frame();
 
@@ -802,11 +802,11 @@ None
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dpu_api.h
 - Library file: libdpu.a
@@ -819,7 +819,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 
@@ -867,11 +867,11 @@ typedef struct {
 | start_num | The DPU device start frame number (that is the first frame calculated by the DPU).   |
 | buffer_num| The number of DPU cache buffers, at least 1                    |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_init](#211-kd_mpi_dpu_init)
 
@@ -898,11 +898,11 @@ typedef struct
 | Page      | DPU long-period parameter structure |
 | spp      | DPU short-period parameter structure |
 
-【Precautions】
+【Note】
 
 - When you need to change the value in the long-period parameter, you should use the virtual address member variable.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_long_parameter_t](#321-k_dpu_long_parameter_t)
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
@@ -937,11 +937,11 @@ typedef struct {
 | depth_p2                    | Parallax to depth: depth numerical calculation coefficient P2, value range: -5.0~100.0, floating-point type: 0.01 accuracy  |
 | depth_precision             | Parallax to depth: depth numerical accuracy (multiple), value range: 0.0~100.0, floating-point type: 0.1 accuracy  |
 
-【Precautions】
+【Note】
 
 - This channel structure parameter is a subset of the device structure parameters, if you have configured device parameters and the channel parameters are the same as the device parameters, you can not configure the channel parameters.
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
 
@@ -968,11 +968,11 @@ typedef struct {
 | depth_k2 | Directly corresponds exactly to one register. Three-images alignment: depth numerical calculation coefficient k2, value range: 0.5~1.5, floating point type: 0.001 accuracy |
 | tz | Directly corresponds exactly to one register. Three-images alignment: projector z direction offset (mm), value range: -5.0~5.0, floating point type: 0.001 accuracy |
 
-【Precautions】
+【Note】
 
 - This channel structure parameter is a subset of the device structure parameters, if you have configured device parameters and the channel parameters are the same as the device parameters, you can not configure the channel parameters.
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
 
@@ -1002,11 +1002,11 @@ typedef struct {
 | phys_addr | The physical address of the template diagram       |
 | virt_addr | The virtual address of the template diagram       |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
 
@@ -1040,11 +1040,11 @@ typedef struct {
 | param_valid       | When the user configures a DPU device property, this member is set to an arbitrary nonzero value that is returned in the output of the corresponding effective frame when the device property takes effect.    |
 | dev_param         | DPU device parameter structure.                                                                                                     |
 
-【Precautions】
+【Note】
 
 - When you first configure DPU device properties, you should configure tytz_temp_recfg and align_depth_recfg to K_TRUE so that the DPU loads the corresponding parameters.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
 [kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
@@ -1073,11 +1073,11 @@ typedef struct {
 | chn_num     | Channel number. The current DPU device has a total of two channels, the user can set this channel number to 0 or 1, and the speckle channel will be input and output in the corresponding channel. If the IR channel is enabled, this channel number should be different from the IR channel number. |
 | lcn_param   | Speckle channel parameters.                                                                                                                                             |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
 
@@ -1105,11 +1105,11 @@ typedef struct {
 | chn_num     | Channel number. The current DPU device has a total of two channels, the user can set this channel number to 0 or 1, and the IR channel will be input and output in the corresponding channel. This channel number should be different from the speckle image channel number. |
 | ir_param    | IR channel parameters.                                                                                                                       |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
 
@@ -1135,11 +1135,11 @@ typedef union {
 | lcn_result | The speckle image channel outputs the resulting structure. [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t) |
 | ir_result  | The IR channel outputs the resulting structure. [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)   |
 
-【Precautions】
+【Note】
 
 - Which member the user selects as output needs to be selected based on the user's own configuration. In [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr) user configures the correspondence between the channel number and the channel type.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
 [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
@@ -1174,11 +1174,11 @@ typedef struct {
 | qlt_out   | Quality inspection output result structure. Includes quality test results, thickness_column parallax (initial resolution) results, and initial determinant difference results.                                                                                                                            |
 | flag      | This structure is used to mark the frame at which the user-configured parameters took effect. The struct contains param_valid variables in [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t). |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
 [k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
@@ -1210,11 +1210,11 @@ typedef struct {
 | ir_out   | The IR image outputs the resulting structure.                                                                                                                                                                                                 |
 | flag     | This structure is used to mark the frame at which the user-configured parameters took effect. The struct contains [param_valid variables in k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t), k_dpu_chn_ir_attr_t[](#318-k_dpu_chn_ir_attr_t). |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
@@ -1245,11 +1245,11 @@ typedef struct {
 | disp_phys_addr | The disparity plot outputs the resulting physical address.                               |
 | disp_virt_addr | The parallax plot outputs the resulting virtual address.                               |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
@@ -1280,11 +1280,11 @@ typedef struct {
 | depth_phys_addr | The depth image outputs the physical address of the result.                               |
 | depth_virt_addr | The depth image outputs the virtual address.                               |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
@@ -1315,11 +1315,11 @@ typedef struct {
 | ir_phys_addr | The IR output results physical address.                               |
 | ir_virt_addr | The IR output results virtual address.                               |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
@@ -1362,11 +1362,11 @@ typedef struct {
 | init_sad_disp_phys_addr | The initial determinant difference outputs the resulting physical address.                         |
 | init_sad_disp_virt_addr | The initial determinant difference outputs the resulting virtual address.                         |
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
@@ -1388,11 +1388,11 @@ DPU long-period parameter structure
 
 There are too many long-period parameter members to be shown here, see the struct k_dpu_long_parameter_t in k_dpu_comm.h in K230_SDK.
 
-【Precautions】
+【Note】
 
 - When you need to change the value in the long-period parameter, you should use the virtual address member variable.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
@@ -1408,11 +1408,11 @@ DPU short-period parameter structure
 
 There are too many short-period parameter members to be shown here, see the struct k_dpu_short_parameter_t in k_dpu_comm.h in K230_SDK.
 
-【Precautions】
+【Note】
 
 None
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
 [kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)

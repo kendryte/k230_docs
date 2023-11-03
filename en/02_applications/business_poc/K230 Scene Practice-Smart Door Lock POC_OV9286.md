@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -31,7 +31,7 @@ A set of programs developed on the K230 platform that integrate UI, face detecti
 - Matching LCD module
 - K230-USIP-OV9286-SENSOR-V1.1模组
 
-### overview
+### Overview
 
 As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, big and little core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the big core terminal program mainly completes video input and output, AI processing and other related functions, the little core end completes the function of UI and face feature value management, the big and little cores communicate through IPCMSG, and the development board is started by norflash.
 

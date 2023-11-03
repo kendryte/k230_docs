@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,7 +21,7 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
@@ -46,7 +46,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date      |
+| Document version number | Modify the description | Author | date      |
 | ---------- | -------- | ------ | --------- |
 | V1.0       | First version of the document | Yang Zhang   | 2023/6/25 |
 
@@ -256,7 +256,7 @@ root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb#
 The final executable program generated is out/bin/mbv2_onnx_int8.elf
 
 ```shell
-root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf 
+root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf
 -rwxr-xr-x 1 root root 1172680 Jun 25 14:37 out/bin/mbv2_onnx_int8.elf*
 ```
 
@@ -273,7 +273,7 @@ total 5560
 
 ### 3.3 Run demo
 
-- Power on K230, execute the following command at serial port of the large core RTT
+- Power on K230, execute the following command at serial port of the big core RTT
 
 ```shell
 msh />cd /sharefs/k230/mbv2_onnx_int8/
@@ -282,11 +282,11 @@ msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg.0.b
 Run graph execution time: 64.71648ms, FPS=15.45
 
 === tensor info ===
-shape: 1 3 224 224 
+shape: 1 3 224 224
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000 
+shape: 1 1000
 data pointer: 0x300194c80
 The max_value of output: 15.581656
 The min_value of output: -8.026914
@@ -299,15 +299,15 @@ The std_value of output: 11.703238
 285: 11.709850
 287: 11.143245
 
-msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg      
+msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg
 Run graph execution time: 64.67589ms, FPS=15.46
 
 === tensor info ===
-shape: 1 3 224 224 
+shape: 1 3 224 224
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000 
+shape: 1 1000
 data pointer: 0x300194c80
 The max_value of output: 16.053827
 The min_value of output: -8.026914

@@ -49,7 +49,7 @@ The main people to whom this document (this guide) applies:
 
 ### Revision history
 
-| Version Number | Modified by    | Revision Date | Revision Notes                                                    |
+| Version Number | Author    | Revision Date | Revision Notes                                                    |
 |----------------|----------------|--------------|-------------------------------------------------------------------|
 | V1.0           | Zhenming Huang | 2023-6-10    | Re-format to markdown document based on K230 Brief Datasheet_Complete_Apr_2023_v1 |
 |                |                |              |           |

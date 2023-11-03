@@ -52,7 +52,7 @@ This document (this guide) is intended primarily for:
 
 ## 1. Function Introduction
 
-SHA256 is mainly used to calculate the hash value of data, and the SHA256 algorithm is implemented in the large core rt-smart to calculate the hash value of data, and the code logic is shown in the following figure:
+SHA256 is mainly used to calculate the hash value of data, and the SHA256 algorithm is implemented in the big core rt-smart to calculate the hash value of data, and the code logic is shown in the following figure:
 
 ![sha256](../../../../zh/01_software/board/mpp/images/sha256.png)
 
@@ -68,7 +68,7 @@ The SHA256 module mainly provides the following APIs:
 
 Calculates the hash value of the message based on the incoming message.
 
-【Grammar】
+【Syntax】
 
 kd_mpi_cipher_sha256(const void \*data, k_u32 len, k_u8 \*hash);
 
@@ -87,11 +87,11 @@ kd_mpi_cipher_sha256(const void \*data, k_u32 len, k_u8 \*hash);
 | 0       | Succeed.                          |
 | Non-0    | Failed, refer to Error Code Definition |
 
-【Chip differences】
+【Differences】
 
 None
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_cipher_api.h
 - Library file: libcipher.a
@@ -104,7 +104,7 @@ None
 
 None
 
-【Related Topics】
+【See Also】
 
 None
 

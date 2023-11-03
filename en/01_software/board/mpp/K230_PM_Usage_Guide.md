@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document describes the K230 platform power management framework and how to use power control.
 
@@ -47,7 +47,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date |
+| Document version number | Modify the description | Author | date |
 | --- | --- | --- | --- |
 | V1.0 | Initial edition | Zhang Tao | 2023/07/17 |
 
@@ -195,7 +195,7 @@ The framework provides the following APIs:
 
 Write registers for expansion or debugging
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_reg(uint32_t reg, uint32_t val);
@@ -215,7 +215,7 @@ int kd_mpi_pm_set_reg(uint32_t reg, uint32_t val);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -234,7 +234,7 @@ None
 
 Read registers for expansion or debugging
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_reg(uint32_t reg, uint32_t *pval);
@@ -254,7 +254,7 @@ int kd_mpi_pm_get_reg(uint32_t reg, uint32_t *pval);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -273,7 +273,7 @@ None
 
 Gets the profile property of the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_profiles(k_pm_domain domain, uint32_t *pcount, k_pm_profile *pprofile);
@@ -294,7 +294,7 @@ int kd_mpi_pm_get_profiles(k_pm_domain domain, uint32_t *pcount, k_pm_profile *p
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -317,7 +317,7 @@ None
 
 Gets statistics for the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_stat(k_pm_domain domain);
@@ -336,7 +336,7 @@ int kd_mpi_pm_get_stat(k_pm_domain domain);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -355,7 +355,7 @@ None
 
 Set the management policy for the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_governor(k_pm_domain domain, k_pm_governor governor);
@@ -375,7 +375,7 @@ int kd_mpi_pm_set_governor(k_pm_domain domain, k_pm_governor governor);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -394,7 +394,7 @@ None
 
 Gets the management policy for the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_governor(k_pm_domain domain, k_pm_governor *pgovernor);
@@ -414,7 +414,7 @@ int kd_mpi_pm_get_governor(k_pm_domain domain, k_pm_governor *pgovernor);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -433,7 +433,7 @@ None
 
 Sets the current profile sequence number for the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_profile(k_pm_domain domain, int32_t index);
@@ -453,7 +453,7 @@ int kd_mpi_pm_set_profile(k_pm_domain domain, int32_t index);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -475,7 +475,7 @@ None
 
 Gets the current profile sequence number of the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_profile(k_pm_domain domain, int32_t *pindex);
@@ -495,7 +495,7 @@ int kd_mpi_pm_get_profile(k_pm_domain domain, int32_t *pindex);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -514,7 +514,7 @@ None
 
 Sets the lowest profile sequence number for the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_profile_lock(k_pm_domain domain, int32_t index);
@@ -534,7 +534,7 @@ int kd_mpi_pm_set_profile_lock(k_pm_domain domain, int32_t index);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -554,7 +554,7 @@ None
 
 Clear the lowest profile sequence number in the power management domain
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_profile_unlock(k_pm_domain domain, int32_t index);
@@ -574,7 +574,7 @@ int kd_mpi_pm_set_profile_unlock(k_pm_domain domain, int32_t index);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -593,7 +593,7 @@ None
 
 Set up power management domain thermal protection throttling
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_thermal_protect(k_pm_domain domain, int32_t temp, int32_t index);
@@ -614,7 +614,7 @@ int kd_mpi_pm_set_thermal_protect(k_pm_domain domain, int32_t temp, int32_t inde
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -633,7 +633,7 @@ None
 
 Obtain a power management domain thermally protected throttling configuration
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_thermal_protect(k_pm_domain domain, int32_t *ptemp, int32_t *pindex);
@@ -654,7 +654,7 @@ int kd_mpi_pm_get_thermal_protect(k_pm_domain domain, int32_t *ptemp, int32_t *p
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -673,7 +673,7 @@ None
 
 Set the thermal shutdown temperature
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_thermal_shutdown(int32_t temp);
@@ -692,7 +692,7 @@ int kd_mpi_pm_set_thermal_shutdown(int32_t temp);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -711,7 +711,7 @@ None
 
 Gets the thermal shutdown temperature
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_get_thermal_shutdown(int32_t *ptemp);
@@ -730,7 +730,7 @@ int kd_mpi_pm_get_thermal_shutdown(int32_t *ptemp);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -749,7 +749,7 @@ None
 
 Set the power management domain clock
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_clock(k_pm_domain domain, bool enable);
@@ -769,7 +769,7 @@ int kd_mpi_pm_set_clock(k_pm_domain domain, bool enable);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -788,7 +788,7 @@ None
 
 Set the power management domain power
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_set_power(k_pm_domain domain, bool enable);
@@ -808,7 +808,7 @@ int kd_mpi_pm_set_power(k_pm_domain domain, bool enable);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -827,7 +827,7 @@ None
 
 Set the nncase run stage, which is called by the nncase runtime
 
-【Grammar】
+【Syntax】
 
 ```c
 int kd_mpi_pm_runtime_runstage(k_runtimestage_id stage);
@@ -846,7 +846,7 @@ int kd_mpi_pm_runtime_runstage(k_runtimestage_id stage);
 | 0 | succeed |
 | Non-0 | Failed, the value of which is described in [error code](#25-error-codes) |
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_pm_api.h
 - Library file: libpm.a
@@ -894,7 +894,7 @@ typedef enum {
 | PM_DOMAIN_MEDIA | Video power management domain |
 | PM_DOMAIN_NR | Total number of power management domains |
 
-【Precautions】
+【Note】
 
 None
 
@@ -924,7 +924,7 @@ typedef enum {
 | PM_GOVERNOR_ENERGYSAVING | Energy saving mode |
 | PM_GOVERNOR_AUTO | Automatic mode |
 
-【Precautions】
+【Note】
 
 None
 
@@ -950,7 +950,7 @@ typedef struct {
 | freq | Frequency, unit: Hz |
 | volt | Voltage, unit: uV |
 
-【Precautions】
+【Note】
 
 1. The frequency pairs are arranged in descending order, the sequence number 0 is the highest frequency, and the larger the serial number, the lower the frequency
 
@@ -984,7 +984,7 @@ typedef enum {
 | RUNTIMESTAGE_ID_CPU_START | CPU operation starts |
 | RUNTIMESTAGE_ID_CPU_STOP | The CPU is running at the end of operation |
 
-【Precautions】
+【Note】
 
 None
 

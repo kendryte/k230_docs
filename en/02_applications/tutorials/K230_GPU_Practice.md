@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document focuses on drawing vector graphics with the K230 GPU.
 
@@ -93,7 +93,7 @@ After the K230 SDK is fully compiled, the library files are placed in
 
 #### make
 
-Put the source file of the code into `src` the directory, create a Makefile and  paste the following content into it, set`K230SDK` the environment variable to the path where the K230 SDK is stored (or change the first line to the path to store the K230 SDK`/path/to/k230_sdk`), you can use the command to build, `make`after the build is completed, the executable file will be generated in the same directory of the Makefile and copied to the small core Run it on linux, or you can use `make install` copy it to the K230 SDK,  build the image in the K230 SDK directory, and then flash it to an SD card or eMMC to boot.
+Put the source file of the code into `src` the directory, create a Makefile and  paste the following content into it, set`K230SDK` the environment variable to the path where the K230 SDK is stored (or change the first line to the path to store the K230 SDK`/path/to/k230_sdk`), you can use the command to build, `make`after the build is completed, the executable file will be generated in the same directory of the Makefile and copied to the little core Run it on linux, or you can use `make install` copy it to the K230 SDK,  build the image in the K230 SDK directory, and then flash it to an SD card or eMMC to boot.
 
 ```Makefile
 K230SDK ?= /path/to/k230_sdk
@@ -180,7 +180,7 @@ install(TARGETS ${PROJECT_NAME} DESTINATION "${K230SDK}/output/k230_evb_defconfi
 
 The K230 EVB has a 1080x1920 display, which can be displayed with DRM on small-core Linux, and allowing the GPU driver to load DRM dumb buffer can reduce memory copies and achieve efficient rendering. The relevant code of GPU+DRM can refer `vglite_drm` to  this demo, and readers can add `drm.c` it to their own programs.
 
-It should be noted that as of K230 SDK v0.8, the DRM driver on linux still**cannot**work independently, and it needs to rely on the configuration of the SoC video output module, which can be completed by executing on the large core `sample_vo.elf 3` .
+It should be noted that as of K230 SDK v0.8, the DRM driver on linux still**cannot**work independently, and it needs to rely on the configuration of the SoC video output module, which can be completed by executing on the big core `sample_vo.elf 3` .
 
 Secondly, the color format enumeration  of DRM `vg_lite_buffer_format_t` is not exactly consistent with , for example, represents red in the `VGLITE_BGRA8888` lower 8 bits and alpha in the upper 8 bits of 32-bit color, corresponding to the DRM `DRM_FORMAT_ARGB8888` in .
 

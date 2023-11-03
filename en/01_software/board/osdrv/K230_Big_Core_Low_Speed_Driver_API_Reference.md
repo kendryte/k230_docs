@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the design of K230 large-core RT-Smart on-driver software, including the use of UART, I2C, GPIO, Hard-lock, ADC, WDT, OTP, TS, PWM, RTC, TIMER and other drivers in user mode and kernel mode.
 
@@ -55,7 +55,7 @@ This document (this guide) is intended primarily for:
 
 | Document version | Modify the description | Author | Date |
 |------------------|------------------------|--------|------|
-| V1.0 | first edition             | Juntao Fan | 2023/4/26 |
+| V1.0 | Initial edition             | Juntao Fan | 2023/4/26 |
 | V1.1 | Added watchdog section    | Juntao Fan | 2023/5/26 |
 | V1.2 | Added OTP TS section      | Juntao Fan | 2023/5/31 |
 | V1.3 | Add PWM RTC Timer section | Juntao Fan | 2023/6/29 |
@@ -88,10 +88,10 @@ WDT：
 WDT is the abbreviation of watchdog, essentially a timer, the software program needs to feed the dog every once in a while, if the WDT timeout can generate an interrupt signal or reset signal to the CPU, thereby preventing the program from running abnormally without resetting through the combination of software and hardware.
 
 OTP：
-OTP is mainly used to store security-sensitive confidential information, such as bootrom firmware information, encryption and decryption keys, signature information, and user-defined security information. The OTP is integrated into the security module PUF, providing secure storage capabilities for the entire SoC, protecting critical data such as the root key and boot code from being compromised by attackers. The large core side OTP driver mainly provides two functions: read and write, the readable area is 24Kbits space including production information, and the write area is the last 512 bytes of OTP space.
+OTP is mainly used to store security-sensitive confidential information, such as bootrom firmware information, encryption and decryption keys, signature information, and user-defined security information. The OTP is integrated into the security module PUF, providing secure storage capabilities for the entire SoC, protecting critical data such as the root key and boot code from being compromised by attackers. The big core side OTP driver mainly provides two functions: read and write, the readable area is 24Kbits space including production information, and the write area is the last 512 bytes of OTP space.
 
 TS：
-K230 TS (Temperature Sensor), self-developed temperature sensor, using TSMC 12nm process. The application scenario for TS is frequency reduction. The large core-side TS driver mainly provides the read function, and before reading the TS, it is necessary to configure the TS register enable signal, output mode, and then read the junction temperature of the chip. In addition, the TS register reads the die junction temperature every 2.6s.
+K230 TS (Temperature Sensor), self-developed temperature sensor, using TSMC 12nm process. The application scenario for TS is frequency reduction. The big core-side TS driver mainly provides the read function, and before reading the TS, it is necessary to configure the TS register enable signal, output mode, and then read the junction temperature of the chip. In addition, the TS register reads the die junction temperature every 2.6s.
 
 PWM: is a method of digital coding of analog signal levels, using the duty cycle of square waves to encode the level of a specific analog signal through pulses of different frequencies, so that the output end gets a series of pulses of equal amplitude, and these pulses are used to replace the required waveform equipment.
 
@@ -381,7 +381,7 @@ The application obtains a device handle based on the ADC device name, which in t
 
 #### 1.3.7 OTP
 
-The large core-side OTP driver can support scenarios such as being invoked by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of OTP drivers in these two application scenarios.
+The big core-side OTP driver can support scenarios such as being invoked by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of OTP drivers in these two application scenarios.
 
 ##### 1.3.7.1 User-mode programs use OTP
 
@@ -467,7 +467,7 @@ When using the read-write API, you need to pay attention to the following key po
 
 #### 1.3.8 TS
 
-The large core-side TS driver can support scenarios such as being called by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of TS drivers in these two application scenarios.
+The big core-side TS driver can support scenarios such as being called by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of TS drivers in these two application scenarios.
 
 ##### 1.3.8.1 User-mode programs use TS
 
@@ -546,7 +546,7 @@ When calling the API to read the TS temperature, you need to pay attention to th
 - TS driver will read the tsensor register and return the value of the register, but the value of the register is not the real temperature value, and it needs to be converted by mathematical formulas, and the detailed formula information is as follows:
 
 ```c
-// code is the result obtained by reading the value of the TS register and reserving 12 bits. temp is the temperature of the internal node of the chip 
+// code is the result obtained by reading the value of the TS register and reserving 12 bits. temp is the temperature of the internal node of the chip
 code = ts_val & 0xfff;
 temp = (1e-10 * pow(code, 4) * 1.01472 - 1e-6 * pow(code, 3) * 1.10063 + 4.36150 * 1e-3 * pow(code, 2) - 7.10128 * code + 3565.87);
 
@@ -678,9 +678,9 @@ Taking "K230-USIP-EVB-LP3-V1.1" as an example, it is necessary to connect the pi
 The K230's RTC supports two interrupt modes:
 
 ```text
-1. alarm interrupt (timed interrupt), which generates only one interrupt at a scheduled time.  Maximum accuracy: seconds 
+1. alarm interrupt (timed interrupt), which generates only one interrupt at a scheduled time.  Maximum accuracy: seconds
 
-2. tick interrupts (periodic interrupts), such as every second, every minute, every hour, every day, etc.  Maximum accuracy: 1/64 second 
+2. tick interrupts (periodic interrupts), such as every second, every minute, every hour, every day, etc.  Maximum accuracy: 1/64 second
 ```
 
 #### 1.3.11 TIMER
@@ -777,7 +777,7 @@ The UART module provides the following APIs:
 
 Initialize a serial device.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_init(struct rt_device *dev)`
 
@@ -800,7 +800,7 @@ Initialize a serial device.
 
 Turn on a serial device.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)`
 
@@ -824,7 +824,7 @@ Turn on a serial device.
 
 Turn off a serial device.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_close(struct rt_device *dev)`
 
@@ -847,7 +847,7 @@ Turn off a serial device.
 
 Read serial port data.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_read(struct rt_device *dev, rt_off_t pos, void *buffer, rt_size_t size)`
 
@@ -872,7 +872,7 @@ Read serial port data.
 
 Send serial port data.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_write(struct rt_device *dev, rt_off_t pos, void *buffer, rt_size_t size)`
 
@@ -897,7 +897,7 @@ Send serial port data.
 
 Through the control interface, the application can configure the serial device such as baud rate, data bit, check digit, receive buffer size, stop bit and other parameters modification.
 
-【Grammar】
+【Syntax】
 
 `rt_serial_control(struct rt_device *dev, int cmd, void *args)`
 
@@ -917,25 +917,25 @@ Through the control interface, the application can configure the serial device s
 |   -RT_ENOSYS | Execution failed with dev empty |
 |   other      | Execution failed |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.2 I2C
 
@@ -952,7 +952,7 @@ The I2C module provides the following APIs:
 
 Look for the I2C bus.
 
-【Grammar】
+【Syntax】
 
 `rt_i2c_bus_device_find(const char *bus_name)`
 
@@ -975,7 +975,7 @@ Look for the I2C bus.
 
 Sends data to the I2C slave device.
 
-【Grammar】
+【Syntax】
 
 ```text
 rt_i2c_master_send(struct rt_i2c_bus_device *bus,
@@ -1008,7 +1008,7 @@ rt_uint32_t count);
 
 Sends data to the I2C slave device.
 
-【Grammar】
+【Syntax】
 
 ```text
 rt_i2c_master_recv(struct rt_i2c_bus_device *bus,
@@ -1041,7 +1041,7 @@ rt_uint32_t count)
 
 Sends data to the I2C slave device.
 
-【Grammar】
+【Syntax】
 
 ```text
 rt_i2c_transfer(struct rt_i2c_bus_device *bus,
@@ -1065,25 +1065,25 @@ rt_uint32_t num)
 | positive value | Success, returns the number of transmitted MSG |
 | -RT_EIO | The transfer failed |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 Header file:`drivers/i2c.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.3 GPIO
 
@@ -1103,7 +1103,7 @@ The GPIO module provides the following APIs:
 
 Set the GPIO pin input and output mode.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_mode(rt_base_t pin, rt_base_t mode)`
 
@@ -1127,7 +1127,7 @@ Set the GPIO pin input and output mode.
 
 Set the GPIO pin level.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_write(rt_base_t pin, rt_base_t value)`
 
@@ -1150,7 +1150,7 @@ Set the GPIO pin level.
 
 Set the GPIO pin level.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_read(rt_base_t pin)`
 
@@ -1173,7 +1173,7 @@ Set the GPIO pin level.
 
 Bind the pin interrupt function and set the interrupt mode.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_attach_irq(rt_int32_t pin,rt_uint32_t mode, void (*hdr)(void *args), void *args)`
 
@@ -1199,7 +1199,7 @@ Bind the pin interrupt function and set the interrupt mode.
 
 Unbind the pin interrupt function and disable interrupt enable for the GPIO pin.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_detach_irq(rt_int32_t pin)`
 
@@ -1222,7 +1222,7 @@ Unbind the pin interrupt function and disable interrupt enable for the GPIO pin.
 
 Interrupt enable for GPIO pins.
 
-【Grammar】
+【Syntax】
 
 `kd_pin_irq_enable(rt_base_t pin, rt_uint32_t enabled)`
 
@@ -1246,7 +1246,7 @@ Interrupt enable for GPIO pins.
 
 GPIO function control.
 
-【Grammar】
+【Syntax】
 
 `gpio_device_ioctl(rt_device_t dev, int cmd, void *args)`
 
@@ -1265,25 +1265,25 @@ GPIO function control.
 | RT_EOK | succeed |
 | Error code | fail |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 Header file:`drv_gpio.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.4 Hard-lock
 
@@ -1299,7 +1299,7 @@ The Hard-lock module provides the following APIs:
 
 Request the use of a lock.
 
-【Grammar】
+【Syntax】
 
 `kd_request_lock(rt_uint32_t num)`
 
@@ -1322,7 +1322,7 @@ Request the use of a lock.
 
 Lock.
 
-【Grammar】
+【Syntax】
 
 `kd_hardlock_lock (rt_uint32_t num)`
 
@@ -1345,7 +1345,7 @@ Lock.
 
 Lock.
 
-【Grammar】
+【Syntax】
 
 `kd_hardlock_unlock (rt_uint32_t num)`
 
@@ -1361,25 +1361,25 @@ Lock.
 |----------|------|
 | No return value  |      |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 Header file:`drv_hardlock.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.5 ADC
 
@@ -1396,7 +1396,7 @@ The ADC module provides the following APIs:
 
 The application obtains a device handle based on the ADC device name, which in turn can manipulate the ADC device.
 
-【Grammar】
+【Syntax】
 
 `rt_device_t rt_device_find(const char* name);`
 
@@ -1413,25 +1413,25 @@ The application obtains a device handle based on the ADC device name, which in t
 | Device handle | Finding the corresponding device returns the corresponding device handle |
 | RT_NULL  | Device not found                       |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.5.2 rt_adc_enable
 
@@ -1439,7 +1439,7 @@ not
 
 The ADC needs to be enabled before reading the ADC device data, and the ADC is enabled by this function.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_adc_enable(rt_adc_device_t dev, rt_uint32_t channel);`
 
@@ -1458,25 +1458,25 @@ The ADC needs to be enabled before reading the ADC device data, and the ADC is e
 | -RT_ENOSYS | Failed, device action method is empty |
 | Other error codes | fail                   |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.5.3 rt_adc_read
 
@@ -1484,7 +1484,7 @@ not
 
 Reading ADC channel sampling values can be done through this function.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_adc_read(rt_adc_device_t dev, rt_uint32_t channel);`
 
@@ -1501,25 +1501,25 @@ Reading ADC channel sampling values can be done through this function.
 |------------|------------|
 | The numeric value read | The numeric value read |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.5.4 rt_adc_disable
 
@@ -1527,7 +1527,7 @@ not
 
 Closing the ADC channel can be done with this function.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_uint32_t channel);`
 
@@ -1546,25 +1546,25 @@ Closing the ADC channel can be done with this function.
 | -RT_ENOSYS | Failed, device action method is empty |
 | Other error codes | fail                   |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.6 WDT
 
@@ -1580,7 +1580,7 @@ The WDT module provides the following APIs:
 
 The application obtains a device handle based on the WDT device name, which in turn can manipulate the WDT device.
 
-【Grammar】
+【Syntax】
 
 `rt_device_t rt_device_find(const char* name);`
 
@@ -1597,25 +1597,25 @@ The application obtains a device handle based on the WDT device name, which in t
 | Device handle | Finding the corresponding device returns the corresponding device handle |
 | RT_NULL  | Device not found                       |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.6.2 rt_device_init
 
@@ -1623,7 +1623,7 @@ not
 
 Initialize a WDT device, primarily the `timeout table`initialization of the pair.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_init(rt_device_t dev)`
 
@@ -1639,25 +1639,25 @@ Initialize a WDT device, primarily the `timeout table`initialization of the pair
 |-----------|---------------|
 | RT_EOK    | Initialization succeeded     |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.6.3 rt_device_control
 
@@ -1665,7 +1665,7 @@ not
 
 Functional functions, according to the incoming cmd, can call different functions downward, similar to the function of the user layer IOCTL.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_control(rt_device_t dev, int cmd, void *arg)`
 
@@ -1685,25 +1685,25 @@ Functional functions, according to the incoming cmd, can call different function
 | RT_EINVAL | Incoming cmd is invalid      |
 | RT_ENOSYS | The driver does not have a contrl interface |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.7 OTP
 
@@ -1718,7 +1718,7 @@ In the large-core rt-smart, the OTP module mainly provides the following APIs:
 
 Read OTP space, readable range: offset 0x0~0xbfc, size is 0xc00.
 
-【Grammar】
+【Syntax】
 
 otp_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 
@@ -1738,26 +1738,26 @@ otp_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 | Read the actual size of the data      | In bytes byte                 |
 | 0                     | Read failed, refer to the error code definition          |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: drv_otp.h
 - Library file: None
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.7.2 otp_device_write
 
@@ -1765,7 +1765,7 @@ not
 
 Write OTP space, writable range: offset 0x0~0x1fc, size is 0x200.
 
-【Grammar】
+【Syntax】
 
 otp_device_write(rt_device_t dev, rt_off_t pos, const void \*buffer, rt_size_t size);
 
@@ -1785,26 +1785,26 @@ otp_device_write(rt_device_t dev, rt_off_t pos, const void \*buffer, rt_size_t s
 | The actual size of the data written      | In bytes byte                 |
 | 0                     | Write failed, refer to Error Code Definition          |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: drv_otp.h
 - Library file: None
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.8 TS
 
@@ -1818,7 +1818,7 @@ In the large-core rt-smart, the TS module mainly provides the following APIs:
 
 Read the chip junction temperature.
 
-【Grammar】
+【Syntax】
 
 ts_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 
@@ -1838,26 +1838,26 @@ ts_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 | Read the actual size of the data      | In bytes byte                 |
 | 0                     | Read failed, refer to the error code definition          |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: drv_ts.h
 - Library file: None
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.9 PWM
 
@@ -1873,7 +1873,7 @@ The PWM module provides the following kernel-state APIs:
 
 Set the period and positive pulse width of the PWM device.
 
-【Grammar】
+【Syntax】
 
 `rt_pwm_set(struct rt_device_pwm *device, int channel, rt_uint32_t period, rt_uint32_t pulse)`
 
@@ -1895,25 +1895,25 @@ Set the period and positive pulse width of the PWM device.
 | -RT_ENOSYS  | The device action method is empty |
 | Other error codes   | Execution failed        |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`drivers/rt_drv_pwm.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.9.2 rt_pwm_enable
 
@@ -1921,7 +1921,7 @@ not
 
 Enable the PWM device.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_pwm_enable(struct rt_device_pwm *device, int channel);`
 
@@ -1940,25 +1940,25 @@ Enable the PWM device.
 | -RT_ENOSYS  | The device action method is empty |
 | Other error codes   | Device enablement failed     |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`drivers/rt_drv_pwm.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.9.3 rt_pwm_disable
 
@@ -1966,7 +1966,7 @@ not
 
 Turn off the corresponding channel for the PWM device.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_pwm_disable(struct rt_device_pwm *device, int channel);`
 
@@ -1985,25 +1985,25 @@ Turn off the corresponding channel for the PWM device.
 | -RT_EIO     | The device handle is empty     |
 | Other error codes   | Device shutdown failed     |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`drivers/rt_drv_pwm.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.10 RTC
 
@@ -2018,7 +2018,7 @@ The PWM module provides the following kernel-state APIs:
 
 Set the date, year, month, and day.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t set_date(rt_uint32_t year, rt_uint32_t month, rt_uint32_t day)`
 
@@ -2038,25 +2038,25 @@ Set the date, year, month, and day.
 | -RT_ERROR   | Failed, RTC device not found |
 | Other error codes   | fail                   |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`time.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.1.10.2 set_time
 
@@ -2064,7 +2064,7 @@ not
 
 Set the date, year, month, and day.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t set_time(rt_uint32_t hour, rt_uint32_t minute, rt_uint32_t second)`
 
@@ -2084,25 +2084,25 @@ Set the date, year, month, and day.
 | -RT_ERROR   | Failed, RTC device not found |
 | Other error codes   | fail                   |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`time.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.11 TIMER
 
@@ -2120,7 +2120,7 @@ The TIMER module provides the following kernel-state APIs:
 
 Set a callback function that is called when the device receives data.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_set_rx_indicate(rt_device_t dev, rt_err_t (*rx_ind)(rt_device_t dev, rt_size_t size))`
 
@@ -2138,25 +2138,25 @@ Set a callback function that is called when the device receives data.
 | RT_EOK      | Setup successful               |
 | Other error codes   | fail                   |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ### 2.2 User-mode API
 
@@ -2175,7 +2175,7 @@ The ADC block provides the following APIs in user mode:
 
 Find the device. The function looks up the device by the specified name. The application obtains a device handle based on the device name, which in turn can manipulate the device.
 
-【Grammar】
+【Syntax】
 
 `rt_device_t rt_device_find(const char *name);`
 
@@ -2192,25 +2192,25 @@ Find the device. The function looks up the device by the specified name. The app
 | rt_device_t | The device handle was successfully returned |
 | RT_NULL     | Failure returns RT_NULL |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.1.2 rt_device_open
 
@@ -2218,7 +2218,7 @@ not
 
 Turn on the device. Through the device handle, the application can open and close the device, when the device is opened, it will detect whether the device has been initialized, and if there is no initialization, it will call the initialization interface by default to initialize the device.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_open(rt_device_t dev, rt_uint16_t oflag);`
 
@@ -2236,25 +2236,25 @@ Turn on the device. Through the device handle, the application can open and clos
 | RT_EOK    | Successfully returned to RT_EOK |
 | rt error code | Failure returns an error code  |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.1.3 rt_device_control
 
@@ -2262,7 +2262,7 @@ not
 
 This function performs various control functions on the device and enables a channel of the ADC device through this function.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_control(rt_device_t dev, int cmd, void *arg);`
 
@@ -2281,11 +2281,11 @@ This function performs various control functions on the device and enables a cha
 | RT_EOK    | Successfully returned to RT_EOK |
 | rt error code | Failure returns an error code  |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
@@ -2295,11 +2295,11 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.1.4 rt_device_read
 
@@ -2307,7 +2307,7 @@ not
 
 The function reads data from the device. When the parameter is an ADC device handle, the function reads the sampled value of the ADC channel.
 
-【Grammar】
+【Syntax】
 
 `rt_size_t rt_device_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size);`
 
@@ -2328,25 +2328,25 @@ The function reads data from the device. When the parameter is an ADC device han
 | buffer    | The user holds a data buffer for reading data. Here is the sampled value of the ADC channel                                            |
 | 0         | Failure returns 0                                                                                       |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.2.2 WDT
 
@@ -2379,25 +2379,25 @@ Syntax】
 | Greater than 0 | Success returns the open device node descriptor |
 | Less than 0 | fail                       |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`fcntl.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.2.2 ioctl
 
@@ -2423,25 +2423,25 @@ Syntax】
 | 0   | succeed |
 | Non-0 | fail |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`sys/ioctl.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.2.3 OTP
 
@@ -2459,7 +2459,7 @@ The OTP module provides the following APIs in user mode:
 
 Find the device. The function looks up the device by the specified name. The application obtains a device handle based on the device name, which in turn can manipulate the device.
 
-【Grammar】
+【Syntax】
 
 `rt_device_t rt_device_find(const char *name);`
 
@@ -2476,25 +2476,25 @@ Find the device. The function looks up the device by the specified name. The app
 | rt_device_t | The device handle was successfully returned |
 | RT_NULL     | Failure returns RT_NULL |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.3.2 rt_device_open
 
@@ -2502,7 +2502,7 @@ not
 
 Turn on the device. Through the device handle, the application can open and close the device, when the device is opened, it will detect whether the device has been initialized, and if there is no initialization, it will call the initialization interface by default to initialize the device.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_open(rt_device_t dev, rt_uint16_t oflag);`
 
@@ -2520,25 +2520,25 @@ Turn on the device. Through the device handle, the application can open and clos
 | RT_EOK    | Successfully returned to RT_EOK |
 | rt error code | Failure returns an error code  |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.3.3 rt_device_read
 
@@ -2546,7 +2546,7 @@ not
 
 Read data from an OTP device in the readable range: offset 0x0~0xbfc, size is 0xc00.
 
-【Grammar】
+【Syntax】
 
 `rt_size_t rt_device_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size);`
 
@@ -2566,25 +2566,25 @@ Read data from an OTP device in the readable range: offset 0x0~0xbfc, size is 0x
 | rt_size_t | Success returns the size of the actual read, in bytes                                                                 |
 | 0         | Failure returns 0                                                                                       |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.3.4 rt_device_write
 
@@ -2592,7 +2592,7 @@ not
 
 Write data to the OTP device in the writable range of offset 0x0~0x1fc and size 0x200.
 
-【Grammar】
+【Syntax】
 
 `rt_size_t otp_device_write(rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size);`
 
@@ -2612,25 +2612,25 @@ Write data to the OTP device in the writable range of offset 0x0~0x1fc and size 
 | rt_size_t | Success returns the size of the data actually written, in bytes                                                                 |
 | 0         | Failure returns 0                                                                                       |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 ##### 2.2.3.5 rt_device_close
 
@@ -2638,7 +2638,7 @@ not
 
 Turn off the device.
 
-【Grammar】
+【Syntax】
 
 `rt_err_t rt_device_close(rt_device_t dev);`
 
@@ -2655,25 +2655,25 @@ Turn off the device.
 | rt_err_t | If successful, shut down the device                                                                 |
 | Error code         | If it fails, an error code is returned                                                                       |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file:`rtdevice.h` ,`rtthread.h`
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.2.4 TS
 
@@ -2730,13 +2730,13 @@ struct rt_device_gpio
 };
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.2 device_hardlock
 
@@ -2749,18 +2749,18 @@ An abstraction of the hardlock device in the driver.
 ```text
 struct device_hardlock
 {
-    volatile void *hw_base; // Module base address in kernel 
+    volatile void *hw_base; // Module base address in kernel
     char used[HARDLOCK_MAX]; //Indicates whether the lock is in use. The corresponding number is set to 1 during the application
 };
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ### 3.3 struct kd_alarm_setup
 
@@ -2778,13 +2778,13 @@ struct kd_alarm_setup
 };
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 ## 4. Error codes
 

@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the design of the K230 GSDMA software, including the GSDMA driver framework and software implementation.
 
@@ -114,7 +114,7 @@ This function module provides the following APIs:
 
 Configure DMA device properties
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_set_dev_attr(k_dma_dev_attr_t \*attr);
 
@@ -131,11 +131,11 @@ k_s32 kd_mpi_dma_set_dev_attr(k_dma_dev_attr_t \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -148,7 +148,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
 
@@ -158,7 +158,7 @@ None.
 
 Gets the configured DMA device properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_get_dev_attr(k_dma_dev_attr_t \*attr);
 
@@ -175,11 +175,11 @@ k_s32 kd_mpi_dma_get_dev_attr(k_dma_dev_attr_t \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -192,7 +192,7 @@ DMA device properties cannot be obtained until you configure them.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
 
@@ -202,7 +202,7 @@ None.
 
 Start the DMA device.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_start_dev();
 
@@ -219,11 +219,11 @@ k_s32 kd_mpi_dma_start_dev();
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -236,7 +236,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 None.
 
@@ -246,7 +246,7 @@ None.
 
 Stop the DMA device.
 
-【Grammar】
+【Syntax】
 
 kd_mpi_dma_stop_dev();
 
@@ -263,11 +263,11 @@ kd_mpi_dma_stop_dev();
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -278,9 +278,9 @@ None.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 None.
 
@@ -290,7 +290,7 @@ None.
 
 Configure DMA channel properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_set_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 
@@ -308,11 +308,11 @@ k_s32 kd_mpi_dma_set_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -325,7 +325,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 
@@ -335,7 +335,7 @@ None.
 
 Gets the configured DMA channel properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_get_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 
@@ -353,11 +353,11 @@ k_s32 kd_mpi_dma_get_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -370,7 +370,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 
@@ -380,7 +380,7 @@ None.
 
 Start the DMA channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_start_chn(k_u8 chn_num);
 
@@ -397,11 +397,11 @@ k_s32 kd_mpi_dma_start_chn(k_u8 chn_num);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -414,7 +414,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 None.
 
@@ -424,7 +424,7 @@ None.
 
 Pause the DMA channel
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_stop_chn(k_u8 chn_num);
 
@@ -441,11 +441,11 @@ k_s32 kd_mpi_dma_stop_chn(k_u8 chn_num);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -456,9 +456,9 @@ None.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 None.
 
@@ -468,7 +468,7 @@ None.
 
 Send data from user space to the destination address.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_send_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 millisec);
 
@@ -487,11 +487,11 @@ k_s32 kd_mpi_dma_send_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 mi
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -504,7 +504,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_video_frame_info](#316-k_video_frame_info)
 
@@ -514,7 +514,7 @@ None.
 
 Gets the data after DMA is moved.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_get_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 millisec);
 
@@ -533,11 +533,11 @@ k_s32 kd_mpi_dma_get_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 mil
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -550,7 +550,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_video_frame_info](#316-k_video_frame_info)
 
@@ -560,7 +560,7 @@ None.
 
 Release the acquired DMA data.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_dma_release_frame(k_u8 chn_num, k_video_frame_info \*df_info);
 
@@ -578,11 +578,11 @@ k_s32 kd_mpi_dma_release_frame(k_u8 chn_num, k_video_frame_info \*df_info);
 | 0      | succeed                 |
 | Non-0    | Failed, see Error Code for value |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
@@ -595,7 +595,7 @@ None.
 
 None.
 
-【Related Topics】
+【See Also】
 
 [k_video_frame_info](#316-k_video_frame_info)
 
@@ -615,11 +615,11 @@ DMA maximum number of devices
 #define DMA_MAX_DEV_NUMS (1)
 ```
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 None.
 
@@ -633,11 +633,11 @@ DMA maximum number of channels
 
 \#define DMA_MAX_CHN_NUMS (8)
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 None.
 
@@ -664,11 +664,11 @@ typedef enum
 | BIND     | Binding mode. |
 | UNBIND   | Unbound mode |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
@@ -698,11 +698,11 @@ typedef struct
 | outstanding | 配置 dma outstanding     |
 | ckg_bypass  | 配置 clock gate bypass   |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
 [kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
@@ -731,11 +731,11 @@ typedef union
 | sdma_attr  | SDMA channel properties          |
 | ckg_bypass | Set clock gate bypass |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
@@ -767,11 +767,11 @@ typedef struct
 | pool_id  | Pool ID of the data VB pool.   |
 | mod_id   | Module ID                  |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
 [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
@@ -804,11 +804,11 @@ typedef struct
 | time_ref  | The frame number transmitted through, in binding mode, is entered by the pre-stage                                                                                                         |
 | pts       | The passthrough timestamp, in binding mode, is entered by the predecessor                                                                                                       |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
 [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
@@ -834,11 +834,11 @@ GDMA maximum number of channels
 define GDMA_MAX_CHN_NUMS (4)
 ```
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 None.
 
@@ -860,11 +860,11 @@ typedef enum
 } k_gdma_rotation_e;
 ```
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 
@@ -969,11 +969,11 @@ typedef struct
 | work_mode    | Working mode, you can choose bound mode or unbound mode.                                                                                                                                                                               |
 | pixel_format | Image format.                                                                                                                                                                                                               |
 
-【Precautions】
+【Note】
 
 - None.
 
-【Related data types and interfaces】
+【See Also】
 
 - [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
 - [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
@@ -998,11 +998,11 @@ SDMA maximum number of channels
 #define SDMA_MAX_CHN_NUMS (4)
 ```
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 None.
 
@@ -1029,11 +1029,11 @@ typedef enum
 | DIMENSION1 | One-dimensional DMA transfer mode |
 | DIMENSION1 | 2D DMA transmission mode |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
 
@@ -1068,11 +1068,11 @@ typedef struct
 | data_mode  | SDMA's modes for transferring data, including 1D mode and 2D mode.                              |
 | work_mode  | Working mode, you can choose bound mode or unbound mode.                                 |
 
-【Precautions】
+【Note】
 
 None.
 
-【Related data types and interfaces】
+【See Also】
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 

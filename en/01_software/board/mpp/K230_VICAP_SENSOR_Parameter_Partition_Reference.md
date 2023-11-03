@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly guides image tuning and application developers how to create VICAP debugging parameter files for use in SPI-NOR-FLASH mode.
 
@@ -375,7 +375,7 @@ typedef enum {
 | VICAP_DATABASE_PARSE_XML_JSON      | 0    | Use XML, Auto JSON, Manual JSON modes|
 | VICAP_DATABASE_PARSE_HEADER        | 1    | Use the parameter partition loading mode  |
 
-【Precautions】
+【Note】
 Only 0 and 1 are internally validated, and other values are invalid
 
 【Note】vicap sets the parameter loading mode
@@ -384,7 +384,7 @@ Only 0 and 1 are internally validated, and other values are invalid
 
 According to the dev_num, set the default value of different vicap devices to load ISP parameters, which is 0
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vicap_set_database_parse_mode(k_vicap_dev dev_num, k_vicap_database_parse_mode parse_mode)
 
@@ -402,11 +402,11 @@ k_s32 kd_mpi_vicap_set_database_parse_mode(k_vicap_dev dev_num, k_vicap_database
 | positive value       | Succeed. Returns the device descriptor   |
 | Negative       | Failed, refer to Error Code Definition. |
 
-【Chip differences】
+【Differences】
 
 None.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a

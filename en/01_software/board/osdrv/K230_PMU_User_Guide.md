@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document describes the specific usage methods of PMU modules and SDK configuration compilation methods, including the construction of software and hardware environments, and introduces the control interface.
 
@@ -46,7 +46,7 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date |
+| Document version number | Modify the description | Author | date |
 | --- | --- | --- | --- |
 | V1.0 | Initial edition | Zhang Tao | 2023/05/19 |
 

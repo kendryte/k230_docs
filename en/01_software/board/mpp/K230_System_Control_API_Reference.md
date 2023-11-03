@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,13 +21,13 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Directory
 
 [TOC]
 
 ## preface
 
-### overview
+### Overview
 
 This document mainly introduces the functions and usage of the system control module in the media subsystem, and the functions and usage of other modules will be discussed in their own special documents.
 
@@ -47,9 +47,9 @@ This document (this guide) is intended primarily for:
 
 ### Revision history
 
-| Document version number | Modify the description | Modified by | date     |
+| Document version number | Modify the description | Author | date     |
 |------------|----------|--------|----------|
-| V1.0       | first edition     | Haibo Hao | 2023/3/4 |
+| V1.0       | Initial edition     | Haibo Hao | 2023/3/4 |
 
 ## 1. Overview
 
@@ -61,7 +61,7 @@ According to the characteristics of the k230 chip, the system control completes 
 
 #### 1.2.1 VB Pool
 
-A video buffer pool is a set of buffers (rather than one) that are primarily used by multimedia hardware devices and flow between multimedia hardware devices. The cache pool is divided into public cache pool and private cache pool, the public cache pool is mainly for VI, before using to determine the size of the cache block according to the image parameters of the VI, and then apply for a certain number of cache blocks to form a cache pool. In general, for the original picture input by the VI, the size of one frame corresponds to the size of a cache block, and multiple cache blocks are equivalent to providing the VI with a mechanism for multi-frame buffering. These public cache blocks can also be used by VO or VENC. Private cache pools often represent that the data stored in memory is closely related to the multimedia device itself, for example, the encoded stream data is still very different from the actual image pixel composition of the video stream, these streams are only available codecs, and VB provides a dedicated buffer pool for these devices. The following figure shows the process of virtual VI and virtual VO using VB for cache block circulation.
+A video buffer pool is a set of buffers (rather than one) that are primarily used by multimedia hardware devices and flow between multimedia hardware devices. The vb pool is divided into public vb pool and private vb pool, the public vb pool is mainly for VI, before using to determine the size of the vb block according to the image parameters of the VI, and then apply for a certain number of vb blocks to form a vb pool. In general, for the original picture input by the VI, the size of one frame corresponds to the size of a vb block, and multiple vb blocks are equivalent to providing the VI with a mechanism for multi-frame buffering. These public vb blocks can also be used by VO or VENC. Private vb pools often represent that the data stored in memory is closely related to the multimedia device itself, for example, the encoded stream data is still very different from the actual image pixel composition of the video stream, these streams are only available codecs, and VB provides a dedicated buffer pool for these devices. The following figure shows the process of virtual VI and virtual VO using VB for vb block circulation.
 
 ![The Illustrative description has been automatically generated](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
 
@@ -139,7 +139,7 @@ This function module provides the following APIs:
 
 Apply MMZ memory in user space
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_mmz_alloc(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* mmb, const k_char\* zone, k_u32 len);
 
@@ -160,11 +160,11 @@ k_s32 kd_mpi_sys_mmz_alloc(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* 
 | 0      | succeed                                          |
 | Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
 
-【Chip differences】
+【Differences】
 
-Not.
+none.
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -173,11 +173,11 @@ Not.
 
 MMZ consists of multiple zones, each with multiple MMBs. You can call this MPI and allocate a memory block of size len \*mmb in the \*zone of the MMZ. In this case, pointers to the physical address and the user-mode virtual address are returned. If there is an anonymous area in MMZ, set \*zone to null. If \*mmb is set to null, the created MMB is named null. 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.2 kd_mpi_sys_mmz_alloc_cached
 
@@ -185,7 +185,7 @@ not
 
 Request MMZ memory with cache in user space
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* mmb, const k_char\* zone, k_u32 len);
 
@@ -206,11 +206,11 @@ k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_
 | 0      | succeed                                          |
 | Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -222,11 +222,11 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.3 kd_mpi_sys_mmap
 
@@ -234,7 +234,7 @@ not
 
 Memory storage mapping interface.
 
-【Grammar】
+【Syntax】
 
 void \*kd_mpi_sys_mmap(k_u64 phy_addr, k_u32 size);
 
@@ -252,11 +252,11 @@ void \*kd_mpi_sys_mmap(k_u64 phy_addr, k_u32 size);
 | 0      | Invalid address |
 | Non-0    | A valid address |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -268,9 +268,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_sys_munmap()](#215-kd_mpi_sys_munmap)
 
@@ -280,7 +280,7 @@ not
 
 Memory stores interfaces with caches.
 
-【Grammar】
+【Syntax】
 
 void \*kd_mpi_sys_mmap_cached(k_u64 phy_addr, k_u32 size);
 
@@ -298,11 +298,11 @@ void \*kd_mpi_sys_mmap_cached(k_u64 phy_addr, k_u32 size);
 | 0      | Invalid address |
 | Non-0    | A valid address |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -314,11 +314,11 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.5 kd_mpi_sys_munmap
 
@@ -326,7 +326,7 @@ not
 
 Memory storage mapping dismissal interface.
 
-【Grammar】
+【Syntax】
 
 void \*kd_mpi_sys_mmap(void \*virt_addr, k_u32 size);
 
@@ -344,24 +344,24 @@ void \*kd_mpi_sys_mmap(void \*virt_addr, k_u32 size);
 | 0      | succeed |
 | Non-0    | fail |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 - [kd_mpi_sys_mmap](#213-kd_mpi_sys_mmap)
 - [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
@@ -372,7 +372,7 @@ not
 
 Flushes the contents of the cache to memory and invalidates the contents of the cache.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 
@@ -391,11 +391,11 @@ k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 | 0      | succeed                                          |
 | Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -410,9 +410,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
 - [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
@@ -423,7 +423,7 @@ not
 
 Frees MMZ memory in user mode.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void\* virt_addr);
 
@@ -441,11 +441,11 @@ k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void\* virt_addr);
 | 0      | succeed                                          |
 | Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
@@ -457,9 +457,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 - [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
@@ -470,7 +470,7 @@ not
 
 Obtain the corresponding memory information based on the virtual address, including the physical address and cached attribute
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem_info);
 
@@ -488,11 +488,11 @@ k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem
 | 0      | succeed                                          |
 | Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_mmz_comm.h
 - Library file: libsys.a
@@ -504,9 +504,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 - [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
@@ -517,7 +517,7 @@ not
 
 Set the MPP VB Pool property.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 
@@ -534,27 +534,27 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-- You can set the cache pool property only when the system is in an uninitialized state, otherwise failure will be returned.
-- The size of each cache block in the public cache pool should vary depending on the current image pixel format and whether the image is compressed
+- You can set the vb pool property only when the system is in an uninitialized state, otherwise failure will be returned.
+- The size of each vb block in the public vb pool should vary depending on the current image pixel format and whether the image is compressed
 
    is different. For specific allocation sizes, see [](#323-k_vb_config) the description in k_vb_config Struct.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_get_config](#2110-kd_mpi_vb_get_config)
 
@@ -564,7 +564,7 @@ not
 
 Gets the MPP video buffer pool properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
 
@@ -581,11 +581,11 @@ k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -596,9 +596,9 @@ You must call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP v
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
 
@@ -608,13 +608,13 @@ not
 
 Initialize the MPP video buffer pool.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_init(void);
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
@@ -623,26 +623,26 @@ not
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-- You must call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool properties before initializing the cache pool, or it will be lost
+- You must call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool properties before initializing the vb pool, or it will be lost
     Fail.
 - It can be initialized repeatedly without returning failures.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_exit](#2112-kd_mpi_vb_exit)
 
@@ -652,13 +652,13 @@ not
 
 Go and initialize the MPP video buffer pool.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_exit(void);
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
@@ -667,26 +667,26 @@ not
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-- Deinitialization does not clear previous configurations of the cache pool.
+- Deinitialization does not clear previous configurations of the vb pool.
 - It can be repeatedly deinitialized and does not return failure.
 - Before exiting the VB pool, make sure that any VB in the VB pool is not in use, otherwise you cannot exit.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_init](#2111-kd_mpi_vb_init)
 
@@ -696,7 +696,7 @@ not
 
 Create a video buffer pool
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) \*config);
 
@@ -704,33 +704,33 @@ k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) \*config);
 
 | **Parameter name** | **Description**                    | Input/output |
 |----------|------------------------|-----------|
-| config   | Cache pool configuration property parameter pointer | input      |
+| config   | VB poolconfiguration property parameter pointer | input      |
 
 【Return value】
 
 | Return value               | **Description**                                              |
 |----------------------|--------------------------------------------------|
-| Non-VB_INVALID_POOLID | A valid cache pool ID number                               |
-| VB_INVALID_POOLID    | The creation of the cache pool failed, either because the parameters are illegal or there is not enough reserved memory. |
+| Non-VB_INVALID_POOLID | A valid vb pool ID number                               |
+| VB_INVALID_POOLID    | The creation of the vb pool failed, either because the parameters are illegal or there is not enough reserved memory. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_destory_pool](#2114-kd_mpi_vb_destory_pool)
 
@@ -740,7 +740,7 @@ not
 
 Destroy a video buffer pool.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 
@@ -748,7 +748,7 @@ k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 
 | **Parameter name** | **Description**                                          | Input/output |
 |----------|----------------------------------------------|-----------|
-| pool_id  | Cache pool ID number. Value range: [0, VB_MAX_POOLS]. | input      |
+| pool_id  | VB poolID number. Value range: [0, VB_MAX_POOLS]. | input      |
 
 【Return value】
 
@@ -757,25 +757,25 @@ k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 | 0      | Succeed.                                      |
 | Non-0   | Failed, see [Error Code](#411-video-buffer-pool-error-code) for value. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-- Destroying a non-existent cache pool returns a [K_ERR_VB_UNEXIST](#411-video-buffer-pool-error-code)
+- Destroying a non-existent vb pool returns a [K_ERR_VB_UNEXIST](#411-video-buffer-pool-error-code)
 - Only buffer pools created by [k_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool) can be destroyed
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
 
@@ -783,9 +783,9 @@ not
 
 【Description】
 
-User mode gets a cache block
+User mode gets a vb block
 
-【Grammar】
+【Syntax】
 
 k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char \*mmz_name);
 
@@ -793,36 +793,36 @@ k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char 
 
 | **Parameter name** | **Description**                                                     | Input/output |
 |----------|---------------------------------------------------------|-----------|
-| pool_id  | Cache pool ID number. Value range: [0, VB_MAX_POOLS].            | input      |
-| blk_size | Cache block size. Value range: The full range of data types, measured in bytes. | input      |
-| mmz_name | The name of the DDR where the cache pool resides.                                 | input      |
+| pool_id  | VB poolID number. Value range: [0, VB_MAX_POOLS].            | input      |
+| blk_size | VB block size. Value range: The full range of data types, measured in bytes. | input      |
+| mmz_name | The name of the DDR where the vb pool resides.                                 | input      |
 
 【Return value】
 
 | Return value               | **Description**              |
 |----------------------|------------------|
-| Non-VB_INVALID_HANDLE | A valid cache block handle |
-| VB_INVALID_HANDLE    | Failed to get cache block   |
+| Non-VB_INVALID_HANDLE | A valid vb block handle |
+| VB_INVALID_HANDLE    | Failed to get vb block   |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-- After creating a cache pool, the user can call this API to obtain a cache block from the cache pool; that is, the first parameter P is set to the ID of the created cache pool; when obtaining the cache block from the specified cache pool, the parameter mmz_name invalid \*
-- If the user needs to obtain a block of cache of the specified size from any of the public cache pools, they can set the first parameter Pool to an invalid ID number (VB_INVALID_POOLID), set the second parameter blk_size to the desired cache block size, and specify the public cache pool on which DDR to obtain the cache block from. If there is no public cache pool on the specified DDR, the cache block will not be fetched. If mmz_name equals NULL, it means that the public cache pool on the anonymous DDR fetches the cache block.
+- After creating a vb pool, the user can call this API to obtain a vb block from the vb pool; that is, the first parameter P is set to the ID of the created vb pool; when obtaining the vb block from the specified vb pool, the parameter mmz_name invalid \*
+- If the user needs to obtain a block of cache of the specified size from any of the public vb pools, they can set the first parameter Pool to an invalid ID number (VB_INVALID_POOLID), set the second parameter blk_size to the desired vb block size, and specify the public vb pool on which DDR to obtain the vb block from. If there is no public vb pool on the specified DDR, the vb block will not be fetched. If mmz_name equals NULL, it means that the public vb pool on the anonymous DDR fetches the vb block.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_release_block](#2116-kd_mpi_vb_release_block)
 
@@ -830,9 +830,9 @@ not
 
 【Description】
 
-User mode frees a cache block
+User mode frees a vb block
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_release_block(k_vb_blk_handle block);
 
@@ -849,24 +849,24 @@ k_s32 kd_mpi_vb_release_block(k_vb_blk_handle block);
 | 0      | Succeed.                                      |
 | Non-0   | Failed, see [Error Code](#411-video-buffer-pool-error-code) for value. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-After the obtained cache block is exhausted, this interface should be called to free the cache block.
+After the obtained vb block is exhausted, this interface should be called to free the vb block.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_get_block](#2115-kd_mpi_vb_get_block)
 
@@ -874,9 +874,9 @@ not
 
 【Description】
 
-The user mode obtains its handle through the physical address of the cache block.
+The user mode obtains its handle through the physical address of the vb block.
 
-【Grammar】
+【Syntax】
 
 k_vb_blk_handle kd_mpi_vb_phyaddr_to_handle(k_u64 phys_addr);
 
@@ -890,37 +890,37 @@ k_vb_blk_handle kd_mpi_vb_phyaddr_to_handle(k_u64 phys_addr);
 
 | Return value               | **Description**                |
 |----------------------|--------------------|
-| Non-VB_INVALID_HANDLE | A valid cache block handle   |
+| Non-VB_INVALID_HANDLE | A valid vb block handle   |
 | VB_INVALID_HANDLE    | Failed to get cache fast handle |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-The physical address should be the address of a valid cache block obtained from the MPP video buffer pool.
+The physical address should be the address of a valid vb block obtained from the MPP video buffer pool.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.18 kd_mpi_vb_handle_to_phyaddr
 
 【Description】
 
-User mode gets the physical address of a cache block
+User mode gets the physical address of a vb block
 
-【Grammar】
+【Syntax】
 
 k_u64 kd_mpi_vb_handle_to_phyaddr(k_vb_blk_handle block);
 
@@ -934,37 +934,37 @@ k_u64 kd_mpi_vb_handle_to_phyaddr(k_vb_blk_handle block);
 
 | Return value | **Description**                          |
 |--------|------------------------------|
-| 0      | Invalid return value, cache block handle is illegal. |
+| 0      | Invalid return value, vb block handle is illegal. |
 | Non-0   | A valid physical address.               |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-The specified cache block should be a valid cache block obtained from the MPP video buffer pool.
+The specified vb block should be a valid vb block obtained from the MPP video buffer pool.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.19 kd_mpi_vb_handle_to_pool_id
 
 【Description】
 
-User mode gets the ID of the cache pool in which a framebuffer block resides.
+User mode gets the ID of the vb pool in which a framebuffer block resides.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_handle_to_pool_id(k_vb_blk_handle block);
 
@@ -978,37 +978,37 @@ k_s32 kd_mpi_vb_handle_to_pool_id(k_vb_blk_handle block);
 
 | Return value               | **Description**                |
 |----------------------|--------------------|
-| Non-VB_INVALID_POOLID | A valid cache pool ID number |
-| VB_INVALID_POOLID    | Failed to get cache pool ID. |
+| Non-VB_INVALID_POOLID | A valid vb pool ID number |
+| VB_INVALID_POOLID    | Failed to get vb pool ID. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-The specified cache block should be a valid cache block obtained from the MPP video buffer pool.
+The specified vb block should be a valid vb block obtained from the MPP video buffer pool.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.20 kd_mpi_vb_inquire_user_cnt
 
 【Description】
 
-Query cache block usage count information.
+Query vb block usage count information.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
 
@@ -1023,28 +1023,28 @@ k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
 | Return value   | **Description**                |
 |----------|--------------------|
 | K_FAILED | The query failed           |
-| Other values   | The cache block uses the count value. |
+| Other values   | The vb block uses the count value. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-Not.
+none.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.21 kd_mpi_vb_get_supplement_attr
 
@@ -1052,7 +1052,7 @@ not
 
 Gets auxiliary information for VB Block memory.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#333-k_video_supplement) \*supplement);【参数】
 
@@ -1068,11 +1068,11 @@ k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1083,11 +1083,11 @@ The virtual address information stored by Supplement DCF and ISP is a kernel-sta
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.1.22 kd_mpi_vb_set_supplement_config
 
@@ -1103,7 +1103,7 @@ etc., this additional information can be passed through the various modules of M
 
 Get this information.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
 
@@ -1120,11 +1120,11 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1138,9 +1138,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
 
@@ -1150,7 +1150,7 @@ not
 
 Gets additional information about VB memory.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
 
@@ -1167,24 +1167,24 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 kd_mpi_vb_set_supplement_config
 
@@ -1194,7 +1194,7 @@ kd_mpi_vb_set_supplement_config
 
 Set the module public video buffer pool properties.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_vb_config) \*config);
 
@@ -1212,11 +1212,11 @@ k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1228,9 +1228,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_get_mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
 
@@ -1240,7 +1240,7 @@ not
 
 Gets the module public video buffer pool property.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_config) \*config);
 
@@ -1258,11 +1258,11 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1275,9 +1275,9 @@ Sex.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
 
@@ -1287,7 +1287,7 @@ not
 
 Initialize the module public video buffer pool.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
@@ -1304,11 +1304,11 @@ k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1316,14 +1316,14 @@ not
 【Note】
 
 - Public video buffer pool initialization must first be called [kd_mpi_vb_init](#2111-kd_mpi_vb_init).
-- You must call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)f to configure the cache pool property before initializing the cache pool or it will fail.
+- You must call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)f to configure the vb pool property before initializing the vb pool or it will fail.
 - It can be initialized repeatedly without returning failures.
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_exit_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
 
@@ -1333,7 +1333,7 @@ not
 
 Exit the module public video buffer pool.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
@@ -1350,11 +1350,11 @@ k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 | 0      | succeed                                      |
 | Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
@@ -1368,9 +1368,9 @@ not
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_vb_init_mod_common_pool](#2126-kd_mpi_vb_init_mod_common_pool)
 
@@ -1388,7 +1388,7 @@ This function module provides the following APIs:
 
 Data source-to-data receiver binding interface
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
 
@@ -1406,11 +1406,11 @@ k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
@@ -1426,7 +1426,7 @@ not
 
 None/xx.
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
 
@@ -1436,7 +1436,7 @@ None/xx.
 
 The data source to the data receiver is unbound interface.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_unbind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
 
@@ -1454,11 +1454,11 @@ k_s32 kd_mpi_sys_unbind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
@@ -1472,7 +1472,7 @@ However, if the source channel of the binding and the pstSrcChn do not match, th
 
 None/xx.
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 
@@ -1482,7 +1482,7 @@ None/xx.
 
 Gets the information of the source channel bound on this channel.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp_chn](#312-k_mpp_chn) \*src_chn);
 
@@ -1500,24 +1500,24 @@ k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
 None/xx.
 
-【Related Topics】
+【See Also】
 
 - [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
@@ -1540,7 +1540,7 @@ This function module provides the following APIs:
 
 Set the log level.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) \*conf);
 
@@ -1557,11 +1557,11 @@ k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) 
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
@@ -1573,9 +1573,9 @@ Then, only the log level of the module specified by the mod_id is set
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
 
@@ -1585,7 +1585,7 @@ not
 
 Set the log level.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf);
 
@@ -1604,24 +1604,24 @@ k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
 
@@ -1631,7 +1631,7 @@ not
 
 Set the wait flag when reading logs.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_set_wait_flag(k_bool is_wait);
 
@@ -1648,26 +1648,26 @@ k_s32 kd_mpi_log_set_wait_flag(k_bool is_wait);
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.3.4 kd_mpi_log_read
 
@@ -1675,7 +1675,7 @@ not
 
 Read the logs.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_read(k_char \*buf, k_u32 size);
 
@@ -1692,26 +1692,26 @@ k_s32 kd_mpi_log_read(k_char \*buf, k_u32 size);
 |------------|------------------------|
 | Greater than or equal to 0 | The size of the log that was successfully read. |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.3.5 kd_mpi_log_close
 
@@ -1719,38 +1719,38 @@ not
 
 Close the log file.
 
-【Grammar】
+【Syntax】
 
 void kd_mpi_log_close(void);
 
 【Parameters】
 
-not
+none
 
 【Return value】
 
-not
+none
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
-not
+none
 
 #### 2.3.6 kd_mpi_log_set_console
 
@@ -1758,7 +1758,7 @@ not
 
 Configure whether to print logs directly from the console.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_set_console(k_bool is_console);
 
@@ -1775,24 +1775,24 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_log_get_console](#237-kd_mpi_log_get_console)
 
@@ -1802,7 +1802,7 @@ not
 
 Gets whether the log is printed directly from the console.
 
-【Grammar】
+【Syntax】
 
 k_s32 kd_mpi_log_set_console(k_bool is_console);
 
@@ -1819,24 +1819,24 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 | 0      | succeed                                    |
 | Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
 
-【Chip differences】
+【Differences】
 
-not
+none
 
-【Demand】
+【Requirement】
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
 【Note】
 
-not
+none
 
 【Example】
 
-not
+none
 
-【Related Topics】
+【See Also】
 
 [kd_mpi_log_set_console](#236-kd_mpi_log_set_console)
 
@@ -1907,13 +1907,13 @@ K_ID_BUTT, /*< Invalid */
 } k_mod_id;
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.1.2 k_mpp_chn
 
@@ -1943,11 +1943,11 @@ k_s32 chn_id; /*< Channel ID */
 | dev_id   | Device number |
 | chn_id   | Channel number |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
 - [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
@@ -1976,13 +1976,13 @@ Maximum number of video buffer pools
 #define VB_SINGLE_MAX_BLKS 256
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.2 k_vb_uid
 
@@ -2030,13 +2030,13 @@ VB_UID_BUTT = 15,
 }k_vb_uid;
 ```
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.3 k_vb_config
 
@@ -2060,15 +2060,15 @@ k_vb_pool_config comm_pool[VB_MAX_COMM_POOLS];
 
 | **Member name**     | **Description**                                                        |
 |--------------|------------------------------------------------------------|
-| max_pool_cnt | The number of cache pools that can be accommodated in the entire system. Value range: (0, VB_MAX_POOLS] |
-| comm_pool    | Public cache pool property structure. Static properties                            |
+| max_pool_cnt | The number of vb pools that can be accommodated in the entire system. Value range: (0, VB_MAX_POOLS] |
+| comm_pool    | Public vb pool property structure. Static properties                            |
 
-【Precautions】
+【Note】
 
-- blk_size equal to 0 or blk_cnt equal to 0, the corresponding cache pool will not be created.
+- blk_size equal to 0 or blk_cnt equal to 0, the corresponding vb pool will not be created.
 - It is recommended that the entire struct be memset to 0 before assigning values as needed.
 
-【Related data types and interfaces】
+【See Also】
 
 - kd_mpi_vb_get_config
 
@@ -2100,18 +2100,18 @@ char mmz_name[MAX_MMZ_NAME_LEN];/*< Name of the MMZ that allocates the memory fo
 
 | **Member Name** | **Description**                                             |
 |----------|-------------------------------------------------|
-| blk_size | The cache block size, in Byte bits.                    |
-| blk_cnt  | The number of cache blocks per cache pool. 0 \~ VB_SINGLE_MAX_BLKS |
+| blk_size | The vb block size, in Byte bits.                    |
+| blk_cnt  | The number of vb blocks per vb pool. 0 \~ VB_SINGLE_MAX_BLKS |
 | mode     | Kernel-state virtual address mapping mode for VB                     |
-| mmz_name | The MMZ region from which the current cache pool allocates memory.             |
+| mmz_name | The MMZ region from which the current vb pool allocates memory.             |
 
-【Precautions】
+【Note】
 
-- The size of each cache block u64BlkSize should be calculated based on the current image width, pixel format, data bit width, whether it is compressed, and so on.
-- The cache pool is allocated from free MMZ memory, and a cache pool contains several cache blocks of the same size. If the size of the cache pool exceeds the free space in reserved memory, the creation of the cache pool fails.
-- The user needs to ensure that the DDR name already exists, if the DDR name does not exist, the memory will not be divided. If the array mmz_name is memset to 0, a cache pool is created in an unnamed DDR.
+- The size of each vb block u64BlkSize should be calculated based on the current image width, pixel format, data bit width, whether it is compressed, and so on.
+- The vb pool is allocated from free MMZ memory, and a vb pool contains several vb blocks of the same size. If the size of the vb pool exceeds the free space in reserved memory, the creation of the vb pool fails.
+- The user needs to ensure that the DDR name already exists, if the DDR name does not exist, the memory will not be divided. If the array mmz_name is memset to 0, a vb pool is created in an unnamed DDR.
 
-【Related data types and interfaces】
+【See Also】
 
 - [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
 - [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
@@ -2146,13 +2146,13 @@ VB_REMAP_MODE_BUTT
 | VB_REMAP_MODE_NOCACHE | Map to nocache |
 | VB_REMAP_MODE_CACHED  | Map to cache   |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.2.6 k_vb_supplement_config
 
@@ -2178,11 +2178,11 @@ k_u32 supplement_config; /*<Control of the auxiliary information*/
 |-------------------|--------------|
 | supplement_config | Additional Information Control |
 
-【Precautions】
+【Note】
 
 Currently, two additional information are supported, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
 
-【Related data types and interfaces】
+【See Also】
 
 - [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config)
 - [kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
@@ -2234,11 +2234,11 @@ k_mod_id mod_id; /*< Logical unit for generating video frames */
 | pool_id  | Video buffer pool ID.                          |
 | mod_id   | Which hardware logic module writes the current frame data from. |
 
-【Precautions】
+【Note】
 
 Currently, two additional information are supported, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
 
-【Related data types and interfaces】
+【See Also】
 
 [k_video_frame](#332-k_video_frame)
 
@@ -2327,13 +2327,13 @@ k_video_supplement supplement; /*< Supplementary information about images */
 | priv_data        | Private data                           |
 | supplement       | Supplemental information for the image                     |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.3 k_video_supplement
 
@@ -2366,11 +2366,11 @@ void isp_info_kvirt_addr; /*< isp_frame_info, used in ISP debug, when get raw an
 | jpeg_dcf_kvirt_addr | Virtual address of JPEG DCF information (kernel-state virtual address)  |
 | isp_info_kvirt_addr | The virtual address of the ISP secondary information. (kernel-state virtual address) |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
 [k_video_frame](#332-k_video_frame)
 
@@ -2432,13 +2432,13 @@ k_u32 vc_num; /*< when dump wdr frame, which is long or short exposure frame. */
 | vmax            | The number of lines in a frame                                                 |
 | vc_num          | The sequence number of the current rookie's frame.                                     |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.5 k_jpeg_dcf
 
@@ -2473,13 +2473,13 @@ k_isp_dcf_info isp_dcf_info;
 | digital_zoom_ratio | The digital zoom factor at the time the JPEG photo was taken |
 | isp_dcf_info       | DCF Additional Information                      |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.6 k_isp_dcf_info
 
@@ -2531,13 +2531,13 @@ COMPRESS_MODE_BUTT
 | COMPRESS_MODE_LINE  | Line compressed video format, compressed in one line as one segment.      |
 | COMPRESS_MODE_FRAME | A frame-compressed video format, compressed in units of one frame.        |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.10 k_color_gamut
 
@@ -2572,7 +2572,7 @@ COLOR_GAMUT_BUTT
 | COLOR_GAMUT_BT2020 | BT2020 color gamut range             |
 | COLOR_GAMUT_USER   | User-defined color gamut, non-standard color gamut |
 
-【Precautions】
+【Note】
 
 The blue, green, macro, and white point coordinates for each color gamut range are as follows
 
@@ -2583,9 +2583,9 @@ The blue, green, macro, and white point coordinates for each color gamut range a
 | BT709       | (0.300, 0.600）  | (0.150, 0.060）  | (0.640, 0.330)  | (0.3127, 0.3290) |
 | BT2020      | (0.170, 0.797)   | (0.131, 0.046)   | (0.708, 0.292)  | (0.3127, 0.3290) |
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.11 k_dynamic_range
 
@@ -2624,7 +2624,7 @@ DYNAMIC_RANGE_BUTT
 | DYNAMIC_RANGE_SLF   | void                       |
 | DYNAMIC_RANGE_XDR   | void                       |
 
-【Precautions】
+【Note】
 
 The curves corresponding to each dynamic range are as follows:
 
@@ -2634,9 +2634,9 @@ The curves corresponding to each dynamic range are as follows:
 | HDR10          | V = ( ( c1 + c2 \* Lc n ) ÷ ( 1 + c3 \* Lc n ) )m for all values of Lc c1 = c3 - c2 + 1 = 3424 ÷ 4096 = 0.8359375 c2 = 32 \* 2413 ÷ 4096 = 18.8515625 c3 = 32 \* 2392 ÷ 4096 = 18.6875 m = 128 \* 2523 ÷ 4096 = 78.84375 n = 0.25 \* 2610 ÷ 4096 = 0.1593017578125 for which Lc equal to 1 for peak white is ordinarily intended to correspond to a reference output luminance level of 10000 candelas per square metre |
 | HLG            | V = a \* Ln( 12 \* Lc - b ) + c for 1 \>= Lc \> 1 ÷ 12 V = Sqrt( 3 ) \* Lc0.5 for 1 ÷ 12 \>= Lc \>= 0 a = 0.17883277, b = 0.28466892, c = 0.55991073                                                                                                                                                                                                                                                                    |
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.12 k_video_format
 
@@ -2673,13 +2673,13 @@ VIDEO_FORMAT_BUTT
 | VIDEO_FORMAT_TILE_16x8       | The TILE format stores a video format where the block size of the tile is 16 pixels wide and 8 rows pixels high, also known as the small TILE format. |
 | VIDEO_FORMAT_LINEAR_DISCRETE | Linear discrete natural row storage data format, data bit width is byte-aligned, low bit is valid, high bit is invalid.                 |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
-not
+none
 
 #### 3.3.13 k_video_filed
 
@@ -2716,11 +2716,11 @@ VIDEO_FIELD_BUTT
 | VIDEO_FIELD_INTERLACED | Two interpolation types |
 | VIDEO_FIELD_FRAME      | Frame type       |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
 [k_video_frame](#332-k_video_frame)
 
@@ -2862,13 +2862,13 @@ PIXEL_FORMAT_BUTT
 
 【Members】
 
-not
+none
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
 outline
 
@@ -2906,11 +2906,11 @@ k_char mod_name[16];
 | level    | Log level   |
 | mod_name | The name of the module |
 
-【Precautions】
+【Note】
 
-not
+none
 
-【Related data types and interfaces】
+【See Also】
 
 - [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
 - [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
@@ -2930,10 +2930,10 @@ Table 41
 | 0xa004800d | K_ERR_VB_NOBUF         | Failed to allocate cache     |
 | 0xa0048005 | K_ERR_VB_UNEXIST       | The video buffer does not exist   |
 | 0xa0048003 | K_ERR_VB_ILLEGAL_PARAM | The parameter setting is invalid     |
-| 0xa0048010 | K_ERR_VB_NOTREADY      | The cache pool is not ready   |
+| 0xa0048010 | K_ERR_VB_NOTREADY      | The vb pool is not ready   |
 | 0xa0048012 | K_ERR_VB_BUSY          | The system is busy           |
 | 0xa0048009 | K_ERR_VB_NOT_PERM      | Operation is not allowed       |
-| 0xa0048040 | K_ERR_VB_2MPOOLS       | Too many cache pools have been created |
+| 0xa0048040 | K_ERR_VB_2MPOOLS       | Too many vb pools have been created |
 
 #### 4.1.2 Multimedia memory zone error codes
 
@@ -3051,27 +3051,27 @@ Record the block usage of the current VB module
 
 | **Parameters**                                                         | **Description**                                                               |                                                                                                        |
 |--------------------------------------------------------------|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| VB PUB CONFIG                                                | MaxPoolCnt                                                             | The maximum number of cache pools.                                                                                   |
+| VB PUB CONFIG                                                | MaxPoolCnt                                                             | The maximum number of vb pools.                                                                                   |
 | VB SUPPLEMENT ATTR                                           | Config                                                                 | Video frame supplemental information configuration.                                                                                   |
 |                                                              | Size                                                                   | Video frame supplemental information takes up memory space.                                                                           |
 |                                                              | VbCnt                                                                  | The total number of VB blocks contained by all VB pools (shared, private).                                                            |
-| COMMON POOL CONFIG                                           | Spools                                                                 | A handle to the public cache pool.                                                                                     |
-|                                                              | Size                                                                   | The size of the block within the cache pool.                                                                                     |
-|                                                              | Count                                                                  | The number of blocks in the cache pool.                                                                                     |
-| MODULE COMMON POOL CONFIG of VB_UID (模块分配的 公共 VB)   | Spools                                                                 | A handle to the public cache pool.                                                                                     |
-|                                                              | Size                                                                   | The size of the block within the cache pool.                                                                                     |
-|                                                              | Count                                                                  | The number of blocks in the cache pool.                                                                                     |
-| NULL (table space, i.e. anonymous DDR)                                      | Spools                                                                 | A handle to the public/private cache pool.                                                                                |
-|                                                              | PhysAddr                                                               | The starting physical address of the public/private cache pool.                                                                        |
-|                                                              | VirtAddr                                                               | The start virtual address of the public/private cache pool.                                                                        |
-|                                                              | IsComm                                                                 | Whether the cache pool is public. Value: {0, 1}.                                                                        |
-|                                                              | Owner                                                                  | The owner of the cache pool. -2: Private pool. -1: Public pool. ≥0: Module VB.                                               |
-|                                                              | BlkSz                                                                  | The size of the cache block within the cache pool.                                                                                 |
-|                                                              | BlkCnt                                                                 | The number of cache blocks in the cache pool.                                                                                 |
-|                                                              | Free                                                                   | The number of cache pool free cache blocks.                                                                               |
-|                                                              | MinFree                                                                | The minimum number of free cache blocks remaining since the MinFree program was run. A count of 0 indicates that there may be frame drops due to insufficient cache blocks. |
-|                                                              | BLK                                                                    | A handle to the cache block within the cache pool.                                                                                 |
-|                                                              | VI/VPROC/VREC/VENC /VDEC/VO/USER/AI/AREC /AENC/ADEC/AO/V_VI/ V_VO/DMA  | Module Name The number under indicates how many places the current module occupies that cache block in the cache pool.  0: Not occupied.  Non-0: Number of occupancy    |
+| COMMON POOL CONFIG                                           | Spools                                                                 | A handle to the public vb pool.                                                                                     |
+|                                                              | Size                                                                   | The size of the block within the vb pool.                                                                                     |
+|                                                              | Count                                                                  | The number of blocks in the vb pool.                                                                                     |
+| MODULE COMMON POOL CONFIG of VB_UID (模块分配的 公共 VB)   | Spools                                                                 | A handle to the public vb pool.                                                                                     |
+|                                                              | Size                                                                   | The size of the block within the vb pool.                                                                                     |
+|                                                              | Count                                                                  | The number of blocks in the vb pool.                                                                                     |
+| NULL (table space, i.e. anonymous DDR)                                      | Spools                                                                 | A handle to the public/private vb pool.                                                                                |
+|                                                              | PhysAddr                                                               | The starting physical address of the public/private vb pool.                                                                        |
+|                                                              | VirtAddr                                                               | The start virtual address of the public/private vb pool.                                                                        |
+|                                                              | IsComm                                                                 | Whether the vb pool is public. Value: {0, 1}.                                                                        |
+|                                                              | Owner                                                                  | The owner of the vb pool. -2: Private pool. -1: Public pool. ≥0: Module VB.                                               |
+|                                                              | BlkSz                                                                  | The size of the vb block within the vb pool.                                                                                 |
+|                                                              | BlkCnt                                                                 | The number of vb blocks in the vb pool.                                                                                 |
+|                                                              | Free                                                                   | The number of vb pool free vb blocks.                                                                               |
+|                                                              | MinFree                                                                | The minimum number of free vb blocks remaining since the MinFree program was run. A count of 0 indicates that there may be frame drops due to insufficient vb blocks. |
+|                                                              | BLK                                                                    | A handle to the vb block within the vb pool.                                                                                 |
+|                                                              | VI/VPROC/VREC/VENC /VDEC/VO/USER/AI/AREC /AENC/ADEC/AO/V_VI/ V_VO/DMA  | Module Name The number under indicates how many places the current module occupies that vb block in the vb pool.  0: Not occupied.  Non-0: Number of occupancy    |
 
 ### 5.2.2 Multimedia memory zone debugging information
 
@@ -3103,7 +3103,7 @@ Records the current usage of multimedia memory
 
 【Parameter description】
 
-not
+none
 
 ### 5.3 System Binding
 

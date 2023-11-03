@@ -6,7 +6,7 @@ Copyright 2023 Canaan Inc. ©
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
 The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
 
@@ -21,7 +21,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ## K230 AI Demo
 
-### overview
+### Overview
 
 K230 AI Demo integrates face, human body, hand, license plate, word continuation and other modules, including classification, detection, segmentation, recognition, tracking and other functions, to provide customers with a reference on how to use K230 to develop AI-related applications.
 
@@ -147,4 +147,4 @@ The kmodel, image, and related dependency paths are located in `src/big/kmodel/a
 
 - Enter the src/reference/ai_poc
 - Execute the build_app.sh script (before executing the script, make sure that there are corresponding kmodels, images, and utils under the src/big/kmodel/ai_poc), this will generate a unified copy of kmodel, images, utils, shell, and elf to the k230_bin folder
-- Copy the entire folder to the board, and execute the sh script on the large core to run the corresponding AI demo
+- Copy the entire folder to the board, and execute the sh script on the big core to run the corresponding AI demo
