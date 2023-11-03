@@ -733,6 +733,8 @@ CONFIG_MEM_MMZ_SIZE="0x0FC00000"        #mmz 共享内存区域       支持配�
 CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配置
 ```
 
+> CONFIG_MEM_LINUX_SYS_BASE 地址需要2MB对齐
+
 ## 8. SDK单板调试
 
 > CanMV-K230主板由于没有引出调试GPIO,因此,不支持单板调试方式。

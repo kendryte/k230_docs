@@ -725,6 +725,8 @@ CONFIG_MEM_MMZ_SIZE="0x0FC00000"        #core share memory size     can modify
 CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #isolation area     can not modify
 ```
 
+> CONFIG_MEM_LINUX_SYS_BASE requires a 2MB alignment
+
 ## 8. SDK board debugging
 
 > The CanMV-K230 motherboard does not support single-board debugging because it does not lead to debugging GPIOs.
