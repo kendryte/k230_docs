@@ -190,7 +190,7 @@ k_s32 kd_xxx_func(k_s32 a)
 
 【Difference】
 
-not
+none
 
 【Requirement】
 
@@ -198,15 +198,16 @@ not
 - Library file: libxxx.a
 
 【Note】
-not
+
+none
 
 【Example】
 
-not
+none
 
 【See Also】
 
-not
+none
 
 ## Data structure description
 
@@ -233,11 +234,11 @@ typedef struct
 
 【Note】
 
-not
+none
 
 【See Also】
 
-not
+none
 
 ## Debugging and printing information
 
