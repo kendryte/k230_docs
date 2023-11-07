@@ -225,6 +225,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 23 | K230 SDK V1.0 | Door lock POC        | Add the function of scanning and decrypting facial feature values |                                     |
 | 24 | K230 SDK V1.0 | SH256 drive        | Added SH256 driver for large and little core hardware |                                     |
 | 25 | K230 SDK V1.1 | big core encryption and decryption driver        | Added big core hardware AES-GCM driver and SM4-ECB/CBC/CFB/OFB/CTR driver |                                     |
+| 26 | K230 SDK V1.2 | Door lock OTA        | Add Door lock OTA |
 
 ### 4.5 Miscellaneous
 
