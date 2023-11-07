@@ -152,6 +152,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 23 | K230 SDK V1.1 | MAPI                     | 增加vicap的MAPI                                                                                                             |      |
 | 24 | K230 SDK V1.1 | HDR频率变换               | 支持HDR 频率变换                                                                                                            |      |
 | 25 | K230 SDK V1.1 | 参数导出                  | 支持isp dewarp参数导出                                                                                                      |      |
+| 26 | K230 SDK V1.2 | 增加词典笔POC             | 增加词典笔POC                                                                                                               |      |
 
 ### 4.3 平台
 

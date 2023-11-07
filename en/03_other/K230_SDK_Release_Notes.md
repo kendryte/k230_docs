@@ -152,6 +152,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 23 | K230 SDK V1.1 | MAPI                     | Add vicap's MAPI                                                                                                             |      |
 | 24 | K230 SDK V1.1 | HDR frequency conversion               | Supports HDR frequency conversion                                                                                                            |      |
 | 25 | K230 SDK V1.1 | Parameter export                  | Support ISP Dewarp parameter export                                                                                                      |      |
+| 26 | K230 SDK V1.2 | Add Dictionary Pen POC                  | Add Dictionary Pen POC                                                                                                  |      |
 
 ### 4.3 Platform
 
