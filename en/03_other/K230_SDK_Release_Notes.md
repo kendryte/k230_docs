@@ -29,7 +29,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document mainly describes the content related to the release of K230 SDK V1.1.0, including the hardware, features, and usage restrictions supported by the current version.
+This document mainly describes the content related to the release of K230 SDK V1.2.0, including the hardware, features, and usage restrictions supported by the current version.
 
 ### Reader object
 
@@ -58,13 +58,13 @@ This document (this guide) is intended primarily for:
 
 | Document version number | Modify the description | Author     | date     |
 |------------|----------|------------|----------|
-| V1.0      | Initial     | System Software Department | 2023-10-16 |
+| V1.0      | Initial     | System Software Department | 2023-11-8 |
 
 ## 1. Version Information
 
 | Affiliated products | Version number | Release date |
 |----------|--------|----------|
-| K230 SDK | V1.1.0 | 2023-10-16|
+| K230 SDK | V1.2.0 | 2023-11-8|
 
 ## 2. Supported hardware
 
