@@ -196,6 +196,8 @@ Memory configuration of parameter areas and intercore communication areas
 | 35 | K230 SDK V1.1 | little core SPI LCD driver | The little core supports SPI interface ST7735S 0.96 inch LCD screen driver| |
 | 36  | K230 SDK V1.1 | BurnTool Burning Tool V2           | Delete the full image burning page and add loader_sip.bin support for SIP burning, see [K230_SDK_Burntool User Guide.md](../../en/01_software/pc/burntool/K230_SDK_Burntool_User_Guide.md) for details|      |
 | 37  | K230 SDK V1.1 | USB port use           | USB1 is fixed in host mode, which can be connected to peripherals such as USB-ETH or U disk, and EVB's J5 pin pin 3 is connected to pin4 jumper cap to enable power supply to peripherals. USB0 is used for USB gadget testing and USB upgrades, and EVB's J5 pin headers, pins 1 and pin2, are no longer connected using jumper caps. |      |
+| 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
+| 39  | K230 SDK V1.2 | canmv only linux           | add k230_canmv_only_linux_defconfig config |      |
 
 ### 4.4 Architecture
 
