@@ -1,4 +1,4 @@
-# K230 Middleware API Reference
+# K230 MultimediaMiddleware API Reference
 
 ![cover](../../../../zh/01_software/board/middleware/images/canaan-cover.png)
 
@@ -29,7 +29,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document provides reference information about the middleware, including application programming interfaces (APIs), header files for programmers who use the middleware to develop products.
+This document provides reference information about the middleware, including application programming interfaces (APIs), header files for programmers who use the multimedia middleware to develop products.
 
 This document also describes the method of calling each API, and related data structures and error codes.
 

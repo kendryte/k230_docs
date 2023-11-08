@@ -5,7 +5,7 @@ K230 SDK API 参考
 
    zh/01_software/board/cdk/K230_核间通讯_API参考.md
    zh/01_software/board/cdk/K230_系统控制_MAPI参考.md
-   zh/01_software/board/middleware/K230_中间件_API参考.md
+   zh/01_software/board/middleware/K230_多媒体中间件_API参考.md
    zh/01_software/board/mpp/K230_DMA_API参考.md
    zh/01_software/board/mpp/K230_DPU_API参考.md
    zh/01_software/board/mpp/K230_FFT_API参考.md
