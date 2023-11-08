@@ -120,8 +120,9 @@ Memory configuration of parameter areas and intercore communication areas
 | 31 | K230 SDK V0.8 | VDEC MPI | Support down scale | |
 | 32 | K230 SDK V0.8 | DPU Demo | Screen depth map: vicap->dma->dpu->vo | |
 | 32 | K230 SDK V0.8 | Voice intercom demo | Add a voice intercom demo | |
-| 33 | K230 SDK V0.9 | Cat's Eye POC | Remote cat's eye realizes video intercom, voice change, video, humanoid detection and capture functions. | |
-| 34 | K230 SDK V1.0 | Cat's Eye POC | 1. Add UI control on the Maoyan device. 2. Add local cat's eye voice intercom function. 3. The mobile phone recording function is changed to the device side implementation, and it is always recording. 4. Add playback function on the Maoyan device.| |
+| 33 | K230 SDK V0.9 | Peephole POC | Remote peephole realizes video intercom, voice change, video, humanoid detection and capture functions. | |
+| 34 | K230 SDK V1.0 | Peephole POC | 1. Add UI control on the peephole  device. 2. Add local peephole voice intercom function. 3. The mobile phone recording function is changed to the device side implementation, and it is always recording. 4. Add playback function on the peephole  device. | |
+| 35 | K230 SDK V1.2 | Peephole POC | nor flash boot up | |
 
 ### 4.2 Images
 
