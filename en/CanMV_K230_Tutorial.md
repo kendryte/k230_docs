@@ -189,7 +189,11 @@ The SDK is currently released simultaneously on GitHub and GitHub
 
 <https://gitee.com/kendryte/k230_sdk>
 
-Users can download the archive directly, download it at [GitHub or](https://github.com/kendryte/k230_sdk/releases)GitHub[, or use](https://gitee.com/kendryte/k230_sdk/releases) or `git clone https://github.com/kendryte/k230_sdk``git clone https://gitee.com/kendryte/k230_sdk.git`
+Users can download the archive directly, download it at [GitHub](https://github.com/kendryte/k230_sdk/releases) [Gitee](https://gitee.com/kendryte/k230_sdk/releases) or
+
+`git clone https://github.com/kendryte/k230_sdk`
+
+`git clone https://gitee.com/kendryte/k230_sdk.git`
 
 Users can choose to use GitHub or GitHub according to their network conditions.
 
@@ -239,7 +243,7 @@ At this point, the entire SDK is compiled, and the adult image sysimage-sdcard.i
 
 #### example
 
-For basic hello world, please refer to [K230_ Practical Basics _hello_world](https://github.com/kendryte/k230_docs/blob/main/zh/02_applications/tutorials/K230_%E5%AE%9E%E6%88%98%E5%9F%BA%E7%A1%80%E7%AF%87_hello_world.md)
+For basic hello world, please refer to [K230_Practical_Basics_hello_world](02_applications/tutorials/K230_Practical_Basics_hello_world.md)
 
 In the case of Vicap_demo, the code is located at k230_sdk/src/big/mpp/userapps/sample/sample_vicap
 
@@ -300,9 +304,13 @@ Example 1:
 
 Note: Bind the ov5647@1920x1080 RGB output to vicap device 0 and enable vicap device output channel 0 and channel 1, where channel 0 output size defaults to the input image size (1920x1080) and channel 1 output image size is 640x480
 
-For the API used in this example, refer to [K230_VICAP_API Reference.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_VICAP_API%E5%8F%82%E8%80%83.md) [K230_Video Output _API Reference.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_%E8%A7%86%E9%A2%91%E8%BE%93%E5%87%BA_API%E5%8F%82%E8%80%83.md)
+For the API used in this example, refer to
 
-For other demos supported by the CanMV-K230 development board, please refer to [the K230_SDK_CanMV_Board_Demo User Guide](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)
+[K230_VICAP_API Reference.md](01_software/board/mpp/K230_VICAP_API_Reference.md)
+
+[K230_Video Output _API Reference.md](01_software/board/mpp/K230_video_output_API_reference.md)
+
+For other demos supported by the CanMV-K230 development board, please refer to [the K230_SDK_CanMV_Board_Demo User Guide](01_software/board/examples/K230_SDK_CanMV_Board_Demo_User_Guide.md)
 
 For other SDK-related documents, please visit [the K230 SDK documentation](https://github.com/kendryte/k230_docs)
 
@@ -601,8 +609,8 @@ Currently `CanMV`supports two sets of development APIs,`C++` and  , `MicroPython
 
 When inference on the board, we provide two modules to accelerate model inference
 
-- Hardware-based pre-processing module: `AI2D`. More details in [AI2D runtime APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#5-ai2d-%E8%BF%90%E8%A1%8C%E6%97%B6apisc);
-- Hardware-based model inference module:`KPU`. More details in [KPU runtime APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#4-kpu%E8%BF%90%E8%A1%8C%E6%97%B6apisc);
+- Hardware-based pre-processing module: `AI2D`. More details in [AI2D runtime APIs](01_software/board/ai/K230_nncase_Development_Guide.md);
+- Hardware-based model inference module:`KPU`. More details in [KPU runtime APIs](01_software/board/ai/K230_nncase_Development_Guide.md);
 
 Next, we will explain how these two modules are used in the C++ code example and what needs to be noticed.
 
