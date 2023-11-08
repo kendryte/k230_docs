@@ -197,6 +197,8 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 35 | K230 SDK V1.1 | 小核SPI LCD驱动 | 小核支持SPI接口ST7735S 0.96寸LCD屏驱动| |
 | 36  | K230 SDK V1.1 | burntool烧录工具V2           | 删除完整镜像烧录页，增加loader_sip.bin支持SIP烧录,具体可查看 [K230_SDK_Burntool使用指南.md](../01_software/pc/burntool/K230_SDK_Burntool使用指南.md) |      |
 | 37  | K230 SDK V1.1 | usb口使用           | usb1固定为host模式，可以连接usb-eth或U盘等外设，EVB的J5排针pin3与pin4跳线帽连接，给外设供电使能。usb0用于usb gadget测试和usb升级，EVB的J5排针pin1与pin2不再使用跳线帽连接。 |      |
+| 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
+| 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 
 ### 4.4 架构
 
