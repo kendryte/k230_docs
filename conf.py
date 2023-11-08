@@ -27,7 +27,8 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ['venv']
+exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
+# html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
 language = 'zh_CN'
 
@@ -65,9 +66,9 @@ html_theme_options = {
     'vcs_pageview_mode': '',
     # 'style_nav_header_background': '#2980B9',
     # Toc options
-    'collapse_navigation': True,
+    'collapse_navigation': False,
     'sticky_navigation': True,
     'navigation_depth': 7,
-    'includehidden': True,
+    'includehidden': False,
     'titles_only': False
 }
