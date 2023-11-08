@@ -105,7 +105,7 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230_Middleware_API_reference.md](en/01_software/board/middleware/K230_Middleware_API_reference.md) | K230 Middleware API reference |
+| [K230_MultimediaMiddleware_API_reference.md](en/01_software/board/middleware/K230_MultimediaMiddleware_API_reference.md) | K230 Middleware API reference |
 | [K230_OpenBLAS_Development_Guide.md](en/01_software/board/middleware/K230_OpenBLAS_Development_Guide.md) | K230 OpenBLAS Development Guide |
 | [K230_OpenCV_Development_Guide.md](en/01_software/board/middleware/K230_OpenCV_Development_Guide.md) | K230 OpenCV Development Guide|
 

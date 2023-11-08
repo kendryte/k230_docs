@@ -105,7 +105,7 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_中间件_API参考.md](zh/01_software/board/middleware/K230_中间件_API参考.md) | K230 中间件 API参考 |
+| [K230_多媒体中间件_API参考.md](zh/01_software/board/middleware/K230_多媒体中间件_API参考.md) | K230 中间件 API参考 |
 | [K230_openblas_开发使用指南.md](zh/01_software/board/middleware/K230_openblas_开发使用指南.md) | K230 OpenBLAS 开发使用指南|
 | [K230_opencv_开发使用指南.md](zh/01_software/board/middleware/K230_opencv_开发使用指南.md) | K230 OpenCV 开发使用指南|
 
