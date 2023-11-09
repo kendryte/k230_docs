@@ -7,15 +7,9 @@ K230 SDK 实用教程
    zh/02_applications/tutorials/K230_AI实战_HHB神经网络模型部署工具.md
    zh/02_applications/tutorials/K230_GPU应用实战.md
    zh/02_applications/tutorials/K230_GUI实战_LVGL移植教程.md
-   zh/02_applications/tutorials/K230_RVV优化性能说明.md
    zh/02_applications/tutorials/K230_RVV实战.md
    zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md
-   zh/02_applications/tutorials/K230_内存优化指南.md
-   zh/02_applications/tutorials/K230_内存占用分析指南.md
-   zh/02_applications/tutorials/K230_启动优化指南.md
    zh/02_applications/tutorials/K230_图像实战_开机视频和开机logo.md
-   zh/02_applications/tutorials/K230_图像采集实战_如何支持一款新sensor.md
-   zh/02_applications/tutorials/K230_大小核通讯_sharefs用法介绍.md
    zh/02_applications/tutorials/K230_编码实战_rtsp_server搭建和推流.md
    zh/02_applications/tutorials/K230_音频实战_音频采集_播放和编解码.md
    zh/02_applications/business_poc/K230_场景实战_智能门锁.md

@@ -70,6 +70,7 @@ markdown-link-check:
     - uname -a
     - whoami
     - pwd
+    # container does not has git - git diff HEAD^1 --name-only | grep "^.*\.md$" | xargs -0 -n1 markdown-link-check -q
     - find . -name \*.md -print0 | xargs -0 -n1 markdown-link-check -q
 
 # new MR open
@@ -87,6 +88,7 @@ markdownlint:
     - whoami
     - pwd
     #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
+    # - git diff HEAD^1 --name-only | grep "^.*\.md$" | xargs -0 markdownlint-cli2
     - find . -name \*.md -print0 | xargs -0 markdownlint-cli2
 
 .setup_env:
@@ -163,6 +165,10 @@ build-web-docs:
     - git checkout dev
     - git pull
     - rm -rf _build
+    - python3 preprocess.py
+    - git commit zh en -m remove_cover
     - make mhtml
+    - git reset HEAD^1
+    - git resotre zh en
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
