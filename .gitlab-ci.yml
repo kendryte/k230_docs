@@ -166,6 +166,8 @@ build-web-docs:
     - git pull
     - rm -rf _build
     - python3 preprocess.py
+    - git config --global user.email "auto@canaan-creative.com"
+    - git config --global user.name "GitLab CI"
     - git commit zh en -m remove_cover
     - make mhtml
     - git reset HEAD^1
