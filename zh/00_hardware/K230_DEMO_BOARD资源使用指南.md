@@ -137,8 +137,8 @@ K230 DEMO BOARD可以按照**图2.1.1**中左图所示大致划分为6个区域�
 ![Flash扩展-J9的原理图](./images/K230_DEMO_BOARD_USAGE_GUIDE/image9.png)
 （**图2.2.1**：上图为flash模组子卡的实例图，左上白点处为引脚1，下图为Flash扩展-J9的原理图）
 
-DEMO板的FLASH的扩展处已焊好验证后的flash模组，无需进一步的改动。选型为NOR
-OSPI（GD25LX256E，厂商：Giga Device，256Mbits）
+DEMO板的FLASH的扩展处已焊好验证后的flash模组，无需进一步的改动。选型为NOR flash,
+OSPI接口（GD25LX256E，厂商：Giga Device，256Mbits）
 
 ### 电源区（开机上电方式）
 
