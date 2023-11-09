@@ -148,6 +148,7 @@ TF card can be burned through the balena Etcher tool under Windows (balena Etche
 
 ![balena-Etcher-flash](../zh/images/balena-Etcher-flash.jpg)
 ![balena-Etcher-finish](../zh/images/balena-Etcher-finish.jpg)
+>Note 1: When burning the image, other programs are forbidden to read and write sd card, please turn off the computer's auto play function (Settings - auto play).
 
 ### Start the system
 

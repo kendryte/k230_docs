@@ -389,7 +389,8 @@ Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具
 
 图5-4 烧录完成
 
-说明：使用`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件时需要先解压缩，烧录解压缩后的文件。
+>说明1：使用`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件时需要先解压缩，烧录解压缩后的文件。
+>说明2：烧录镜像时禁止其他程序读写sd卡，请把电脑的自动播放功能关闭(设置-自动播放)。
 
 ### 5.2 Emmc镜像烧写参考
 
