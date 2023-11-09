@@ -388,7 +388,8 @@ Figure 5-3 Start burning
 
 Figure 5-4 Burning complete
 
-Note: When using`sysimage-sdcard_aes.img.gz` , , `sysimage-sdcard.img.gz`files, `sysimage-sdcard_sm.img.gz`you need to decompress and burn the decompressed files.
+>Note1: When using`sysimage-sdcard_aes.img.gz` , , `sysimage-sdcard.img.gz`files, `sysimage-sdcard_sm.img.gz`you need to decompress and burn the decompressed files.
+>Note 2: When burning the image, other programs are forbidden to read and write sd card, please turn off the computer's auto play function (Settings - auto play).
 
 ### 5.2 EMMC image flashing reference
 
