@@ -3,3 +3,5 @@
 _build
 venc
 __pycache__
+_templates/layout.html
+

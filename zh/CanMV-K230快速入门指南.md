@@ -151,6 +151,7 @@ Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具
 
 ![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
 ![balena-Etcher-finish](images/balena-Etcher-finish.jpg)
+>说明1：烧录镜像时禁止其他程序读写sd卡，请把电脑的自动播放功能关闭(设置-自动播放)。
 
 ## 5 启动系统
 

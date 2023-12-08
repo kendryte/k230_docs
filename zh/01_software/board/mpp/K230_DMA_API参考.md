@@ -64,10 +64,6 @@ GSDMA：DMA 全称 Direct Memory Access，即直接存储器访问，将数据�
 
 ### 1.2 功能描述
 
-dma 驱动调用流程如下图所示：
-
-![图示 描述已自动生成](images/5eb26853f9444bbda3a54cdb33688a12.png)
-
 将 dma 硬件抽象为一个设备，八个通道，其中，通道 0\~3 是 gdma 通道，通道 4\~7 是 sdma 通道。
 
 #### 1.2.1 gdma

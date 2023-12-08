@@ -4,16 +4,18 @@
 [![Gitee repository](https://img.shields.io/badge/gitee-repository-blue?logo=gitee&style=plastic)](https://gitee.com/kendryte/k230_docs)
 [![GitHub release](https://img.shields.io/github/v/release/kendryte/k230_docs?color=brightgreen&display_name=tag&logo=github&style=plastic)](https://github.com/kendryte/k230_docs/releases)
 
+[中文文档](README.md) | [English Docs](README_en.md)
+
 [TOC]
 
 ## K230相关资源链接
 
 | 链接 | 说明  |
 | ------ | ---- |
-| [K230 SDK](https://github.com/kendryte/k230_sdk) | Kendryte K230 SDK Github Repo |
+|[K230 SDK](https://github.com/kendryte/k230_sdk) | Kendryte K230 SDK Github Repo |
 |[K230 Docs](https://github.com/kendryte/k230_docs)| Kendryte K230 Docs Github Repo |
 |[K230_training_scripts](https://github.com/kendryte/K230_training_scripts/)| Kendryte K230 Training Scripts Github Repo |
-| [K230 SDK Gitee mirror](https://gitee.com/kendryte/k230_sdk) | Kendryte K230 SDK Gitee mirror Repo |
+|[K230 SDK Gitee mirror](https://gitee.com/kendryte/k230_sdk) | Kendryte K230 SDK Gitee mirror Repo |
 |[K230 Docs Gitee mirror](https://gitee.com/kendryte/k230_docs)| Kendryte K230 Docs Gitee mirror Repo |
 |[K230 SDK Release mirror](https://kendryte-download.canaan-creative.com/k230/release/sdk/k230_sdk.tar.gz)| 嘉楠勘智K230 SDK release k230_sdk.tar.gz下载 |
 |[K230 Docs Release mirror](https://kendryte-download.canaan-creative.com/k230/release/docs/k230_docs.tar.gz)| 嘉楠勘智K230 Docs release k230_docs.tar.gz下载 |
@@ -103,7 +105,7 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_中间件_API参考.md](zh/01_software/board/middleware/K230_中间件_API参考.md) | K230 中间件 API参考 |
+| [K230_多媒体中间件_API参考.md](zh/01_software/board/middleware/K230_多媒体中间件_API参考.md) | K230 中间件 API参考 |
 | [K230_openblas_开发使用指南.md](zh/01_software/board/middleware/K230_openblas_开发使用指南.md) | K230 OpenBLAS 开发使用指南|
 | [K230_opencv_开发使用指南.md](zh/01_software/board/middleware/K230_opencv_开发使用指南.md) | K230 OpenCV 开发使用指南|
 
@@ -117,11 +119,13 @@
 | [K230_GPU_API参考.md](zh/01_software/board/mpp/K230_GPU_API参考.md) | K230 GPU API参考|
 | [K230_SHA256_API参考.md](zh/01_software/board/mpp/K230_SHA256_API参考.md) | K230 SHA256 API参考|
 | [K230_VICAP_API参考.md](zh/01_software/board/mpp/K230_VICAP_API参考.md) | K230 VICAP API参考|
+| [K230_VICAP_SENSOR_参数分区参考.md](zh/01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md) | K230 VICAP SENSOR 参数分区参考|
 | [K230_系统控制_API参考.md](zh/01_software/board/mpp/K230_系统控制_API参考.md) | K230 系统控制 API参考|
 | [K230_视频编解码_API参考.md](zh/01_software/board/mpp/K230_视频编解码_API参考.md) | K230 视频编解码 API参考|
 | [K230_视频输出_API参考.md](zh/01_software/board/mpp/K230_视频输出_API参考.md) | K230 视频输出 API参考|
 | [K230_音频_API参考.md](zh/01_software/board/mpp/K230_音频_API参考.md) | K230 音频 API参考|
 | [K230_FFT_API参考.md](zh/01_software/board/mpp/K230_FFT_API参考.md) | K230 FFT API参考|
+| [K230_PM框架使用指南.md](zh/01_software/board/mpp/K230_PM框架使用指南.md) | K230 PM框架使用指南|
 
 #### K230 sdk osdrv 文档
 
@@ -172,6 +176,7 @@
 | [K230_场景实战_智能门锁.md](zh/02_applications/business_poc/K230_场景实战_智能门锁.md) | K230 场景实战 智能门锁|
 | [K230_场景实战_智能门锁_ov9286.md](zh/02_applications/business_poc/K230_场景实战_智能门锁_OV9286.md) | K230 场景实战 智能门锁 OV9286|
 | [K230_场景实战_猫眼.md](zh/02_applications/business_poc/K230_场景实战_猫眼.md) | K230 场景实战 猫眼|
+| [K230_场景实战_词典笔.md](zh/02_applications/business_poc/K230_场景实战_词典笔.md) | K230 场景实战 词典笔 |
 
 ### K230 SDK AI教程
 
@@ -185,6 +190,7 @@
 | 文档名称 | 文档概要 |
 | --- | --- |
 | [K230_SDK_版本说明.md](zh/03_other/K230_SDK_版本说明.md) | K230 SDK 版本说明|
+| [K230_常见问题解答.md](zh/03_other/K230_常见问题解答.md) | K230 SDK 常见问题解答|
 
 ## 贡献指南
 

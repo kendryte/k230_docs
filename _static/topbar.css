@@ -1,8 +1,13 @@
 /* Customize for top bar (testing and outdated docs)*/
 
+:target {
+    scroll-margin-top: 50px;
+}
+
 .wy-nav-side
 {
-    margin-top: 50px !important;
+    min-height: calc(100% - 50px);
+    top: 50px;
 }
 
 .wy-nav-content-wrap

@@ -26,10 +26,10 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230 Demo Board Hardware Resource Usage Documentation.md](zh/00_hardware/K230_DEMO_BOARD资源使用指南.md) | K230 Demo Board Hardware Resource Usage Documentation |
-| [K230_ Hardware Design Guide.md](zh/00_hardware/K230_硬件设计指南.md) | K230 Hardware Design Guide document |
+| [K230_DEMO_BOARD_Resource_Usage_Instructions.md](en/00_hardware/K230_DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board Hardware Resource Usage Documentation |
+| [K230_Hardware_Design_Guide.md](en/00_hardware/K230_Hardware_Design_Guide.md) | K230 Hardware Design Guide document |
 | [K230_PINOUT_V1.0_20230524](zh/00_hardware/K230_PINOUT_V1.0_20230524.xlsx) | K230 chip pin definition |
-| [K230_datasheet.md](zh/00_hardware/K230_datasheet.md) | K230 Datasheet |
+| [K230_datasheet.md](en/00_hardware/K230_datasheet.md) | K230 Datasheet |
 
 ### K230 LP3 engineering design file
 
@@ -105,7 +105,7 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230_Middleware_API_reference.md](en/01_software/board/middleware/K230_Middleware_API_reference.md) | K230 Middleware API reference |
+| [K230_MultimediaMiddleware_API_reference.md](en/01_software/board/middleware/K230_MultimediaMiddleware_API_reference.md) | K230 Middleware API reference |
 | [K230_OpenBLAS_Development_Guide.md](en/01_software/board/middleware/K230_OpenBLAS_Development_Guide.md) | K230 OpenBLAS Development Guide |
 | [K230_OpenCV_Development_Guide.md](en/01_software/board/middleware/K230_OpenCV_Development_Guide.md) | K230 OpenCV Development Guide|
 

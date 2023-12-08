@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath('exts'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'CanMV'
+project = 'K230'
 copyright = '2023 Canaan Inc'
 author = 'Canaan'
 # release = '0.1'
@@ -20,13 +20,15 @@ author = 'Canaan'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'sphinx_copybutton',
     'myst_parser',
     'sphinx_rtd_dark_mode',
     'sphinx_multiversion'
 ]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
+# html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
 language = 'zh_CN'
 
@@ -64,9 +66,9 @@ html_theme_options = {
     'vcs_pageview_mode': '',
     # 'style_nav_header_background': '#2980B9',
     # Toc options
-    'collapse_navigation': True,
+    'collapse_navigation': False,
     'sticky_navigation': True,
     'navigation_depth': 7,
-    'includehidden': True,
+    'includehidden': False,
     'titles_only': False
 }

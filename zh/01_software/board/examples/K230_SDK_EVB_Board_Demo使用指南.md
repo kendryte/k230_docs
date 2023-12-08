@@ -1,4 +1,4 @@
-# K230 SDK Demo使用指南
+# K230 SDK EVB Board Demo使用指南
 
 ![cover](images/canaan-cover.png)
 
@@ -611,7 +611,7 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 `/bin/sample_dma.elf`
 
-会有测试信息在屏幕上显示出来，输入 e 结束运行。
+会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
 1. 绑定模式 demo 运行
 
@@ -1083,8 +1083,6 @@ isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
 
 ##### 2.16.4.2 执行
 
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
-
 1. 挂载 nfs，使用如下命令：
 
     ```shell
@@ -1159,8 +1157,6 @@ isp 捕获图像，dma 进行图像旋转，dpu 进行深度处理。
 > 更详细的编译过程可以参考release sdk软件包中的README.md。
 
 ##### 2.17.4.2 执行
-
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
 
 1. 挂载 nfs，使用如下命令：
 
@@ -1280,7 +1276,6 @@ backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, �
 
 ##### 2.19.4.2 执行
 
-1. 使用 sharefs，具体步骤参考`K230 SDK 开发使用流程`；
 1. 挂载 nfs，挂载成功以后在大小核都可以看到`/sharefs`目录，将编译出来的 demo `sample_dpu_vo.elf`拷贝到服务器的 nfs 目录下，此时在大核 rtt 的`/sharefs`下也能看到对应的 elf 文件.
 1. 使用命令`./sample_dpu_vo.elf`启动 demo，此时会在屏幕上显示 dpu 处理后的深度图。
 1. 按'q'退出 demo。

@@ -38,43 +38,57 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ```shell
 # AI Demo子目录（eg：bytetrack、face_detection等）中有详细的Demo说明文档
 .
+├── anomaly_det
 ├── build_app.sh
 ├── bytetrack
 ├── cmake
 ├── CMakeLists.txt
+├── crosswalk_detect
+├── dynamic_gesture
+├── eye_gaze
+├── face_alignment
 ├── face_detection
 ├── face_emotion
 ├── face_gender
 ├── face_glasses
 ├── face_landmark
 ├── face_mask
+├── face_mesh
 ├── face_parse
 ├── face_pose
 ├── falldown_detect
 ├── finger_guessing
 ├── fitness
 ├── head_detection
-├── k230_bin
+├── helmet_detect
 ├── licence_det
 ├── licence_det_rec
 ├── llamac
 ├── nanotracker
 ├── object_detect_yolov8n
+├── ocr
 ├── person_attr
 ├── person_detect
 ├── pose_detect
 ├── pphumanseg
+├── puzzle_game
 ├── segment_yolov8n
+├── self_learning
+├── self_learning_small
 ├── shell
 ├── smoke_detect
 ├── space_resize
 ├── sq_hand_det
 ├── sq_handkp_class
 ├── sq_handkp_det
+├── sq_handkp_flower
 ├── sq_handkp_ocr
 ├── sq_handreco
 ├── traffic_light_detect
+├── translate_en_ch
 ├── vehicle_attr
+├── virtual_keyboard
+└── yolop_lane_seg
 └── version
 ```
 
@@ -83,24 +97,37 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 ``` shell
 .
 ├── images
+│   ├── 000.png
+│   ├── 001.png
 │   ├── 1000.jpg
+│   ├── 1024x1111.jpg
 │   ├── 1024x1331.jpg
 │   ├── 1024x624.jpg
 │   ├── 1024x768.jpg
+│   ├── 333.jpg
 │   ├── 640x340.jpg
 │   ├── bus.jpg
 │   ├── bytetrack_data
 │   ├── car.jpg
+│   ├── cw.jpg
 │   ├── falldown_elder.jpg
+│   ├── helmet.jpg
 │   ├── hrnet_demo.jpg
+│   ├── input_flower.jpg
 │   ├── input_hd.jpg
 │   ├── input_ocr.jpg
 │   ├── licence.jpg
+│   ├── road.jpg
 │   ├── smoke1.jpg
 │   └── traffic.jpg
 ├── kmodel
+│   ├── anomaly_det.kmodel
 │   ├── bytetrack_yolov5n.kmodel
 │   ├── cropped_test127.kmodel
+│   ├── crosswalk.kmodel
+│   ├── eye_gaze.kmodel
+│   ├── face_alignment.kmodel
+│   ├── face_alignment_post.kmodel
 │   ├── face_detection_320.kmodel
 │   ├── face_detection_640.kmodel
 │   ├── face_emotion.kmodel
@@ -110,23 +137,32 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── face_mask.kmodel
 │   ├── face_parse.kmodel
 │   ├── face_pose.kmodel
+│   ├── flower_rec.kmodel
+│   ├── gesture.kmodel
 │   ├── hand_det.kmodel
 │   ├── handkp_det.kmodel
 │   ├── hand_reco.kmodel
 │   ├── head_detection.kmodel
+│   ├── helmet.kmodel
 │   ├── human_seg_2023mar.kmodel
 │   ├── licence_reco.kmodel
 │   ├── LPD_640.kmodel
 │   ├── nanotrack_backbone_sim.kmodel
 │   ├── nanotracker_head_calib_k230.kmodel
+│   ├── ocr_det_int16.kmodel
 │   ├── ocr_det.kmodel
+│   ├── ocr_rec_int16.kmodel
 │   ├── ocr_rec.kmodel
 │   ├── person_attr_yolov5n.kmodel
 │   ├── person_detect_yolov5n.kmodel
 │   ├── person_pulc.kmodel
-│   ├── traffic_detect_yolov5s_best.kmodel
+│   ├── recognition.kmodel
+│   ├── traffic.kmodel
+│   ├── translate_decoder.kmodel
+│   ├── translate_encoder.kmodel
 │   ├── vehicle_attr_yolov5n.kmodel
 │   ├── vehicle.kmodel
+│   ├── yolop.kmodel
 │   ├── yolov5n-falldown.kmodel
 │   ├── yolov5s_smoke_best.kmodel
 │   ├── yolov8n_320.kmodel
@@ -136,13 +172,32 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   └── yolov8n_seg_640.kmodel
 └── utils
     ├── Asci0816.zf
+    ├── bfm_tri.bin
     ├── bu.bin
     ├── dict_6625.txt
+    ├── dict_ocr_16.txt
+    ├── dict_ocr.txt
+    ├── down.bin
     ├── HZKf2424.hz
     ├── jiandao.bin
+    ├── left.bin
+    ├── libsentencepiece.a
     ├── llama.bin
+    ├── memory.bin
+    ├── middle.bin
+    ├── ncc_code.bin
+    ├── pintu.bin
+    ├── right.bin
+    ├── shang.bin
     ├── shitou.bin
-    └── tokenizer.bin
+    ├── tokenizer.bin
+    ├── trans_src.model
+    ├── trans_tag.model
+    ├── trigger.bin
+    ├── up.bin
+    ├── xia.bin
+    ├── you.bin
+    └── zuo.bin
 ```
 
 ### 编译及运行程序

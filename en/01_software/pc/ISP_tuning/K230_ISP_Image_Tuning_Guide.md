@@ -62,7 +62,7 @@ The calibration sequence of the modules is as follows:
 
 ![flow](images/02.png)
 
-Before using the calibration tool, the user needs to pre-install the MATLAB Runtime (R2023a). Download address:[https://www.mathworks.com/products/compiler/matlab-runtime.html](https://www.mathworks.com/products/compiler/matlab-runtime.html)
+Before using the calibration tool, the user needs to pre-install the MATLAB Runtime (R2023a). Download address: <https://www.mathworks.com/products/compiler/matlab-runtime.html>
 
 The main interface of the calibration tool is shown in the figure below.
 

@@ -29,7 +29,7 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document mainly describes the content related to the release of K230 SDK V1.1.0, including the hardware, features, and usage restrictions supported by the current version.
+This document mainly describes the content related to the release of K230 SDK V1.2.0, including the hardware, features, and usage restrictions supported by the current version.
 
 ### Reader object
 
@@ -58,13 +58,13 @@ This document (this guide) is intended primarily for:
 
 | Document version number | Modify the description | Author     | date     |
 |------------|----------|------------|----------|
-| V1.0      | Initial     | System Software Department | 2023-10-16 |
+| V1.0      | Initial     | System Software Department | 2023-11-8 |
 
 ## 1. Version Information
 
 | Affiliated products | Version number | Release date |
 |----------|--------|----------|
-| K230 SDK | V1.1.0 | 2023-10-16|
+| K230 SDK | V1.2.0 | 2023-11-8|
 
 ## 2. Supported hardware
 
@@ -120,8 +120,9 @@ Memory configuration of parameter areas and intercore communication areas
 | 31 | K230 SDK V0.8 | VDEC MPI | Support down scale | |
 | 32 | K230 SDK V0.8 | DPU Demo | Screen depth map: vicap->dma->dpu->vo | |
 | 32 | K230 SDK V0.8 | Voice intercom demo | Add a voice intercom demo | |
-| 33 | K230 SDK V0.9 | Cat's Eye POC | Remote cat's eye realizes video intercom, voice change, video, humanoid detection and capture functions. | |
-| 34 | K230 SDK V1.0 | Cat's Eye POC | 1. Add UI control on the Maoyan device. 2. Add local cat's eye voice intercom function. 3. The mobile phone recording function is changed to the device side implementation, and it is always recording. 4. Add playback function on the Maoyan device.| |
+| 33 | K230 SDK V0.9 | Peephole POC | Remote peephole realizes video intercom, voice change, video, humanoid detection and capture functions. | |
+| 34 | K230 SDK V1.0 | Peephole POC | 1. Add UI control on the peephole  device. 2. Add local peephole voice intercom function. 3. The mobile phone recording function is changed to the device side implementation, and it is always recording. 4. Add playback function on the peephole  device. | |
+| 35 | K230 SDK V1.2 | Peephole POC | nor flash boot up | |
 
 ### 4.2 Images
 
@@ -152,6 +153,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 23 | K230 SDK V1.1 | MAPI                     | Add vicap's MAPI                                                                                                             |      |
 | 24 | K230 SDK V1.1 | HDR frequency conversion               | Supports HDR frequency conversion                                                                                                            |      |
 | 25 | K230 SDK V1.1 | Parameter export                  | Support ISP Dewarp parameter export                                                                                                      |      |
+| 26 | K230 SDK V1.2 | Add Dictionary Pen POC                  | Add Dictionary Pen POC                                                                                                  |      |
 
 ### 4.3 Platform
 
@@ -195,6 +197,8 @@ Memory configuration of parameter areas and intercore communication areas
 | 35 | K230 SDK V1.1 | little core SPI LCD driver | The little core supports SPI interface ST7735S 0.96 inch LCD screen driver| |
 | 36  | K230 SDK V1.1 | BurnTool Burning Tool V2           | Delete the full image burning page and add loader_sip.bin support for SIP burning, see [K230_SDK_Burntool User Guide.md](../../en/01_software/pc/burntool/K230_SDK_Burntool_User_Guide.md) for details|      |
 | 37  | K230 SDK V1.1 | USB port use           | USB1 is fixed in host mode, which can be connected to peripherals such as USB-ETH or U disk, and EVB's J5 pin pin 3 is connected to pin4 jumper cap to enable power supply to peripherals. USB0 is used for USB gadget testing and USB upgrades, and EVB's J5 pin headers, pins 1 and pin2, are no longer connected using jumper caps. |      |
+| 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
+| 39  | K230 SDK V1.2 | canmv only linux           | add k230_canmv_only_linux_defconfig config |      |
 
 ### 4.4 Architecture
 
@@ -225,6 +229,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 23 | K230 SDK V1.0 | Door lock POC        | Add the function of scanning and decrypting facial feature values |                                     |
 | 24 | K230 SDK V1.0 | SH256 drive        | Added SH256 driver for large and little core hardware |                                     |
 | 25 | K230 SDK V1.1 | big core encryption and decryption driver        | Added big core hardware AES-GCM driver and SM4-ECB/CBC/CFB/OFB/CTR driver |                                     |
+| 26 | K230 SDK V1.2 | Door lock OTA        | Add Door lock OTA |
 
 ### 4.5 Miscellaneous
 

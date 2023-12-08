@@ -1,4 +1,4 @@
-# K230 SDK Demo使用指南
+# K230 SDK CanMV Board Demo使用指南
 
 ![cover](images/canaan-cover.png)
 
@@ -882,3 +882,151 @@ cd /sharefs/app
    -----fft ifft point 4096 use 1099 us result: ok
 
    ```
+
+### 2.15 SDIO WIFI
+
+#### 2.15.1 Demo介绍
+
+CANMV开发板上使用了一颗支持2.4G的SDIO WIFI，AP6212。支持STA与softAP模式。
+
+#### 2.15.2 编译
+
+k230_sdk编译CANMV的配置默认是支持AP6212 WIFI的。
+
+make menuconfig
+
+```shell
+K230 SDK Configuration
+    wifi configurations  --->
+        [*] enable ap6212a
+```
+
+使能ap6212a后，k230_sdk 会把WIFI需要的固件或nvram配置拷贝到文件系统中。
+
+make linux-menuconfig
+
+```shell
+Linux/riscv 5.10.4 Kernel Configuration
+    Device Drivers  --->
+        [*] Network device support  --->
+            [*]   Wireless LAN  --->
+                <M>   Broadcom FullMAC wireless cards support
+                (/etc/firmware/fw_bcm43456c5_ag.bin) Firmware path
+                (/etc/firmware/nvram.txt) NVRAM path
+                    Enable Chip Interface (SDIO bus interface support)  --->
+                    Interrupt type (In-Band Interrupt)  --->
+```
+
+配置LINUX编译WIFI驱动，CANMV默认WIFI的STA与softAP共存模式。源码路径：
+
+src/little/linux/drivers/net/wireless/bcmdhd
+
+make buildroot-menuconfig
+
+```shell
+Buildroot 2021.02-git Configuration
+    Target packages  --->
+        Networking applications  --->
+            [*] hostapd
+            [*]   Enable hostap driver
+            [*]   Enable nl80211 driver
+            [ ]   Enable wired driver 
+            [*]   Enable ACS
+            [*]   Enable EAP
+            [*]   Enable WPS
+            [*]   Enable WPA3 support
+            [*]   Enable VLAN support
+            [*]     Enable dynamic VLAN support
+            [*]     Use netlink-based API for VLAN operations
+            
+            [*] wireless tools
+                [*]   Install shared library
+
+            [*] wpa_supplicant
+                [*]   Enable nl80211 support
+                [*]   Enable AP mode
+                [*]     Enable Wi-Fi Display
+                [*]     Enable mesh networking
+                [*]   Enable autoscan
+                [*]   Enable EAP
+                [*]   Enable HS20
+                [*]   Enable syslog support
+                [*]   Enable WPS
+                [*]   Enable WPA3 support
+                [*]   Install wpa_clibinary
+                [ ]   Install wpa_client shared library
+                [*]   Install wpa_passphrase binary
+                [*]   Enable support for the DBus control interface
+```
+
+编译buildroot，增加无线使用的工具。
+
+WIFI模块在系统启动时在uboot中进行复位。源码：
+
+src/little/uboot/board/canaan/k230_canmv/board.c : board_late_init
+
+WIFI模块在系统启动后，if wlan down/up 对WIFI模块进行上电下电操作。源码：
+
+```c
+&gpio1 {
+    status = "okay";
+};
+
+&mmc_sd0{
+    status = "okay";
+    io_fixed_1v8;
+    rx_delay_line = <0x00>;
+    tx_delay_line = <0x00>;
+    bcmdhd_wlan {
+        compatible = "android,bcmdhd_wlan";
+        gpio_wl_reg_on = <&port1 0 GPIO_ACTIVE_HIGH>;
+    };
+};
+```
+
+#### 2.15.3 执行
+
+STA是Station的缩写，它是无线网络中的一个终端站点设备，可以看成是一个客户端，一般来说，处在STA模式下的设备本身不接受无线的接入，该设备连接到AP节点进行网络访问，我们的手机就是作为STA连接路由器。
+
+AP是Access Point的缩写，即无线接入点，它是一个无线网络的中心节点，可以看成是一个服务器。它作为一个网络的中心节点，提供无线接入服务，其他的无线设备允许接入该节点，所有接入该节点设备的无线信号数据都要通过它才能进行交换和互相访问。一般的无线路由器、网关、热点就是工作在AP模式下，AP节点和AP节点之间允许相互连接。
+
+#### 2.15.3.1 STA测试
+
+```shell
+ifconfig -a
+ifconfig  wlan0 up
+wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+wpa_cli -i wlan0 scan
+wpa_cli -i wlan0 scan_result
+wpa_cli -i wlan0 add_network
+wpa_cli -i wlan0 set_network 1 psk '"12345678"'
+wpa_cli -i wlan0 set_network 1 ssid '"wifi_test"'
+wpa_cli -i wlan0 select_network 1
+udhcpc -i wlan0 -q
+```
+
+#### 2.15.3.2 AP测试
+
+```shell
+[root@canaan ~ ]#cat /etc/hostapd.conf
+ctrl_interface=/var/run/hostapd
+driver=nl80211
+ieee80211n=1
+interface=wlan1
+hw_mode=g
+channel=6
+beacon_int=100
+dtim_period=1
+ssid=k230_ap
+auth_algs=1
+ap_isolate=0
+ignore_broadcast_ssid=0
+```
+
+```shell
+ifconfig wlan1 192.168.1.1
+udhcpd /etc/udhcpd.conf &
+hostapd /etc/hostapd.conf &
+```
+
+sta可以直接连接无密码的k230_ap热点。

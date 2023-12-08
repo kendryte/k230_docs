@@ -882,3 +882,151 @@ not
    -----fft ifft point 4096 use 1099 us result: ok
 
    ```
+
+### 2.15 SDIO WIFI
+
+#### 2.15.1 Introduction to Demo
+
+The CANMV development board uses a SDIO WIFI that supports 2.4G, AP6212. Supports STA and softAP modes.
+
+#### 2.15.2 Compilation
+
+The configuration of k230_sdk compiled CANMV supports AP6212 WIFI by default.
+
+make menuconfig
+
+```shell
+K230 SDK Configuration
+    wifi configurations  --->
+        [*] enable ap6212a
+```
+
+After enabling ap6212a, k230_sdk will copy the firmware and nvram.txt required by WIFI to rootfs.
+
+make linux-menuconfig
+
+```shell
+Linux/riscv 5.10.4 Kernel Configuration
+    Device Drivers  --->
+        [*] Network device support  --->
+            [*]   Wireless LAN  --->
+                <M>   Broadcom FullMAC wireless cards support
+                (/etc/firmware/fw_bcm43456c5_ag.bin) Firmware path
+                (/etc/firmware/nvram.txt) NVRAM path
+                    Enable Chip Interface (SDIO bus interface support)  --->
+                    Interrupt type (In-Band Interrupt)  --->
+```
+
+Configure LINUX to compile the WIFI driver. CANMV WIFI defaults to the STA and SoftAP concurrent mode. Source code path:
+
+src/little/linux/drivers/net/wireless/bcmdhd
+
+make buildroot-menuconfig
+
+```shell
+Buildroot 2021.02-git Configuration
+    Target packages  --->
+        Networking applications  --->
+            [*] hostapd
+            [*]   Enable hostap driver
+            [*]   Enable nl80211 driver
+            [ ]   Enable wired driver 
+            [*]   Enable ACS
+            [*]   Enable EAP
+            [*]   Enable WPS
+            [*]   Enable WPA3 support
+            [*]   Enable VLAN support
+            [*]     Enable dynamic VLAN support
+            [*]     Use netlink-based API for VLAN operations
+            
+            [*] wireless tools
+                [*]   Install shared library
+
+            [*] wpa_supplicant
+                [*]   Enable nl80211 support
+                [*]   Enable AP mode
+                [*]     Enable Wi-Fi Display
+                [*]     Enable mesh networking
+                [*]   Enable autoscan
+                [*]   Enable EAP
+                [*]   Enable HS20
+                [*]   Enable syslog support
+                [*]   Enable WPS
+                [*]   Enable WPA3 support
+                [*]   Install wpa_clibinary
+                [ ]   Install wpa_client shared library
+                [*]   Install wpa_passphrase binary
+                [*]   Enable support for the DBus control interface
+```
+
+Compile buildroot and add tools for wireless use.
+
+The WIFI module is reset in uboot when the system starts. Source code:
+
+src/little/uboot/board/canaan/k230_canmv/board.c : board_late_init
+
+After the WIFI module is started in the system, power on and off the WIFI module if wlan down/up. Source code:
+
+```c
+&gpio1 {
+    status = "okay";
+};
+
+&mmc_sd0{
+    status = "okay";
+    io_fixed_1v8;
+    rx_delay_line = <0x00>;
+    tx_delay_line = <0x00>;
+    bcmdhd_wlan {
+        compatible = "android,bcmdhd_wlan";
+        gpio_wl_reg_on = <&port1 0 GPIO_ACTIVE_HIGH>;
+    };
+};
+```
+
+#### 2.15.3 Execution
+
+STA is the abbreviation of Station. It is a terminal site device in the wireless network and can be regarded as a client. Generally speaking, the device in STA mode itself does not accept wireless access. The device is connected to the AP node. For network access, our mobile phone acts as an STA to connect to the router.
+
+AP is the abbreviation of Access Point, which is a wireless access point. It is the central node of a wireless network and can be regarded as a server. As the central node of a network, it provides wireless access services. Other wireless devices are allowed to access the node. All wireless signal data of devices accessing the node must pass through it for exchange and mutual access. General wireless routers, gateways, and hotspots work in AP mode, and AP nodes are allowed to connect to each other.
+
+#### 2.15.3.1 STA test
+
+```shell
+ifconfig -a
+ifconfig  wlan0 up
+wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+wpa_cli -i wlan0 scan
+wpa_cli -i wlan0 scan_result
+wpa_cli -i wlan0 add_network
+wpa_cli -i wlan0 set_network 1 psk '"12345678"'
+wpa_cli -i wlan0 set_network 1 ssid '"wifi_test"'
+wpa_cli -i wlan0 select_network 1
+udhcpc -i wlan0 -q
+```
+
+#### 2.15.3.2 AP test
+
+```shell
+[root@canaan ~ ]#cat /etc/hostapd.conf
+ctrl_interface=/var/run/hostapd
+driver=nl80211
+ieee80211n=1
+interface=wlan1
+hw_mode=g
+channel=6
+beacon_int=100
+dtim_period=1
+ssid=k230_ap
+auth_algs=1
+ap_isolate=0
+ignore_broadcast_ssid=0
+```
+
+```shell
+ifconfig wlan1 192.168.1.1
+udhcpd /etc/udhcpd.conf &
+hostapd /etc/hostapd.conf &
+```
+
+sta can directly connect to the passwordless "k230_ap" hotspot.

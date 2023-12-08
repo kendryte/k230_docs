@@ -389,7 +389,8 @@ Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具
 
 图5-4 烧录完成
 
-说明：使用`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件时需要先解压缩，烧录解压缩后的文件。
+>说明1：使用`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件时需要先解压缩，烧录解压缩后的文件。
+>说明2：烧录镜像时禁止其他程序读写sd卡，请把电脑的自动播放功能关闭(设置-自动播放)。
 
 ### 5.2 Emmc镜像烧写参考
 
@@ -732,6 +733,8 @@ CONFIG_MEM_MMZ_BASE="0x10000000"        #mmz共享内存其实地址     支持�
 CONFIG_MEM_MMZ_SIZE="0x0FC00000"        #mmz 共享内存区域       支持配置
 CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配置
 ```
+
+> CONFIG_MEM_LINUX_SYS_BASE 地址需要2MB对齐
 
 ## 8. SDK单板调试
 

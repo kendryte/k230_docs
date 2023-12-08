@@ -70,7 +70,10 @@ markdown-link-check:
     - uname -a
     - whoami
     - pwd
-    - find . -name \*.md -print0 | xargs -0 -n1 markdown-link-check -q
+    - git fetch
+    - git diff origin/dev --name-only
+    - git diff origin/dev --name-only -z | (grep "\\.md$" || echo en/CanMV_K230_Tutorial.md) | xargs markdown-link-check
+    # - find . -name \*.md -print0 | xargs -0 -n1 markdown-link-check -q
 
 # new MR open
 markdownlint:
@@ -86,8 +89,11 @@ markdownlint:
     - uname -a
     - whoami
     - pwd
+    - git fetch
+    - git diff origin/dev --name-only
     #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
-    - find . -name \*.md -print0 | xargs -0 markdownlint-cli2
+    - git diff origin/dev --name-only -z | (grep "\\.md$" || echo en/CanMV_K230_Tutorial.md) | xargs markdownlint-cli2
+    # - find . -name \*.md -print0 | xargs -0 markdownlint-cli2
 
 .setup_env:
   before_script:
@@ -162,6 +168,12 @@ build-web-docs:
     - git fetch
     - git checkout dev
     - git pull
+    - rm -rf _build
+    - python3 preprocess.py
+    - git config --global user.email "auto@canaan-creative.com"
+    - git config --global user.name "GitLab CI"
+    - git commit zh en -m remove_cover
     - make mhtml
+    - git reset --hard HEAD^1
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs

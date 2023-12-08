@@ -62,7 +62,7 @@
 
 ![flow](images/02.png)
 
-在使用标定工具前，需要用户预先安装MATLAB Runtime(R2023a)。下载地址：[https://www.mathworks.com/products/compiler/matlab-runtime.html](https://www.mathworks.com/products/compiler/matlab-runtime.html)
+在使用标定工具前，需要用户预先安装MATLAB Runtime(R2023a)。下载地址：<https://www.mathworks.com/products/compiler/matlab-runtime.html>
 
 标定工具的主界面如下图所示。
 
