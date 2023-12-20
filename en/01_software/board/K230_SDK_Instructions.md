@@ -284,7 +284,7 @@ make CONF=k230_evb_defconfig  #compile K230-USIP-LP3-EVB image
 > - Compile the K230-USIP-LP3-EVB board image using the`make CONF=k230_evb_defconfig`  command.
 > - Compile the K230-SIP-LP3-EVB board image using the`make CONF=k230d_defconfig`  command.
 > - Compile the nand image of the K230-USIP-LP3-EVB board using the `make CONF=k230_evb_nand_defconfig`  command
-> - Compile the image of the CanMV-K230 board using the `make CONF=CONF=k230_canmv_defconfig`  command
+> - Compile the image of the CanMV-K230 board using the `make CONF=k230_canmv_defconfig`  command
 >
 > Remark:
 The SDK does not support multi-process compilation, do not add multi-process compilation parameters like -j32.
