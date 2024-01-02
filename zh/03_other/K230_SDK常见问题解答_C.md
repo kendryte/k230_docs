@@ -1,4 +1,4 @@
-# K230 常见问题解答
+# K230 SDK 常见问题解答（C）
 
 ![cover](images/canaan-cover.png)
 
@@ -25,50 +25,7 @@
 
 [TOC]
 
-## 前言
-
-### 概述
-
-本文档主要介绍了K230 SDK V0.9.0 版本发布相关的内容，包括当前版本支持的硬件、功能、使用限制等。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 缩略词定义
-
-| 简称               | 说明                                                   |
-|--------------------|--------------------------------------------------------|
-| K230 USIP LP3 EVB | USIP封装形式的K230芯片搭载LPDDR3的开发板              |
-| VENC               | Video Encoder，视频编码模块                            |
-| VDEC               | Video Decoder，视频解码模块                            |
-| VICAP              | Video Input Capture，图像输入采集模块                  |
-| VO                 | Video Output，视频输出模块                             |
-| AI                 | Audio Input，音频输入模块                              |
-| AO                 | Audio Output，音频输出模块                             |
-| AENC               | Audio Encoder，音频编码模块                            |
-| ADEC               | Audio Decoder，音频解码模块                            |
-| NonAI-2D           | 2D图形加速处理模块，支持OSD叠加，画框，CSC变换等功能。 |
-| MCM                | Multi Camera Management ,多摄像头管理                  |
-
-### 修订记录
-
-| 文档版本号 | 修改说明 | 修改者     | 日期     |
-|------------|----------|------------|----------|
-| V1.0       | 初版     | SDK 部 | 2023-9-4 |
-
-## 1. 版本信息
-
-| 所属产品 | 版本号 | 发布日期 |
-|----------|--------|----------|
-| K230 SDK | V1.0.0 | 2023-9-4|
-
-## 2.常见问题解答
-
-### 2.1 TF boot failed with exit code 13
+## 1 TF boot failed with exit code 13
 
 问题： TF卡启动报boot failed with exit code 13错误
 
@@ -76,7 +33,7 @@
 
 TF卡启动管脚设置特别说明： 两个启动管脚电平为高(需要拨到丝印的1和2，也就是ON的反方向)时才会从TF卡启动。
 
-### 2.2 bootrom启动错误码
+## 2 bootrom启动错误码
 
 问题：bootrom 启动错误码含义是什么？
 
@@ -88,7 +45,7 @@ bootrom引导失败时会打印类似下面错误  boot failed with exit code 19
 | 19   | 启动介质初始化失败，比如没有插sd卡等                |
 | 17   | otp要求必需是安全镜像，但是介质里面文件是非安全镜像 |
 
-### 2.3 spi nor 和 spi nand flash识别
+## 3 spi nor 和 spi nand flash识别
 
 问题： 怎么知道evb板上连接的是spi nor还是spi nand flash？
 
@@ -104,7 +61,7 @@ bootrom引导失败时会打印类似下面错误  boot failed with exit code 19
 [    1.318147] Creating 2 MTD partitions on "spi0.0":
 ```
 
-### 2.4 perf 使用
+## 4 perf 使用
 
 问题：perf如何编译，支持那些硬件事件？
 
@@ -169,7 +126,7 @@ CONFIG_FRAME_POINTER=y
 
 ```
 
-### 2.5大核运行vector linux
+## 5大核运行vector linux
 
 问题：大核如何运行带vector的linux？
 
@@ -181,19 +138,19 @@ linux内核配置文件增加CONFIG_VECTOR=y，linux系统就会使能向量1.0�
 
 备注：可以参考configs/k230_evb_only_linux_defconfig文件修改配置 ，make CONF=k230_evb_only_linux_defconfig 会生成evb板的大核带向量linux镜像。
 
-### 2.6 大核串口id
+## 6 大核串口id
 
 问题：怎么修改大核的串口id？
 
 答：configs下面配置文件 CONFIG_RTT_CONSOLE_ID代表大核串口id，修改为正确的值就可以了。
 
-### 2.7uboot命令行
+## 7 uboot命令行
 
 怎么编译可以进入uboot命令行的版本
 
 答：  configs下面配置文件 CONFIG_QUICK_BOOT代表快起，修改为CONFIG_QUICK_BOOT=n 就可以生成可进去uboot命令行版本。
 
-### 2.8慢启怎么变快启动
+## 8 慢启怎么变快启动
 
 答：进入uboot命令行执行如下命令：
 
@@ -201,7 +158,7 @@ linux内核配置文件增加CONFIG_VECTOR=y，linux系统就会使能向量1.0�
 setenv quick_boot true;saveenv;reset;
 ```
 
-### 2.9linux如何修改最后一个分区大小
+## 9 linux如何修改最后一个分区大小
 
 答：使用parted工具可以动态修改最后一个分区大小，参考命令如下：
 
@@ -286,7 +243,7 @@ tmpfs                    51.8M     36.0K     51.7M   0% /run
  
 ```
 
-### 2.10如何修改bootargs
+## 10如何修改bootargs
 
 答：方法1：修改使用env文件里面的bootargs 。比如可以在board/common/env/default.env文件里面添加如下内容：
 
@@ -300,7 +257,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi" ;saveenv;reset;
 ```
 
-### 2.11如何查看bootargs
+## 11如何查看bootargs
 
 答：方法1：linux下 输入cat /proc/cmdline  查看
 
@@ -319,7 +276,7 @@ root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,1152
 [root@canaan 
 ```
 
-### 2.12小核默认串口修改
+## 12小核默认串口修改
 
 答：目前sdk里面小核串口默认0，如果需要修改成其他串口(比如串口2)，请参考下面进行修改：
 
@@ -368,7 +325,7 @@ chosen {
 bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS2,115200 earlycon=sbi；
 ```
 
-### 2.13如何彻底重编sdk
+## 13如何彻底重编sdk
 
 答：更新修改SDK源代码之后，或者修改SDK源代码之后，建议输入如下命令彻底重编下sdk。
 
