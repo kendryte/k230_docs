@@ -764,3 +764,7 @@ The current version compiles the generated image by default, and after burning i
 
 > 1. If the IMX335 camera is not connected to the EVB series motherboard, the program will report an error when starting the program, the program will automatically exit, and press Enter to return to the console.
 > 1. If you need to cancel the auto-start function of the big core, you need to `k230_sdk/src/big/rt-smart/init.sh` comment out the contents of .
+
+## 10.k230 debian和ubuntu image note
+
+mirror image download and build please reference [K230_debian_ubuntu.md](../../../en/03_other/K230_debian_ubuntu.md)
