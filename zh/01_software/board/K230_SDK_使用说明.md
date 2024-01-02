@@ -772,3 +772,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 > 1. EVB系列主板如果没有连接IMX335摄像头,则自启动程序报错，程序自动退出,按回车即可回到控制台。
 > 1. 若需要取消大核的自启动功能，需将 `k230_sdk/src/big/rt-smart/init.sh` 中的内容注释掉。
+
+## 10.k230 debian和ubuntu 镜像说明
+
+镜像及构建方法详见[K230_debian_ubuntu说明.md](../../../zh/03_other/K230_debian_ubuntu说明.md)
