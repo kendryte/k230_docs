@@ -5,6 +5,7 @@
 
 import sys, os
 import sphinx_rtd_theme
+import datetime
 
 sys.path.append(os.path.abspath('exts'))
 
@@ -12,7 +13,7 @@ sys.path.append(os.path.abspath('exts'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'K230'
-copyright = '2023 Canaan Inc'
+copyright = f'{datetime.datetime.now().year} Canaan Inc'
 author = 'Canaan'
 # release = '0.1'
 
