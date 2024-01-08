@@ -349,4 +349,16 @@ ov5647
 
 sc201
 
+### 2.15canmmv板子是否可以使用平头哥的cklink进行jtag调试
+
+答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
+
+``` bash
+    #src/little/uboot/arch/riscv/dts/k230_canmv.dts 文件gpio5和gipi6修改为如下内容
+    (IO5 ) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO2_IO13 <<MSC | 1<<IE | 0<<OE | 0<<PU | 0<<PD | 4<<DS | 0<<ST )
+    (IO6 ) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO2_IO13 <<MSC | 1<<IE | 0<<OE | 1<<PU | 0<<PD | 4<<DS | 0<<ST )
+```
+
+>修改完后需要重新编译uboot代码
+
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。

@@ -370,4 +370,16 @@ Answer: After updating and modifying the SDK source code, or after modifying the
 make clean; make;
 ```
 
+### 2.15 Whether cklink jtag can be used on canmmv?
+
+Answer：uboot default disable cklink jtag,you can enable cklink jtag by modify follow code:
+
+``` bash
+    #src/little/uboot/arch/riscv/dts/k230_canmv.dts gpio5 and gipi6 modify
+    (IO5 ) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO2_IO13 <<MSC | 1<<IE | 0<<OE | 0<<PU | 0<<PD | 4<<DS | 0<<ST )
+    (IO6 ) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO2_IO13 <<MSC | 1<<IE | 0<<OE | 1<<PU | 0<<PD | 4<<DS | 0<<ST )
+```
+
+>need rebuild uboot code
+
 Special note: The SDK does not support multi-process compilation, do not add multi-process compilation options like -j32.
