@@ -25,7 +25,7 @@
 
 ### 概述
 
-K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块，包含了分类、检测、分割、识别和跟踪等多种功能，给客户提供如何使用K230开发AI相关应用的参考。
+K230 AI Demo集成了人脸、人体、手部、车牌、单词续写、语音、dms等模块，包含了分类、检测、分割、识别、跟踪、单目测距等多种功能，给客户提供如何使用K230开发AI相关应用的参考。
 
 ### 硬件环境
 
@@ -33,7 +33,7 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 
 ### 源码位置
 
-源码路径位于`src/reference/ai_poc`，目录结构如下：
+源码路径位于`/mnt/src/reference/ai_poc`，目录结构如下：
 
 ```shell
 # AI Demo子目录（eg：bytetrack、face_detection等）中有详细的Demo说明文档
@@ -44,6 +44,9 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── cmake
 ├── CMakeLists.txt
 ├── crosswalk_detect
+├── demo_mix
+├── distraction_reminder
+├── dms_system
 ├── dynamic_gesture
 ├── eye_gaze
 ├── face_alignment
@@ -56,11 +59,13 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── face_mesh
 ├── face_parse
 ├── face_pose
+├── face_verification
 ├── falldown_detect
 ├── finger_guessing
 ├── fitness
 ├── head_detection
 ├── helmet_detect
+├── kws
 ├── licence_det
 ├── licence_det_rec
 ├── llamac
@@ -69,12 +74,12 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── ocr
 ├── person_attr
 ├── person_detect
+├── person_distance
 ├── pose_detect
 ├── pphumanseg
 ├── puzzle_game
 ├── segment_yolov8n
 ├── self_learning
-├── self_learning_small
 ├── shell
 ├── smoke_detect
 ├── space_resize
@@ -86,19 +91,19 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写等模块�
 ├── sq_handreco
 ├── traffic_light_detect
 ├── translate_en_ch
+├── tts_zh
 ├── vehicle_attr
+├── version
 ├── virtual_keyboard
 └── yolop_lane_seg
-└── version
 ```
 
-kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构如下：
+kmodel、image及相关依赖路径位于`/mnt/src/big/kmodel/ai_poc`，目录结构如下：
 
 ``` shell
 .
 ├── images
 │   ├── 000.png
-│   ├── 001.png
 │   ├── 1000.jpg
 │   ├── 1024x1111.jpg
 │   ├── 1024x1331.jpg
@@ -113,10 +118,13 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── falldown_elder.jpg
 │   ├── helmet.jpg
 │   ├── hrnet_demo.jpg
+│   ├── identification_card.png
 │   ├── input_flower.jpg
 │   ├── input_hd.jpg
 │   ├── input_ocr.jpg
+│   ├── input_pd.jpg
 │   ├── licence.jpg
+│   ├── person.png
 │   ├── road.jpg
 │   ├── smoke1.jpg
 │   └── traffic.jpg
@@ -137,6 +145,7 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── face_mask.kmodel
 │   ├── face_parse.kmodel
 │   ├── face_pose.kmodel
+│   ├── face_recognition.kmodel
 │   ├── flower_rec.kmodel
 │   ├── gesture.kmodel
 │   ├── hand_det.kmodel
@@ -144,7 +153,9 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── hand_reco.kmodel
 │   ├── head_detection.kmodel
 │   ├── helmet.kmodel
+│   ├── hifigan.kmodel
 │   ├── human_seg_2023mar.kmodel
+│   ├── kws.kmodel
 │   ├── licence_reco.kmodel
 │   ├── LPD_640.kmodel
 │   ├── nanotrack_backbone_sim.kmodel
@@ -169,7 +180,9 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 │   ├── yolov8n_640.kmodel
 │   ├── yolov8n-pose.kmodel
 │   ├── yolov8n_seg_320.kmodel
-│   └── yolov8n_seg_640.kmodel
+│   ├── yolov8n_seg_640.kmodel
+│   ├── zh_fastspeech_1.kmodel
+│   └── zh_fastspeech_2.kmodel
 └── utils
     ├── Asci0816.zf
     ├── bfm_tri.bin
@@ -177,24 +190,21 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
     ├── dict_6625.txt
     ├── dict_ocr_16.txt
     ├── dict_ocr.txt
-    ├── down.bin
+    ├── file
     ├── HZKf2424.hz
     ├── jiandao.bin
-    ├── left.bin
     ├── libsentencepiece.a
     ├── llama.bin
     ├── memory.bin
-    ├── middle.bin
     ├── ncc_code.bin
     ├── pintu.bin
-    ├── right.bin
+    ├── reply_wav
     ├── shang.bin
     ├── shitou.bin
     ├── tokenizer.bin
     ├── trans_src.model
     ├── trans_tag.model
-    ├── trigger.bin
-    ├── up.bin
+    ├── wav_play.elf
     ├── xia.bin
     ├── you.bin
     └── zuo.bin
@@ -202,6 +212,19 @@ kmodel、image及相关依赖路径位于`src/big/kmodel/ai_poc`，目录结构�
 
 ### 编译及运行程序
 
-- 进入src/reference/ai_poc
-- 执行build_app.sh脚本（执行脚本前确保src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
+#### a.自编译上板镜像
+
+- 进入/mnt/src/reference/ai_poc
+- 执行build_app.sh脚本（执行脚本前确保/mnt/src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
+- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+#### b.直接下载官网上板镜像
+
+- 确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器
+- 进入/mnt目录
+- make prepare_sourcecode（若之前已执行，请忽略）
+- make mpp
+- make CONF=k230_canmv_defconfig prepare_memory(canmv支持)、make CONF=k230_evb_defconfig prepare_memory(evb支持)两条命令二选一
+- 进入/mnt/src/reference/ai_poc
+- 执行build_app.sh脚本（执行脚本前确保/mnt/src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
 - 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
