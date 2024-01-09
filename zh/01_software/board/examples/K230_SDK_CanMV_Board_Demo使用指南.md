@@ -448,6 +448,7 @@ Options:
 |---|---|---|
 | -dev         | 0：vicap设备0 1：vicap设备1 2：vicap设备2.                             | 指定当前使用的vicap设备，系统最多支持三个vicap设备。通过指定设备号实现sensor与不同vicap设备之间的绑定关系。 例如： -dev 1 -sensor 0即表示将ov9732 1280x720 RGB图像输出绑定到vicap设备1.                   |
 | -mode | 0：在线模式；1：离线模式 | 指定vicap设备工作模式，当前之前在线模式和离线模式。对于多个sensor输入，必须指定为离线模式。 |
+| -conn | 0: 屏 hx8399； 1: HDMI lt9611-1920x1080p60； 2: HDMI lt9611-1920x1080p30  |   指定显示方式，可以选择屏或者HDMI 默认为0 |
 | -sensor      | 23：OV5647（CanMV开发板仅支持该sensor） | 指定当前使用的sensor类型                                                         |
 | -chn         | 0：vicap设备输出通道0 1：vicap设备输出通道1 2：vicap设备输出通道2.     | 指定当前使用的vicap设备的输出通道，一个vicap设备最多支持三路输出，仅通道0支持RAW图像格式输出  |
 | -ow          |                                                                         | 指定输出图像宽度，默认为输入图像宽度。宽度需要16字节对齐。 如果默认宽度超过显示屏输出最大宽度，则使用显示输出宽度作为图像最终输出宽度 如果输出宽度小于输入图像宽度，且未指定ox或者oy参数，则默认为缩放输出 |
@@ -461,9 +462,23 @@ Options:
 
 示例1：
 
-`./sample_vicap -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480`
+`./sample_vicap -conn 1 -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0`
 
 说明：将ov5647@1920x1080 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
+
+示例2：ov5647三摄
+
+![三摄OV5647](images/Tri_camera_board.png)
+
+注意：背面的两个ov5647可以使用树莓派的ov5647摄像头，Canmv-K230 V1.0 V1.1版本的板子需要更换LDO为1.8V，如RT9013-18。如下图所示
+
+![换LDO](images/pi_change_io.png)
+
+如果不方便更换LDO可以等待后续的V1.2版本的板子。
+
+`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 23 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 26 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 27 -chn 0 -ow 320 -oh 240 -ofmt 1`
+
+![三摄结果](images/Tri_camera_result.png)
 
 ### 2.7 DMA_demo
 
@@ -764,7 +779,7 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944，最小分辨率为640x480.
 
 ```shell
-Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720 -a 0
+Usage: ./rtsp_demo -s 24 -n 2 -t h265 -w 1280 -h 720 -a 0
                     -s: the sensor type:
                         see vicap doc
                     -n: the session number, range: 1, 2，3
