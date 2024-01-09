@@ -285,7 +285,7 @@ make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
 > - 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
 > - 编译K230-SIP-LP3-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
 > - 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令
-> - 编译CanMV-K230板子的镜像使用 `make CONF=CONF=k230_canmv_defconfig`  命令
+> - 编译CanMV-K230板子的镜像使用 `make CONF=k230_canmv_defconfig`  命令
 >
 > 备注：
 sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
