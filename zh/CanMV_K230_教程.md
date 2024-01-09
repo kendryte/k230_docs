@@ -2430,4 +2430,10 @@ main.elf best.kmodel None labels.txt 2
 
 ## 常见问题问答(FAQ)
 
-请参考[常见问题问答](03_other/K230_%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94.md)
+请参考常见问题问答
+
+[SDK](03_other/K230_SDK常见问题解答_C.md)
+
+[nncase](03_other/K230_nncase常见问题解答.md)
+
+[AI demo](03_other/K230_AI_demo常见问题解答_C++.md)

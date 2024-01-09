@@ -15,5 +15,5 @@ Welcome to K230's documentation!
    index_dev_guide.rst
    zh/00_hardware/index.rst
    index_api.rst
-   zh/03_other/K230_常见问题解答.md
+   index_faq.rst
    zh/03_other/index.rst
