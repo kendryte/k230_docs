@@ -158,7 +158,7 @@ build-web-docs:
   stage: build
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
-  image: ai.b-bug.org:5000/python:web-docs
+  image: ai.b-bug.org:5000/python:web-docs-v2
   tags:
     - k230
   environment:
@@ -177,3 +177,5 @@ build-web-docs:
     - git reset --hard HEAD^1
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
+    - ssh -p 52522 huangziyi@40.73.58.120 "rm -rf /data/webapp/k230"
+    - scp -P 52522 -O -r _build huangziyi@40.73.58.120:/data/webapp/k230
