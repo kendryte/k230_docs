@@ -363,7 +363,7 @@ sdk默认产生release镜像，如果需要调试镜像，请参考下面增加C
 
 #### 5.1.2 Windows下烧录
 
-Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。
+Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。注意打开balenaEtcher软件的时候要以“管理员身份运行”，否则可能会出现烧录失败的情况。
 
 1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件，如下图。
 
