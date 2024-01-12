@@ -199,6 +199,7 @@ Memory configuration of parameter areas and intercore communication areas
 | 37  | K230 SDK V1.1 | USB port use           | USB1 is fixed in host mode, which can be connected to peripherals such as USB-ETH or U disk, and EVB's J5 pin pin 3 is connected to pin4 jumper cap to enable power supply to peripherals. USB0 is used for USB gadget testing and USB upgrades, and EVB's J5 pin headers, pins 1 and pin2, are no longer connected using jumper caps. |      |
 | 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
 | 39  | K230 SDK V1.2 | canmv only linux           | add k230_canmv_only_linux_defconfig config |      |
+| 40  | K230 SDK V1.3 | debian ubuntu image           | add debian and ubuntu image |      |
 
 ### 4.4 Architecture
 
