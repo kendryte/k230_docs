@@ -202,6 +202,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 | 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
+| 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
 
 ### 4.4 架构
 
@@ -233,6 +234,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
 | 25 | K230 SDK V1.1 | 大核加解密驱动        | 增加了大核硬件 AES-GCM 驱动和 SM4-ECB/CBC/CFB/OFB/CTR 驱动 |                                     |
 | 26 | K230 SDK V1.2 | 门锁OTA功能        | 增加了门锁OTA功能 |
+| 27 | K230 SDK V1.3 | OTP空间调整        | 调整SDK操作的OTP空间，用户可读写768bytes。其余的空间为芯片厂商保留使用 |
 
 ### 4.5 其它
 
