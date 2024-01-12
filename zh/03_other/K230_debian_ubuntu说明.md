@@ -53,23 +53,23 @@
 
 ## 1.镜像说明
 
-镜像请点击[这里](https://kvftsfijpo.feishu.cn/drive/folder/TnhofV1QslU7KfdrSgxcrI4Bnme?from=from_copylink)下载，
+镜像请从[嘉楠开发者社区](https://developer.canaan-creative.com/resource) 下载，在嘉楠开发者社区网站的k230/images下面可以找到debian和ubuntu相关文件。
 
-1.1). [debian_sysimage-sdcard.img.gz](https://kvftsfijpo.feishu.cn/file/ISpXbPfEaoSUiwxN94Zc8K9InKd) 文件是k230 的debian镜像压缩包：
+1.1). 类似canmv_debian_sdcard_sdk_x.x.img.gz文件是k230 的debian镜像压缩包：
 
 使用的是trixie/sid (debian13)版本，启动时会看到Welcome to Debian GNU/Linux trixie/sid!  打印。
 
-1.2) [ubuntu_sysimage-sdcard.img.gz](https://kvftsfijpo.feishu.cn/file/HWeCbGnsboactlxPLo4c5Kron8b) 是k230 ubuntu镜像压缩包：
+1.2) 类似canmv_ubuntu_sdcard_x.x.img.gz 文件是k230 ubuntu镜像压缩包：
 
 使用的时Ubuntu 23.10 版本，启动会会看到Welcome to Ubuntu 23.10! 打印；
 
-1.3) [debian13.ext4.tar.gz](https://kvftsfijpo.feishu.cn/file/NiOGbdnxkoYaRRxLyfJcjxYhnif)  是k230 debian根文件系统。
+1.3) debian13.ext4.tar.gz 是k230 debian根文件系统。
 
-1.4). [ubuntu23_rootfs.ext4.gz](https://kvftsfijpo.feishu.cn/file/Ig3Gb4hTLogZPdxz3w6cJasZnxh)  是k230 ubuntu根文件系统
+1.4). ubuntu23_rootfs.ext4.gz是k230 ubuntu根文件系统
 
 > 说明1：镜像仅适用于canmv板子
->
-> 说明2：网口不稳定如果找不到网口，重启下板子,
+> 说明2：烧录时需要先解压缩文件
+> 说明3：网口不稳定如果找不到网口，重启下板子,
 
 ## 2.k230 debian根文件系统制作及验证
 
