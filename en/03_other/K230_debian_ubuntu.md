@@ -53,13 +53,13 @@ This document (this guide) is intended primarily for:
 
 ## 1.  download note
 
-please click [here](https://kvftsfijpo.feishu.cn/drive/folder/TnhofV1QslU7KfdrSgxcrI4Bnme?from=from_copylink) to download image.
+debian and ubuntu related files can be found on the [canaan developer community website](https://developer.canaan-creative.com/resource) under k230/images
 
-1.1). [debian_sysimage-sdcard.img.gz](https://kvftsfijpo.feishu.cn/file/ISpXbPfEaoSUiwxN94Zc8K9InKd) is k230 debian compressed image;
+1.1). similar canmv_debian_sdcard_sdk_x.x.img.gz is k230 debian compressed image;
 
 ​        debian version is  trixie/sid (debian13)，You can see "Welcome to Debian GNU/Linux trixie/sid!" print at startup  .
 
-1.2) [ubuntu_sysimage-sdcard.img.gz](https://kvftsfijpo.feishu.cn/file/HWeCbGnsboactlxPLo4c5Kron8b)  is k230 ubuntu compressed mirror image;
+1.2) similar canmv_ubuntu_sdcard_x.x.img.gz is k230 ubuntu compressed mirror image;
 
 ​​        debian version is Ubuntu 23.10(mantic)，You can see "Welcome to Ubuntu 23.10! "print at startup.
 
@@ -68,7 +68,8 @@ please click [here](https://kvftsfijpo.feishu.cn/drive/folder/TnhofV1QslU7KfdrSg
 1.4). [ubuntu23_rootfs.ext4.gz](https://kvftsfijpo.feishu.cn/file/Ig3Gb4hTLogZPdxz3w6cJasZnxh)  is k230 ubuntu rootfs.
 
 >note1:mirror image only applies to the canmv board.
->note2: The network port is unstable. If the network port cannot be found, reset the board.
+>note2:image need uncompress.
+>note3: The network port is unstable. If the network port cannot be found, reset the board.
 
 ## 2.k230 debian Rootfs build and verification
 
