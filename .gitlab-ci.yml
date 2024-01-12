@@ -71,9 +71,9 @@ markdown-link-check:
     - whoami
     - pwd
     - git fetch
-    - git diff origin/dev --name-only
-    - git diff origin/dev --name-only -z | (grep "\\.md$" || echo en/CanMV_K230_Tutorial.md) | xargs markdown-link-check
-    # - find . -name \*.md -print0 | xargs -0 -n1 markdown-link-check -q
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - echo $FILELIST
+    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check; fi
 
 # new MR open
 markdownlint:
@@ -89,11 +89,12 @@ markdownlint:
     - uname -a
     - whoami
     - pwd
-    - git fetch
-    - git diff origin/dev --name-only
     #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
-    - git diff origin/dev --name-only -z | (grep "\\.md$" || echo en/CanMV_K230_Tutorial.md) | xargs markdownlint-cli2
-    # - find . -name \*.md -print0 | xargs -0 markdownlint-cli2
+    #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
+    - git fetch
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - echo $FILELIST
+    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
 
 .setup_env:
   before_script:

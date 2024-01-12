@@ -54,6 +54,7 @@
 | CNR  | Color Noise Reduction                                      |
 | CAC  | Chromatic Aberration Correction                            |
 | CA   | Color Adjustment                                           |
+| DCI  | Dynamic Contrast Improvement                                           |
 | 2DNR | 2D Noise Reduction                                         |
 | 3DNR | 3D Noise Reduction                                         |
 | GC   | Gamma Correction                                           |
@@ -74,6 +75,8 @@
 | V1.1       | 更新部分功能描述                   | 刘家安 | 2023-04-07 |
 | V1.2       | 更新部分功能描述 新增部分功能描述   | 郭世栋 | 2023-05-05 |
 | V1.3       | 增加RTSP功能描述  | 郭世栋 | 2023-07-28 |
+| V2.0       | 更新为新版本 VTunerClient | 黄子懿 | 2024-01-10 |
+| V2.1       | 更新部分功能描述 新增部分功能描述   | 荣坚 | 2024-01-11 |
 
 ## 1. 模块软件架构
 
@@ -87,312 +90,256 @@
 
 | **文件名**      | **存放位置**       | **功能**                                            |
 |-----------------|--------------------|-----------------------------------------------------|
-| PC tuning-tool软件包（tuning-client.exe） | relaese的源码包k230_sdk/tools/tuning-tool-client/Kendyte_ISP_Tool_TuningClient_RC22.5_Pre_596062-20221116.7z                    | 用于图像dump，ISP调试等PC端工具 |
-| tsconfig.json                     | 小核文件系统 /app/tuning-server/        | DUMP数据用配置文件    |
-| run_tuning_server.sh              | 小核文件系统 /app/tuning-server/        | 启动tuning-server脚本 |
-| 3aconfig.json                     | 小核文件系统 /app/tuning-server/        | 3a模块的配置参数      |
-| tuning-server                     | 小核文件系统 /app/tuning-server/        | tuning-server可执行程序，被run_tuning_server.sh调用 |
-| sample_sys_init.elf               | 大核/bin/                               | ISP demo（包含少部分ISP功能，RTSP模式下使用）       |
-| sample_vicap_dump.elf             | 大核/bin/                               | 基于VICAP的ISP demo（包括基本ISP pipeline）         |
+| PC tuning-tool软件包（tuning-client.exe） | relaese的源码包k230_sdk/tools/tuning-tool-client/Kendyte_ISP_Tool_TuningClient-6.2.23.5-Win32-x86_64-10-26-2023-09.28.16.7z                  | 用于图像dump，ISP调试等PC端工具  |
+| t_server_c-6.1.0                        | 小核文件系统 /mnt/             | tuning server可执行程序 |
+| sample_sys_init.elf                     | 大核文件系统 /sdcard/app       | 大核服务端              |
 **表2-1 文件列表**
 
-### 2.2 环境编译
-
-Tuning-tool依赖板端小核系统的tuning-server程序通信，依赖板端大核系统的ISP demo，demo当前为sample_sys_init.elf和sample_vicap_dump.elf，包含基本ISP pipeline功能。当使用RTSP模式时，大核启动sample_sys_init.elf，当使用非RTSP模式时，大核启动sample_vicap_dump.elf
-
-根据release源码包中的README.md编译出镜像，烧写至板端。Tuning-server相关组件以及应用程序将存放在小核/app/tuning-server和/lib/tuning-server中。
-下表说明了大核分别启动sample_sys_init.elf和sample_vicap_dump.elf的功能。
-
-| **大核demo**          | **屏显**  | **RTSP** | **dump raw** | **dump yuv** | **在线切换sensor** | **在线切换分辨率** |
-|-----------------------|-----------|----------|--------------|--------------|---------------------|--------------------|
-| sample_sys_init.elf   |   不支持  |   支持   |      不支持  |  支持        |       支持          |         支持        |
-| sample_vicap_dump.elf |    支持   |  不支持  |      支持    |  支持        |      不支持         |        不支持       |
-**表2-2 文件列表**
-
-### 2.3 启动流程
+### 2.2 启动流程
 
 1. 板端小核配置IP
-1. 板端小核等待sharefs启动后，将sample_vicap_dump.elf和sample_sys_init.elf放入/sharefs中，可通过nfs以及tftp方式完成，详细参考sharefs使用方法
-1. 板端小核启动tuning-server
-1. RTSP模式下，板端大核启动ISP demo，cd /sharefs/; ./sample_sys_init.elf
-1. 板端大核启动ISP demo，cd /sharefs/; ./sample_vicap_dump.elf -dev \<dev_num\> -sensor \<sensor_num\> -chn \<chn_num\> -ofmt \<out_format\> -preview \<display_enable\>
-1. PC端启动tuning-tool-client
-
-### 2.4 修改配置文件
-
-#### 2.4.1 小核
-
-1. tsconfig.json
-
-用于配置DUMP功能的图像数据参数以及RTSP的图像参数。在非RTSP模式下，sensor配置需要根据sample_vicap_dump指定；在RTSP模式下，可以通过修改sensor_index进行sensor配置
-修改“convert_to_Bmp”为1时，将dump的数据保存BMP并发送到PC指定保存目录，此时预览窗口将显示BMP。
-修改“convert_to_Bmp”为0时，将dump的原始数据（yuvNV12）保存并发送到PC指定保存目录，此时预览窗口将无法显示。
-
-| **关键字**     | **默认值**                | **功能**                         |
-|----------------|---------------------------|-----------------------------------|
-| Width          | 1920                      | DUMP图像的宽，RTSP开启时为推流的宽 |
-| Height         | 1088                      | DUMP图像的高，RTSP开启时为推流的高，目前需要宽x高 4K对齐，否则可能导致推流失败 |
-| Align          | 1                         | 对齐字节数                        |
-| stride         | 1280                      | 对齐后的数据宽度（跟随Width）即可 |
-| pixel_format   | 27                        | DUMP图像格式，27/30: YUV NV12     |
-| insert_pic     | 0                         | 插帧测试，0：关闭，1：开启，默认关闭，目前无需开启 |
-| convert_to_Bmp | 1                         | DUMP后的图像转换为BMP，默认开启，将在tuning-tool中显示转换后的BMP，关闭后将不进行转换，tuning-tool显示窗口将无法显示图像 |
-| bayer_pattern  | 1                         | 0： BGGR，1： RGGB，默认RGGB，暂时不生效 |
-| insertFilename | NON                       | 插帧测试文件全路径： 默认为空即可       |
-| save_path      | /app/tuning-server/mount/ | DUMP数据在板端的存储路径，板端无mount目录，需自行创建 |
-| dev_num        | 0                         | 设备ID编号，默认0，0：sensor0， 1：sensor1 |
-| chn_num        | 0                         | 绑定通道编号，默认0                    |
-| exp_type       | 0                         | sensor曝光模式，当前不生效，默认为0    |
-| rtsp_mode      | 1                         | 0： 使用非RTSP模式，大核启动使用RTSP模式，大核启动sample_vicap_dump.elf，1： 使用RTSP模式，大核启动sample_sys_init.elf |
-| video_index    | 2                         |rtsp编码方式，0： kVideoTypeH264， 1： kVideoTypeH265， 2： kVideoTypeMjpeg|
-| sensor_index   | 3                         |rtsp使用切换sensor配置， 支持index 0-8， 0： ov9732， 1： ov9286 ir，2：ov9286 speckl，3-8：imx335，详细参考tsconfig.json的key：HELP for sensor_index|
-**表2-3 配置参数说明**
-
-1. run_tuning_server.sh，用于启动tuning-server，直接按照步骤3)执行即可。
-1. 启动tuning-server，cd /app/tuning-server; ./run_tuning_server.sh
-
-#### 2.4.2 大核
-
-1. RT-Smart启动ISP-demo
-
-非RTSP模式：
-修改tsconfig.json的rtsp_mode为0
-> cd /sharefs/; ./sample_vicap_dump.elf
-ISP-demo启动方法
-./sample_vicap_dump.elf -dev \<dev_num\> -sensor \<sensor_num\> -chn \<chn_num\> -ofmt \<out_format\> -preview \<display_enable\>
-./sample_vicap_dump.elf -dev 0 -sensor 0 -chn 0
-./sample_vicap_dump.elf -dev 0 -sensor 2 -chn 0
-通过指定sensor num决定使用哪个sensor配置，preview开关决定是否进行屏显预览
-
-RTSP模式：
-修改tsconfig.json的rtsp_mode为1
-> cd /sharefs/; ./sample_sys_init.elf
-ISP-demo启动方法
-./sample_sys_init.elf
-
-通过修改tsconfig.json的sensor_index为需要的值，如默认IMX335为3，决定使用哪个sensor配置，无屏显，启动后，需要点击tuning-tool界面的Start preview开启推流，当需要在线切换时，点击Stop Preview，修改tsconfig.json，执行sync命令，重复点击Start preview即可
-
-#### 2.4.3 PC tuning tool
-
-1. 启动tuning-tool
-
-打开release的tuning-tool工具包中的tuning-client.exe。路径为：k230_sdk/tools/tuning-tool-client/Kendyte_ISP_Tool_TuningClient_RC22.5_Pre_596062-20221116.7z
-参照章节3.1配置IP即可。
+1. 板端小核等待sharefs启动后，在大核启动 sample_sys_init.elf，运行 `/sharefs/app/sample_sys_init.elf` 即可
+1. 板端小核启动tuning server，运行 `/mnt/t_server_c-6.1.0`，需要根据实际情况添加参数，使用 `-?` 参数查看帮助
+1. PC端启动VTunnerClient，连接K230
 
 ## 3. Tuning Tool界面介绍
 
-![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/ebd1d0f0d38884a6e0eb9d4b370e006d.png)
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/01.png)
 
 图3-1
 
-如图3-1所示为tuning-tool-client的基本操作UI全部展开后共五个区域
+如图3-1所示为VTunnerClient的基本操作UI全部展开后共六个区域：
 
-① 菜单操作区域：用于ISP的选择、参数导入/导出、通信连接配置
+(1) 菜单操作区域：文件操作、窗口管理等功能
 
-② 图像操作区域：抓取图像
+(2) 工具栏区域：支持关键功能的操作
 
-③ 功能区域：用于ISP各模块UI的切换
+| 按钮 | 描述|
+|------|------------------------------------------------------------|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/11.png) | 将设置导出到文件|
+| ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/12.png) | 从文件导入设置|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/10.png) | 拍摄图像或视频|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/13.png) | 将本地raw图像或视频发送到调试服务器由ISP处理|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/09.png)  | 视频预览|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/14.png)  | 配置寄存器|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/02.png)  | 配置连接调试服务器|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/15.png)  | 修改首选项|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/16.png)  | 提供对额外组件的访问|
 
-④ 调试区域：用于调试某一个模块的参数
+(3) 工程管理区域：选择和管理不同工程
 
-⑤ 回显区域：用于打印部分参数下发和接收的日志
+(4) 功能区域：用于ISP各模块UI的切换
+
+(5) 调试区域：用于调试某一个模块的参数
+
+(6) 回显区域：用于打印部分参数下发和接收的日志
 
 ### 3.1 连接板端tuning-server
 
 #### 3.1.1 使用HTTP方式连接板端tuning-server
 
-![图形用户界面, 文本, 应用程序 描述已自动生成](images/cde5234f5012c9f0b08ecfa108470466.png)
+SDK默认支持HTTP方式连接，点击工具栏中的配置连接调试服务器按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/02.png)，将弹出图3-2。
+
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/03.png)
+
 图3-2
 
-SDK默认支持HTTP方式连接，依次点击Edit-\>Preferences-\>Server Settings将弹出配置窗口，如图3-2，图3-3。
+选择HTTP模式，保证PC与板端连接的网络处于同一网段，在“Host”输入框中输入板端的IP，在“Port”输入框中请输入固定端口34567，配置完成后点击“OK”按钮，如果板端tuning-server已经启动，则会自动完成连接。任意切换图3-1中④区域的模块，则会看到tuning-server端的函数打印。
 
-![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/89e7206f4f032031939db08d5242a71e.png)
+### 3.2 创建/选择工程
+
+若所需调试的工程已在图3-1中③区域，则点击选中该工程即可开始ISP调试。
+若还没有创建所需调试的工程，则需先创建该工程。
+
+#### 3.2.1 创建调试工程
+
+如图3-3，依次点击File-\>New-\>Project...，弹出工程创建向导窗口，如图3-4。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/04.png)
+
 图3-3
 
-选择HTTP模式，保证PC与板端连接的网络处于同一网段，在Server的第一项指定板端的IP，第二项指定端口默认即可，依次点击add-\>apply后关闭窗口即可完成配置，如果板端tuning-server已经启动，则会自动完成连接，任意切换图3-1中③区域的模块，则会看到tuning-server端的函数打印。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/05.png)
 
-### 3.2 在线调试界面及功能描述
+图3-4
 
-本节只是简单介绍一些tuning tool界面上调试模块的主要功能，具体的调试策略及步骤将在以后的图像调优文档中进行详细的描述。
+点击“Next”按钮，弹出创建工程窗口，如图3-5。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/06.png)
 
-#### 3.2.1 Input Control
+图3-5
 
-Sensor Driver：选择sensor的驱动配置.drv
+输入工程名称，指定工程地址后，点击“Finish”按钮即可完成工程创建，该工程将显示在图3-1中的区域③。点击该工程即可开始ISP调试。
 
-Resolution：sensor配置出图的resolution
+### 3.3 在线调试界面及功能描述
 
-Enable Test Pattern：是否打开sensor test pattern
+本节只是简单介绍一些tuning tool界面上调试模块的主要功能，具体的调试策略及步骤在图像调优文档中进行详细的描述。
 
-Connection Status：查看连接状态
+ISP功能模块如图3-6所示。
 
-Bayer Pattern: bayer排序
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/07.png)
 
-#### 3.2.2 Register
+图3-6
 
-支持用户对ISP的寄存器进行读写。
+#### 3.3.1 Bypass Setting
 
-支持对sensor寄存器的读写，目前默认对sensor0进行读写，若读写sensor1，需要配置tsconfig.json中dev_num参数为1即可。
+所有ISP功能模块的使能控制。
 
-#### 3.2.3 3A Config
+#### 3.3.2 Auto Exposure
 
-目前未使用，已分解到其他地方。
+自动曝光控制参数，控制图像亮度和AE调节时的收敛速度等。
 
-#### 3.2.4 Calibration Data
+支持设置ROI窗口。开启ROI模式需要，需要semMode中选择FIX模式并enable AE才能开启ROI模式。
 
-将标定工具生成的xml文件导入并显示在界面上。
-
-#### 3.2.5 High Dynamic Range 2
+#### 3.3.3 Auto Focus
 
 暂未支持。
 
-#### 3.2.6 Exposure Control
+#### 3.3.4 Auto Focus Measurement
 
-支持获取自动曝光和增益，支持通过工具界面设置曝光和增益，设置时需要关闭自动曝光功能。
+暂未支持。
 
-#### 3.2.7 Digital Gain
+#### 3.3.5 3D Noise Reduction
 
-用于对ISP Digital Gain使能控制及调节大小。
+通过调整参数配置，对图像降噪强度的调节。
 
-#### 3.2.8 Black Level Subtraction
+#### 3.3.6 Black Level Subtraction
 
 提供与Sensor相关的黑电平校正，可对R、Gr、Gb、B四通道进行设置。
 
-#### 3.2.9 Lens Shading Correction
+#### 3.3.7 Color Processing
 
-提供镜头阴影校正，校准系数由标定工具生成。
+颜色处理模块，可调节图像的对比度、亮度、饱和度及色调，设置不同的颜色喜好或风格。
 
-#### 3.2.10 White Balance
+#### 3.3.8 Color Correction Matrix
 
-提供白平衡R、Gr、Gb、B四通道增益设置；
+色彩还原矩阵。通过调节3x3 CCM矩阵及偏移量可完成颜色偏差的校准。
 
-通过调节3x3 CCM矩阵及偏移量可完成颜色偏差的校准。
+#### 3.3.9 Compand
 
-#### 3.2.11 Wide Dynamic Range 4
+数据拉伸、压缩模块，可设置作用曲线。
 
-提供对图像全局和局部对比度的调整。
-
-#### 3.2.12 Defect Pixel Cluster Correction
-
-提供对像素坏点的检测及校准的功能，通过选择set可设置不同的校准方法。
-
-#### 3.2.13 Denoising Prefilter
-
-双边滤波降噪模块。
-
-#### 3.2.14 Demosaicing 2
+#### 3.3.10 Demosaic
 
 通过插值将Bayer格式的Raw图转为RGB图，并提供去摩尔纹、去紫边、锐化及降噪处理功能。
 
-#### 3.2.15 Color Noise Reduction
+该模块中还包含了CAC子模块，用于校准主要由镜头引入的色差，由标定工具生成校准参数。
 
-未支持。
+#### 3.3.11 Defect Pixel Cluster Correction
 
-#### 3.2.16 Chromatic Aberration Correction
+提供对像素坏点的检测及校准的功能，通过选择set可设置不同的校准方法。
 
-用于校准主要由镜头引入的色差，由标定工具生成校准参数。
+#### 3.3.12 DeNoising Prefilter
 
-#### 3.2.17 Color Adjustment
+双边滤波降噪模块。
 
-分为CA和DCI两块。
+#### 3.3.13 Digital Gain
+
+用于对ISP Digital Gain使能控制及调节大小。
+
+#### 3.3.14 Edge Enhance
+
+用于提升图像的清晰度。通过设置合适的参数，提升图像清晰度的同时，也可抑制噪声的增强。
+
+该模块中还包含了CA和DCI两个子模块。
 
 CA模块用于调节图像的饱和度。根据图像亮度或者原饱和度的变化来调整饱和度，达到局部调整饱和度的目的，让亮区域的颜色更鲜艳以及消除暗区域或低饱和度区域的彩噪。
 
 DCI模块实现对图像的动态对比度调整。
 
-#### 3.2.18 3D Noise Reduction 3
+#### 3.3.15 Exposure Control
 
-通过调整参数配置，对图像降噪强度的调节。
+支持获取自动曝光和增益，支持通过工具界面设置曝光和增益，设置时需要关闭自动曝光功能。
 
-#### 3.2.19 Gamma Correction 2
-
-支持客户自定义gamma，该模式下可更改gamma指数。
-
-#### 3.2.20 Green Equilibrate
-
-校准Gr与Gb两通道的不平衡，可设置不同的绿平衡强度。
-
-#### 3.2.21 Edge Enhance
-
-用于提升图像的清晰度。通过设置合适的参数，提升图像清晰度的同时，也可抑制噪声的增强。
-
-#### 3.2.22 Color Processing
-
-颜色处理模块，可调节图像的对比度、亮度、饱和度及色调，设置不同的颜色喜好或风格。
-
-#### 3.2.23 Rgbir
+#### 3.3.16 Exposure Statics
 
 暂未支持。
 
-#### 3.2.24 Auto Exposure 2
+#### 3.3.17 Focus Control
 
-工具界面暂不支持调节自动参数。
+未支持。
 
-#### 3.2.25 Region Of Interested
+#### 3.3.18 Gamma Correction
 
-支持通过工具设置8个ROI窗口，第一次设置窗口数量超过1后，将不能再关闭ROI模式，ROI数量最少1个。开启ROI模式需要，需要在Auto Exposure2模块Scene Evaluation Mode中选择FIX模式并enable AE才能开启ROI模式。
+支持客户自定义gamma，该模式下可更改gamma指数。
 
-#### 3.2.26 Auto Focus
+#### 3.3.19 Green Equilibrate
 
-因涉及到自动功能，暂未支持。
+校准Gr与Gb两通道的不平衡，可设置不同的绿平衡强度。
 
-#### 3.2.27 Auto White Balance
+#### 3.3.20 High Dynamic Range
 
-因涉及到自动功能，暂未支持。
+多曝光宽动态，可调节各曝光间的曝光量比例系数、融合取值范围。
 
-#### 3.2.28 Dewarp
+#### 3.3.21 Lens Shading Correction
 
-已经移到单独的Dewarp tool里。
+提供镜头阴影校正，校准系数由标定工具生成。
 
-### 3.3 抓取图片
+#### 3.3.22 RGB Infrared Radiation
 
-#### 3.3.1 选择保存目录
+暂未支持。
 
-![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/cc9d6c96f9050f3e754279087fba464f.png)
-图3-4
+#### 3.3.23 White Balance
 
-点击菜单-\>Edit-\>preferences，弹窗如图3-4，点击Capture Settings，点击Browser按钮，选择保存数据的路径，关闭窗口即可。
+提供白平衡R、Gr、Gb、B四通道增益设置。
 
-#### 3.3.2 采集图像
+#### 3.3.24 Wide Dynamic Range
 
-当前仅支持dump 8bit yuvNV12格式数据，点击![cam](images/857dd7d1140476e6a225b78297b9b2fe.png)，等待预览窗口弹出，即可将转换为BMP的图像传送至设置的保存路径中，并显示，原始yuv数据则存放在文件系统中。
+提供对图像全局和局部对比度的调整。
 
-如果yuv和BMP数据都需要，可以考虑使用挂载盘或者tftp等功能将数据发出。如果使用挂载方式。在tsconfig.json中修改"save_path"值，默认"save_path": "/app/tuning-server/mount/"，可以修改tuning-server dump数据时原始数据的存储路径，可将路径设置为挂载目录，直接会将yuv和BMP文件存储在该路径下。
+### 3.4 拍摄图像
 
-如果不需要BMP数据，仅使用yuv数据，则可以在tsconfig.json中设置"convert_to_Bmp": 0，关闭转换BMP功能，这样yuv数据将直接发送至PC，预览窗口将不再显示图像。
+#### 3.4.1 设置图像格式和大小
 
-板端存储空间有限，在dump一定帧数后将无法dump，需要手动清理数据后再执行该功能。
+点击工具栏中的预览按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/09.png)，将弹出图3-7。
 
-tsconfig.json文件可直接修改，保存后执行sync命令，此时capture功能将更新，无需退出tuning-server后再修改。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/08.png)
 
-#### 3.3.3 RTSP推流
+图3-7
 
-在RTSP模式下支持http推流至PC进行显示，在tuning-tool与tuning-server建立连接后，点击![cam](images/start_preview.png)，等待小核加载推流功能，完成后将打印推流的地址。
-![cam](images/rtsp_print_log.png)
-将打印中的URL复制到VLC网络串流设备URL中，播放等待即可。
-在线修改图像参数并应用，需要先停止推流，点击![cam](images/stop_preview.png)，等待串口打印中提示stop success后，修改tsconfig.json后，保存，sync。重新点击 ![cam](images/start_preview.png)即可。
+勾选“Stream Enable”。在“Output Format”栏中选择需拍摄的图像格式：
+若需拍摄YUV图像，当前仅支持8bit yuvNV12格式数据，请选择“YUV420 Semi_Planar”；
+若需拍摄raw data图像，请根据ISP接入的raw data位宽选择相应位宽选项。
 
-如果yuv和BMP数据都需要，可以考虑使用挂载盘或者tftp等功能将数据发出。如果使用挂载方式。在tsconfig.json中修改"save_path"值，默认"save_path": "/app/tuning-server/mount/"，可以修改tuning-server dump数据时原始数据的存储路径，可将路径设置为挂载目录，直接会将yuv和BMP文件存储在该路径下。
+如下图3-8，在“Output Size”栏中正确设置图像大小。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/17.png)
 
-如果不需要BMP数据，仅使用yuv数据，则可以在tsconfig.json中设置"convert_to_Bmp": 0，关闭转换BMP功能，这样yuv数据将直接发送至PC，预览窗口将不再显示图像。
+图3-8
 
-板端存储空间有限，在dump一定帧数后将无法dump，需要手动清理数据后再执行该功能。
+点击“OK”按钮完成设置。
 
-tsconfig.json文件可直接修改，保存后执行sync命令，此时capture功能将更新，无需退出tuning-server后再修改。
+#### 3.4.2 采集图像
 
-### 3.4 参数的导入与导出
+点击工具栏中的拍摄按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/10.png)，将弹出图3-9。
 
-#### 3.4.1 参数导入
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/18.png)
 
-工具默认支持导入的参数文件为标准xml格式，分为标定参数和tuning参数两部分，支持PC本地和远程（板端本地）导入。
+图3-9
 
-依次点击File-\>Import All Settings-\>Local/Remote即可在弹出的窗口中选择需要导入的参数xml文件，如图3-5所示。在tuning-tool-client中默认自带多种sensor的参考xml，可用于进行测试。也可在板端Linux文件系统中导入提前存放的xml文件。
+在“Save Path”栏中选择图像文件保存的地址。
+若拍摄单帧图像，直接点击“Capture”按钮即可；
+若拍摄多帧图像，请在“Snapshot Num”选项中设置所需拍摄的帧数，并根据所希望输出的文件数量设置“Output as One File”选项（勾选或不勾选），完成上述配置后，点击“Capture”按钮开始拍摄。
 
-![图形用户界面, 应用程序 描述已自动生成](images/c82b2bcd7ec8b6ad2d9af0c3778354b3.png)
+### 3.5 参数的导入与导出
 
-图3-5
+#### 3.5.1 参数导入
 
-#### 3.4.2 参数导出
+工具默认支持导入的参数文件为标准xml和json格式，分为标定参数和tuning参数两部分，支持PC本地导入。
 
-工具默认导出方式会将标定参数和在线调试参数两部分汇总为一个xml文件存放。
+点击工具栏中的导入按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/12.png)，将弹出图3-10。
 
-依次点击File-\>Export All Settings后，将在板端保存isp-yyyy-MM-dd_HH-mm-ss.xml文件，如：isp-2023-02-07_11-13-17.xml。
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/import.png)
+
+图3-10
+
+在图3-10所示窗口中选择需要导入的xml或json参数文件，点击“Open”按钮即可开始导入。
+
+#### 3.5.2 参数导出
+
+工具默认导出方式会将在线调试参数汇总为一个json文件存放。
+
+点击工具栏中的导出按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/11.png)，将弹出图3-11。
+
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/export.png)
+
+图3-11
+
+在图3-11所示窗口中选择需要导出的json参数文件，点击“Save”按钮即可开始导出。
