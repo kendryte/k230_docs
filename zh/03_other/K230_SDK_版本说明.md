@@ -29,7 +29,7 @@
 
 ### 概述
 
-本文档主要介绍了K230 SDK V1.2.0 版本发布相关的内容，包括当前版本支持的硬件、功能、使用限制等。
+本文档主要介绍了K230 SDK V1.3.0 版本发布相关的内容，包括当前版本支持的硬件、功能、使用限制等。
 
 ### 读者对象
 
@@ -64,7 +64,7 @@
 
 | 所属产品 | 版本号 | 发布日期 |
 |----------|--------|----------|
-| K230 SDK | V1.2.0 | 2023-11-8|
+| K230 SDK | V1.3.0 | 2024-1-12|
 
 ## 2. 支持的硬件
 
@@ -123,6 +123,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 33 | K230 SDK V0.9 | 猫眼poc | 远程猫眼，实现可视对讲、变声、录像、人形检测及抓拍功能。 | |
 | 34 | K230 SDK V1.0 | 猫眼poc | 1. 猫眼设备端增加UI控制。 2. 增加本地猫眼语音对讲功能。3. 手机端录像功能改为设备端实现，始终为录像。4. 猫眼设备端增加回放功能。| |
 | 35 | K230 SDK V1.2 | 猫眼poc | 更改为nor flash启动 | |
+| 35 | K230 SDK V1.3 | 深度相机poc | 增加深度相机poc功能，猫眼poc改为sd卡启动 | |
 
 ### 4.2 图像
 
@@ -154,6 +155,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 24 | K230 SDK V1.1 | HDR频率变换               | 支持HDR 频率变换                                                                                                            |      |
 | 25 | K230 SDK V1.1 | 参数导出                  | 支持isp dewarp参数导出                                                                                                      |      |
 | 26 | K230 SDK V1.2 | 增加词典笔POC             | 增加词典笔POC                                                                                                               |      |
+| 27 | K230 SDK V1.3 | 增加三摄demo             | Canmv-K230板增加3摄(ov5647)同时工作的demo                                                                                    |      |
 
 ### 4.3 平台
 
@@ -199,6 +201,8 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 37  | K230 SDK V1.1 | usb口使用           | usb1固定为host模式，可以连接usb-eth或U盘等外设，EVB的J5排针pin3与pin4跳线帽连接，给外设供电使能。usb0用于usb gadget测试和usb升级，EVB的J5排针pin1与pin2不再使用跳线帽连接。 |      |
 | 38  | K230 SDK V1.2 | canmv wifi ap6212           | canmv support ap6212 |      |
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
+| 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
+| 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
 
 ### 4.4 架构
 
@@ -230,6 +234,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
 | 25 | K230 SDK V1.1 | 大核加解密驱动        | 增加了大核硬件 AES-GCM 驱动和 SM4-ECB/CBC/CFB/OFB/CTR 驱动 |                                     |
 | 26 | K230 SDK V1.2 | 门锁OTA功能        | 增加了门锁OTA功能 |
+| 27 | K230 SDK V1.3 | OTP空间调整        | 调整SDK操作的OTP空间，用户可读写768bytes。其余的空间为芯片厂商保留使用 |
 
 ### 4.5 其它
 

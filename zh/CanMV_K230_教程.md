@@ -143,7 +143,7 @@ CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/
 
 ##### Windows下烧录
 
-Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。
+Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。注意打开balenaEtcher软件的时候要以“管理员身份运行”，否则可能会出现烧录失败的情况。
 
 1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件。
 
@@ -2430,4 +2430,10 @@ main.elf best.kmodel None labels.txt 2
 
 ## 常见问题问答(FAQ)
 
-请参考[常见问题问答](03_other/K230_%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94.md)
+请参考常见问题问答
+
+[SDK](03_other/K230_SDK常见问题解答_C.md)
+
+[nncase](03_other/K230_nncase常见问题解答.md)
+
+[AI demo](03_other/K230_AI_demo常见问题解答_C++.md)

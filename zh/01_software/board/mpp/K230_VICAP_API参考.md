@@ -604,6 +604,78 @@ k_s32 kd_mpi_vicap_dump_release(k_vicap_dev dev_num, k_vicap_chn chn_num, const 
 
 【相关主题】
 
+#### 2.1.12 kd_mpi_vicap_set_vi_drop_frame
+
+【描述】
+
+设置硬件丢帧
+
+【语法】
+
+k_s32 kd_mpi_vicap_set_vi_drop_frame(k_vicap_csi_num csi, k_vicap_drop_frame *frame, k_bool enable)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| csi         | VICAP设备号     | 输入          |
+| frame        | 结构体，见下 |               |
+| m | 每隔 m 帧丢 n 帧| 输入 |
+| n | 每隔 m 帧丢 n 帧| 输入 |
+| mode | hdr mode | 输入 |
+| enable       | 是否开启 | 输入 |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mpi_vicap_api.h
+- 库文件：libvicap.a
+
+#### 2.1.13 kd_mpi_vicap_set_mclk
+
+【描述】
+
+设置 MCLK 频率
+
+【语法】
+
+k_s32 kd_mpi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk_div, k_u8 mclk_en)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| id         | MCLK ID     | 输入          |
+| sel | 时钟源 | 输入 |
+| mclk_div | 分频系数 | 输入 |
+| mclk_en | 是否开启 | 输入 |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mpi_vicap_api.h
+- 库文件：libvicap.a
+
 ### 2.2 Sensor
 
 该功能模块提供以下API：
@@ -1343,38 +1415,39 @@ k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 
 ```c
 typedef enum {
-    OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR = 0,
-    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR = 1,
-    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE = 2,
-
-    OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR = 3,
-    OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_SPECKLE = 4,
-
-    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR_SPECKLE = 5,
-    OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR_SPECKLE  = 6,
-
-    IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR = 7,
-    IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_LINEAR = 8,
-    IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_LINEAR = 9,
-    SENSOR_TYPE_MAX,
+OV_OV9732_MIPI_1920X1080_30FPS_10BIT_LINEAR,
+OV_OV9732_MIPI_1920X1080_30FPS_10BIT_HDR,
+OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR,
+OV_OV9286_MIPI_1920X1080_30FPS_10BIT_LINEAR,
+OV_OV9286_MIPI_1920X1080_30FPS_10BIT_HDR,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE,
+SENSOR_TYPE_MAX,
 } k_vicap_sensor_type;
 ```
 
 【成员】
 
-| **成员名称**                                          | **描述**                                                 |
-| ----------------------------------------------------- | -------------------------------------------------------- |
-| OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR            | OV9732 720P 10bit 30帧线性输出配置                       |
-| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR         | OV9286 720P 10bit 30帧线性输出 红外配置（实际帧率15fps） |
-| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE    | OV9286 720P 10bit 30帧线性输出 散斑配置（实际帧率15fps） |
-| OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR         | OV9286 720P 10bit 60帧线性输出 红外配置（实际帧率30fps） |
-| OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_SPECKLE    | OV9286 720P 10bit 60帧线性输出 散斑配置（实际帧率30fps） |
-| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR_SPECKLE | OV9286 720P 10bit 30帧线性输出 红外/散斑交替             |
-| OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR_SPECKLE | OV9286 720P 10bit 60帧线性输出 红外/散斑交替             |
+| **成员名称**                                       | **描述**                                |
+|----------------------------------------------------|-----------------------------------------|
+| OV_OV9732_MIPI_1920X1080_30FPS_10BIT_LINEAR        | OV9732 1080P 10bit 30帧线性输出配置     |
+| OV_OV9732_MIPI_1920X1080_30FPS_10BIT_HDR           | OV9732 1080P 10bit 30帧HDR输出配置      |
+| OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR         | OV9732 720P 10bit 30帧线性输出配置      |
+| OV_OV9286_MIPI_1920X1080_30FPS_10BIT_LINEAR        | OV9286 1080P 10bit 30帧线性输出配置     |
+| OV_OV9286_MIPI_1920X1080_30FPS_10BIT_HDR           | OV9286 1080P 10bit 30帧HDR输出配置      |
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR      | OV9286 720P 10bit 30帧线性输出 红外配置 |
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE | OV9286 720P 10bit 30帧线性输出 散斑配置 |
 
 【注意事项】
 
 1. 该列表需要有sensor驱动开发人员维护，应用开发者通过此处定义的sensor type来打开指定类型的sensor设备
+1. 当前版本支持如下类型：
+
+    OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR
+
+    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR
+
+    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE
 
 #### 3.1.2 k_vicap_dev
 
@@ -2053,7 +2126,409 @@ k_sensor_reg_list *reg_list;
 | ae_info        | AE参数信息               |
 | reg_list       | 当前模式的寄存器配置列表 |
 
-## 4. 错误码
+## 4. MAPI
+
+该功能模块提供以下API：
+
+- [kd_mapi_vicap_get_sensor_fd]
+- [kd_mapi_vicap_get_sensor_info]
+- [kd_mapi_vicap_set_dev_attr]
+- [kd_mapi_vicap_set_chn_attr]
+- [kd_mapi_vicap_start]
+- [kd_mapi_vicap_stop]
+- [kd_mapi_vicap_dump_frame]
+- [kd_mapi_vicap_release_frame]
+- [kd_mapi_vicap_set_vi_drop_frame]
+- [kd_mapi_vicap_set_mclk]
+- [kd_mapi_vicap_tuning]
+- [kd_mapi_isp_ae_get_roi]
+- [kd_mapi_isp_ae_set_roi]
+
+### 4.1 API
+
+#### 4.1.1 kd_mapi_vicap_get_sensor_fd
+
+【描述】
+
+根据指定的sensor获取文件描述符
+
+【语法】
+
+k_s32 kd_mapi_vicap_get_sensor_fd(k_vicap_sensor_attr \*sensor_attr)
+
+【参数】
+
+| **参数名称** | **描述**       | **输入/输出** |
+|--------------|----------------|---------------|
+| sensor_attr  | Sensor属性 | 输入 & 输出     |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.2 kd_mapi_vicap_get_sensor_info
+
+【描述】
+
+根据指定的sensor配置类型获取sensor配置信息，参见[kd_mpi_vicap_get_sensor_info](#211-kd_mpi_vicap_get_sensor_info)，将 `sensor_type` 放入 `sensor_info.sensor_type` ，用法一致
+
+【语法】
+
+k_s32 kd_mapi_vicap_get_sensor_info(k_vicap_sensor_info \*sensor_info)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.3 kd_mapi_vicap_set_dev_attr
+
+【描述】
+
+设置VICAP设备属性，参见[kd_mpi_vicap_set_dev_attr](#212-kd_mpi_vicap_set_dev_attr)，将 `dev_num` 放入 `dev_info.vicap_dev`，用法一致
+
+【语法】
+
+k_s32 kd_mapi_vicap_set_dev_attr(k_vicap_dev_set_info dev_info)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.4 kd_mapi_vicap_set_chn_attr
+
+【描述】
+
+设置VICAP通道属性，参见[kd_mpi_vicap_set_chn_attr](#214-kd_mpi_vicap_set_chn_attr)，将 `dev_num` 放入 `chn_info.vicap_dev`，将 `chn_num` 放入 `chn_info.vicap_chn`，用法一致
+
+【语法】
+
+k_s32 kd_mapi_vicap_set_chn_attr(k_vicap_chn_set_info chn_info)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.5 kd_mapi_vicap_start
+
+【描述】
+
+[kd_mpi_vicap_init](#216-kd_mpi_vicap_init) + [kd_mpi_vicap_start_stream](#218-kd_mpi_vicap_start_stream)
+
+【语法】
+
+k_s32 kd_mapi_vicap_start(k_vicap_dev vicap_dev)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.6 kd_mapi_vicap_stop
+
+【描述】
+
+[kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream) + [kd_mpi_vicap_deinit](#217-kd_mpi_vicap_deinit)
+
+【语法】
+
+k_s32 kd_mapi_vicap_stop(k_vicap_dev vicap_dev)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.7 kd_mapi_vicap_dump_frame
+
+【描述】
+
+根据指定的设备和输出通道dump vicap数据，参见[kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame)
+
+【语法】
+
+k_s32 kd_mapi_vicap_dump_frame(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vicap_dump_format foramt, k_video_frame_info *vf_info, k_u32 milli_sec)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| dev_num      | VICAP设备号     | 输入          |
+| chn_num      | VICAP输出通道号 | 输入          |
+| foramt       | Dump数据类型    | 输入          |
+| vf_info      | Dump帧信息      | 输出          |
+| milli_sec    | 超时时间        | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.8 kd_mapi_vicap_release_frame
+
+【描述】
+
+释放dump数据帧，参见[kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release)
+
+【语法】
+
+k_s32 kd_mapi_vicap_release_frame(k_vicap_dev dev_num, k_vicap_chn chn_num, const k_video_frame_info *vf_info)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| dev_num      | VICAP设备号     | 输入          |
+| chn_num      | VICAP输出通道号 | 输入          |
+| vf_info      | Dump帧信息      | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.9 kd_mapi_vicap_set_vi_drop_frame
+
+【描述】
+
+设置硬件丢帧，参见[kd_mpi_vicap_set_vi_drop_frame](#419-kd_mapi_vicap_set_vi_drop_frame)
+
+【语法】
+
+k_s32 kd_mapi_vicap_set_vi_drop_frame(k_vicap_csi_num csi, k_vicap_drop_frame *frame, k_bool enable)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| csi         | VICAP设备号     | 输入          |
+| frame        | 结构体，见下  | |
+| m | 每隔 m 帧丢 n 帧| 输入 |
+| n | 每隔 m 帧丢 n 帧| 输入 |
+| mode | hdr mode | 输入 |
+| enable       | 是否开启 | 输入 |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.10 kd_mapi_vicap_set_mclk
+
+【描述】
+
+设置 MCLK 频率，参见[kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk)
+
+【语法】
+
+k_s32 kd_mapi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk_div, k_u8 mclk_en)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| id         | MCLK ID     | 输入          |
+| sel | 时钟源 | 输入 |
+| mclk_div | 分频系数 | 输入 |
+| mclk_en | 是否开启 | 输入 |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.11 kd_mapi_vicap_tuning
+
+【描述】
+
+用于处理 tuning client 发送的命令
+
+【语法】
+
+k_s32 kd_mapi_vicap_tuning(char\* string, k_u32 size, char\*\* response, k_u32\* response_len)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_vicap_api.h
+- 库文件：libmapi.a
+
+#### 4.1.12 kd_mapi_isp_ae_get_roi
+
+【描述】
+
+获取 AE ROI 配置
+
+【语法】
+
+k_s32 kd_mapi_isp_ae_get_roi(k_vicap_dev dev_num, k_isp_ae_roi \*ae_roi)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_isp_api.h
+- 库文件：libmapi.a
+
+#### 4.1.13 kd_mapi_isp_ae_set_roi
+
+【描述】
+
+设置 AE ROI
+
+【语法】
+
+k_s32 kd_mapi_isp_ae_set_roi(k_vicap_dev dev_num, k_isp_ae_roi ae_roi)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_isp_api.h
+- 库文件：libmapi.a
+
+## 5. 错误码
 
 表 41 VICAP API 错误码
 
@@ -2076,6 +2551,6 @@ k_sensor_reg_list *reg_list;
 | 0xA0158011 | K_ERR_VICAP_BADADDR       | 地址超出合法范围                             |
 | 0xA0158012 | K_ERR_VICAP_BUSY          | VICAP系统忙                                  |
 
-## 5. 调试信息
+## 6. 调试信息
 
 VICAP内存管理和和系统绑定调试信息，请参考《K230 系统控制 API参考》。

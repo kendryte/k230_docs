@@ -88,7 +88,7 @@ WDT：
 WDT 是watchdog的简称，本质上是一个定时器，软件程序需要每隔一段时间喂一次狗，如果WDT超时则可以产生一个中断信号或复位信号到CPU，由此通过软硬件结合的方式防止程序运行异常而不复位。
 
 OTP：
-OTP 主要用于存储安全敏感的机密信息，例如 bootrom 的固件信息、加解密密钥、签名信息以及用户自己定义的安全信息等。OTP 集成在安全模块 PUF 中，为整个 SoC 提供安全存储功能，保护根密钥和启动代码等关键数据不被攻击者破坏。大核侧 OTP 驱动主要提供读、写两种功能，可读区域为包括生产信息在内的 24Kbits 空间；写区域为 OTP 的最后 512 bytes 空间。
+OTP 主要用于存储安全敏感的机密信息。OTP 集成在安全模块 PUF 中，为整个 SoC 提供安全存储功能，保护根密钥和启动代码等关键数据不被攻击者破坏。大核侧 OTP 驱动主要提供读、写两种功能，可读写区域768bytes 空间。如果产品量产需要用到OTP的读写保护功能等等，请联系我们，我们会提供相关的接口驱动程序。
 
 TS：
 K230 TS（Temperature Sensor），自研温度传感器，采用 TSMC 12nm 工艺。TS 的应用场景是降频。大核侧 TS 驱动主要提供读功能，在读 TS 之前，首先需要配置 TS 寄存器使能信号、输出模式，然后才能读出芯片的结温。另外，TS 寄存器每 2.6s 读取一次芯片结温。
@@ -411,8 +411,8 @@ ret = rt_device_open(otp_dev, RT_DEVICE_OFLAG_RDWR);
 
 // 初始化读参数并从OTP空间读值，参数分别代表读取OTP的偏移量、要读取的字节长度、缓冲区
 uint32_t pos = 0x0;
-uint32_t  size = 0xC00;
-uint32_t buffer[768] = {0};
+uint32_t  size = 0x300;
+uint32_t buffer[192] = {0};
 ret = rt_device_read(otp_dev, pos, (void *)buffer, size);
 
 
@@ -448,8 +448,8 @@ otp_dev = rt_device_find(“otp”);
 
 // 从(otp_read_base + 0x0)地址处读取0xC00字节的数据
 uint32_t pos = 0x0;
-uint32_t  size = 0xC00;
-uint32_t buffer[768] = {0};
+uint32_t  size = 0x300;
+uint32_t buffer[192] = {0};
 ret = otp_device_read(otp_dev, pos, (void *)buf, size);
 
 // 向(otp_write_base + 0x0)地址处写 0xff11ff11
@@ -465,7 +465,6 @@ ret = otp_device_write(otp_dev, pos, (void *)buffer, size);
 在使用读写 API 的时候，需要注意以下几个关键点：
 
 - 危险操作：OTP 空间为一次可编程的区域，bit 位一旦由0写为1，便不能恢复；
-- 读写偏移量：读操作和写操作的基地址是不同的，OTP 区域的可读空间范围为`(otp_read_base + 0x0)~(otp_read_base + 0xc00)`，可写空间的长度为`(otp_write_base + 0x0)~(otp_write_base + 0x200)`;
 - 读写size：size 是4的倍数。
 
 #### 1.3.8 TS
@@ -1721,7 +1720,7 @@ WDT 模块提供以下API：
 
 【描述】
 
-读 OTP 空间，可读范围：偏移量 0x0~0xbfc，size 为 0xc00。
+读 OTP 空间，可读范围：偏移量 0x0~0x2fc，size 为 0x300。
 
 【语法】
 
@@ -1768,7 +1767,7 @@ otp_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 
 【描述】
 
-写 OTP 空间，可写范围：偏移量 0x0~0x1fc，size 为 0x200。
+写 OTP 空间，可写范围：偏移量 0x0~0x2fc，size 为 0x300。
 
 【语法】
 
@@ -2595,7 +2594,7 @@ OTP 模块在用户态提供以下API：
 
 【描述】
 
-向 OTP 设备中写入数据，可写范围：偏移量 0x0~0x1fc，size 为 0x200。
+向 OTP 设备中写入数据，可写范围：偏移量 0x0~0x2fc，size 为 0x300。
 
 【语法】
 

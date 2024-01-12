@@ -49,6 +49,14 @@ K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta
 
 ### 编译及运行程序
 
+- make prepare_sourcecode（若之前已执行，请忽略）
+
+- make mpp
+
+- make CONF=k230_canmv_defconfig prepare_memory(canmv支持)、make CONF=k230_evb_defconfig prepare_memory(evb支持)两条命令二选一
+
 - 进入src/reference/fancy_poc
+
 - 执行build_app.sh脚本，会在k230_bin文件夹中生成所有需要的可执行文件
+
 - 从k230_bin中将需要的可执行程序拷贝到k230开发板中运行即可。
