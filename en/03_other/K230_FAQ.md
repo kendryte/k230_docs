@@ -382,4 +382,19 @@ Answer：uboot default disable cklink jtag,you can enable cklink jtag by modify 
 
 >need rebuild uboot code
 
+## 2.16 How to quickly compile one of the  buildroot packages
+
+Answer：Reference the following command to quickly rebuild one of the buildroot packages
+
+``` bash
+    #rebuild lvgl packege,   
+    cd output/k230_canmv_defconfig/little/buildroot-ext/; #Take k230 canmv defconfig as an example
+    make  lvgl-dirclean;
+    make  lvgl && make;
+    cd -  #Switch to the sdk home directory；
+    make build-image #Regenerate  image    
+```
+
+For more information please refer to [buildroot rebuild pkg](https://buildroot.org/downloads/manual/manual.html\#rebuild-pkg).
+
 Special note: The SDK does not support multi-process compilation, do not add multi-process compilation options like -j32.
