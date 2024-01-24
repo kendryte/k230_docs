@@ -40,10 +40,11 @@ dpu深度相机POC支持如下功能:
 - 支持stream/snap捕获方式：可捕获实时数据流或某一帧图像。
 - PC端可连接多个k230设备，支持多k230设备图像同时捕获。
 - 传输性能:stream模式每台k320设备性能达720p@10fps。
+- 帧率控制:可设置每秒传输帧数。
 
 ## 使用说明
 
-1. 正常启动k230设备。
+1. 编译烧录镜像：编译命令为`make CONF=k230_evb_dpu_depth_camera_defconfig`，生成的镜像在`output/k230_evb_dpu_depth_camera_defconfig/images/sysimage-sdcard.img`，烧录该镜像，启动后自动运行dpu深度相机程序。
 1. 在PC电脑上更新k230设备uvc驱动为"WinUSB"驱动：参考后面章节介绍。
 1. PC端执行：先将k230_sdk/src/common/cdk/user/thirdparty/windows_uvc/lib_uvc/bin/x64/release目录文件下载到pc电脑，后执行该文件夹下run.bat文件，可通过修改批处理文件内容，来执行不同功能。
    run.bat文件使用test_uvc.exe命令来执行不同功能，test_uvc.exe执行命令如下
@@ -58,6 +59,7 @@ Usage: grab stream frame Usage: %s -s 0 -m 0 -f ./bin/0702/H1280W720.bin -t 0.
                     -o <remote filepathname>: k230 receive filename.
                     -f <ref/cfg filepathname>: k230 update ref/cfg file.
                     -t <dpu image mode>: dpu image mode. 0:RGB_DEPTH, 1：RGB_IR, 2：IR_DEPTH, 3：SPECKLE, 4：IR, 5：DEPTH
+                    -r <fps>: set fps.
 ```
 
 ## 更新驱动
@@ -90,4 +92,10 @@ Usage: grab stream frame Usage: %s -s 0 -m 0 -f ./bin/0702/H1280W720.bin -t 0.
 
   ```shell
   test_uvc.exe -m 1 -s 1 -f "./bin/0702/H1280W720.bin" -t 0
+  ```
+
+- 帧率控制，设置每秒传输2帧。
+
+  ```shell
+  test_uvc.exe -m 1 -s 1 -f "./bin/0702/H1280W720.bin" -t 0 -r 2
   ```

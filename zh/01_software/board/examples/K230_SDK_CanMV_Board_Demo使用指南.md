@@ -945,7 +945,7 @@ Buildroot 2021.02-git Configuration
             [*] hostapd
             [*]   Enable hostap driver
             [*]   Enable nl80211 driver
-            [ ]   Enable wired driver 
+            [ ]   Enable wired driver
             [*]   Enable ACS
             [*]   Enable EAP
             [*]   Enable WPS
@@ -953,7 +953,7 @@ Buildroot 2021.02-git Configuration
             [*]   Enable VLAN support
             [*]     Enable dynamic VLAN support
             [*]     Use netlink-based API for VLAN operations
-            
+
             [*] wireless tools
                 [*]   Install shared library
 
@@ -999,13 +999,13 @@ WIFI模块在系统启动后，if wlan down/up 对WIFI模块进行上电下电�
 };
 ```
 
-#### 2.15.3 执行
+#### 2.14.5 执行
 
 STA是Station的缩写，它是无线网络中的一个终端站点设备，可以看成是一个客户端，一般来说，处在STA模式下的设备本身不接受无线的接入，该设备连接到AP节点进行网络访问，我们的手机就是作为STA连接路由器。
 
 AP是Access Point的缩写，即无线接入点，它是一个无线网络的中心节点，可以看成是一个服务器。它作为一个网络的中心节点，提供无线接入服务，其他的无线设备允许接入该节点，所有接入该节点设备的无线信号数据都要通过它才能进行交换和互相访问。一般的无线路由器、网关、热点就是工作在AP模式下，AP节点和AP节点之间允许相互连接。
 
-#### 2.15.3.1 STA测试
+##### 2.14.5.1 STA测试
 
 ```shell
 ifconfig -a
@@ -1020,7 +1020,7 @@ wpa_cli -i wlan0 select_network 1
 udhcpc -i wlan0 -q
 ```
 
-#### 2.15.3.2 AP测试
+##### 2.14.5.2 AP测试
 
 ```shell
 [root@canaan ~ ]#cat /etc/hostapd.conf
@@ -1045,3 +1045,76 @@ hostapd /etc/hostapd.conf &
 ```
 
 sta可以直接连接无密码的k230_ap热点。
+
+### 2.15 UVC_demo
+
+#### 2.15.1 uvc_demo简介
+
+uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播放器可以播放真实摄像头的图像。
+
+#### 2.15.2 Feature说明
+
+当前版本支持bulk传输与ISO传输。
+
+当前版本只支持640x480 NV12格式图像 1280x720 H264/MJPEG格式图像。
+
+支持PID、VID以及设备名称通过修改shell脚本配置。
+
+#### 2.15.3 依赖资源
+
+type c线连接USB0与PC
+
+PC的相机应用或安装PotPlayer软件
+
+#### 2.15.4 使用说明
+
+##### 2.15.4.1 编译
+
+软件编译环境参考SDK中的README.md。
+
+1. 小核用户程序源码位于`cdk/user/mapi/sample/camera`
+1. 小核驱动程序位于`linux/drivers/usb/dwc2`
+1. 小核驱动程序位于`linux/drivers/usb/gadget`
+1. 大核程序涉及到mpp仓库以及cdk
+
+大核rtt实现摄像头驱动功能。
+
+小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
+
+参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
+
+##### 2.15.4.2 执行
+
+进入大核rt-smart系统后，进入/bin目录下，执行
+
+```shell
+msh /sharefs/app>./sample_sys_init.elf
+```
+
+进入小核linux系统后，进入`/mnt`目录下，执行
+
+```shell
+./canaan-camera.sh start otg0
+
+./camera -t 24
+```
+
+typec USB线连接USB0与PC，potplayer播放器播放摄像头。
+
+默认使用BULK传输，使用以下命令可以更改为ISO传输。
+
+```shell
+./canaan-camera.sh stop
+
+./canaan-camera.sh start otg0 iso
+
+./camera -i -t 24
+```
+
+-t 选项用于指定vicap sensor 类型，请参考`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，CanMV需指定为24。
+
+进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
+`视频录制设备`->`设备`，选择`UVC Camera`
+`视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
+
+PotPlayer -> `打开` -> `摄像头/其他设备`
