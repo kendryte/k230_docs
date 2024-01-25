@@ -71,7 +71,7 @@ markdown-link-check:
     - whoami
     - pwd
     - git fetch
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check; fi
 
@@ -92,7 +92,7 @@ markdownlint:
     #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
     #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
     - git fetch
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
 
