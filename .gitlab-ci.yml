@@ -164,7 +164,7 @@ build web docs:
     - k230
   environment:
     name: dev
-    url: https://ai.b-bug.org/k230/k230_canmv_docs/dev/
+    url: https://ai.b-bug.org/k230/docs/dev/
   script:
     - git fetch
     - git checkout dev
@@ -174,8 +174,8 @@ build web docs:
     - git config --global user.name "GitLab CI"
     - git commit "*.md" -m "remove cover"
     - make mhtml
-    - rm -rf /data1/k230/k230_canmv_docs/*
-    - cp -r _build/* /data1/k230/k230_canmv_docs
+    - rm -rf /data1/k230/docs/*
+    - cp -r _build/* /data1/k230/docs
   artifacts:
     paths:
       - _build
@@ -189,7 +189,7 @@ deploy production:
     - k230
   environment:
     name: production
-    url: https://developer.canaan-creative.com/k230_canmv/dev/index.html
+    url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
     - ssh -p 52522 huangziyi@40.73.58.120 "rm -rf /data/webapp/k230_canmv"
-    - scp -P 52522 -O -C -r _build huangziyi@40.73.58.120:/data/webapp/k230_canmv
+    - scp -P 52522 -O -C -r _build huangziyi@40.73.58.120:/data/webapp/k230
