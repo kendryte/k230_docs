@@ -1,4 +1,4 @@
-# K230 SDK Tuning Tool使用指南
+# K230 ISP Tuning Tool使用指南
 
 ![cover](images/canaan-cover.png)
 
@@ -74,9 +74,10 @@
 | V1.0       | 初版                              | 郭世栋 | 2023-02-20 |
 | V1.1       | 更新部分功能描述                   | 刘家安 | 2023-04-07 |
 | V1.2       | 更新部分功能描述 新增部分功能描述   | 郭世栋 | 2023-05-05 |
-| V1.3       | 增加RTSP功能描述  | 郭世栋 | 2023-07-28 |
+| V1.3       | 增加RTSP功能描述                  | 郭世栋 | 2023-07-28 |
 | V2.0       | 更新为新版本 VTunerClient | 黄子懿 | 2024-01-10 |
-| V2.1       | 更新部分功能描述 新增部分功能描述   | 荣坚 | 2024-01-11 |
+| V2.1       | 更新部分功能描述 新增部分功能描述   | 荣 坚 | 2024-01-11 |
+| V2.2       | 更新部分功能描述                   | 荣 坚 | 2024-01-30 |
 
 ## 1. 模块软件架构
 
@@ -90,7 +91,7 @@
 
 | **文件名**      | **存放位置**       | **功能**                                            |
 |-----------------|--------------------|-----------------------------------------------------|
-| PC tuning-tool软件包（tuning-client.exe） | relaese的源码包k230_sdk/tools/tuning-tool-client/Kendyte_ISP_Tool_TuningClient-6.2.23.5-Win32-x86_64-10-26-2023-09.28.16.7z                  | 用于图像dump，ISP调试等PC端工具  |
+| PC tuning-tool软件包（K230 ISP Tuning Tool.exe） | relaese的源码包k230_sdk/tools/tuning-tool-client/K230_ISP_Tuning_Tool_20240129.7z                  | 用于图像dump，ISP调试等PC端工具  |
 | t_server_c-6.1.0                        | 小核文件系统 /mnt/             | tuning server可执行程序 |
 | sample_sys_init.elf                     | 大核文件系统 /sdcard/app       | 大核服务端              |
 **表2-1 文件列表**
@@ -100,7 +101,7 @@
 1. 板端小核配置IP
 1. 板端小核等待sharefs启动后，在大核启动 sample_sys_init.elf，运行 `/sharefs/app/sample_sys_init.elf` 即可
 1. 板端小核启动tuning server，运行 `/mnt/t_server_c-6.1.0`，需要根据实际情况添加参数，使用 `-?` 参数查看帮助
-1. PC端启动VTunnerClient，连接K230
+1. PC端启动tuning tool，连接K230
 
 ## 3. Tuning Tool界面介绍
 
@@ -108,7 +109,7 @@
 
 图3-1
 
-如图3-1所示为VTunnerClient的基本操作UI全部展开后共六个区域：
+如图3-1所示为tuning tool的基本操作UI全部展开后共六个区域：
 
 (1) 菜单操作区域：文件操作、窗口管理等功能
 
@@ -126,6 +127,7 @@
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/15.png)  | 修改首选项|
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/16.png)  | 提供对额外组件的访问|
 
+
 (3) 工程管理区域：选择和管理不同工程
 
 (4) 功能区域：用于ISP各模块UI的切换
@@ -138,6 +140,7 @@
 
 #### 3.1.1 使用HTTP方式连接板端tuning-server
 
+
 SDK默认支持HTTP方式连接，点击工具栏中的配置连接调试服务器按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/02.png)，将弹出图3-2。
 
 ![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/03.png)
@@ -147,22 +150,20 @@ SDK默认支持HTTP方式连接，点击工具栏中的配置连接调试服务�
 选择HTTP模式，保证PC与板端连接的网络处于同一网段，在“Host”输入框中输入板端的IP，在“Port”输入框中请输入固定端口34567，配置完成后点击“OK”按钮，如果板端tuning-server已经启动，则会自动完成连接。任意切换图3-1中④区域的模块，则会看到tuning-server端的函数打印。
 
 ### 3.2 创建/选择工程
-
 若所需调试的工程已在图3-1中③区域，则点击选中该工程即可开始ISP调试。
 若还没有创建所需调试的工程，则需先创建该工程。
 
 #### 3.2.1 创建调试工程
-
 如图3-3，依次点击File-\>New-\>Project...，弹出工程创建向导窗口，如图3-4。
-![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/04.png)
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/New_Project_01.png)
 
 图3-3
 
-![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/05.png)
+![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/New_Project_02.png)
 
 图3-4
 
-点击“Next”按钮，弹出创建工程窗口，如图3-5。
+点击“ISP”目录，显示出“ISP Project Wizard”, 单击“ISP Project Wizard”后，再点击“Next”按钮，弹出创建工程窗口，如图3-5。
 ![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/06.png)
 
 图3-5
@@ -227,7 +228,7 @@ ISP功能模块如图3-6所示。
 
 提供对像素坏点的检测及校准的功能，通过选择set可设置不同的校准方法。
 
-#### 3.3.12 DeNoising Prefilter
+#### 3.3.12 DeNoising Prefilter 
 
 双边滤波降噪模块。
 
@@ -318,6 +319,7 @@ DCI模块实现对图像的动态对比度调整。
 若拍摄单帧图像，直接点击“Capture”按钮即可；
 若拍摄多帧图像，请在“Snapshot Num”选项中设置所需拍摄的帧数，并根据所希望输出的文件数量设置“Output as One File”选项（勾选或不勾选），完成上述配置后，点击“Capture”按钮开始拍摄。
 
+
 ### 3.5 参数的导入与导出
 
 #### 3.5.1 参数导入
@@ -331,6 +333,7 @@ DCI模块实现对图像的动态对比度调整。
 图3-10
 
 在图3-10所示窗口中选择需要导入的xml或json参数文件，点击“Open”按钮即可开始导入。
+
 
 #### 3.5.2 参数导出
 
