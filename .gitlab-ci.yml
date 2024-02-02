@@ -185,6 +185,8 @@ deploy production:
   image: ai.b-bug.org:5000/python:web-docs-v2
   dependencies:
     - build web docs
+  needs:
+    - build web docs
   tags:
     - k230
   environment:
