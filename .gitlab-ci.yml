@@ -187,6 +187,8 @@ deploy production:
     - build web docs
   needs:
     - build web docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
   tags:
     - k230
   environment:
