@@ -142,10 +142,11 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_SDK_Tuning_Tool使用指南.md](zh/01_software/pc/pqtools/K230_SDK_Tuning_Tool使用指南.md) | K230 SDK Tuning Tool 使用指南|
+| [K230_ISP_Tuning_Tool使用指南.md](zh/01_software/pc/pqtools/K230_ISP_Tuning_Tool使用指南.md) | K230 SDK Tuning Tool 使用指南|
 | [K230_SDK_Dewarp使用指南.md](zh/01_software/pc/dewarp/K230_SDK_Dewarp使用指南.md) | K230 SDK Dewarp 使用指南 |
 | [K230_SDK_Burntool使用指南.md](zh/01_software/pc/burntool/K230_SDK_Burntool使用指南.md) | K230 SDK Burntool 使用指南 |
 | [K230_ISP图像调优指南.md](zh/01_software/pc/ISP_tuning/K230_ISP图像调优指南.md) | K230 ISP图像调优指南 |
+| [K230_ISP初始化配置指南.md](zh/01_software/pc/ISP_tuning/K230_ISP初始化配置指南.md) | K230 ISP初始化配置指南 |
 
 ## K230 SDK 使用教程
 

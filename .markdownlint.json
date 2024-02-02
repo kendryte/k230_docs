@@ -69,7 +69,7 @@
     // MD033
     "no-inline-html": {
         "allowed_elements": [
-            "div"
+            "div", "br"
         ]
     },
     // MD035

@@ -35,6 +35,7 @@ This document mainly guides users to perform image tuning for K230 ISP.
 
 This document (this guide) is intended primarily for:
 
+- Image Tuning Engineer
 - Technical Support Engineer
 - Software Development Engineer
 
@@ -43,6 +44,7 @@ This document (this guide) is intended primarily for:
 | Document version number  | Modify the description                           | Author | date       |
 |------------|-----------------------------------|--------|------------|
 | V1.0       | Initial edition                             | Liu Jiaan | 2023-09-04 |
+| V1.1       | Updated some parameters descriptions | Rong Jian | 2024-01-30 |
 
 ## 1. K230 ISP Image Tuning Overview
 
@@ -301,7 +303,7 @@ The specific operation steps are as follows:
 1. Click the "Color Correction" button to set the parameters under this interface;
 
     - Check "ISP_bls_enable" to set the correct BLC;
-    - 勾选”Auto White-Balance”；
+    - Check "Auto White-Balance”；
     - Set up CCM;
     - Global gain is set to 1.0 by default.
 
@@ -373,15 +375,35 @@ Auto exposure controls the brightness of the image. The main debugging of the AE
 
 | parameter            | Type and value range | description                                                   |
 | --------------- | -------------- | ------------------------------------------------------ |
-| antiBandingMode | Int            | Anti-Banding working mode                                     |
+| enable          | bool           | false: disable AE <br/>true : enable AE |
+| antiBandingMode | Int 0~3        | Anti-Banding working mode<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
 | dampOver        | float 0~1.0    | Damping factor to smooth AE convergence during overexposure                       |
-| dampOverGain    | float          | The convergence acceleration gain factor outside the clip range when AE is overexposed, the larger the value, the faster the convergence |
-| dampOverRatio   | float 1.0~3.0  | When AE is overexposed, the scale factor outside the clip range, the smaller the value, the faster the convergence           |
+| dampOverGain    | float 0~128.0  | The convergence acceleration gain factor outside the clip range when AE is overexposed. If the value is larger, the convergence will be faster. |
+| dampOverRatio   | float 1.0~4.0  | When AE is overexposed, the scale factor outside the clip range.  If the value is smaller, the convergence will be faster.   |
 | dampUnder       | float 0~1.0    | Damping factor to smooth AE convergence under exposure                       |
-| dampUnderGain   | float          | The convergence acceleration gain factor outside the clip range when AE is underexposed, the higher the value, the faster the convergence |
-| dampUnderRatio  | float 0~1.0    | When AE is underexposed, the clip range scale factor, the larger the value, the faster the convergence             |
-| setPoint        | float 0~255.0  | Set the target brightness value for AE                                     |
+| dampUnderGain   | float 0~16.0   | The convergence acceleration gain factor outside the clip range when AE is underexposed. If the value is larger, the convergence will be faster. |
+| dampUnderRatio  | float 0~1.0    | When AE is underexposed, the clip range scale factor.  If the value is larger, the convergence will be faster. |
+| lowLightHdrGain  | float[20] 0~255.0   | The gain value of current gain level at HDR mode |
+| lowLightHdrLevel  | int 0~19  | Total number of gain level for HDR mode   |
+| lowLightHdrRepress  | float[20] 0~1.0   | The repress ratio of current gain level at HDR mode    |
+| lowLightLinearGain  | float[20] 0~255.0   | The gain value of current gain level at linear mode    |
+| lowLightLinearLevel  | int 0~16   | Total number of gain level for linear mode   |
+| lowLightLinearRepress  | float[20] 0~1.0   | The repress ratio of current gain level at linear mode    |
+| maxISPDgain  | float 1.0~255.99609375 | Maximum ISP digital gain    |
+| maxSensorAgain  | float   | Maximum sensor analog gain |
+| maxSensorDgain  | float   | Maximum sensor digital gain  |
+| mode  | int 0~2  | 0: AE <br/>1: Anti-Banding <br/>2: Scene Evaluation  |
+| motionFilter  | float 0~1.0  | Motion filter, use to calculate the motion factor at AE scene evaluation adaptive mode  |
+| motionThreshold  | float 0~1.0 | Motion threshold     |
+| roiNumber  | int   | The serial number of current ROI window |
+| roiWindow  | float (fx,fy,fw, fh) | Current ROI window's starting coordinate(x,y), width and height   |
+| roiWeight  | float   |  The weight for current ROI window   |
+| semMode  | int 0~2  | Scene mode <br/>0: Scene evaluation disable <br/>1: Scene evaluation fix <br/>2: Scene evaluation adaptive    |
+| setPoint        | float 0~255.0  | Set the target brightness value for AE   |
+| targetFilter  | float 0~1.0   | The smoothness coefficient for the AE setpoint value change, with larger values leading to faster changes |
 | tolerance       | float 0~100.0  | Set the percentage lock range of AE's brightness target value                       |
+| wdrContrast.max  | float 0~255.0   | Maximum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode  |
+| wdrContrast.min  | float 0~255.0   | Minimum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode    |
 
 ### 3.5 AWB
 
@@ -393,7 +415,14 @@ Depending on the light source, the color of the object will be different. The hu
 
 | parameter    | Type and value range | description                                 |
 | ------- | -------------- | ------------------------------------ |
-| kFactor | float          | Used to identify the photosensitivity coefficient of outdoor and tansition |
+| enable      | bool  | false: disable AWB <br/>true : enable AWB|
+| roiNumber   | int   | The serial number of current ROI window |
+| roiWindow   | float (fx,fy,fw, fh) | Current ROI window's starting coordinate(x,y), width and height   |
+| useCcMatrix | bool  | false: disable CCM adaptive <br/>true : enable CCM adaptive |
+| useCcOffset | bool  | false: disable CCM offset adaptive <br/>true : enable CCM offset adaptive   |
+| useDamping  | bool  | false: disable AWB damping <br/>true : enable AWB damping |
+| useLsc      | bool  | false: disable LSC adaptive <br/>true : enable LSC adaptive |
+| kFactor     | float | Used to identify the photosensitivity coefficient of outdoor and tansition |
 
 #### 3.5.3 Tuning Strategies
 
@@ -402,6 +431,8 @@ The judgement of environment as outdoor is: Exp*kFactor <=0.12 (Exp is exposure)
 The illuminance of the light box can be measured at its brightest, for example, 2000K is the separation point between the outdoor and transition, and the exposure value of the corresponding illuminance (ET*gain) can be found to calculate the kFactor.
 
 The larger the kFactor, the stronger the sensitivity of the sensor; the smaller the kFactor, the weaker the sensitivity of the sensor.
+
+kFactor is included in AWB parameters in .xml file.
 
 ### 3.6 WDR
 
@@ -421,6 +452,7 @@ In the process of image processing, it is easy to find that the contrast of the 
 | flat_strength   | int 0~19       | Tensile strength in flat areas                                             |
 | flat_thr        | int 0~20       | Flat area threshold. The larger the value, the flatter the discriminant image, less than the threshold is discriminated as a flat area, and greater than the threshold is discriminated as a texture area |
 | gamma_down      | int[20]        | local weight                                                 |
+| gamma_pre       | int[20]        | local weight                                                 |
 | gamma_up        | Int[20]        | global curve                                                 |
 | global_strength | int 0~128      | Global contrast intensity                                               |
 | high_strength   | int 0~128      | The strength of the protection of the bright area information of the image. The higher the value, the stronger the protection of bright areas in the image   |
@@ -454,10 +486,23 @@ Limited by the sensor manufacturing process, it is impossible for a sensor with 
 
 | parameter         | Type and value range              | description               |
 | ------------ | --------------------------- | ------------------ |
-| enable       | bool                        | DPCC enable switch       |
-| set_use      | int 1~7                     | Select which set of calibration setting values |
-| out_mode     | int 0~15                    | Calibrate the interpolation mode of the unit |
-| line_mad_fac | int lineMadFac [2] [3] 0~63 | Average absolute difference coefficient     |
+| enable      | bool                        | 0: disable DPCC (Default); <br/> 1: enable DPCC       |
+| bpt_Enable  | bool      | bad pixel table enable |
+| bpt_Num | int 0~1024    | Number of current bad pixel entries in bad pixel table |
+| bpt_out_mode | int 0~14 | output median mode selection for bad pixels in BPT |
+| bpt_pos_X   | int       | Bad pixel horizontal address (pixel position) |
+| bpt_pos_Y   | int       | Bad pixel vertical address (pixel position) |
+| bypass      | bool      | false: DPCC enable <br/>true : DPCC bypass |
+| line_mad_fac | int lineMadFac\[2][3] 0~63 | Average absolute difference coefficient |
+| line_thresh | int lineThresh\[2][3] 0~255 | Line threshold for set R&B&G |
+| methods_set | int methodsSet[3] 0~8191 | Methods enable for each channel. There are two methods for bad point correction, which can be divided into median filtering including center point and median filtering without center point according to the Settings. |
+| out_mode    | int 0~15  | Calibrate the interpolation mode of the unit |
+| pg_fac      | int pgFac\[2][3] 0~63     | Peak gradient factor  |
+| rg_fac      | int rgFac\[2][3] 0~63     | Rank gradient factor  |
+| rnd_offs    | int rndOffs\[2][3] 0~3    | Differential rank offsets for rank neighbor difference |
+| rnd_thresh  | int rndThresh\[2][3] 0~63 | Rank neighbor difference threshold |
+| ro_limits   | int roLimits\[2][3] 0~3   | Rank order limits |
+| set_use     | int 1~7                  | Select which set of calibration setting values |
 
 ### 3.9 DPF
 
@@ -519,6 +564,8 @@ Image denoising is an important link and step in digital image processing, and t
 1. Set the damping ratio filter_len2 control motion frames;
 1. Use noise_level to distinguish foreground from background;
 1. Set thr_motion_slope, sad weight, preweight to calculate the motion area.
+
+Please note：if want to enable TNR, the ISP requires that the sensor/ISP Hblank should not be less than 180 pixel clocks (recommended to be set to 256 pixel clocks), and the Vblank should not be less than 60 sensor ET lines.
 
 ### 3.11 Demosaic
 
