@@ -1118,3 +1118,37 @@ typec USB线连接USB0与PC，potplayer播放器播放摄像头。
 `视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
 
 PotPlayer -> `打开` -> `摄像头/其他设备`
+
+### 2.16 YUV Sensor demo
+
+#### 2.16.1 Demo简介
+
+三路YUV sensor输入，通过vicap的MCM硬件输出yuv444 packed格式到ddr，利用nonai_2d硬件的CSC功能转成nv12格式。
+
+vicap绑定nonai_2d，nonai_2d一出二绑定venc和vo，做rtsp推流和屏显。
+
+#### 2.16.2 Feature说明
+
+只支持1280x720分辨率。
+
+#### 2.16.3 依赖资源
+
+依赖特殊的转接板硬件，见下图：
+
+![图片描述](images/yuv_sensor.png)
+
+#### 2.16.4 使用说明
+
+进入大核rt-smart系统后，执行
+
+```shell
+/sharefs/app/sample_yuv_sensor.elf
+```
+
+进入小核linux系统后，执行
+
+```shell
+/mnt/yuv_sensor_demo -n 3
+```
+
+小核上正常运行rtsp_demo后，会打印出形如：`rtsp://10.100.228.150:8554/BackChannelTest0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放，也可接HDMI输出到屏幕观看

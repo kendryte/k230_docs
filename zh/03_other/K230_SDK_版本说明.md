@@ -118,6 +118,8 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 34 | K230 SDK V1.0 | 猫眼poc | 1. 猫眼设备端增加UI控制。 2. 增加本地猫眼语音对讲功能。3. 手机端录像功能改为设备端实现，始终为录像。4. 猫眼设备端增加回放功能。| |
 | 35 | K230 SDK V1.2 | 猫眼poc | 更改为nor flash启动 | |
 | 35 | K230 SDK V1.3 | 深度相机poc | 增加深度相机poc功能，猫眼poc改为sd卡启动 | |
+| 36 | K230 SDK V1.4 | nonai_2d API | 增加nonai_2d CSC功能mpi和mapi | |
+| 37 | K230 SDK V1.4 | YUV Sensor Demo | 增加yuv sensor demo，3路yuv sensor输入，3路推流和屏显 | |
 
 ### 4.2 图像
 
