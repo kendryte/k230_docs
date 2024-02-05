@@ -1692,6 +1692,7 @@ k_u16 height;
 typedef enum {
 VICAP_WORK_ONLINE_MODE,
 VICAP_WORK_OFFLINE_MODE,
+VICAP_WORK_ONLY_MCM_MODE,
 } k_vicap_work_mode;
 ```
 
@@ -1701,8 +1702,11 @@ VICAP_WORK_OFFLINE_MODE,
 |-------------------------|----------|
 | VICAP_WORK_ONLINE_MODE  | 在线模式 |
 | VICAP_WORK_OFFLINE_MODE | 离线模式 |
+| VICAP_WORK_ONLY_MCM_MODE | 只工作在mcm模式 |
 
-【注意事项】支持多个摄像头输入时，必须指定为离线模式。
+【注意事项】
+支持多个摄像头输入时，必须指定为离线模式。
+配置VICAP_WORK_ONLY_MCM_MODE，dump图像只能用yuv444这种格式。
 
 #### 3.1.12 k_vicap_sensor_info
 
@@ -1751,6 +1755,7 @@ typedef enum {
 VICAP_DUMP_YUV = 0,
 VICAP_DUMP_RGB = 1,
 VICAP_DUMP_RAW = 2,
+VICAP_DUMP_YUV444 = 3,
 } k_vicap_dump_format;
 ```
 
@@ -1761,6 +1766,7 @@ VICAP_DUMP_RAW = 2,
 | VICAP_DUMP_YUV | Dump YUV数据 |
 | VICAP_DUMP_RGB | Dump RGB数据 |
 | VICAP_DUMP_RAW | Dump RAW数据 |
+| VICAP_DUMP_YUV444 | Dump YUV444数据 |
 
 #### 3.1.14 k_vicap_dev_attr
 

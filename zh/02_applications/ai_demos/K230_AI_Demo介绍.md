@@ -44,6 +44,7 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写、语音�
 ├── cmake
 ├── CMakeLists.txt
 ├── crosswalk_detect
+├── dec_ai_enc
 ├── demo_mix
 ├── distraction_reminder
 ├── dms_system
@@ -138,6 +139,7 @@ kmodel、image及相关依赖路径位于`/mnt/src/big/kmodel/ai_poc`，目录�
 │   ├── face_alignment_post.kmodel
 │   ├── face_detection_320.kmodel
 │   ├── face_detection_640.kmodel
+│   ├── face_detection_hwc.kmodel
 │   ├── face_emotion.kmodel
 │   ├── face_gender.kmodel
 │   ├── face_glasses.kmodel

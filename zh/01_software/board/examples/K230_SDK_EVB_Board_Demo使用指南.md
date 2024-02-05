@@ -713,7 +713,7 @@ msh /sharefs/app>./sample_sys_init.elf
 ```shell
 ./canaan-camera.sh start otg0
 
-./camera
+./camera -t 7
 ```
 
 typec USB线连接USB0与PC，potplayer播放器播放摄像头。
@@ -725,10 +725,10 @@ typec USB线连接USB0与PC，potplayer播放器播放摄像头。
 
 ./canaan-camera.sh start otg0 iso
 
-./camera -i
+./camera -i -t 7
 ```
 
-默认为IMX335摄像头。如果是OV9732摄像头，使用`./camera -t 0`，其他摄像头未进行测试。
+-t 选项用于指定vicap sensor 类型，请参考`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，默认值为7。
 
 进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
 `视频录制设备`->`设备`，选择`UVC Camera`

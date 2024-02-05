@@ -35,6 +35,7 @@
 
 本文档（本指南）主要适用于以下人员：
 
+- 图像调试工程师
 - 技术支持工程师
 - 软件开发工程师
 
@@ -43,6 +44,7 @@
 | 文档版本号  | 修改说明                           | 修改者 | 日期       |
 |------------|-----------------------------------|--------|------------|
 | V1.0       | 初版                              | 刘家安 | 2023-09-04 |
+| V1.1       | 更新部分参数描述                   | 荣 坚 | 2024-01-30 |
 
 ## 1. K230 ISP图像调优概述
 
@@ -373,15 +375,35 @@ AE自动曝光控制图像的亮度。AE模块主要的调试有对AE目标值�
 
 | 参数            | 类型及取值范围 | 描述                                                   |
 | --------------- | -------------- | ------------------------------------------------------ |
-| antiBandingMode | int            | 抗工频干扰工作模式                                     |
-| dampOver        | float 0~1.0    | 阻尼因子，用于平滑过曝时的AE收敛                       |
-| dampOverGain    | float          | AE过曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
-| dampOverRatio   | float 1.0~3.0  | AE过曝时clip范围外比例因子，值越小，收敛越快           |
-| dampUnder       | float 0~1.0    | 阻尼因子，用于平滑欠曝时的AE收敛                       |
-| dampUnderGain   | float          | AE欠曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
-| dampUnderRatio  | float 0~1.0    | AE欠曝时clip范围比例因子，值越大，收敛越快             |
-| setPoint        | float 0~255.0  | 设置AE的亮度目标值                                     |
-| tolerance       | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围                       |
+| enable          | bool           | 自动曝光使能开关。<br/>false: 关闭自动曝光 <br/>true : 使能自动曝光    |
+| antiBandingMode | Int 0~3        | 抗工频干扰工作模式<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| dampOver        | float 0~1.0    | 阻尼因子，用于平滑过曝时的AE收敛 |
+| dampOverGain    | float 0~128.0  | AE过曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
+| dampOverRatio   | float 1.0~4.0  | AE过曝时clip范围外比例因子，值越小，收敛越快 |
+| dampUnder       | float 0~1.0    | 阻尼因子，用于平滑欠曝时的AE收敛 |
+| dampUnderGain   | float 0~16.0   | AE欠曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
+| dampUnderRatio  | float 0~1.0    | AE欠曝时clip范围比例因子，值越大，收敛越快 |
+| lowLightHdrGain  | float[20] 0~255.0   | 宽动态模式下，当前增益阶数对应的增益值 |
+| lowLightHdrLevel  | int 0~16  | 宽动态模式下总的增益阶数 |
+| lowLightHdrRepress  | float[20] 0~1.0   | 宽动态模式下，当前增益阶数对应的目标亮度压制比例    |
+| lowLightLinearGain  | float[20] 0~255.0   | 线性模式下，当前增益阶数对应的增益值 |
+| lowLightLinearLevel  | int 0~19   | 线性模式下总的增益阶数 |
+| lowLightLinearRepress  | float[20] 0~1.0   | 线性模式下，当前增益阶数对应的目标亮度压制比例  |
+| maxISPDgain  | float 1.0~255.99609375 | 设置ISP数字增益最大值    |
+| maxSensorAgain  | float   | 设置sensor模拟增益最大值 |
+| maxSensorDgain  | float   | 设置sensor数字增益最大值 |
+| mode  | int 0~2  | 自动曝光模式 <br/>0: AE(不含抗工频干扰等功能) <br/>1: 抗工频干扰AE模式 <br/>2: 场景评估AE模式 |
+| motionFilter  | float 0~1.0  | 运动变化平滑参数，用于计算AE场景评估自适应模式下的运动因子 |
+| motionThreshold  | float 0~1.0 | 运动判别阈值     |
+| roiNumber  | int   |  当前ROI窗口序号   |
+| roiWindow  | float (fx,fy,fw, fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
+| roiWeight  | float   |  当前ROI窗口的亮度计算权重 |
+| semMode  | int 0~2  | 场景模式 <br/>0: 场景评估关闭模式 <br/>1: 场景评估固定模式 <br/>2: 场景评估动态模式    |
+| setPoint        | float 0~255.0  | 设置AE的亮度目标值 |
+| targetFilter  | float 0~1.0 | AE的亮度目标值变化平滑系数，值越大变化越快 |
+| tolerance       | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围  |
+| wdrContrast.max  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最大对比度值  |
+| wdrContrast.min  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最小对比度值    |
 
 ### 3.5 AWB
 
@@ -393,7 +415,14 @@ AE自动曝光控制图像的亮度。AE模块主要的调试有对AE目标值�
 
 | 参数    | 类型及取值范围 | 描述                                 |
 | ------- | -------------- | ------------------------------------ |
-| kFactor | float          | 用于判别outdoor和tansition的感光系数 |
+| enable      | bool  | false: 关闭AWB <br/>true : 使能AWB|
+| roiNumber   | int   |  当前ROI窗口序号   |
+| roiWindow   | float (fx,fy,fw, fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
+| useCcMatrix | bool  | false: 关闭CCM自适应 <br/>true : 使能CCM 自适应 |
+| useCcOffset | bool  | false: 关闭CCM offset自适应 <br/>true : 使能CCM offset自适应   |
+| useDamping  | bool  | false: 关闭AWB阻尼变化 <br/>true : 使能AWB阻尼变化 |
+| useLsc      | bool  | false: 关闭LSC自适应 <br/>true : 使能LSC自适应 |
+| kFactor     | float | 用于判别outdoor和tansition的感光系数 |
 
 #### 3.5.3 调试策略
 
@@ -402,6 +431,8 @@ AE自动曝光控制图像的亮度。AE模块主要的调试有对AE目标值�
 可测量灯箱最亮时的照度，比如以2000K为outdoor与transition的分割点，找到对应该照度的曝光值(ET*gain)，即可计算出kFactor。
 
 kFactor越大，说明sensor的sensitivity越强；kFactor越小，说明sensor的sensitivity越弱。
+
+kFactor这个参数位于xml文件的AWB参数中。
 
 ### 3.6 WDR
 
@@ -421,6 +452,7 @@ kFactor越大，说明sensor的sensitivity越强；kFactor越小，说明sensor�
 | flat_strength   | int 0~19       | 平坦区域拉伸强度                                             |
 | flat_thr        | int 0~20       | 平坦区域阈值。值越大，判别图像越平坦，小于阈值判别为平坦区，大于阈值判别为纹理区 |
 | gamma_down      | int[20]        | local weight                                                 |
+| gamma_pre      | int[20]        | local weight                                                 |
 | gamma_up        | int[20]        | global curve                                                 |
 | global_strength | int 0~128      | 全局对比度强度                                               |
 | high_strength   | int 0~128      | 对图像亮区信息的保护强度。值越大，对图像中亮区信息保护越强   |
@@ -454,10 +486,23 @@ kFactor越大，说明sensor的sensitivity越强；kFactor越小，说明sensor�
 
 | 参数         | 类型及取值范围              | 描述               |
 | ------------ | --------------------------- | ------------------ |
-| enable       | bool                        | DPCC使能开关       |
-| set_use      | int 1~7                     | 选择哪组校准设置值 |
-| out_mode     | int 0~15                    | 校准单元的插值模式 |
-| line_mad_fac | int lineMadFac [2] [3] 0~63 | 平均绝对差系数     |
+| enable      | bool                        | DPCC使能开关。<br/> 0: 关闭DPCC (Default); <br/> 1: 使能DPCC       |
+| bpt_Enable  | bool      | 坏点表使能开关 |
+| bpt_Num | int 0~1024    | 坏点表中当前坏点的序号 |
+| bpt_out_mode | int 0~14 | 坏点表中坏点的校正输出中值模式选择 |
+| bpt_pos_X   | int       | 坏点的水平地址 |
+| bpt_pos_Y   | int       | 坏点的垂直地址 |
+| bypass      | bool      | DPCC bypass使能开关。<br/>false: 经过DPCC <br/>true : 绕过DPCC |
+| line_mad_fac | int lineMadFac\[2][3] 0~63 | 平均绝对差系数 |
+| line_thresh | int lineThresh\[2][3] 0~255 | 设置R&B&G的行阈值 |
+| methods_set | int methodsSet[3] 0~8191 | 每个通道启用的坏点校正方法选择。坏点校正有两种方法，根据设置可分为包括中心点的中值滤波和无中心点的中位数滤波。 |
+| out_mode    | int 0~15  | 校准单元的插值模式 |
+| pg_fac      | int pgFac\[2][3] 0~63     | 峰值梯度因子  |
+| rg_fac      | int rgFac\[2][3] 0~63     | 等级梯度因子  |
+| rnd_offs    | int rndOffs\[2][3] 0~3    | 秩邻差差分秩偏移 |
+| rnd_thresh  | int rndThresh\[2][3] 0~63 | 秩邻差阈值 |
+| ro_limits   | int roLimits\[2][3] 0~3   | 秩偏移限制 |
+| set_use     | int 1~7                  | 选择哪组校准设置值 |
 
 ### 3.9 DPF
 
@@ -519,6 +564,8 @@ kFactor越大，说明sensor的sensitivity越强；kFactor越小，说明sensor�
 1. 设置filter_len2控制运动帧的damping ratio；
 1. 用noise_level来区分前景与背景；
 1. 设置thr_motion_slope，sad weight，preweight来计算运动区域。
+
+请注意：使能TNR时，ISP的要求sensor/ISP Hblank不能小于180 pixel clocks（推荐 设置为256 pixel clocks），Vblank最小不要小于 60 sensor ET lines。
 
 ### 3.11 Demosaic
 

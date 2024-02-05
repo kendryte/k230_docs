@@ -153,6 +153,7 @@ nav.navbar a {
     padding: 10px !important;
     color: #fff;
     text-align: start !important;
+    text-wrap: wrap !important;
 }
 
 .document-select:hover {

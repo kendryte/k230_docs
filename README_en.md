@@ -142,10 +142,11 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230_SDK_Tuning_Tool_User_Guide.md](en/01_software/pc/pqtools/K230_SDK_Tuning_Tool_User_Guide.md) | K230 SDK Tuning Tool User Guide|
+| [K230_ISP_Tuning_Tool_User_Guide.md](en/01_software/pc/pqtools/K230_ISP_Tuning_Tool_User_Guide.md) | K230 SDK Tuning Tool User Guide|
 | [K230_SDK_Dewarp_Guide.md](en/01_software/pc/dewarp/K230_SDK_Dewarp_Guide.md) | K230 SDK Dewarp User Guide |
 | [K230_SDK_Burntool_User_Guide.md](en/01_software/pc/burntool/K230_SDK_Burntool_User_Guide.md) | K230 SDK Burntool User Guide |
 | [K230_ISP_Image_Tuning_Guide.md](en/01_software/pc/ISP_tuning/K230_ISP_Image_Tuning_Guide.md) | K230 ISP Image Tuning Guide |
+| [K230_ISP_Initial_Setting_Guide.md](en/01_software/pc/ISP_tuning/K230_ISP_Initial_Setting_Guide.md) | K230 ISP Initial Setting Guide |
 
 ## K230 SDK usage tutorial
 

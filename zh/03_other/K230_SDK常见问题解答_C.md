@@ -333,7 +333,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 make clean; make;
 ```
 
-### 2.14支持sensor list在哪里
+## 2.14支持sensor list在哪里
 
 答：请参考 [K230_Camera_Sensor适配指南](../01_software/board/mpp/K230_Camera_Sensor适配指南.md) 第4.1章节“支持的sensor类型”，目前支持
 
@@ -349,7 +349,7 @@ ov5647
 
 sc201
 
-### 2.15canmmv板子是否可以使用平头哥的cklink进行jtag调试
+## 2.15canmmv板子是否可以使用平头哥的cklink进行jtag调试
 
 答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
 
@@ -360,5 +360,20 @@ sc201
 ```
 
 >修改完后需要重新编译uboot代码
+
+## 2.16如何快速编译buildroot下面的某一个软件包
+
+答：参考如下命令快速重编buildroot下面的某一个软件包
+
+``` bash
+    #重编lvgl软件包命令参考,   
+    cd output/k230_canmv_defconfig/little/buildroot-ext/; #以k230_canmv_defconfig 为例
+    make  lvgl-dirclean;
+    make  lvgl && make;
+    cd -  #切换到sdk主目录；
+    make build-image #重新生成下镜像    
+```
+
+更多信息请参考[buildroot rebuild pkg](https://buildroot.org/downloads/manual/manual.html\#rebuild-pkg)。
 
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。

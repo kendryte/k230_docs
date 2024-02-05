@@ -71,7 +71,7 @@ markdown-link-check:
     - whoami
     - pwd
     - git fetch
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check; fi
 
@@ -92,7 +92,7 @@ markdownlint:
     #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
     #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
     - git fetch
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$")
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
 
@@ -155,10 +155,10 @@ markdownlint:
     - echo "---push to github---"
     - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
 
-build-web-docs:
+build web docs:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
   image: ai.b-bug.org:5000/python:web-docs-v2
   tags:
     - k230
@@ -168,15 +168,31 @@ build-web-docs:
   script:
     - git fetch
     - git checkout dev
-    - git pull
-    - rm -rf _build
+    - git reset --hard origin/dev
     - python3 preprocess.py
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
-    - git commit zh en -m remove_cover
+    - git commit "*.md" -m "remove cover"
     - make mhtml
-    - git reset --hard HEAD^1
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
-    - ssh -p 52522 huangziyi@40.73.58.120 "rm -rf /data/webapp/k230"
-    - scp -P 52522 -O -r _build huangziyi@40.73.58.120:/data/webapp/k230
+  artifacts:
+    paths:
+      - _build
+
+deploy production:
+  stage: deploy
+  image: ai.b-bug.org:5000/python:web-docs-v2
+  dependencies:
+    - build web docs
+  needs:
+    - build web docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
+  tags:
+    - k230
+  environment:
+    name: production
+    url: https://developer.canaan-creative.com/k230/dev/index.html
+  script:
+    - scp -P 52522 -O -C -r _build huangziyi@40.73.58.120:/data/webapp/k230
