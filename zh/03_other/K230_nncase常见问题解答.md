@@ -52,6 +52,31 @@
 #### Q：编译模型出现错误`RuntimeError: Failed to initialize hostfxr`
 
 - A：需要安装dotnet-sdk-7.0
+  - Linux:
+  
+      ```shell
+      sudo apt-get update
+      sudo apt-get install dotnet-sdk-7.0
+      ```
+  
+  - Windows: 请自行查阅微软官方文档。
+
+### 2.4 "KeyNotFoundException"
+
+#### Q: "The given key 'K230' was not present in the dictionary"
+
+- A：需要安装nncase-kpu
+  - Linux：使用pip安装nncase-kpu `pip install nncase-kpu`
+  - Windows：在[nncase github tags界面](https://github.com/kendryte/nncase/tags)下载对应版本的whl包，然后使用pip安装。
+  
+  > 安装nncase-kpu之前，请先检查nncase版本，然后安装与nncase版本一致的nncase-kpu。
+  
+  ```shell
+  > pip show nncase | grep "Version:"
+   Version: 2.8.0
+  (Linux)  > pip install nncase-kpu==2.8.0
+  (Windows)> pip install nncase_kpu-2.8.0-py2.py3-none-win_amd64.whl
+  ```
 
 ---
 
@@ -59,13 +84,18 @@
 
 ### Q: PC推理出现错误 `nncase.simulator.k230.sc: not found`
 
+或者以下情况：
+
+>- `"nncase.simulator.k230.sc: Permision denied."`
+>- `"Input/output error."`
+
 - A：将nncase的安装路径加入到 `PATH`环境变量中，并检查一下nncase和nncase-kpu版本是否一致，如果不一致，请安装相同版本的Python包`pip install nncase==x.x.x.x nncase-kpu==x.x.x.x`。
 
-```shell
-root@a52f1cacf581:/mnt# pip list | grep nncase
-nncase                       2.1.1.20230721
-nncase-kpu                   2.1.1.20230721
-```
+  ```shell
+  root@a52f1cacf581:/mnt# pip list | grep nncase
+  nncase                       2.1.1.20230721
+  nncase-kpu                   2.1.1.20230721
+  ```
 
 ---
 
