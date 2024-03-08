@@ -1,4 +1,4 @@
-# K230 SDK Release Notes
+# K230_SDK_nncase_version_correspondence
 
 ![cover](../../zh/03_other/images/canaan-cover.png)
 

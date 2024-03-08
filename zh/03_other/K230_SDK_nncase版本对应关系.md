@@ -1,4 +1,4 @@
-# K230 SDK版本说明
+# K230 SDK nncase版本对应关系
 
 ![cover](images/canaan-cover.png)
 
