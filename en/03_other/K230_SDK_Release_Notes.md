@@ -252,3 +252,12 @@ Memory configuration of parameter areas and intercore communication areas
 | 1  | VPU encoding       | VPU repeats the code many times and is probabilistic stuck                                                          |      |
 | 2  | usb            | Transporting H264 encoding over USB for a long time is abnormal                    |      |
 | 3  | Peephole | During the operation of the simulated mobile phone, the network cannot be automatically reconnected after it is disconnected | |
+
+## 6. Correspondence between SDK, CanMV version and nncase version
+
+| K230 SDK versions | nncase versions | nncase-kpu versions | K230 CanMV versions | remark |
+| ----------------- | --------------- | ------------------- | ------------------- | ------ |
+| 1.1.0             | 2.4.0           | 2.4.0               | 0.2、0.3            | -      |
+| 1.2.0             | 2.5.1           | 2.5.0               | -                   | -      |
+| 1.3.0             | 2.7.0           | 2.7.0               | 0.4                 | -      |
+| 1.4.0             | 2.8.0           | 2.8.0               | -                   | -      |
