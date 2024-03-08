@@ -195,4 +195,4 @@ deploy production:
     name: production
     url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
-    - scp -P 52522 -O -C -r _build huangziyi@40.73.58.120:/data/webapp/k230
+    - scp -P 52522 -O -C -r _build/* huangziyi@40.73.58.120:/data/webapp/k230
