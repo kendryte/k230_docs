@@ -131,7 +131,7 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 - 网线一根(可选)
 - SD卡(可选)
 
-说明：TypeC USB 转以太网推荐型号是<https://item.jd.com/5326738.html>
+说明：TypeC USB 转以太网推荐型号是 `https://item.jd.com/5326738.html`
 
 参考《K230 DEMO BOARD 资源使用说明》准备开发板。
 
@@ -139,7 +139,7 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 
 K230 主板通过USB提供两路调试串口，windows下使用调试串口，需要安装USB转串口驱动程序，驱动下载链接如下：
 
-<https://ftdichip.com/wp-content/uploads/2021/11/CDM-v2.12.36.4.U-WHQL-Certified.zip>
+`https://ftdichip.com/wp-content/uploads/2021/11/CDM-v2.12.36.4.U-WHQL-Certified.zip`
 
 安装了驱动后，板子上电，PC使用type C数据线连接主板的调试串口后，可以发现两个USB串口设备，如下图所示：
 
@@ -363,34 +363,18 @@ sdk默认产生release镜像，如果需要调试镜像，请参考下面增加C
 
 #### 5.1.2 Windows下烧录
 
-Windows下可通过balena Etcher工具对sd卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。注意打开balenaEtcher软件的时候要以“管理员身份运行”，否则可能会出现烧录失败的情况。
+Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `http://rufus.ie/downloads/`）。
 
-1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件，如下图。
+1）将TF卡插入PC，然后启动rufus工具，点击工具界面的"选择”按钮，选择待烧写的固件。
 
-![图形用户界面, 应用程序 描述已自动生成](images/3e2358e04601c3e03bf233c84f8b3ec4.png)
+![rufus-flash-from-file](../../images/rufus_select.png)
 
-图5-1 选择固件
+2）点击“开始”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示“准备就绪”。
 
-2）点击工具界面的“Select target”按钮，选择目标sdcard卡。
-
-![图形用户界面, 文本, 应用程序 描述已自动生成](images/4d9f7101ce0225108752d4cae16c9663.png)
-
-图5-2 选择SD卡
-
-3）点击“Flash”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示Flash Finish。
-
-4）当烧录完成后，将SD卡插入开发板卡槽，选择 BOOT为从SD启动，最后开发板上电即可从SD卡启动。
-
-![手机屏幕的截图 描述已自动生成](images/84c28ea8eb1de88fe5b4a1b2c122767d.jpg)
-
-图5-3 开始烧录
-
-![图形用户界面, 应用程序 描述已自动生成](images/578b62c404f1f18af8c6aa342e5830b5.jpg)
-
-图5-4 烧录完成
-
->说明1：使用`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件时需要先解压缩，烧录解压缩后的文件。
->说明2：烧录镜像时禁止其他程序读写sd卡，请把电脑的自动播放功能关闭(设置-自动播放)。
+![rufus-flash](../../images/rufus_start.png)
+![rufus-sure](../../images/rufus_sure.png)
+![rufus-warning](../../images/rufus_warning.png)
+![rufus-finish](../../images/rufus_finish.png)
 
 ### 5.2 Emmc镜像烧写参考
 
@@ -742,7 +726,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ### 8.1 调试前准备
 
-1.从 T-Head 公 司 的 OCC 平 台<https://occ.t-head.cn/community/download>下载`T-Head-DebugServer`软件和《DebugServer User Guide v5.6》，并参考《DebugServer User Guide v5.6》在pc电脑上安装`T-Head-DebugServer`软件；
+1.从 T-Head公司的OCC平台 `https://occ.t-head.cn/community/download` 下载`T-Head-DebugServer`软件和《DebugServer User Guide v5.6》，并参考《DebugServer User Guide v5.6》在pc电脑上安装`T-Head-DebugServer`软件；
 
 ![图形用户界面, 文本, 应用程序 描述已自动生成](images/830f7333997768ba1fa01e69aedeeb88.png)
 

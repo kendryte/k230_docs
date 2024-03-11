@@ -109,7 +109,7 @@ Linux串口显示如下：
 
 ### 4.1 固件获取
 
-CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/developer/k230>
+CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/developer/k230`
 
 请下载“k230_canmv”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230的固件。
 
@@ -137,21 +137,18 @@ CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/
 
 #### 4.2.2 Windows下烧录
 
-Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。注意打开balenaEtcher软件的时候要以“管理员身份运行”，否则可能会出现烧录失败的情况。
+Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `http://rufus.ie/downloads/`）。
 
-1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件。
+1）将TF卡插入PC，然后启动rufus工具，点击工具界面的"选择”按钮，选择待烧写的固件。
 
-![balena-Etcher-flash-from-file](images/balena-Etcher-flash-from-file.jpg)
+![rufus-flash-from-file](images/rufus_select.png)
 
-2）点击工具界面的“Select target”按钮，选择目标sdcard卡。
+2）点击“开始”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示“准备就绪”。
 
-![balena-Etcher-select-target](images/balena-Etcher-select-target.jpg)
-
-3）点击“Flash”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示Flash Finish。
-
-![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
-![balena-Etcher-finish](images/balena-Etcher-finish.jpg)
->说明1：烧录镜像时禁止其他程序读写sd卡，请把电脑的自动播放功能关闭(设置-自动播放)。
+![rufus-flash](images/rufus_start.png)
+![rufus-sure](images/rufus_sure.png)
+![rufus-warning](images/rufus_warning.png)
+![rufus-finish](images/rufus_finish.png)
 
 ## 5 启动系统
 
