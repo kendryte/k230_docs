@@ -1,4 +1,4 @@
-# K230_SDK_nncase_version_correspondence
+# K230_SDK_update_nncase_runtime_tutorial
 
 ![cover](../../zh/03_other/images/canaan-cover.png)
 

@@ -1,4 +1,4 @@
-# K230 SDK 常见问题解答（C）
+# K230 SDK 更新nncase运行时库教程
 
 ![cover](images/canaan-cover.png)
 
