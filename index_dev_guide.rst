@@ -18,4 +18,5 @@ K230 SDK 开发指南
    zh/01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_使用指南.md
    zh/01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_驱动开发指南.md
    zh/01_software/board/ai/K230_nncase_开发指南.md
+   zh/03_other/K230_SDK更新nncase运行时库指南.md
    zh/03_other/K230_debian_ubuntu说明.md
