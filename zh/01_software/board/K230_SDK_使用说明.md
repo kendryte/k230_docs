@@ -654,7 +654,7 @@ gd25lx256e
 
 #### 6.2.1 sd和emmc默认分区
 
-![image-20230705100321637](images/sd_emmc默认分区.png)
+![image-20230705100321637](images/sd_emmc_default_partion.png)
 
 | SD、emmc卡默认分区 |           |            |        |       |
 | ------------------ | --------- | ---------- | ------ | ----- |
