@@ -45,4 +45,4 @@
 
 * dotnet环境变量配置错误。用户可以在系统环境变量部分添加环境变量，例如"C:\Program Files\dotnet\sdk\7.0.406"
 
-![dotnet环境变量](images/dotnet环境变量.png)
+![dotnet环境变量](images/dotnet_env_var.png)
