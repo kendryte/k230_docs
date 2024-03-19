@@ -195,4 +195,4 @@ deploy production:
     name: production
     url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
-    - scp -P $AWS_PORT -O -C -r _build/* $AWS/data/webapp/k230
+    - scp -P $AWS_PORT -C -r _build/* $AWS/data/webapp/k230
