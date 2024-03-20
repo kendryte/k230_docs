@@ -183,6 +183,7 @@ build web docs:
 deploy production:
   stage: deploy
   image: ai.b-bug.org:5000/huangziyi/deploy:v1
+  retry: 2
   dependencies:
     - build web docs
   needs:
