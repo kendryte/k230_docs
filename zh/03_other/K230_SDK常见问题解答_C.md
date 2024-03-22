@@ -509,4 +509,25 @@ make linux-menuconfig #修改linux配置
 make linux-savedefconfig #保存linux配置
 ```
 
+## 2.20大核如何自启动sd(共享文件系统)里面的程序
+
+答：
+
+```c
+修改1：src/big/rt-smart/kernel/rt-thread/components/finsh/shell.c 文件 456行附近 修改为如下：
+        if(shell_thread_first_run) {
+            struct stat stat_buf;
+            // shell_thread_first_run = 0;
+            // msh_exec("/bin/init.sh", 13);
+            if(0 == stat("/sharefs/onboard",&stat_buf)){ // 请根据实际情况修改为正确的文件
+                shell_thread_first_run = 0;               
+                msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
+            }
+
+            continue;
+        }
+修改2：  src/big/rt-smart/init.sh 文件里面修改为类似如下内容
+/sharefs/onboard/xxxx.sh
+```
+
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。
