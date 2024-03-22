@@ -331,7 +331,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 make clean; make;
 ```
 
-## 2.14支持sensor list在哪里
+## 14支持sensor list在哪里
 
 答：请参考 [K230_Camera_Sensor适配指南](../01_software/board/mpp/K230_Camera_Sensor适配指南.md) 第4.1章节“支持的sensor类型”，目前支持
 
@@ -347,7 +347,7 @@ ov5647
 
 sc201
 
-## 2.15canmmv板子是否可以使用平头哥的cklink进行jtag调试
+## 15canmmv板子是否可以使用平头哥的cklink进行jtag调试
 
 答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
 
@@ -359,7 +359,7 @@ sc201
 
 >修改完后需要重新编译uboot代码
 
-## 2.16 如何快速编译buildroot下面的某一个软件包
+## 16 如何快速编译buildroot下面的某一个软件包
 
 答：参考如下命令快速重编buildroot下面的某一个软件包
 
@@ -374,7 +374,7 @@ sc201
 
 更多信息请百度搜索buildroot how to rebuild packages。
 
-## 2.17 canmv如何仅运行rtt系统，并且挂载sd卡？
+## 17 canmv如何仅运行rtt系统，并且挂载sd卡？
 
 答：需要进行如下修改：
 
@@ -477,7 +477,7 @@ sc201
 make CONF=k230_canmv_only_rtt_defconfig
 ```
 
-## 2.18 linux下如何快速验证下串口收发是否正常？
+## 18 linux下如何快速验证下串口收发是否正常？
 
 答：参考如下命令，
 
@@ -489,7 +489,7 @@ echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  #发送字符串
 cat  /dev/ttyS2   #接受串口数据
 ```
 
-## 2.19 如何快速修改linux配置？
+## 19 如何快速修改linux配置？
 
 答：
 1).Makefile里面linux-savedefconfig目标修改为如下内容(382行附近)：
@@ -509,7 +509,7 @@ make linux-menuconfig #修改linux配置
 make linux-savedefconfig #保存linux配置
 ```
 
-## 2.20大核如何自启动sd(共享文件系统)里面的程序
+## 20大核如何自启动sd(共享文件系统)里面的程序
 
 答：
 
