@@ -530,4 +530,89 @@ make linux-savedefconfig #保存linux配置
 /sharefs/onboard/xxxx.sh
 ```
 
+## 21是否可以使用libxml2？
+
+答：可以，参考下面方法在buildroot里面使能BR2_PACKAGE_LIBXML2就可以使用了。
+
+使能libxml2方法1：备注sdk已经编译过
+
+```bash
+#使用libxml2方法(以k230_canmv_defconfig为例),在sdk主目录执行下面命令
+make -C output/k230_canmv_defconfig/little/buildroot-ext/ menuconfig
+#Target packages -->Libraries--->JSON/XML--> libxml2 
+#使能libxml2 库，并保存配置；
+make -C output/k230_canmv_defconfig/little/buildroot-ext/ savedefconfig  #保存配置
+make -C output/k230_canmv_defconfig/little/buildroot-ext/  #编译buildroot
+make build-image
+```
+
+使能libxml2方法2：sdk没有编译过
+
+```bash
+#使用libxml2方法(以k230_canmv_defconfig为例) 在sdk主目录执行下面命令
+echo "BR2_PACKAGE_LIBXML2=y" >> src/little/buildroot-ext/configs/k230_evb_defconfig
+make CONF=k230_canmv_defconfig
+```
+
+libxml2使用例子
+
+```c
+//把如下代码 保存成io.c,编译方法见后面
+#include <libxml/parser.h>
+
+#if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
+int main(void)
+{
+
+    xmlNodePtr n;
+    xmlDocPtr doc;
+    xmlChar *xmlbuff;
+    int buffersize;
+
+    /*
+     * Create the document.
+     */
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    n = xmlNewDocNode(doc, NULL, BAD_CAST "root", NULL);
+    xmlNodeSetContent(n, BAD_CAST "content");
+    xmlDocSetRootElement(doc, n);
+
+    /*
+     * Dump the document to a buffer and print it
+     * for demonstration purposes.
+     */
+    xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+    printf("%s", (char *) xmlbuff);
+
+    /*
+     * Free associated memory.
+     */
+    xmlFree(xmlbuff);
+    xmlFreeDoc(doc);
+
+    return (0);
+
+}
+#else
+#include <stdio.h>
+
+int main(void)
+{
+    fprintf(stderr,
+            "library not configured with tree and output support\n");
+    return (0);
+}
+
+//编译方法 
+/* 假设sdk主目录是SDK=/home/wangjianxin/k230_sdk
+SDK=/home/wangjianxin/k230_sdk
+BD=${SDK}/output/k230_canmv_defconfig/little/buildroot-ext
+gcc=${SDK}/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin/riscv64-unknown-linux-gnu-gcc
+
+all:
+    ${gcc} io.c --sysroot=${BD}/host/riscv64-buildroot-linux-gnu/sysroot   -I=${sysroot}/usr/include/libxml2 -lxml2
+*/
+#endif
+```
+
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。
