@@ -48,55 +48,84 @@
 |------------|-----------------------------------|--------|------------|
 | V1.0       | 初版                              | jiangxiangbing | 2023-08-01 |
 | V2.0       | 删除完整镜像烧录页，增加loader_sip.bin支持SIP烧录     | jiangxiangbing | 2023-10-12 |
+| V3.0       | 支持sdcard/otp烧录，支持从存储介质读数据。用户可以自行基于uboot开发编译loader.bin     | jiangxiangbing | 2024-4-1 |
 
-## 1. Burntool烧录机制
+[烧录工具下载链接](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v3.7z)
 
-1.K230芯片刚上电会执行固化在芯片ROM上的程序。当启动失败打印“boot failed with exit code xx”后，如果检测到USB0连接了USB线，ROM程序会进入USB烧录模式。
-所以烧录时，建议把BOOTIO拨码到SD卡启动，同时不插SD卡，USB0连接typeC线。然后上电。此时电脑设备管理器可以看到K230 USB Boot Device
+## 1. K230烧录工具的用途
+
+1. 对于存储器为SD卡的设备，用户可以拔出SD卡烧录镜像。但是对于存储器为emmc/nand/nor设备，用户不能这么做，所以K230提供了通过USB烧录的机制。
+
+1. otp为One Time Programmable，也就是一次性可编程的器件。K230芯片提供了768bytes的空间给用户使用。可以存放MAC地址这种需要与产品永久绑定的信息。顺带提示一下k230芯片是自带随机唯一chipid的，不需要使用otp来存储chipid信息。
+
+1. K230烧录工具v3版本已经支持烧录SD/emmc/nand/nor/otp。支持分区烧录，支持从存储介质读数据。
+
+## 2. K230烧录工具如何使用
+
+k230芯片上电从存储介质启动失败，且检查到连接了usb线，则会进入usb烧录模式。
+
+此时电脑上可以看到k230设备
 
 ![k230_usb_boot_device](images/k230_usb_boot_device.png)
 
-2.烧录工具会先通过USB通信把loader程序下载到K230的SRAM空间运行。该loader程序基于uboot开发，主要完成DDR training，以及DFU功能。
+如果是下面这样的情况，则需要使用zadig-2.8.exe安装usb驱动
 
-3.接下来就是DFU方式烧录各种存储介质，支持eMMC/norflash烧录。
-
-## 2. 软件获取及安装
-
-### 2.1 软件获取
-
-[下载链接](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v2.7z)
-
-### 2.2 Windows系统环境安装
-
-在系统没有K230 USB Boot Device驱动的情况下使用zadig-2.8.exe安装
+![k230_usb_boot_device_driver](images/k230_usb_boot_device_driver.png)
 
 ![zadig](images/zadig.png)
 
-## 3. 分区镜像烧录
-
-### 3.1 界面各项说明
+下载k230_burntool软件包，打开软件
 
 ![interface_disc](images/interface_disc.png)
 
-1. 选择是否烧录该分区
-1. 配置分区起始地址，双击修改，地址都是字节偏移。地址与genimage的配置文件一致，例如emmc的镜像，镜像配置路径：k230_sdk/board/common/genimage-sdcard.cfg
+第一行为loader.bin选择，可以通过打开文件，选择对应设备使用的loader.bin（软件包里面包含了package_canmvpi package_evb package_canmvzero等loader） 。loader.bin是必须要有的，所以第一行除了文件选择，其他的编辑权限都禁止了，避免用户选择困难。
 
-    ```shell
-        partition linux {
-            #50M@30M   0x800@0x800
-            offset = 30M
-            image = "little-core/linux_system.bin"
-            size = 50M
-        }
-    ```
+**1** ，第一列,，选择是否写操作，如果只是需要从设备存储介质读数据，则不用勾选。
 
-    linux_system.bin 分区的起始地址为30MB，0x1E00000
+**2** ，第二列，选择是否读操作，如果只是需要对设备存储介质写数据，则不用勾选。读数据保存文件名为“文件路径+.目标名称”，如fn_ug_u-boot.bin.uboot_a
 
-    烧录由SDK编译生成的sysimage-sdcard.img和sysimage-spinor32m.img完整镜像，分区起始地址配置为0。
+**3** ，第三列，目标地址,，存储介质的分区起始地址，无论flash还是sd/emmc，都是以字节为单位。sd/emmc固件的分区情况，是与K230_sdk/board/common/gen_image_cfg/genimage-sdcard.cfg 相关的。
 
-1. 配置分区名称，除了loader，其他名称可以随意，只要不重复即可，双击修改。
-1. 分区镜像文件路径。
-1. 选择分区镜像文件。loader使用压缩包内doc目录下提供的即可，需配置其分区名称固定为“loader”。loader的种类是由于DDR training程序不一样导致的。如果是SIP芯片设备，ddr training一样，loader选择k230_burntool_v2/doc/loader_sip.bin，如果是EVB LP3设备，loader选择k230_burntool_v2/doc/loader_evb_lp3.bin，如果使用unsip芯片的其他板子，则loader程序需要根据ddr training代码重新编译。
-1. 选择emmc或norflash
-1. 开始烧录，烧录单个设备可以采用这种方式。
-1. 自动烧录，电脑可以通过USB连接多台K230设备，自动并行烧录。
+**4**，第四列，目标大小。对于sd/emmc/nor烧录，如果 该项为空，则软件会使用文件的实际大小。对于nand，由于有跳过坏块的机制，所以需要用户指定一个分区大小。
+
+**5**，第五列，目标名称。除了第一行的loader是固定的，其他的分区可以随意输入，只要不重复就可以。
+
+**6**，第六列，文件路径。也就是烧录分区文件的路径
+
+**7**，第七列，打开文件。选择烧录分区文件
+
+**8**，目标设备选择，SDIO0/SDIO1既可以接SD卡，也可以接emmc。NOR/NAND可以是接spi0，也可以是接spi1/spi2
+
+**9**，开始烧录。前面的选项配置好后，且让k230芯片处于usb烧录模式后，点击就会开始烧录。
+
+## 3. K230 USB 烧录机制
+
+![k230_dfu](images/k230_dfu.png)
+
+K230的usb烧录功能是在bootrom中实现的。当bootrom启动过程中启动失败，就会跳转到usb烧录模式。例如，设备使用SD卡作为存储介质，一种方案是通过bootio切换到其他的介质启动，这样k230启动失败就会进入usb烧录模式。另一种方案是拔出SD卡，这样k230启动失败也会进入usb烧录模式。对于emmc/nand/nor的设备，就只能是采用第一种方案了。
+
+ROM只是提供了USB下载数据到SRAM和让CPU执行程序的功能。具体针对存储介质的读写驱动，是由loader.bin来实现的。loader.bin还做了ddr training的操作。
+
+不同的设备DDR training不一样，且存储介质方案可能不一样，所以不同的设备会对应各自的loader.bin。
+
+## 4. K230 烧录工具loader.bin如何开发
+
+sdk1.5的uboot包含了loader.bin的源码。支持以下几款设备。客户自己设计的设备可以参考这些配置文件做修改。
+
+```shell
+k230_canmv_burntool_defconfig
+k230d_canmv_burntool_defconfig
+k230_evb_burntool_defconfig
+```
+
+执行编译
+
+```shell
+cd uboot
+export ARCH=riscv
+export CROSS_COMPILE=riscv64-unknown-linux-gnu-
+make k230_canmv_burntool_defconfig O=out
+make -C out -j
+```
+
+生成的u-boot.bin就是loader.bin
