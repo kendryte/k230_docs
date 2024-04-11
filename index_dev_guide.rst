@@ -7,7 +7,6 @@ K230 SDK 开发指南
    zh/02_applications/tutorials/K230_内存优化指南.md
    zh/02_applications/tutorials/K230_内存占用分析指南.md
    zh/02_applications/tutorials/K230_启动优化指南.md
-   zh/02_applications/tutorials/K230_图像采集实战_如何支持一款新sensor.md
    zh/02_applications/tutorials/K230_大小核通讯_sharefs用法介绍.md
    zh/01_software/board/middleware/K230_openblas_开发使用指南.md
    zh/01_software/board/middleware/K230_opencv_开发使用指南.md
