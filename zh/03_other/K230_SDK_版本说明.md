@@ -154,6 +154,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 27 | K230 SDK V1.3 | 增加三摄demo             | Canmv-K230板增加3摄(ov5647)同时工作的demo                                                                                    |      |
 | 28 | K230 SDK V1.4 | Vicap MCM only 模式      | Vicap MCM only 模式 适配YUV sensor                                                                                          |      |
 | 29 | K230 SDK V1.4 | linear mode 支持adaptive      | linear mode 支持adaptive                                                                                               |      |
+| 29 | K230 SDK V1.5 | gc2053      | 添加gc2053的驱动                                                                                                                         |      |
 
 ### 4.3 平台
 
@@ -201,6 +202,9 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 | 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
 | 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
+| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |
+| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |
+| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |
 
 ### 4.4 架构
 
