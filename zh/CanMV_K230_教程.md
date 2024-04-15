@@ -115,7 +115,7 @@ Linux串口显示如下：
 
 #### 固件获取
 
-CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/developer/k230>
+CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/developer/k230`
 
 请下载“k230_canmv”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230的固件。
 
@@ -143,20 +143,18 @@ CanMV-K230 固件下载地址： <https://kendryte-download.canaan-creative.com/
 
 ##### Windows下烧录
 
-Windows下可通过balena Etcher工具对TF卡进行烧录（balena Etcher工具下载地址<https://www.balena.io/etcher/>）。注意打开balenaEtcher软件的时候要以“管理员身份运行”，否则可能会出现烧录失败的情况。
+Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `http://rufus.ie/downloads/`）。
 
-1）将TF卡插入PC，然后启动balena Etcher工具，点击工具界面的"Flash from file”按钮，选择待烧写的固件。
+1）将TF卡插入PC，然后启动rufus工具，点击工具界面的"选择”按钮，选择待烧写的固件。
 
-![balena-Etcher-flash-from-file](images/balena-Etcher-flash-from-file.jpg)
+![rufus-flash-from-file](images/rufus_select.png)
 
-2）点击工具界面的“Select target”按钮，选择目标sdcard卡。
+2）点击“开始”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示“准备就绪”。
 
-![balena-Etcher-select-target](images/balena-Etcher-select-target.jpg)
-
-3）点击“Flash”按钮开始烧写，烧写过程有进度条展示，烧写结束后会提示Flash Finish。
-
-![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
-![balena-Etcher-finish](images/balena-Etcher-finish.jpg)
+![rufus-flash](images/rufus_start.png)
+![rufus-sure](images/rufus_sure.png)
+![rufus-warning](images/rufus_warning.png)
+![rufus-finish](images/rufus_finish.png)
 
 ### 启动系统
 
@@ -194,11 +192,11 @@ K230 SDK没有在其他Linux版本的主机环境下验证过，不保证SDK可�
 
 SDK目前在github和gitee同步发布
 
-<https://github.com/kendryte/k230_sdk>
+`https://github.com/kendryte/k230_sdk`
 
-<https://gitee.com/kendryte/k230_sdk>
+`https://gitee.com/kendryte/k230_sdk`
 
-用户可以直接下载压缩包，下载地址 [github](https://github.com/kendryte/k230_sdk/releases)或者[gitee](https://gitee.com/kendryte/k230_sdk/releases)，或者使用`git clone https://github.com/kendryte/k230_sdk`或者 `git clone https://gitee.com/kendryte/k230_sdk.git`
+用户可以直接下载压缩包，下载地址 `https://github.com/kendryte/k230_sdk/releases`或者`https://gitee.com/kendryte/k230_sdk/releases`，或者使用`git clone https://github.com/kendryte/k230_sdk`或者 `git clone https://gitee.com/kendryte/k230_sdk.git`
 
 用户可以根据自己的网络状况选择使用github或者gitee。
 
@@ -1243,15 +1241,15 @@ CANMV K230 支持SDCard启动方式。为方便开发，建议您准备一张TF�
 
 sudo dd if=sysimage-sdcard.img of=/dev/sdx bs=1M oflag=sync
 
-**Windows:** 如使用Windows烧录, 建议使用[the balena Etcher](https://etcher.balena.io/)工具。将生成的sysimage-sdcard.img下载到本地，使用烧录工具the balena Etcher进行烧录。
+**Windows:** 如使用Windows烧录, 建议使用rufus工具。将生成的sysimage-sdcard.img下载到本地，使用烧录工具rufus进行烧录。
 
-![balena-Etcher-flash](images/balena-Etcher-flash.jpg)
+![rufus-flash](images/rufus_select.png)
 
 烧录成功后会弹出通知消息。在烧录前最好将SD卡格式化。
 
 ### 上电启动开发板
 
-安装MobaXterm实现串口通信，MobaXterm下载地址:<https://mobaxterm.mobatek.net>。
+安装MobaXterm实现串口通信，MobaXterm下载地址:`https://mobaxterm.mobatek.net`。
 
 ![CanMV-K230_debug](images/CanMV-K230_debug.png)
 
@@ -2332,7 +2330,7 @@ ifconfig
 
 - 工具：tftpd64
 
-安装tftp通信工具，下载地址：<https://bitbucket.org/phjounin/tftpd64/downloads/>
+安装tftp通信工具，下载地址：`https://bitbucket.org/phjounin/tftpd64/downloads/`
 
 启动tftpd64，配置待传输文件存放目录和服务网卡
 

@@ -182,7 +182,8 @@ build web docs:
 
 deploy production:
   stage: deploy
-  image: ai.b-bug.org:5000/python:web-docs-v2
+  image: ai.b-bug.org:5000/huangziyi/deploy:v1
+  retry: 2
   dependencies:
     - build web docs
   needs:
@@ -195,4 +196,4 @@ deploy production:
     name: production
     url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
-    - scp -P 52522 -O -C -r _build huangziyi@40.73.58.120:/data/webapp/k230
+    - scp -P $AWS_PORT -C -r _build/* $AWS/data/webapp/k230

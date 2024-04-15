@@ -29,7 +29,7 @@
 
 ### 概述
 
-本文档主要介绍了K230 SDK V1.4.0 版本发布相关的内容，包括当前版本支持的硬件、功能、使用限制等。
+本文档主要介绍了K230 SDK V1.5.0 版本发布相关的内容，包括当前版本支持的硬件、功能、使用限制等。
 
 ### 读者对象
 
@@ -58,7 +58,7 @@
 
 | 所属产品 | 版本号 | 发布日期 |
 |----------|--------|----------|
-| K230 SDK | V1.4.0 | 2024-2-8|
+| K230 SDK | V1.5.0 | 2024-4-15|
 
 ## 2. 支持的硬件
 
@@ -154,6 +154,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 27 | K230 SDK V1.3 | 增加三摄demo             | Canmv-K230板增加3摄(ov5647)同时工作的demo                                                                                    |      |
 | 28 | K230 SDK V1.4 | Vicap MCM only 模式      | Vicap MCM only 模式 适配YUV sensor                                                                                          |      |
 | 29 | K230 SDK V1.4 | linear mode 支持adaptive      | linear mode 支持adaptive                                                                                               |      |
+| 29 | K230 SDK V1.5 | gc2053      | 添加gc2053的驱动                                                                                                                         |      |
 
 ### 4.3 平台
 
@@ -201,6 +202,9 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 | 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
 | 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
+| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |
+| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |
+| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |
 
 ### 4.4 架构
 
@@ -231,8 +235,8 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 23 | K230 SDK V1.0 | 门锁POC        | 添加人脸特征值加解密功能 |                                     |
 | 24 | K230 SDK V1.0 | SH256驱动        | 增加了大小核硬件SH256驱动 |                                     |
 | 25 | K230 SDK V1.1 | 大核加解密驱动        | 增加了大核硬件 AES-GCM 驱动和 SM4-ECB/CBC/CFB/OFB/CTR 驱动 |                                     |
-| 26 | K230 SDK V1.2 | 门锁OTA功能        | 增加了门锁OTA功能 |
-| 27 | K230 SDK V1.3 | OTP空间调整        | 调整SDK操作的OTP空间，用户可读写768bytes。其余的空间为芯片厂商保留使用 |
+| 26 | K230 SDK V1.2 | 门锁OTA功能        | 增加了门锁OTA功能 | |
+| 27 | K230 SDK V1.3 | OTP空间调整        | 调整SDK操作的OTP空间，用户可读写768bytes。其余的空间为芯片厂商保留使用 | |
 
 ### 4.5 其它
 

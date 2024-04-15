@@ -126,7 +126,7 @@ sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 举例：
 
 ```shell
-./sample_venc.elf 0 -sensor 7 -o out.265
+./sample_venc.elf 0 -sensor 24 -o out.265
 ```
 
 ##### 2.2.4.2 MAPI编码demo
@@ -140,7 +140,7 @@ sample_venc默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS
 1. 在小核侧 /mnt 目录下，执行 `./sample_venc`，默认执行1路h264视频编码，分辨率为1280x720，生成的码流文件存放在 /tmp 目录下面，如需传参可参考如下参数说明：
 
 ```shell
-Usage: ./sample_venc -s 0 -n 2 -o /tmp -t 0
+Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0
                      -s or --sensor_type [sensor_index],\n");
                             see vicap doc
                      -n or --chn_num [number], 1, 2, 3

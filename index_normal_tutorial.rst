@@ -15,6 +15,8 @@ K230 SDK 实用教程
    zh/02_applications/business_poc/K230_场景实战_智能门锁.md
    zh/02_applications/business_poc/K230_场景实战_智能门锁_OV9286.md
    zh/02_applications/business_poc/K230_场景实战_猫眼.md
+   zh/02_applications/business_poc/K230_场景实战_词典笔.md
+   zh/02_applications/business_poc/K230_场景实战_dpu深度相机.md
    zh/02_applications/ai_demos/K230_AI_Demo介绍.md
    zh/02_applications/fancy_poc/K230_Fancy_Poc介绍.md
    zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo使用指南.md

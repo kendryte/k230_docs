@@ -130,7 +130,7 @@ Please prepare the following hardware:
 - One network cable (optional)
 - SD card (optional)
 
-Note: The recommended TypeC USB to Ethernet model is<https://item.jd.com/5326738.html>
+Note: The recommended TypeC USB to Ethernet model is `https://item.jd.com/5326738.html`
 
 Refer to the K230 DEMO BOARD Resource Instructions to prepare the development board.
 
@@ -138,7 +138,7 @@ Refer to the K230 DEMO BOARD Resource Instructions to prepare the development bo
 
 K230 motherboard provides two debugging serial ports through USB, using debugging serial ports under Windows, you need to install USB to serial port drivers, the driver download link is as follows:
 
-<https://ftdichip.com/wp-content/uploads/2021/11/CDM-v2.12.36.4.U-WHQL-Certified.zip>
+`https://ftdichip.com/wp-content/uploads/2021/11/CDM-v2.12.36.4.U-WHQL-Certified.zip`
 
 After installing the driver, the board is powered on, and the PC uses the type C data cable to connect the debugging serial port of the motherboard, and two USB serial port devices can be found, as shown in the following figure:
 
@@ -362,34 +362,16 @@ Note: `sysimage-sdcard.img`It can be a `images`file in a directory`sysimage-sdca
 
 #### 5.1.2 Burning under Windows
 
-Windows can burn the SD card through the balena Etcher tool (balena Etcher tool download address<https://www.balena.io/etcher/>).
+Windows can burn the SD card through the rufus tool (rufus tool download address `http://rufus.ie/downloads/`).
 
-1)Insert the TF card into the PC, then launch the balena Etcher tool, click the "Flash from file" button on the tool interface, and select the firmware to be programmed, as shown below.
+1）Insert the TF card into the PC, then launch the rufus tool, click the "select" button on the tool interface, and select the firmware to be programmed, as shown below.
+![rufus-flash-from-file](../../../zh/images/rufus_select.png)
 
-![Graphical user interface, Application description is automatically generated](../../../zh/01_software/board/images/3e2358e04601c3e03bf233c84f8b3ec4.png)
-
-Figure 5-1 Select firmware
-
-2)Click the "Select target" button on the tool interface to select the target sdcard card.
-
-![Graphical user interface, text, application description is automatically generated](../../../zh/01_software/board/images/4d9f7101ce0225108752d4cae16c9663.png)
-
-Figure 5-2 Select an SD card
-
-3)Click the "Flash" button to start flashing, the flashing process has a progress bar display, and Flash Finish will be prompted after flashing.
-
-4)When the burning is completed, insert the SD card into the development board card slot, select BOOT to boot from SD, and finally power on the development board to boot from the SD card.
-
-![A screenshot of the phone's screen description has been automatically generated](../../../zh/01_software/board/images/84c28ea8eb1de88fe5b4a1b2c122767d.jpg)
-
-Figure 5-3 Start burning
-
-![Graphical user interface, Application description is automatically generated](../../../zh/01_software/board/images/578b62c404f1f18af8c6aa342e5830b5.jpg)
-
-Figure 5-4 Burning complete
-
->Note1: When using`sysimage-sdcard_aes.img.gz` , , `sysimage-sdcard.img.gz`files, `sysimage-sdcard_sm.img.gz`you need to decompress and burn the decompressed files.
->Note 2: When burning the image, other programs are forbidden to read and write sd card, please turn off the computer's auto play function (Settings - auto play).
+2）Click the "Start" button to start flashing, the flashing process has a progress bar display, and Ready will be prompted after flashing
+![rufus-flash](../../../zh/images/rufus_start.png)
+![rufus-sure](../../../zh/images/rufus_sure.png)
+![rufus-warning](../../../zh/images/rufus_warning.png)
+![rufus-finish](../../../zh/images/rufus_finish.png)
 
 ### 5.2 EMMC image flashing reference
 
@@ -734,7 +716,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #isolation area     can not modi
 
 ### 8.1 Preparation before commissioning
 
-1. Download the software and DebugServer User Guide v5.6 <https://occ.t-head.cn/community/download>from the T-Head Platform`T-Head-DebugServer`, and install the software on your PC by referring to DebugServer User Guide v5.6`T-Head-DebugServer`
+1. Download the software and DebugServer User Guide v5.6 `https://occ.t-head.cn/community/download` from the T-Head Platform`T-Head-DebugServer`, and install the software on your PC by referring to DebugServer User Guide v5.6`T-Head-DebugServer`
 
 ![Graphical user interface, text, application description is automatically generated](../../../zh/01_software/board/images/830f7333997768ba1fa01e69aedeeb88.png)
 

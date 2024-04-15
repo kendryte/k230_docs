@@ -9,6 +9,7 @@ SDK 使用教程
    tutorials/K230_RVV优化性能说明.md
    tutorials/K230_RVV实战.md
    tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md
+   tutorials/K230_Opencv调用UVC指南.md
    tutorials/K230_内存优化指南.md
    tutorials/K230_内存占用分析指南.md
    tutorials/K230_启动优化指南.md

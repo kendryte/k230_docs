@@ -29,11 +29,11 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写、语音�
 
 ### 硬件环境
 
-- K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1/CanMV-K230（默认支持）
+- `CanMV-K230-V1.x / CanMV-K230-V2.x / K230-UNSIP-LPx-EVB-V1.x`
 
 ### 源码位置
 
-源码路径位于`/mnt/src/reference/ai_poc`，目录结构如下：
+源码路径位于`k230_sdk/src/reference/ai_poc`，目录结构如下：
 
 ```shell
 # AI Demo子目录（eg：bytetrack、face_detection等）中有详细的Demo说明文档
@@ -77,6 +77,7 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写、语音�
 ├── person_detect
 ├── person_distance
 ├── pose_detect
+├── pose_det_rtsp_plug
 ├── pphumanseg
 ├── puzzle_game
 ├── segment_yolov8n
@@ -94,12 +95,11 @@ K230 AI Demo集成了人脸、人体、手部、车牌、单词续写、语音�
 ├── translate_en_ch
 ├── tts_zh
 ├── vehicle_attr
-├── version
 ├── virtual_keyboard
 └── yolop_lane_seg
 ```
 
-kmodel、image及相关依赖路径位于`/mnt/src/big/kmodel/ai_poc`，目录结构如下：
+kmodel、image及相关依赖路径位于`k230_sdk/src/big/kmodel/ai_poc`，目录结构如下：
 
 ``` shell
 .
@@ -183,6 +183,7 @@ kmodel、image及相关依赖路径位于`/mnt/src/big/kmodel/ai_poc`，目录�
 │   ├── yolov8n-pose.kmodel
 │   ├── yolov8n_seg_320.kmodel
 │   ├── yolov8n_seg_640.kmodel
+│   ├── zh_fastspeech_1_f32.kmodel
 │   ├── zh_fastspeech_1.kmodel
 │   └── zh_fastspeech_2.kmodel
 └── utils
@@ -216,17 +217,201 @@ kmodel、image及相关依赖路径位于`/mnt/src/big/kmodel/ai_poc`，目录�
 
 #### a.自编译上板镜像
 
-- 进入/mnt/src/reference/ai_poc
-- 执行build_app.sh脚本（执行脚本前确保/mnt/src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
-- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+- 确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器，并构建镜像
+
+- 进入k230_sdk/src/reference/ai_poc
+
+- 执行build_app.sh脚本，会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
+
+- 将k230_bin整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+（1）确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器并构建镜像
+
+（2）进入k230_sdk/src/reference/ai_poc
+
+```bash
+cd k230_sdk/src/reference/ai_poc
+```
+
+（3）编译单个AI Demo（以人脸检测为例）
+
+```shell
+./build_app.sh face_detection
+```
+
+**注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
+
+```bash
+#若是没有上述依赖，执行一下命令下载
+cd k230_sdk
+make prepare_sourcecode
+```
+
+生成以下文件：
+
+```bash
+k230_bin/
+├── face_detection
+│   ├── 1024x624.jpg
+│   ├── face_detect_image.sh
+│   ├── face_detection_320.kmodel
+│   ├── face_detection_640.kmodel
+│   ├── face_detection.elf
+│   └── face_detect_isp.sh
+```
+
+将k230_bin/整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+```shell
+#进入开发板小核sharefs目录
+scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
+
+#进入开发板大核sharefs目录
+cd /sharefs/k230_bin/face_detection
+#执行相应脚本即可运行人脸检测
+#详细人脸检测说明可以参考k230_sdk/src/reference/ai_poc/face_detection/README.md
+./face_detect_isp.sh
+```
+
+（4）编译所有AI Demo（若只需编译某个demo，无需执行该步骤）
+
+```shell
+./build_app.sh
+```
+
+生成以下文件：
+
+```bash
+k230_bin/
+......
+├── face_detection
+│   ├── 1024x624.jpg
+│   ├── face_detect_image.sh
+│   ├── face_detection_320.kmodel
+│   ├── face_detection_640.kmodel
+│   ├── face_detection.elf
+│   └── face_detect_isp.sh
+......
+└── llamac
+    ├── llama.bin
+    ├── llama_build.sh
+    ├── llama_run
+    └── tokenizer.bin
+......
+```
+
+将k230_bin/整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+```shell
+#进入小核sharefs目录
+scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
+
+#进入大核sharefs目录
+cd /sharefs/k230_bin/face_detection
+#执行相应脚本即可运行人脸检测
+#详细人脸检测说明可以参考k230_sdk/src/reference/ai_poc/face_detection/README.md
+./face_detect_isp.sh
+```
 
 #### b.直接下载官网上板镜像
 
-- 确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器
-- 进入/mnt目录
-- make prepare_sourcecode（若之前已执行，请忽略）
-- make mpp
-- make CONF=k230_canmv_defconfig prepare_memory(canmv支持)、make CONF=k230_evb_defconfig prepare_memory(evb支持)两条命令二选一
-- 进入/mnt/src/reference/ai_poc
-- 执行build_app.sh脚本（执行脚本前确保/mnt/src/big/kmodel/ai_poc下已经有相应kmodel、images、utils），会将kmodel、images、utils、shell、elf统一拷贝生成到k230_bin文件夹
-- 将整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+（1）确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器
+
+（2）从[官网资源库](https://developer.canaan-creative.com/resource)下载镜像
+
+（3）环境准备
+
+```bash
+cd k230_sdk
+make prepare_sourcecode #（若之前已执行，请忽略）
+make mpp
+make cdk-user
+#根据使用的开发板型号，分别执行不同的命令
+#若是型号是CanMV-K230-V1.x，执行以下命令
+make CONF=k230_canmv_defconfig prepare_memory
+#若是型号是CanMV-K230-V2.x，执行以下命令
+make CONF=k230_canmv_v2_defconfig prepare_memory
+#若是型号是K230-xxx-xxx-EVB-V1.x，执行以下命令
+make CONF=k230_evb_defconfig prepare_memory
+cd k230_sdk/src/reference/ai_poc
+```
+
+（4）编译单个AI Demo（以人脸检测为例）
+
+```shell
+./build_app.sh face_detection
+```
+
+**注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
+
+```bash
+#若是没有上述依赖，执行一下命令下载
+cd k230_sdk
+make prepare_sourcecode
+```
+
+生成以下文件：
+
+```bash
+k230_bin/
+├── face_detection
+│   ├── 1024x624.jpg
+│   ├── face_detect_image.sh
+│   ├── face_detection_320.kmodel
+│   ├── face_detection_640.kmodel
+│   ├── face_detection.elf
+│   └── face_detect_isp.sh
+```
+
+将k230_bin整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+```shell
+#进入开发板小核sharefs目录
+scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
+
+#进入开发板大核sharefs目录
+cd /sharefs/k230_bin/face_detection
+#执行相应脚本即可运行人脸检测
+#详细人脸检测说明可以参考k230_sdk/src/reference/ai_poc/face_detection/README.md
+./face_detect_isp.sh
+```
+
+（5）编译所有AI Demo（若只需编译某个demo，无需执行该步骤）
+
+```shell
+./build_app.sh
+```
+
+生成以下文件：
+
+```bash
+k230_bin/
+......
+├── face_detection
+│   ├── 1024x624.jpg
+│   ├── face_detect_image.sh
+│   ├── face_detection_320.kmodel
+│   ├── face_detection_640.kmodel
+│   ├── face_detection.elf
+│   └── face_detect_isp.sh
+......
+└── llamac
+    ├── llama.bin
+    ├── llama_build.sh
+    ├── llama_run
+    └── tokenizer.bin
+......
+```
+
+将k230_bin整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
+
+```shell
+#进入小核sharefs目录
+scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
+
+#进入大核sharefs目录
+cd /sharefs/k230_bin/face_detection
+#执行相应脚本即可运行人脸检测
+#详细人脸检测说明可以参考k230_sdk/src/reference/ai_poc/face_detection/README.md
+./face_detect_isp.sh
+```

@@ -106,7 +106,7 @@ You can use Linux minicom or other serial port tools for connection debugging, a
 
 #### Firmware acquisition
 
-CanMV-K230 firmware download address: <https://kendryte-download.canaan-creative.com/developer/k230>
+CanMV-K230 firmware download address: `https://kendryte-download.canaan-creative.com/developer/k230`
 
 Please download the gz archive starting with "k230_canmv" and extract the sysimage-sdcard.img file, which is the firmware of CanMV-K230.
 
@@ -134,21 +134,16 @@ Assume that /dev/sdc is the TF card device node, run the following command to fl
 
 ##### Flashing under Windows
 
-TF card can be burned through the balena Etcher tool under Windows (balena Etcher tool download address<https://www.balena.io/etcher/>).
+Windows can burn the SD card through the rufus tool (rufus tool download address `http://rufus.ie/downloads/`).
 
-1) Insert the TF card into the PC, then launch the balena Etcher tool, click the "Flash from file" button on the tool interface, and select the firmware to be programmed.
+1）Insert the TF card into the PC, then launch the rufus tool, click the "select" button on the tool interface, and select the firmware to be programmed, as shown below.
+![rufus-flash-from-file](../zh/images/rufus_select.png)
 
-![balena-Etcher-flash-from-file](../zh/images/balena-Etcher-flash-from-file.jpg)
-
-1) Click the "Select target" button on the tool interface to select the target sdcard card.
-
-![balena-Etcher-select-target](../zh/images/balena-Etcher-select-target.jpg)
-
-1) Click the "Flash" button to start flashing, the flashing process has a progress bar display, and Flash Finish will be prompted after flashing.
-
-![balena-Etcher-flash](../zh/images/balena-Etcher-flash.jpg)
-![balena-Etcher-finish](../zh/images/balena-Etcher-finish.jpg)
->Note 1: When burning the image, other programs are forbidden to read and write sd card, please turn off the computer's auto play function (Settings - auto play).
+2）Click the "Start" button to start flashing, the flashing process has a progress bar display, and Ready will be prompted after flashing
+![rufus-flash](../zh/images/rufus_start.png)
+![rufus-sure](../zh/images/rufus_sure.png)
+![rufus-warning](../zh/images/rufus_warning.png)
+![rufus-finish](../zh/images/rufus_finish.png)
 
 ### Start the system
 
@@ -186,11 +181,11 @@ The K230 SDK has not been verified in the host environment of other Linux versio
 
 The SDK is currently released simultaneously on GitHub and GitHub
 
-<https://github.com/kendryte/k230_sdk>
+`https://github.com/kendryte/k230_sdk`
 
-<https://gitee.com/kendryte/k230_sdk>
+`https://gitee.com/kendryte/k230_sdk`
 
-Users can download the archive directly, download it at [GitHub](https://github.com/kendryte/k230_sdk/releases) [Gitee](https://gitee.com/kendryte/k230_sdk/releases) or
+Users can download the archive directly, download it at `https://github.com/kendryte/k230_sdk/releases` `https://gitee.com/kendryte/k230_sdk/releases` or
 
 `git clone https://github.com/kendryte/k230_sdk`
 
@@ -951,15 +946,15 @@ The CANMV K230 supports SDCard boot mode. To facilitate development, it is recom
 
 sudo dd if=sysimage-sdcard.img of=/dev/sdx bs=1M oflag=sync
 
-**Windows:** If you are using Windows burning, it is recommended to use[the balena Etcher](https://etcher.balena.io/)tool. Download the generated sysimage-sdcard.img locally and burn it using the burning tool The balena Etcher.
+**Windows:** If you are using Windows burning, it is recommended to use rufus tool. Download the generated sysimage-sdcard.img locally and burn it using the burning tool rufus.
 
-![balena-Etcher-flash](../zh/images/balena-Etcher-flash.jpg)
+![rufus-flash](../zh/images/rufus_select.png)
 
 After the burning is successful, a notification message will pop up. It is best to format the SD card before flashing.
 
 ### Power on the development board
 
-Install MobaXterm to achieve serial communication, MobaXterm download address:<https://mobaxterm.mobatek.net> .
+Install MobaXterm to achieve serial communication, MobaXterm download address:`https://mobaxterm.mobatek.net` .
 
 ![CanMV-K230_debug](../zh/images/CanMV-K230_debug.png)
 
@@ -2033,7 +2028,7 @@ ifconfig
 
 - Tool: TFTPD64
 
-Install the TFTP communication tool, download address:<https://bitbucket.org/phjounin/tftpd64/downloads/>
+Install the TFTP communication tool, download address: `https://bitbucket.org/phjounin/tftpd64/downloads/`
 
 Start TFTPD64 and configure the directory and service NIC for files to be transferred
 
@@ -2152,7 +2147,7 @@ When bootROM fails to boot, it will print an error similar to the following boot
 
 Question: How is perf compiled and what hardware events are supported?
 
-A: The reference image with PERF function is linked below<https://kvftsfijpo.feishu.cn/file/LJjpbwxnzowI9RxvL0NcEK73nkf?from=from_copylink>
+A: The reference image with PERF function is linked below `https://kvftsfijpo.feishu.cn/file/LJjpbwxnzowI9RxvL0NcEK73nkf?from=from_copylink`
 
 When perf, you can use the RAW event, such as perf stat -e r12, and the perf tool compile command as follows
 

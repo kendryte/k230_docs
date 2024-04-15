@@ -65,9 +65,7 @@ bootrom引导失败时会打印类似下面错误  boot failed with exit code 19
 
 问题：perf如何编译，支持那些硬件事件？
 
-答：带perf功能的参考镜像链接如下<https://kvftsfijpo.feishu.cn/file/LJjpbwxnzowI9RxvL0NcEK73nkf?from=from_copylink>
-
-perf的时候可以使用raw事件，比如perf stat -e r12 ,perf工具编译命令如下
+答：perf的时候可以使用raw事件，比如perf stat -e r12 ,perf工具编译命令如下:
 
 ```bash
 cd src/little/linux/tools
@@ -333,7 +331,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 make clean; make;
 ```
 
-## 2.14支持sensor list在哪里
+## 14支持sensor list在哪里
 
 答：请参考 [K230_Camera_Sensor适配指南](../01_software/board/mpp/K230_Camera_Sensor适配指南.md) 第4.1章节“支持的sensor类型”，目前支持
 
@@ -349,7 +347,7 @@ ov5647
 
 sc201
 
-## 2.15canmmv板子是否可以使用平头哥的cklink进行jtag调试
+## 15canmmv板子是否可以使用平头哥的cklink进行jtag调试
 
 答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
 
@@ -361,7 +359,7 @@ sc201
 
 >修改完后需要重新编译uboot代码
 
-## 2.16如何快速编译buildroot下面的某一个软件包
+## 16 如何快速编译buildroot下面的某一个软件包
 
 答：参考如下命令快速重编buildroot下面的某一个软件包
 
@@ -374,6 +372,247 @@ sc201
     make build-image #重新生成下镜像    
 ```
 
-更多信息请参考[buildroot rebuild pkg](https://buildroot.org/downloads/manual/manual.html\#rebuild-pkg)。
+更多信息请百度搜索buildroot how to rebuild packages。
+
+## 17 canmv如何仅运行rtt系统，并且挂载sd卡？
+
+答：需要进行如下修改：
+
+1)src\big\rt-smart\kernel\bsp\maix3\applications\mnt.c文件里面第7行修改为：
+
+```C
+#define RT_SDCARD_MOUNT_STACK_SIZE (16 * 1024)
+```
+
+3.src\big\rt-smart\kernel\bsp\maix3\rtconfig.h里面第145行左右添加如下内容
+
+```C
+#define RT_USING_SDIO
+#define RT_USING_SDIO1
+```
+
+4.board\common\gen_image_cfg\genimage-sdcard.cfg 文件替换为如下内容：
+
+```C
+    image app.vfat {
+        vfat {
+            files = {
+                "big-core/app",
+            }        
+        }
+        # empty =true
+        size = 1024M
+    }
+
+    image sysimage-sdcard.img {
+        hdimage {
+            gpt = "false"
+        }
+        
+        partition uboot_spl_1 {
+            #512k@1M   0x400@0x800
+            in-partition-table = false
+            offset = 1M
+            image = "little-core/uboot/fn_u-boot-spl.bin"
+        }
+        partition uboot_spl_2 {
+            #512k@1.5M   0x800@0xc00
+            in-partition-table = false
+            offset = 0x180000
+            image = "little-core/uboot/fn_u-boot-spl.bin"
+        }
+        partition uboot_env {
+            in-partition-table = false
+            offset = 0x1e0000
+            image = "little-core/uboot/env.env"
+            size = 0x20000
+        }
+        partition uboot {
+            #1.5m@2M   0xc00@0x1000
+            in-partition-table = false
+            offset = 2M
+            image = "little-core/uboot/fn_ug_u-boot.bin"
+        }
+        # partition env {
+        #     #128k@3.5M   0x800@0x1c00
+        #     in-partition-table = false
+        #     offset = 0x380000
+        #     #image = "../little/uboot/u-boot.img"
+        # }
+
+        partition rtt {
+            #20M@10M   0x800@0x800
+            offset = 10M
+            image = "big-core/rtt_system.bin"
+            size = 20M
+        }
+
+        partition linux {
+            #50M@30M   0x800@0x800
+            offset = 30M
+            image = "little-core/linux_system.bin"
+            size = 50M
+        }
+
+        # partition rootfs {
+        #     offset = 128M 
+        #     partition-type = 0x83
+        #     image = "little-core/rootfs.ext4"
+        # }
+
+        partition fat32appfs {
+            #offset = 168M
+            partition-type = 0xc
+            # size = 32M
+            image = "app.vfat"
+        }
+    }
+```
+
+5)src/big/rt-smart/init.sh  里面修改(可选修改)为需要自启动的elf文件比如/sdcard/app/micropython
+
+6)编译镜像：
+
+```bash
+make CONF=k230_canmv_only_rtt_defconfig
+```
+
+## 18 linux下如何快速验证下串口收发是否正常？
+
+答：参考如下命令，
+
+```bash
+#以串口2为例,请根据实际情况修改命令
+stty -a  -F  /dev/ttyS2  #查看串口配置；
+stty  -F  /dev/ttyS2 115200   #设置下波特率，默认9600
+echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  #发送字符串，电脑可以收到正确数据
+cat  /dev/ttyS2   #接受串口数据
+```
+
+## 19 如何快速修改linux配置？
+
+答：
+1).Makefile里面linux-savedefconfig目标修改为如下内容(382行附近)：
+
+```makefile
+linux-savedefconfig:
+	cd $(LINUX_SRC_PATH); \
+	make O=$(LINUX_BUILD_DIR) CROSS_COMPILE=$(LINUX_EXEC_PATH)/$(LINUX_CC_PREFIX) ARCH=riscv savedefconfig; \
+	cp $(LINUX_BUILD_DIR)/defconfig  arch/riscv/configs/$(LINUX_KERNEL_DEFCONFIG);\
+	cd -
+```
+
+2).修改保存linux配置
+
+```bash
+make linux-menuconfig #修改linux配置
+make linux-savedefconfig #保存linux配置
+```
+
+## 20大核如何自启动sd(共享文件系统)里面的程序
+
+答：
+
+```c
+修改1：src/big/rt-smart/kernel/rt-thread/components/finsh/shell.c 文件 456行附近 修改为如下：
+        if(shell_thread_first_run) {
+            struct stat stat_buf;
+            // shell_thread_first_run = 0;
+            // msh_exec("/bin/init.sh", 13);
+            if(0 == stat("/sharefs/onboard",&stat_buf)){ // 请根据实际情况修改为正确的文件
+                shell_thread_first_run = 0;               
+                msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
+            }
+
+            continue;
+        }
+修改2：  src/big/rt-smart/init.sh 文件里面修改为类似如下内容
+/sharefs/onboard/xxxx.sh
+```
+
+## 21是否可以使用libxml2？
+
+答：可以，参考下面方法在buildroot里面使能BR2_PACKAGE_LIBXML2就可以使用了。
+
+使能libxml2方法1：备注sdk已经编译过
+
+```bash
+#使用libxml2方法(以k230_canmv_defconfig为例),在sdk主目录执行下面命令
+make -C output/k230_canmv_defconfig/little/buildroot-ext/ menuconfig
+#Target packages -->Libraries--->JSON/XML--> libxml2 
+#使能libxml2 库，并保存配置；
+make -C output/k230_canmv_defconfig/little/buildroot-ext/ savedefconfig  #保存配置
+make -C output/k230_canmv_defconfig/little/buildroot-ext/  #编译buildroot
+make build-image
+```
+
+使能libxml2方法2：sdk没有编译过
+
+```bash
+#使用libxml2方法(以k230_canmv_defconfig为例) 在sdk主目录执行下面命令
+echo "BR2_PACKAGE_LIBXML2=y" >> src/little/buildroot-ext/configs/k230_evb_defconfig
+make CONF=k230_canmv_defconfig
+```
+
+libxml2使用例子
+
+```c
+//把如下代码 保存成io.c,编译方法见后面
+#include <libxml/parser.h>
+
+#if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
+int main(void)
+{
+
+    xmlNodePtr n;
+    xmlDocPtr doc;
+    xmlChar *xmlbuff;
+    int buffersize;
+
+    /*
+     * Create the document.
+     */
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    n = xmlNewDocNode(doc, NULL, BAD_CAST "root", NULL);
+    xmlNodeSetContent(n, BAD_CAST "content");
+    xmlDocSetRootElement(doc, n);
+
+    /*
+     * Dump the document to a buffer and print it
+     * for demonstration purposes.
+     */
+    xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+    printf("%s", (char *) xmlbuff);
+
+    /*
+     * Free associated memory.
+     */
+    xmlFree(xmlbuff);
+    xmlFreeDoc(doc);
+
+    return (0);
+
+}
+#else
+#include <stdio.h>
+
+int main(void)
+{
+    fprintf(stderr,
+            "library not configured with tree and output support\n");
+    return (0);
+}
+
+//编译方法 
+/* 假设sdk主目录是SDK=/home/wangjianxin/k230_sdk
+SDK=/home/wangjianxin/k230_sdk
+BD=${SDK}/output/k230_canmv_defconfig/little/buildroot-ext
+gcc=${SDK}/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin/riscv64-unknown-linux-gnu-gcc
+
+all:
+    ${gcc} io.c --sysroot=${BD}/host/riscv64-buildroot-linux-gnu/sysroot   -I=${sysroot}/usr/include/libxml2 -lxml2
+*/
+#endif
+```
 
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。

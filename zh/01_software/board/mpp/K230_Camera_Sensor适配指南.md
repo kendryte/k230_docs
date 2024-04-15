@@ -50,7 +50,7 @@
 | 文档版本号 | 修改说明  | 修改者 | 日期  |
 |---|---|---|---|
 | V1.0       | 初版 | 汪成根 | 2023-05-30 |
-|            |          |        |            |
+| V1.1       | 示例修改为ov5647并添加4.4章节 | 赵忠祥 | 2023-04-11  |
 |            |          |        |            |
 
 ## 1. 概述
@@ -95,10 +95,10 @@ Camera Sensor框架如图2-1所示，最底层是sensor驱动层
 
 本节将按照如何增加支持一个新的camera sensor的步骤来进行详细描述。
 
-这里以ov9732驱动作为示例进行说明，对应的驱动文件源码路径如下：
+这里以ov5647驱动作为示例进行说明，对应的驱动文件源码路径如下：
 
 ```shell
-src/big/mpp/kernel/sensor/src/ov9732_drv.c
+src/big/mpp/kernel/sensor/src/ov5647_drv.c
 ```
 
 ### 4.1 定义支持的sensor类型
@@ -142,6 +142,28 @@ typedef enum {
 
     SC_SC201CS_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR = 25,
     SC_SC201CS_SLAVE_MODE_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR = 26,
+
+    OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR = 27,
+    OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR = 28,
+
+    XS9922B_MIPI_CSI0_1280X720_30FPS_YUV422_DOL3 = 29,
+
+    XS9950_MIPI_CSI0_1280X720_30FPS_YUV422 = 30,
+    XS9950_MIPI_CSI1_1280X720_30FPS_YUV422 = 31,
+    XS9950_MIPI_CSI2_1280X720_30FPS_YUV422 = 32,
+    XS9950_MIPI_CSI0_1920X1080_30FPS_YUV422 = 33,
+
+    OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_SPECKLE_V2 = 34,
+    OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_IR_V2 = 35,
+    OV_OV9732_MIPI_1280X720_30FPS_10BIT_MCLK_16M_LINEAR_V2 = 36,
+
+    OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR_V2 = 37,
+    OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR_V2 = 38,
+    OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR_V2 = 39,
+
+    GC2053_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR = 40,
+
+    SENSOR_TYPE_MAX,
 } k_vicap_sensor_type;
 ```
 
@@ -162,16 +184,20 @@ typedef struct {
 } k_sensor_reg_list;
 ```
 
-以下是ov9732的寄存器配置列表
+以下是ov5647的寄存器配置列表
 
 ```c
-static k_sensor_reg_list ov9732_mipi2lane_720p_30fps_linear[] = {
+static const k_sensor_reg ov5647_mipi2lane_1080p_30fps_linear[] = {
+    //pixel_rate = 81666700
     {0x0103, 0x01},
     {0x0100, 0x00},
-
-    ......
-
-    {0x400b, 0xc0},
+    {0x3034, 0x1a},
+    {0x3035, 0x21},
+    ...
+    {0x3501, 0x02},
+    {0x3502, 0xa0},
+    {0x3503, 0x07},
+    {0x350b, 0x10},
     {REG_NULL, 0x00},
 };
 ```
@@ -197,35 +223,22 @@ typedef struct {
 } k_sensor_mode;
 ```
 
-以下是ov9732的支持的模式
+以下是ov5647的支持的模式
 
 ```c
-static k_sensor_mode ov9732_mode_info[] = {
-    ......
-
+static k_sensor_mode ov5647_mode_info[] = {
     {
-        .index = 2,
-        .sensor_type = OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR,
+        .index = 0,
+        .sensor_type = OV_OV5647_MIPI_1920X1080_30FPS_10BIT_LINEAR,
         .size = {
-            .bounds_width = 1280,
-            .bounds_height = 720,
+            .bounds_width = 1920,
+            .bounds_height = 1080,
             .top = 0,
             .left = 0,
-            .width = 1280,
-            .height = 720,
+            .width = 1920,
+            .height = 1080,
         },
-        .fps = 30000,
-        .hdr_mode = SENSOR_MODE_LINEAR,
-        .bit_width = 10,
-        .bayer_pattern = BAYER_BGGR,
-        .mipi_info = {
-            .csi_id = 0,
-            .mipi_lanes = 1,
-            .data_type = 0x2B, //RAW10
-        },
-        .reg_list = ov9732_mipi2lane_720p_30fps_linear,
-    },
-
+    ......
 }
 ```
 
@@ -264,36 +277,36 @@ typedef struct {
 } k_sensor_function;
 ```
 
-以下是ov9732的支持的模式
+以下是ov5647的支持的模式
 
 ```c
     .sensor_func = {
-        .sensor_power = ov9732_sensor_power_on,
-        .sensor_init = ov9732_sensor_init,
-        .sensor_get_chip_id = ov9732_sensor_get_chip_id,
-        .sensor_get_mode = ov9732_sensor_get_mode,
-        .sensor_set_mode = ov9732_sensor_set_mode,
-        .sensor_enum_mode = ov9732_sensor_enum_mode,
-        .sensor_get_caps = ov9732_sensor_get_caps,
-        .sensor_conn_check = ov9732_sensor_conn_check,
-        .sensor_set_stream = ov9732_sensor_set_stream,
-        .sensor_get_again = ov9732_sensor_get_again,
-        .sensor_set_again = ov9732_sensor_set_again,
-        .sensor_get_dgain = ov9732_sensor_get_dgain,
-        .sensor_set_dgain = ov9732_sensor_set_dgain,
-        .sensor_get_intg_time = ov9732_sensor_get_intg_time,
-        .sensor_set_intg_time = ov9732_sensor_set_intg_time,
-        .sensor_get_exp_parm = ov9732_sensor_get_exp_parm,
-        .sensor_set_exp_parm = ov9732_sensor_set_exp_parm,
-        .sensor_get_fps = ov9732_sensor_get_fps,
-        .sensor_set_fps = ov9732_sensor_set_fps,
-        .sensor_get_isp_status = ov9732_sensor_get_isp_status,
-        .sensor_set_blc = ov9732_sensor_set_blc,
-        .sensor_set_wb = ov9732_sensor_set_wb,
-        .sensor_get_tpg = ov9732_sensor_get_tpg,
-        .sensor_set_tpg = ov9732_sensor_set_tpg,
-        .sensor_get_expand_curve = ov9732_sensor_get_expand_curve,
-        .sensor_get_otp_data = ov9732_sensor_get_otp_data,
+        .sensor_power = ov5647_sensor_power_on,
+        .sensor_init = ov5647_sensor_init,
+        .sensor_get_chip_id = ov5647_sensor_get_chip_id,
+        .sensor_get_mode = ov5647_sensor_get_mode,
+        .sensor_set_mode = ov5647_sensor_set_mode,
+        .sensor_enum_mode = ov5647_sensor_enum_mode,
+        .sensor_get_caps = ov5647_sensor_get_caps,
+        .sensor_conn_check = ov5647_sensor_conn_check,
+        .sensor_set_stream = ov5647_sensor_set_stream,
+        .sensor_get_again = ov5647_sensor_get_again,
+        .sensor_set_again = ov5647_sensor_set_again,
+        .sensor_get_dgain = ov5647_sensor_get_dgain,
+        .sensor_set_dgain = ov5647_sensor_set_dgain,
+        .sensor_get_intg_time = ov5647_sensor_get_intg_time,
+        .sensor_set_intg_time = ov5647_sensor_set_intg_time,
+        .sensor_get_exp_parm = ov5647_sensor_get_exp_parm,
+        .sensor_set_exp_parm = ov5647_sensor_set_exp_parm,
+        .sensor_get_fps = ov5647_sensor_get_fps,
+        .sensor_set_fps = ov5647_sensor_set_fps,
+        .sensor_get_isp_status = ov5647_sensor_get_isp_status,
+        .sensor_set_blc = ov5647_sensor_set_blc,
+        .sensor_set_wb = ov5647_sensor_set_wb,
+        .sensor_get_tpg = ov5647_sensor_get_tpg,
+        .sensor_set_tpg = ov5647_sensor_set_tpg,
+        .sensor_get_expand_curve = ov5647_sensor_get_expand_curve,
+        .sensor_get_otp_data = ov5647_sensor_get_otp_data,
     },
 ```
 
@@ -313,22 +326,24 @@ struct sensor_driver_dev {
 };
 ```
 
-ov9732驱动结构体定义及初始化内容如下：
+ov5647驱动结构体定义及初始化内容如下：
 
 ```c
-struct sensor_driver_dev ov9732_sensor_drv = {
+struct sensor_driver_dev ov5647_sensor_drv = {
     .i2c_info = {
         .i2c_bus = NULL,
-        .i2c_name = "i2c1",
+        .i2c_name = OV5647_IIC,
         .slave_addr = 0x36,
+        .reg_addr_size = SENSOR_REG_VALUE_16BIT,
+        .reg_val_size = SENSOR_REG_VALUE_8BIT,
     },
-    .sensor_name = "ov9732",
+    .sensor_name = "ov5647",
     .sensor_func = {
-        .sensor_power = ov9732_sensor_power_on,
-        .sensor_init = ov9732_sensor_init,
-        .sensor_get_chip_id = ov9732_sensor_get_chip_id,
-        .sensor_get_mode = ov9732_sensor_get_mode,
-        .sensor_set_mode = ov9732_sensor_set_mode,
+        .sensor_power = ov5647_sensor_power_on,
+        .sensor_init = ov5647_sensor_init,
+        .sensor_get_chip_id = ov5647_sensor_get_chip_id,
+        .sensor_get_mode = ov5647_sensor_get_mode,
+        .sensor_set_mode = ov5647_sensor_set_mode,
         ......
     },
 };
@@ -336,14 +351,16 @@ struct sensor_driver_dev ov9732_sensor_drv = {
 
 #### 4.2.5 更新sensor驱动列表
 
-将上一节定义的sensor驱动结构体添加到sensor_drv_list数组中。
+将上一节定义的sensor驱动结构体添加到sensor_common.c中的sensor_drv_list数组中。
 当前系统支持的sensor列表如下：
 
 ```c
-struct sensor_driver_dev *sensor_drv_list[] = {
+struct sensor_driver_dev *sensor_drv_list[SENSOR_NUM_MAX] = {
     &ov9732_sensor_drv,
     &ov9286_sensor_drv,
     &imx335_sensor_drv,
+    &sc035hgs_sensor_drv,
+    &ov5647_sensor_drv,
 };
 ```
 
@@ -372,26 +389,25 @@ typedef struct {
 } k_vicap_sensor_info;
 ```
 
-以下是ov9732对应的配置信息：
+在userapps/src/sensor/mpi_sensor.c中ov5647对应的配置信息：
 
 ```shell
 const k_vicap_sensor_info sensor_info_list[] = {
     {
-        "ov9732",
-        "ov9732",
+        "ov5647",
         1920,
         1080,
-        VICAP_CSI0,
-        VICAP_MIPI_1LANE,
-        VICAP_SOURCE_CSI0,
-        K_FALSE,
+        VICAP_CSI2,
+        VICAP_MIPI_2LANE,
+        VICAP_SOURCE_CSI2,
+        K_TRUE,
         VICAP_MIPI_PHY_800M,
         VICAP_CSI_DATA_TYPE_RAW10,
         VICAP_LINERA_MODE,
         VICAP_FLASH_DISABLE,
         VICAP_VI_FIRST_FRAME_FS_TR0,
         0,
-        OV_OV9732_MIPI_1920X1080_30FPS_10BIT_LINEAR
+        OV_OV5647_MIPI_1920X1080_30FPS_10BIT_LINEAR,
     },
 ```
 
@@ -405,10 +421,84 @@ const k_vicap_sensor_info sensor_info_list[] = {
 src/big/mpp/userapps/src/sensor/config/
 ```
 
-以下是ov9732对应的配置文件：
+以下是ov5647对应的配置文件：
 
 ```shell
-ov9732.xml  ov9732_auto.json  ov9732_manual.json
+ov5647.xml  ov5647_auto.json  ov5647_manual.json
 ```
 
 对于新增加的sensor，可以通过拷贝修改现有文件实现支持，其中的calibration和tuning参数可以通过相关工具修改导出。
+
+### 4.5 现有sensor驱动的移植
+
+如果重新打板，一般情况下可能会修改的sensor的reset、shutdown、CSI、I2C。仍然以canmv的ov5647为例。
+
+ov5647的reset使用的是K230的GPIO0, I2C使用的是i2c3。
+
+```c
+int ov5647_power_rest(k_s32 on)
+{
+    rt_kprintf("ov5647_power_rest OV5647_CAM_PIN is %d \n", OV5647_CAM_PIN);
+    // rst
+    kd_pin_mode(OV5647_CAM_PIN, GPIO_DM_OUTPUT);
+    kd_pin_write(OV5647_CAM_PIN, GPIO_PV_HIGH);
+
+    if (on)
+    {
+        rt_thread_mdelay(DELAY_MS_SENSOR_DEFAULT);
+        kd_pin_write(OV5647_CAM_PIN, GPIO_PV_LOW);  //GPIO_PV_LOW  GPIO_PV_HIGH
+        rt_thread_mdelay(DELAY_MS_SENSOR_DEFAULT);
+        kd_pin_write(OV5647_CAM_PIN, GPIO_PV_HIGH);
+    }
+```
+
+```c
+struct sensor_driver_dev ov5647_sensor_drv = {
+    .i2c_info = {
+        .i2c_bus = NULL,
+        .i2c_name = OV5647_IIC, // "i2c3"
+        .slave_addr = 0x36,
+        .reg_addr_size = SENSOR_REG_VALUE_16BIT,
+        .reg_val_size = SENSOR_REG_VALUE_8BIT,
+    },
+```
+
+OV5647_CAM_PIN和OV5647_IIC 定义在mpp/include/comm/k_board_config_comm.h。该头文件根据板子类型来配置驱动中的变量。
+
+```c
+#elif defined(CONFIG_BOARD_K230_CANMV)
+#define DISPLAY_LCD_RST_GPIO                            20
+#define DISPLAY_LCD_BACKLIGHT_EN                        25
+#define VICAP_IMX335_RST_GPIO                           46
+#define VICAP_IMX335_MASTER_GPIO                        28
+#define VICAP_OV9286_RST_GPIO                           23
+#define OV5647_IIC "i2c3"
+#define OV5647_CAM_PIN                                  0
+```
+
+如果reset或者i2c有变化，可以在驱动中直接修改，也可以在该头件中修改。
+
+如果使用CSI有变化，例如将CSI0改为了CSI1，可以修改mpp/userapps/src/sensor/mpi_sensor.c中
+
+```c
+    static const k_vicap_sensor_info sensor_info_list[] = {
+        {
+            "ov5647",
+            1920,
+            1080,
+            VICAP_CSI0,
+            VICAP_MIPI_2LANE,
+            VICAP_SOURCE_CSI0,
+            K_TRUE,
+            VICAP_MIPI_PHY_800M,
+            VICAP_CSI_DATA_TYPE_RAW10,
+            VICAP_LINERA_MODE,
+            VICAP_FLASH_DISABLE,
+            VICAP_VI_FIRST_FRAME_FS_TR0,
+            0,
+            OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR_V2,
+        },
+    }
+```
+
+VICAP_CSI0和VICAP_SOURCE_CSI0修改为VICAP_CSI1和VICAP_SOURCE_CSI1。

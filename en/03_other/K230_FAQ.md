@@ -108,7 +108,7 @@ Method 2: The Linux boot log will be printed, for example, when connecting to SP
 
 Question: How is perf compiled and what hardware events are supported?
 
-A: The reference image with PERF function is linked below<https://kvftsfijpo.feishu.cn/file/LJjpbwxnzowI9RxvL0NcEK73nkf?from=from_copylink>
+A: The reference image with PERF function is linked below `https://kvftsfijpo.feishu.cn/file/LJjpbwxnzowI9RxvL0NcEK73nkf?from=from_copylink`
 
 When perf, you can use the RAW event, such as perf stat -e r12, and the perf tool compile command as follows
 
