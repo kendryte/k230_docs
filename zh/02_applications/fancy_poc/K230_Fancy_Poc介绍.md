@@ -53,7 +53,7 @@ K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta
 
 - make mpp
 
-- make CONF=k230_canmv_defconfig prepare_memory(canmv支持)、make CONF=k230_evb_defconfig prepare_memory(evb支持)两条命令二选一
+- make CONF=k230_canmv_defconfig prepare_memory(canmv支持)、make CONF=k230_canmv_v2_defconfig prepare_memory(canmv2支持)、make CONF=k230_evb_defconfig prepare_memory(evb支持)三条命令三选一
 
 - 进入src/reference/fancy_poc
 
