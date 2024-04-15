@@ -331,7 +331,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 make clean; make;
 ```
 
-## 14支持sensor list在哪里
+## 14 支持的sensor list在哪里
 
 答：请参考 [K230_Camera_Sensor适配指南](../01_software/board/mpp/K230_Camera_Sensor适配指南.md) 第4.1章节“支持的sensor类型”，目前支持
 
@@ -616,3 +616,31 @@ all:
 ```
 
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。
+
+## 22 支持的屏有哪些？
+
+答：移植新的屏请参考 [K230_LCD适配指南](../01_software/board/mpp/K230_LCD适配指南.md)。
+目前我们支持的屏驱有
+
+HX8399 4LANE 1080x1920 30fps
+
+ST7701 2LANE 480x800 30fps
+
+ST7701 2LANE 480x854 30fps
+
+LT9611(HDMI) 4LANE 1920x1080 30/50/60fps 1280x720 30/50/60fps 640x480 60fps
+
+现有驱动移植，要注意驱动中使用的reset、背光脚管和i2c，这些都定义在k230_sdk/src/big/mpp/include/comm/k_board_config_comm.h文件里面，不同的板子这些定义可能不同。是通过板子的宏定义来进行区分的。例如
+
+```c
+#elif defined(CONFIG_BOARD_K230_CANMV)
+// display gpio
+#define DISPLAY_LCD_RST_GPIO                            20
+#define DISPLAY_LCD_BACKLIGHT_EN                        25
+#elif defined(CONFIG_BOARD_K230_CANMV_V2)
+// display gpio
+#define DISPLAY_LCD_RST_GPIO                            22
+#define DISPLAY_LCD_BACKLIGHT_EN                        25
+```
+
+Canmv-K230-V1.0和V2.0板子的reset管脚不一样，移植时请修改相应的管脚编号。
