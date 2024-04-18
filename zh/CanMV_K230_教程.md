@@ -119,9 +119,9 @@ CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/
 
 CanMV-K230-V1.0/V1.1请下载“k230_canmv_sdcard”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230-V1.0/V1.1的固件。
 
-`CanMV-K230-V2.0请下载k230\_canmv\_v2开头的压缩包。`
+`CanMV-K230-V2.0请下载k230_canmv_v2开头的压缩包。`
 
-`注意：不要将k230\_canmv\_sdcard...gz（CanMV-K230-V1.0/V1.1的镜像）的压缩包烧至2.0板子，板子可能会烧毁。`
+`注意：不要将k230_canmv_sdcard...gz（CanMV-K230-V1.0/V1.1的镜像）的压缩包烧至2.0板子，板子可能会烧毁。`
 
 #### 固件烧录
 
