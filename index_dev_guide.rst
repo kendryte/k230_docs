@@ -19,3 +19,8 @@ K230 SDK 开发指南
    zh/01_software/board/ai/K230_nncase_开发指南.md
    zh/03_other/K230_SDK更新nncase运行时库指南.md
    zh/03_other/K230_debian_ubuntu说明.md
+   zh/01_software/pc/burntool/K230_SDK_Burntool使用指南.md
+   zh/01_software/pc/dewarp/K230_SDK_Dewarp使用指南.md
+   zh/01_software/pc/ISP_tuning/K230_ISP图像调优指南.md
+   zh/01_software/pc/ISP_tuning/K230_ISP初始化配置指南.md
+   zh/01_software/pc/pqtools/K230_ISP_Tuning_Tool使用指南.md
