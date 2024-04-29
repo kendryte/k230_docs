@@ -509,12 +509,41 @@ make linux-menuconfig #修改linux配置
 make linux-savedefconfig #保存linux配置
 ```
 
-## 20大核如何自启动sd(共享文件系统)里面的程序
+## 20大核如何切换自启动程序
 
 答：
+如果自启动程序在/bin目录下，修改方法如下：
 
 ```c
-修改1：src/big/rt-smart/kernel/rt-thread/components/finsh/shell.c 文件 456行附近 修改为如下：
+//src/big/rt-smart/init.sh 文件里面修改为你需要自启动的程序，比如修改为
+/bin/fastboot_app.elf /bin/test.kmodel
+```
+
+如果自启动程在共享文件系统里面，需要修改2个地方，参考修改方法如下：
+
+修改1：修改src/big/rt-smart/init.sh文件
+
+```c
+//src/big/rt-smart/init.sh 文件里面修改为类似如下内容
+cd /sdcard/app/onboard
+./sample_vo.elf
+/sharefs/onboard/xxxx.sh
+```
+
+修改2 添加等待共享文件系统动作（适应于sdk 1.5及以后版本）
+
+```c  
+//src/big/rt-smart/kernel/bsp/maix3/applications/main.c 文件 34行附近 修改为如下：
+        
+    struct stat stat_buf;
+    while(stat("/sharefs/onboard",&stat_buf));// 请根据实际情况修改为正确的文件 
+    msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
+```  
+
+修改2 添加等待共享文件系统动作（适应于sdk 1.4及以前版本）
+
+```c
+//src/big/rt-smart/kernel/rt-thread/components/finsh/shell.c 文件 456行附近 修改为如下：
         if(shell_thread_first_run) {
             struct stat stat_buf;
             // shell_thread_first_run = 0;
@@ -523,11 +552,8 @@ make linux-savedefconfig #保存linux配置
                 shell_thread_first_run = 0;               
                 msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
             }
-
             continue;
         }
-修改2：  src/big/rt-smart/init.sh 文件里面修改为类似如下内容
-/sharefs/onboard/xxxx.sh
 ```
 
 ## 21是否可以使用libxml2？
