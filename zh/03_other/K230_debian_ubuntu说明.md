@@ -55,11 +55,11 @@
 
 镜像请从[嘉楠开发者社区](https://developer.canaan-creative.com/resource) 下载，在嘉楠开发者社区网站的k230/images下面可以找到debian和ubuntu相关文件。
 
-1.1). 类似canmv_debian_sdcard_sdk_x.x.img.gz文件是k230 的debian镜像压缩包：
+1.1). 类似xxxx_debian_sdcard_x.x.img.gz文件是k230 的debian镜像压缩包：
 
 使用的是trixie/sid (debian13)版本，启动时会看到Welcome to Debian GNU/Linux trixie/sid!  打印。
 
-1.2) 类似canmv_ubuntu_sdcard_x.x.img.gz 文件是k230 ubuntu镜像压缩包：
+1.2) 类似xxxx_ubuntu_sdcard_x.x.img.gz 文件是k230 ubuntu镜像压缩包：
 
 使用的时Ubuntu 23.10 版本，启动会会看到Welcome to Ubuntu 23.10! 打印；
 
@@ -67,8 +67,10 @@
 
 1.4). ubuntu23_rootfs.ext4.gz是k230 ubuntu根文件系统
 
-> 说明1：镜像仅适用于canmv板子
+> 说明1：最开头的标识是板子名称，比如canmv/k230_evb等
+>
 > 说明2：烧录时需要先解压缩文件
+>
 > 说明3：网口不稳定如果找不到网口，重启下板子,
 
 ## 2.k230 debian根文件系统制作及验证
@@ -167,6 +169,7 @@ date -s 20231027
 apt-get update
 apt-get install gcc
 apt-get install ssh
+apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
 ./a.out 
@@ -285,9 +288,11 @@ make build-image
 
 ```bash
 dhcpcd 
+date -s "20240507 15:06"
 apt-get update
 apt-get install gcc
 apt-get install ssh
+apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
 ./a.out 
