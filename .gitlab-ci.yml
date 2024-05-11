@@ -172,7 +172,7 @@ markdownlint:
         echo "Merge Request title check PASS, continue get release version from merge request title";
       else
         echo "Merge Request title check FAILED, please EDIT title name with release tag";
-        echo "Title MUST be end with tag like: k230 sdk release v1.4";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
         exit 1;
       fi
     - RELEASE_TAG=$(echo $CI_MERGE_REQUEST_TITLE |grep -Eo "v[0-9]+\.[0-9]+.*?$")
@@ -182,7 +182,7 @@ markdownlint:
         echo "Release TAG/version will be " $RELEASE_TAG;
       else
         echo "Release TAG/version check FAILED, please EDIT title name with release tag";
-        echo "Title MUST be end with tag like: k230 sdk release v1.4";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
         exit 1;
       fi
     - echo "----------sync dev branch to main branch for k230 sdk docs release----------"
