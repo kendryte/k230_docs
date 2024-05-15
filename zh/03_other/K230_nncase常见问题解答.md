@@ -120,4 +120,4 @@
 interp.load_model(ifs).expect("Invalid kmodel");
 ```
 
-- A：是由于编译`kmodel`时的nncase版本与当前SDK版本不匹配导致，请按照[SDK、nncase版本对应关系](./K230_SDK_nncase版本对应关系.md)查询，并按照[更新nncase运行时库教程](./K230_SDK更新nncase运行时库指南.md)解决。
+- A：在不存在其他问题的情况下，是由于编译`kmodel`时的nncase版本与当前SDK版本不匹配导致，请按照[SDK、nncase版本对应关系](./K230_SDK_nncase版本对应关系.md)查询，并按照[更新nncase运行时库教程](./K230_SDK更新nncase运行时库指南.md)解决。
