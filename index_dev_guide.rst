@@ -13,6 +13,7 @@ K230 SDK 开发指南
    zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md
    zh/01_software/board/mpp/K230_PM框架使用指南.md
    zh/01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md
+   zh/01_software/board/mpp/K230_LCD适配指南.md
    zh/01_software/board/osdrv/K230_PMU_使用指南.md
    zh/01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_使用指南.md
    zh/01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_驱动开发指南.md
