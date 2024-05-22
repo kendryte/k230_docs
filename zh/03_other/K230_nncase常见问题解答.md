@@ -47,16 +47,22 @@
 
 - A：使用 `sudo gedit /proc/sys/fs/inotify/max_user_instances`修改128为更大的值即可。
 
-### 2.3 `initialize`相关
+### 2.3 `hostfxr`相关
 
-#### Q：编译模型出现错误 `RuntimeError: Failed to initialize hostfxr`
+#### Q：编译模型出现错误 `RuntimeError: Failed to initialize hostfxr` or `RuntimeError: Failed to get hostfxr path.`
 
-- A：需要安装dotnet-sdk-7.0
+- A：需要安装dotnet-sdk-7.0，不要在`anaconda`的虚拟环境中安装。
   - Linux:
 
     ```shell
     sudo apt-get update
     sudo apt-get install dotnet-sdk-7.0
+    ```
+
+    如果安装完毕后仍然报类似的错误，配置`dotnet`环境变量。 [dotnet error](https://stackoverflow.com/questions/52695238/whats-the-expected-value-for-dotnet-root-variable-when-installing-dotnet-core-f)
+
+    ```shell
+    export DOTNET_ROOT=/usr/share/dotnet
     ```
 
   - Windows: 请自行查阅微软官方文档。
