@@ -247,7 +247,7 @@ VICAP Demo implements the camera data acquisition preview function by calling th
 
 ##### compile
 
-Execute make rt-smart-clean && rt-smart && make build-image in the k230_sdk directory, compile the changes of the big core into the sd card image, and generate the image file sysimage-sdcard.img in the k230_sdk/output/k230_evb_defconfig/images/ directory
+Execute make rt-smart-clean && make rt-smart && make build-image in the k230_sdk directory, compile the changes of the big core into the sd card image, and generate the image file sysimage-sdcard.img in the k230_sdk/output/k230_evb_defconfig/images/ directory
 
 The corresponding program is located at k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
