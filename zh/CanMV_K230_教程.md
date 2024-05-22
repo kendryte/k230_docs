@@ -258,7 +258,7 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV�
 
 ##### 编译
 
-在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+在k230_sdk目录下执行make rt-smart-clean && make rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
 对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
@@ -323,7 +323,7 @@ CanMV-K230开发板支持的其它demo请参考 [K230_SDK_CanMV_Board_Demo使用
 
 ##### 编译程序
 
-在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+在k230_sdk目录下执行make rt-smart-clean && make rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
 对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/fastboot_elf/fastboot_app.elf
 
