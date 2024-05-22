@@ -24,10 +24,13 @@ help:
 mhtml: _templates/layout.html _templates/versions.html _static/topbar.css
 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-_templates/layout.html:
+_templates:
+	mkdir $@
+
+_templates/layout.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
-_templates/versions.html:
+_templates/versions.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/topbar.css:
