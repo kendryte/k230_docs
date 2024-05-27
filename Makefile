@@ -8,7 +8,7 @@ SPHINXBUILD   ?= sphinx-build
 SPHINXMULTIVERSION ?= sphinx-multiversion
 SOURCEDIR     = .
 BUILDDIR      = _build
-WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~huangziyi/web-docs-builder
+WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~zhengshanshan/web-docs-builder
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -18,20 +18,23 @@ help:
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile _templates/layout.html _templates/versions.html _static/topbar.css
+%: Makefile _static/init_mermaid.js _templates/versions.html _static/topbar.css _static/custom.css
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-mhtml: _templates/layout.html _templates/versions.html _static/topbar.css
+mhtml: _static/init_mermaid.js _templates/versions.html _static/topbar.css _static/custom.css
 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 _templates:
 	mkdir $@
 
-_templates/layout.html: _templates
+_static/init_mermaid.js: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _templates/versions.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/topbar.css:
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_static/custom.css:
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
