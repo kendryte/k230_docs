@@ -195,7 +195,7 @@ build web docs:
   stage: build
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
-  image: ai.b-bug.org:5000/python:web-docs-v2
+  image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   environment:
     name: dev
     url: https://ai.b-bug.org/k230/docs/dev/
