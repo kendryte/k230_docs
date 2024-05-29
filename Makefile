@@ -18,10 +18,10 @@ help:
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile _static/init_mermaid.js _templates/versions.html _static/topbar.css _static/custom.css
+%: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-mhtml: _static/init_mermaid.js _templates/versions.html _static/topbar.css _static/custom.css
+mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 _templates:
@@ -30,11 +30,11 @@ _templates:
 _static/init_mermaid.js: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
-_templates/versions.html: _templates
+_templates/versionsFlex.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/topbar.css:
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
-_static/custom.css:
+_static/custom-theme.css:
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
