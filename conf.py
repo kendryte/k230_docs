@@ -51,22 +51,23 @@ html_show_sourcelink = False
 
 html_favicon = 'favicon.ico'
 
-html_sidebars = {
-    '**':['navbar-logo.html','search-field.html','sbt-sidebar-nav.html', 'versions.html'],
-}
 # html_show_sphinx = False
 html_theme = "sphinx_book_theme"
 # html_theme = 'alabaster'
 html_static_path = ['_static']
 
 # if want to add top nav for canann, enable this.
-html_css_files = ['topbar.css', 'custom.css']
 
 default_dark_mode = True
 
 locale_dirs = ['locale']
 
+html_css_files = ['topbar.css', 'custom-theme.css']
+
 html_theme_options = {
-    'collapse_navigation': False,
+    'collapse_navigation': True,
+    "repository_url": "https://github.com/kendryte/k230_docs",
     'navigation_depth': 7,
+    "primary_sidebar_end": ["versionsFlex.html"],
+    "use_repository_button": True
 }
