@@ -367,16 +367,14 @@ CompileOptions类, 用于配置nncase编译选项，各属性说明如下
 
 目前暂不支持自定义前处理顺序，可以根据以下流程示意图，选择所需要的前处理参数进行配置。
 
-```mermaid
+<div class="mermaid">
 graph TD;
-
     NewInput("NewInput\n(shape = input_shape\ndtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty\nmean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
     a--N-->b--N-->c--N-->d--N-->e--N-->OldInput; f--N-->NewOutput;
-
     subgraph origin_model
         OldInput; Model_body ; OldOutput;
     end
-```
+</div>
 
 参数说明：
 
@@ -386,16 +384,16 @@ graph TD;
 
    b. 输入数据类型为uint8，range为[0,255]，`input_range`为[0,1]，则反量化会将定点数转化为浮点数[0,1]，`mean`和 `std`参数需要按照0~1的数据进行指定。
 
-   ```mermaid
+   <div class="mermaid">
     graph TD;
         NewInput_uint8("NewInput_uint8 \n[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
         NewInput_uint81("NewInput_uint8 \n[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
-   ```
+   </div>
 
 1. `input_shape`为输入数据的shape，layout为 `input_layout`，现在支持字符串（`"NHWC"`、`"NCHW"`）和index两种方式作为 `input_layout`，并且支持非4D的数据处理。
 当按照字符串形式配置 `input_layout`时，表示输入数据的layout；当按照index形式配置`input_layout`时，表示输入数据会按照当前配置的 `input_layout`进行数据转置，即 `input_layout`为 `Transpose`的 `perm`参数。
 
-```mermaid
+<div class="mermaid">
 graph TD;
     subgraph B
         NewInput1("NewInput: 1,4,10") --"input_layout:"0,2,1""-->Transpose2("Transpose perm: 0,2,1") --> OldInput2("OldInput: 1,10,4");
@@ -404,11 +402,11 @@ graph TD;
         NewInput --"input_layout:"NHWC""--> Transpose0("Transpose: NHWC2NCHW") --> OldInput;
         NewInput("NewInput: 1,224,224,3 (NHWC)") --"input_layout:"0,3,1,2""--> Transpose1("Transpose perm: 0,3,1,2") --> OldInput("OldInput: 1,3,224,224 (NCHW)");
     end
-```
+</div>
 
 ​   `output_layout`同理，如下图所示。
 
-```mermaid
+<div class="mermaid">
 graph TD;
 subgraph B
     OldOutput1("OldOutput: 1,10,4,5,2") --"output_layout: "0,2,3,1,4""--> Transpose5("Transpose perm: 0,2,3,1,4") --> NewOutput1("NewOutput: 1,4,5,10,2");
@@ -417,7 +415,7 @@ subgraph A
     OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput\nNHWC");
     OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput\nNHWC");
     end
-```
+</div>
 
 ##### 2.2.1.2 动态shape参数说明
 
