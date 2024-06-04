@@ -212,7 +212,8 @@ buffer.width = width;
 buffer.height = height;
 buffer.format = VG_LITE_ARGB8888;
 buffer.stride = buffer.width * 4;
-if (vg_lite_from_dma_buf(buf_fd, &buffer.address)) {
+buffer.memory = buffer.memory = drm_get_map(0);
+if (vg_lite_map(&buffer, VG_LITE_MAP_DMABUF, buf_fd)) {
     perror("import dma-buf");
     return -1;
 }
@@ -231,7 +232,7 @@ if (vg_lite_allocate(&buffer)) {
 }
 ```
 
-显然分配离屏 buffer 更简单，只需要配置分辨率和像素格式即可，而从 DRM dumb 导入还需要自己计算 stride(一行的字节数量)，当然从 DRM dumb 导入的好处就是可以直接用于显示，当然从驱动分配的 buffer 也可以导入到 DRM 进行显示。
+显然分配离屏 buffer 更简单，只需要配置分辨率和像素格式即可，而从 DRM dumb 导入还需要自己计算 stride(一行像素的字节数量)，当然从 DRM dumb 导入的好处就是可以直接用于显示。
 
 ### 多边形
 
