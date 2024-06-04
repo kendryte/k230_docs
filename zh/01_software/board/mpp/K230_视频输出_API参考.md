@@ -1650,6 +1650,54 @@ kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_s
 
 无
 
+#### 2.3.25 kd_mpi_connector_set_mirror
+
+【描述】
+
+设置屏幕mirror 功能
+
+【语法】
+
+k_s32 kd_mpi_connector_set_mirror(k_s32 fd, k_connector_mirror mirror)
+
+【参数】
+
+| 参数名称 | 描述 | 输入/输出 |
+| ----------------|----------------|-----------|
+| fd | 文件描述符 | 输入 |
+| mirror | 屏幕mirror 的功能 | 输入 |
+
+【返回值】
+
+| 返回值 | 描述               |
+|--------|--------------------|
+| 0 | 成功 |
+| -1 | 失败，参见错误码 |
+
+【芯片差异】
+
+无
+
+【需求】
+
+- 头文件：mpi_vo_api.h k_vo_comm.h k_connector_comm.h
+- 库文件：libvo.a libconnector.a
+
+【注意】
+
+1 kd_mpi_connector_adapt_resolution()内部通过调用kd_mpi_connector_get_negotiated_data()和显示器进行协商
+
+2 当应用程序调用kd_mpi_connector_adapt_resolution()函数完成自适应设置后，仍然可以调用
+kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_set()、kd_mpi_connector_init()重新设置输出分辨率
+
+【举例】
+
+无
+
+【相关主题】
+
+无
+
 ## 3. 数据类型
 
 ### 3.1 VO
@@ -2469,9 +2517,9 @@ Display驱动和HDMI显示器协商后的数据
 ```C
 
 typedef struct {  
-k_u32 connection_status;  
-k_u32 negotiated_count;  
-k_connector_type negotiated_types[256];
+&emsp;k_u32 connection_status;  
+&emsp;k_u32 negotiated_count;  
+&emsp;k_connector_type negotiated_types[256];  
 } k_connector_negotiated_data;
 
 ```
@@ -2483,6 +2531,40 @@ k_connector_type negotiated_types[256];
 | connection_status | HDMI接口连接状态    |
 | negotiated_count  | Display驱动和HDMI显示器协商后，Display驱动支持的分辨率数量 |
 | negotiated_types[256] | Display驱动和HDMI显示器协商后，Display驱动支持的分辨率列表, negotiated_types[0]表示最佳分辨率 |
+
+【注意事项】
+
+无
+
+【相关数据类型及接口】
+
+无
+
+#### 3.1.27 k_connector_mirror
+
+【说明】
+
+Display驱动的mirror 功能
+
+【定义】
+
+```C
+
+typedef enum {  
+&emsp;K_CONNECTOR_MIRROR_HOR = 1,  
+&emsp;K_CONNECTOR_MIRROR_VER,  
+&emsp;K_CONNECTOR_MIRROR_BOTH,  
+}k_connector_mirror;
+
+```
+
+【成员】
+
+| 成员名称 | 描述        |
+| --- | --- |
+| K_CONNECTOR_MIRROR_HOR | 横向mirror    |
+| K_CONNECTOR_MIRROR_VER  | 纵向mirror |
+| K_CONNECTOR_MIRROR_BOTH| 横向和纵向都mirror |
 
 【注意事项】
 
