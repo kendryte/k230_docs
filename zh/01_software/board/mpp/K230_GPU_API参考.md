@@ -336,13 +336,13 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 描述
 
-    这个函数是用来为一个特定的缓冲区适当地映射内存。它将被用来对GPU需要的缓冲区的物理地址进行适当的转换。
-
-    如果你想直接使用一个帧缓冲区作为目标缓冲区，你需要用一个[vg_lite_buffer_t](#3241-vg_lite_buffer_t)结构包裹它，并调用内核将提供的逻辑或物理地址映射到硬件可访问的内存中。例如，如果你知道帧缓冲区的逻辑地址，用这个地址设置[vg_lite_buffer_t](#3241-vg_lite_buffer_t)结构的memory字段并调用这个函数。如果你知道物理地址，将memory字段设置为NULL，然后用物理地址对地址字段进行编程。
+    这个函数是用来将 DMABUF 导入 GPU 中进行使用，在调用前需要配置好 buffer 的 width, height, format, stride, memory 属性，具体用法可以参考 vglite_drm 这个示例。
 
 - 参数
 
     vg_lite_buffer_t \*buffer: 指向被[vg_lite_allocate](#3251-vg_lite_allocate)填入的缓冲区结构的指针。
+    vg_lite_map_flag_t flag: 目前只支持 VG_LITE_MAP_DMABUF
+    int32_t fd: DMABUF fd
 
 ##### 3.2.5.5 vg_lite_unmap
 
