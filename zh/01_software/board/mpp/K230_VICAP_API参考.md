@@ -126,6 +126,12 @@ Sensor模块系统架构如下图1-4所示：
 - [kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream)
 - [kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame)
 - [kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release)
+- [kd_mpi_vicap_set_vi_drop_frame](#2112-kd_mpi_vicap_set_vi_drop_frame)
+- [kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk)
+- [kd_mpi_vicap_set_dump_reserved](#2114-kd_mpi_vicap_set_dump_reserved)
+- [kd_mpi_vicap_set_slave_enable](#2115-kd_mpi_vicap_set_slave_enable)
+- [kd_mpi_vicap_set_slave_attr](#2116-kd_mpi_vicap_set_slave_attr)
+- [kd_mpi_vicap_3d_mode_crtl](#2117-kd_mpi_vicap_3d_mode_crtl)
 
 #### 2.1.1 kd_mpi_vicap_get_sensor_info
 
@@ -676,6 +682,123 @@ k_s32 kd_mpi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk_
 - 头文件：mpi_vicap_api.h
 - 库文件：libvicap.a
 
+#### 2.1.14 kd_mpi_vicap_set_dump_reserved
+
+【描述】
+
+设置是否开启快速dump 模式
+
+【语法】
+
+void kd_mpi_vicap_set_dump_reserved(k_vicap_dev dev_num, k_vicap_chn chn_num, k_bool reserved)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| dev_num      | VICAP设备号     | 输入          |
+| chn_num      | VICAP输出通道号 | 输入          |
+| reserved | 是否开启快速dump 模式 | 输入 |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+#### 2.1.15 kd_mpi_vicap_set_slave_enable
+
+【描述】
+
+使能slave mode
+
+【语法】
+
+k_s32 kd_mpi_vicap_set_slave_enable(k_vicap_slave_id id, k_vicap_slave_enable *enable)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| id      | slave mode 的id     | 输入          |
+| enable      | 是否enable slave mode | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+#### 2.1.16 kd_mpi_vicap_set_slave_attr
+
+【描述】
+
+设置slave mode 参数
+
+【语法】
+
+k_s32 kd_mpi_vicap_set_slave_attr(k_vicap_slave_id id, k_vicap_slave_info *info)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| id      | slave mode 的id     | 输入          |
+| info      | slave mode 的参数 | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+#### 2.1.17 kd_mpi_vicap_3d_mode_crtl
+
+【描述】
+
+设置3d 模式使能
+
+【语法】
+
+k_s32 kd_mpi_vicap_3d_mode_crtl(k_bool enable)
+
+【参数】
+
+| **参数名称** | **描述**        | **输入/输出** |
+|--------------|-----------------|---------------|
+| enable      | 3d 模式使能     | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mpi_vicap_api.h
+- 库文件：libvicap.a
+
 ### 2.2 Sensor
 
 该功能模块提供以下API：
@@ -696,6 +819,8 @@ k_s32 kd_mpi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk_
 - [kd_mpi_sensor_dgain_get](#2214-kd_mpi_sensor_dgain_get)
 - [kd_mpi_sensor_intg_time_set](#2215-kd_mpi_sensor_intg_time_set)
 - [kd_mpi_sensor_intg_time_get](#2216-kd_mpi_sensor_intg_time_get)
+- [kd_mpi_sensor_otpdata_get](#2217-kd_mpi_sensor_otpdata_get)
+- [kd_mpi_sensor_otpdata_set](#2218-kd_mpi_sensor_otpdata_set)
 
 #### 2.2.1 kd_mpi_sensor_open
 
@@ -1385,6 +1510,92 @@ k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 
 【相关主题】
 
+#### 2.2.17 kd_mpi_sensor_otpdata_get
+
+【描述】
+
+获取 sensor otp 数据
+
+【语法】
+
+k_s32 kd_mpi_sensor_otpdata_get(k_s32 fd, void *ota_data)
+
+【参数】
+
+| **参数名称** | **描述**             | **输入/输出** |
+|--------------|----------------------|---------------|
+| fd           | Sensor设备文件描述符 | 输入          |
+| ota_data         | otp 数据    | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mpi_sensor_api.h
+- 库文件：libsensor.a
+
+【注意】
+
+无。
+
+【举例】
+
+无。
+
+【相关主题】
+
+#### 2.2.18 kd_mpi_sensor_otpdata_set
+
+【描述】
+
+设置sensor otp 数据
+
+【语法】
+
+k_s32 kd_mpi_sensor_otpdata_set(k_s32 fd, void *ota_data)
+
+【参数】
+
+| **参数名称** | **描述**             | **输入/输出** |
+|--------------|----------------------|---------------|
+| fd           | Sensor设备文件描述符 | 输入          |
+| ota_data         | otp 数据    | 输入          |
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mpi_sensor_api.h
+- 库文件：libsensor.a
+
+【注意】
+
+无。
+
+【举例】
+
+无。
+
+【相关主题】
+
 ## 3. 数据类型
 
 ### 3.1 VICAP
@@ -1415,39 +1626,94 @@ k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 
 ```c
 typedef enum {
-OV_OV9732_MIPI_1920X1080_30FPS_10BIT_LINEAR,
-OV_OV9732_MIPI_1920X1080_30FPS_10BIT_HDR,
-OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR,
-OV_OV9286_MIPI_1920X1080_30FPS_10BIT_LINEAR,
-OV_OV9286_MIPI_1920X1080_30FPS_10BIT_HDR,
-OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR,
-OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE,
+OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR = 0,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR = 1,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE = 2,
+OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR = 3,
+OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_SPECKLE = 4,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR_SPECKLE = 5,
+OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR_SPECKLE  = 6,
+IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR = 7,
+IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_LINEAR = 8,
+IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_LINEAR = 9,
+IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_MCLK_7425_LINEAR = 10,
+IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR = 11,
+IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR = 12,
+IMX335_MIPI_4LANE_RAW10_2XDOL = 13,
+IMX335_MIPI_4LANE_RAW10_3XDOL = 14,
+SC_SC035HGS_MIPI_1LANE_RAW10_640X480_120FPS_LINEAR = 15,
+SC_SC035HGS_MIPI_1LANE_RAW10_640X480_60FPS_LINEAR = 16,
+SC_SC035HGS_MIPI_1LANE_RAW10_640X480_30FPS_LINEAR = 17,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_SPECKLE = 18,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_IR = 19,
+OV_OV9732_MIPI_1280X720_30FPS_10BIT_MCLK_16M_LINEAR = 20,
+OV_OV5647_MIPI_1920X1080_30FPS_10BIT_LINEAR = 21,
+OV_OV5647_MIPI_2592x1944_10FPS_10BIT_LINEAR = 22,
+OV_OV5647_MIPI_640x480_60FPS_10BIT_LINEAR = 23,
+OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR = 24,
+SC_SC201CS_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR = 25,
+SC_SC201CS_SLAVE_MODE_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR = 26,
+OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR = 27,
+OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR = 28,
+XS9922B_MIPI_CSI0_1280X720_30FPS_YUV422_DOL3 = 29,
+XS9950_MIPI_CSI0_1280X720_30FPS_YUV422 = 30,
+XS9950_MIPI_CSI1_1280X720_30FPS_YUV422 = 31,
+XS9950_MIPI_CSI2_1280X720_30FPS_YUV422 = 32,
+XS9950_MIPI_CSI0_1920X1080_30FPS_YUV422 = 33,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_SPECKLE_V2 = 34,
+OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_IR_V2 = 35,
+OV_OV9732_MIPI_1280X720_30FPS_10BIT_MCLK_16M_LINEAR_V2 = 36,
+OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR_V2 = 37,
+OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR_V2 = 38,
+OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR_V2 = 39,
+GC2053_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR = 40,
 SENSOR_TYPE_MAX,
 } k_vicap_sensor_type;
 ```
 
 【成员】
-
 | **成员名称**                                       | **描述**                                |
 |----------------------------------------------------|-----------------------------------------|
-| OV_OV9732_MIPI_1920X1080_30FPS_10BIT_LINEAR        | OV9732 1080P 10bit 30帧线性输出配置     |
-| OV_OV9732_MIPI_1920X1080_30FPS_10BIT_HDR           | OV9732 1080P 10bit 30帧HDR输出配置      |
-| OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR         | OV9732 720P 10bit 30帧线性输出配置      |
-| OV_OV9286_MIPI_1920X1080_30FPS_10BIT_LINEAR        | OV9286 1080P 10bit 30帧线性输出配置     |
-| OV_OV9286_MIPI_1920X1080_30FPS_10BIT_HDR           | OV9286 1080P 10bit 30帧HDR输出配置      |
-| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR      | OV9286 720P 10bit 30帧线性输出 红外配置 |
-| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE | OV9286 720P 10bit 30帧线性输出 散斑配置 |
+| OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR        | OV9732 1lan 10bit 720P30帧线性输出配置 外接晶振16M 接csi0    |
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR     | OV9286 2lan 10bit 720P30帧线性输出配置ir图像 外接晶振25M 接csi1     |
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE | OV9286 2lan 10bit 720P30帧线性输出配置speckle图像 外接晶振25M 接csi1 |
+| OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_IR     | OV9286 2lan 10bit 720P60帧线性输出配置ir图像 外接晶振25M 接csi1    |
+| OV_OV9286_MIPI_1280X720_60FPS_10BIT_LINEAR_SPECKLE  | OV9286 2lan 10bit 720P60帧线性输出配置speckle图像 外接晶振25M 接csi1  |
+| IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR      |  imx335 12bit 2lan 1080P30帧线性输出 外接晶振24M 接csi0 |
+| IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_LINEAR |  imx335 12bit 2lan 全尺寸30帧线性输出 外接晶振24M 接csi0|
+| IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_LINEAR      |  imx335 12bit 4lan 全尺寸30帧线性输出 外接晶振24M 接csi0|
+| IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_MCLK_7425_LINEAR |  imx335 12bit 2lan 1080P30帧线性输出 芯片输出74.25M 时钟 接csi0 |
+| IMX335_MIPI_2LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR  |  imx335 12bit 2lan 全尺寸30帧线性输出 芯片输出74.25M 时钟 接csi0 |
+| IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_MCLK_7425_LINEAR |  imx335 12bit 4lan 全尺寸30帧线性输出 芯片输出74.25M 时钟 接csi0|
+| IMX335_MIPI_4LANE_RAW10_2XDOL      |  imx335 10bit 4lan 全尺寸15帧2dol输出 外接晶振24M 接csi0|
+| IMX335_MIPI_4LANE_RAW10_3XDOL |  imx335 10bit 4lan 全尺寸15帧3dol输出 外接晶振24M 接csi0|
+| SC_SC035HGS_MIPI_1LANE_RAW10_640X480_120FPS_LINEAR      |   sc035 10bit 1lan 640x480 120帧线性输出 外接晶振24M 接csi2 |
+| SC_SC035HGS_MIPI_1LANE_RAW10_640X480_60FPS_LINEAR |  sc035 10bit 1lan 640x480 60帧线性输出 外接晶振24M 接csi2|
+| SC_SC035HGS_MIPI_1LANE_RAW10_640X480_30FPS_LINEAR      |  sc035 10bit 1lan 640x480 30帧线性输出 外接晶振24M 接csi2|
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_SPECKLE | OV9286 2lan 10bit 720P30帧线性输出配置speckle图像 芯片输出25M 时钟 接csi1|
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_IR      |OV9286 2lan 10bit 720P30帧线性输出配置ir图像 芯片输出25M 时钟 接csi1|
+| OV_OV9732_MIPI_1280X720_30FPS_10BIT_MCLK_16M_LINEAR | OV9732 1lan 10bit 720P30帧线性输出配置 芯片输出16M时钟 接csi0|
+| OV_OV5647_MIPI_1920X1080_30FPS_10BIT_LINEAR      | OV5647 2lan 10bit 1080P30帧线性输出配置 外接晶振25M 接csi2|
+| OV_OV5647_MIPI_2592x1944_10FPS_10BIT_LINEAR |OV5647 2lan 10bit 全尺寸 10帧线性输出配置 外接晶振25M 接csi2|
+| OV_OV5647_MIPI_640x480_60FPS_10BIT_LINEAR      | OV5647 2lan 10bit 640x480 60帧线性输出配置 外接晶振25M 接csi2|
+| OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR | OV5647 2lan 10bit 1080P30帧线性输出配置 芯片输出25M时钟 接csi0|
+| SC_SC201CS_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR      | sc201 1lan 10bit 1600x1200 30帧线性输出  晶振27M 接csi1|
+| SC_SC201CS_SLAVE_MODE_MIPI_1LANE_RAW10_1600X1200_30FPS_LINEAR |  sc201 1lan 10bit slave模式 1600x1200 30帧线性输出 晶振27M 接csi1|
+| OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR  | OV5647 2lan 10bit 1080P30帧线性输出配置 外接晶振25M 外接csi1|
+| OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR | OV5647 2lan 10bit 1080P30帧线性输出配置 外接晶振25M 外接csi2|
+| XS9950_MIPI_CSI0_1280X720_30FPS_YUV422      | XS9950 2lan yuv422 720P25帧线性输出 模拟摄像头 接csi0|
+| XS9950_MIPI_CSI1_1280X720_30FPS_YUV422 | XS9950 2lan yuv422 720P25帧线性输出 模拟摄像头 接csi1|
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_SPECKLE_V2      | OV9286 2lan 10bit 720P30帧线性输出配置speckle图像 芯片输出25M 时钟 接csi1|
+| OV_OV9286_MIPI_1280X720_30FPS_10BIT_MCLK_25M_LINEAR_IR_V2 | OV9286 2lan 10bit 720P30帧线性输出配置ir图像 芯片输出25M 时钟 接csi1|
+| OV_OV9732_MIPI_1280X720_30FPS_10BIT_MCLK_16M_LINEAR_V2   | OV9732 1lan 10bit 720P30帧线性输出配置 芯片输出16M时钟 接csi2|
+| OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR_V2    | OV5647 2lan 10bit 1080P30帧线性输出配置 外接晶振25M 外接csi0 |
+| OV_OV5647_MIPI_CSI1_1920X1080_30FPS_10BIT_LINEAR_V2        | OV5647 2lan 10bit 1080P30帧线性输出配置 外接晶振25M 外接csi1  |
+| OV_OV5647_MIPI_CSI2_1920X1080_30FPS_10BIT_LINEAR_V2        | OV5647 2lan 10bit 1080P30帧线性输出配置 芯片输出25M时钟 接csi2|
+| GC2053_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR        |  GC2053 2lan 10bit 1080P30帧线性输出配置 芯片输出16M时钟   接csi0  |
 
 【注意事项】
 
 1. 该列表需要有sensor驱动开发人员维护，应用开发者通过此处定义的sensor type来打开指定类型的sensor设备
-1. 当前版本支持如下类型：
-
-    OV_OV9732_MIPI_1280X720_30FPS_10BIT_LINEAR
-
-    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_IR
-
-    OV_OV9286_MIPI_1280X720_30FPS_10BIT_LINEAR_SPECKLE
 
 #### 3.1.2 k_vicap_dev
 
@@ -1784,6 +2050,7 @@ typedef struct {
     k_bool dw_enable;
     k_u32 buffer_num;
     k_u32 buffer_size;
+    k_vicap_mirror mirror;
 } k_vicap_dev_attr;
 ```
 
@@ -1799,6 +2066,7 @@ typedef struct {
 | dw_enable     | Dewarp使能（详见 [K230_SDK_Dewarp使用指南.md](../../pc/dewarp/K230_SDK_Dewarp使用指南.md)） |
 | buffer_num    | 离线模式下，配置sensor接收数据的缓冲区个数                   |
 | buffer_size   | 离线模式下，配置sensor接收数据的缓冲区大小                   |
+| mirror   | sensor 的mirror 功能                   |
 
 【注意事项】对于小内存应用场景，建议关闭3DNR模块，减小内存占用。关闭方式为应用设置设备属性时，将 pipe_ctrl.bits.dnr3_enable 设置为0
 
@@ -1838,6 +2106,33 @@ typedef struct {
 | buffer_size  | 缓冲区大小               |
 | alignment    | 缓冲区对齐方式           |
 
+#### 3.1.16 k_vicap_mirror
+
+【说明】vicap sensor mirror 功能
+
+【定义】
+
+```c
+typedef enum {
+VICAP_MIRROR_NONE = 0,
+VICAP_MIRROR_HOR = 1,
+VICAP_MIRROR_VER = 2,
+VICAP_MIRROR_BOTH = 3,
+} k_vicap_mirror;
+
+```
+
+【成员】
+
+| **成员名称**                       | **描述**                    |
+|------------------------------------|-----------------------------|
+| VICAP_MIRROR_NONE          | sensor不需要mirror            |
+| VICAP_MIRROR_HOR           | sensor 横向mirror |
+| VICAP_MIRROR_VER           | sensor 纵向mirror              |
+| VICAP_MIRROR_BOTH          | sensor 横向和纵向mirror                       |
+
+【注意事项】
+
 ### 3.2 Sensor
 
 该功能模块的相关数据类型定义如下：
@@ -1850,6 +2145,7 @@ typedef struct {
 - [k_sensor_size](#326-k_sensor_size)
 - [k_sensor_ae_info](#327-k_sensor_ae_info)
 - [k_sensor_mode](#328-k_sensor_mode)
+- [k_sensor_otp_date](#329-k_sensor_otp_date)
 
 #### 3.2.1 k_sensor_bayer_pattern
 
@@ -2131,6 +2427,28 @@ k_sensor_reg_list *reg_list;
 | mipi_info      | MIPI参数信息             |
 | ae_info        | AE参数信息               |
 | reg_list       | 当前模式的寄存器配置列表 |
+| otp_type          | otp 类型：sensor 自用的和user             |
+| otp_date    | otp数据           |
+
+#### 3.2.9 k_sensor_otp_date
+
+【说明】sensor otp参数
+
+【定义】
+
+```c
+typedef struct {
+k_u8 otp_type;
+k_u8 otp_date[20];
+} k_sensor_otp_date;
+```
+
+【成员】
+
+| **成员名称**   | **描述**                 |
+|----------------|--------------------------|
+| otp_type          | otp 类型：sensor 自用的和user             |
+| otp_date    | otp数据           |
 
 ## 4. MAPI
 
@@ -2149,6 +2467,7 @@ k_sensor_reg_list *reg_list;
 - [kd_mapi_vicap_tuning]
 - [kd_mapi_isp_ae_get_roi]
 - [kd_mapi_isp_ae_set_roi]
+- [kd_mapi_sensor_otpdata_get]
 
 ### 4.1 API
 
@@ -2517,6 +2836,32 @@ k_s32 kd_mapi_isp_ae_get_roi(k_vicap_dev dev_num, k_isp_ae_roi \*ae_roi)
 【语法】
 
 k_s32 kd_mapi_isp_ae_set_roi(k_vicap_dev dev_num, k_isp_ae_roi ae_roi)
+
+【返回值】
+
+| **返回值** | **描述**               |
+|------------|------------------------|
+| 0          | 成功。                 |
+| 非0        | 失败，参考错误码定义。 |
+
+【芯片差异】
+
+无。
+
+【需求】
+
+- 头文件：mapi_isp_api.h
+- 库文件：libmapi.a
+
+#### 4.1.14 kd_mapi_sensor_otpdata_get
+
+【描述】
+
+获取sensor otp 数据
+
+【语法】
+
+k_s32 kd_mapi_sensor_otpdata_get(k_s32 sensor_type, k_sensor_otp_date *otp_data)
 
 【返回值】
 
