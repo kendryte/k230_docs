@@ -12,6 +12,7 @@ K230 SDK API 参考
    zh/01_software/board/mpp/K230_GPU_API参考.md
    zh/01_software/board/mpp/K230_SHA256_API参考.md
    zh/01_software/board/mpp/K230_VICAP_API参考.md
+   zh/01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md
    zh/01_software/board/mpp/K230_系统控制_API参考.md
    zh/01_software/board/mpp/K230_视频编解码_API参考.md
    zh/01_software/board/mpp/K230_视频输出_API参考.md
