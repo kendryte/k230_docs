@@ -27,7 +27,7 @@
 
 ### 硬件环境
 
-- K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 * 1个
+- K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1/CanMV-k230-V1.0/CanMV-k230-V1.1 * 1个
 - 指定的sensor模组一个
 - 一台windows系统pc电脑
 - typeC线两根
@@ -50,16 +50,20 @@ dpu深度相机POC支持如下功能:
    run.bat文件使用test_uvc.exe命令来执行不同功能，test_uvc.exe执行命令如下
 
 ```shell
-Usage: grab stream frame Usage: %s -s 0 -m 0 -f ./bin/0702/H1280W720.bin -t 0.
+Usage: grab stream frame Usage: %s -s 0 -m 0 -f ./bin/0702/H1280W720.bin -t 0 -a 19 -b 20 -n "0701".
        snap frame  Usage: %s -s 1 -m 1 -f ./bin/0702/H1280W720.bin -t 0.
-       transfer file Usage: %s -m 2 -i ./bin/H1280W720_conf.bin -o /sharefs/H1280W720_conf.bin.
-                    -s <local filepathname>: save frame data to local file
-                    -m <work mode>: work mode. 0:grab data,  1:snap data, 2:tranfer file
-                    -i <local filepathname>: transfer local filename.
-                    -o <remote filepathname>: k230 receive filename.
-                    -f <ref/cfg filepathname>: k230 update ref/cfg file.
-                    -t <dpu image mode>: dpu image mode. 0:RGB_DEPTH, 1：RGB_IR, 2：IR_DEPTH, 3：SPECKLE, 4：IR, 5：DEPTH
-                    -r <fps>: set fps.
+       transfer file Usage: % s -m 2 -i ./bin/H1280W720_conf.bin -o /sharefs/H1280W720_conf.bin.
+          -s <local filepathname>: save frame data to local file
+          -m <work mode>: work mode. 0:grab data,  1:snap data, 2:tranfer file
+          -i <local filepathname>: transfer local filename.
+          -o <remote filepathname>: k230 receive filename.
+          -f <ref/cfg filepathname>: k230 update ref/cfg file.
+          -t <dpu image mode>: dpu image mode.
+          -r <fps>: set fps.
+          -a <sensor type0>:sensor type0,default is 20,see vicap doc.
+          -b <sensor type1>:sensor type1,default is 19,see vicap doc.
+          -n <init serialnumber>:init seialnumber,default is 0701.
+          -d <gdma rotate>:0: Rotate 0, 1: Rotate 90, 2: Rotate 180, 3:Rotate 270. evb Rotate 90 and canmv Rotate 270.
 ```
 
 ## 更新驱动
@@ -85,17 +89,17 @@ Usage: grab stream frame Usage: %s -s 0 -m 0 -f ./bin/0702/H1280W720.bin -t 0.
   将run.bat修改成如下命令,请将H1280W720.bin替换成sensor模组相匹配的文件。会在./data文件夹下实时生成深度图和彩色图图片。
 
   ```shell
-  test_uvc.exe -m 0 -s 1 -f "./bin/0702/H1280W720.bin" -t 0
+  test_uvc.exe -m 0 -s 1 -a 36 -b 35 -f "./bin/canmv/05/H1280W720.bin" -t 0 -n "2405-05"
   ```
 
 - 每秒抓取一张k230设备深度图和彩色图，请将H1280W720.bin替换成sensor模组相匹配的文件。会在./data文件夹下每个一秒生成深度图和彩色图图片。
 
   ```shell
-  test_uvc.exe -m 1 -s 1 -f "./bin/0702/H1280W720.bin" -t 0
+  test_uvc.exe -m 1 -s 1 -a 36 -b 35 -f "./bin/canmv/05/H1280W720.bin" -t 0 -n "2405-05"
   ```
 
 - 帧率控制，设置每秒传输2帧。
 
   ```shell
-  test_uvc.exe -m 1 -s 1 -f "./bin/0702/H1280W720.bin" -t 0 -r 2
+  test_uvc.exe -m 1 -s 1 -a 36 -b 35 -f "./bin/canmv/05/H1280W720.bin" -t 0 -n "2405-05" -r 2
   ```
