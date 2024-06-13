@@ -212,9 +212,6 @@ build web docs:
     - make mhtml
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
-  artifacts:
-    paths:
-      - _build
 
 deploy production:
   stage: deploy
@@ -230,4 +227,4 @@ deploy production:
     name: production
     url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
-    - scp -P $AWS_PORT -C -r _build/* $AWS/data/webapp/k230
+    - scp -P $AWS_PORT -C -r /data1/k230/docs/* $AWS/data/webapp/k230
