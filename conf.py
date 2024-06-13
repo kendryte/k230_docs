@@ -38,7 +38,13 @@ templates_path = ['_templates']
 exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
 # html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
-language = 'zh_CN'
+language = os.getenv('SPHINX_LANGUAGE', 'en')
+
+# Set the title based on the language
+if language == 'en':
+    html_title = 'K230 Docs'
+else:
+    html_title = 'K230 文档'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -55,8 +61,6 @@ html_favicon = 'favicon.ico'
 html_theme = "sphinx_book_theme"
 # html_theme = 'alabaster'
 html_static_path = ['_static']
-
-# if want to add top nav for canann, enable this.
 
 default_dark_mode = True
 
