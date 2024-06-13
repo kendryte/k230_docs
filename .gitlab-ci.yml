@@ -98,7 +98,7 @@ markdownlint:
     - whoami
     - pwd
     #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
-    - git fetch
+    - git fetch --tags
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
@@ -200,7 +200,7 @@ build web docs:
     name: dev
     url: https://ai.b-bug.org/k230/docs/dev/
   script:
-    - git fetch
+    - git fetch --tags
     - git checkout dev
     - git tag --list
     - git reset --hard origin/dev
