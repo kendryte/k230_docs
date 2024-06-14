@@ -235,13 +235,28 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 #### 4.2.1 配置文件说明
 
 `k230_evb_defconfig` ：基于K230 USIP LP3 EVB的默认SDK配置文件
+
 `k230_evb_usiplpddr4_defconfig` ：基于K230 USIP LP4 EVB的默认SDK配置文件
+
 `k230d_defconfig` ：基于K230-SIP-LP3-EVB的默认SDK配置文件
+
 `k230_evb_nand_defconfig` ：基于K230 USIP LP3 EVB会生成nand镜像的默认SDK配置文件
-`k230_canmv_defconfig` ：基于CanMV-K230的默认SDK配置文件
+
+`k230_canmv_defconfig` ：基于CanMV-K230 V1.0/V1.1 的默认SDK配置文件
+
 `k230_evb_doorlock_defconfig` ：基于K230 USIP LP3 EVB的门锁poc默认SDK配置文件
+
 `k230_evb_peephole_device_defconfig` ：基于K230 USIP LP3 EVB的猫眼POC
+
 `k230d_doorlock_defconfig` ：基于K230-SIP-LP3-EVB的门锁POC
+
+`k230_canmv_v2_defconfig` ：基于Canmv-K230 V2.0板的默认SDK配置文件
+
+`k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板rt-thread系统配置文件
+
+`k230_canmv_v2_only_rtt_defconfig` ：基于Canmv-K230 V2.0板rt-thread系统配置文件
+
+`k230d_canmv_only_rtt_defconfig` ：基于CanMV-K230-Zero板的rt-thread系统配置文件
 
 ### 4.3 编译 SDK
 
