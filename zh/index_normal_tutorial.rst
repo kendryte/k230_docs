@@ -21,3 +21,4 @@ K230 SDK 实用教程
   02_applications/fancy_poc/K230_Fancy_Poc介绍.md
   01_software/board/examples/K230_SDK_CanMV_Board_Demo使用指南.md
   01_software/board/examples/K230_SDK_EVB_Board_Demo使用指南.md
+  01_software/board/examples/K230D_SDK_Zero_Board_Demo使用指南.md
