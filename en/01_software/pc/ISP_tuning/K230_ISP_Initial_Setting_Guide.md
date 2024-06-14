@@ -44,6 +44,7 @@ This document (this guide) is intended primarily for:
 | Document version number  | Modify the description                           | Author | date       |
 |------------|-----------------------------------|--------|------------|
 | V1.0       | Initial edition                             | Rong Jian | 2024-01-24 |
+| V1.1       | Updated some parameters descriptions | Rong Jian | 2024-04-28 |
 
 ## 1. K230 ISP Initial Setting Overview
 
@@ -58,7 +59,7 @@ These configuration files are stored in followling directiory:
 
 ### 2.1 Overview
 
-The K230 ISP Calibration Tool can be used to generate XML files, and the calibration for all modules in the Calibration Tool must be completed to obtain complete calibration data.
+The K230 ISP Calibration Tool (K230ISPCalibrationTool.exe) can be used to generate XML files, and the calibration for all modules in the Calibration Tool must be completed to obtain complete calibration data.
 
 Calibration parameters are generated in two ways:
 
@@ -123,6 +124,14 @@ In the "Resolution" column, input the correct width and height of the image, sel
 
 After renaming the generated XML file according to the input XML name in the K230 SDK (such as ov9732-1280x720.xml) code, place it in the config directory and it will be loaded correctly by the K230 SDK.
 
+## 2.4 AWB parameter K_Factor
+
+In the awb sub section of the XML file, there is a K_Factor parameter that needs to be calibrated and manually filled in separately. This parameter provides feedback on the sensitivity of the camera module.
+
+In the AWB algorithm, the judgement for outdoor environment is: Exp*K_Factor <=0.12 (Exp is exposure).
+
+For example, take 2000 lux as the ambient illumination segmentation point for the outdoor and transition, obtain the exposure value (ET \* gain) corresponding to this illumination and calculate: K_Factor=0.12/(ET \* gain).
+
 ## 3. manual.json file
 
 The manual.json file needs to be manually created. Please refer to imx335-2592x1944_manual.json to create a *_manual.json file for the required sensor resolution.
@@ -138,8 +147,7 @@ This module is for setting HDR mode parameters that are not included in other IS
 | parameter | Type and value range | description  |
 | --------- | -------------------- | --------------- |
 | base_frame | int 0~1      | 0: base on S frame; <br/>1: base on L frame。<br/>Recommended setting is 0. |
-| bls      | int[4]         | Black level(12bit) <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>The dirver of current version just supports the same bls value for all channels.  |
-| bls_out     | int[4]      | Black level out(12bit) <br/Default setting is [0,0,0,0]       |
+| bls_out     | int[4]      | Black level out <br/Default setting is [0,0,0,0]，value based on ISP 12bits.   |
 | bypass      | bool        |  false: HDR enable <br/>true: HDR bypass      |
 | bypass_select| int 0~2    | 0: HDR output  long frame; <br/>1: HDR output short frame; <br/>2: HDR output very short frame       |
 | color_weight| int[3] 0~255 | color_weight <br/> stitch_color_weight0+stitch_color_weight1*2+stitch_color_weight2=256 <br/> Recommended setting is[255, 0, 1] |
@@ -178,7 +186,6 @@ This module is for setting RGBIR pattern.
 | parameter      | Type and value range | description            |
 | --------- | -------------- | --------------- |
 | bit       | int       | 12, fixed value |
-| bls       | int[4]    | Black level(12bit) <br/>[bls_r,bls_g,bls_b,bls_ir]。<br/>The dirver of current version just supports the same bls value for all channels.  |
 | ccmatrix  | float[12] | 3x4 color conversion matrix, convert RGBIR value to RGB value |
 | dpcc_mid_th | int     | DPCC median threshold of channel |
 | dpcc_th   | int       | DPCC threshold of channel |
@@ -203,67 +210,68 @@ Please refer to Chapter 3.3 of the 《K230 ISP Image Tuning Guide》.
 
 ### 3.7 CCpdv1
 
-#### 3.7.1 Function Description
+Please refer to Chapter 3.19 of the 《K230 ISP Image Tuning Guide》.
 
-Set black level for linear mode.
+### 3.8 Bls
 
-#### 3.7.2 Main Parameters
+#### 3.8.1 Function Description
 
-| parameter      | Type and value range | description            |
+This module is for setting black level. The default setting of Bls module enable is enabled.
+
+#### 3.8.2 Main Parameters
+
+| parameter      | Type and value range | description   |
 | --------- | -------------- | --------------- |
-| bls        | int[4] | Black level(12bit) <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>The dirver of current version just supports the same bls value for all channels.  |
-| bls_enable | bool   | false: BLS disable. <br/>true: BLS enable. |
+| bls        | int[4] | Black level <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>The dirver of current version just supports the same bls value for all channels. Value based on ISP 12bits. |
 
-Please do not change the settings of other parameters.
-
-### 3.8 CGamma64
+### 3.9 CGamma64
 
 Please refer to Chapter 3.14 of the 《K230 ISP Image Tuning Guide》.
 
-### 3.9 CDpcc
+### 3.10 CDpcc
 
 Please refer to Chapter 3.8 of the 《K230 SP Image Tuning Guide》.
 
-### 3.10 CDpf
+### 3.11 CDpf
 
 Please refer to Chapter 3.9 of the 《K230 ISP Image Tuning Guide》.
 
-### 3.11 CLscv2
+### 3.12 CLscv2
 
 Please refer to Chapter 3.2 of the 《K230 ISP Image Tuning Guide》.
 
-### 3.12 CWdrv4
+### 3.13 CWdrv4
 
 Please refer to Chapter 3.6 of the 《K230 ISP Image Tuning Guide》.
 
-### 3.13 C3dnrv3_1
+### 3.14 C3dnrv3_1
 
 Please refer to Chapter 3.10 of the 《K230 ISP Image Tuning Guide》.
 
-### 3.14 CCproc
+### 3.15 CCproc
 
 Please refer to Chapter 3.18 of the 《K230_SP_Image Tuning Guide》.
 
-### 3.15 CEEv1
-
-#### 3.15.1 Function Description
-
-This module includes three sub-modules: CA, DCI and EE .
-
-#### 3.15.2 Main Parameters
-
-Please refer to the Chapter 3.15(EE), 3.16(CA) and 3.17(DCI) of the 《K230 ISP Image Tuning Guide》.
-
-### 3.16 CDmscv2
+### 3.16 CEEv1
 
 #### 3.16.1 Function Description
 
-This module includes two sub-modules: CAC and DSMC.
+This module includes three sub-modules: CA, DCI and EE .
 
 #### 3.16.2 Main Parameters
 
-Please refer to the parameters of the CAC module in the XML file for CAC parameter settings.<br/>
-And please refer to Chapter 3.11 of the 《K230 ISP Image Tuning Guide》for DSMC parameter settings.
+Please refer to the Chapter 3.15(EE), 3.16(CA) and 3.17(DCI) of the 《K230 ISP Image Tuning Guide》.
+
+### 3.17 CDmscv2
+
+#### 3.17.1 Function Description
+
+This module includes two sub-modules: CAC and DSMC.
+
+#### 3.17.2 Main Parameters
+
+Please refer to Chapter 3.20 of the 《K230 ISP Image Tuning Guide》 for CAC parameter settings.<br/>
+And please refer to Chapter 3.11 of the 《K230 ISP Image Tuning Guide》 for DSMC parameter settings.
 
 ## 4. auto.json file
 
@@ -273,38 +281,39 @@ The auto.json file needs to be manually created. Please refer to imx335-2592x194
 
 #### 4.1.1 Function Description
 
-This module is used to set the parameters for the AE control and AE adaptive functions.
+This module is used to set the parameters for the AE control and AE adaptive function.
 
 #### 4.1.2 Main parameters
 
-| parameter            | Type and value range | description                                                   |
+| parameter    | Type and value range | description    |
 | --------------- | -------------- | ------------------------------------------------------ |
-| antiBandingMode | Int 0~3        | Anti-Banding working mode<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| enable          | bool           | false: disable AE <br/>true : enable AE |
+| semMode  | int 0~2  | Scene mode <br/>0: Scene evaluation disable <br/>1: Scene evaluation fix <br/>2: Scene evaluation adaptive    |
+| antiFlickerMode | Int 0~3        | Anti-Banding working mode<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| setPoint        | float 0~255.0  | Set the target brightness value for AE   |
+| tolerance       | float 0~100.0  | Set the percentage lock range of AE's brightness target value           |
 | dampOver        | float 0~1.0    | Damping factor to smooth AE convergence during overexposure                       |
 | dampOverGain    | float 0~128.0  | The convergence acceleration gain factor outside the clip range when AE is overexposed. If the value is larger, the convergence will be faster. |
 | dampOverRatio   | float 1.0~4.0  | The scale factor outside the clip range when AE is overexposed. If the value is smaller, the convergence will be faster.  |
 | dampUnder       | float 0~1.0    | Damping factor to smooth AE convergence under exposure                       |
 | dampUnderGain   | float 0~16.0   | The convergence acceleration gain factor outside the clip range when AE is underexposed. If the value is larger, the convergence will be faster. |
 | dampUnderRatio  | float 0~1.0    | The clip range scale factor when AE is underexposed. If the value is larger, the convergence will be faster. |
-| enable          | bool           | false: disable AE <br/>true : enable AE |
-| lowlight|||
-| hdr_gain  | float[20] 0~255.0   | The gain values of each "gain" levels at HDR mode, the maximum "gain" level is 20. |
-| hdr_repress | float[20] 0~1.0   | The repress ratios of each "gain" levels at HDR mode  |
-| linear_gain | float[20] 0~255.0 | The gain values of each "gain" levels at linear mode, the maximum "gain" level is 20. |
-| linear_repress | float[20] 0~1.0 | The repress ratios of each "gain" levels at linear mode |
-| maxISPDgain | float 1.0~255.99609375 | Maximum ISP digital gain  |
-| maxSensorAgain  | float   | Maximum sensor analog gain |
-| maxSensorDgain  | float   | Maximum sensor digital gain  |
-| mode  | int 0~2  | 0: AE <br/>1: Anti-Banding <br/>2: Scene Evaluation  |
 | motionFilter  | float 0~1.0  | Motion filter, use to calculate the motion factor at AE scene evaluation adaptive mode  |
 | motionThreshold  | float 0~1.0 | Motion threshold     |
-| roiWeight  | float   |  The weight for ROI window   |
-| semMode  | int 0~2  | Scene mode <br/>0: Scene evaluation disable <br/>1: Scene evaluation fix <br/>2: Scene evaluation adaptive    |
-| setPoint        | float 0~255.0  | Set the target brightness value for AE   |
 | targetFilter  | float 0~1.0   | The smoothness coefficient for the AE setpoint value change, with larger values leading to faster changes |
-| tolerance       | float 0~100.0  | Set the percentage lock range of AE's brightness target value                       |
-| wdrContrast.max  | float 0~255.0   | Maximum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode  |
-| wdrContrast.min  | float 0~255.0   | Minimum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode    |
+| lowLightLinearRepress | float[20] 0~1.0 | The repress ratios of each "gain" levels at linear mode |
+| lowLightLinearGain | float[20] 0~255.0 | The gain values of each "gain" levels at linear mode, the maximum "gain" level is 20. |
+| lowLightLinearLevel  | int 0~19   | total gain levels at linear mode |
+| lowLightHdrRepress | float[20] 0~1.0   | The repress ratios of each "gain" levels at HDR mode  |
+| lowLightHdrGain  | float[20] 0~255.0   | The gain values of each "gain" levels at HDR mode, the maximum "gain" level is 20. |
+| lowLightHdrLevel  | int 0~16  | total gain levels at HDR mode |
+| wdrContrastMax  | float 0~255.0   | Maximum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode  |
+| wdrContrastMin  | float 0~255.0   | Minimum contrast value for calcuating AE setpoint at AE scene evaluation adaptive mode    |
+| frameCalEnable          | bool           | Exposure setting frame interval enable switch <br/>true : Enable exposure setting frame interval function <br/>false: disable exposure setting frame interval function  |
+| autoHdrEnable | bool        | true: auto calculate the HDR ratio at HDR mode <br/>false: use the fixed HDR ratio at HDR mode|
+| roiNumber  | int   |  the seiral number of current ROI window   |
+| roiWindow  | float (fx,fy,fw,fh,weight) | the starting point coordinates (x, y), width&height abd weight of the current ROI window |
+| expV2WindowWeight | float[32x32] 0~255  | the exposure weight for every grid |
 
 ### 4.2 Awbv2
 
@@ -314,15 +323,15 @@ This module is used to set the parameters for the awb adaptive function. It has 
 
 #### 4.2.2 Main Parameters
 
-| parameter      | Type and value range | description            |
+| parameter   | Type and value range | description     |
 | --------- | -------------- | --------------- |
-| avg  | float  | Not yet used |
-| enable | bool | false: disable AWB adaptive <br/>true : enable AWB adaptive  |
-| illuorder | char | All light sources in calibration  |
-| indoor  | float 0~1.0  | Light source weight in indoor conditions   |
-| outdoor | float 0~1.0  | Light source weight in outdoor conditions |
-| overExposureWeight | float[16] 0~1.0  | Calculating weights for different exposure brightness levels  |
-| transition | float 0~1.0  | Light source weight in transition conditions  |
+| enable      | bool  | false: disable AWB <br/>true : enable AWB|
+| mode   | int 0,1   |  0: AWB <br/> 1: AWB METEDATA |
+| useCcMatrix | bool  | false: disable CCM adaptive <br/>true : enable CCM adaptive |
+| useCcOffset | bool  | false: disable CCM offset adaptive <br/>true : enable CCM offset adaptive   |
+| useDamping  | bool  | false: disable AWB damping <br/>true : enable AWB damping |
+| roiNumber   | int   | The serial number of current ROI window |
+| roiWindow   | float (fx,fy,fw,fh,weight) | Current ROI window's starting coordinate(x,y), width, height and AWB weight  |
 
 ### 4.3 Af
 
@@ -332,7 +341,7 @@ This module is used to set the parameters for the AF function. It has not yet ta
 
 #### 4.3.2 Main Parameters
 
-| parameter      | Type and value range | description            |
+| parameter   | Type and value range | description   |
 | --------- | -------------- | --------------- |
 | enable | bool | false: disable AF  <br/>true : enable AF |
 | mode| int | 0: normal AF mode  <br/> (Plan to develop other AF modes.) |
@@ -353,101 +362,34 @@ This module is used to set the parameters for the AF function. It has not yet ta
 | PdStablecountMax | uint8 1~10 | Not used |
 | PdROIIndex | uint8 0~48 | Not used |
 
-### 4.4 IspController
+### 4.4 ALscv2
 
 #### 4.4.1 Function Description
 
-This module is the enable switch of the ISP controller.
+This module is used to set the parameters for LSC adaptive function.
 
 #### 4.4.2 Main Parameters
 
-| parameter      | Type and value range | description            |
+| parameter   | Type and value range | description     |
 | --------- | -------------- | --------------- |
-| enable | bool | false: disable ISP <br/>true : enable ISP|
+| enable | bool | false: disable ALSC  <br/>true: enable ALSC|
+| damping | float | damping factor to smooth LSC curve changes during ALSC|
+| interMode | int 0~2 | 0: Adaptive adjustment based on gain value <br/>1: Adaptive adjustment based on color temperature <br/>2: Adaptive adjustment based on gain value and color temperature|
+| hdr | bool |false: means that the group is set for linear mode <br/> true: means that the group is set for HDR mode|
+| gain | float[20] | gain values of each level |
+| strength | float[20] 0~1.0 | the strength of the retained LSC based on the gain values of each level |
 
-It should be set to enable.
-
-### 4.5 CcWhitePixels
-
-#### 4.5.1 Function Description
-
-This module controls the adaptive action of CCM with AWB.
-
-#### 4.5.2 Main Parameters
-
-| parameter      | Type and value range | description            |
-| --------- | -------------- | --------------- |
-| damping| float 0~1.0| Damping factor to smooth CCM change |
-| enable | bool | false: disable CCM adaptive <br/>true : enable CCM adaptive|
-
-### 4.6 LscWhitePixels
-
-#### 4.6.1 Function Description
-
-This module controls the adaptive action of LSC with AWB.
-
-#### 4.6.2 Main Parameters
-
-| parameter      | Type and value range | description            |
-| --------- | -------------- | --------------- |
-| damping| float 0~1.0| Damping factor to smooth LSC change |
-| enable | bool | false: disable LSC adaptive <br/>true : enable LSC adaptive|
-
-### 4.7 AutoHdr
-
-#### 4.7.1 Function Description
-
-This module is the enable switch of auto HDR function. It has not yet taken effect.
-
-#### 4.7.2 Main Parameters
-
-| parameter      | Type and value range | description            |
-| --------- | -------------- | --------------- |
-| enable | bool | false: disable auto HDR <br/>true : enable auto HDR|
-
-### 4.8 DciHist
-
-#### 4.8.1 Function Description
-
-This module is to set the parameters of dynamic contrast improvement histogram. It has not yet taken effect.
-
-#### 4.8.2 Main Parameters
-
-| parameter      | Type and value range | description            |
-| --------- | -------------- | --------------- |
-| enable | bool | false: disable DciHist <br/>true : enable DciHist|
-| gaussAmpNeg   | float |   |
-| gaussAmpPos   | float |   |
-| gaussMeanNeg  | float |   |
-| gaussMeanPos  | float |   |
-| gaussSigmaNeg | float |   |
-| gaussSigmaPos | float |   |
-
-### 4.9 SensorController
-
-#### 4.9.1 Function Description
-
-This module is the enable switch of the image sensor controller.
-
-#### 4.9.2 Main Parameters
-
-| parameter      | Type and value range | description            |
-| --------- | -------------- | --------------- |
-| enable | bool | false: disable image sensor controller <br/>true : enable image sensor controller|
-
-It should be set to enable.
-
-### 4.10 Others
+### 4.5 Others
 
 This chapter introduces other adaptive function modules.
 
 The parameters of these adaptive function modules are usually divided into two parts by "tables" and the following brackets "[]". The parameters outside the brackets "[]" are bool type parameters, and the parameters inside the brackets "[]" are parameters that participate in adaptive function adjustment.
 
-#### 4.10.1 Parameters description outside of "tables"
+#### 4.5.1 Parameters description outside of "tables"
 
 In these adaptive functional modules, there are usually three parameters outside of "tables":
 
-| parameter | Type  | description            |
+| parameter | Type  | description      |
 | --------- | -------------- | --------------- |
 | disable | bool | please set to false|
 | enable | bool | false: disable; true: enable <br/> Set according to the required adaptive module functions|
@@ -455,12 +397,12 @@ In these adaptive functional modules, there are usually three parameters outside
 
 In the A3dnrv3 module, there are two additional parameters outside of "table":
 
-| parameter | Type  | description            |
+| parameter | Type  | description     |
 | --------- | -------------- | --------------- |
 | nlm_en | bool | NLM (Non-local Means) denoise enable switch. <br/>It is recommended to set to true|
 | tnr_en | bool | TNR (temporal noise reduction) enable switch. <br/> Since the opening of K230 ISP TNR is actually controlled by parameter of external commands, it can be fixed to false.|
 
-#### 4.10.2 Parameters description in "tables"
+#### 4.5.2 Parameters description in "tables"
 
 In adaptive function modules, there are two parameters:
 
