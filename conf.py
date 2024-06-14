@@ -4,7 +4,6 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import sys, os
-import sphinx_rtd_theme
 import datetime
 
 sys.path.append(os.path.abspath('exts'))
@@ -23,20 +22,34 @@ author = 'Canaan'
 extensions = [
     'sphinx_copybutton',
     'myst_parser',
-    'sphinx_rtd_dark_mode',
-    'sphinx_multiversion'
+    'sphinx_multiversion',
+    'sphinxcontrib.mermaid'
 ]
+html_js_files = [
+    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.8/mermaid.min.js',
+    'init_mermaid.js',
+]
+source_suffix = {
+   '.rst': 'restructuredtext',  
+    '.md': 'markdown',
+}
 
 templates_path = ['_templates']
 exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
 # html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
-language = 'zh_CN'
+language = os.getenv('SPHINX_LANGUAGE', 'en')
+
+# Set the title based on the language
+if language == 'en':
+    html_title = 'K230 Docs'
+else:
+    html_title = 'K230 文档'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-myst_heading_anchors = 4
+myst_heading_anchors = 7
 suppress_warnings = ["myst.header"]
 
 html_copy_source = True
@@ -45,31 +58,20 @@ html_show_sourcelink = False
 html_favicon = 'favicon.ico'
 
 # html_show_sphinx = False
-
+html_theme = "sphinx_book_theme"
 # html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
-
-# if want to add top nav for canann, enable this.
-html_css_files = ['topbar.css']
 
 default_dark_mode = True
 
 locale_dirs = ['locale']
 
+html_css_files = ['topbar.css', 'custom-theme.css']
+
 html_theme_options = {
-    # 'analytics_id': 'G-XXXXXXXXXX',  #  Provided by Google in your dashboard
-    # 'analytics_anonymize_ip': False,
-    # 'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    'vcs_pageview_mode': '',
-    # 'style_nav_header_background': '#2980B9',
-    # Toc options
-    'collapse_navigation': False,
-    'sticky_navigation': True,
+    'collapse_navigation': True,
+    "repository_url": "https://github.com/kendryte/k230_docs",
     'navigation_depth': 7,
-    'includehidden': False,
-    'titles_only': False
+    "primary_sidebar_end": ["versionsFlex.html"],
+    "use_repository_button": True
 }

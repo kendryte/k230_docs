@@ -202,9 +202,11 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 | 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
 | 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
-| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |
-| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |
-| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |
+| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |  |
+| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |  |
+| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |  |
+| 45 | K230 SDK V1.6 | 01Studio-CanMV-K230 | 支持01Studio-CanMV-K230板                                                                         |  |
+| 46 | K230 SDK V1.6 | 支持rtt only系统 | 支持rtt only单系统                                                                                    |  |
 
 ### 4.4 架构
 
@@ -250,11 +252,3 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 6  | K230 SDK V0.7 | 工具链           | 大核工具链版本更新为：riscv64-unknown-linux-musl-rv64imafdcv-lp64d-20230420.tar.bz2  |      |
 | 7  | K230 SDK V0.8 | 软件镜像           | Emmc/Sdcard镜像打包时，会将大核的demo打包到小核/sharefs |      |
 | 8  | K230 SDK V0.8 | Demo           | 为了适配不同的camera模组而修改相关的demo，比如编码/UVC,demo具体使用可查看《K230 SDK Demo使用指南》 |      |
-
-## 5. 版本的遗留问题及限制说明
-
-| ID | 功能模块      | 问题/限制描述                                                                         | 备注 |
-|----|---------------|---------------------------------------------------------------------------------------|------|
-| 1  | VPU 编码       | VPU 重复编码多次，有概率性卡住                                                          |      |
-| 2  | usb            | 通过 usb 传输 h264 编码长时间运行会异常                    |      |
-| 3  | 猫眼 poc | 模拟手机端运行过程中网络断开后不能自动重连 | |

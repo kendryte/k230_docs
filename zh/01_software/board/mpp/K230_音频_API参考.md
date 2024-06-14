@@ -57,6 +57,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 | V1.2       | 修改声音质量增强API接口[kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr) 增加音频编解码mapi接口函数 | 孙小朋/崔妍 | 2023/4/27 |
 | V1.3       | 1)增加内置Audio Codec API接口                                | 孙小朋      | 2023/5/10 |
 | v1.4       | 1)i2s支持单双声道输入和输出，修改[k_audio_i2s_attr](#3110-k_audio_i2s_attr)属性，增加snd_mode属性。 2)增加内置Audio Codec API接口:包括音量获取和复位相关接口:[k_acodec_get_gain_micl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)/[k_acodec_reset](#2510-k_acodec_reset) | 孙小朋      | 2023/6/15 |
+| V1.5       | 1)增加音频输入输出单声道选择控制                                | 孙小朋      | 2024/6/5 |
 
 ## 1. 概述
 
@@ -184,6 +185,7 @@ k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, const [k_ai
 
 ```c
 k_aio_dev_attr aio_dev_attr;
+memset(&aio_dev_attr,0,sizeof(aio_dev_attr));
 aio_dev_attr.audio_type = KD_AUDIO_INPUT_TYPE_I2S;
 aio_dev_attr.kd_audio_attr.i2s_attr.sample_rate = 44100;
 aio_dev_attr.kd_audio_attr.i2s_attr.bit_width = KD_AUDIO_BIT_WIDTH_16
@@ -552,6 +554,7 @@ k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, const [k_ai
 
 ```c
 k_aio_dev_attr ao_dev_attr;
+memset(&ao_dev_attr,0,sizeof(ao_dev_attr));
 ao_dev_attr.audio_type = KD_AUDIO_OUTPUT_TYPE_I2S;
 ao_dev_attr.kd_audio_attr.i2s_attr.sample_rate = 48000;
 ao_dev_attr.kd_audio_attr.i2s_attr.bit_width = KD_AUDIO_BIT_WIDTH_24;
@@ -2691,6 +2694,7 @@ k_u32 chn_cnt; /* channle number on FS,i2s valid value:1/2,pdm valid value:1/2/3
 k_u32 sample_rate; /* sample rate 8k ~192k */
 k_audio_bit_width bit_width;
 k_audio_snd_mode snd_mode; /* momo or stereo */
+k_i2s_in_mono_channel  mono_channel;/* use mic input or headphone input */
 k_i2s_work_mode   i2s_mode;  /*i2s work mode*/
 k_u32 frame_num; /* frame num in buf[2,K_MAX_AUDIO_FRAME_NUM] */
 k_u32 point_num_per_frame;
@@ -2706,6 +2710,7 @@ k_aio_i2s_type type;
 | sample_rate         | 采样率:支持8k~192k                                   |
 | bit_width           | 采样精度：支持16/24/32                               |
 | snd_mode            | 音频声道模式。支持单声道和双声道。                   |
+| mono_channel        | 单声道源选择。0:mic input,  1:headphone input     |
 | I2s_mode            | I2s工作模式:支持飞利浦模式，左对齐模式，右对齐模式。 |
 | frame_num           | 缓存帧数目`[2,K_MAX_AUDIO_FRAME_NUM]`。              |
 | point_num_per_frame | 每帧的采样点个数`[sample_rate/100,sample_rate]`。    |
@@ -2937,6 +2942,22 @@ k_audio_agc_cfg agc_cfg;
 【相关数据类型及接口】
 
 无
+
+#### 3.1.18 k_i2s_in_mono_channel
+
+【说明】
+
+- 单声道源。
+
+【定义】
+
+```c
+typedef enum
+{
+    KD_I2S_IN_MONO_RIGHT_CHANNEL = 0,  //mic input
+    KD_I2S_IN_MONO_LEFT_CHANNEL = 1,   //hp input
+} k_i2s_in_mono_channel;
+```
 
 ### 3.2 音频编解码
 

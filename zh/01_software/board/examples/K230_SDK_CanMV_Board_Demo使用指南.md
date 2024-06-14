@@ -126,7 +126,8 @@ sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 举例：
 
 ```shell
-./sample_venc.elf 0 -sensor 24 -o out.265
+./sample_venc.elf 0 -sensor 24 -o out.265 // Canmv-K230-V1.0/1.1板
+./sample_venc.elf 0 -sensor 39 -o out.265 // Canmv-K230-V2.0板
 ```
 
 ##### 2.2.4.2 MAPI编码demo
@@ -140,7 +141,7 @@ sample_venc默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS
 1. 在小核侧 /mnt 目录下，执行 `./sample_venc`，默认执行1路h264视频编码，分辨率为1280x720，生成的码流文件存放在 /tmp 目录下面，如需传参可参考如下参数说明：
 
 ```shell
-Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0
+Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0            // Canmv-K230-V1.0/1.1板
                      -s or --sensor_type [sensor_index],\n");
                             see vicap doc
                      -n or --chn_num [number], 1, 2, 3
@@ -150,6 +151,8 @@ Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0
                             2: jpeg type
                      -o or --out_path [output_path]
                      -h or --help, will print usage
+
+Usage: ./sample_venc -s 39 -n 2 -o /tmp -t 0            // Canmv-K230-V2.0板
 ```
 
 sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，默认值为7
@@ -422,7 +425,8 @@ CanMV开发板默认使用OV5647摄像头模组，支持单个摄像头最多输
 当输入：`sample_vicap`命令后打印如下提示信息：
 
 ```shell
-usage: ./sample_vicap -mode 0 -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1
+usage: ./sample_vicap -mode 0 -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1      // Canmv-K230-V1.0/1.1板
+usage: ./sample_vicap -mode 0 -dev 0 -sensor 33 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1      // Canmv-K230-V2.0板
 Options:
  -mode:         vicap work mode[0: online mode, 1: offline mode. only offline mode support multiple sensor input]     default 0
  -dev:          vicap device id[0,1,2]        default 0
@@ -449,7 +453,7 @@ Options:
 | -dev         | 0：vicap设备0 1：vicap设备1 2：vicap设备2.                             | 指定当前使用的vicap设备，系统最多支持三个vicap设备。通过指定设备号实现sensor与不同vicap设备之间的绑定关系。 例如： -dev 1 -sensor 0即表示将ov9732 1280x720 RGB图像输出绑定到vicap设备1.                   |
 | -mode | 0：在线模式；1：离线模式 | 指定vicap设备工作模式，当前之前在线模式和离线模式。对于多个sensor输入，必须指定为离线模式。 |
 | -conn | 0: 屏 hx8399； 1: HDMI lt9611-1920x1080p60； 2: HDMI lt9611-1920x1080p30  |   指定显示方式，可以选择屏或者HDMI 默认为0 |
-| -sensor      | 23：OV5647（CanMV开发板仅支持该sensor） | 指定当前使用的sensor类型                                                         |
+| -sensor      | 23：OV5647（Canmv-K230-V1.0/1.1板） 33：OV5647（Canmv-K230-V2.0板） | 指定当前使用的sensor类型                                                         |
 | -chn         | 0：vicap设备输出通道0 1：vicap设备输出通道1 2：vicap设备输出通道2.     | 指定当前使用的vicap设备的输出通道，一个vicap设备最多支持三路输出，仅通道0支持RAW图像格式输出  |
 | -ow          |                                                                         | 指定输出图像宽度，默认为输入图像宽度。宽度需要16字节对齐。 如果默认宽度超过显示屏输出最大宽度，则使用显示输出宽度作为图像最终输出宽度 如果输出宽度小于输入图像宽度，且未指定ox或者oy参数，则默认为缩放输出 |
 | -oh          |                                                                         | 指定输出图像高度，默认为输入图像高度。 如果默认高度超过显示屏输出最大高度，则使用显示输出高度作为图像最终输出高度 如果输出高度小于输入图像高度，且未指定ox或者oy参数，则默认为缩放输出  |
@@ -462,7 +466,9 @@ Options:
 
 示例1：
 
-`./sample_vicap -conn 1 -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0`
+`./sample_vicap -conn 1 -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V1.0/1.1板`
+
+`./sample_vicap -conn 1 -dev 0 -sensor 33 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V2.0板`
 
 说明：将ov5647@1920x1080 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
 
@@ -476,7 +482,9 @@ Options:
 
 如果不方便更换LDO可以等待后续的V1.2版本的板子。
 
-`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 23 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 26 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 27 -chn 0 -ow 320 -oh 240 -ofmt 1`
+`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 23 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 26 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 27 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V1.0/1.1板`
+
+`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 31 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 32 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 33 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V2.0板`
 
 ![三摄结果](images/Tri_camera_result.png)
 
@@ -779,7 +787,8 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944，最小分辨率为640x480.
 
 ```shell
-Usage: ./rtsp_demo -s 24 -n 2 -t h265 -w 1280 -h 720 -a 0
+Usage: ./rtsp_demo -s 24 -n 2 -t h265 -w 1280 -h 720 -a 0  // Canmv-K230-V1.0/1.1板
+Usage: ./rtsp_demo -s 39 -n 2 -t h265 -w 1280 -h 720 -a 0  // Canmv-K230-V2.0板
                     -s: the sensor type:
                         see vicap doc
                     -n: the session number, range: 1, 2，3
@@ -1108,7 +1117,8 @@ typec USB线连接USB0与PC，potplayer播放器播放摄像头。
 
 ./canaan-camera.sh start otg0 iso
 
-./camera -i -t 24
+./camera -i -t 24  // Canmv-K230-V1.0/1.1板
+./camera -i -t 39  // Canmv-K230-V2.0板
 ```
 
 -t 选项用于指定vicap sensor 类型，请参考`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，CanMV需指定为24。

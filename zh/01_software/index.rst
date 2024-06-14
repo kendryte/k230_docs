@@ -9,6 +9,7 @@ SDK API 参考
    board/cdk/K230_系统控制_MAPI参考.md
    board/examples/K230_SDK_CanMV_Board_Demo使用指南.md
    board/examples/K230_SDK_EVB_Board_Demo使用指南.md
+   board/examples/K230D_SDK_Zero_Board_Demo使用指南.md
    board/middleware/K230_多媒体中间件_API参考.md
    board/middleware/K230_openblas_开发使用指南.md
    board/middleware/K230_opencv_开发使用指南.md

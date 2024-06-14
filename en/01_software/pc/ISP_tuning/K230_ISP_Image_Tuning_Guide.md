@@ -45,6 +45,7 @@ This document (this guide) is intended primarily for:
 |------------|-----------------------------------|--------|------------|
 | V1.0       | Initial edition                             | Liu Jiaan | 2023-09-04 |
 | V1.1       | Updated some parameters descriptions | Rong Jian | 2024-01-30 |
+| V1.2       | Updated some parameters descriptions | Rong Jian | 2024-04-28 |
 
 ## 1. K230 ISP Image Tuning Overview
 
@@ -54,17 +55,25 @@ The overall image tuning process is as follows:
 
 ![flow](images/01.png)
 
+K230 ISP pipeline as following figure:
+![flow](../../../../zh/01_software/pc/ISP_tuning/images/K230_isp-pipe-line.jpg)
+
+Please note:
+
+- In K230 HDR mode, the K230 CSI (Camera serial interface) module does not support the sensor data mode of Hsync before Vsync. And when the Vsync of each frame (L/S/VS) is high (effective data output), there should be no overlap.
+- When enabling TNR in 3DNR, the ISP requires that the sensor Hblank should not be less than 180 pixel clocks (it is recommended to set it to not less than 256 pixel clocks), and it is recommended： the Frame length - Active lines >= 92 lines.
+
 ## 2. Calibration
 
 ### 2.1 Overview
 
-Use the calibration tool to complete the parameter calibration function of six ISP modules, BLC, LSC, CC, AWB, NC, and CAC.
+Use the calibration tool (K230ISPCalibrationTool.exe) to complete the parameter calibration function of six ISP modules, BLC, LSC, CC, AWB, NC, and CAC.
 
 The calibration sequence of the modules is as follows:
 
 ![flow](images/02.png)
 
-Before using the calibration tool, the user needs to pre-install the MATLAB Runtime (R2023a). Download address: <https://www.mathworks.com/products/compiler/matlab-runtime.html>
+Before using the calibration tool(K230ISPCalibrationTool.exe), the user needs to pre-install the MATLAB Runtime (R2023a). Download address: <https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/0/deployment_files/installer/complete/win64/MATLAB_Runtime_R2023a_win64.zip>
 
 The main interface of the calibration tool is shown in the figure below.
 
@@ -139,14 +148,14 @@ When you click "Lens Shade correction" on the main interface, the tool will pop 
 
 Specific operation steps:
 
-1. Fill in the bayer pattern, image width, bit width, and Black Level Offset values of the RAW image in Area 2;
-1. Click the "load image" button in area 1 to import the RAW image to be calibrated;
-1. The mesh node setting of area 3, the K230 ISP LSC hardware statistics are 32x16, so "symmetric 17x17 knots" can be selected for calibration;
-1. Zone 4 selects the maximum calibration ratio of the center/corner;
-1. Zone 5 can set the compensation ratio of the corner (if it is set to 80%, it means that the brightness of the corner to be calibrated is 80% of the center brightness.);
+1. In Region 2, check the bayer pattern type of the RAW image, fill in the image width, height, and bit width, check the type of LSC correction required (Color Shading or Lumi&Color Shading), check the color temperature light source in the CCT drop-down menu, and fill in the Black Level Offset value for each channel in the offset Subtraction column;
+1. Click the "load image" button in Region 1 to import the RAW image to be calibrated;
+1. Region 3 is set for LSC knot positions. First, determine the number of grids. The hardware statistics of K230 ISP LSC are 32x16 grids, so "33Full x 17Symm knots" can be selected for calibration; If you plan to use the ISP ALSC function, check "ALSC uniform..."; If "Automatic initial knot positioning" is checked, the ALSC function cannot be enabled in auto.json.
+1. Region 4 selects the maximum calibration ratio of the center/corner;
+1. Region 5 can set the compensation ratio of the corner (if it is set to 80%, it means that the brightness of the corner to be calibrated is 80% of the center brightness.);
 1. Keep the other settings as default;
 1. Click "Start" to start calibration and save LSC data;
-1. Area 6 selects the calibrated LSC data to apply to the image, preview the calibration effect, and click "save image to file" to save the Png image under each light source.
+1. Region 6 selects the calibrated LSC data to apply to the image, preview the calibration effect, and click "save image to file" to save the Png image under each light source.
 
 Note: When setting the compensation ratio in step 5, it should be determined according to the severity of the shading of the lens. When the lens shading is very serious, the gain of the four corners of the picture compensation is very large, which is easy to cause the noise of the four corners to become larger. At this time, it is necessary to reduce the compensation ratio to achieve the purpose of optimizing the four-corner noise.
 
@@ -177,7 +186,8 @@ When you click "Color Correction" on the main interface, the tool will pop up th
 The specific operation steps are as follows:
 
 1. Set the width, height, bit width, Black level Offset, and bayer pattern of the RAW image in area 1;
-1. Click the "Load" button to import sRGB reference files CC_Standard.cxf, 24-color card RAW image, gray wall background RAW image;
+1. Click the "Load" option to import color checker reference file CC_Standard.cxf(click "Load sRGB References"，this cxf file is located in  the director of calibration tool Canaan.Calibration.Samples\Data\), 24-color card RAW image(click "Load Color Checker Image"), gray wall background RAW image(click "Load Background Image");
+<br/>Import reference color checker, and you can also obtain the Lab values of customer reference through the "Load Lab Customer References" option under the "Load" option; Alternatively, you can use the "Load References Image" option under the "Load" option to access the reference color checker image file, and then select "Select Reference Color Checker" under the "Function" option. Move the mouse to control the crosshairs so that they are located at the center of the four corners color blocks. Click the mouse one by one to complete the area selection of the reference color checker.
 1. Click the "LSC" button to import the calibrated LSC parameter file;
 1. Configure calibration parameters;
     - Set up gamma
@@ -186,6 +196,7 @@ The specific operation steps are as follows:
     - Set the preferred light source
     - Set the output saturation, which defaults to 1
 1. Select the way to select 24 color blocks in the drop-down key of area 3 (there are three modes: automatic, semi-automatic and manual);
+<br/>At semi-automatic mode, move the mouse to control the crosshairs so that they are located at the center of the four corners color blocks. Click the mouse one by one to complete the area selection of the reference color checker.
 1. Click "Caibrate" to start calibration.
 
 ### 2.5 Auto White Balance
@@ -194,7 +205,7 @@ The specific operation steps are as follows:
 
 AWB calibration, that is, the calculation of the best Planck fit curve and color temperature fitting curve based on the white point characteristics (R/G, B/G) of the sensor under several standard light sources. The purpose of AWB calibration is to enable the camera to automatically recognize and adapt to various color temperature light source conditions to guarantee the accurate reproduction of white and other colors in the image.
 
-#### 2.5.3 Start calibration using the calibration tool
+#### 2.5.2 Start calibration using the calibration tool
 
 When you click "Auto White Balance" on the main interface, the tool will pop up the dialog box as shown in the figure.
 
@@ -206,15 +217,15 @@ The specific operation steps are as follows:
 
    ![image-20230822152530065](../../../../zh/01_software/pc/ISP_tuning/images/09.png)
 
-   Note: If the user does not have the sensor spectral sensitivity file they are using, use the default OV2775_sensitivity.txt in the toolkit. Because AWB calibration now does not depend on the sensor spectral sensitivity file, but in order not to affect the subsequent operation, so import any sensor spectral sensitivity file.
+   Note: If the user does not have the sensor spectral sensitivity file they are using, use the default OV2775_sensitivity.txt (this txt file is located in  the director of calibration tool Canaan.Calibration.Samples\Data\) in the toolkit. Because AWB calibration now does not depend on the sensor spectral sensitivity file, but in order not to affect the subsequent operation, so import any sensor spectral sensitivity file.
 
-1. Click the "illuination" button, import the light file CIE_Illuminants.cxf, and select the light sources to be calibrated (at least 3), as shown in the figure. Click the "OK" button, the spectral release of each light source will be displayed on the left as shown in the figure, and each light source will be divided into indoor light source and outdoor light source by drop-down key.
+1. Click the "illuination" button, import the light file CIE_Illuminants.cxf (this cxf file is located in  the director of calibration tool Canaan.Calibration.Samples\Data\), and select the light sources to be calibrated (at least 3), as shown in the figure. Click the "OK" button, the spectral release of each light source will be displayed on the left as shown in the figure, and each light source will be divided into indoor light source and outdoor light source by drop-down key.
 
    ![image-20230822152740591](../../../../zh/01_software/pc/ISP_tuning/images/10.png)
 
    ![image-20230822154937933](../../../../zh/01_software/pc/ISP_tuning/images/11.png)
 
-1. Click the "Start Calibration" button and select the parameter file of each light source generated by CC calibration as shown in the red box of the figure;
+1. Click the "AWB V2+ Calibration" button（please click the "Start Calibration" button in old version calibration tool） and select the parameter file of each light source generated by CC calibration as shown in the red box of the figure;
 
    ![image-20230822155713505](../../../../zh/01_software/pc/ISP_tuning/images/12.png)
 
@@ -231,6 +242,12 @@ The specific operation steps are as follows:
 1. Manually adjust the range of the orange box (near the white area) and the black box (all identified as white points in the black box) through the button in the red frame area, and adjust the range of the black box to include all the selected white points of the light source, as shown in the figure. Save the data and, if the test fails, resize the polygon.
 
    ![image-20230822164058879](../../../../zh/01_software/pc/ISP_tuning/images/15.png)
+
+#### 2.5.3 calibration of AWB parameter K_Factor
+
+In the AWB algorithm, the judgement for outdoor environment is: Exp*K_Factor <=0.12 (Exp is exposure).
+
+For example, take 2000 lux as the ambient illumination segmentation point for the outdoor and transition, obtain the exposure value (ET \* gain) corresponding to this illumination and calculate: K_Factor=0.12/(ET \* gain).
 
 ### 2.6 Noise Calibration
 
@@ -325,10 +342,10 @@ Subtract the offset value of the black level to ensure the linear consistency of
 
 #### 3.1.2 Main parameters
 
-| parameter       | Type and value range    | description                                        |
+| parameter        | Type and value range      | description       |
 | ---------- | ----------------- | ------------------------------------------- |
 | bls_enable | bool              | BLS enable switch                                 |
-| bls        | int bls[4] 0~4095 | Black level compensation value for four channels, value based on RAW 12bit |
+| bls        | int bls[4] 0~4095 | Black level compensation value for four channels, value based on ISP 12bits |
 
 #### 3.1.3 Tuning Strategy
 
@@ -342,12 +359,12 @@ In the K230, the LSC algorithm calibrates the image using a 32x16 grid. During t
 
 #### 3.2.2 Main parameters
 
-| parameter   | Type and value range   | description                                                     |
+| parameter        | Type and value range      | description       |
 | ------ | ---------------- | -------------------------------------------------------- |
 | enable | bool             | LSC enable switch                                              |
 | matrix | matrix[4] [1089] | The Lens shading calibration parameters of R, Gr, Gb, and B four channels are obtained from the calibration file |
 | x_size | xSize[32]        | The distance between the two mesh nodes of the x-axis, obtained from the calibration file                  |
-| y_size | ySize[16]        | The distance between each two mesh nodes of the y-axis, obtained from the calibration file                  |
+| y_size | ySize[16]        | The distance between each two mesh nodes of the y-axis, obtained from the calibration file       |
 
 ### 3.3 Dgain
 
@@ -357,9 +374,9 @@ The ISP digital gain is mainly used to improve the brightness of the image.
 
 #### 3.3.2 Main parameters
 
-| parameter            | Type and value range   | description                  |
+| parameter        | Type and value range      | description       |
 | --------------- | ---------------- | --------------------- |
-| driver_load     | bool             | Enable switch for ISP digital gain |
+| enable     | bool             | Enable switch for ISP digital gain |
 | digital_gain_r  | float 1.0~255.99 | Digital gain of the R channel       |
 | digital_gain_gr | float 1.0~255.99 | Digital gain of the Gr channel      |
 | digital_gain_gb | float 1.0~255.99 | Digital gain of Gb channel      |
@@ -373,31 +390,30 @@ Auto exposure controls the brightness of the image. The main debugging of the AE
 
 #### 3.4.2 Main parameters
 
-| parameter            | Type and value range | description                                                   |
+| parameter        | Type and value range      | description       |
 | --------------- | -------------- | ------------------------------------------------------ |
 | enable          | bool           | false: disable AE <br/>true : enable AE |
-| antiBandingMode | Int 0~3        | Anti-Banding working mode<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| antiFlickerMode | Int 0~3        | Anti-Banding working mode<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| autoHdrEnable | bool        | true: auto calculate the HDR ratio at HDR mode <br/>false: use the fixed HDR ratio at HDR mode|
 | dampOver        | float 0~1.0    | Damping factor to smooth AE convergence during overexposure                       |
 | dampOverGain    | float 0~128.0  | The convergence acceleration gain factor outside the clip range when AE is overexposed. If the value is larger, the convergence will be faster. |
-| dampOverRatio   | float 1.0~4.0  | When AE is overexposed, the scale factor outside the clip range.  If the value is smaller, the convergence will be faster.   |
+| dampOverRatio   | float 1.0~4.0  | The scale factor outside the clip range when AE is overexposed. If the value is smaller, the convergence will be faster.  |
 | dampUnder       | float 0~1.0    | Damping factor to smooth AE convergence under exposure                       |
 | dampUnderGain   | float 0~16.0   | The convergence acceleration gain factor outside the clip range when AE is underexposed. If the value is larger, the convergence will be faster. |
-| dampUnderRatio  | float 0~1.0    | When AE is underexposed, the clip range scale factor.  If the value is larger, the convergence will be faster. |
-| lowLightHdrGain  | float[20] 0~255.0   | The gain value of current gain level at HDR mode |
-| lowLightHdrLevel  | int 0~19  | Total number of gain level for HDR mode   |
-| lowLightHdrRepress  | float[20] 0~1.0   | The repress ratio of current gain level at HDR mode    |
-| lowLightLinearGain  | float[20] 0~255.0   | The gain value of current gain level at linear mode    |
-| lowLightLinearLevel  | int 0~16   | Total number of gain level for linear mode   |
-| lowLightLinearRepress  | float[20] 0~1.0   | The repress ratio of current gain level at linear mode    |
-| maxISPDgain  | float 1.0~255.99609375 | Maximum ISP digital gain    |
-| maxSensorAgain  | float   | Maximum sensor analog gain |
-| maxSensorDgain  | float   | Maximum sensor digital gain  |
-| mode  | int 0~2  | 0: AE <br/>1: Anti-Banding <br/>2: Scene Evaluation  |
+| dampUnderRatio  | float 0~1.0    | The clip range scale factor when AE is underexposed. If the value is larger, the convergence will be faster. |
+| expV2WindowWeight | float[32x32] 0~255  | the exposure weight for every grid |
+| frameCalEnable          | bool           | Exposure setting frame interval enable switch <br/>true : Enable exposure setting frame interval function <br/>false: disable exposure setting frame interval function  |
+| lowLightHdrGain  | float[20] 0~255.0   | The gain values of each "gain" levels at HDR mode, the maximum "gain" level is 20. |
+| lowLightHdrLevel  | int 0~16  | total gain levels at HDR mode |
+| lowLightHdrRepress | float[20] 0~1.0   | The repress ratios of each "gain" levels at HDR mode  |
+| lowLightLinearGain | float[20] 0~255.0 | The gain values of each "gain" levels at linear mode, the maximum "gain" level is 20. |
+| lowLightLinearLevel  | int 0~19   | total gain levels at linear mode |
+| lowLightLinearRepress | float[20] 0~1.0 | The repress ratios of each "gain" levels at linear mode |
 | motionFilter  | float 0~1.0  | Motion filter, use to calculate the motion factor at AE scene evaluation adaptive mode  |
 | motionThreshold  | float 0~1.0 | Motion threshold     |
-| roiNumber  | int   | The serial number of current ROI window |
-| roiWindow  | float (fx,fy,fw, fh) | Current ROI window's starting coordinate(x,y), width and height   |
-| roiWeight  | float   |  The weight for current ROI window   |
+| roiNumber  | int   |  the seiral number of current ROI window   |
+| roiWeight  | float   |  The weight for ROI window   |
+| roiWindow  | float (fx,fy,fw, fh) | the starting point coordinates (x, y) and width&height of the current ROI window |
 | semMode  | int 0~2  | Scene mode <br/>0: Scene evaluation disable <br/>1: Scene evaluation fix <br/>2: Scene evaluation adaptive    |
 | setPoint        | float 0~255.0  | Set the target brightness value for AE   |
 | targetFilter  | float 0~1.0   | The smoothness coefficient for the AE setpoint value change, with larger values leading to faster changes |
@@ -413,26 +429,28 @@ Depending on the light source, the color of the object will be different. The hu
 
 #### 3.5.2 Main parameters
 
-| parameter    | Type and value range | description                                 |
+| parameter        | Type and value range      | description       |
 | ------- | -------------- | ------------------------------------ |
 | enable      | bool  | false: disable AWB <br/>true : enable AWB|
+| awbTempWeight   | float 0.0~1.0  | AWB weight of temperature lights |
+| mode   | int 0,1  |  0: AWB <br/> 1: AWB METEDATA |
 | roiNumber   | int   | The serial number of current ROI window |
+| roiWeight  | float   |  The weight for ROI window   |
 | roiWindow   | float (fx,fy,fw, fh) | Current ROI window's starting coordinate(x,y), width and height   |
 | useCcMatrix | bool  | false: disable CCM adaptive <br/>true : enable CCM adaptive |
 | useCcOffset | bool  | false: disable CCM offset adaptive <br/>true : enable CCM offset adaptive   |
 | useDamping  | bool  | false: disable AWB damping <br/>true : enable AWB damping |
-| useLsc      | bool  | false: disable LSC adaptive <br/>true : enable LSC adaptive |
 | kFactor     | float | Used to identify the photosensitivity coefficient of outdoor and tansition |
 
-#### 3.5.3 Tuning Strategies
+#### 3.5.3 Parameter kFactor calibration instructions
 
-The judgement of environment as outdoor is: Exp*kFactor <=0.12 (Exp is exposure).
+In the AWB algorithm, the judgement for outdoor environment is: Exp*kFactor <=0.12 (Exp is exposure).
 
-The illuminance of the light box can be measured at its brightest, for example, 2000K is the separation point between the outdoor and transition, and the exposure value of the corresponding illuminance (ET*gain) can be found to calculate the kFactor.
+For example, take 2000 lux as the ambient illumination segmentation point for the outdoor and transition, obtain the exposure value (ET \* gain) corresponding to this illumination and calculate: kFactor=0.12/(ET \* gain).
 
 The larger the kFactor, the stronger the sensitivity of the sensor; the smaller the kFactor, the weaker the sensitivity of the sensor.
 
-kFactor is included in AWB parameters in .xml file.
+The parameter kFactor is located in the AWB parameters of the .xml file, and needs to be calculated using the above method and then to be filled in xml file.
 
 ### 3.6 WDR
 
@@ -442,22 +460,22 @@ In the process of image processing, it is easy to find that the contrast of the 
 
 #### 3.6.2 Main parameters
 
-| parameter            | Type and value range | description                                                         |
+| parameter        | Type and value range      | description       |
 | --------------- | -------------- | ------------------------------------------------------------ |
-| enable          | bool           | WDR enable switch                                                |
-| contrast        | int -1023~1023 | The higher the value, the stronger the local contrast                                       |
-| entropy         | int[20]        | local weight                                                 |
+| enable      | bool       | WDR enable switch    |
+| contrast        | int -1023~1023 | The higher the value, the stronger the local contrast     |
+| entropy         | int[20]        | local weight |
 | entropy_base    | int            | Luminance factor parameters. The larger the base, the smaller the slope and the stronger the local contrast            |
 | entropy_slope   | int            | Luminance factor parameters. The larger the base, the smaller the slope and the stronger the local contrast            |
-| flat_strength   | int 0~19       | Tensile strength in flat areas                                             |
+| flat_strength   | int 0~19       | Tensile strength in flat areas     |
 | flat_thr        | int 0~20       | Flat area threshold. The larger the value, the flatter the discriminant image, less than the threshold is discriminated as a flat area, and greater than the threshold is discriminated as a texture area |
-| gamma_down      | int[20]        | local weight                                                 |
-| gamma_pre       | int[20]        | local weight                                                 |
-| gamma_up        | Int[20]        | global curve                                                 |
-| global_strength | int 0~128      | Global contrast intensity                                               |
+| gamma_down      | int[20]        | local weight      |
+| gamma_pre       | int[20]        | local weight    |
+| gamma_up        | Int[20]        | global curve    |
+| global_strength | int 0~128      | Global contrast intensity    |
 | high_strength   | int 0~128      | The strength of the protection of the bright area information of the image. The higher the value, the stronger the protection of bright areas in the image   |
 | low_strength    | int 0~255      | The strength of protection for information in dark areas of the image. The higher the value, the stronger the protection of information in dark areas of the image   |
-| strength        | int 0~128      | Total intensity                                                       |
+| strength        | int 0~128      | Total intensity   |
 
 #### 3.6.3 Tuning Strategies
 
@@ -467,13 +485,13 @@ In linear mode, the Stength setting is fixed at 128. Low Strength is actually th
 
 #### 3.7.1 Function Description
 
-The main function of green equalization is to balance the difference between neighboring pixels Gr and Gb in RAW data, and prevent the subsequent generation of squares, maze grids and other similar textures in the demosaic interpolation algorithm.
+The main function of green equalization is to balance the difference between neighboring pixels Gr and Gb in RAW data, and prevent the subsequent generation of squares, maze grids and other similar textures in the demosaic interpolation algorithm. This module is located before DPCC.
 
 #### 3.7.2 Main parameters
 
 | parameter        | Type and value range | description             |
 | ----------- | -------------- | ---------------- |
-| driver_load | bool           | Enable switch for green equalization |
+| enable | bool           | Enable switch for green equalization |
 | threshold   | float 0~511.0  | Green equalization intensity threshold. |
 
 ### 3.8 DPCC
@@ -484,9 +502,9 @@ Limited by the sensor manufacturing process, it is impossible for a sensor with 
 
 #### 3.8.2 Main parameters
 
-| parameter         | Type and value range              | description               |
+| parameter        | Type and value range      | description       |
 | ------------ | --------------------------- | ------------------ |
-| enable      | bool                        | 0: disable DPCC (Default); <br/> 1: enable DPCC       |
+| enable      | bool                        | false: disable DPCC (Default); <br/> true: enable DPCC       |
 | bpt_Enable  | bool      | bad pixel table enable |
 | bpt_Num | int 0~1024    | Number of current bad pixel entries in bad pixel table |
 | bpt_out_mode | int 0~14 | output median mode selection for bad pixels in BPT |
@@ -512,7 +530,7 @@ Bilateral filtering noise reduction.
 
 #### 3.9.2 Main parameters
 
-| parameter        | Type and value range   | description                                |
+| parameter        | Type and value range      | description       |
 | ----------- | ---------------- | ----------------------------------- |
 | enable      | bool             | Enable switch.                          |
 | gain        | float 1.0~1000.0 | sensor gain                         |
@@ -532,7 +550,7 @@ Image denoising is an important link and step in digital image processing, and t
 
 #### 3.10.2 Main Parameters
 
-| parameter             | Type and value range  | description                                                         |
+| parameter        | Type and value range      | description       |
 | ---------------- | --------------- | ------------------------------------------------------------ |
 | enable           | bool            | 2DNR and 3DNR total enable switches                                         |
 | tnr_en           | bool            | 3DNR enable switch                                                 |
@@ -575,13 +593,13 @@ The functions realized by the Demosaic module are mainly to convert the input ba
 
 #### 3.11.2 Main Parameters
 
-| parameter                         | Type and value range | description                                                         |
+| parameter        | Type and value range      | description       |
 | ---------------------------- | -------------- | :----------------------------------------------------------- |
 | demosaic_enable              | bool           | Demosaic enable switch                                             |
 | demosaic_thr                 | int 0~255      | The interpolation threshold for the r and b channels is less than this value for directionless interpolation                 |
 | dmsc_dir_thr_min             | int 0~4095     | Dark area G channel interpolation                                                |
 | dmsc_dir_thr_max             | int 0~4095     | Bright area G channel interpolation                                                |
-| dmsc_denoise_strength        | int 0~32       | Low-frequency filtering noise reduction intensity                                             |
+| dmsc_denoise_strength        | int 0~31       | Low-frequency filtering noise reduction intensity                                             |
 | dmsc_sharpen_enable          | bool           | Sharpen enable switch                                            |
 | dmsc_sharpen_clip_black      | int 0~2047     | Black bars sharpen limit parameter                                             |
 | dmsc_sharpen_clip_white      | int 0~2047     | White edge sharpening limit parameter                                             |
@@ -593,9 +611,9 @@ The functions realized by the Demosaic module are mainly to convert the input ba
 | dmsc_sharpen_line_strength   | int 0~4095     | The higher the value, the greater the line sharpening intensity                                     |
 | dmsc_sharpen_line_thr        | int            | Line sharpening threshold                                                 |
 | dmsc_sharpen_line_thr_shift1 | int 0~10       | /                                                            |
-| dmsc_sharpen_r1              | int 0~255      | Sharpen curve parameters                                                 |
-| dmsc_sharpen_r2              | int 0~255      | Sharpen curve parameters                                                 |
-| dmsc_sharpen_r3              | int 0~255      | Sharpen curve parameters                                                 |
+| dmsc_sharpen_r1              | int 0~256      | Sharpen curve parameters                                                 |
+| dmsc_sharpen_r2              | int 0~256      | Sharpen curve parameters                                                 |
+| dmsc_sharpen_r3              | int 0~256      | Sharpen curve parameters                                                 |
 | dmsc_sharpen_size            | int 0~16       | Indicates the rendering of a high-frequency signal. A smaller value indicates more detail in the sharpened area and more small details that will be sharpened |
 | dmsc_sharpen_t1              | int 0~2047     | Sharpen curve parameters                                                 |
 | dmsc_sharpen_t2_shift        | int 0~11       | Sharpen curve parameters                                                 |
@@ -657,7 +675,7 @@ Manually set the gain value of the white balance.
 
 #### 3.12.2 Main parameters
 
-| parameter        | Type and value range      | description                       |
+| parameter        | Type and value range      | description       |
 | ----------- | ------------------- | -------------------------- |
 | driver_load | bool                | Indicates whether to load the parameters under the module |
 | gain        | float [4] 1.0~3.999 | four channels white balance gain       |
@@ -670,9 +688,9 @@ Linear correction of color space is accomplished by matrix and vector offsets of
 
 #### 3.13.2 Main parameters
 
-| parameter        | Type and value range                | description                       |
+| parameter        | Type and value range      | description       |
 | ----------- | ----------------------------- | -------------------------- |
-| driver_load | bool                          | Indicates whether to load the parameters under the module |
+| enable | bool               | CCM enable switch |
 | ccmatrix    | float ccMatrix[9] -8.0~7.996  | Color calibration matrix               |
 | ccoffset    | ccOffset[3] -2048~2047(12bit) | Offset                     |
 
@@ -684,10 +702,10 @@ The Gamma module is mainly a nonlinear conversion of luminance space to adapt to
 
 #### 3.14.2 Main parameters
 
-| parameter         | Type and value range | description                       |
+| parameter        | Type and value range      | description       |
 | ------------ | -------------- | -------------------------- |
-| driver_load  | bool           | Indicates whether to load the parameters under the module |
-| standard     | bool           | Standard gamma enable switch          |
+| enable  | bool           | gamma enable switch |
+| standard  | bool | Standard gamma enable switch |
 | standard_val | float          | The size of the gamma value, default 2.2     |
 | curve        | int [64]       | Gamma curve of 64 points          |
 
@@ -703,11 +721,11 @@ The EE module is used to sharpen and enhance the texture of the image details to
 
 #### 3.15.2 Main Parameters
 
-| parameter            | Type and scope  | description                                                   |
+| parameter        | Type and value range      | description       |
 | :-------------- | :---------- | :----------------------------------------------------- |
 | enable          | bool        | Enable control of EE functions                                       |
 | ee_strength     | int 0~128   | EE intensity                                                |
-| ee_src_strength | int 0~128   | The higher the value, the greater the noise reduction intensity. The default setting is 1                        |
+| ee_src_strength | int 0~255   | The higher the value, the greater the noise reduction intensity. The default setting is 1                        |
 | ee_y_up_gain    | int 0~10000 | Gain intensity of bright edges                                         |
 | ee_y_down_gain  | int 0~10000 | Gain intensity on the dark edge                                         |
 | ee_uv_gain      | int 0~1024  | Control of edge color saturation, the higher the value, the more pronounced the saturation drop       |
@@ -721,7 +739,7 @@ The CA module is based on the UV gain curve to adjust the image saturation, and 
 
 #### 3.16.2 Main parameters
 
-| parameter     | Type and value range | description                                                         |
+| parameter        | Type and value range      | description       |
 | -------- | -------------- | ------------------------------------------------------------ |
 | ca_en    | bool           | Enable switch for CA module                                             |
 | curve_en | bool           | Enable switch for ca_curve and dci_curve                                |
@@ -741,7 +759,7 @@ Dynamic Contrast Improve is used to adjust the global contrast of an image.
 | dci_en    | bool           | DCI enable switch     |
 | dci_curve | float          | DCI curve for 64 points |
 
-### 3.18 CProcess
+### 3.18 CProcess(Color Processing)
 
 #### 3.18.1 Function Description
 
@@ -749,9 +767,9 @@ The color of the image is processed in the YUV domain.
 
 #### 3.18.2 Main Parameters
 
-| parameter        | Type and value range      | description                                                         |
+| parameter        | Type and value range      | description       |
 | ----------- | ------------------- | ------------------------------------------------------------ |
-| driver_load | bool                | CProcess enable switch                                             |
+| enable | bool        | CProcess enable switch  |
 | luma_in     | int                 | Luminance input range. 0: Y_in range [64..940],1: Y_in full range [0..1023] |
 | luma_out    | int                 | Luminance Output Clipping Range. 0: Y_out clipping range [16..235],1: Y_out clipping range [0..255] |
 | chroma_out  | int                 | Chrominance pixel clipping range at output. 0: CbCr_out clipping range [16..240]，1: Full UV_out clipping range [0..255] |
@@ -759,3 +777,45 @@ The color of the image is processed in the YUV domain.
 | contrast    | float 0.3~1.9921875 | Contrast adjustment value                                                 |
 | hue         | float -90~89        | Hue adjustment value                                                   |
 | saturation  | float 0~1.9921875   | Saturation adjustment value                                                 |
+
+### 3.19 Compand
+
+#### 3.19.1 Function Description
+
+The data stretching and compression module.
+
+#### 3.19.2 Main Parameters
+
+| parameter        | Type and value range      | description       |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| enable | bool        | Compand enable switch  |
+| compress_enable | bool        | data compress enable switch  |
+| compress_curve_x | int[64] 0~31 | distance of x in compress curve |
+| compress_use_out_y_curve| bool  | data compression output Y-axis curve enable switch |
+| compress_curve_y| int[64] 0~16777216  | y data in compress curve  |
+| expand_enable| bool  | data expand enable switch  |
+| expand_curve_x| int[64] 0~31 | distance of x in expand curve  |
+| expand_use_out_y_curve| bool  | data expand output Y-axis curve enable switch  |
+| expand_curve_y| int[64] 0~16777216  | y data in expand curve  |
+
+### 3.20 CAC (Chromatic Aberration Correction)
+
+#### 3.20.1 Function Description
+
+Chromatic aberration correction module.
+
+#### 3.20.2 Main Parameters
+
+| parameter        | Type and value range      | description       |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| a_blue | float -16~15.9375 | parameter for radial blue shift calculation, according to (a_blue \* r + b_blue \* r^2 + c_blue \* r^3) |
+| a_red | float -16~15.9375 | parameter for radial red shift calculation, according to (a_red \* r + b_red \* r^2 + c_red \* r^3)  |
+| b_blue | float -16~15.9375 | parameter for radial blue shift calculation, according to (a_blue \* r + b_blue \* r^2 + c_blue \* r^3)  |
+| b_red | float -16~15.9375 | parameter for radial red shift calculation, according to (a_red \* r + b_red \* r^2 + c_red \* r^3)  |
+| c_blue | float -16~15.9375 | parameter for radial blue shift calculation, according to (a_blue \* r + b_blue \* r^2 + c_blue \* r^3)  |
+| c_red | float -16~15.9375 | parameter for radial red shift calculation, according to (a_red \* r + b_red \* r^2 + c_red \* r^3)  |
+| cac_enable | bool | CAC enable switch  |
+| center_h_offs | int |  the horizontal distance between image center and optical center |
+| center_v_offs | int |  the vertical distance between image center and optical center |
+
+The a-blue, b-blue, and c-blue can be obtained from the blue_parameters of the CAC field in the xml file; The a_red, b_red, and c_red can be obtained from the red_parameters in the CAC field of the xml file; The center_h_offs can be obtained from the x_offset of the CAC field in the xml file; The center_v_offs can be obtained from the y_offset of the CAC field in the xml file.

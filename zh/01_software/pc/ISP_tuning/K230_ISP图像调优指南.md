@@ -45,26 +45,35 @@
 |------------|-----------------------------------|--------|------------|
 | V1.0       | 初版                              | 刘家安 | 2023-09-04 |
 | V1.1       | 更新部分参数描述                   | 荣 坚 | 2024-01-30 |
+| V1.2       | 更新部分参数描述                   | 荣 坚 | 2024-04-28 |
 
 ## 1. K230 ISP图像调优概述
 
 在进行图像调优时，亮度、色彩、对比度、清晰度这几个方面是我们的主要关注点。通过对sensor和镜头的标定以及ISP子模块的联合调优做到图像的整体亮度合理，图像中的色彩还原准确，图像的清晰度好，没有明显噪声，图像的对比度高，整体看上去要比较通透。
 
-总体图像调优流程如下所示：
+总体图像调优流程如下图所示：
 
 ![flow](images/01.png)
+
+K230 ISP pipeline如下图所示：
+![flow](images/K230_isp-pipe-line.jpg)
+
+请注意：
+
+- K230 HDR模式下，K230 CSI（Camera serial interface）模块不支持Hsync在Vsync之前的sensor数据模式，且各帧（L/S/VS）Vsync拉高(有效数据输出)时不能有交叠。
+- 使能3DNR中的TNR时，ISP的要求sensor Hblank不能小于180 pixel clocks（推荐设置为不小于256 pixel clocks），建议：Frame length – Active lines >=92 lines。
 
 ## 2. 标定
 
 ### 2.1 概述
 
-使用标定工具完成对BLC、LSC、CC、AWB、Noise Profile、CAC这6个ISP模块的参数标定功能。
+使用标定工具(K230ISPCalibrationTool.exe)完成对BLC、LSC、CC、AWB、Noise Profile、CAC这6个ISP模块的参数标定功能。
 
 模块的标定顺序如下：
 
 ![flow](images/02.png)
 
-在使用标定工具前，需要用户预先安装MATLAB Runtime(R2023a)。下载地址：<https://www.mathworks.com/products/compiler/matlab-runtime.html>
+在使用标定工具(K230ISPCalibrationTool.exe)前，需要用户预先安装MATLAB Runtime(R2023a)。下载地址：<https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/0/deployment_files/installer/complete/win64/MATLAB_Runtime_R2023a_win64.zip>
 
 标定工具的主界面如下图所示。
 
@@ -139,9 +148,9 @@ LSC标定目的就是为了消除由镜头光学折射不均匀导致的画面�
 
 具体操作步骤：
 
-1. 填写区域2里RAW图的bayer pattern、图像宽高、bit位宽及Black Level Offset值；
+1. 在区域2中，选择RAW图的bayer pattern排序、填入图像宽高和bit位宽，选择所需lsc校正的类型（Color Shading或是Luma&Color Shading），在CCT下拉栏中选择对应的色温光源，并在offset Subtration栏中填入各通道Black Level Offset值；
 1. 点击区域1的“load image”按钮导入待标定的RAW图；
-1. 区域3的网格结点设置，K230 ISP LSC硬件统计为32x16的，因此可选择“symmetric 17x17 knots”进行标定；
+1. 区域3为lsc网格结点设置。先确定网格的数量，K230 ISP LSC硬件统计为32x16网格，因此可选择“33Full x 17Symm knots”进行标定；若准备使用ISP ALSC功能，则勾选“ALSC uniform...”；若勾选"Automatic initial knot positioning"，则在auto.json中不能使能ALSC功能。
 1. 区域4可选择中心/边角的最大校准比率；
 1. 区域5可设置边角的补偿比率（如设置为80%，则表示需要校准的边角校准后的亮度为中心亮度的80%就行。）；
 1. 其他设置保持默认配置即可；
@@ -177,7 +186,8 @@ CCM 标定的原理是用sensor采集的24 色卡色块的实际颜色信息与�
 具体操作步骤如下：
 
 1. 在区域1设置好RAW图的宽高、bit位宽、Black level Offset、bayer pattern；
-1. 点击“Load”按钮，依次导入sRGB参考文件CC_Standard.cxf、24色卡RAW图、灰壁背景RAW图；
+1. 点击“Load”菜单，依次导入色板颜色参考文件CC_Standard.cxf(Load sRGB References, 该文件位于calibration tool的Canaan.Calibration.Samples\Data\目录下)、24色卡RAW图(Load Color Checker Image)、灰壁背景RAW图(Load Background Image)；
+   <br/>导入参考色板，除了通过“Load sRGB References”导入CC_Standard.cxf之外，还可以通过“Load”菜单下的“Load Lab-Customer References”来获取客户自定义的参考色板Lab值；或是通过“Load”菜单下的“Load References Image”,调入参考色板图像，然后在“Function”菜单下选择“Select Reference Color Check”，通过移动鼠标控制十字线，让其分别依次位于给出色板的上下左右四角四个色块的中心位置，依次点击鼠标后即可完成参考色板区域的指定。
 1. 点击“LSC”按钮，导入标定好的LSC参数文件；
 1. 配置标定参数；
     - 设置gamma
@@ -186,6 +196,7 @@ CCM 标定的原理是用sensor采集的24 色卡色块的实际颜色信息与�
     - 设置偏好光源
     - 设置输出饱和度，默认为1
 1. 在区域3的下拉键选择选取24色块的方式（有自动、半自动、手动三种模式）；
+   <br/>在半自动模式下，可通过移动鼠标控制十字线，让其分别依次位于色板图的上下左右四角四个色块的中心位置，依次点击鼠标后即可完成参考色板区域的指定。
 1. 点击“Caibrate”开始标定。
 
 ### 2.5 Auto White Balance
@@ -194,7 +205,7 @@ CCM 标定的原理是用sensor采集的24 色卡色块的实际颜色信息与�
 
 AWB 标定，即根据sensor在数个标准光源下的白点特征(R/G, B/G)，计算最佳普朗克拟合曲线和色温拟合曲线。AWB标定的目的是使相机能够自动识别和适应各种色温光源条件，以保证白色和其他颜色在图像中的准确再现。
 
-#### 2.5.3 使用标定工具开始标定
+#### 2.5.2 使用标定工具开始标定
 
 当点击了主界面的“Auto White Balance”后，工具将弹出如图所示对话框。
 
@@ -206,15 +217,15 @@ AWB 标定，即根据sensor在数个标准光源下的白点特征(R/G, B/G)，
 
    ![image-20230822152530065](images/09.png)
 
-   注：若用户手上没有自己使用的sensor光谱灵敏度文件，用工具包里默认的OV2775_sensitivity.txt即可。因为现在AWB标定已经不依赖于sensor光谱灵敏度文件，但为了不影响后面操作，所以导入任意一个sensor光谱灵敏度文件就可以。
+   注：若用户手上没有自己使用的sensor光谱灵敏度文件，用工具包里默认的OV2775_sensitivity.txt(该文件位于calibration tool的Canaan.Calibration.Samples\Data\目录下)即可。因为现在AWB标定已经不依赖于sensor光谱灵敏度文件，但为了不影响后面操作，所以导入任意一个sensor光谱灵敏度文件就可以。
 
-1. 点击“illuination”按钮，导入光源文件CIE_Illuminants.cxf，并选择需要标定的光源（至少3个），如图所示。点击“确定”按钮，各光源的光谱发布将在如图所示的左边展示，并通过下拉键把各光源分为室内光源和室外光源。
+1. 点击“illuination”按钮，导入光源文件CIE_Illuminants.cxf(该文件位于calibration tool的Canaan.Calibration.Samples\Data\目录下)，并选择需要标定的光源（至少3个），如图所示。点击“确定”按钮，各光源的光谱发布将在如图所示的左边展示，并通过下拉键把各光源分为室内光源和室外光源。
 
    ![image-20230822152740591](images/10.png)
 
    ![image-20230822154937933](images/11.png)
 
-1. 点击“Start Calibration”按钮，根据如图红框中的所示，选择CC标定生成的各光源的参数文件；
+1. 点击“AWB V2+ Calibration”按钮（在旧版本的calibration tool中，请点击“Start Calibration”按钮），根据如图红框中的所示，选择CC标定生成的各光源的参数文件；
 
    ![image-20230822155713505](images/12.png)
 
@@ -231,6 +242,12 @@ AWB 标定，即根据sensor在数个标准光源下的白点特征(R/G, B/G)，
 1. 通过红框区域的按钮手动调整橙色框（近白区）和黑色框（落在黑色框里的全部识别为白点）的范围，调整黑色框的范围包含选的所有光源白点，如图所示。保存数据，如果测试不通过，再来重新调整多边形的范围。
 
    ![image-20230822164058879](images/15.png)
+
+#### 2.5.3 AWB参数K_Factor的标定
+
+在AWB算法中，环境为outdoor的判别为: Exp*K_Factor <=0.12（Exp为曝光量）。
+
+比如以2000 lux为outdoor与transition的环境照度分割点，获取对应该照度的曝光值(ET \* gain)， 则可计算：K_Factor = 0.12 / (ET\*gain)。
 
 ### 2.6 Noise Calibration
 
@@ -325,14 +342,14 @@ Noise Profile 标定涉及到对sensor在不同条件下产生的噪声特性进
 
 #### 3.1.2 主要参数
 
-| 参数       | 类型及取值范围    | 描述                                        |
-| ---------- | ----------------- | ------------------------------------------- |
+| 参数        | 类型及取值范围 | 描述        |
+| -------------- | ----------------------- | ------------------------------------------- |
 | bls_enable | bool              | BLS使能开关                                 |
-| bls        | int bls[4] 0~4095 | 四通道的黑电平补偿值，数值是基于RAW 12bit的 |
+| bls        | int bls[4] 0~4095 | 四通道的黑电平补偿值，设置数值基于ISP 12bits |
 
 #### 3.1.3 调试策略
 
-尽管支持四通道单独的黑电平补偿值，但还是建议使用相同的值。
+虽然支持四通道单独的黑电平补偿值，但还是建议使用相同的值。
 
 ### 3.2 LSC
 
@@ -342,7 +359,7 @@ Noise Profile 标定涉及到对sensor在不同条件下产生的噪声特性进
 
 #### 3.2.2 主要参数
 
-| 参数   | 类型及取值范围   | 描述                                                     |
+| 参数        | 类型及取值范围      | 描述      |
 | ------ | ---------------- | -------------------------------------------------------- |
 | enable | bool             | LSC使能开关                                              |
 | matrix | matrix[4] [1089] | R、Gr、Gb、B四通道的Lens shading校准参数，从标定文件获得 |
@@ -359,7 +376,7 @@ ISP的数字增益主要用于提升图像的亮度。
 
 | 参数            | 类型及取值范围   | 描述                  |
 | --------------- | ---------------- | --------------------- |
-| driver_load     | bool             | ISP数字增益的使能开关 |
+| enable     | bool             | ISP数字增益的使能开关 |
 | digital_gain_r  | float 1.0~255.99 | R通道的数字增益       |
 | digital_gain_gr | float 1.0~255.99 | Gr通道的数字增益      |
 | digital_gain_gb | float 1.0~255.99 | Gb通道的数字增益      |
@@ -373,35 +390,34 @@ AE自动曝光控制图像的亮度。AE模块主要的调试有对AE目标值�
 
 #### 3.4.2 主要参数
 
-| 参数            | 类型及取值范围 | 描述                                                   |
+| 参数        | 类型及取值范围      | 描述      |
 | --------------- | -------------- | ------------------------------------------------------ |
 | enable          | bool           | 自动曝光使能开关。<br/>false: 关闭自动曝光 <br/>true : 使能自动曝光    |
-| antiBandingMode | Int 0~3        | 抗工频干扰工作模式<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| antiFlickerMode | Int 0~3        | 抗工频干扰工作模式 <br/>0: Off<br/>1: 50Hz<br/>2: 60Hz<br/>3: User defined |
+| autoHdrEnable | bool        | true: HDR mode下，自动计算当前帧HDR ratio<br/>false: HDR mode下，使用固定的HDR ratio |
 | dampOver        | float 0~1.0    | 阻尼因子，用于平滑过曝时的AE收敛 |
 | dampOverGain    | float 0~128.0  | AE过曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
 | dampOverRatio   | float 1.0~4.0  | AE过曝时clip范围外比例因子，值越小，收敛越快 |
 | dampUnder       | float 0~1.0    | 阻尼因子，用于平滑欠曝时的AE收敛 |
 | dampUnderGain   | float 0~16.0   | AE欠曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
 | dampUnderRatio  | float 0~1.0    | AE欠曝时clip范围比例因子，值越大，收敛越快 |
+| expV2WindowWeight | float[32x32] 0~255  | 各子块曝光权重 |
+| frameCalEnable          | bool           | 曝光设置帧间隔使能开关。<br/>true : 使能曝光设置帧间隔功能 <br/>false: 关闭曝光设置帧间隔功能   |
 | lowLightHdrGain  | float[20] 0~255.0   | 宽动态模式下，当前增益阶数对应的增益值 |
 | lowLightHdrLevel  | int 0~16  | 宽动态模式下总的增益阶数 |
 | lowLightHdrRepress  | float[20] 0~1.0   | 宽动态模式下，当前增益阶数对应的目标亮度压制比例    |
 | lowLightLinearGain  | float[20] 0~255.0   | 线性模式下，当前增益阶数对应的增益值 |
 | lowLightLinearLevel  | int 0~19   | 线性模式下总的增益阶数 |
 | lowLightLinearRepress  | float[20] 0~1.0   | 线性模式下，当前增益阶数对应的目标亮度压制比例  |
-| maxISPDgain  | float 1.0~255.99609375 | 设置ISP数字增益最大值    |
-| maxSensorAgain  | float   | 设置sensor模拟增益最大值 |
-| maxSensorDgain  | float   | 设置sensor数字增益最大值 |
-| mode  | int 0~2  | 自动曝光模式 <br/>0: AE(不含抗工频干扰等功能) <br/>1: 抗工频干扰AE模式 <br/>2: 场景评估AE模式 |
 | motionFilter  | float 0~1.0  | 运动变化平滑参数，用于计算AE场景评估自适应模式下的运动因子 |
 | motionThreshold  | float 0~1.0 | 运动判别阈值     |
 | roiNumber  | int   |  当前ROI窗口序号   |
-| roiWindow  | float (fx,fy,fw, fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
 | roiWeight  | float   |  当前ROI窗口的亮度计算权重 |
+| roiWindow  | float (fx,fy,fw, fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
 | semMode  | int 0~2  | 场景模式 <br/>0: 场景评估关闭模式 <br/>1: 场景评估固定模式 <br/>2: 场景评估动态模式    |
-| setPoint        | float 0~255.0  | 设置AE的亮度目标值 |
+| setPoint  | float 0~255.0  | 设置AE的亮度目标值 |
 | targetFilter  | float 0~1.0 | AE的亮度目标值变化平滑系数，值越大变化越快 |
-| tolerance       | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围  |
+| tolerance  | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围  |
 | wdrContrast.max  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最大对比度值  |
 | wdrContrast.min  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最小对比度值    |
 
@@ -413,26 +429,28 @@ AE自动曝光控制图像的亮度。AE模块主要的调试有对AE目标值�
 
 #### 3.5.2 主要参数
 
-| 参数    | 类型及取值范围 | 描述                                 |
+| 参数    | 类型及取值范围 | 描述                       |
 | ------- | -------------- | ------------------------------------ |
-| enable      | bool  | false: 关闭AWB <br/>true : 使能AWB|
+| enable      | bool  | true : 使能AWB <br/> false: 关闭AWB |
+| awbTempWeight   | float 0.0~1.0  | AWB色温光源权重  |
+| mode   | int 0,1  |  0: AWB <br/> 1: AWB METEDATA |
 | roiNumber   | int   |  当前ROI窗口序号   |
-| roiWindow   | float (fx,fy,fw, fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
-| useCcMatrix | bool  | false: 关闭CCM自适应 <br/>true : 使能CCM 自适应 |
-| useCcOffset | bool  | false: 关闭CCM offset自适应 <br/>true : 使能CCM offset自适应   |
-| useDamping  | bool  | false: 关闭AWB阻尼变化 <br/>true : 使能AWB阻尼变化 |
-| useLsc      | bool  | false: 关闭LSC自适应 <br/>true : 使能LSC自适应 |
-| kFactor     | float | 用于判别outdoor和tansition的感光系数 |
+| roiWeight  | float   |  当前ROI窗口的AWB计算权重 |
+| roiWindow   | float (fx,fy,fw,fh) | 当前ROI窗口的起始点坐标(x,y)和宽高 |
+| useCcMatrix | bool  | true : 使能CCM 自适应 <br/>false: 关闭CCM自适应 |
+| useCcOffset | bool  | true : 使能CCM offset自适应 <br/> false: 关闭CCM offset自适应  |
+| useDamping  | bool  | true : 使能AWB阻尼变化 <br/> false: 关闭AWB阻尼变化 |
+| kFactor     | float | 用于识别室外(outdoor)和过渡区间(transition)的光敏系数 |
 
-#### 3.5.3 调试策略
+#### 3.5.3 参数kFactor标定说明
 
-环境为outdoor的判别为: Exp*kFactor <=0.12（其他Exp为曝光量）。
+AWB算法中，环境为outdoor的判别为: Exp*kFactor <=0.12（Exp为曝光量）。
 
-可测量灯箱最亮时的照度，比如以2000K为outdoor与transition的分割点，找到对应该照度的曝光值(ET*gain)，即可计算出kFactor。
+比如以2000 lux为outdoor与transition的环境照度分割点，获取对应该照度的曝光值(ET \* gain)， 则可计算：kFactor=0.12/(ET\*gain)。
 
 kFactor越大，说明sensor的sensitivity越强；kFactor越小，说明sensor的sensitivity越弱。
 
-kFactor这个参数位于xml文件的AWB参数中。
+kFactor这个参数位于xml文件的AWB参数中，需要用以上方法计算后填入。
 
 ### 3.6 WDR
 
@@ -442,22 +460,22 @@ kFactor这个参数位于xml文件的AWB参数中。
 
 #### 3.6.2 主要参数
 
-| 参数            | 类型及取值范围 | 描述                                                         |
-| --------------- | -------------- | ------------------------------------------------------------ |
+| 参数            | 类型及取值范围    | 描述   |
+| --------------- | --------------- | ------------------------------------------------------------ |
 | enable          | bool           | WDR的使能开关                                                |
-| contrast        | int -1023~1023 | 值越大，局部对比度越强                                       |
-| entropy         | int[20]        | local weight                                                 |
+| contrast        | int -1023~1023 | 值越大，局部对比度越强   |
+| entropy         | int[20]        | local weight  |
 | entropy_base    | int            | 亮度因子参数。base越大，slope越小，局部对比度越强            |
 | entropy_slope   | int            | 亮度因子参数。base越大，slope越小，局部对比度越强            |
-| flat_strength   | int 0~19       | 平坦区域拉伸强度                                             |
+| flat_strength   | int 0~19       | 平坦区域拉伸强度       |
 | flat_thr        | int 0~20       | 平坦区域阈值。值越大，判别图像越平坦，小于阈值判别为平坦区，大于阈值判别为纹理区 |
-| gamma_down      | int[20]        | local weight                                                 |
-| gamma_pre      | int[20]        | local weight                                                 |
-| gamma_up        | int[20]        | global curve                                                 |
-| global_strength | int 0~128      | 全局对比度强度                                               |
+| gamma_down      | int[20]        | local weight    |
+| gamma_pre      | int[20]        | local weight     |
+| gamma_up        | int[20]        | global curve     |
+| global_strength | int 0~128      | 全局对比度强度           |
 | high_strength   | int 0~128      | 对图像亮区信息的保护强度。值越大，对图像中亮区信息保护越强   |
 | low_strength    | int 0~255      | 对图像暗区信息的保护强度。值越大，对图像中暗区信息保护越强   |
-| strength        | int 0~128      | 总强度                                                       |
+| strength        | int 0~128      | 总强度   |
 
 #### 3.6.3 调试策略
 
@@ -467,13 +485,13 @@ kFactor这个参数位于xml文件的AWB参数中。
 
 #### 3.7.1 功能描述
 
-绿平衡的主要功能是为了平衡RAW数据中邻近像素Gr与Gb的差异，防止后续在demosaic插值算法中产生方格、迷宫格等类似纹路。
+绿平衡的主要功能是为了平衡RAW数据中邻近像素Gr与Gb的差异，防止后续在demosaic插值算法中产生方格、迷宫格等类似纹路。该模块位于DPCC之前。
 
 #### 3.7.2 主要参数
 
 | 参数        | 类型及取值范围 | 描述             |
 | ----------- | -------------- | ---------------- |
-| driver_load | bool           | 绿平衡的使能开关 |
+| enable | bool           | 绿平衡的使能开关 |
 | threshold   | float 0~511.0  | 绿平衡强度阈值。 |
 
 ### 3.8 DPCC
@@ -486,7 +504,7 @@ kFactor这个参数位于xml文件的AWB参数中。
 
 | 参数         | 类型及取值范围              | 描述               |
 | ------------ | --------------------------- | ------------------ |
-| enable      | bool                        | DPCC使能开关。<br/> 0: 关闭DPCC (Default); <br/> 1: 使能DPCC       |
+| enable      | bool                        | DPCC使能开关。<br/> false: 关闭DPCC (Default); <br/> true: 使能DPCC       |
 | bpt_Enable  | bool      | 坏点表使能开关 |
 | bpt_Num | int 0~1024    | 坏点表中当前坏点的序号 |
 | bpt_out_mode | int 0~14 | 坏点表中坏点的校正输出中值模式选择 |
@@ -512,7 +530,7 @@ kFactor这个参数位于xml文件的AWB参数中。
 
 #### 3.9.2 主要参数
 
-| 参数        | 类型及取值范围   | 描述                                |
+| 参数        | 类型及取值范围      | 描述      |
 | ----------- | ---------------- | ----------------------------------- |
 | enable      | bool             | 使能开关。                          |
 | gain        | float 1.0~1000.0 | sensor gain                         |
@@ -532,7 +550,7 @@ kFactor这个参数位于xml文件的AWB参数中。
 
 #### 3.10.2 主要参数
 
-| 参数             | 类型及取值范围  | 描述                                                         |
+| 参数        | 类型及取值范围      | 描述      |
 | ---------------- | --------------- | ------------------------------------------------------------ |
 | enable           | bool            | 2DNR和3DNR总使能开关                                         |
 | tnr_en           | bool            | 3DNR使能开关                                                 |
@@ -575,13 +593,13 @@ Demosaic模块实现的功能主要是通过插值算法将输入的bayer格式�
 
 #### 3.11.2 主要参数
 
-| 参数                         | 类型及取值范围 | 描述                                                         |
+| 参数        | 类型及取值范围      | 描述      |
 | ---------------------------- | -------------- | :----------------------------------------------------------- |
 | demosaic_enable              | bool           | demosaic使能开关                                             |
 | demosaic_thr                 | int 0~255      | r和b通道的插值阈值，小于这个值做无方向的插值                 |
 | dmsc_dir_thr_min             | int 0~4095     | 暗区G通道插值                                                |
 | dmsc_dir_thr_max             | int 0~4095     | 亮区G通道插值                                                |
-| dmsc_denoise_strength        | int 0~32       | 低频滤波降噪强度                                             |
+| dmsc_denoise_strength        | int 0~31       | 低频滤波降噪强度                                             |
 | dmsc_sharpen_enable          | bool           | sharpen的使能开关                                            |
 | dmsc_sharpen_clip_black      | int 0~2047     | 黑边锐化限制参数                                             |
 | dmsc_sharpen_clip_white      | int 0~2047     | 白边锐化限制参数                                             |
@@ -593,9 +611,9 @@ Demosaic模块实现的功能主要是通过插值算法将输入的bayer格式�
 | dmsc_sharpen_line_strength   | int 0~4095     | 值越大，线条锐化强度越大                                     |
 | dmsc_sharpen_line_thr        | int            | 线条锐化阈值                                                 |
 | dmsc_sharpen_line_thr_shift1 | int 0~10       | /                                                            |
-| dmsc_sharpen_r1              | int 0~255      | 锐化曲线参数                                                 |
-| dmsc_sharpen_r2              | int 0~255      | 锐化曲线参数                                                 |
-| dmsc_sharpen_r3              | int 0~255      | 锐化曲线参数                                                 |
+| dmsc_sharpen_r1              | int 0~256      | 锐化曲线参数                                                 |
+| dmsc_sharpen_r2              | int 0~256      | 锐化曲线参数                                                 |
+| dmsc_sharpen_r3              | int 0~256      | 锐化曲线参数                                                 |
 | dmsc_sharpen_size            | int 0~16       | 表示高频信号的呈现情况。值越小，表示锐化区域中的细节越多，更多的小细节会被锐化 |
 | dmsc_sharpen_t1              | int 0~2047     | 锐化曲线参数                                                 |
 | dmsc_sharpen_t2_shift        | int 0~11       | 锐化曲线参数                                                 |
@@ -670,9 +688,9 @@ Demosaic模块实现的功能主要是通过插值算法将输入的bayer格式�
 
 #### 3.13.2 主要参数
 
-| 参数        | 类型及取值范围                | 描述                       |
+| 参数        | 类型及取值范围      | 描述      |
 | ----------- | ----------------------------- | -------------------------- |
-| driver_load | bool                          | 表示是否加载该模块下的参数 |
+| enable | bool                          | CCM开关 |
 | ccmatrix    | float ccMatrix[9] -8.0~7.996  | 色彩校准矩阵               |
 | ccoffset    | ccOffset[3] -2048~2047(12bit) | 偏移量                     |
 
@@ -686,7 +704,7 @@ Gamma模块主要是对亮度空间进行非线性转化以适应一般的输出
 
 | 参数         | 类型及取值范围 | 描述                       |
 | ------------ | -------------- | -------------------------- |
-| driver_load  | bool           | 表示是否加载该模块下的参数 |
+| enable  | bool           | gamma使能开关 |
 | standard     | bool           | 标准gamma使能开关          |
 | standard_val | float          | gamma值的大小，默认2.2     |
 | curve        | int [64]       | 64个点的gamma曲线          |
@@ -703,11 +721,11 @@ EE模块用于对图像细节纹理的锐化增强，实现图像清晰度的提
 
 #### 3.15.2 主要参数
 
-| 参数            | 类型及范围  | 描述                                                   |
+| 参数        | 类型及取值范围      | 描述      |
 | :-------------- | :---------- | :----------------------------------------------------- |
 | enable          | bool        | EE功能的使能控制                                       |
-| ee_strength     | int 0~128   | EEq强度                                                |
-| ee_src_strength | int 0~128   | 值越大，降噪强度越大。默认设为1                        |
+| ee_strength     | int 0~128   | EE强度                                                |
+| ee_src_strength | int 0~255   | 值越大，降噪强度越大。默认设为1                        |
 | ee_y_up_gain    | int 0~10000 | 亮边的gain强度                                         |
 | ee_y_down_gain  | int 0~10000 | 暗边的gain强度                                         |
 | ee_uv_gain      | int 0~1024  | 对边缘色彩饱和度的控制，值越大，饱和度下降越明显       |
@@ -721,7 +739,7 @@ CA模块是基于UV gain曲线去调节图像饱和度，它主要的功能是�
 
 #### 3.16.2 主要参数
 
-| 参数     | 类型及取值范围 | 描述                                                         |
+| 参数        | 类型及取值范围      | 描述      |
 | -------- | -------------- | ------------------------------------------------------------ |
 | ca_en    | bool           | CA模块的使能开关                                             |
 | curve_en | bool           | ca_curve和dci_curve的使能开关                                |
@@ -741,7 +759,7 @@ Dynamic Contrast Improve用于调整图像的全局对比度。
 | dci_en    | bool           | dci使能开关     |
 | dci_curve | float          | 64个点的dci曲线 |
 
-### 3.18 CProcess
+### 3.18 CProcess(Color Processing)
 
 #### 3.18.1 功能描述
 
@@ -749,9 +767,9 @@ Dynamic Contrast Improve用于调整图像的全局对比度。
 
 #### 3.18.2 主要参数
 
-| 参数        | 类型及取值范围      | 描述                                                         |
+| 参数        | 类型及取值范围      | 描述      |
 | ----------- | ------------------- | ------------------------------------------------------------ |
-| driver_load | bool                | CProcess使能开关                                             |
+| enable | bool                | CProcess使能开关                                             |
 | luma_in     | int                 | luminance input range。0: Y_in range [64..940]，1: Y_in full range [0..1023] |
 | luma_out    | int                 | luminance output clipping range。0: Y_out clipping range [16..235]，1: Y_out clipping range [0..255] |
 | chroma_out  | int                 | chrominance pixel clipping range at output。0: CbCr_out clipping range [16..240]，1: Full UV_out clipping range [0..255] |
@@ -759,3 +777,45 @@ Dynamic Contrast Improve用于调整图像的全局对比度。
 | contrast    | float 0.3~1.9921875 | 对比度调整值                                                 |
 | hue         | float -90~89        | 色调调整值                                                   |
 | saturation  | float 0~1.9921875   | 饱和度调整值                                                 |
+
+### 3.19 Compand
+
+#### 3.19.1 功能描述
+
+数据压缩、拉伸模块。可用于对数据的压缩和拉伸处理。
+
+#### 3.19.2 主要参数
+
+| 参数        | 类型及取值范围      | 描述      |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| enable | bool        | 数据压缩扩展使能开关  |
+| compress_enable | bool        | 数据压缩使能开关  |
+| compress_curve_x | int[64] 0~31 | 数据压缩x轴距离曲线 |
+| compress_use_out_y_curve| bool  | 数据压缩输出Y轴曲线使能开关  |
+| compress_curve_y| int[64] 0~16777216  | 数据压缩y轴数值曲线  |
+| expand_enable| bool  | 数据扩展使能开关  |
+| expand_curve_x| int[64] 0~31 | 数据扩展x轴距离曲线  |
+| expand_use_out_y_curve| bool  | 数据扩展输出Y轴曲线使能开关  |
+| expand_curve_y| int[64] 0~16777216  | 数据扩展y轴数值曲线  |
+
+### 3.20 CAC (Chromatic Aberration Correction)
+
+#### 3.20.1 功能描述
+
+该模块用于色差校正。
+
+#### 3.20.2 主要参数
+
+| 参数        | 类型及取值范围      | 描述      |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| a_blue | float -16~15.9375 | 径向蓝移计算参数，根据公式 (a_blue \* r + b_blue \* r^2 + c_clue \* r^3)计算 |
+| a_red | float -16~15.9375 | 径向红移计算参数，根据公式 (a_red \* r + b_red \* r^2 + c_red \* r^3)计算  |
+| b_blue | float -16~15.9375 | 径向蓝移计算参数，根据公式 (a_blue \* r + b_blue \* r^2 + c_clue \* r^3)计算  |
+| b_red | float -16~15.9375 | 径向红移计算参数，根据公式 (a_red \* r + b_red \* r^2 + c_red \* r^3)计算  |
+| c_blue | float -16~15.9375 | 径向蓝移计算参数，根据公式 (a_blue \* r + b_blue \* r^2 + c_clue \* r^3)计算  |
+| c_red | float -16~15.9375 | 径向红移计算参数，根据公式 (a_red \* r + b_red \* r^2 + c_red \* r^3)计算  |
+| cac_enable | bool | CAC使能开关  |
+| center_h_offs | int |  图像中心和光学中心之间的水平距离 |
+| center_v_offs | int |  图像中心和光学中心之间的垂直距离 |
+
+a_blue、b_blue、c_blue可从xml文件中CAC字段的blue_parameters中获得，a_red、b_red、c_red可从xml文件中CAC字段的red_parameters中获得，center_h_offs可从xml文件中CAC字段的x_offset获得，center_v_offs可从xml文件中CAC字段的y_offset获得。

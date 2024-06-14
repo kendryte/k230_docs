@@ -11,6 +11,9 @@ variables:
 
 default:
   interruptible: true
+  image: ai.b-bug.org:5000/k230_sdk:latest
+  tags:
+    - k230_sdk
 
 stages:
   - lint
@@ -26,6 +29,15 @@ merge_sync:
   extends:
     - .setup_env
     - .sync_github_gitee
+
+# release
+dev_to_main:
+  stage: sync
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+  extends:
+    - .setup_env
+    - .dev_to_main
 
 # tag push
 tag_sync:
@@ -63,8 +75,6 @@ markdown-link-check:
   stage: lint
   timeout: 10m
   retry: 2
-  tags:
-    - k230
   image: ai.b-bug.org:5000/markdown:latest
   script:
     - uname -a
@@ -73,7 +83,7 @@ markdown-link-check:
     - git fetch
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check; fi
+    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v ; fi
 
 # new MR open
 markdownlint:
@@ -83,15 +93,12 @@ markdownlint:
   stage: lint
   timeout: 10m
   image: ai.b-bug.org:5000/markdown:latest
-  tags:
-    - k230
   script:
     - uname -a
     - whoami
     - pwd
-    #- markdownlint-cli2 *.md **/*.md **/**/*.md **/**/**/*.md **/**/**/**/*.md
     #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
-    - git fetch
+    - git fetch --tags
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
     - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
@@ -127,10 +134,7 @@ markdownlint:
     - git config --global --add safe.directory $CI_PROJECT_DIR
 
 .sync_github_gitee:
-  timeout: 45m
-  image: ai.b-bug.org:5000/k230_sdk:latest
-  tags:
-    - k230_sdk
+  timeout: 30m
   script:
     - cd $CI_PROJECT_DIR
     - ls -alht
@@ -155,30 +159,59 @@ markdownlint:
     - echo "---push to github---"
     - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
 
+.dev_to_main:
+  timeout: 30m
+  script:
+    - cd $CI_PROJECT_DIR
+    - ls -alht
+    - echo "----------Step 1, Check Merge Request Title, k230 sdk docs release v*.* MUST bt exist----------"
+    - echo "$CI_MERGE_REQUEST_TITLE"
+    - >
+      if [[ "$CI_MERGE_REQUEST_TITLE" =~ ^"k230 sdk docs release v[0-9]+\.[0-9]+".*$ ]];
+      then
+        echo "Merge Request title check PASS, continue get release version from merge request title";
+      else
+        echo "Merge Request title check FAILED, please EDIT title name with release tag";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
+        exit 1;
+      fi
+    - RELEASE_TAG=$(echo $CI_MERGE_REQUEST_TITLE |grep -Eo "v[0-9]+\.[0-9]+.*?$")
+    - >
+      if [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+.*$ ]];
+      then
+        echo "Release TAG/version will be " $RELEASE_TAG;
+      else
+        echo "Release TAG/version check FAILED, please EDIT title name with release tag";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
+        exit 1;
+      fi
+    - echo "----------sync dev branch to main branch for k230 sdk docs release----------"
+    - wget -qc https://ai.b-bug.org/k230/test_resources/ci/release/k230_docs_release.sh -O ./k230_docs_release.sh
+    - chmod +x ./k230_docs_release.sh
+    - ./k230_docs_release.sh $RELEASE_TAG "k230 sdk docs release $RELEASE_TAG" || exit 1
+    - echo "----------sync dev to main branch pass in k230 sdk docs repos----------"
+
 build web docs:
   stage: build
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
-  image: ai.b-bug.org:5000/python:web-docs-v2
-  tags:
-    - k230
+  image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   environment:
     name: dev
     url: https://ai.b-bug.org/k230/docs/dev/
   script:
-    - git fetch
+    - git fetch --tags
     - git checkout dev
+    - git tag --list
     - git reset --hard origin/dev
     - python3 preprocess.py
+    - python3 preprocessEn.py
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
     - git commit "*.md" -m "remove cover"
     - make mhtml
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
-  artifacts:
-    paths:
-      - _build
 
 deploy production:
   stage: deploy
@@ -190,10 +223,8 @@ deploy production:
     - build web docs
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
-  tags:
-    - k230
   environment:
     name: production
     url: https://developer.canaan-creative.com/k230/dev/index.html
   script:
-    - scp -P $AWS_PORT -C -r _build/* $AWS/data/webapp/k230
+    - scp -P $AWS_PORT -C -r /data1/k230/docs/* $AWS/data/webapp/k230

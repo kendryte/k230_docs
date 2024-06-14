@@ -1,7 +1,10 @@
+.vscode
 .DS_Store
 **/.DS_Store
 _build
 venc
 __pycache__
-_templates/layout.html
+/_templates/layout.html
+/_templates/versions.html
+/_static/topbar.css
 

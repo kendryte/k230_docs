@@ -992,7 +992,7 @@ rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_L
 启动开发板后:
 
 1. 通过 ` lsmod ` 检查小核侧是否加载k_ipcm模块，如未加载，执行 `insmod k_ipcm.ko` 加载k_ipcm模块
-1. 在大核侧启动核间通信进程，执行 `./sample_sys_inif.elf`
+1. 在大核侧启动核间通信进程，执行 `/sharefs/app/sample_sys_init.elf`
 1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944，最小分辨率为640x480.
 
 ```shell

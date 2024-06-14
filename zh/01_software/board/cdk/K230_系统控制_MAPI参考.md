@@ -179,7 +179,7 @@ k_s32 kd_mapi_sys_deinit(void );
 【语法】
 
 ```c
-k_s32 kd_mapi_media_init(const [k_mapi_media_attr_t](#33-k_mapi_media_attr_t) *media_attr);
+k_s32 kd_mapi_media_init(const k_mapi_media_attr_t *media_attr);
 ```
 
 【参数】
@@ -367,7 +367,7 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 【语法】
 
 ```c
-k_s32 kd_mapi_sys_get_vb_block(k_u32 \*pool_id, k_u64 \*phys_addr, k_u64 blk_size, const char\* mmz_name);
+k_s32 kd_mapi_sys_get_vb_block(k_u32 *pool_id, k_u64 *phys_addr, k_u64 blk_size, const char* mmz_name);
 ```
 
 【参数】

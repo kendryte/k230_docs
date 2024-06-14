@@ -55,11 +55,11 @@
 
 镜像请从[嘉楠开发者社区](https://developer.canaan-creative.com/resource) 下载，在嘉楠开发者社区网站的k230/images下面可以找到debian和ubuntu相关文件。
 
-1.1). 类似canmv_debian_sdcard_sdk_x.x.img.gz文件是k230 的debian镜像压缩包：
+1.1). 类似xxxx_debian_sdcard_x.x.img.gz文件是k230 的debian镜像压缩包：
 
 使用的是trixie/sid (debian13)版本，启动时会看到Welcome to Debian GNU/Linux trixie/sid!  打印。
 
-1.2) 类似canmv_ubuntu_sdcard_x.x.img.gz 文件是k230 ubuntu镜像压缩包：
+1.2) 类似xxxx_ubuntu_sdcard_x.x.img.gz 文件是k230 ubuntu镜像压缩包：
 
 使用的时Ubuntu 23.10 版本，启动会会看到Welcome to Ubuntu 23.10! 打印；
 
@@ -67,8 +67,10 @@
 
 1.4). ubuntu23_rootfs.ext4.gz是k230 ubuntu根文件系统
 
-> 说明1：镜像仅适用于canmv板子
+> 说明1：最开头的标识是板子名称，比如canmv/k230_evb等
+>
 > 说明2：烧录时需要先解压缩文件
+>
 > 说明3：网口不稳定如果找不到网口，重启下板子,
 
 ## 2.k230 debian根文件系统制作及验证
@@ -155,7 +157,7 @@ make build-image
 
 备注：网口不稳定，如果找不到网口，请重启设备试下。
 
-### 1.3gcc验证
+### 2.3gcc验证
 
 备注：网口不稳定，如果没有找到网口请重启试下。
 
@@ -167,6 +169,7 @@ date -s 20231027
 apt-get update
 apt-get install gcc
 apt-get install ssh
+apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
 ./a.out 
@@ -279,21 +282,70 @@ make build-image
 
 备注：网口不稳定，如果找不到网口，请重启设备试下。
 
-### 2.4 gcc 验证
+### 3.4 gcc 验证
 
 主要命令：
 
 ```bash
 dhcpcd 
+date -s "20240507 15:06"
 apt-get update
 apt-get install gcc
 apt-get install ssh
+apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
 ./a.out 
 ```
 
-## 4.参考资料
+## 4.添加Qt及lxqt支持
+
+### 4.1安装Qt, lxqt
+
+参考[debian根文件系统制作](#22debian-rootfs制作)或[ubuntu根文件系统制作](#32k230-ubuntu根文件系统制作)步骤
+
+```sh
+chroot /path/to/rootfs
+apt-get install openssh-server
+apt-get install libdrm-dev
+apt-get install qtbase5-dev qtbase5-examples
+apt-get install lxqt
+systemctl disable sddm
+```
+
+### 4.2运行Qt example
+
+新建QPA输出配置文件，复制以下内容到`kms_config.json`
+
+```json
+{
+  "device": "/dev/dri/card0",
+  "outputs": [
+    { "name": "DSI1", "format": "argb8888" }
+  ]
+}
+```
+
+新建QPA环境变量文件，复制以下内容到`env.sh`
+
+```sh
+export QT_QPA_PLATFORM=linuxfb
+export QT_QPA_FB_DRM=1
+export QT_QPA_EGLFS_KMS_CONFIG="/root/kms_config.json"
+```
+
+通过以下命令运行Qt example
+
+```sh
+source env.sh
+/usr/lib/riscv64-linux-gnu/qt5/examples/gui/analogclock/analogclock
+```
+
+### 4.3运行lxqt
+
+目前lxqt只能通过X11Forwarding在pc或其他平台显示，通过ssh -X连接到板子，然后执行`startlxqt`
+
+## 5.参考资料
 
 <https://wiki.debian.org/RISC-V>
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>

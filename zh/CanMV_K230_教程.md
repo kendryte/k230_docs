@@ -58,7 +58,7 @@ CanMV-K230开发板默认套件包含以下物品：
 
 1、TF卡， 用于烧写固件，启动系统（必须）
 
-2、带HDMI接口的显示器及HDMI连接线，显示器要求支持1080P30，否则无法显示
+2、带HDMI接口的显示器及HDMI连接线
 
 3、100M/1000M 以太网线缆，及有线路由器
 
@@ -117,7 +117,11 @@ Linux串口显示如下：
 
 CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/developer/k230`
 
-请下载“k230_canmv”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230的固件。
+CanMV-K230-V1.0/V1.1请下载“k230_canmv_sdcard”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230-V1.0/V1.1的固件。
+
+`CanMV-K230-V2.0请下载k230_canmv_v2开头的压缩包。`
+
+`注意：不要将k230_canmv_sdcard...gz（CanMV-K230-V1.0/V1.1的镜像）的压缩包烧至2.0板子，板子可能会烧毁。`
 
 #### 固件烧录
 
@@ -254,7 +258,7 @@ vicap demo通过调用mpi接口实现摄像头数据采集预览功能。CanMV�
 
 ##### 编译
 
-在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+在k230_sdk目录下执行make rt-smart-clean && make rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
 对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/elf/sample_vicap.elf
 
@@ -319,7 +323,7 @@ CanMV-K230开发板支持的其它demo请参考 [K230_SDK_CanMV_Board_Demo使用
 
 ##### 编译程序
 
-在k230_sdk目录下执行make rt-smart-clean && rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
+在k230_sdk目录下执行make rt-smart-clean && make rt-smart && make build-image，将大核的修改编译进sd卡镜像中，会在k230_sdk/output/k230_canmv_defconfig/images/目录下生成镜像文件sysimage-sdcard.img
 
 对应的程序位于 k230_sdk/src/big/mpp/userapps/sample/fastboot_elf/fastboot_app.elf
 
@@ -620,6 +624,11 @@ int main(int argc, char *argv[])
 
 ### 模型编译和模拟器推理
 
+进行模型编译前,您需要了解以下关键信息:
+
+1. `KPU`推理使用定点运算。因此在编译模型时,必须配置量化相关参数,用于将模型从浮点转换为定点。详见 `nncase`文档中的[PTQTensorOptions](https://github.com/kendryte/nncase/blob/master/docs/USAGE_v2.md#ptqtensoroptions)说明。
+1. `nncase`支持将前处理层集成到模型中，这可以减少推理时的前处理开销。相关参数和示意图见 `nncase`文档的[CompileOptions](https://github.com/kendryte/nncase/blob/master/docs/USAGE_v2.md#compileoptions)部分。
+
 #### 安装nncase工具链
 
 nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安装才可以编译出CanMV-K230所支持的模型文件。`nncase`和 `nncase-kpu`插件包均在[nncase github release](https://github.com/kendryte/nncase/releases)发布，并且依赖dotnet-7.0。
@@ -664,13 +673,6 @@ export PATH=$PATH:/path/to/python/site-packages/
 >
 > 1. 对于TensorFlow的`pb`模型,请参考官方文档将其转换为`tflite`格式。注意不要设置量化选项,直接输出浮点模型即可。如果模型中存在quantize和dequantize算子,则属于量化模型，目前不支持。
 > 1. 对于PyTorch的`pth`等格式模型,需使用`torch.export.onnx`接口导出`onnx`格式。
-
-#### 编译参数说明
-
-进行模型编译前,您需要了解以下关键信息:
-
-1. `KPU`推理使用定点运算。因此在编译模型时,必须配置量化相关参数,用于将模型从浮点转换为定点。详见 `nncase`文档中的[PTQTensorOptions](https://github.com/kendryte/nncase/blob/master/docs/USAGE_v2.md#ptqtensoroptions)说明。
-1. `nncase`支持将前处理层集成到模型中，这可以减少推理时的前处理开销。相关参数和示意图见 `nncase`文档的[CompileOptions](https://github.com/kendryte/nncase/blob/master/docs/USAGE_v2.md#compileoptions)部分。
 
 #### 编译脚本说明
 

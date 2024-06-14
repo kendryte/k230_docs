@@ -43,8 +43,8 @@
 | 简称 | 说明 |
 | --- | --- |
 | DRM | Direct Rendering Manager |
-| KMS | Kernel Mode Setting
-| GEM | Graphics Execution Manager
+| KMS | Kernel Mode Setting |
+| GEM | Graphics Execution Manager|
 
 ### 修订记录
 

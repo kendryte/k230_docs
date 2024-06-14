@@ -55,25 +55,27 @@ This document (this guide) is intended primarily for:
 
 debian and ubuntu related files can be found on the [canaan developer community website](https://developer.canaan-creative.com/resource) under k230/images
 
-1.1). similar canmv_debian_sdcard_sdk_x.x.img.gz is k230 debian compressed image;
+1.1). similar xxx_debian_sdcard_sdk_x.x.img.gz is k230 debian compressed image;
 
 ​        debian version is  trixie/sid (debian13)，You can see "Welcome to Debian GNU/Linux trixie/sid!" print at startup  .
 
-1.2) similar canmv_ubuntu_sdcard_x.x.img.gz is k230 ubuntu compressed mirror image;
+1.2) similar xxx_ubuntu_sdcard_x.x.img.gz is k230 ubuntu compressed mirror image;
 
 ​​        debian version is Ubuntu 23.10(mantic)，You can see "Welcome to Ubuntu 23.10! "print at startup.
 
-1.3) [debian13.ext4.tar.gz](https://kvftsfijpo.feishu.cn/file/NiOGbdnxkoYaRRxLyfJcjxYhnif) is k230 debian rootfs;
+1.3) debian13.ext4.tar.gz is k230 debian rootfs;
 
-1.4). [ubuntu23_rootfs.ext4.gz](https://kvftsfijpo.feishu.cn/file/Ig3Gb4hTLogZPdxz3w6cJasZnxh)  is k230 ubuntu rootfs.
+1.4). ubuntu23_rootfs.ext4.gz is k230 ubuntu rootfs.
 
->note1:mirror image only applies to the canmv board.
+>note1:The first string is the board name, such as canmv/k230_evb etc.
+>
 >note2:image need uncompress.
+>
 >note3: The network port is unstable. If the network port cannot be found, reset the board.
 
-## 2.k230 debian Rootfs build and verification
+## 2. k230 debian Rootfs build and verification
 
-### 2.1environment
+### 2.1 environment
 
 I  build the debian rootfs  file system in ubuntu21.04 (other systems should be able to do it too), and it need root permission.
 
@@ -86,7 +88,7 @@ wangjianxin@v:~/t$ lsb_release  -a
  Codename:       hirsute
 ```
 
-### 2.2debian rootfs  build
+### 2.2 debian rootfs build
 
 please  referring to the following command to build the debian rootfs.
 
@@ -128,7 +130,7 @@ make CONF=k230_canmv_only_linux_defconfig
 #target file is "output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img"
 ```
 
-2). Decompress  [debian13.ext4.tar.gz](https://kvftsfijpo.feishu.cn/file/NiOGbdnxkoYaRRxLyfJcjxYhnif)  to output/k230_canmv_only_linux_defconfig/images/
+2). Decompress  debian13.ext4.tar.gz to output/k230_canmv_only_linux_defconfig/images/
 
 ```Bash
 tar -xvf debian13.ext4.tar.gz  -C output/k230_canmv_only_linux_defconfig/images/
@@ -260,7 +262,7 @@ make CONF=k230_canmv_only_linux_defconfig
 #target file is "output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img"
 ```
 
-2). Decompress [ubuntu23_rootfs.ext4.gz](https://kvftsfijpo.feishu.cn/file/Ig3Gb4hTLogZPdxz3w6cJasZnxh)  to output/k230_canmv_only_linux_defconfig/images/
+2). Decompress ubuntu23_rootfs.ext4.gz  to output/k230_canmv_only_linux_defconfig/images/
 
 ```Bash
 tar -xvf ubuntu23_rootfs.ext4.gz  -C output/k230_canmv_only_linux_defconfig/images/
@@ -303,9 +305,53 @@ gcc a.c
 ./a.out 
 ```
 
-> note: The network port is unstable. If the network port cannot be found, reset the board.
+## 4.add Qt and lxqt
 
-## 4. reference material
+### 4.1 install Qt, lxqt
 
-<https://wiki.debian.org/RISC-V>
+reference [debian rootfs build](#22-debian-rootfs-build) or [ubuntu根文件系统制作](#32-k230-ubuntu-rootfs-build)
+
+```sh
+chroot /path/to/rootfs
+apt-get install openssh-server
+apt-get install libdrm-dev
+apt-get install qtbase5-dev qtbase5-examples
+apt-get install lxqt
+systemctl disable sddm
+```
+
+### 4.2 run Qt example
+
+Create a new QPA output configuration file and copy the following to `kms_config.json`
+
+```json
+{
+  "device": "/dev/dri/card0",
+  "outputs": [
+    { "name": "DSI1", "format": "argb8888" }
+  ]
+}
+```
+
+Create a new QPA environment variables file and copy the following to`env.sh`
+
+```sh
+export QT_QPA_PLATFORM=linuxfb
+export QT_QPA_FB_DRM=1
+export QT_QPA_EGLFS_KMS_CONFIG="/root/kms_config.json"
+```
+
+run Qt example
+
+```sh
+source env.sh
+/usr/lib/riscv64-linux-gnu/qt5/examples/gui/analogclock/analogclock
+```
+
+### 4.3 run lxqt
+
+Currently lxqt can only be displayed on a pc or other platform via X11Forwarding, connected to the board via ssh-X, and then executed `startlxqt`
+
+## 5. reference material
+
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>

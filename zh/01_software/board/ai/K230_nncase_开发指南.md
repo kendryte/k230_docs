@@ -47,12 +47,13 @@
 
 ### 修订记录
 
-| 文档版本号 | 修改说明                                            | 修改者             | 日期     |
-| ---------- | --------------------------------------------------- | ------------------ | -------- |
-| V1.0       | 文档初版                                            | 张扬/霍成海        | 2023/4/7 |
-| V1.1       | 统一改成word格式， 完善ai2d                         | 张扬/霍成海        | 2023/5/5 |
-| V1.2       | nncase v2新架构                                     | 张扬/郑启航/霍成海 | 2023/6/2 |
-| V1.3       | nncase_k230_v2.1.0, ai2d/runtime_tensor支持物理地址 | 张扬               | 2023/7/3 |
+| 文档版本号 | 修改说明                                            | 修改者             | 日期      |
+| ---------- | --------------------------------------------------- | ------------------ | --------- |
+| V1.0       | 文档初版                                            | 张扬/霍成海        | 2023/4/7  |
+| V1.1       | 统一改成word格式， 完善ai2d                         | 张扬/霍成海        | 2023/5/5  |
+| V1.2       | nncase v2新架构                                     | 张扬/郑启航/霍成海 | 2023/6/2  |
+| V1.3       | nncase_k230_v2.1.0, ai2d/runtime_tensor支持物理地址 | 张扬               | 2023/7/3  |
+| V1.4       | 文档描述更新                                        | 杨浩琪             | 2024/5/15 |
 
 ## 1. 概述
 
@@ -330,119 +331,163 @@ nncase提供了Python APIs, 用于在PC上编译神经网络模型
 
 ### 2.2 APIs
 
-目前编译模型APIs支持tflite/onnx/caffe等格式的深度学习模型。
+目前编译模型APIs支持tflite/onnx等格式的深度学习模型。
 
 #### 2.2.1 CompileOptions
 
 【描述】
 
-CompileOptions类, 用于配置nncase编译选项
+CompileOptions类, 用于配置nncase编译选项，各属性说明如下
 
-【定义】
+| 属性名称                    |         类型          | 是否必须 | 描述                                                                                                                   |
+| :-------------------------- | :-------------------: | :------: | ---------------------------------------------------------------------------------------------------------------------- |
+| target                      |        string         |    是    | 指定编译目标, 如'cpu', 'k230'                                                                                          |
+| dump_ir                     |         bool          |    否    | 指定是否dump IR, 默认为False                                                                                           |
+| dump_asm                    |         bool          |    否    | 指定是否dump asm汇编文件, 默认为False                                                                                  |
+| dump_dir                    |        string         |    否    | 前面指定dump_ir等开关后, 这里指定dump的目录, 默认为""                                                                  |
+| input_file                  |        string         |    否    | onnx模型超过2GB时，用于指定参数文件路径，默认为""                                                                      |
+|                             |                       |          |                                                                                                                        |
+| preprocess                  |         bool          |    否    | 是否开启前处理，默认为False。以下参数仅在 `preprocess=True`时生效                                                      |
+| input_type                  |        string         |    否    | 开启前处理时指定输入数据类型，默认为"float"。当 `preprocess`为 `True`时，必须指定为"uint8"或者"float32"                |
+| input_shape                 |       list[int]       |    否    | 开启前处理时指定输入数据的shape，默认为[]。当 `preprocess`为 `True`时，必须指定                                        |
+| input_range                 |      list[float]      |    否    | 开启前处理时指定输入数据反量化后的浮点数范围，默认为[ ]。当 `preprocess`为 `True`且 `input_type`为 `uint8`时，必须指定 |
+| input_layout                |        string         |    否    | 指定输入数据的layout，默认为""                                                                                         |
+| swapRB                      |         bool          |    否    | 是否在 `channel`维度反转数据，默认为False                                                                              |
+| mean                        |      list[float]      |    否    | 前处理标准化参数均值，默认为[0,0,0]                                                                                    |
+| std                         |      list[float]      |    否    | 前处理标准化参数方差，默认为[1,1,1]                                                                                    |
+| letterbox_value             |         float         |    否    | 指定前处理letterbox的填充值，默认为0                                                                                   |
+| output_layout               |        string         |    否    | 指定输出数据的layout, 默认为""                                                                                         |
+|                             |                       |          |                                                                                                                        |
+| shape_bucket_enable         |         bool          |    是    | 是否开启ShapeBucket功能，默认为False。在 `dump_ir=True`时生效                                                          |
+| shape_bucket_range_info     | Dict[str, [int, int]] |    是    | 每个输入shape维度信息中的变量的范围，最小值必须大于等于1                                                               |
+| shape_bucket_segments_count |          int          |    是    | 输入变量的范围划分为几段                                                                                               |
+| shape_bucket_fix_var_map    |    Dict[str, int]     |    否    | 固定shape维度信息中的变量为特定的值                                                                                    |
+
+##### 2.2.1.1 前处理流程说明
+
+目前暂不支持自定义前处理顺序，可以根据以下流程示意图，选择所需要的前处理参数进行配置。
+
+<div class="mermaid">
+graph TD;
+    NewInput("NewInput\n(shape = input_shape\ndtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty\nmean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
+    a--N-->b--N-->c--N-->d--N-->e--N-->OldInput; f--N-->NewOutput;
+    subgraph origin_model
+        OldInput; Model_body ; OldOutput;
+    end
+</div>
+
+参数说明：
+
+1. `input_range`为输入数据类型为定点时，反量化后的浮点数范围。
+
+   a. 输入数据类型为uint8，range为[0,255]，`input_range`为[0,255]，则反量化的作用只是进行类型转化，将uint8的数据转化为float32，`mean`和 `std`参数仍然按照[0,255]的数据进行指定。
+
+   b. 输入数据类型为uint8，range为[0,255]，`input_range`为[0,1]，则反量化会将定点数转化为浮点数[0,1]，`mean`和 `std`参数需要按照0~1的数据进行指定。
+
+   <div class="mermaid">
+    graph TD;
+        NewInput_uint8("NewInput_uint8 \n[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
+        NewInput_uint81("NewInput_uint8 \n[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
+   </div>
+
+1. `input_shape`为输入数据的shape，layout为 `input_layout`，现在支持字符串（`"NHWC"`、`"NCHW"`）和index两种方式作为 `input_layout`，并且支持非4D的数据处理。
+当按照字符串形式配置 `input_layout`时，表示输入数据的layout；当按照index形式配置`input_layout`时，表示输入数据会按照当前配置的 `input_layout`进行数据转置，即 `input_layout`为 `Transpose`的 `perm`参数。
+
+<div class="mermaid">
+graph TD;
+    subgraph B
+        NewInput1("NewInput: 1,4,10") --"input_layout:"0,2,1""-->Transpose2("Transpose perm: 0,2,1") --> OldInput2("OldInput: 1,10,4");
+    end
+    subgraph A
+        NewInput --"input_layout:"NHWC""--> Transpose0("Transpose: NHWC2NCHW") --> OldInput;
+        NewInput("NewInput: 1,224,224,3 (NHWC)") --"input_layout:"0,3,1,2""--> Transpose1("Transpose perm: 0,3,1,2") --> OldInput("OldInput: 1,3,224,224 (NCHW)");
+    end
+</div>
+
+​   `output_layout`同理，如下图所示。
+
+<div class="mermaid">
+graph TD;
+subgraph B
+    OldOutput1("OldOutput: 1,10,4,5,2") --"output_layout: "0,2,3,1,4""--> Transpose5("Transpose perm: 0,2,3,1,4") --> NewOutput1("NewOutput: 1,4,5,10,2");
+    end
+subgraph A
+    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput\nNHWC");
+    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput\nNHWC");
+    end
+</div>
+
+##### 2.2.1.2 动态shape参数说明
+
+ShapeBucket是针对动态shape的一种解决方案，会根据输入长度的范围以及指定的段的数量来对动态shape进行优化。该功能默认为false，需要打开对应的option才能生效，除了指定对应的字段信息，其他流程与编译静态模型没有区别。
+
+- onnx
+
+在模型的shape中会有些维度为变量名字，这里以一个onnx模型的输入为例
+
+> tokens: int64[batch_size, tgt_seq_len]
+> step: float32[seq_len, batch_size]
+
+shape的维度信息中存在seq_len，tgt_seq_len，batch_size这三个变量。
+首先是batch_size，虽然是变量的但实际应用的时候固定为3，因此在**fix_var_map**中添加batch_size = 3，在运行的时候会将这个维度固定为3。
+seq_len，tgt_seq_len两个是实际会发生改变的，因此需要配置这两个变量的实际范围，也就是**range_info**的信息。**segments_count**是实际分段的数量，会根据范围等分为几份，对应的编译时间也会相应增加几倍。
+
+以下为对应的编译参数示例：
 
 ```python
-class CompileOptions:
-    benchmark_only: bool
-    dump_asm: bool
-    dump_dir: str
-    dump_ir: bool
-    swapRB: bool
-    input_range: List[float]
-    input_shape: List[int]
-    input_type: str
-    is_fpga: bool
-    mean: List[float]
-    std: List[float]
-    output_type: str
-    preprocess: bool
-    quant_type: str
-    target: str
-    w_quant_type: str
-    use_mse_quant_w: bool
-    input_layout: str
-    output_layout: str
-    letterbox_value: float
-    tcu_num: int
-
-    def __init__(self) -> None:
-        self.benchmark_only = False
-        self.dump_asm = True
-        self.dump_dir = "tmp"
-        self.dump_ir = False
-        self.is_fpga = False
-        self.quant_type = "uint8"
-        self.target = "cpu"
-        self.w_quant_type = "uint8"
-        self.use_mse_quant_w = True
-        self.tcu_num = 0
-
-        self.preprocess = False
-        self.swapRB = False
-        self.input_range = []
-        self.input_shape = []
-        self.input_type = "float32"
-        self.mean = [0, 0, 0]
-        self.std = [1, 1, 1]
-        self.input_layout = ""
-        self.output_layout = ""
-        self.letterbox_value = 0
+compile_options = nncase.CompileOptions()
+compile_options.shape_bucket_enable = True
+compile_options.shape_bucket_range_info = {"seq_len": [1, 100], "tgt_seq_len": [1, 100]}
+compile_options.shape_bucket_segments_count = 2
+compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-【属性】
+- tflite
 
-| 名称            | 类型   | 描述                                                         |
-| --------------- | ------ | ------------------------------------------------------------ |
-| dump_asm        | bool   | 指定是否dump asm汇编文件, 默认为True                         |
-| dump_dir        | bool   | 前面指定dump_ir等开关后, 这里指定dump的目录, 默认为"tmp"     |
-| dump_ir         | bool   | 指定是否dump IR, 默认为False                                 |
-| swapRB          | bool   | 是否交换RGB输入数据的红和蓝两个通道(RGB--\>BGR或者BGR--\>RGB)，默认为False |
-| input_range     | list   | 输入数据反量化后对应浮点数的范围，默认为`[0，1]`             |
-| input_shape     | list   | 指定输入数据的shape，input_shape的layout需要与input layout保持一致，输入数据的input_shape与模型的input shape不一致时会进行letterbox操作(resize/pad等) |
-| input_type      | string | 指定输入数据的类型, 默认为'float32'                          |
-| mean            | list   | 前处理标准化参数均值，默认为`[0, 0, 0]`                      |
-| std             | list   | 前处理标准化参数方差，默认为`[1, 1, 1]`                      |
-| output_type     | string | 指定输出数据的类型, 如'float32', 'uint8'(仅用于指定量化情况下) |
-| preprocess      | bool   | 是否开启前处理，默认为False                                  |
-| target          | string | 指定编译目标, 如'k210', 'k510', ‘k230’                       |
-| letterbox_value | float  | 指定前处理letterbox的填充值                                  |
-| input_layout    | string | 指定输入数据的layout, 如'NCHW', 'NHWC'. 若输入数据layout与模型本身layout不同, nncase会插入transpose进行转换 |
-| output_layout   | string | 指定输出数据的layout, 如'NCHW', 'NHWC'. 若输出数据layout与模型本身layout不同, nncase会插入transpose进行转换. |
+tflite的模型与onnx不同，shape上暂未标注维度的名称，目前只支持输入中具有一个维度是动态的，并且名称统一配置为-1，配置方式如下：
 
-【注意】
+```cpp
+compile_options = nncase.CompileOptions()
+compile_options.shape_bucket_enable = True
+compile_options.shape_bucket_range_info = {"-1":[1, 100]}
+compile_options.shape_bucket_segments_count = 2
+compile_options.shape_bucket_fix_var_map = {"batch_size" : 3}
+```
 
-1. input range为浮点数的范围，即如果输入数据类型为uint8，则input range为反量化到浮点之后的范围（可以不为0\~1），可以自由指定.
-1. input_shape需要按照input_layout进行指定，以`[1，224，224，3]`为例，如果input_layout为NCHW，则input_shape需指定为`[1,3,224,224]`;input_layout为NHWC，则input_shape需指定为`[1,224,224,3]`.
-1. mean和std为浮点数进行normalize的参数，用户可以自由指定.
-1. 使用letterbox功能时，需要限制输入size在1.5MB内，单channel的size在0.75MB内.
+配置完这些选项后整个编译的流程和静态shape一致。
 
-例如:
+##### 2.2.1.3 参数配置示例
 
-1. 输入数据类型设定为uint8，input_range设定为`[0,255]`，则反量化的作用只是进行类型转化，将uint8的数据转化为float32，mean和std参数仍然可以按照0\~255的数据进行指定.
-1. 输入数据类型设定为uint8，input_range设定为`[0,1]`，则会将定点数反量化为范围为`[0,1]`的浮点数, mean 和std需要按照新的浮点数范围进行指定。
-
-前处理流程如下(图中绿色节点皆为可选)：
-
-![前处理流程](images/540e27e83677e9457077ad1d45bc1980.png)
-
-【示例】
-
-实例化CompileOptions, 配置各属性的值
+实例化CompileOptions，配置各属性的值。
 
 ```python
-# compile_options                                                                
-compile_options = nncase.CompileOptions()                                           
-compile_options.target = args.target                                                
-compile_options.preprocess = True                                                   
-compile_options.swapRB = False                                                      
-compile_options.input_shape = input_shape                                           
-compile_options.input_type = 'uint8'                                                
-compile_options.input_range = [0, 255]                                              
-compile_options.mean = [127.5, 127.5, 127.5]                                        
-compile_options.std = [127.5, 127.5, 127.5]                                         
-compile_options.input_layout = 'NCHW'                                               
-compile_options.dump_ir = True                                                      
-compile_options.dump_asm = True                                                     
-compile_options.dump_dir = dump_dir                                                 
+compile_options = nncase.CompileOptions()
+
+compile_options.target = "cpu" #"k230"
+compile_options.dump_ir = True  # if False, will not dump the compile-time result.
+compile_options.dump_asm = True
+compile_options.dump_dir = "dump_path"
+compile_options.input_file = ""
+
+# preprocess args
+compile_options.preprocess = False
+if compile_options.preprocess:
+    compile_options.input_type = "uint8"  # "uint8" "float32"
+    compile_options.input_shape = [1,224,320,3]
+    compile_options.input_range = [0,1]
+    compile_options.input_layout = "NHWC" # "NHWC" ”NCHW“
+    compile_options.swapRB = False
+    compile_options.mean = [0,0,0]
+    compile_options.std = [1,1,1]
+    compile_options.letterbox_value = 0
+    compile_options.output_layout = "NHWC" # "NHWC" "NCHW"
+
+# Dynamic shape args
+compile_options.shape_bucket_enable = False
+if compile_options.shape_bucket_enable:
+    compile_options.shape_bucket_range_info = {"seq_len": [1, 100], "tgt_seq_len": [1, 100]}
+    compile_options.shape_bucket_segments_count = 2
+    compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
 #### 2.2.2 ImportOptions
@@ -474,55 +519,27 @@ import_options = nncase.ImportOptions()
 
 PTQTensorOptions类, 用于配置nncase PTQ选项
 
-【定义】
+| 名称                           | 类型   | 描述 |
+| ------------------------------ | ------ | ---- |
+| calibrate_method               | string | 否   |
+| samples_count                  | int    | 否   |
+| finetune_weights_method        | string | 否   |
+| quant_type                     | string | 否   |
+| w_quant_type                   | string | 否   |
+|                                |        |      |
+| quant_scheme                   | string | 否   |
+| quant_scheme_strict_mode       | bool   | 否   |
+| export_quant_scheme            | bool   | 否   |
+| export_weight_range_by_channel | bool   | 否   |
 
-```python
-class PTQTensorOptions:
-    calibrate_method: str
-    input_mean: float
-    input_std: float
-    samples_count: int
-    quant_type: str
-    w_quant_type: str
-    finetune_weights_method: str
-    use_mix_quant: bool
-    quant_scheme: str
-    export_quant_scheme: bool
-    export_weight_range_by_channel: bool
-    cali_data: List[RuntimeTensor]
+- 混合量化参数说明
 
-    def __init__(self) -> None:
-        self.calibrate_method: str = "Kld"
-        self.input_mean: float = 0.5
-        self.input_std: float = 0.5
-        self.samples_count: int = 5
-        self.quant_type: str = "uint8"
-        self.w_quant_type: str = "uint8"
-        self.finetune_weights_method: str = "NoFineTuneWeights"
-        self.use_mix_quant: bool = False
-        self.quant_scheme: str = ""
-        self.export_quant_scheme: bool = False
-        self.export_weight_range_by_channel: bool = False
-        self.cali_data: List[RuntimeTensor] = []
+  - quant_scheme：导入量化参数配置文件的路径
+  - quant_scheme_strict_mode：是否严格按照quant_scheme执行量化
+  - export_quant_scheme：是否导出量化参数配置文件
+  - export_weight_range_by_channel：是否导出 `bychannel`形式的weights量化参数，为了保证量化效果，该参数建议设置为 `True`
 
-    def set_tensor_data(self, data: List[List[np.ndarray]]) -> None:
-        reshape_data = list(map(list, zip(*data)))
-        self.cali_data = [RuntimeTensor.from_numpy(
-            d) for d in itertools.chain.from_iterable(reshape_data)]
-```
-
-【属性】
-
-| 名称                    | 类型   | 描述                                                         |
-| ----------------------- | ------ | ------------------------------------------------------------ |
-| calibrate_method        | string | 校准方法 , 支持'NoClip', 'Kld',  默认值为'Kld'               |
-| input_mean              | float  | 用户指定输入的均值，默认值为0.5                              |
-| input_std               | float  | 用户指定输入的方差，默认值为0.5                              |
-| samples_count           | Int    | 样本个数                                                     |
-| quant_type              | string | 指定数据量化类型, 如'uint8', 'int8'， 默认值为'uint8'        |
-| w_quant_type            | string | 指定权重量化类型, 如'uint8', 'int8', 默认值为’uint8’         |
-| finetune_weights_method | string | 调整权重方法，有'NoFineTuneWeights', 'UseSquant'，默认值为'NoFineTuneWeights' |
-| use_mix_quant           | bool   | 是否使用混合量化，默认值为False                              |
+​   具体使用流程见 [MixQuant说明](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md)
 
 【示例】
 
@@ -530,7 +547,16 @@ class PTQTensorOptions:
 # ptq_options
 ptq_options = nncase.PTQTensorOptions()
 ptq_options.samples_count = 6
+ptq_options.finetune_weights_method = "NoFineTuneWeights"
+ptq_options.quant_type = "uint8"
+ptq_options.w_quant_type = "uint8"
 ptq_options.set_tensor_data(generate_data(input_shape, ptq_options.samples_count, args.dataset))
+
+ptq_options.quant_scheme = ""
+ptq_options.quant_scheme_strict_mode = False
+ptq_options.export_quant_scheme = True
+ptq_options.export_weight_range_by_channel = True
+
 compiler.use_ptq(ptq_options)
 ```
 
@@ -551,8 +577,8 @@ compiler.use_ptq(ptq_options)
 
 【参数】
 
-| 名称       | 类型   | 描述           |
-| ---------- | ------ | -------------- |
+| 名称 | 类型                  | 描述           |
+| ---- | --------------------- | -------------- |
 | data | List[List[np.ndarray] | 读取的校准数据 |
 
 【返回值】
@@ -605,7 +631,7 @@ def import_tflite(self, model_content: bytes, options: ImportOptions) -> None:
 
 | 名称           | 类型          | 描述           |
 | -------------- | ------------- | -------------- |
-| model_content  | byte\[\]        | 读取的模型内容 |
+| model_content  | byte\[\]      | 读取的模型内容 |
 | import_options | ImportOptions | 导入选项       |
 
 【返回值】
@@ -637,7 +663,7 @@ def import_onnx(self, model_content: bytes, options: ImportOptions) -> None:
 
 | 名称           | 类型          | 描述           |
 | -------------- | ------------- | -------------- |
-| model_content  | byte\[\]        | 读取的模型内容 |
+| model_content  | byte\[\]      | 读取的模型内容 |
 | import_options | ImportOptions | 导入选项       |
 
 【返回值】
@@ -1164,8 +1190,8 @@ py::class_<interpreter>(m, "Simulator")
 
 【参数】
 
-| 名称          | 类型   | 描述         |
-| ------------- | ------ | ------------ |
+| 名称          | 类型     | 描述         |
+| ------------- | -------- | ------------ |
 | model_content | byte\[\] | kmodel字节流 |
 
 【返回值】
@@ -1525,11 +1551,11 @@ auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape
 
 【参数】
 
-| 名称   | 类型           | 描述                                                         |
-| ------ | -------------- | ------------------------------------------------------------ |
-| tensor | runtime_tensor | 要操作的tensor                                               |
+| 名称   | 类型           | 描述                                                                                 |
+| ------ | -------------- | ------------------------------------------------------------------------------------ |
+| tensor | runtime_tensor | 要操作的tensor                                                                       |
 | op     | sync_op_t      | sync_invalidate(将tensor的cache invalidate)或sync_write_back(将tensor的cache写入ddr) |
-| force  | bool           | 是否强制执行                                                 |
+| force  | bool           | 是否强制执行                                                                         |
 
 【返回值】
 
@@ -1857,8 +1883,14 @@ static int inference(const char *kmodel_file, const char *image_file, const char
 {
     // load kmodel
     interpreter interp;
+    
+    // 从内存加载kmodel
     auto kmodel = read_binary_file<unsigned char>(kmodel_file);
-    interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load model.");
+    interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load kmodel.");
+    // 从文件流加载kmodel
+    std::ifstream ifs(kmodel_file, std::ios::binary);
+    interp.load_model(ifs).expect("cannot load kmodel");
+    
 
     // create input tensor
     auto input_desc = interp.input_desc(0);
@@ -1940,7 +1972,7 @@ int main(int argc, char *argv[])
 
 ### 5.1 简介
 
-AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配置，执行AI2D计算等.
+AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配置，执行AI2D计算等。请在使用前阅读最后一部分[注意事项](./K230_nncase_开发指南.md#54-注意事项)。
 
 #### 5.1.1   支持的格式转换
 

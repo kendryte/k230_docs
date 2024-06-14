@@ -25,7 +25,7 @@ Without the written permission of the company, no unit or individual may extract
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
@@ -67,7 +67,7 @@ You can use the sample_vicap.elf program to grab and convert the saved YUV file 
 ffmpeg -f rawvideo -pixel_format nv12 -video_size 2592x1944 -i dev_00_chn_00_2592x1944_0000.yuv420sp 0.png
 ```
 
-### 1.3 Introduction to the Dewarp pattern
+### 1.3 Import to the Dewarp pattern
 
 Dewarp has a variety of modes, and two are described here, lens correction and split screen.
 

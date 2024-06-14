@@ -44,6 +44,7 @@
 | 文档版本号  | 修改说明                           | 修改者 | 日期       |
 |------------|-----------------------------------|--------|------------|
 | V1.0       | 初版                              | 荣 坚 | 2024-01-24 |
+| V1.1       | 更新部分参数描述                   | 荣 坚 | 2024-04-28 |
 
 ## 1. K230 ISP初始化配置概述
 
@@ -54,7 +55,7 @@ ISP初始化配置有三个文件：xml、manaual.json和auto.json，若sensor�
 
 ### 2.1 概述
 
-可使用K230 ISP Calibration Tool生成xml文件，工具中所有模块的校准都需要完成，以得到完整的校准数据。
+可使用K230 ISP Calibration Tool(K230ISPCalibrationTool.exe)生成xml文件，工具中所有模块的校准都需要完成，以得到完整的校准数据。
 
 xml文件中包含的数据有两个来源：
 
@@ -99,7 +100,7 @@ xml文件中包含的数据有两个来源：
         - BLS parameters.txt
       - ...
 
-### 2.2 使用K230 ISP Calibration Tool生成xml文件
+### 2.3 使用K230 ISP Calibration Tool生成xml文件
 
 将所有校准参数文件复制到相应文件夹后, 打开K230 ISP Calibration Tool，用其生成xml文件。
 
@@ -119,6 +120,14 @@ xml文件中包含的数据有两个来源：
 
 将生成的xml文件，按K230 SDK代码中输入的xml名称改名后(如ov9732-1280x720.xml)，放入config目录下,即可被K230 SDK正确调用。
 
+### 2.4 AWB参数K_Factor
+
+在xml文件中awb子段中有一个K_Factor参数需要另行标定和手动填入。该参数反馈了摄像模组的感光灵敏度。
+
+在AWB算法中，环境为outdoor的判别为: Exp*K_Factor <=0.12（Exp为曝光量）。
+
+比如以2000 lux为outdoor与transition的环境照度分割点，获取对应该照度的曝光值(ET \* gain)， 则可计算：K_Factor = 0.12 / (ET\*gain)。
+
 ## 3. manual.json文件
 
 manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件创建所需sensor分辨率的manual.json文件。
@@ -134,12 +143,10 @@ manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件�
 | 参数        | 类型及取值范围      | 描述                       |
 | ----------- | ------------------- | -------------------------- |
 | base_frame  | int 0~1        | 0: S帧为参考帧; <br/>1: L帧为参考帧。<br/>推荐设置为0. |
-| bls         | int[4]         | Black level(12bit) <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>目前驱动仅支持各通道配置相同的黑电平  |
-| bls_out     | int[4]         | Black level out(12bit) <br/>默认配置为[0,0,0,0]       |
+| bls_out     | int[4]         | Black level out <br/>默认配置为[0,0,0,0], 设置值基于ISP 12bits       |
 | bypass      | bool           |  false: 经过HDR模块 <br/>true: 不经过HDR模块      |
 | bypass_select | int 0~2      | 0: HDR模块输出L帧; <br/>1: HDR模块输出S帧; <br/>2: HDR模块输出VS帧 |
 | color_weight  | int[3] 0~255 | color_weight <br/> stitch_color_weight0+stitch_color_weight1*2+stitch_color_weight2=256 <br/> 建议设置为[255, 0, 1] |
-| driver_load   | bool         | false: 不加载该模块参数 <br/>true: 加载该模块参数 |
 | enable        | bool         | false: HDR不使能 <br/>true: HDR使能      |
 | extend_bit    | int[2] -1~8  | 扩展bit位 <br/>  [L/S帧融合, LS/VS帧融合] <br/> 建议设置为[-1,-1], 自动计算；0 ~ 8为手动设置值。 |
 | ratio         | float[3] 1.0~256.0 |  曝光量比值 <br/> [long/short, short/very short, very short/exposure 3]  |
@@ -174,7 +181,6 @@ manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件�
 | 参数        | 类型及取值范围      | 描述                       |
 | --------- | -------------- | --------------- |
 |  bit      | int       | 12, 固定值 |
-| bls       | int[4]    | Black level(12bit) <br/>[bls_r,bls_g,bls_b,bls_ir]。<br/>目前驱动仅支持各通道配置相同的黑电平|
 | ccmatrix  | float[12] | 3x4色彩转换矩阵，将RGBIR值转换为RGB值 |
 | dpcc_mid_th | int     | DPCC通道中阈值值 |
 | dpcc_th   | int       | DPCC通道阈值 |
@@ -199,66 +205,67 @@ manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件�
 
 ### 3.7 CCpdv1
 
-#### 3.7.1 功能描述
+请参考《K230 ISP图像调优指南》第3.19章节。
 
-设置线性模式下的bls。
+### 3.8 Bls
 
-#### 3.7.2 主要参数
+#### 3.8.1 功能描述
 
-| 参数        | 类型及取值范围      | 描述                       |
+该模块为设置black level。默认bls功能为打开。
+
+#### 3.8.2 主要参数
+
+| 参数        | 类型及取值范围      | 描述    |
 | --------- | -------------- | --------------- |
-| bls        | int[4] | Black level(12bit) <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>目前驱动仅支持各通道配置相同的黑电平  |
-| bls_enable | bool   | false: 不使能BLS. <br/>true: 使能BLS. |
+| bls        | int[4] | Black level <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>目前驱动仅支持各通道配置相同的黑电平，设置值基于ISP 12bits |
 
-请不要更改其它参数的设置。
-
-### 3.8 CGamma64
+### 3.9 CGamma64
 
 请参考《K230 ISP图像调优指南》第3.14章节。
 
-### 3.9 CDpcc
+### 3.10 CDpcc
 
 请参考《K230 ISP图像调优指南》第3.8章节。
 
-### 3.10 CDpf
+### 3.11 CDpf
 
 请参考《K230 ISP图像调优指南》第3.9章节。
 
-### 3.11 CLscv2
+### 3.12 CLscv2
 
 请参考《K230 ISP图像调优指南》第3.2章节。
 
-### 3.12 CWdrv4
+### 3.13 CWdrv4
 
 请参考《K230 ISP图像调优指南》第3.6章节。
 
-### 3.13 C3dnrv3_1
+### 3.14 C3dnrv3_1
 
 请参考《K230 ISP图像调优指南》第3.10章节。
 
-### 3.14 CCproc
+### 3.15 CCproc
 
 请参考《K230 ISP图像调优指南》第3.18章节。
 
-### 3.15 CEEv1
-
-#### 3.15.1 功能描述
-
-该模块包含了CA、DCI和EE三个子块。
-
-#### 3.15.2 主要参数
-
-请参考《K230 ISP图像调优指南》第3.15（EE）、3.16（CA）和3.17（DCI）章节。
-
-### 3.16 CDmscv2
+### 3.16 CEEv1
 
 #### 3.16.1 功能描述
 
-该模块包含了CAC和DMSC两个子块。
+该模块包含了CA、DCI和EE三个子块。
 
 #### 3.16.2 主要参数
 
-CAC参数设置请参考xml文件中CAC模块的相应参数。
+请参考《K230 ISP图像调优指南》第3.15（EE）、3.16（CA）和3.17（DCI）章节。
+
+### 3.17 CDmscv2
+
+#### 3.17.1 功能描述
+
+该模块包含了CAC和DMSC两个子块。
+
+#### 3.17.2 主要参数
+
+CAC参数设置请参考《K230 ISP图像调优指南》第3.20章节。
 DMSC参数设置请参考《K230 ISP图像调优指南》第3.11章节。
 
 ## 4. auto.json文件
@@ -275,50 +282,51 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 
 | 参数            | 类型及取值范围 | 描述                                                   |
 | --------------- | -------------- | ------------------------------------------------------ |
-| antiBandingMode | Int 0~3        | 抗工频干扰工作模式<br/>0: Off <br/>1: 50Hz <br/>2: 60Hz <br/>3: User defined |
+| enable          | bool           | 自动曝光使能开关。<br/>false: 关闭自动曝光 <br/>true : 使能自动曝光    |
+| semMode  | int 0~2  | 场景模式 <br/>0: 场景评估关闭模式 <br/>1: 场景评估固定模式 <br/>2: 场景评估动态模式    |
+| antiFlickerMode | Int 0~3        | 抗工频干扰工作模式 <br/>0: Off<br/>1: 50Hz<br/>2: 60Hz<br/>3: User defined |
+| setPoint  | float 0~255.0  | 设置AE的亮度目标值 |
+| tolerance  | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围  |
 | dampOver        | float 0~1.0    | 阻尼因子，用于平滑过曝时的AE收敛 |
 | dampOverGain    | float 0~128.0  | AE过曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
 | dampOverRatio   | float 1.0~4.0  | AE过曝时clip范围外比例因子，值越小，收敛越快 |
 | dampUnder       | float 0~1.0    | 阻尼因子，用于平滑欠曝时的AE收敛 |
 | dampUnderGain   | float 0~16.0   | AE欠曝时clip范围外的收敛加速增益因子，值越大，收敛越快 |
 | dampUnderRatio  | float 0~1.0    | AE欠曝时clip范围比例因子，值越大，收敛越快 |
-| enable          | bool           | 自动曝光使能开关。<br/>false: 关闭自动曝光 <br/>true : 使能自动曝光    |
-| lowlight|||
-| hdr_gain  | float[20] 0~255.0   | 宽动态模式下，各阶gain对应的增益值 |
-| hdr_repress | float[20] 0~1.0   | 宽动态模式下，各阶gain对应的目标亮度压制比例    |
-| linear_gain  | float[20] 0~255.0   | 线性模式下，各阶gain对应的增益值 |
-| linear_epress  | float[20] 0~1.0   | 线性模式下，各阶gain对应的目标亮度压制比例  |
-| maxISPDgain  | float 1.0~255.99609375 | 设置ISP数字增益最大值    |
-| maxSensorAgain  | float   | 设置sensor模拟增益最大值 |
-| maxSensorDgain  | float   | 设置sensor数字增益最大值 |
-| mode  | int 0~2  | 自动曝光模式 <br/>0: AE(不含抗工频干扰等功能) <br/>1: 抗工频干扰AE模式 <br/>2: 场景评估AE模式 |
 | motionFilter  | float 0~1.0  | 运动变化平滑参数，用于计算AE场景评估自适应模式下的运动因子 |
 | motionThreshold  | float 0~1.0 | 运动判别阈值     |
-| roiWeight  | float   |  ROI窗口的亮度计算权重 |
-| semMode  | int 0~2  | 场景模式 <br/>0: 场景评估关闭模式 <br/>1: 场景评估固定模式 <br/>2: 场景评估动态模式    |
-| setPoint        | float 0~255.0  | 设置AE的亮度目标值 |
 | targetFilter  | float 0~1.0 | AE的亮度目标值变化平滑系数，值越大变化越快 |
-| tolerance       | float 0~100.0  | 设置AE的亮度目标值百分比锁定范围  |
-| wdrContrast.max  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最大对比度值  |
-| wdrContrast.min  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最小对比度值    |
+| lowLightLinearRepress  | float[20] 0~1.0   | 线性模式下，当前增益阶数对应的目标亮度压制比例  |
+| lowLightLinearGain  | float[20] 0~255.0   | 线性模式下，当前增益阶数对应的增益值 |
+| lowLightLinearLevel  | int 0~19   | 线性模式下总的增益阶数 |
+| lowLightHdrRepress  | float[20] 0~1.0   | 宽动态模式下，当前增益阶数对应的目标亮度压制比例    |
+| lowLightHdrGain  | float[20] 0~255.0   | 宽动态模式下，当前增益阶数对应的增益值 |
+| lowLightHdrLevel  | int 0~16  | 宽动态模式下总的增益阶数 |
+| wdrContrastMax | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最大对比度值  |
+| wdrContrastMin  | float 0~255.0   | AE场景评估自适应模式下计算AE setpoint的最小对比度值    |
+| frameCalEnable          | bool           | 曝光设置帧间隔使能开关。<br/>true : 使能曝光设置帧间隔功能 <br/>false: 关闭曝光设置帧间隔功能   |
+| autoHdrEnable | bool        | true: HDR mode下，自动计算当前帧HDR ratio<br/>false: HDR mode下，使用固定的HDR ratio |
+| roiNumber  | int   |  当前ROI窗口序号   |
+| roiWindow  | float (fx,fy,fw,fh,weight) | 当前ROI窗口的起始点坐标(x,y)、宽高和亮度计算权重 |
+| expV2WindowWeight | float[32x32] 0~255  | 各子块曝光权重 |
 
 ### 4.2 Awbv2
 
 ### 4.2.1 功能描述
 
-该模块为awb自适应功能的参数设置。该模块暂未生效。
+该模块为awb自适应功能的参数设置。
 
 ### 4.2.2 主要参数
 
 | 参数        | 类型及取值范围      | 描述                       |
 | --------- | -------------- | --------------- |
-| avg  | float  | 暂未使用 |
-| enable | bool | false: 关闭AWB自适应 <br/>true : 使能AWB自适应  |
-| illuorder | char | 所有参与了校验的光源  |
-| indoor  | float 0~1.0  | 处于室内情形时的各光源权重 |
-| outdoor | float 0~1.0  | 处于室外情形时的各光源权重 |
-| overExposureWeight | float[16] 0~1.0  | 不同曝光亮度等级下的计算权重 |
-| transition | float 0~1.0  | 处于室内外过渡情形时的各光源权重  |
+| enable      | bool  | true : 使能AWB <br/> false: 关闭AWB |
+| mode   | int 0,1  |  0: AWB <br/> 1: AWB METEDATA |
+| useCcMatrix | bool  | true : 使能CCM 自适应 <br/>false: 关闭CCM自适应 |
+| useCcOffset | bool  | true : 使能CCM offset自适应 <br/> false: 关闭CCM offset自适应  |
+| useDamping  | bool  | true : 使能AWB阻尼变化 <br/> false: 关闭AWB阻尼变化 |
+| roiNumber   | int   |  当前ROI窗口序号   |
+| roiWindow   | float (fx,fy,fw,fh,weight) | 当前ROI窗口的起始点坐标(x,y)、宽高和AWB计算权重 |
 
 ### 4.3 Af
 
@@ -349,98 +357,30 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | PdStablecountMax | uint8 1~10 | 未使用 |
 | PdROIIndex | uint8 0~48 | 未使用 |
 
-### 4.4 IspController
+### 4.4 ALscv2
 
 #### 4.4.1 功能描述
 
-该模块用于控制ISP的使能。
+该模块为LSC自适应功能的参数设置。
 
 #### 4.4.2 主要参数
 
-| 参数        | 类型及取值范围      | 描述                       |
+| 参数        | 类型及取值范围      | 描述     |
 | --------- | -------------- | --------------- |
-| enable | bool | false: 关闭ISP <br/>true : 使能ISP|
+| enable | bool | false: 关闭ALSC  <br/>true: 使能ALSC|
+| damping | float | 阻尼因子，用于平滑ALSC时的LSC曲线变化|
+| interMode | int 0~2 | 0: 根据增益值自适应调节 <br/> 1: 根据色温自适应调节 <br/> 2: 根据增益值和色温自适应调节|
+| hdr | bool |false: 表示该组设置为线性模式下的设置 <br/> true: 表示该组设置为HDR模式下的设置。|
+| gain | float[20] | 各阶对应的增益值 |
+| strength | float[20] 0~1.0 | 各阶增益值对应的保留LSC的强度 |
 
-请将其设置为使能。
-
-### 4.5 CcWhitePixels
-
-#### 4.5.1 功能描述
-
-该模块用于控制CCM是否随AWB自适应切换。
-
-#### 4.5.2 主要参数
-
-| 参数        | 类型及取值范围      | 描述                       |
-| --------- | -------------- | --------------- |
-| damping| float 0~1.0| 用于平滑CCM变化的阻尼系数 |
-| enable | bool | false: 关闭CCM自适应 <br/>true : 使能CCM自适应 |
-
-### 4.6 LscWhitePixels
-
-#### 4.6.1 功能描述
-
-该模块用于控制LSC是否随AWB自适应切换。
-
-#### 4.6.2 主要参数
-
-| 参数        | 类型及取值范围      | 描述                       |
-| --------- | -------------- | --------------- |
-| damping| float 0~1.0| 用于平滑LSC变化的阻尼系数 |
-| enable | bool | false: 关闭LSC自适应 <br/>true : 使能LSC自适应 |
-
-### 4.7 AutoHdr
-
-#### 4.7.1 功能描述
-
-该模块用于使能自动HDR。该模块暂未生效。
-
-#### 4.7.2 主要参数
-
-| 参数        | 类型及取值范围      | 描述                       |
-| --------- | -------------- | --------------- |
-| enable | bool | false: 关闭自动HDR <br/>true : 使能自动HDR |
-
-### 4.8 DciHist
-
-#### 4.8.1 功能描述
-
-该模块用于设置动态对比度改善直方图(DciHist)的参数。
-该模块暂未生效。
-
-#### 4.8.2 主要参数
-
-| 参数        | 类型及取值范围      | 描述                       |
-| --------- | -------------- | --------------- |
-| enable | bool | false: 关闭DciHist <br/>true : 使能DciHist|
-| gaussAmpNeg   | float |   |
-| gaussAmpPos   | float |   |
-| gaussMeanNeg  | float |   |
-| gaussMeanPos  | float |   |
-| gaussSigmaNeg | float |   |
-| gaussSigmaPos | float |   |
-
-### 4.9 SensorController
-
-#### 4.9.1 功能描述
-
-该模块用于使能图像传感器的自动控制。
-
-#### 4.9.2 主要参数
-
-| 参数        | 类型及取值范围      | 描述                       |
-| --------- | -------------- | --------------- |
-| enable | bool | false: 关闭图像传感器自动控制 <br/>true : 使能图像传感器自动控制 |
-
-请将其设置为使能。
-
-### 4.10 其它
+### 4.5 其它
 
 本章节对其它自适应功能模块进行统一介绍。
 
 这些自适应功能模块的设置参数，通常用“tables”标记引导的中括号“[]”分为两部分，在该中括号外的都为bool类型的使能参数，在该中括号内的则为参与自适应功能调节的参数。
 
-#### 4.10.1 tables外的参数说明
+#### 4.5.1 tables外的参数说明
 
 这些功能模块中，在tables外通常有以下三个参数：
 | 参数        | 类型      | 描述                       |
@@ -456,7 +396,7 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | nlm_en | bool | 非局部均值降噪使能开关，建议设置为true|
 | tnr_en | bool | 时域降噪使能开关。因K230 ISP tnr打开实际由外部命令参数控制，故可固定设置为false|
 
-#### 4.10.2 tables内的参数说明
+#### 4.5.2 tables内的参数说明
 
 在功能模块中，都有以下两个参数：
 

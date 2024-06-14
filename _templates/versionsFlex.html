@@ -1,0 +1,104 @@
+<style>
+  .rst-versions {
+      color: #100e0e;
+      background: #eaebec;
+      font-family: Lato, proxima-nova, Helvetica Neue, Arial, sans-serif;
+      z-index: 400;
+      width: 100%;
+  }
+  .rst-versions.shift-up {
+      height: auto;
+      max-height: 100%;
+      overflow-y: scroll;
+  }
+  .rst-versions .rst-current-version {
+      padding: 12px;
+      background-color: #f3f4f5;
+      display: block;
+      text-align: right;
+      padding-left: 10px;
+      font-size: 90%;
+      cursor: pointer;
+      color: #27ae60;
+  }
+  
+  .rst-versions .rst-other-versions dd {
+      display: inline-block;
+      margin: 0;
+  }
+  .rst-versions .rst-other-versions dd a {
+      display: inline-block;
+      padding: 6px;
+      color: #201919;
+      font-size: 12px;
+      text-decoration: none;
+  }
+  .rst-versions .rst-other-versions dd a:hover {
+    text-decoration-thickness: inherit;
+    color: #0d6efd;
+  }
+  .rst-versions .rst-other-versions {
+      font-size: 90%;
+      padding: 12px;
+      display: none;
+  }
+  .shift-up .rst-other-versions {
+      display: block;
+  }
+  
+  </style>
+  {%- if current_version %}
+  <div class="rst-versions" style="overflow: unset;" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <!-- <span class="fa fa-book">Versions</span> -->
+      {{ current_version.name }}
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <!--<dl>
+        <dt>Langs</dt>
+        <dd><a href="/zh">简体中文</a></dd>
+        <dd><a href="/en">English</a></dd>
+      </dl>-->
+      {%- if versions.tags %}
+      <dl>
+        <dt>Tags</dt>
+        {%- for item in versions.tags %}
+        <dd><a href="{{ item.url }}">{{ item.name }}</a></dd>
+        {%- endfor %}
+      </dl>
+      {%- endif %}
+      {%- if versions.branches %}
+      <dl>
+        <dt>Branches</dt>
+        {%- for item in versions.branches %}
+        <dd><a href="{{ item.url }}">{{ item.name }}</a></dd>
+        {%- endfor %}
+      </dl>
+      <dl>
+        <dt>External links</dt>
+          <dd>
+            <a href="https://github.com/kendryte/canmv">K210 CanMV</a>
+          </dd>
+          <dd>
+            <a href="https://github.com/kendryte/canmv_docs">K210 CanMV Docs</a>
+          </dd>
+    <dd>
+            <a href="https://github.com/kendryte/k230_docs">K230 Docs</a>
+          </dd>
+    <dd>
+            <a href="https://github.com/kendryte/k230_canmv_docs">K230 CanMV Docs</a>
+          </dd>
+      </dl>
+      {%- endif %}
+    </div>
+  </div>
+  {%- endif %}
+  <script>
+    document.querySelector('.rst-versions').addEventListener('click', function() {
+          var details = document.querySelector('.rst-versions');
+          details.classList.toggle('shift-up');
+      });
+      
+  </script>
+  

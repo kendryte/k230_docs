@@ -108,7 +108,7 @@ K230进行模型推理时需要使用 `.kmodel`格式的模型，`.kmodel`是由
 
 以下为使用RVV优化前后各算子在模型推理时间中的占比图。
 
-```mermaid
+<div class="mermaid">
 pie
     title 未开启RVV优化
     "softmax" : 88.6574
@@ -128,10 +128,9 @@ pie
     "LDARG" : 0.000405381
     "RET" : 0.000202691
     "LDTUPLE" : 0.000152018
- 
-```
+</div>
 
-```mermaid
+<div class="mermaid">
 pie
     title 开启RVV优化
     "softmax" : 55.6175
@@ -151,7 +150,7 @@ pie
     "LDARG" : 0.0237848
     "RET" : 0.0108113
     "LDTUPLE" : 0.00648677
-```
+</div>
 
 以下为使用RVV优化前后相关算子的性能对比。
 

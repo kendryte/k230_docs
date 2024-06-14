@@ -52,7 +52,7 @@ CanMV-K230开发板默认套件包含以下物品：
 
 1、TF卡， 用于烧写固件，启动系统（必须）
 
-2、带HDMI接口的显示器及HDMI连接线，显示器要求支持1080P30，否则无法显示
+2、带HDMI接口的显示器及HDMI连接线
 
 3、100M/1000M 以太网线缆，及有线路由器
 
@@ -111,7 +111,11 @@ Linux串口显示如下：
 
 CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/developer/k230`
 
-请下载“k230_canmv”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230的固件。
+CanMV-K230-V1.0/V1.1请下载“k230_canmv_sdcard”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230-V1.0/V1.1的固件。
+
+`CanMV-K230-V2.0请下载k230_canmv_v2开头的压缩包。`
+
+`注意：不要将k230_canmv_sdcard...gz（CanMV-K230-V1.0/V1.1的镜像）的压缩包烧至2.0板子，板子可能会烧毁。`
 
 ### 4.2 固件烧录
 
