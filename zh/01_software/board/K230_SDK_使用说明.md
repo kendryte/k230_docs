@@ -82,6 +82,7 @@ K230平台支持的硬件信息文档可以参考目录:[00_hardware](../../00_h
 | K230-USIP-LP4-EVB | 具体硬件信息参考: [00_hardware/K230_LP4](../../00_hardware/K230_LP4)|
 | K230-SIP-LP3-EVB | 具体硬件信息参考: [00_hardware/K230D](../../00_hardware/K230D)|
 | CanMV-K230 | 具体硬件信息参考: [00_hardware](../../00_hardware/CanMV_K230)|
+| CanMV-K230D-Zero | |
 
 ### 2.2 开发环境搭建
 
@@ -232,7 +233,7 @@ K230 SDK支持一键编译大小核操作系统和公共组件，生成可以烧
 
 K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在configs目录下。
 
-#### 4.2.1 配置文件说明
+#### 4.2.1 部分配置文件说明
 
 `k230_evb_defconfig` ：基于K230 USIP LP3 EVB的默认SDK配置文件
 
@@ -737,7 +738,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ## 8. SDK单板调试
 
-> CanMV-K230主板由于没有引出调试GPIO,因此,不支持单板调试方式。
+> CanMV-K230主板由于的调试口默认是串口功能，如果需要调试请参考[sdk常见问题解答](../../03_other/K230_SDK常见问题解答_C.md)。
 
 ### 8.1 调试前准备
 
