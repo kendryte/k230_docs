@@ -202,9 +202,11 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 39  | K230 SDK V1.2 | canmv only linux           |canmv 新增 大核运行带向量linux(k230_canmv_only_linux_defconfig)配置 |      |
 | 40  | K230 SDK V1.3 | 新增debian和ubuntu发行版镜像           |新增canmv的debian和ubuntu发行版镜像  |      |
 | 41 | K230 SDK V1.3 | OTA | buildroot增加swupdate OTA升级功能，支持双分区切换升级(需要配合双分区启动方案) | 使用参考描述k230_sdk/tools/ota/README |
-| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |
-| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |
-| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |
+| 42 | K230 SDK V1.5 | U转eth | 修复了U转eth网络不稳定性的问题                                                                                  |  |
+| 43 | K230 SDK V1.5 | 触控 | 添加LCD屏触控                                                                                                    |  |
+| 44 | K230 SDK V1.5 | Canmv2.0 | 支持Canmv-K230-V2.0板                                                                                        |  |
+| 45 | K230 SDK V1.6 | 01Studio-CanMV-K230 | 支持01Studio-CanMV-K230板                                                                         |  |
+| 46 | K230 SDK V1.6 | 支持rtt only系统 | 支持rtt only单系统                                                                                    |  |
 
 ### 4.4 架构
 
