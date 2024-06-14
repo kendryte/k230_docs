@@ -78,6 +78,7 @@
 | V2.0       | 更新为新版本 VTunerClient | 黄子懿 | 2024-01-10 |
 | V2.1       | 更新部分功能描述 新增部分功能描述   | 荣 坚 | 2024-01-11 |
 | V2.2       | 更新部分功能描述                   | 荣 坚 | 2024-01-30 |
+| V2.3       | 更新部分功能描述                   | 荣 坚 | 2024-04-28 |
 
 ## 1. 模块软件架构
 
@@ -94,7 +95,6 @@
 | PC tuning-tool软件包（K230 ISP Tuning Tool.exe） | relaese的源码包k230_sdk/tools/tuning-tool-client/K230_ISP_Tuning_Tool_20240129.7z                  | 用于图像dump，ISP调试等PC端工具  |
 | t_server_c-6.1.0                        | 小核文件系统 /mnt/             | tuning server可执行程序 |
 | sample_sys_init.elf                     | 大核文件系统 /sdcard/app       | 大核服务端              |
-**表2-1 文件列表**
 
 ### 2.2 启动流程
 
@@ -125,8 +125,8 @@
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/14.png)  | 配置寄存器|
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/02.png)  | 配置连接调试服务器|
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/15.png)  | 修改首选项|
+|  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/19.png)  | 在一个批次中调整多个参数|
 |  ![Graphical User Interface,Text,Application,Email Description is automatically generated](images/16.png)  | 提供对额外组件的访问|
-
 
 (3) 工程管理区域：选择和管理不同工程
 
@@ -140,7 +140,6 @@
 
 #### 3.1.1 使用HTTP方式连接板端tuning-server
 
-
 SDK默认支持HTTP方式连接，点击工具栏中的配置连接调试服务器按钮![图形用户界面, 文本, 应用程序 描述已自动生成](images/02.png)，将弹出图3-2。
 
 ![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/03.png)
@@ -150,10 +149,12 @@ SDK默认支持HTTP方式连接，点击工具栏中的配置连接调试服务�
 选择HTTP模式，保证PC与板端连接的网络处于同一网段，在“Host”输入框中输入板端的IP，在“Port”输入框中请输入固定端口34567，配置完成后点击“OK”按钮，如果板端tuning-server已经启动，则会自动完成连接。任意切换图3-1中④区域的模块，则会看到tuning-server端的函数打印。
 
 ### 3.2 创建/选择工程
+
 若所需调试的工程已在图3-1中③区域，则点击选中该工程即可开始ISP调试。
 若还没有创建所需调试的工程，则需先创建该工程。
 
 #### 3.2.1 创建调试工程
+
 如图3-3，依次点击File-\>New-\>Project...，弹出工程创建向导窗口，如图3-4。
 ![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/New_Project_01.png)
 
@@ -180,63 +181,99 @@ ISP功能模块如图3-6所示。
 
 图3-6
 
-#### 3.3.1 Bypass Setting
+#### 3.3.1 Bypass Settings
 
 所有ISP功能模块的使能控制。
 
-#### 3.3.2 Auto Exposure
+#### 3.3.2 Auto Focus Control (Focus Control)
+
+聚焦控制调试模块。
+
+当选择auto mode时（Auto Mode View)，界面列表中显示为自动聚焦控制(Auto Focus Control); 当选择manual mode时（Manual Mode View），界面列表中显示为聚焦控制（Focus Control）。
+
+#### 3.3.3 Auto Exposure Control (Exposure Control)
+
+曝光控制调试模块。
+
+当选择auto mode时（Auto Mode View)，界面列表中显示为自动曝光控制(Auto Exposure Control); 当选择manual mode时（Manual Mode View），界面列表中显示为曝光控制（Exposure Control）。
 
 自动曝光控制参数，控制图像亮度和AE调节时的收敛速度等。
 
 支持设置ROI窗口。开启ROI模式需要，需要semMode中选择FIX模式并enable AE才能开启ROI模式。
 
-#### 3.3.3 Auto Focus
+#### 3.3.4 Auto White Balance (White Balance)
+
+白平衡控制调试模块。
+
+当选择auto mode时（Auto Mode View)，界面列表中显示为自动曝光控制(Auto White Balance); 当选择manual mode时（Manual Mode View），界面列表中显示为曝光控制（White Balance）。
+
+#### 3.3.5 Exposure Statics
 
 暂未支持。
 
-#### 3.3.4 Auto Focus Measurement
+#### 3.3.6 Auto Focus Measurement
 
 暂未支持。
 
-#### 3.3.5 3D Noise Reduction
+#### 3.3.7 High Dynamic Range
 
-通过调整参数配置，对图像降噪强度的调节。
+多曝光宽动态，可调节各曝光间的曝光量比例系数、融合取值范围。
 
-#### 3.3.6 Black Level Subtraction
-
-提供与Sensor相关的黑电平校正，可对R、Gr、Gb、B四通道进行设置。
-
-#### 3.3.7 Color Processing
-
-颜色处理模块，可调节图像的对比度、亮度、饱和度及色调，设置不同的颜色喜好或风格。
-
-#### 3.3.8 Color Correction Matrix
-
-色彩还原矩阵。通过调节3x3 CCM矩阵及偏移量可完成颜色偏差的校准。
-
-#### 3.3.9 Compand
+#### 3.3.8 Compand
 
 数据拉伸、压缩模块，可设置作用曲线。
 
-#### 3.3.10 Demosaic
+#### 3.3.9 Black Level Subtraction
+
+提供与Sensor相关的黑电平校正，可对R、Gr、Gb、B四通道进行设置。
+
+#### 3.3.10 RGB Infrared Radiation
+
+暂未支持。
+
+#### 3.3.11 Lens Shading Correction
+
+提供镜头阴影校正，校准系数由标定工具生成。
+
+#### 3.3.12 Digital Gain
+
+用于对ISP Digital Gain使能控制及调节大小。
+
+#### 3.3.13 Wide Dynamic Range
+
+提供对图像全局和局部对比度的调整。
+
+#### 3.3.14 Green Equilibrate
+
+校准Gr与Gb两通道的不平衡，可设置不同的绿平衡强度。
+
+#### 3.3.15 Defect Pixel Cluster Correction
+
+提供对像素坏点的检测及校准的功能，通过选择set可设置不同的校准方法。
+
+#### 3.3.16 DeNoising Prefilter
+
+双边滤波降噪模块。
+
+#### 3.3.17 3D Noise Reduction
+
+通过调整参数配置，对图像降噪强度的调节。
+
+#### 3.3.18 Demosaic
 
 通过插值将Bayer格式的Raw图转为RGB图，并提供去摩尔纹、去紫边、锐化及降噪处理功能。
 
 该模块中还包含了CAC子模块，用于校准主要由镜头引入的色差，由标定工具生成校准参数。
 
-#### 3.3.11 Defect Pixel Cluster Correction
+#### 3.3.19 Color Correction Matrix
 
-提供对像素坏点的检测及校准的功能，通过选择set可设置不同的校准方法。
+色彩还原矩阵。通过调节3x3 CCM矩阵及偏移量可完成颜色偏差的校准。
 
-#### 3.3.12 DeNoising Prefilter 
+#### 3.3.20 Gamma Correction
 
-双边滤波降噪模块。
+支持客户自定义gamma，该模式下可更改gamma指数。
 
-#### 3.3.13 Digital Gain
-
-用于对ISP Digital Gain使能控制及调节大小。
-
-#### 3.3.14 Edge Enhance
+#### 3.3.21 Edge Enhance
 
 用于提升图像的清晰度。通过设置合适的参数，提升图像清晰度的同时，也可抑制噪声的增强。
 
@@ -246,45 +283,9 @@ CA模块用于调节图像的饱和度。根据图像亮度或者原饱和度的
 
 DCI模块实现对图像的动态对比度调整。
 
-#### 3.3.15 Exposure Control
+#### 3.3.22 Color Processing
 
-支持获取自动曝光和增益，支持通过工具界面设置曝光和增益，设置时需要关闭自动曝光功能。
-
-#### 3.3.16 Exposure Statics
-
-暂未支持。
-
-#### 3.3.17 Focus Control
-
-未支持。
-
-#### 3.3.18 Gamma Correction
-
-支持客户自定义gamma，该模式下可更改gamma指数。
-
-#### 3.3.19 Green Equilibrate
-
-校准Gr与Gb两通道的不平衡，可设置不同的绿平衡强度。
-
-#### 3.3.20 High Dynamic Range
-
-多曝光宽动态，可调节各曝光间的曝光量比例系数、融合取值范围。
-
-#### 3.3.21 Lens Shading Correction
-
-提供镜头阴影校正，校准系数由标定工具生成。
-
-#### 3.3.22 RGB Infrared Radiation
-
-暂未支持。
-
-#### 3.3.23 White Balance
-
-提供白平衡R、Gr、Gb、B四通道增益设置。
-
-#### 3.3.24 Wide Dynamic Range
-
-提供对图像全局和局部对比度的调整。
+颜色处理模块，可调节图像的对比度、亮度、饱和度及色调，设置不同的颜色喜好或风格。
 
 ### 3.4 拍摄图像
 
@@ -319,7 +320,6 @@ DCI模块实现对图像的动态对比度调整。
 若拍摄单帧图像，直接点击“Capture”按钮即可；
 若拍摄多帧图像，请在“Snapshot Num”选项中设置所需拍摄的帧数，并根据所希望输出的文件数量设置“Output as One File”选项（勾选或不勾选），完成上述配置后，点击“Capture”按钮开始拍摄。
 
-
 ### 3.5 参数的导入与导出
 
 #### 3.5.1 参数导入
@@ -333,7 +333,6 @@ DCI模块实现对图像的动态对比度调整。
 图3-10
 
 在图3-10所示窗口中选择需要导入的xml或json参数文件，点击“Open”按钮即可开始导入。
-
 
 #### 3.5.2 参数导出
 

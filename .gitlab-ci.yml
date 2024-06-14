@@ -83,7 +83,7 @@ markdown-link-check:
     - git fetch
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check; fi
+    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v ; fi
 
 # new MR open
 markdownlint:
