@@ -49,7 +49,7 @@ else:
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-myst_heading_anchors = 4
+myst_heading_anchors = 7
 suppress_warnings = ["myst.header"]
 
 html_copy_source = True
