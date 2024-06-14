@@ -128,13 +128,12 @@ CONFIG_FRAME_POINTER=y
 
 问题：大核如何运行带vector的linux？
 
-答：在sdk主目录执行make menuconfig;取消CONFIG_SUPPORT_RTSMART，把CONFIG_LINUX_RUN_CORE_ID配置为1，
+答：请使用如下命令编译
 
-就可以让linux运行在大核，如下图所示：
-![only_linux](images/linux_on_big_core.png)
-linux内核配置文件增加CONFIG_VECTOR=y，linux系统就会使能向量1.0功能。
-
-备注：可以参考configs/k230_evb_only_linux_defconfig文件修改配置 ，make CONF=k230_evb_only_linux_defconfig 会生成evb板的大核带向量linux镜像。
+```bash
+make CONF=k230_canmv_only_linux_defconfig
+#k230_canmv_only_linux_defconfig 对应的是带vector大核linux镜像
+```
 
 ## 6 大核串口id
 
@@ -376,105 +375,11 @@ sc201
 
 ## 17 canmv如何仅运行rtt系统，并且挂载sd卡？
 
-答：需要进行如下修改：
-
-1)src\big\rt-smart\kernel\bsp\maix3\applications\mnt.c文件里面第7行修改为：
-
-```C
-#define RT_SDCARD_MOUNT_STACK_SIZE (16 * 1024)
-```
-
-3.src\big\rt-smart\kernel\bsp\maix3\rtconfig.h里面第145行左右添加如下内容
-
-```C
-#define RT_USING_SDIO
-#define RT_USING_SDIO1
-```
-
-4.board\common\gen_image_cfg\genimage-sdcard.cfg 文件替换为如下内容：
-
-```C
-    image app.vfat {
-        vfat {
-            files = {
-                "big-core/app",
-            }        
-        }
-        # empty =true
-        size = 1024M
-    }
-
-    image sysimage-sdcard.img {
-        hdimage {
-            gpt = "false"
-        }
-        
-        partition uboot_spl_1 {
-            #512k@1M   0x400@0x800
-            in-partition-table = false
-            offset = 1M
-            image = "little-core/uboot/fn_u-boot-spl.bin"
-        }
-        partition uboot_spl_2 {
-            #512k@1.5M   0x800@0xc00
-            in-partition-table = false
-            offset = 0x180000
-            image = "little-core/uboot/fn_u-boot-spl.bin"
-        }
-        partition uboot_env {
-            in-partition-table = false
-            offset = 0x1e0000
-            image = "little-core/uboot/env.env"
-            size = 0x20000
-        }
-        partition uboot {
-            #1.5m@2M   0xc00@0x1000
-            in-partition-table = false
-            offset = 2M
-            image = "little-core/uboot/fn_ug_u-boot.bin"
-        }
-        # partition env {
-        #     #128k@3.5M   0x800@0x1c00
-        #     in-partition-table = false
-        #     offset = 0x380000
-        #     #image = "../little/uboot/u-boot.img"
-        # }
-
-        partition rtt {
-            #20M@10M   0x800@0x800
-            offset = 10M
-            image = "big-core/rtt_system.bin"
-            size = 20M
-        }
-
-        partition linux {
-            #50M@30M   0x800@0x800
-            offset = 30M
-            image = "little-core/linux_system.bin"
-            size = 50M
-        }
-
-        # partition rootfs {
-        #     offset = 128M 
-        #     partition-type = 0x83
-        #     image = "little-core/rootfs.ext4"
-        # }
-
-        partition fat32appfs {
-            #offset = 168M
-            partition-type = 0xc
-            # size = 32M
-            image = "app.vfat"
-        }
-    }
-```
-
-5)src/big/rt-smart/init.sh  里面修改(可选修改)为需要自启动的elf文件比如/sdcard/app/micropython
-
-6)编译镜像：
+答：请使用如下命令编译
 
 ```bash
 make CONF=k230_canmv_only_rtt_defconfig
+#k230_canmv_only_rtt_defconfig对应镜像仅运行rtt系统，并且rtt挂载sd。
 ```
 
 ## 18 linux下如何快速验证下串口收发是否正常？
@@ -538,7 +443,7 @@ cd /sdcard/app/onboard
     struct stat stat_buf;
     while(stat("/sharefs/onboard",&stat_buf));// 请根据实际情况修改为正确的文件 
     msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
-```  
+```
 
 修改2 添加等待共享文件系统动作（适应于sdk 1.4及以前版本）
 
