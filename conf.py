@@ -49,7 +49,7 @@ else:
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-myst_heading_anchors = 7
+myst_heading_anchors = 6
 suppress_warnings = ["myst.header"]
 
 html_copy_source = True
@@ -66,7 +66,7 @@ default_dark_mode = True
 
 locale_dirs = ['locale']
 
-html_css_files = ['topbar.css', 'custom-theme.css']
+html_css_files = ['topbar.css', 'custom-theme.css', 'auto-num.css']
 
 html_theme_options = {
     'collapse_navigation': True,
