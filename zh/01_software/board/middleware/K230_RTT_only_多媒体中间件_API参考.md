@@ -1490,10 +1490,10 @@ ov5647_power_rest OV5647_CAM_PIN is 0
 
 #### 3.2.2 运行程序
 
-以Canmv 1.0板子为例，开机启动后，在大核串口按`q`键退出自启动程序。输入命令:`/sdcard/app/sample_rtspclient.elf <rtsp_url> <out_type>`,如下所示，拉取服务器端的`rtsp://10.10.1.94:8554/canaan.264`流数据。
+以Canmv 1.0板子为例，开机启动后，在大核串口按`q`键退出自启动程序。输入命令:`/sdcard/app/sample_rtspclient.elf <rtsp_url> <out_type>`,如下所示，拉取服务器端的`rtsp://10.10.1.94:8554/canaan.264`流数据。注:evb板 out_type为0，Canmv 1.0/1.1板out_type为1。
 
 ```text
-msh />/sdcard/app/sample_rtspclient.elf rtsp://10.10.1.94:8554/canaan.264 0
+msh />/sdcard/app/sample_rtspclient.elf rtsp://10.10.1.94:8554/canaan.264 1
 vb_set_config ok
 debug: _ai_i2s_set_pitch_shift : semitones = 0
 Created new TCP socket 9 for connection
