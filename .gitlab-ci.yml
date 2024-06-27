@@ -201,7 +201,8 @@ build web docs:
     url: https://ai.b-bug.org/k230/docs/dev/
   script:
     - git fetch --tags
-    - git branch -b main origin/main
+    - git branch main origin/main
+    - git checkout main
     - python3 preprocess.py
     - python3 preprocessEn.py
     - git commit "*.md" -m "remove cover"
