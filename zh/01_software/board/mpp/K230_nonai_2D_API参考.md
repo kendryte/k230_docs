@@ -57,18 +57,27 @@
 ### 1.1 概述
 
 nonai 2D硬件能实现OSD，画框和CSC功能，本文仅仅描述CSC功能，OSD和画框功能暂未在本文API中实现，后续如有需求可以增加。
+
 VENC模块借助nonai 2D硬件实现了在编码图像上叠加OSD和画框，仅限于编码图像不能单独使用，见《K230_视频编解码_API参考》的1.2.1.4和2.1.14 ~ 2.1.29等章节。
 
 ### 1.2 功能描述
 
 实现RGB和YUV的相互转换，作为mpp的一个模块，可参与系统绑定功能，在不绑定的情况下可以做单帧处理。
+
 支持如下图像格式的互转：
+
 PIXEL_FORMAT_YUV_SEMIPLANAR_420
+
 PIXEL_FORMAT_YVU_PLANAR_420
+
 PIXEL_FORMAT_YUV_PACKAGE_444
+
 PIXEL_FORMAT_YVU_PLANAR_444
+
 PIXEL_FORMAT_RGB_565
+
 PIXEL_FORMAT_RGB_888
+
 PIXEL_FORMAT_RGB_888_PLANAR
 
 代码示例：
