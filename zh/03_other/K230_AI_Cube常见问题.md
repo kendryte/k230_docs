@@ -31,7 +31,7 @@
 
 ![license_error](images/license_error.jpg)
 
-答：AI Cube内部采用license校验机制，进入AI Cube需要当月的授权license。用户可以向<Developersupport@canaan-creative.com>发送邮件申请当月授权license，我们的专业团队会为您提供license支持。
+答：AI Cube内部采用license校验机制，进入AI Cube需要当月的授权license。用户可以向[Developersupport@canaan-creative.com](mailto:Developersupport@canaan-creative.com)发送邮件申请当月授权license，我们的专业团队会为您提供license支持。
 
 问题： 运行AI Cube时发生闪退，无响应。
 

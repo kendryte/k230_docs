@@ -2374,7 +2374,7 @@ k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_v
 
 | Parameter name   | description | Input/output |
 |---|---|---|
-| Chn | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)].  Enter |
+| Chn | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)].  | input |
 | frame_info | For the obtained decoded image information, refer to the K230 System Control API Reference.| output |
 | supplement | Obtain supplementary information for the decoded image. | output |
 | milli_sec  | Flag of the code stream mode. Value range: -1: Blocking. 0: Non-blocking. Positive value: timeout period, no upper value, in ms Dynamic property. | input |
@@ -3073,7 +3073,7 @@ typedef struct {
 | cbr          | Constant bit rate mode attribution, reference to H.264/H.265 protocol. |
 | VBR          | Varible bitrate mode attribution, reference to H.264/H.265 protocol. |
 | fixqp        | Fixed QP mode attribution, reference to H.264/H.265 protocol.     |
-| mjpeg_fixqp  | Fixed QP mode attributes, referenc to Mjpeg protocol. |            |
+| mjpeg_fixqp  | Fixed QP mode attributes, referenc to Mjpeg protocol. |
 
 【Note】
 

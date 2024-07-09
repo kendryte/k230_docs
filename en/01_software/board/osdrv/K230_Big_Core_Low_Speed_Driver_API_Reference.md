@@ -991,7 +991,7 @@ rt_uint32_t count);
 |----------|-----------------------------------------------------------------------|-----------|
 | bus      | I2C bus handle                                                           | input      |
 | addr     | I2C slave device address                                                        | input      |
-| flags    | Flags, which can be flags`RT_I2C_WR RT_I2C_RD` other than and can be '|' operation | input      |
+| flags    | Flags, which can be flags`RT_I2C_WR RT_I2C_RD` other than and can be 'OR' operation | input      |
 | buf      | The data buffer to be sent                                                  | input      |
 | count    | Size of data to be sent (in bytes)                                          | input      |
 
@@ -1024,7 +1024,7 @@ rt_uint32_t count)
 |----------|-----------------------------------------------------------------------|-----------|
 | bus      | I2C bus handle                                                           | input      |
 | addr     | I2C slave device address                                                        | input      |
-| flags    | Flag bits, which can be flags`RT_I2C_WR` other than , can`RT_I2C_RD`  be '|' operation | input      |
+| flags    | Flag bits, which can be flags`RT_I2C_WR` other than , can`RT_I2C_RD`  be 'OR' operation | input      |
 | buf      | Receive data data buffer                                                    | input      |
 | count    | Received data size (in bytes)                                            | input      |
 

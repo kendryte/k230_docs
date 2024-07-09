@@ -302,7 +302,7 @@ Built-in G711A/U 16bit audio codec, users can register other external codecs.
 
 You can use the built-in codec or an external device (audio daughter board) to test audio-related functions. Use the built-in codec to test one set of I2S audio input and output and audio codec related functions, and use the audio daughter board to test 2 sets of I2S audio input and output and 4 groups of PDM audio input functions.
 
-![audio hw](images/audio_001.png)
+![audio hw](../../../../zh/01_software/board/examples/images/173605eb81594328bcb17479f8ea0525.png)
 
 ##### 2.5.2.6 Precautions
 

@@ -2374,7 +2374,7 @@ k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_v
 
 | 参数名称   | 描述 | 输入/输出 |
 |---|---|---|
-| chn | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。  输入 |
+| chn | 编码通道信息。 取值范围：[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))。  | 输入 |
 | frame_info | 获取的解码图像信息，参考《K230 系统控制 API参考》。| 输出 |
 | supplement | 获取的解码图像补充信息。 | 输出 |
 | milli_sec  | 送码流方式标志。 取值范围：  -1：阻塞。 0：非阻塞。 正值：超时时间，没有上限值，以ms为单位 动态属性。 | 输入 |
