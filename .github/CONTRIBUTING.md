@@ -29,6 +29,11 @@ issue和pull request填写时都支持Markdown，关于GitHub的Markdown语法�
 
 ## Markdown检查
 
-本项目会对上传的Markdown文件进行格式化检查和内部引用链接检查，如果不符合格式要求或存在不能访问的链接，导致PR不能被merge，因此提交PR前请确保您已在本地进行过检查
-格式检查工具使用的是`markdownlint`，规则配置文件是[markdownlint.json](../.markdownlint.json)。本地可使用`vscode`安装`markdownlint`来进行在线检查和格式化
+本项目会对上传的Markdown文件进行格式化检查和内部引用链接检查，如果不符合格式要求或存在不能访问的链接，导致PR不能被merge，因此提交PR前请确保您已在本地进行过检查。
+格式检查工具使用的是`markdownlint`，规则配置文件是[markdownlint.json](../.markdownlint.json)。本地可使用`vscode`安装`markdownlint`来进行在线检查和格式化。也可以使用`markdownlint-cli`工具进行检查，执行如下命令：
+
+```shell
+docker run -v $PWD:/workdir davidanson/markdownlint-cli2:v0.13.0 "**/*.md"
+```
+
 您也可以在提交PR之前，先push到您GitHub仓库的`check`分支进行CI检查，避免重复修改PR

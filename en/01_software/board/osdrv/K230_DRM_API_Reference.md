@@ -43,8 +43,8 @@ This document is intended primarily for:
 | abbreviation | illustrate |
 | --- | --- |
 | DRM | Direct Rendering Manager |
-| KMS | Kernel Mode Setting
-| GEM | Graphics Execution Manager
+| KMS | Kernel Mode Setting |
+| GEM | Graphics Execution Manager |
 
 ### Revision history
 

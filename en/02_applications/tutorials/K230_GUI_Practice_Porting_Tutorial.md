@@ -39,8 +39,8 @@ This document is intended primarily for:
 | abbreviation | illustrate |
 | --- | --- |
 | DRM | Direct Rendering Manager |
-| KMS | Kernel Mode Setting
-| GUI | Graphical User Interface
+| KMS | Kernel Mode Setting |
+| GUI | Graphical User Interface |
 
 ### Revision history
 
