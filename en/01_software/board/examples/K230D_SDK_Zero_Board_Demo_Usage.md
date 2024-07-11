@@ -1,4 +1,4 @@
-# K230 SDK CanMV Board Demo Usage Guide
+# K230D SDK Zero Board Demo Usage Guide
 
 ![cover](../../../../zh/images/canaan-cover.png)
 
