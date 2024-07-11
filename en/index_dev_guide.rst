@@ -13,6 +13,7 @@ K230 SDK Development Guide
   01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md
   01_software/board/mpp/K230_PM_Usage_Guide.md
   01_software/board/mpp/K230_VICAP_SENSOR_Parameter_Partition_Reference.md
+  01_software/board/mpp/K230_LCD_Adaptation_Guide.md
   01_software/board/osdrv/K230_PMU_User_Guide.md
   01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_User_Guide.md
   01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_Driver_Development_Guide.md
@@ -24,6 +25,5 @@ K230 SDK Development Guide
   01_software/pc/ISP_tuning/K230_ISP_Image_Tuning_Guide.md
   01_software/pc/ISP_tuning/K230_ISP_Initial_Setting_Guide.md
   01_software/pc/pqtools/K230_ISP_Tuning_Tool_User_Guide.md
-..   01_software/board/mpp/K230_LCD适配指南.md 16行
 
 
