@@ -1,185 +1,185 @@
-# K230 USB Application Practice - UVC Transmission YUV and Encoding Stream
+# K230 USB Practical Application - UVC Transmission of YUV and Encoded Streams
 
-![cover](../../../zh/images/canaan-cover.png)
+![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is only for use as a reference guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+No part of this document may be excerpted, reproduced, or transmitted in any form without the written permission of the Company.
 
 <div style="page-break-after:always"></div>
 
 ## Overview
 
-This article explains how to implement the USB camera function on the k230 development board. That is, connect the K230 development board to the computer, and the computer can play the image collected by the K230 camera through the player.
+This document explains how to implement the USB camera function on the K230 development board. This means connecting the K230 development board to a computer, allowing the computer to play images captured by the K230 camera through a media player.
 
-## 1. Environmental Preparation
+## 1. Environment Preparation
 
 ### 1.1 Hardware Environment
 
 - K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
-- Typec USB cable * 1 at least
-- USB TypeC to Ethernet (if using TFTP loading and NFS file system)
-- One network cable
-- SD card (if booting with an SD card, or software requires access to the SD card)
+- At least one Type-C USB cable
+- USB Type-C to Ethernet adapter (if using TFTP loading and NFS file system)
+- One Ethernet cable
+- SD card (if using SD card boot, or if the software needs to access the SD card)
 
 ### 1.2 Software Environment
 
-The toolchains are provided in the k230_sdk and are available in the following paths.
+The k230_sdk provides toolchains located in the following paths:
 
-- Large core RT-SAMRT toolchain
+- Big core rt-smart toolchain
 
-``` shell
+```shell
 k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu
 ```
 
-- Small-core Linux toolchain
+- Small core Linux toolchain
 
-``` shell
+```shell
 k230_sdk/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0
 ```
 
-The toolchain can also be downloaded via the link below
+You can also download the toolchain via the following links:
 
-``` shell
+```shell
 wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-rv64imafdcv-lp64d-20230222.tar.bz2
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
 ## 2. SDK UVC Demo Experience
 
-### 2.1 Release SDK Compiles the Firmware and Burns the Firmware
+### 2.1 Compile and Flash Firmware with Release SDK
 
-Refer to [section 2/3/4/5](../../01_software/board/K230_SDK_Instructions.md) of the K230_SDK_ Instructions for Use
+Refer to [K230_SDK_User_Manual](../../01_software/board/K230_SDK_User_Manual.md) chapters 2/3/4/5 for detailed instructions.
 
 ### 2.2 Execute Command to Test Demo
 
-Refer to [section  2.9 UVC_demo](../../01_software/board/examples/K230_SDK_EVB_Board_Demo_User_Guide.md) of the K230_SDK_Demo User Guide
+Refer to [K230_SDK_Demo_User_Guide](../../01_software/board/examples/K230_SDK_EVB_Board_Demo_User_Guide.md) chapter 2.9 UVC_demo.
 
-## 3. How to Develop UVC Functions
+## 3. How to Develop UVC Functionality
 
 ### 3.1 USB/UVC Protocol
 
 ### 3.1.1 USB Protocol
 
-The USB protocol has more content, is a very common interface, and there is a lot of information on the Internet. This article describes only a few points that I think will help in understanding the USB protocol.
+The USB protocol is extensive and widely used, with plenty of information available online. This document only describes points that I believe are helpful for understanding the USB protocol.
 
-USB2.0 has 4 lines, VBUS/GND/D+/D-, differential signal transmission. 3.3V at low speed/full speed, and 400mV at high speed. In addition to the differential 0/1 signal that carries the data, other voltage combinations can be used as speed identification, idle, reset, wake-up signals, and so on.
+USB 2.0 has four lines: VBUS, GND, D+, and D-, with differential signal transmission. Low-speed/full-speed uses 3.3V voltage, and high-speed uses 400mV voltage. Besides transmitting differential 0/1 data signals, other voltage combinations can be used for speed identification, idle, reset, wake-up, and other signals.
 
-PHY can be understood as doing a parallel string operation to convert UTMI+ signals into differential signals of D+/D-.
+The PHY can be understood as performing a parallel-to-serial conversion, converting UTMI+ signals to differential D+/D- signals.
 
 ![usb_phy](../../../zh/02_applications/tutorials/images/usb_phy.png)
 
-Theoretically, the two data signals can be controlled using GPIO, but the protocol is too complex and GPIO changes too slowly. Whether it is SPI/SDIO/UART/IIC, etc., these interface controllers are like this, the controller provides the necessary interfaces to the software as much as possible, and let the software do as few operations as possible. The USB controller is to let the hardware do the functions of the protocol as much as possible, such as speed negotiation, automatic generation of response packets after receiving data packets, and other functions. A number of register interfaces are provided to inform the software of the current status of USB communication. Of course, the most important thing is to provide an interface for transmitting data, so that the software can send and receive different data, and DMA is generally used to send and receive data.
+In theory, the two data signals can be controlled entirely using GPIO, but the protocol is too complex, and the GPIO speed is too slow. Whether it's SPI/SDIO/UART/IIC, these interface controllers aim to provide necessary interfaces to the software while minimizing software operations. The USB controller handles protocol functions as much as possible in hardware, such as speed negotiation, automatic response packet generation upon receiving a data packet, etc. It provides some register interfaces to inform the software of the current USB communication status. The most crucial part is providing data transmission interfaces, allowing the software to send and receive different data, usually using DMA.
 
-USB transmission data is based on packets. The following figure shows the composition of the package
+USB data is transmitted in packets. The following diagram shows the packet structure:
 
-![packet](images/usb_packet.png)
+![packet](../../../zh/02_applications/tutorials/images/usb_packet.png)
 
-PID determines the type of packet, token packet, data packet, handshake packet and special packet, different packet types contain different field components, such as packet only contains PID + data + CRC, handshake package only PID.
+The PID determines the packet type, such as token packet, data packet, handshake packet, and special packet. Different packet types contain different fields; for example, data packets only include PID+data+CRC, while handshake packets only include PID.
 
-Packets make up transactions, token packets + packets (optional) + handshake packets (optional). The following figure uses the USB interaction information captured by Nanjing Qinheng's USB2.0 high-speed bus analyzer, and if you want to capture data on the USB line, this instrument is recommended.
+Packets form transactions, consisting of a token packet, an optional data packet, and an optional handshake packet. The diagram below uses a USB 2.0 high-speed bus analyzer from Nanjing QinHeng to capture USB interaction information. This instrument is recommended for capturing data on USB lines.
 
 ![transaction](../../../zh/02_applications/tutorials/images/usb_transaction.png)
 
-You can see that the front is an enumeration transfer, which contains a SETUP transaction, a data IN/OUT transaction, and a status IN/OUT transaction. This is followed by synchronous transmission, which contains data IN transactions.
+The front part shows enumeration transfer, including SETUP transactions, data IN/OUT transactions, and status IN/OUT transactions. The later part shows isochronous transfer, including data IN transactions.
 
-Transfers consist of single or multiple transactions and there are 4 transport types:
+Transfers consist of single or multiple transactions, with four types of transfers:
 
-Control Transfer - Used during the enumeration phase, all USB devices connected to the host require a uniform set of protocols to identify the various USB device types. The USB controller initially makes the 0 endpoint a bidirectional control endpoint.
+Control Transfer - Used during the enumeration phase. All USB devices need a unified protocol to identify various USB device types when connecting to the host. The USB controller initially sets endpoint 0 as a bidirectional control endpoint.
 
 ![control](../../../zh/02_applications/tutorials/images/usb_control.png)
 
-Interrupt transmission - small data volume and discontinuity, and real-time performance requirements are high. For example, mouse and keyboard.
+Interrupt Transfer - Used in scenarios with small data volumes, non-continuous data, and high real-time requirements, such as mouse and keyboard.
 
 ![interrupt](../../../zh/02_applications/tutorials/images/usb_interrupt.png)
 
-Synchronous transmission - where the amount of data is large, continuous, and real-time is required. For example, USB camera devices.
+Isochronous Transfer - Used in scenarios with large data volumes, continuous data, and real-time requirements, such as USB camera devices.
 
 ![iso](../../../zh/02_applications/tutorials/images/usb_iso.png)
 
-Batch transfer - used in situations where the amount of data is large, but there is no real-time requirement. For example, U disk equipment.
+Bulk Transfer - Used in scenarios with large data volumes but no real-time requirements, such as USB flash drives.
 
 ![bulk](../../../zh/02_applications/tutorials/images/usb_bulk.png)
 
-No matter what kind of USB device protocol, it is realized through these 4 kinds of transmission. Therefore, the USB protocol stack of operating systems like Linux provides an interface for these four transmission methods.
+No matter the USB device protocol, all are implemented through these four types of transfers. Therefore, USB protocol stacks in operating systems like Linux provide interfaces for these four transfer types.
 
 ### 3.1.2 UVC Protocol
 
 ### 3.1.2.1 UVC Descriptors
 
-The USB descriptor is used to let the host know the attribute information of the device. When a device first connects to a host, the host sends a request command that all devices support. Common descriptors include device descriptors, configuration descriptors, interface descriptors, endpoint descriptors, and string descriptors. Different device types may define unique descriptors that extend the description of the device.
+USB descriptors let the host know the device's attribute information. When a device is first connected to the host, the host sends requests supported by all devices. General descriptors include device descriptor, configuration descriptor, interface descriptor, endpoint descriptor, and string descriptor. Different device types may define specific descriptors to extend device descriptions.
 
-Windows can use the UsbTreeView software to view the descriptors of USB devices. The following figure shows the overall layout of a UVC device with its descriptors.
+On Windows, the UsbTreeView software can view USB device descriptors. The diagram below shows the overall layout of a UVC device's descriptors.
 
 ![usb_uvc_layout](../../../zh/02_applications/tutorials/images/usb_uvc_layout.png)
 
-In this layout of the layout, the first item is the device descriptor, followed by the configuration descriptor, which the device possesses. The configuration descriptor is followed by an interface association descriptor IAD, which has a video control interface VC and N video stream interfaces.
+In this descriptor layout, the first item is the device descriptor, followed by the configuration descriptor. This device has a single configuration descriptor. The configuration descriptor is followed by an Interface Association Descriptor (IAD), which includes a video control interface (VC) and multiple video streaming interfaces.
 
-The video control interface includes a video control interface header descriptor, an input terminal descriptor, a processing unit descriptor, a coding unit descriptor, an output terminal descriptor, and an interrupt breakpoint descriptor.
+The video control interface includes video control interface header descriptor, input terminal descriptor, processing unit descriptor, encoding unit descriptor, output terminal descriptor, and interrupt endpoint descriptor.
 
-The video stream interface includes an interface and a number of corresponding Alternate Setting.
+The video streaming interface includes one interface and multiple alternate setting interfaces.
 
-Through the video control interface descriptor, the host side can know the topology of the UVC camera and control it. For example, the processing unit PU, including backlight, contrast, chrominance, etc., the host side first knows which are adjustable items through the descriptor, and then interacts with the UVC device to obtain control range information.
+The host can understand the UVC camera's topology and control it through video control interface descriptors. For example, the processing unit (PU) includes adjustments like backlight, contrast, chroma, etc. The host first learns which adjustments are available through the descriptors, then interacts with the UVC device to obtain control range information.
 
 ![usb_unit](../../../zh/02_applications/tutorials/images/usb_unit.png)
 
 ### 3.1.2.2 UVC Video Stream Format Selection
 
-The VS interface contains many formats (YUV/MJPEG/H264, etc.), and each format contains multiple frames (various resolutions). The process of parameter setting requires negotiation between the host and the USB device, and the negotiation process is roughly shown in the following figure:
+The VS interface includes many formats (YUV/MJPEG/H264, etc.), each containing multiple frames (various resolutions). Parameter settings require negotiation between the host and the USB device. The negotiation process is roughly as shown below:
 
 ![usb_vs](../../../zh/02_applications/tutorials/images/usb_vs.png)
 
 Process Description:
 
-- The host first sends the desired settings to the USB device (PROBE)
-- The device modifies the host's expectations within its own capabilities and returns them to the host(PROBE)
-- If the Host thinks the settings are feasible, Commit (COMMIT)
-- Set the current setting of the interface to one of the settings
+- The host first sends the desired settings to the USB device (PROBE).
+- The device modifies the host's desired settings within its capabilities and returns them to the host (PROBE).
+- If the host considers the settings feasible, it commits (COMMIT).
+- The current settings of the interface are set to a specific setting.
 
-### 3.1.2.3 UVC Video Streaming Load
+### 3.1.2.3 UVC Video Stream Payload
 
 ![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_payload.png)
 
-You can see that the payload data contains a header in front of it, and the payload data contains multiple USB packets, how does the host identify a frame of image data?
+The payload data includes a header at the front, and the payload data contains multiple USB packets. How does the host recognize a new frame of image data? Through the payload header.
 
-The payload header fixes the first 2 bytes and the subsequent extensions. Focus on FID - different formats have different regulations. But all formats use this bit to switch between 0 and 1 to recognize a new frame of image data.
+The payload header has a fixed first 2 bytes and an extended part. Focus on the FID - different formats have variations, but all formats use this bit toggling between 0 and 1 to identify a new frame of image data.
 
 ![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_payload_header.png)
 
 ### 3.2 Linux Driver Layer
 
-The SDK design of the K230 puts the video and audio functions on the large-core RTT for performance. The function implementation of USB on Linux is very mature, so UVC function is developed based on Linux to obtain large-core video data through inter-core mapi communication.
+The K230 SDK design places video and audio functions on the big core RTT for performance. The USB functionality on Linux is mature, so UVC functionality is developed based on Linux, obtaining video data from the big core via inter-core mapi communication.
 
-![uvc_payload](images/uvc_framework.png)
+![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_framework.png)
 
 ### 3.2.1 Controller Driver
 
 ![usb_gadget](../../../zh/02_applications/tutorials/images/usb_gadget.png)
 
-The K230 integrates a Synopsys USB module, and the linux/drivers/usb/dwc2 directory is the driver for this controller.
+The K230 integrates Synopsys' USB module, with the controller driver located in linux/drivers/usb/dwc2.
 
-The current SDK design UVC uses USB1 fixedly, and otg is recognized as device mode through the ID signal.
+In the current SDK design, UVC is fixed to use USB1, and the OTG mode is recognized as device mode via the ID signal.
 
-platform.c, do some reset, register interrupts, configure parameters and other operations. The USB of the SDK supports buffer DMA mode by default. Scatter Gather DMA mode can improve ISO transmission performance, HOST mode cannot support HUB using this DMA mode.
+platform.c - handles resets, registers interrupts, configures parameters, etc. The SDK's USB defaults to buffer DMA mode. Scatter Gather DMA mode can enhance ISO transfer performance, but the HOST mode using this DMA mode cannot support HUB.
 
-gadget.c, which focuses on the driver code, dwc2_gadget_init initializes important structs, gadget.ops and ep.ops. usb_ep_ops queue is a request to submit data to send and receive, which is actually put into a linked list for processing. USB will process the requests on these linked lists one by one and then report a completion callback.
+gadget.c - focuses on this driver code, dwc2_gadget_init initializes important structures, gadget.ops, and ep.ops. The usb_ep_ops queue submits data transfer requests, essentially placing these requests in a processing list. The USB will process these requests one by one and report completion callbacks.
 
-``` c
-//device tree
+```c
+// Device tree
 usbotg1: usb-otg@91540000 {
     compatible = "kendryte,k230-otg";
     reg = <0x0 0x91540000 0x0 0x10000>;
@@ -193,18 +193,18 @@ usbotg1: usb-otg@91540000 {
 };
 ```
 
-### 3.2.2 Gadget Drivers
+### 3.2.2 Gadget Driver
 
-The source code is located at linux/drivers/usb/gadget
+The source code is located in linux/drivers/usb/gadget.
 
-- legacy: The entry point for the entire Gadget device driver. Located under driver/usb/gadget/legacy, it gives driver samples for commonly used USB devices. Its role is to configure the USB device descriptor information, provide a usb_composite_driver, and then register it with the composite layer. It can also be created dynamically through functionfs, which is more flexible, and the USB gadget demo provided by K230 adopts this method.
-- Functions: Various USB subclass device function drivers. Located in driver/usb/gadget/functions, the corresponding sample is also given. Its role is to configure the interface description of the USB subclass protocol and other subclass protocols, such as UVC protocol, HID, etc. The relevant documents involved in UVC uvc_video.c, uvc_v4l2.c, uvc_queue.c, uvc_configfs.c, f_uvc.c
+- legacy: the entry point of the entire Gadget device driver. Located in driver/usb/gadget/legacy, it provides samples of common USB class device drivers. Its role is to configure USB device descriptor information, provide a usb_composite_driver, and register it to the composite layer. It can also be dynamically created through functionfs, which is more flexible. The USB gadget demos provided by K230 use this method.
+- functions: various USB subclass device function drivers. Located in driver/usb/gadget/functions, it provides corresponding samples. Its role is to configure USB subclass protocol interface descriptors and other subclass protocols, such as UVC protocol, HID, etc. UVC-related files include uvc_video.c, uvc_v4l2.c, uvc_queue.c, uvc_configfs.c, f_uvc.c.
 
-The UVC of the K230 hardly modifies the gadget driver layer, only porting the H264 format support function and expansion unit.
+The K230's UVC makes minimal modifications to the gadget driver layer, mainly porting support for the H264 format and extension units.
 
-Linux compiles the kernel to add the USB Gadget framework
+To compile the Linux kernel with USB Gadget framework support, add:
 
-``` shell
+```shell
 -> Device Drivers
     -> USB support
         -> USB Gadget Support
@@ -214,9 +214,9 @@ Linux compiles the kernel to add the USB Gadget framework
 
 ![uvc_linux_menuconfig](../../../zh/02_applications/tutorials/images/uvc_linux_menuconfig.png)
 
-UVC involves the functionality of the V4L2 module, and the Media framework needs to be added
+Since UVC involves V4L2 module functionality, the media framework also needs to be added:
 
-``` shell
+```shell
 -> Device Drivers
     -> Multimedia support
         -> Media core support
@@ -227,54 +227,60 @@ UVC involves the functionality of the V4L2 module, and the Media framework needs
 
 ### 3.3 UVC-Gadget Application Layer
 
-From the SDK design architecture of K230, it can be seen that the difference between the UVC function of K230 and the UVC function on Linux is that the way to obtain video data is obtained from the large core RTT through inter-core communication.
+From the K230 SDK design architecture, the difference between K230's UVC functionality and a pure Linux UVC functionality is that video data is obtained from the big core RTT via inter-core communication.
 
-The code location of the K230 UVC application layer: cdk/user/mapi/sample/camera
+The K230 UVC application layer code is located at: cdk/user/mapi/sample/camera.
 
-Source code file description:
+Source code file descriptions:
 
-application.c - Main function
+- application.c - main function
+- camera.c - provides camera object operations, including UVC/UAC control
+- frame_cache.c - complex buffer management
+- kstream.c - implements video stream operations
+- kuvc.c - implements kuvc object operations
+- sample_venc.c - obtains encoded images from the big core via mapi
+- sample_yuv.c - obtains YUV images from the big core via mapi
+- uvc-gadget.c - implements UVC device operations
 
-camera.c - Provides camera object manipulation and can include UVC/UAC controls
+The debugging steps involve first porting the generic UVC app on Linux, running the standalone functionality on Linux (i.e., playing fixed image data). Then debug the functionality of playing real camera image data.
 
-frame_cache.c - Management of complex buffers
+Below is the design flowchart of the K230 UVC APP:
 
-kstream.c - Implements video streaming operations
+![uvc_app_flow](../../../zh/02_applications/tutorials/images/uvc_app_flow.png)
 
-kuvc.c - Implements kuvc object operations
+Most operations in the UVC app are generic, with plenty of information available online.
+Here we will discuss the private operations of the K230, focusing on the handling of the `venc_normalp_classic` function.
 
-sample_venc.c - The operation of acquiring encoded images from large nuclei via MAPI
+- First, configure the vicap device attributes, including the camera type, etc.
+  - `kd_mapi_vicap_set_dev_attr`
+- Obtain camera information, mainly to get the image resolution output by the camera.
+  - `k_vicap_sensor_info`
+- Calculate the required vb buffer size based on the image output from vicap as needed, and allocate the buffer.
+  - `kd_mapi_media_init`
+- Configure channel attributes, including output resolution, format, etc.
+  - `kd_mapi_vicap_set_chn_attr`
+- Start video processing.
+  - `kd_mapi_vicap_start`
+  - Get a frame of image.
+    - `kd_mapi_vicap_dump_frame`
+  - Release image buffer.
+    - `kd_mapi_vicap_release_frame`
+- Initialize the venc module, including encoding format, frame rate, resolution, etc.
+  - `kd_mapi_venc_init`
+- Register the callback function for encoding completion.
+  - `kd_mapi_venc_registercallback`
+- Enable H264 GOP interval to generate IDR frames.
+  - `kd_mapi_venc_enable_idr`
+- Start venc.
+  - `kd_mapi_venc_start`
+- Bind the venc module to the vi module.
+  - `kd_mapi_venc_bind_vi`
+  - Callback function after encoding completion to get the encoded image data.
+    - `get_venc_stream`
 
-sample_yuv.c - Operation to acquire YUV images from large nuclei via mapi
+### 3.4 Recommended Reference Materials
 
-UVC-gadget.c - Implements UVC device operation
-
-The debugging step is to first port the common uvc_app on Linux and run through the standalone function on Linux, that is, play fixed image data. Then debug the ability to play back real camera image data.
-
-Below is the design flowchart of the K230 UVC APP
-
-![uvc_app_flow](images/uvc_app_flow.png)
-
-Most of the operations of UVC APP are general operations, and there are more materials on the Internet. Here we talk about the K230 private operation, focusing on the processing of venc_normalp_classic functions.
-
-- First, configure the VICAP device properties, including the camera type
-kd_mapi_vicap_set_dev_attr
-- Get camera information, mainly to get the image resolution k_vicap_sensor_info output by the camera
-- Calculate the required VB buffer size from the vicap output image according to the needs and allocate the buffer kd_mapi_media_init
-- Configure channel properties, including the resolution, format, and other kd_mapi_vicap_set_chn_attr of the output
-- Start video processing kd_mapi_vicap_start
-  - Get a frame of image kd_mapi_vicap_dump_frame
-  - Release the image buffer kd_mapi_vicap_release_frame
-- Initialize the venc module, including encoding format, frame rate, resolution, etc. kd_mapi_venc_init
-- Register the callback function kd_mapi_venc_registercallback after encoding is complete
-- Enabling the H264 GOP interval generates IDR frame kd_mapi_venc_enable_idr
-- Start the venc kd_mapi_venc_start
-- The venc module binds the vi module kd_mapi_venc_bind_vi
-  - The callback function after encoding is completed to obtain the encoded image data get_venc_stream
-
-### 3.4 Reference Study Recommendations
-
-- [USB2.0 official documentation download](https://www.usb.org/document-library/usb-20-specification)
-- [UUV1.1 official document download](https://www.usb.org/document-library/video-class-v11-document-set)
-- [UUV1.5 official document download](https://www.usb.org/document-library/video-class-v15-document-set)
-- [USB Chinese network](https://www.usbzh.com/article/forum-12.html)
+- [USB 2.0 Official Documentation Download](https://www.usb.org/document-library/usb-20-specification)
+- [UVC 1.1 Official Documentation Download](https://www.usb.org/document-library/video-class-v11-document-set)
+- [UVC 1.5 Official Documentation Download](https://www.usb.org/document-library/video-class-v15-document-set)
+- [USB Chinese Website](https://www.usbzh.com/article/forum-12.html)

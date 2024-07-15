@@ -1,6 +1,6 @@
 # K230 nncase FAQ
 
-![cover](images/canaan-cover.png)
+![cover](../../zh/03_other/images/canaan-cover.png)
 
 Copyright ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
@@ -118,4 +118,4 @@ When loading the `kmodel` with the following code, this custom exception is thro
 interp.load_model(ifs).expect("Invalid kmodel");
 ```
 
-- A: In the absence of other issues, this is due to the mismatch between the nncase version used to compile the `kmodel` and the current SDK version. Please refer to the [SDK and nncase version correspondence](./K230_SDK_nncase_version_correspondence.md) and follow the guide to [update the nncase runtime library](./K230_SDK_update_nncase_runtime_tutorial.md) to resolve the issue.
+- A: In the absence of other issues, this is due to the mismatch between the nncase version used to compile the `kmodel` and the current SDK version. Please refer to the [SDK and nncase version correspondence](./K230_SDK_nncase_version_correspondence.md) and follow the guide to [update the nncase runtime library](./K230_SDK_Updating_nncase_Runtime_Library_Guide.md) to resolve the issue.

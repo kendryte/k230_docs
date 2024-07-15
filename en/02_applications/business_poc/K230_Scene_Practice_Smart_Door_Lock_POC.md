@@ -1,47 +1,47 @@
-# K230 Scene Practice-Smart Door Lock POC
+# K230 Scenario Practice - Smart Door Lock POC
 
-![cover](../../images/canaan-cover.png)
+![cover](../../../zh/02_applications/business_poc/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan-JieSi Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan-JieSi Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/business_poc/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan-JieSi Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan-JieSi Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## K230 smart door lock
+## K230 Smart Door Lock
 
-A set of programs developed on the K230 platform that integrate UI, face detection, face recognition, and face registration functions.
+A program developed on the K230 platform that integrates UI, face detection, face recognition, and face registration functions.
 
-### Hardware environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1/K230-SIP-EVB-V1.0
-- Matching LCD module
+- Supporting LCD module
 - K230-USIP-IMX335-SENSOR-V1.1 module
 
 ### Overview
 
-As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, big and little core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the big core terminal program mainly completes video input and output, AI processing and other related functions, the little core end completes the function of UI and face feature value management, the big and little cores communicate through IPCMSG, and the development board is started by norflash.
+The smart door lock program, as a POC project, provides customers with a reference on how to use lvgl, big-little core communication, multimedia pipeline, and AI functionalities. The program is mainly divided into two parts: the big core program primarily handles video input and output, AI processing, and related functions, while the little core handles UI and face feature management functions. Communication between the big and little cores is done via IPCMSG, and the program starts from NOR flash on the development board.
 
-### remark
+### Notes
 
-1. Before powering down and reset, the little core serial port should be input now`halt` to protect the file system from being damaged.
+1. Before powering off or resetting, input `halt` on the little core serial port to protect the file system from damage.
 
-### Source code location
+### Source Code Location
 
-The source code path of the big kernel program is located in the`src/reference/business_poc/doorlock/big` directory structure as follows:
+The big core program source code is located at `src/reference/business_poc/doorlock/big`, with the directory structure as follows:
 
 ```sh
 .
@@ -59,10 +59,9 @@ The source code path of the big kernel program is located in the`src/reference/b
 ├── util.cc
 ├── util.h
 └── vi_vo.h
-
 ```
 
-The source code path of the little core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
+The little core program source code is located at `src/little/buildroot-ext/package/door_lock`, with the directory structure as follows:
 
 ```sh
 .
@@ -99,28 +98,33 @@ The source code path of the little core program is located in the`src/little/bui
 │           ├── scr_signup.c
 │           └── ui_common.h
 └── src.mk
-
 ```
 
-#### Compile the program
+#### Compiling the Program
 
-K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 Development Board Compiler:
-Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230_evb_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_defconfig/little/buildroot-ext/target``app`.
+For the K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board:
+Execute `make CONF=k230_evb_doorlock_defconfig` in the `k230_sdk` directory. The big core program `door_lock.elf` will be generated in the `k230_sdk/src/reference/business_poc/doorlock/big/out` directory, and the little core program in the `app` directory under `k230_sdk/output/k230_evb_doorlock_defconfig/little/buildroot-ext/target`.
 
-K230-SIP-EVB-V1.0 development board compiler:
-Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230d_doorlock_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230d_doorlock_defconfig/little/buildroot-ext/target``app`.
+For the K230-SIP-EVB-V1.0 development board:
+Execute `make CONF=k230d_doorlock_defconfig` in the `k230_sdk` directory. The big core program `door_lock.elf` will be generated in the `k230_sdk/src/reference/business_poc/doorlock/big/out` directory, and the little core program in the `app` directory under `k230_sdk/output/k230d_doorlock_defconfig/little/buildroot-ext/target`.
 
-#### Run the program
+#### Running the Program
 
-The smart door lock is in the NOR flash image, the big and little core programs start automatically, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate an image in`output/k230_evb_doorlock_defconfig/images/` the directory after compilation, and the K230-SIP-LP3-EVB-V1.0 development board will`sysimage-spinor32m.img` be generated in the directory`output/k230d_doorlock_defconfig/images/` after compilation`sysimage-spinor32m.img`Image, flash flash image, development board DIP switch set to NOR flash start
+The smart door lock program is in the NOR flash image, and the big and little core programs start automatically. After compiling for the K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board, the `sysimage-spinor32m.img` image will be generated in the `output/k230_evb_doorlock_defconfig/images/` directory. After compiling for the K230-SIP-LP3-EVB-V1.0 development board, the `sysimage-spinor32m.img` image will be generated in the `output/k230d_doorlock_defconfig/images/` directory. Flash the NOR flash image, and set the development board's DIP switch to NOR flash boot.
 
-#### Feature demo
+#### Function Demonstration
 
-1. After the big and little core programs are started, the interface is displayed as follows:![ door_lock_menu](../../../zh/02_applications/business_poc/images/door_lock_menu.png)
+1. After starting the big and little core programs, the interface is displayed as follows: ![door_lock_menu](../../../zh/02_applications/business_poc/images/door_lock_menu.png)
 
-1. SD face picture import function, must be put in the picture under /sharefs/pic, in order to ensure the recognition effect, the format of the imported picture is required to be jpg, the resolution is 720*1280, the user puts the face picture that needs to be imported down`/sharefs/pic`, press the picture import key, the program will automatically complete the extraction of feature value function, and the file name of the picture is lable after successful recognition, the operation effect is as follows:![ door_lock_ import](../../../zh/02_applications/business_poc/images/door_lock_import.png)
+1. To import face images from an SD card, place images in the `/sharefs/pic` directory. To ensure recognition accuracy, the imported images must be in JPG format with a resolution of 720x1280. Place the face images to be imported in the `/sharefs/pic` directory and press the image import button. The program will automatically extract feature values and use the filename of the image as the label for successful recognition. The operation effect is as follows: ![door_lock_import](../../../zh/02_applications/business_poc/images/door_lock_import.png)
 
-1. Face real-time registration function, click the face registration button, enter lable through the keyboard displayed by the UI, in order to ensure the recognition effect, the face should be located in the center of the image when registering, and the operation effect is as follows:![ door_lock_singup](../../../zh/02_applications/business_poc/images/door_lock_singup.png)
-Recognition effect:![ door_lock_singup_show](../../../zh/02_applications/business_poc/images/door_lock_singup_show.png)
+1. For real-time face registration, click the face registration button and enter the label via the UI keyboard. To ensure recognition accuracy, the face should be centered in the image during registration. The operation effect is as follows: ![door_lock_signup](../../../zh/02_applications/business_poc/images/door_lock_signup.png) Recognition effect: ![door_lock_signup_show](../../../zh/02_applications/business_poc/images/door_lock_signup_show.png)
 
-1. The face bottom library deletion function deletes all faces registered in real time through the SD card and face, and the operation effect is as follows:![ door_lock_delete](../../../zh/02_applications/business_poc/images/door_lock_delete.png)
+1. To delete the face database, delete all faces registered via the SD card and real-time face registration. The operation effect is as follows: ![door_lock_delete](../../../zh/02_applications/business_poc/images/door_lock_delete.png)
+
+#### OTA
+
+1. Refer to the SDK OTA upgrade function to package the flash partition to be updated. Since the partition file size is saved in the RTT kernel, when upgrading other partitions of NOR flash, the `rtt_system.bin` must also be upgraded.
+1. Input the server IP address via the upgrade button.
+1. Input commands sequentially via the serial port: `killall -9 ui`, mount the SD card partition to the `/tmp` directory, e.g., `mount /dev/mmcblk0p2 /tmp`.
+1. Ensure that the local network server is connected and execute the `/usr/bin/ota` command. The device will restart after a successful upgrade.

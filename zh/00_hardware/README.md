@@ -8,7 +8,7 @@
 | --- | --- |
 | [K230_DEMO_BOARD资源使用指南.md](K230_DEMO_BOARD资源使用指南.md) | K230 Demo Board 硬件资源使用说明文档 |
 | [K230_硬件设计指南.md](K230_硬件设计指南.md) | K230 硬件设计指南文档 |
-| [K230_PINOUT_V1.0_20230524](K230_PINOUT_V1.0_20230524.xlsx) | K230 芯片引脚定义 |
+| [K230_PINOUT_V1.1_20240321](K230_PINOUT_V1.1_20240321.xlsx) | K230 芯片引脚定义 |
 | [K230_datasheet.md](K230_datasheet.md) | K230 Datasheet |
 
 ## K230 LP3 工程设计文件

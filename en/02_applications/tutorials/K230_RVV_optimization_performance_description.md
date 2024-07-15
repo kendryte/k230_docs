@@ -1,62 +1,62 @@
-# K230 RVV optimization performance description
+# K230 RVV Performance Optimization Description
 
-![cover](../../../zh/images/canaan-cover.png)
+![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no organization or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [toc]
 
 <div style="page-break-after:always"></div>
 
-## preface
+## Preface
 
 ### Overview
 
-This document describes the impact of RVV on model inference performance.
+This document mainly introduces the impact of RVV on model inference performance.
 
-### Reader object
+### Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author     | date       |
-| ----------------------- | ---------------------- | ---------- | ---------- |
-| V1.0                    | Initial edition       | Yang Haoqi | 2023/08/04 |
+| Document Version | Modification Description | Modifier | Date       |
+| ---------------- | ------------------------ | -------- | ---------- |
+| V1.0             | Initial Version          | Yang Haoqi | 2023/08/04 |
 
 ## 1. Overview
 
-In recent years, the rapid development of the field of AI has derived a variety of neural network models, and new operators are constantly emerging. However, the iteration cycle of the AI chip is much longer than that of the AI model, and most of these newly emerged operators cannot directly use the AI chip for inference acceleration, and some of the old operators are not suitable for inference acceleration using the AI chip.Therefore, the CPU becomes the execution carrier of this part of operators, which also means that the performance of the CPU will become a factor affecting the final performance when the model is deployed, and the RVV expansion is an important means for RISC-V CPU to improve performance. The C908 dual-core processor used in K230 has the characteristics of RVV1.0 expansion, which can greatly improve the performance of CPU operator inference.
+In recent years, the rapid development of the AI field has led to the emergence of various neural network models and new operators. However, the iteration cycle of AI chips is much longer compared to AI models, and many of these new operators cannot directly use AI chips for inference acceleration. At the same time, some old operators are also not suitable for inference acceleration using AI chips. Therefore, the CPU becomes the execution carrier for these operators, which means that the performance of the CPU will become a factor affecting the final performance during model deployment. The RVV extension is an important means to improve the performance of RISC-V CPUs. The K230 uses the Xuantie C908 dual-core processor, where the large core has the RVV1.0 extension feature, which can significantly improve the performance during CPU operator inference.
 
-K230 needs to use the model in `.kmodel` format for model inference. `.kmodel` is compiled by [nncase](https://github.com/kendryte/nncase) for `ONNX` and `TFLite` models. It is suitable for the development board produced by our company and related cooperative enterprises. `nncase` supports common neural network operators, but some operators cannot be accelerated by K230, and these operators can only be inferred using CPU.
+To perform model inference on the K230, a model in the `.kmodel` format is required. The `.kmodel` format is a compiled model format by [nncase](https://github.com/kendryte/nncase) for `ONNX` and `TFLite` models, suitable for development boards produced by the Company and related cooperative enterprises. nncase supports common neural network operators, but some operators cannot be accelerated for inference by the K230 and must use the CPU for inference.
 
-## 2. RVV application scenarios
+## 2. RVV Application Scenarios
 
-At present, the most widely studied and applied neural network `Transformer` is quite different with `CNN`, and many AI chips designed based on CNN cannot fully accelerate `Transformer`. The following is the operator execution of the `Decoder` model with RVV optimization enabled and without RVV optimization, which is a sub-model in `Transformer`.
+Currently, the most widely researched and applied neural network is the `Transformer`, which has a model structure significantly different from `CNN`. Many AI chips designed based on `CNN` cannot fully accelerate the `Transformer`. Below is the execution of operators in the `Decoder` model of `Transformer` with and without RVV optimization enabled.
 
-### 2.1 RVV optimization is not enabled
+### 2.1 Without RVV Optimization
 
 | stackvm tensor op | count | time consumption(ms) | percentage(%) |
 | ----------------- | ----- | -------------------- | ------------- |
@@ -75,11 +75,11 @@ At present, the most widely studied and applied neural network `Transformer` is 
 | LEA_GP            | 58    | 0.097                | 0.00491525    |
 | LDDATATYPE        | 29    | 0.07                 | 0.00354709    |
 | LDARG             | 5     | 0.008                | 0.000405381   |
-| RIGHT             | 1     | 0.004                | 0.000202691   |
+| RET               | 1     | 0.004                | 0.000202691   |
 | LDTUPLE           | 1     | 0.003                | 0.000152018   |
 | total             | 941   | 1973.45              | 100           |
 
-### 2.2 Enable RVV optimization
+### 2.2 With RVV Optimization
 
 | stackvm tensor op | count | time consumption(ms) | percentage(%) |
 | ----------------- | ----- | -------------------- | ------------- |
@@ -98,19 +98,19 @@ At present, the most widely studied and applied neural network `Transformer` is 
 | LDTENSOR          | 29    | 0.103                | 0.222712      |
 | LDDATATYPE        | 29    | 0.076                | 0.164331      |
 | LDARG             | 5     | 0.011                | 0.0237848     |
-| RIGHT             | 1     | 0.005                | 0.0108113     |
+| RET               | 1     | 0.005                | 0.0108113     |
 | LDTUPLE           | 1     | 0.003                | 0.00648677    |
 | total             | 941   | 46.248               | 100           |
 
 ### 2.3 Performance Analysis and Description
 
-From the above model inference situation, the KPU unit of K230 does not support hardware acceleration for `softmax`, `layer_norm`, `where`, `gather`, `reduce_arg`, and `reshape`, so we need to use CPU (C908) to implement inference. At present, the RVV optimization of `softmax`, `layer_norm` and `where` has been completed, and the performance has been improved significantly.
+In the model inference above, the KPU unit of K230 does not support hardware inference acceleration for `softmax`, `layer_norm`, `where`, `gather`, `reduce_arg`, and `reshape`, so the C908 is used for inference. RVV optimization has been completed for `softmax`, `layer_norm`, and `where`, with significant performance improvement.
 
-The following is a graph of the proportion of each operator in the model inference time before and after RVV optimization.
+Below are the pie charts showing the proportion of each operator's time consumption in model inference before and after RVV optimization.
 
-```mermaid
+<div class="mermaid">
 pie
-    title without RVV optimization
+    title Without RVV Optimization
     "softmax" : 88.6574
     "where" : 10.1058
     "EXTCALL" : 0.815779
@@ -128,12 +128,11 @@ pie
     "LDARG" : 0.000405381
     "RET" : 0.000202691
     "LDTUPLE" : 0.000152018
+</div>
 
-```
-
-```mermaid
+<div class="mermaid">
 pie
-    title Enable RVV optimization
+    title With RVV Optimization
     "softmax" : 55.6175
     "EXTCALL" : 34.9831
     "layer_norm" : 2.0909
@@ -151,65 +150,65 @@ pie
     "LDARG" : 0.0237848
     "RET" : 0.0108113
     "LDTUPLE" : 0.00648677
-```
+</div>
 
-The following is a comparison of the performance of related operators before and after RVV optimization.
+Below is the performance comparison of related operators before and after RVV optimization.
 
 ![RVV](../../../zh/02_applications/tutorials/images/RVV_optimize_performance.jpg)
 
-From the above comparison results, it can be seen that the RVV optimization can greatly improve the inference performance of the CPU operator and shorten the inference time of the whole model (1973-->46) ms. The time of `softmax` operator is reduced to 25 ms, the time of `layer_norm` operator is reduced to 0.97 ms, and the time of `where` operator is reduced to 0.91 ms. The inference time of the whole model is shortened by 97.6%, which has high application value in the actual model deployment.
+From the comparison results above, it can be seen that enabling RVV optimization can greatly improve the inference performance of CPU operators, significantly reducing the overall model inference time (1973 ms to 46 ms). After RVV optimization, the `softmax` operator time is reduced to 25 ms, the `layer_norm` operator time is reduced to 0.97 ms, and the `where` operator time is reduced to 0.91 ms. The overall model inference time is shortened by 97.6%, which has high application value in actual model deployment.
 
-### 2.4 RVV optimization example
+### 2.4 RVV Optimization Example
 
-#### 2.4.1 RVV code
+#### 2.4.1 RVV Code
 
-Please refer to [layer_norm](https://github.com/kendryte/nncase/blob/master/src/Native/src/kernels/stackvm/optimized/riscv64/layer_norm.cpp) in `nncase`, requires some knowledge of RV instructions and V extension instructions.
+For specific implementation, please refer to `layer_norm` in `nncase` [here](https://github.com/kendryte/nncase/blob/master/src/Native/src/kernels/stackvm/optimized/riscv64/layer_norm.cpp). It requires some knowledge of RV instructions and V extension instructions.
 
-The calculation formula of `layer_norm` is:
+The calculation formula for `layer_norm` is as follows:
 
 ```plaintext
 y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
 ```
 
-The overall calculation process is detailed in Functions `layernorm_impl`, in order to have higher readability of the code, the RVV optimization code is split into three parts:
+The overall calculation process can be found in the `layernorm_impl` function. For better readability, the RVV optimized code in this process is split into three parts:
 
-1. Calculation `E[x]`, please refer to Function `get_mean` for details .
-1. Calculation `Var[x]`, please refer to Function `get_var` for details .
-1. For the calculation of the layer_norm according to the above formula, please refer to `layer_norm_update1` Function.
+1. Calculate `E[x]`, refer to the `get_mean` function.
+1. Calculate `Var[x]`, refer to the `get_var` function.
+1. Perform layer_norm calculation according to the formula above, refer to the `layer_norm_update1` function.
 
-Since multiplication takes less time than division, the formula transformation is performed in step 3 of the calculation. Using `rsqrt` instead of `sqrt` and then using multiplication instead of division.
+Since multiplication is less time-consuming than division, the formula in step 3 is transformed to use `rsqrt` instead of `sqrt` and multiplication instead of division.
 
-#### 2.4.2 Core Code Description
+#### 2.4.2 Core Code Explanation
 
-The following is the description of the function `get_mean`, which implements the loop loading summation of the array at `a1`, the sum result is stored in `v0`, and the final average is saved in `ret`. It utilizes the vector loading of RVV, vector accumulation instructions to achieve summation, thereby improving computing performance.
+Below is an explanation of the core code in `get_mean`. This code segment implements the loop load and summation of the array at a1, stores the summation result in v0, and finally stores the average value in ret. It uses RVV's vector load and vector accumulate instructions to achieve summation, thereby improving computational performance.
 
 ```plaintext
-"vle32.v v8, (a1);"   // Load the 32 bit vector at the a1 address to the v8 register.
-"sub a0,a0, t0;"      // a0 − = t0, for cycle control counting.
-"slli t1, t0, 2;"     // t1 = t0 < < 2, because each float32 is 4 bytes, so the address is increased by 4 * t0.
-"vfredsum.vs v0,v8,v0;"  // v0 + = v8, vector sum to v0.
+"vle32.v v8, (a1);"   // Load 32-bit vector at a1 address into v8 register
+"sub a0,a0, t0;"      // a0 -= t0, used for loop control count
+"slli t1, t0, 2;"     // t1 = t0 << 2, as each float32 is 4 bytes, so address increases by 4*t0
+"vfredsum.vs v0,v8,v0;"  // v0 += v8, vector accumulate sum into v0
 
-"add a1, a1, t1;"      // a1 + = t1, update the loading address.
-"bnez a0, XXXXXX%=;"   // If a0 ! = 0, jump to the loop start address.
-"vfmv.f.s f0, v0;"     // Move the v0 vector accumulation result to f0.
-"fcvt.s.w f1, %[avl];"  // Convert avl to float and save to f1.
-"fdiv.s %[ret], f0, f1;" // ret = f0 / f1, get the average value.
+"add a1, a1, t1;"      // a1 += t1, update load address
+"bnez a0, XXXXXX%=;"   // If a0 != 0, jump to loop start address
+"vfmv.f.s f0, v0;"     // Move vector accumulate result from v0 to f0
+"fcvt.s.w f1, %[avl];"  // Convert avl to float and save to f1
+"fdiv.s %[ret], f0, f1;" // ret = f0/f1, i.e., calculate average
 ```
 
-#### 2.4.3 Add RVV operator process
+#### 2.4.3 Adding RVV Operator Process
 
-In the following process, the path uses [nncase](https://github.com/kendryte/nncase) as the root
+In the following process, paths are based on [nncase](https://github.com/kendryte/nncase) as the root directory
 
-1. function declaration: src/Native/src/kernels/stackvm/optimized/opt_ops.h
-1. Operator implementation:
-   - general optimization   src/Native/src/kernels/stackvm/optimized
-   - x86 optimization   src/Native/src/kernels/stackvm/optimized/x86_64
-   - RVV optimization  src/Native/src/kernels/stackvm/optimized/riscv64
-1. Logic call: src/Native/src/kernels/stackvm/tensor_ops.cpp
-1. Modify CMakeLists：src/Native/src/kernels/stackvm/optimized/CMakeLists.txt
-   - General optimization: 15 lines increase the source file name
-   - Platform-specific optimization: 44 lines increase the source file name
+1. Function Declaration: src/Native/src/kernels/stackvm/optimized/opt_ops.h
+1. Operator Implementation:
+   - General Optimization: src/Native/src/kernels/stackvm/optimized
+   - x86 Optimization: src/Native/src/kernels/stackvm/optimized/x86_64
+   - RVV Optimization: src/Native/src/kernels/stackvm/optimized/riscv64
+1. Logical Call: src/Native/src/kernels/stackvm/tensor_ops.cpp
+1. Modify CMakeLists: src/Native/src/kernels/stackvm/optimized/CMakeLists.txt
+   - General Optimization: Add source file name in line 15
+   - Platform-specific Optimization: Add source file name in line 44
 
-### 2.5 tips
+### 2.5 Tips
 
-If you encounter an operator that does not support RVV optimization and need to support it, you are welcome to [submit an issue and PR](https://github.com/kendryte/nncase/issues).
+If you encounter operators that are not yet supported by RVV optimization and need support, feel free to raise issues and PRs on [nncase](https://github.com/kendryte/nncase/issues).
