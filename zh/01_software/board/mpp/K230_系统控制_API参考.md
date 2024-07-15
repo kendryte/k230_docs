@@ -2203,7 +2203,7 @@ k_u32 supplement_config; /*<Control of the auxiliary information*/
 - [k_color_gamut](#3310-k_color_gamut)
 - [k_dynamic_range](#3311-k_dynamic_range)
 - [k_video_format](#3312-k_video_format)
-- [k_video_filed](#3313-k_video_filed)
+- [k_video_field](#3313-k_video_field)
 - [k_pixel_format](#3314-k_pixel_format)
 
 #### 3.3.1 k_video_frame_info
@@ -2681,7 +2681,7 @@ VIDEO_FORMAT_BUTT
 
 无
 
-#### 3.3.13 k_video_filed
+#### 3.3.13 k_video_field
 
 【说明】
 

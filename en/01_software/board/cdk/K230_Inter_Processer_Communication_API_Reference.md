@@ -1,91 +1,91 @@
-# K230 Intercore Communication API Reference
+# K230 Inter-Core Communication API Reference
 
 ![cover](../../../../zh/01_software/board/cdk/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not make any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for guidance and reference.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/cdk/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/cdk/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document mainly introduces the functions and usage of the system control module in the media subsystem, and the functions and usage of other modules will be discussed in their own special documents.
+This document mainly introduces the functions and usage of the system control module in the media subsystem. The functions and usage of other modules will be discussed in their respective documents.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly applicable to the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation   | illustrate                                     |
-|--------|------------------------------------------|
-| ipcm   | internal processor communication module  |
-| IPCMSG | internal processor communication message |
+| Abbreviation | Description                                |
+|--------------|--------------------------------------------|
+| ipcm         | internal processor communication module    |
+| IPCMSG       | internal processor communication message   |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author | date     |
-|------------|----------|--------|----------|
-| v1.0       | Initial edition     | Haibo Hao | 2023/3/8 |
+| Document Version | Modification Description | Modifier | Date       |
+|------------------|--------------------------|----------|------------|
+| v1.0             | Initial version          | Haibo Hao | 2023/3/8   |
 
 ## 1. Overview
 
 ### 1.1 Overview
 
-This document describes the K230 heterogeneous internuclear communication.
+This document describes the relevant content of K230 heterogeneous inter-core communication.
 
-#### 1.1.1 Internuclear communication implementation principle
+#### 1.1.1 Inter-Core Communication Implementation Principle
 
-![Timeline Low-confidence descriptions have been automatically generated](images/Dingtalk_20231101193221.jpg)
+![Schedule Low Confidence Description Automatically Generated](../../../../zh/01_software/board/cdk/images/91c0f5a20c9460bd6c865a704f7b9404.png)
 
-- Shared memory is used for large and little cores to send the specific content of communication messages
-- Shared memory management is used to identify the properties of communication messages such as address, size, port number, etc
-- Mailbox implements the notification mechanism after the large and little cores send messages through interrupts
+- Shared memory is used for the specific content of communication messages sent by large and small cores.
+- Shared memory management is used to identify the attributes of communication messages such as address, size, port number, etc.
+- Mailbox realizes the notification mechanism after large and small cores send messages through interrupts.
 
 #### 1.1.2 Memory Space Usage
 
-At present, the data sharing memory area used by large and little cores is designed to have a total of 1M space, and for the party involved in communication, the sending and receiving space each occupies 512KB of space. The area of shared memory used to maintain the state of individual cores is 4KB.
+Currently, the data shared memory area used by large and small cores is designed with a total space of 1M, with each party involved in the communication occupying 512KB for sending and receiving. The shared memory area used to maintain the state of each core is 4KB.
 
 ### 1.2 Function Description
 
 #### 1.2.1 IPCMSG
 
-IPCMSG is a component of K230 large and little cores that communicates in user mode, mainly for sending control messages. This module includes functions such as service addition and deletion, message creation and deletion, disconnection, sending messages, etc. Support three message sending methods, send asynchronous messages, send synchronous messages, and send messages that do not require a reply. The timeout mechanism is supported for synchronous messages, and the timeout period can be set when users call APIs. If a message that needs to be replied to is received 60 seconds after it is sent, the reply message will be discarded.
+IPCMSG is a component for communication between large and small cores of K230 in user mode, mainly used for sending control messages. This module includes functions such as adding and deleting services, creating and deleting messages, disconnecting, and sending messages. It supports three types of message sending: sending asynchronous messages, sending synchronous messages, and sending messages that do not require a reply from the other party. Among them, synchronous messages support a timeout mechanism, and users can set the timeout period when calling the API. For messages that need a reply, if the reply is received after 60 seconds, the reply message will be discarded.
 
 #### 1.2.2 DATAFIFO
 
-DATAFIFO is an inter-core communication component used by K230 large and little cores when large and little cores interact with a large amount of data (such as encoding data) in user mode. The internal main use of shared memory to complete the interaction of data, the data is passed pointers, the content of the data will not be copied, and the sending and receiving notifications of data rely on thread polling to achieve.
+DATAFIFO is a component used for inter-core communication when large and small cores of K230 perform large data interactions (such as encoded data) in user mode. Internally, it mainly uses shared memory to complete data interaction, transmitting data pointers without copying the data content. The notification of data sending and receiving relies on thread polling.
 
-DATAFIFO mainly contains the opening, closing, writing and reading of data, and other control commands
+DATAFIFO mainly includes opening and closing channels, writing and reading data, and other control commands.
 
 ## 2. API Reference
 
 ### 2.1 IPCMSG
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
 - [kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
@@ -103,138 +103,136 @@ This function module provides the following APIs:
 
 #### 2.1.1 kd_ipcmsg_add_service
 
-【Description】
+[Description]
 
 Add a service
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_connect_s](#314-k_ipcmsg_connect_s)* pstConnectAttr);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**         | **Description**                          | **Input/output** |
-|-----------------|-------------------------------|-----------|
-| pszServiceName  | A pointer to the name of the service.            | input      |
-| pstConnectAttr  | The property structure of the connecting peer server.  | input      |
+| **Parameter Name** | **Description**                     | **Input/Output** |
+|--------------------|-------------------------------------|------------------|
+| pszServiceName     | Pointer to the service name.        | Input            |
+| pstConnectAttr     | Attribute structure of the connection to the server. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-Multiple services can be added, but different services cannot use the same port number, and the client and service are connected
+Multiple services can be added, but different services cannot use the same port number. Clients and services communicate through the same port number, so one service corresponds to one client.
 
-The same port number is used to communicate, so one service can correspond to one client
+[Example]
 
-【Example】
+None
 
-none
-
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
 
 #### 2.1.2 kd_ipcmsg_del_service
 
-【Description】
+[Description]
 
-Delete the service
+Delete a service
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_del_service(const k_char* pszServiceName);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**         | **Description**                                                              | **Input/output** |
-|-----------------|-------------------------------------------------------------------|-----------|
-| pszServiceName  | A pointer to the name of the service. Maximum length of service name: K_IPCMSG_MAX_SERVICENAME_LEN. | input      |
+| **Parameter Name** | **Description**                                         | **Input/Output** |
+|--------------------|---------------------------------------------------------|------------------|
+| pszServiceName     | Pointer to the service name. Maximum length: K_IPCMSG_MAX_SERVICENAME_LEN. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
 
 #### 2.1.3 kd_ipcmsg_try_connect
 
-【Description】
+[Description]
 
-The connection is established in non-blocking mode
+Establish a connection in a non-blocking manner
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**           | **Description**                | **Input/output** |
-|-------------------|---------------------|-----------|
-| ps32Id            | Message communication ID pointer.  | output      |
-| pszServiceName    | Service name pointer.      | input      |
-| pfnMessageHandle  | Message handling callback functions.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| ps32Id             | Pointer to the message communication ID. | Output           |
+| pszServiceName     | Pointer to the service name. | Input            |
+| pfnMessageHandle   | Callback function for message handling. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
 
@@ -242,47 +240,47 @@ none
 
 #### 2.1.4 kd_ipcmsg_connect
 
-【Description】
+[Description]
 
-Blocking mode establishes the connection
+Establish a connection in a blocking manner
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**           | **Description**                | **Input/output** |
-|-------------------|---------------------|-----------|
-| ps32Id            | Message communication ID pointer.  | output      |
-| pszServiceName    | Service name pointer.      | input      |
-| pfnMessageHandle  | Message handlers.      | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| ps32Id             | Pointer to the message communication ID. | Output           |
+| pszServiceName     | Pointer to the service name. | Input            |
+| pfnMessageHandle   | Message handling function. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
 
@@ -290,45 +288,45 @@ none
 
 #### 2.1.5 kd_ipcmsg_disconnect
 
-【Description】
+[Description]
 
 Disconnect
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_disconnect(k_s32 s32Id);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**           | **Input/output** |
-|-----------|----------------|-----------|
-| s32Id     | The message communication ID.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| s32Id              | Message communication ID. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
 
@@ -336,360 +334,355 @@ none
 
 #### 2.1.6 kd_ipcmsg_is_connect
 
-【Description】
+[Description]
 
-Whether the message communication is connected status.
+Check if the message communication is connected.
 
-【Syntax】
+[Syntax]
 
 k_bool kd_ipcmsg_is_connect(k_s32 s32Id);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**           | **Input/output** |
-|-----------|----------------|-----------|
-| s32Id     | The message communication ID.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| s32Id              | Message communication ID. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**    | **Description**         |
-|----------|--------------|
-| K_TRUE   | Connection status.   |
-| K_FALSE  | Non-connected state. |
+| **Return Value** | **Description**           |
+|------------------|---------------------------|
+| K_TRUE           | Connected.                |
+| K_FALSE          | Not connected.            |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 #### 2.1.7 kd_ipcmsg_send_only
 
-【Description】
+[Description]
 
-Only sends messages to peers and does not receive return values from peers
+Only send a message to the other end without receiving a return value from the other end.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s) *pstRequest);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**     | **Description**                | **Input/output** |
-|-------------|---------------------|-----------|
-| s32Id       | Message service ID.       | input      |
-| pstRequest  | A pointer to the message structure.  | input      |
+| **Parameter Name** | **Description**                | **Input/Output** |
+|--------------------|--------------------------------|------------------|
+| s32Id              | Message service ID.            | Input            |
+| pstRequest         | Pointer to the message structure. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**  | **Description**                        |
-|-------------|---------------------------------|
-| 0           | Succeed.                          |
-| Non-0        | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 #### 2.1.8 kd_ipcmsg_send_async
 
-【Description】
+[Description]
 
-Send asynchronous messages. This interface is a non-blocking interface, which returns after sending a message to the peer without waiting for the processing of the message command.
+Send an asynchronous message. This interface is non-blocking; it returns after sending the message to the other end without waiting for the message command to be processed.
 
-If you call this interface to send a reply message, you do not need to reply to the peer, otherwise the peer must reply
+If this interface is used to send a reply message, no reply from the other end is required; otherwise, the other end must reply.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, k_ipcmsg_resphandle_fn_ptr pfnRespHandle);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**        | **Description**                                                                   | **Input/output** |
-|----------------|------------------------------------------------------------------------|-----------|
-| s32Id          | Message service ID.                                                          | input      |
-| pstMsg         | Message pointer.                                                             | input      |
-| pfnRespHandle  | Message reply handler. NULL is possible when sending a reply message, otherwise NULL is not allowed. | input      |
+| **Parameter Name** | **Description**                                                      | **Input/Output** |
+|--------------------|-----------------------------------------------------------------------|------------------|
+| s32Id              | Message service ID.                                                  | Input            |
+| pstMsg             | Pointer to the message.                                              | Input            |
+| pfnRespHandle      | Message reply handling function. When sending a reply message, it can be NULL; otherwise, it must not be NULL. | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 #### 2.1.9 kd_ipcmsg_send_sync
 
-【Description】
+[Description]
 
-Send a synchronization message. This interface blocks waiting for the peer message command to finish processing before returning.
+Send a synchronous message. This interface will block and wait until the message command from the other end is processed before returning.
 
-【Syntax】
+[Syntax]
 
-k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
+k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**       | **Description**                    | **Input/output** |
-|---------------|-------------------------|-----------|
-| s32Id         | Message service ID.           | input      |
-| pstMsg        | Message pointer.              | input      |
-| ppstMsg       | A pointer to the pointer to reply to the message.  | output      |
-| s32TimeoutMs  | Timeout. Unit: ms.    | input      |
+| **Parameter Name** | **Description**                | **Input/Output** |
+|--------------------|--------------------------------|------------------|
+| s32Id              | Message service ID.            | Input            |
+| pstMsg             | Pointer to the message.        | Input            |
+| ppstMsg            | Pointer to the reply message.  | Output           |
+| s32TimeoutMs       | Timeout period in milliseconds.| Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed with the value of [error code](#41-ipcmsg) |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-If this interface times out, the internal call [kd_ipcmsg_destory_message *](#2113-kd_ipcmsg_destroy_message)ppstMsg (reply cancellation
+In case of a timeout, this interface will internally call [kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message) to destroy *ppstMsg (reply message). Since the same message cannot be destroyed twice, there is no need to destroy the reply message again after the timeout exits.
 
-Since the same message cannot be destroyed repeatedly, this interface does not need to be destroyed after the timeout exit
+[Example]
 
-Processing of reply messages
+None
 
-【Example】
-
-none
-
-【See Also】
+[Related Topics]
 
 #### 2.1.10 kd_ipcmsg_run
 
-【Description】
+[Description]
 
-Message handlers
+Message processing function
 
-【Syntax】
+[Syntax]
 
 k_void kd_ipcmsg_run(k_s32 s32Id);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**           | **Input/output** |
-|-----------|----------------|-----------|
-| s32Id     | Message service ID.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| s32Id              | Message service ID.       | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **** Description|
-|---------|------|
-| void    | not   |
+| **Return Value** | **Description** |
+|------------------|-----------------|
+| void             | None            |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 #### 2.1.11 kd_ipcmsg_create_message
 
-【Description】
+[Description]
 
 Create a message
 
-【Syntax】
+[Syntax]
 
-[k_ipcmsg_message_s *](#315-k_ipcmsg_messsage_s)kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void*
-pBody, k_u32 u32BodyLen);
+[k_ipcmsg_message_s *](#315-k_ipcmsg_messsage_s) kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void* pBody, k_u32 u32BodyLen);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**     | **Description**                                                       | **Input/output** |
-|-------------|------------------------------------------------------------|-----------|
-| u32Modules   | Module ID. Created by the user to distinguish between different messages for different modules.          | input      |
-| u32CMD      | u32CMD command ID. Created by the user to distinguish between different commands under the same module. | input      |
-| pBody       | Message body pointer                                                 | input      |
-| u32BodyLen  | Message body size                                                 | input      |
+| **Parameter Name** | **Description**                                             | **Input/Output** |
+|--------------------|-------------------------------------------------------------|------------------|
+| u32Module          | Module ID, created by the user, used to distinguish different messages from different modules. | Input            |
+| u32CMD             | Command ID, created by the user, used to distinguish different commands within the same module. | Input            |
+| pBody              | Pointer to the message body.                                | Input            |
+| u32BodyLen         | Size of the message body.                                   | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**                 | **Description**             |
-|-----------------------|------------------|
-| k_ipcmsg_message_s*  | Message structure pointer. |
-| null                  | Message creation failed     |
+| **Return Value**      | **Description**     |
+|-----------------------|---------------------|
+| k_ipcmsg_message_s*   | Pointer to the message structure. |
+| null                  | Message creation failed. |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
-[kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
 
 #### 2.1.12 kd_ipcmsg_create_resp_message
 
-【Description】
+[Description]
 
 Create a reply message
 
-【Syntax】
+[Syntax]
 
 [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* kd_ipcmsg_create_resp_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* pstRequest, k_s32 s32RetVal, k_void* pBody, k_u32 u32BodyLen);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**     | **Description**                    | **Input/output** |
-|-------------|-------------------------|-----------|
-| pstRequest  | A pointer to the request message.        | input      |
-| s32RetVal   | Reply return value.            | input      |
-| pBody       | Message body pointer to reply to a message.  | input      |
-| u32BodyLen  | The message body size of the reply message.  | input      |
+| **Parameter Name** | **Description**                | **Input/Output** |
+|--------------------|--------------------------------|------------------|
+| pstRequest         | Pointer to the request message.| Input            |
+| s32RetVal          | Return value of the reply.     | Input            |
+| pBody              | Pointer to the reply message body. | Input            |
+| u32BodyLen         | Size of the reply message body.| Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**                 | **Description**             |
-|-----------------------|------------------|
-| k_ipcmsg_message_s*  | Message structure pointer. |
-| null                  | Message creation failed     |
+| **Return Value**      | **Description**     |
+|-----------------------|---------------------|
+| k_ipcmsg_message_s*   | Pointer to the message structure. |
+| null                  | Message creation failed. |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
-[kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
 
 #### 2.1.13 kd_ipcmsg_destroy_message
 
-【Description】
+[Description]
 
-Destroy the message
+Destroy a message
 
-【Syntax】
+[Syntax]
 
 k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg);
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**        | **Input/output** |
-|-----------|-------------|-----------|
-| pstMsg    | Message pointer.  | input      |
+| **Parameter Name** | **Description** | **Input/Output** |
+|--------------------|-----------------|------------------|
+| pstMsg             | Pointer to the message. | Input      |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **** Description|
-|---------|------|
-| k_void  | not   |
+| **Return Value** | **Description** |
+|------------------|-----------------|
+| k_void           | None            |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_comm_ipcmsg.h k_ipcmsg.h
-- Library file: libipcmsg.a
+- Header files: k_comm_ipcmsg.h k_ipcmsg.h
+- Library files: libipcmsg.a
 
-【Note】
+[Notes]
 
-Repeated destruction of the same message is not supported, otherwise it will cause system exceptions.
+The same message cannot be destroyed multiple times, otherwise it will cause system exceptions.
 
-【Example】
+[Example]
 
-none
+None
 
-【See Also】
+[Related Topics]
 
 [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
 
@@ -697,7 +690,7 @@ none
 
 ### 2.2 DATAFIFO
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_datafifo_open](#221-kd_datafifo_open)
 - [kd_datafifo_open_by_addr](#222-kd_datafifo_open_by_addr)
@@ -708,263 +701,265 @@ This function module provides the following APIs:
 
 #### 2.2.1 kd_datafifo_open
 
-【Description】
+[Description]
 
-Open the data path.
+Open a data channel.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_datafifo_params_s](#325-k_datafifo_params_s)\* pstParams)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**    | **Description**                | **Input/output** |
-|------------|---------------------|-----------|
-| Handle     | Data path handle.      | output      |
-| pstParams  | Data path parameter pointer.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| Handle             | Data channel handle.      | Output           |
+| pstParams          | Pointer to data channel parameters. | Input      |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                                |
-|---------|-------------------------------------|
-| 0       | Succeed.                              |
-| Non-0    | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
 #### 2.2.2 kd_datafifo_open_by_addr
 
-【Description】
+[Description]
 
-Open the data path through a physical address.
+Open a data channel by physical address.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Handle, [k_datafifo_params_s](#325-k_datafifo_params_s) *pstParams, k_u64 u64Phyaddr)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**     | **Description**                  | **Input/output** |
-|-------------|-----------------------|-----------|
-| Handle      | Data path handle.        | output      |
-| pstParams   | Data path parameter pointer.    | input      |
-| u32PhyAddr  | The physical address of the data cache.  | input      |
+| **Parameter Name** | **Description**                | **Input/Output** |
+|--------------------|--------------------------------|------------------|
+| Handle             | Data channel handle.           | Output           |
+| pstParams          | Pointer to data channel parameters. | Input      |
+| u32PhyAddr         | Physical address of the data buffer. | Input      |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                                |
-|---------|-------------------------------------|
-| 0       | Succeed.                              |
-| Non-0    | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
 #### 2.2.3 kd_datafifo_close
 
-【Description】
+[Description]
 
-Close the data path.
+Close a data channel.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**            | **Input/output** |
-|-----------|-----------------|-----------|
-| Handle    | Data path handle.  | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| Handle             | Data channel handle.      | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                                |
-|---------|-------------------------------------|
-| 0       | Succeed.                              |
-| Non-0    | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
+[Notes]
 
-When DataFifo is turned off, in order to ensure the normal release of data on both sides of the read/write end, the user needs to ensure that the reader finishes reading the data existing in the DataFifo[, and the writing end needs to call an additional kd_datafifo_write (](#225-kd_datafifo_write)Handle, NULL) after writing the data to trigger the data release and read pointer update on the write side
+When closing DataFifo, to ensure the normal release of data at both the read and write ends, the user needs to ensure that the read end reads all the data existing in DataFifo. After the write end finishes writing data, it needs to call [kd_datafifo_write](#225-kd_datafifo_write) (Handle, NULL) once to trigger the release of data at the write end and update the read pointer.
 
-【Example】
+[Example]
 
-none
+None
 
 #### 2.2.4 kd_datafifo_read
 
-【Description】
+[Description]
 
-Read the data.
+Read data.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void** ppData)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**                    | **Input/output** |
-|-----------|-------------------------|-----------|
-| Handle    | Data path handle.          | input      |
-| ppData    | A pointer to the read data pointer.  | output      |
+| **Parameter Name** | **Description**                | **Input/Output** |
+|--------------------|--------------------------------|------------------|
+| Handle             | Data channel handle.           | Input            |
+| ppData             | Pointer to the data read.      | Output           |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                                |
-|---------|-------------------------------------|
-| 0       | Succeed.                              |
-| Non-0    | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
+[Notes]
 
-none
+None
 
-【Example】
+[Example]
 
-none
+None
 
 #### 2.2.5 kd_datafifo_write
 
-【Description】
+[Description]
 
 Write data.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void* pData)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**            | **Input/output** |
-|-----------|-----------------|-----------|
-| Handle    | Data path handle.  | input      |
-| pData     | The data written.    | input      |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| Handle             | Data channel handle.      | Input            |
+| pData              | Data to be written.       | Input            |
 
-【Return value】
+[Return Value]
 
-| **Return value**   | **Description**                                |
-|---------|-------------------------------------|
-| 0       | Succeed.                              |
-| Non-0    | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
-When pData is NULL, the data release callback function on the write side is triggered, and the read pointer on the write side is updated.
+[Notes]
 
-【Example】
+When pData is NULL, it triggers the data release callback function at the write end and updates the read tail pointer.
 
-none
+[Example]
+
+None
 
 #### 2.2.6 kd_datafifo_cmd
 
-【Description】
+[Description]
 
 Other operations.
 
-【Syntax】
+[Syntax]
 
 k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_datafifo_cmd_e](#326-k_datafifo_cmd_e) enCMD, void* pArg)
 
-【Parameters】
+[Parameters]
 
-| **Parameter name**   | **Description**                  | **Input/output** |
-|-----------|-----------------------|-----------|
-| Handle    | Data path handle.        | input      |
-| enCMD     | Action commands.            | input      |
-| pArg      | Parameters, see [Note] for details.  | **Input/output** |
+| **Parameter Name** | **Description**           | **Input/Output** |
+|--------------------|---------------------------|------------------|
+| Handle             | Data channel handle.      | Input            |
+| enCMD              | Operation command.        | Input            |
+| pArg               | Parameter, see [Notes].   | **Input/Output** |
 
-【Return value】
+[Return Value]
 
-| **Return value**  | **Description**                            |
-|-------------|-------------------------------------|
-| 0           | Succeed.                              |
-| Non-0        | Failed with a value of [error code](#42-datafifo). |
+| **Return Value** | **Description**                      |
+|------------------|--------------------------------------|
+| 0                | Success.                             |
+| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
 
-【Differences】
+[Chip Differences]
 
-none
+None
 
-【Requirement】
+[Requirements]
 
-- Header file: k_datafifo.h
-- Library file: libdatafifo.a
+- Header files: k_datafifo.h
+- Library files: libdatafifo.a
 
-【Note】
+[Notes]
+
 Control commands and corresponding parameters:
 
-| command                                     | Parameters along with descriptions                                                                                                                                                                                               |
-|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DATAFIFO_CMD_GET_PHY_ADDR                | Returns the physical address of DATAFIFO, k_u64 type.                                                                                                                                                                      |
-| DATAFIFO_CMD_READ_DONE                   | After the read end uses the data, it needs to call the head-to-tail pointer of this update read.                                                                                                                                                       |
-| DATAFIFO_CMD_WRITE_DONE                  | After the writer finishes writing the data, you need to call the write-tail pointer of the update writer. No return value and the parameter can be NULL.                                                                                                                                |
-| DATAFIFO_CMD_SET_DATA_RELEASE \_CALLBACK | Data release callback function.                                                                                                                                                                                         |
-| DATAFIFO_CMD_GET_AVAIL_WRITE\_ ONLY       | Returns the number of data that can be written, k_u32 type. Note: Due to the need to keep a data item to assist buffer management, the length of the data that can actually be used for cache is one data item less than the length of the configured DATAFIFO u32EntriesNum* u32CacheLineSize). |
-| DATAFIFO_CMD_GET_AVAIL_READ_L IN         | Returns the number of data that can be read, k_u32 type                                                                                                                                                                           |
+| Command                                | Parameter and Description                                                                                                                       |
+|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| DATAFIFO_CMD_GET_PHY_ADDR              | Returns the physical address of the DATAFIFO, k_u64 type.                                                                                        |
+| DATAFIFO_CMD_READ_DONE                 | After the read end uses the data, it needs to call this to update the head and tail pointers of the read end.                                     |
+| DATAFIFO_CMD_WRITE_DONE                | After the write end finishes writing data, it needs to call this to update the write end's write pointer. No return value, parameter can be NULL. |
+| DATAFIFO_CMD_SET_DATA_RELEASE_CALLBACK | Data release callback function.                                                                                                                  |
+| DATAFIFO_CMD_GET_AVAIL_WRITE_LEN       | Returns the number of data items that can be written, k_u32 type. Note: Since one data item is reserved for buffer management, the actual length available for buffering data is one data item length (u32CacheLineSize) less than the configured DATAFIFO length (u32EntriesNum * u32CacheLineSize). |
+| DATAFIFO_CMD_GET_AVAIL_READ_LEN        | Returns the number of data items that can be read, k_u32 type.                                                                                   |
 
-【Example】
+[Example]
 
-none
+None
 
-## 3. Data Type
+## 3. Data Types
 
 ### 3.1 IPCMSG
 
-The module has the following data types
+This module has the following data types:
 
 - [K_IPCMSG_MAX_CONTENT_LEN](#311-k_ipcmsg_max_content_len)
 - [K_IPCMSG_PRIVDATA_NUM](#312-k_ipcmsg_privdata_num)
@@ -975,195 +970,178 @@ The module has the following data types
 
 #### 3.1.1 K_IPCMSG_MAX_CONTENT_LEN
 
-【Description】
+[Description]
 
 Defines the maximum length of the message body.
 
-【Definition】
+[Definition]
 
 ```C
 #define K_IPCMSG_MAX_CONTENT_LEN (1024)
 ```
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
-The module has the following data types
+This module has the following data types:
 
 #### 3.1.2 K_IPCMSG_PRIVDATA_NUM
 
-【Description】
+[Description]
 
-Defines the maximum number of private data in the message body.
+Defines the maximum number of private data items in the message body.
 
-【Definition】
+[Definition]
 
 ```C
-#define K_IPCMSG_MAX\_ PRIVDATA_NUM (8)
+#define K_IPCMSG_PRIVDATA_NUM (8)
 ```
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.1.3 K_IPCMSG_INVALID_MSGID
 
-【Description】
+[Description]
 
 Defines an invalid message ID.
 
-【Definition】
+[Definition]
 
 ```C
 #define K_IPCMSG_INVALID_MSGID (0xFFFFFFFFFFFFFFFF)
 ```
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.1.4 k_ipcmsg_connect_s
 
-【Description】
+[Description]
 
 Defines the module ID enumeration type.
 
-【Definition】
+[Definition]
 
 ```C
-
 typedef struct IPCMSG_CONNECT_S
-
 {
-
-k_u32 u32RemoteId;
-
-k_u32 u32Port;
-
-k_u32 u32Priority;
-
+    k_u32 u32RemoteId;
+    k_u32 u32Port;
+    k_u32 u32Priority;
 } k_ipcmsg_connect_s;
 ```
 
-【Members】
+[Members]
 
-| **Member Name** | **Description**                                                             |
-|--------------|----------------------------------------------------------------------|
-| u32RemoteId  | An enumeration value that identifies the remote CPU that connects. 0: small nucleus; 1: large nucleus                        |
-| u32Port      | Custom port number for messaging Value range: \[0, 512\]                        |
-| u32Priority  | The priority of the messaging. The value range is 0: normal priority; 1: high priority. The default is 0 |
+| **Member Name** | **Description**                                                                 |
+|-----------------|---------------------------------------------------------------------------------|
+| u32RemoteId     | Enumeration value indicating the remote CPU connection. 0: small core; 1: large core |
+| u32Port         | Custom port number for message communication. Range: [0, 512]                   |
+| u32Priority     | Priority of message delivery. Range: 0: normal priority; 1: high priority. Default is 0 |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
 [kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
 
 #### 3.1.5 k_ipcmsg_messsage_s
 
-【Description】
+[Description]
 
-Define the message structure.
+Defines the message structure.
 
-【Definition】
+[Definition]
 
-``` C
-
+```C
 typedef struct IPCMSG_MESSAGE_S
-
 {
-
-k_bool bIsResp; /**<Identify the response messgae*/
-
-k_u64 u64Id; /**<Message ID*/
-
-k_u32 u32Module; /**<Module ID, user-defined*/
-
-k_u32 u32CMD; /**<CMD ID, user-defined*/
-
-k_s32 s32RetVal; /**<Retrun Value in response message*/
-
-k_s32 as32PrivData[K_IPCMSG_PRIVDATA_NUM]; /**<Private data, can be modify directly after ::kd_ipcmsg_create_message or ::kd_ipcmsg_create_resp_message*/
-
-void* pBody; /**<Message body*/
-
-k_u32 u32BodyLen; /**<Length of pBody*/
-
+    k_bool bIsResp; /**< Identify the response message */
+    k_u64 u64Id; /**< Message ID */
+    k_u32 u32Module; /**< Module ID, user-defined */
+    k_u32 u32CMD; /**< CMD ID, user-defined */
+    k_s32 s32RetVal; /**< Return Value in response message */
+    k_s32 as32PrivData[K_IPCMSG_PRIVDATA_NUM]; /**< Private data, can be modified directly after ::kd_ipcmsg_create_message or ::kd_ipcmsg_create_resp_message */
+    void* pBody; /**< Message body */
+    k_u32 u32BodyLen; /**< Length of pBody */
 } k_ipcmsg_message_t;
 ```
 
-【Members】
+[Members]
 
-| **Member name**     | **Description**                                                      |
-|---------------|-----------------------------------------------------------|
-| bIsResp       | Indicate whether the message replies to the message: K_TURE: reply; K_FALSE: do not reply. |
-| u64Id         | Message ID.                                                 |
-| u32Modules     | Module ID.                                                 |
-| u32CMD        | CMD ID。                                                  |
-| s32RetVal     | Return value.                                                  |
-| as32PrivData  | Private data.                                                |
-| pBody         | Message body pointer.                                              |
-| u32BodyLen    | Message body length, in bytes                                      |
+| **Member Name** | **Description**                                           |
+|-----------------|-----------------------------------------------------------|
+| bIsResp         | Indicates whether the message is a response: K_TRUE: yes; K_FALSE: no |
+| u64Id           | Message ID                                                |
+| u32Module       | Module ID                                                 |
+| u32CMD          | CMD ID                                                    |
+| s32RetVal       | Return value                                              |
+| as32PrivData    | Private data                                              |
+| pBody           | Pointer to the message body                               |
+| u32BodyLen      | Length of the message body in bytes                       |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
 - [kd_ipcmsg_send_only](#217-kd_ipcmsg_send_only)
 - [kd_ipcmsg_send_async](#218-kd_ipcmsg_send_async)
 - [kd_ipcmsg_send_sync](#219-kd_ipcmsg_send_sync)
 - [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
 - [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
-- [kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+- [kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
 
 #### 3.1.6 k_ipcmsg_handle_fn_ptr
 
-【Description】
+[Description]
 
-Defines a message reply handler
+Defines the message response handling function.
 
-【Definition】
+[Definition]
 
 ```C
 typedef void (*k_ipcmsg_handle_fn_ptr)(k_s32 s32Id, k_ipcmsg_message_s* pstMsg);
 ```
 
-【Members】
+[Members]
 
-| **Member Name** | **Description**   |
-|--------------|------------|
-| s32Id        | Message service ID |
-| pstMsg       | Message body pointer |
+| **Member Name** | **Description** |
+|-----------------|-----------------|
+| s32Id           | Message service ID |
+| pstMsg          | Pointer to the message body |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
 - [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
 - [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
 
 ### 3.2 DATAFIFO
 
-This module has the following data structures
+This module has the following data structures:
 
 - [k_datafifo_handle](#321-k_datafifo_handle)
 - [K_DATAFIFO_INVALID_HANDLE](#322-k_datafifo_invalid_handle)
@@ -1174,272 +1152,251 @@ This module has the following data structures
 
 #### 3.2.1 k_datafifo_handle
 
-【Description】
+[Description]
 
-DEFINE A DATAFIFO HANDLE
+Defines the DATAFIFO handle.
 
-【Definition】
+[Definition]
 
 ```C
 typedef K_U32 K_DATAFIFO_HANDLE;
 ```
 
-【Members】
+[Members]
 
-| **Member Name** | **Description**   |
-|--------------|------------|
-| s32Id        | Message service ID |
-| pstMsg       | Message body pointer |
+| **Member Name** | **Description** |
+|-----------------|-----------------|
+| s32Id           | Message service ID |
+| pstMsg          | Pointer to the message body |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.2.2 K_DATAFIFO_INVALID_HANDLE
 
-【Description】
+[Description]
 
-Defines an invalid handle to the data path.
+Defines an invalid handle for the data channel.
 
-【Definition】
+[Definition]
 
 ```C
 #define K_DATAFIFO_INVALID_HANDLE (-1)
 ```
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.2.3 K_DATAFIFO_RELEASESTREAM_FN_PTR
 
-【Description】
+[Description]
 
-Define a data path stream release function.
+Defines the data channel stream release function.
 
-【Definition】
+[Definition]
 
 ```C
 typedef void (*K_DATAFIFO_RELEASESTREAM_FN_PTR)(void* pStream);
 ```
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.2.4 K_DATAFIFO_OPEN_MODE_E
 
-【Description】
+[Description]
 
-Define the data path open mode.
+Defines the open mode of the data channel.
 
-【Definition】
+[Definition]
 
 ```C
-
 typedef struct k_DATAFIFO_PARAMS_S
-
 {
-
-k_u32 u32EntriesNum; /**< The number of items in the ring buffer*/
-
-k_u32 u32CacheLineSize; /**< Item size*/
-
-k_bool bDataReleaseByWriter; /**<Whether the data buffer release by writer*/
-
-K_DATAFIFO_OPEN_MODE_E enOpenMode; /**<READER or WRITER*/
-
+    k_u32 u32EntriesNum; /**< The number of items in the ring buffer */
+    k_u32 u32CacheLineSize; /**< Item size */
+    k_bool bDataReleaseByWriter; /**< Whether the data buffer release by writer */
+    K_DATAFIFO_OPEN_MODE_E enOpenMode; /**< READER or WRITER */
 } k_datafifo_params_s;
 ```
 
-【Members】
+[Members]
 
-| **Member name**    | **Description**             |
-|-----------------|----------------------|
-| DATAFIFO_READER | Read out the role, only read the data |
-| DATAFIFO_WRITER | Write to the role, only the data |
+| **Member Name**    | **Description**       |
+|--------------------|-----------------------|
+| DATAFIFO_READER    | Reader role, only reads data |
+| DATAFIFO_WRITER    | Writer role, only writes data |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.2.5 k_datafifo_params_s
 
-【Description】
+[Description]
 
-Define the path configuration parameters
+Defines the configuration parameters for the data channel.
 
-【Definition】
+[Definition]
 
 ```C
 typedef struct k_DATAFIFO_PARAMS_S
-
 {
-
-k_u32 u32EntriesNum; /**< The number of items in the ring buffer*/
-
-k_u32 u32CacheLineSize; /**< Item size*/
-
-k_bool bDataReleaseByWriter; /**<Whether the data buffer release by writer*/
-
-K_DATAFIFO_OPEN_MODE_E enOpenMode; /**<READER or WRITER*/
-
+    k_u32 u32EntriesNum; /**< The number of items in the ring buffer */
+    k_u32 u32CacheLineSize; /**< Item size */
+    k_bool bDataReleaseByWriter; /**< Whether the data buffer release by writer */
+    K_DATAFIFO_OPEN_MODE_E enOpenMode; /**< READER or WRITER */
 } k_datafifo_params_s;
 ```
 
-【Members】
+[Members]
 
-| **Member name**          | **Description**                 |
-|-----------------------|--------------------------|
-| u32EntriesNum         | The number of data looping through the buffer. |
-| u32CacheLineSize      | The size of each data item.       |
-| bDataReleaseByWriter  | Whether the writer is required to free the data. |
-| enOpenMode            | The role that opens the path.         |
+| **Member Name**         | **Description**                   |
+|-------------------------|-----------------------------------|
+| u32EntriesNum           | Number of items in the ring buffer |
+| u32CacheLineSize        | Size of each item                 |
+| bDataReleaseByWriter    | Whether the writer releases data  |
+| enOpenMode              | Role of the open channel          |
 
-【Note】
+[Notes]
 
-u32EntriesNum and u32CacheLineSize do not limit the value range, as long as the MMZ memory is large enough, DATAFIFO can be created successfully. Therefore, the user needs to ensure that these 2 parameters are within a reasonable range.
+There are no restrictions on the values of u32EntriesNum and u32CacheLineSize. As long as the MMZ memory is large enough, DATAFIFO can be successfully created. Therefore, users need to ensure that these two parameters are within a reasonable range.
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
 #### 3.2.6 k_datafifo_cmd_e
 
-【Description】
+[Description]
 
-Defines the control type of the data path
+Defines the control types for the data channel.
 
-【Definition】
+[Definition]
 
 ```C
 typedef enum k_DATAFIFO_CMD_E
-
 {
-
-DATAFIFO_CMD_GET_PHY_ADDR, /**<Get the physic address of ring buffer*/
-
-DATAFIFO_CMD_READ_DONE, /**<When the read buffer read over, the reader should call this function to notify the writer*/
-
-DATAFIFO_CMD_WRITE_DONE, /**<When the writer buffer is write done, the writer should call this function*/
-
-DATAFIFO_CMD_SET_DATA_RELEASE_CALLBACK, /**<When bDataReleaseByWriter is K_TRUE, the writer should call this to register release callback*/
-
-DATAFIFO_CMD_GET_AVAIL_WRITE_LEN, /**<Get available write length*/
-
-DATAFIFO_CMD_GET_AVAIL_READ_LEN /**<Get available read length*/
-
+    DATAFIFO_CMD_GET_PHY_ADDR, /**< Get the physical address of the ring buffer */
+    DATAFIFO_CMD_READ_DONE, /**< When the read buffer is read over, the reader should call this function to notify the writer */
+    DATAFIFO_CMD_WRITE_DONE, /**< When the writer buffer is written, the writer should call this function */
+    DATAFIFO_CMD_SET_DATA_RELEASE_CALLBACK, /**< When bDataReleaseByWriter is K_TRUE, the writer should call this to register release callback */
+    DATAFIFO_CMD_GET_AVAIL_WRITE_LEN, /**< Get available write length */
+    DATAFIFO_CMD_GET_AVAIL_READ_LEN /**< Get available read length */
 } k_datafifo_cmd_e;
 ```
 
-【Members】
+[Members]
 
-| **Member name**                                | **Description**                                                                                                                                                                                                        |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DATAFIFO_CMD_GET_PHY_ADDR                | Returns the physical address of DATAFIFO, k_u64 type.                                                                                                                                                                       |
-| DATAFIFO_CMD_READ_DONE                   | After the read end uses the data, it needs to call the head-to-tail pointer of this update read.                                                                                                                                                        |
-| DATAFIFO_CMD_WRITE_DONE                  | After the writer finishes writing the data, you need to call the write-tail pointer of the update writer. No return value and the parameter can be NULL.                                                                                                                                 |
-| DATAFIFO_CMD_SET_DATA_RELEASE \_CALLBACK | Data release callback function.                                                                                                                                                                                          |
-| DATAFIFO_CMD_GET_AVAIL_WRITE\_ ONLY       | Returns the number of data that can be written, k_u32 type. Note: Due to the need to keep a data item for auxiliary buffer management, the length of the data that can actually be used for cache is one data item less than the length of the configured DATAFIFO u32EntriesNum* u32CacheLineSize). |
-| DATAFIFO_CMD_GET_AVAIL_READ_L IN         | Returns the number of data that can be read, k_u32 type                                                                                                                                                                            |
+| **Member Name**                       | **Description**                                                                                                                                                                    |
+|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DATAFIFO_CMD_GET_PHY_ADDR             | Returns the physical address of the DATAFIFO, k_u64 type                                                                                                                            |
+| DATAFIFO_CMD_READ_DONE                | After the read end uses the data, it needs to call this to update the head and tail pointers of the read end                                                                        |
+| DATAFIFO_CMD_WRITE_DONE               | After the write end finishes writing data, it needs to call this to update the write end's write pointer. No return value, parameter can be NULL                                     |
+| DATAFIFO_CMD_SET_DATA_RELEASE_CALLBACK| Data release callback function                                                                                                                                                      |
+| DATAFIFO_CMD_GET_AVAIL_WRITE_LEN      | Returns the number of data items that can be written, k_u32 type. Note: Since one data item is reserved for buffer management, the actual length available for buffering data is one data item length (u32CacheLineSize) less than the configured DATAFIFO length (u32EntriesNum * u32CacheLineSize) |
+| DATAFIFO_CMD_GET_AVAIL_READ_LEN       | Returns the number of data items that can be read, k_u32 type                                                                                                                       |
 
-【Note】
+[Notes]
 
-none
+None
 
-【See Also】
+[Related Data Types and Interfaces]
 
-none
+None
 
-## 4. Error codes
+## 4. Error Codes
 
 ### 4.1 IPCMSG
 
 Table 41
 
-| Error code    | Macro definitions              | **Description**         |
-|-------------|---------------------|--------------|
-| 0x1901      | K_IPCMSG_EINVAL     | The configuration parameter is invalid |
-| 0x1902      | K_IPCMSG_ETIMEOUT   | Timeout error     |
-| 0x1903      | K_IPCMSG_ENOOP      | Driver failed to open |
-| 0x1904      | K_IPCMSG_EINTER     | Internal error     |
-| 0x1905      | K_IPCMSG_ENULL_PTR  | Null pointer error   |
-| 0x00000000  | K_SUCCESS           | succeed         |
-| 0xFFFFFFFF  | K_FAILURE           | fail         |
-| 0x1901      | K_IPCMSG_EINVAL     | The configuration parameter is invalid |
-| 0x1902      | K_IPCMSG_ETIMEOUT   | Timeout error     |
+| Error Code  | Macro Definition      | **Description**       |
+|-------------|-----------------------|-----------------------|
+| 0x1901      | K_IPCMSG_EINVAL       | Invalid configuration parameter |
+| 0x1902      | K_IPCMSG_ETIMEOUT     | Timeout error         |
+| 0x1903      | K_IPCMSG_ENOOP        | Driver open failure   |
+| 0x1904      | K_IPCMSG_EINTER       | Internal error        |
+| 0x1905      | K_IPCMSG_ENULL_PTR    | Null pointer error    |
+| 0x00000000  | K_SUCCESS             | Success               |
+| 0xFFFFFFFF  | K_FAILURE             | Failure               |
+| 0x1901      | K_IPCMSG_EINVAL       | Invalid configuration parameter |
+| 0x1902      | K_IPCMSG_ETIMEOUT     | Timeout error         |
 
 ### 4.2 DATAFIFO
 
 Table 42
 
-| Error code    | Macro definitions                           | **Description**         |
-|-------------|----------------------------------|--------------|
-| 0x1A01      | K_DATAFIFO_ERR_EINVAL_PARAM ETER | The configuration parameter is invalid |
-| 0x1A02      | K_DATAFIFO_ERR_NULL_PTR          | Null pointer error   |
-| 0x1A03      | K_DATAFIFO_ERR_NOMEM             | Failed to allocate memory |
-| 0x1A04      | K_DATAFIFO_ERR_DEV_OPT           | Device operation failed |
-| 0x1A05      | K_DATAFIFO_ERR_NOT_PERM          | Operation is not allowed   |
-| 0x1A06      | K_DATAFIFO_ERR_NO_DATA           | No data to read |
-| 0x1A07      | K_DATAFIFO_ERR_NO_SPACE          | No writable space |
-| 0x1A08      | K_DATAFIFO_ERR_READ              | Read error       |
-| 0x1A09      | K_DATAFIFO_ERR_WRITE             | Write error       |
-| 0x00000000  | K_SUCCESS                        | succeed         |
-| 0xFFFFFFFF  | K_FAILURE                        | fail         |
+| Error Code  | Macro Definition                    | **Description**       |
+|-------------|-------------------------------------|-----------------------|
+| 0x1A01      | K_DATAFIFO_ERR_EINVAL_PARAMETER     | Invalid configuration parameter |
+| 0x1A02      | K_DATAFIFO_ERR_NULL_PTR             | Null pointer error    |
+| 0x1A03      | K_DATAFIFO_ERR_NOMEM                | Memory allocation failure |
+| 0x1A04      | K_DATAFIFO_ERR_DEV_OPT              | Device operation failure |
+| 0x1A05      | K_DATAFIFO_ERR_NOT_PERM             | Operation not allowed |
+| 0x1A06      | K_DATAFIFO_ERR_NO_DATA              | No data available to read |
+| 0x1A07      | K_DATAFIFO_ERR_NO_SPACE             | No space available to write |
+| 0x1A08      | K_DATAFIFO_ERR_READ                 | Read error            |
+| 0x1A09      | K_DATAFIFO_ERR_WRITE                | Write error           |
+| 0x00000000  | K_SUCCESS                           | Success               |
+| 0xFFFFFFFF  | K_FAILURE                           | Failure               |
 
-## 5. Debugging information
+## 5. Debug Information
 
 ### 5.1 ipcm
 
-【Debugging Information】
+[Debug Information]
 
-``` text
-msh /bin\>cat /proc/ipcm
+```text
+msh /bin>cat /proc/ipcm
 
 *---REMOTE NODE: ID=0, STATE: READY
 
-\|-RECV BUFFER, PHYS\<0x0000000000180000, 0x00079000\>
+|-RECV BUFFER, PHYS<0x0000000000180000, 0x00079000>
 
-\|-SEND BUFFER, PHYS\<0x0000000000100000, 0x00080000\>
+|-SEND BUFFER, PHYS<0x0000000000100000, 0x00080000>
 
-\|-Port \| State \| Send Count \| Recv Count \| Max Send Len \| Max Recv Len
+|-Port | State | Send Count | Recv Count | Max Send Len | Max Recv Len
 
 1 Connected 15 15 320 608
 
 *---LOCAL NODE: ID=1, STATE: ALIVE
 ```
 
-【Debugging Information Analysis】
+[Debug Information Analysis]
 
-Record the current usage of the IPCM module
+Records the current usage of the ipcm module.
 
-【Parameter description】
+[Parameter Description]
 
-| **Parameters**         | **Description**          |                            |
-|--------------|---------------|----------------------------|
-| REMOTE NODE  | ID            | The ID number of the remote processor           |
-|              | STATE         | The status of the remote processor.         |
-|              | RECV BUFFER   | The physical address interval of the receiving buffer   |
-|              | SEND BUFFER   | The range of physical addresses where the buffer is sent. |
-|              | Port          | Port number                     |
-|              | State         | Port connection status               |
-|              | Send Count    | Number of sends                   |
-|              | Recv Count    | Number of receptions                   |
-|              | Max Send len  | The maximum length of data sent         |
-|              | Max Recv len  | The maximum received data length         |
+| **Parameter** | **Description**     |                            |
+|---------------|---------------------|----------------------------|
+| REMOTE NODE   | ID                  | ID number of the remote processor |
+|               | STATE               | State of the remote processor |
+|               | RECV BUFFER         | Physical address range of the receive buffer |
+|               | SEND BUFFER         | Physical address range of the send buffer |
+|               | Port                | Port number                 |
+|               | State               | Port connection state       |
+|               | Send Count          | Number of sends             |
+|               | Recv Count          | Number of receives          |
+|               | Max Send len        | Maximum length of data sent |
+|               | Max Recv len        | Maximum length of data received |

@@ -1,27 +1,27 @@
 # K230 SDK Dewarp User Guide
 
-![cover](../../../../zh/images/canaan-cover.png)
+![cover](../../../../zh/01_software/pc/dewarp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or usage. Unless otherwise stipulated in the contract, the Company does not provide any explicit or implicit statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference purposes only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/pc/dewarp/images/canaan-lable.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
@@ -29,65 +29,65 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document mainly introduces the calibration and use of Dewarp in the K230 VICAP module.
+This document mainly introduces the calibration and usage methods of the Dewarp module in the K230 VICAP module.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate |
-| ---- | ---- |
-| Carbon copy  | Dewarp   |
+| Abbreviation | Description |
+| ------------ | ----------- |
+| DW           | Dewarp      |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author     | date       |
-| ---------- | -------- | ---------- | ---------- |
-| V1.0       | Initial     | Liu Jia'an, Huang Ziyi | 2023-06-08 |
+| Document Version | Description | Author(s)       | Date       |
+| ---------------- | ----------- | --------------- | ---------- |
+| V1.0             | Initial Version | Liu Jia'an, Huang Ziyi | 2023-06-08 |
 
-## 1. Introduction to Dewarp calibration
+## 1. Introduction to Dewarp Calibration
 
-The Dewarp calibration process generates a YAML file containing the camera matrix and distortion coefficient, and the K230 SDK will generate a remap file through this YAML file at build time, and put it in the directory of the large kernel root file system`/bin`, and set the structure to 1  when configuring  VICAP `k_vicap_dev_attr` to enable Dewarp, and VICAP will look for it in the current path `dw_enable` `<sensor_name>-<width>x<height>.bin` (for example, IMX335 full resolution, that is) `imx335-2592x1944.bin` file is distorted as a Dewarp configuration file.
+The Dewarp calibration process generates a YAML file containing the camera matrix and distortion coefficients. During the build process, the K230 SDK uses this YAML file to generate a remap file, which is then placed in the `/bin` directory of the main core root file system. When configuring VICAP, set the `dw_enable` field of the `k_vicap_dev_attr` structure to 1 to enable Dewarp. VICAP will look for the `<sensor_name>-<width>x<height>.bin` file (e.g., for IMX335 full resolution, it would be `imx335-2592x1944.bin`) in the current path as the Dewarp configuration file for distortion correction.
 
-### 1.1 Grab images
+### 1.1 Capturing Images
 
-1. Rotate the checkerboard on the same plane and take at least 20 pictures
-1. Choose to save at least 10 photos covering all angles to a fixed directory, it is recommended to choose pictures with large differences
+1. Rotate the chessboard on the same plane and capture at least 20 images.
+1. Select at least 10 photos covering all angles and save them to a fixed directory. It is recommended to choose images with significant differences.
 
-![Example of calibration picture](../../../../zh/01_software/pc/dewarp/images/calibration.png)
+![Calibration Image Example](../../../../zh/01_software/pc/dewarp/images/calibration.png)
 
-You can use the sample_vicap.elf program to grab and convert the saved YUV file to an image format that is easy to read by OpenCV such as png/bmp through ffmpeg, refer to the following command
+You can use the `sample_vicap.elf` program to capture images. Convert the saved YUV files to png/bmp formats that are easily readable by OpenCV using ffmpeg, as shown in the following command:
 
 ```shell
 ffmpeg -f rawvideo -pixel_format nv12 -video_size 2592x1944 -i dev_00_chn_00_2592x1944_0000.yuv420sp 0.png
 ```
 
-### 1.3 Import to the Dewarp pattern
+### 1.3 Dewarp Modes Introduction
 
-Dewarp has a variety of modes, and two are described here, lens correction and split screen.
+Dewarp has multiple modes. Here, two modes are introduced: lens correction and split screen.
 
-#### Lens correction
+#### Lens Correction
 
-Lens correction is actually using the Brown-Conrady distortion model. The input parameters include u0, v0, fx, and fy in the camera's internal matrix, k1, k2, p1, p2, k3, k4, k5, and k6 in the distortion factor, as well as fovRatio, which can be calibrated by the table in the previous step, and the correction effect is as follows
+Lens correction uses the Brown-Conrady distortion model. Input parameters include u0, v0, fx, and fy from the camera's internal matrix, distortion coefficients k1, k2, p1, p2, k3, k4, k5, and k6, and fovRatio. These parameters can be obtained from the previous calibration step. The correction effect is as follows:
 
-![Corrects the effect](../../../../zh/01_software/pc/dewarp/images/ldc.png)
+![Correction Effect](../../../../zh/01_software/pc/dewarp/images/ldc.png)
 
-#### Split screen
+#### Split Screen
 
-Split-screen mode does not require the camera to be calibrated.
+The split screen mode does not require camera calibration.
 
-Each sliced image in the image below is corrected to a small rectangular split-screen image. Each mini-split-screen image is calculated similarly. After calculating each small image, the corresponding coordinate array of each small image needs to be spliced into a coordinate array of the large image. For example, the coordinate calculation process for one of the small images is shown below. Input parameters include CenterOffsetRatio, CircleOffsetRatio, maxRadius, image width, and image height, which are the dimensions of each small output image, and centerX and centerY, the center points of the input image. The outputX and outputY of the output are the coordinates relative to the output small image.
+Each sector image in the figure below is corrected to a small rectangular split screen image. The calculation method for each small split screen image is similar. After calculating each small image, the corresponding coordinate arrays of each small image need to be concatenated into the coordinate array of the large image. For example, the coordinate calculation process of one small image is as follows. Input parameters include CenterOffsetRatio, CircleOffsetRatio, maxRadius, image width, and image height, which are the dimensions of each small output image, and the center point centerX and centerY of the input image. The output outputX and outputY are coordinates relative to the output small image.
 
-![Split screen](../../../../zh/01_software/pc/dewarp/images/splitscreen.png)
+![Split Screen](../../../../zh/01_software/pc/dewarp/images/splitscreen.png)
 
-### 1.2 Perform calibration procedures
+### 1.2 Executing the Calibration Program
 
-Create an XML file containing the image path, for example, `imx335-2592x1944-0.xml` fill in the image path saved in the previous step, like
+Create an XML file containing the image paths, such as `imx335-2592x1944-0.xml`, and fill in the saved image paths from the previous step, in the form of:
 
 ```xml
 <?xml version="1.0"?>
@@ -99,20 +99,20 @@ images/imx335-2592x1944-0/0.png
 </opencv_storage>
 ```
 
-Edit  , change the last parameter to the path to the `run.bat`XML file you just created, change the -o parameter to the path to the YAML file where the output is saved, and execute `run.bat`
+Edit `run.bat`, change the last parameter to the path of the XML file just created, and change the -o parameter to the path to save the output YAML file, then execute `run.bat`.
 
-## 2. Dewarp works with the VICAP module
+## 2. Using Dewarp with the VICAP Module
 
-VICAP controls distortion correction by loading the Dewarp configuration file, the Dewarp configuration file generated after the K230 SDK compilation is placed under  , the `<K230 SDK> src/big/mpp/userapps/src/sensor/config` suffix .bin is the dewarp configuration file, the first 8 bytes of its content are split-screen parameters, and then all the content is a mapping table, VICAP will match the current sensor according to the file name to load.
+VICAP controls distortion correction by loading the Dewarp configuration file. The Dewarp configuration file generated after compiling the K230 SDK is placed in `<K230 SDK> src/big/mpp/userapps/src/sensor/config`, and files with the .bin suffix are all dewarp configuration files. The first 8 bytes of their content are split screen parameters, and the rest are all mapping tables. VICAP loads the current sensor based on the file name.
 
-### Lens correction mode
+### Lens Correction Mode
 
-Note: **Opening Dewarp requires an additional vb pool, and changing the buf_size of the device property to the sensor output buffer size, you can refer `sample_vicap.c` to the practice of the function  in `sample_vicap_vb_init` to initialize the vb pool.**
+Note: **Enabling Dewarp requires an additional vb pool, and the buf_size of the device properties should be changed to the sensor output buffer size. You can refer to the `sample_vicap.c` function `sample_vicap_vb_init` to initialize the vb pool.**
 
-The YAML file generated in the previous step needs to be placed in `<K230 SDK>/src/big/mpp/userapps/src/sensor/dewarp` the  directory to compile the K230 SDK.
+The YAML file generated in the previous step needs to be placed in the `<K230 SDK>/src/big/mpp/userapps/src/sensor/dewarp` directory, and the K230 SDK should be compiled.
 
-If you have compiled the K230 SDK before, you can run it directly after placing the YAML file without recompiling it completely, `make mpp-apps` or if you need to make an image `make build-image`.
+If the K230 SDK has been compiled before, you can avoid a full recompile. After placing the YAML file, directly run `make mpp-apps`. If you need to create an image, you also need to run `make build-image`.
 
-### Split screen mode
+### Split Screen Mode
 
-In the K230 SDK built-in a program for generating a split screen mode configuration file, the source code is placed in , K230 SDK will `<K230 SDK>/src/big/mpp/userapps/src/sensor/dewarp/k230dwmapgen/exe/split_screen.c` generate a program in the directory `<K230 SDK>/src/big/mpp/userapps/src/sensor/build` after complete compilation, after running, the configuration file will be printed through the standard output, if you need to keep it can be redirected to the file, this program defaults to 1280x720 camera configuration split screen, `k230dwmapgen-splitscreen` if you need to modify the parameters can modify its source code `CreateUpdateWarpPolarMap` The parameters of the function, recompile and run.
+The K230 SDK includes a built-in program for generating split screen mode configuration files. The source code is located in `<K230 SDK>/src/big/mpp/userapps/src/sensor/dewarp/k230dwmapgen/exe/split_screen.c`. After fully compiling the K230 SDK, a `k230dwmapgen-splitscreen` program will be generated in the `<K230 SDK>/src/big/mpp/userapps/src/sensor/build` directory. Running it will print the configuration file through standard output. If you need to keep it, you can redirect it to a file. This program defaults to the 1280x720 camera configuration split screen. If you need to modify parameters, you can change the parameters of the `CreateUpdateWarpPolarMap` function in its source code, recompile and run it.

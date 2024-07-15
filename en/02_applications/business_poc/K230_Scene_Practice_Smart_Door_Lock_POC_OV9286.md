@@ -1,57 +1,57 @@
-# K230 Scene Practice-Smart Door Lock POC
+# K230 Scene Practice - Smart Door Lock POC - 3D Structured Light
 
-![cover](../../images/canaan-cover.png)
+![cover](../../../zh/02_applications/business_poc/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not make any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/business_poc/images/logo.png), "Canaan", and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## K230 smart door lock
+## K230 Smart Door Lock
 
-A set of programs developed on the K230 platform that integrate UI, face detection, ir detection, depth detection, face recognition, and face registration functions. Use 8-wire nor flash fast, from power on to image within 400ms, to unlock within 700ms, the use flash size is 32M, DDR size is 128M.
+A program developed on the K230 platform integrating UI, face detection, IR detection, depth detection, face recognition, and face registration functions. It uses 8-line NOR flash for fast startup, with power-on to image output within 400ms and unlocking within 700ms, using 32M flash and 128M DDR.
 
-### Hardware environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1
-- Matching LCD module
-- K230-USIP-OV9286-SENSOR-V1.1模组
+- Supporting LCD module
+- K230-USIP-OV9286-SENSOR-V1.1 module
 
 ### Overview
 
-As a POC project, the smart door lock program provides customers with a reference on how to use LVGL, big and little core communication, multimedia pipeline and AI functions, the program is mainly divided into two parts, the big core terminal program mainly completes video input and output, AI processing and other related functions, the little core end completes the function of UI and face feature value management, the big and little cores communicate through IPCMSG, and the development board is started by norflash.
+The smart door lock program, as a POC project, provides customers with a reference on how to use lvgl, big-little core communication, multimedia pipeline, and AI functions. The program is mainly divided into two parts: the big core program primarily handles video input/output and AI processing, while the small core handles UI and face feature management. Communication between the big and small cores is achieved through IPCMSG, and the program is started from NOR flash on the development board.
 
-### remark
+### Notes
 
-1. In order to ensure the recognition effect, the configuration file and reference frame file used by the DPU must be matched with the sensor used, if they do not match, please`src/reference/business_poc/doorlock_ov9286/big/bin/` replace the matching sum under the path`H1280W720_conf.bin``H1280W720_ref.bin`, replace and recompile the image.
+1. To ensure recognition effect, the configuration file and reference frame file used by DPU must match the sensor used. If not, replace the matching `H1280W720_conf.bin` and `H1280W720_ref.bin` in the `src/reference/business_poc/doorlock_ov9286/big/bin/` path and recompile the image.
 
-1. Before powering down and reset, the little core serial port should be input now`halt` to protect the file system from being damaged.
+1. Before power-off or reset, input `halt` on the small core serial port to protect the file system from damage.
 
-1. In the door lock POC scenario, personal private information such as face feature values must be stored in ciphertext to avoid private information being stolen by attackers and leaving potential security risks. In the K230 smart door lock POC scenario, the face feature value is encrypted and stored in norflash, and the uboot stage will move the ciphertext data from flash to DDR and complete data decryption. This project uses AES-GCM encryption and decryption algorithm to complete the feature value encryption and decryption, and the key used for encryption and decryption is hardcoded into the app in clear text, so that customers can experience the door lock POC function more conveniently. However, encoding the key into the app in plaintext itself is an insecure behavior, if there is a demand, we will provide a complete set of face feature value encryption and decryption storage scheme, the specific process is as follows:
+1. In the door lock POC scenario, personal private information such as face features must be stored in encrypted form to avoid security risks from attackers stealing the information. In the K230 smart door lock POC scenario, face features are encrypted and stored in NOR flash. During the uboot stage, the encrypted data is transferred from flash to DDR and decrypted. This project uses the AES-GCM encryption/decryption algorithm to handle feature encryption/decryption, with the key hardcoded in plaintext in the app for ease of customer experience. However, storing the key in plaintext in the app is inherently insecure. If needed, we will provide a complete face feature encryption/decryption storage solution later. The specific process is as follows:
 
-3.1 After the customer gets the k230 development board kit, he needs to burn the key to the OTP key area;
+3.1 After receiving the K230 development board kit, the customer needs to burn the key into the OTP key area.
 
-3.2 In the door lock POC scenario, when the customer needs to store the face feature value, the key will be read from the OTP, and then the key will be used to implement AES-GCM encryption;
+3.2 In the door lock POC scenario, when the customer needs to store face features, the key is read from OTP, and AES-GCM encryption is performed using the key.
 
-3.3 In the uboot stage, read the key burned by the user in the OTP key area for decryption.
+3.3 During the uboot stage, the key burned by the user in the OTP key area is read for decryption.
 
-### Source code location
+### Source Code Location
 
-The source code path of the big kernel program is located in the`src/reference/business_poc/doorlock_ov9286/big` directory structure as follows:
+The big core program source code is located in `src/reference/business_poc/doorlock_ov9286/big`, with the directory structure as follows:
 
 ```sh
 .
@@ -75,11 +75,9 @@ The source code path of the big kernel program is located in the`src/reference/b
 ├── util.cc
 ├── util.h
 └── vi_vo.h
-
-
 ```
 
-The source code path of the little core program is located in the`src/little/buildroot-ext/package/door_lock` directory structure as follows:
+The small core program source code is located in `src/little/buildroot-ext/package/door_lock`, with the directory structure as follows:
 
 ```sh
 .
@@ -116,25 +114,30 @@ The source code path of the little core program is located in the`src/little/bui
 │           ├── scr_signup.c
 │           └── ui_common.h
 └── src.mk
-
 ```
 
-#### Compile the program
+#### Compiling the Program
 
-K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 Development Board Compiler:
-Execute under the`k230_sdk` directory, generate big core programs`make CONF=k230_evb_doorlock_ov9286_defconfig` under the directory, and`k230_sdk/src/reference/business_poc/doorlock_ov9286/big/out` generate little core program`door_lock.elf` directories under the directory`k230_sdk/output/k230_evb_doorlock_ov9286_defconfig/little/buildroot-ext/target``app`.
+For the K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board, compile the program by executing `make CONF=k230_evb_doorlock_ov9286_defconfig` in the `k230_sdk` directory. The big core program `door_lock.elf` will be generated in the `k230_sdk/src/reference/business_poc/doorlock_ov9286/big/out` directory, and the small core program will be generated in the `app` directory under `k230_sdk/output/k230_evb_doorlock_ov9286_defconfig/little/buildroot-ext/target`.
 
-#### Run the program
+#### Running the Program
 
-The smart door lock is in the NOR flash image, the big and little core programs are self-starting, K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board will generate`output/k230_evb_doorlock_ov9286_defconfig/images/` an image in the directory after compilation, burn the NOR flash `sysimage-spinor32m.img`image, and the development board DIP switch is set to NOR flash startup
+The smart door lock is in the NOR flash image, and the big and small core programs start automatically. After compiling for the K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 development board, a `sysimage-spinor32m.img` image will be generated in the `output/k230_evb_doorlock_ov9286_defconfig/images/` directory. Burn the NOR flash image and set the development board's DIP switch to NOR flash boot.
 
-#### Feature demo
+#### Function Demonstration
 
-1. After the big and little core programs are started, the interface is displayed as follows:![ ov9286_door_lock_menu](../../../zh/02_applications/business_poc/images/ov9286_door_lock_menu.png)
+1. After the big and small core programs start, the interface will display as follows: ![ov9286_door_lock_menu](../../../zh/02_applications/business_poc/images/ov9286_door_lock_menu.png)
 
-1. SD face picture import function, must be put in the picture under /sharefs/pic, in order to ensure the recognition effect, the format of the imported picture is required to be jpg, the resolution is 720*1280, the ratio is 9:16, the user puts the face picture that needs to be imported down `/sharefs/pic`, press the picture import key, the program will automatically complete the function of extracting feature values, and the file name of the picture is lable after successful recognition, the operation effect is as follows:![ov9286_door_lock_import](../../../zh/02_applications/business_poc/images/ov9286_door_lock_import.png)
+1. To import face images via SD card, place the images in the `/sharefs/pic` directory. To ensure recognition effectiveness, the imported images should be in JPG format, with a resolution of 720*1280 and a 9:16 aspect ratio. Place the face images to be imported in the `/sharefs/pic` directory, press the image import button, and the program will automatically extract the feature values and use the image file name as the label for successful recognition. The operation effect is as follows: ![ov9286_door_lock_import](../../../zh/02_applications/business_poc/images/ov9286_door_lock_import.png)
 
-1. Face real-time registration function, click the face registration button, enter lable through the keyboard displayed by the UI, in order to ensure the recognition effect, the face should be located in the center of the image when registering, and the operation effect is as follows:![ ov9286_door_lock_singup](../../../zh/02_applications/business_poc/images/ov9286_door_lock_singup.png)
-Recognition effect:![ ov9286_door_lock_singup_show](../../../zh/02_applications/business_poc/images/ov9286_door_lock_singup_show.png)
+1. For real-time face registration, click the face registration button and input the label through the UI-displayed keyboard. To ensure recognition effectiveness, the face should be centered in the image during registration. The operation effect is as follows: ![ov9286_door_lock_signup](../../../zh/02_applications/business_poc/images/ov9286_door_lock_signup.png)
+Recognition effect: ![ov9286_door_lock_signup_show](../../../zh/02_applications/business_poc/images/ov9286_door_lock_signup_show.png)
 
-1. The face library deletion function deletes all faces registered in real time through SD cards and faces, and the operation effect is as follows:![ ov9286_door_lock_delete](../../../zh/02_applications/business_poc/images/ov9286_door_lock_delete.png)
+1. To delete the face database, delete all faces registered via SD card and real-time face registration. The operation effect is as follows: ![ov9286_door_lock_delete](../../../zh/02_applications/business_poc/images/ov9286_door_lock_delete.png)
+
+#### OTA
+
+1. Refer to the SDK OTA upgrade function to package the flash partition that needs updating. Since the partition file size is saved in the RTT kernel, when upgrading other NOR flash partitions, the `rtt_system.bin` must also be upgraded.
+1. Input the server IP address through the upgrade button.
+1. Input the command `killall -9 ui` via serial port, mount the SD card partition to the `/tmp` directory, e.g., `mount /dev/mmcblk0p2 /tmp`.
+1. Ensure the local network server is connected, execute the `/usr/bin/ota` command, and the device will reboot after a successful upgrade.

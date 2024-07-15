@@ -28,7 +28,7 @@
 | --- | --- |
 | [K230_DEMO_BOARD_Resource_Usage_Instructions.md](en/00_hardware/K230_DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board Hardware Resource Usage Documentation |
 | [K230_Hardware_Design_Guide.md](en/00_hardware/K230_Hardware_Design_Guide.md) | K230 Hardware Design Guide document |
-| [K230_PINOUT_V1.0_20230524](zh/00_hardware/K230_PINOUT_V1.0_20230524.xlsx) | K230 chip pin definition |
+| [K230_PINOUT_V1.1_20240321](zh/00_hardware/K230_PINOUT_V1.1_20240321.xlsx) | K230 chip pin definition |
 | [K230_datasheet.md](en/00_hardware/K230_datasheet.md) | K230 Datasheet |
 
 ### K230 LP3 engineering design file
@@ -79,7 +79,7 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230_SDK_Instructions.md](en/01_software/board/K230_SDK_Instructions.md) | K230 SDK instructions|
+| [K230_SDK_User_Manual.md](en/01_software/board/K230_SDK_User_Manual.md) | K230 SDK instructions|
 
 #### K230 SDK nncase docs
 
@@ -166,7 +166,7 @@
 | [K230_Audio_Capture_Playback_Codec_In_Action.md](en/02_applications/tutorials/K230_Audio_Capture_Playback_Codec_In_Action.md) | K230 Audio in Action - Audio capture, playback, codec|
 | [K230_Coding_In_Action_rtsp_server_build_and_push_stream.md](en/02_applications/tutorials/K230_Coding_In_Action_rtsp_server_build_and_push_stream.md) | K230 Coding in Action - rtsp sever build and stream|
 | [K230_AI_in_Action_HHB_Neural_Network_Model_Deployment_Tool.md](en/02_applications/tutorials/K230_AI_in_Action_HHB_Neural_Network_Model_Deployment_Tool.md) | K230 AI in Action - HHB Neural Network Model Deployment Tool|
-| [K230_Memory_Analysis_Guide.md](en/02_applications/tutorials/K230_Memory_Analysis_Guide.md) | K230 Memory Analysis Guide|
+| [K230_Memory_Usage_Analysis_Guide.md](en/02_applications/tutorials/K230_Memory_Usage_Analysis_Guide.md) | K230 Memory Analysis Guide|
 | [K230_Memory_Optimization_Guide.md](en/02_applications/tutorials/K230_Memory_Optimization_Guide.md) | K230 Memory Optimization Guide|
 | [K230_Boot_Optimization_Guide.md](en/02_applications/tutorials/K230_Boot_Optimization_Guide.md) | K230 Boot Optimization Guide|
 
@@ -191,6 +191,9 @@
 | --- | --- |
 | [K230_FAQ.md](en/03_other/K230_FAQ.md) | K230 SDK FAQ|
 | [K230_SDK_Release_Notes.md](en/03_other/K230_SDK_Release_Notes.md) | K230 SDK Release Notes|
+| [K230_AI_demo_FAQ_C++.md](en/03_other/K230_AI_demo_FAQ_C++.md) | K230_AI_demo_FAQ |
+| [K230_nncase_FAQ.md](en/03_other/K230_nncase_FAQ.md) | K230_nncase_FAQ |
+| [K230_AI_Cube_FAQ.md](en/03_other/K230_AI_Cube_FAQ.md) | K230_AI_Cube_FAQ |
 
 ## Contribution guidelines
 

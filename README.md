@@ -28,7 +28,7 @@
 | --- | --- |
 | [K230_DEMO_BOARD资源使用指南.md](zh/00_hardware/K230_DEMO_BOARD资源使用指南.md) | K230 Demo Board 硬件资源使用说明文档 |
 | [K230_硬件设计指南.md](zh/00_hardware/K230_硬件设计指南.md) | K230 硬件设计指南文档 |
-| [K230_PINOUT_V1.0_20230524](zh/00_hardware/K230_PINOUT_V1.0_20230524.xlsx) | K230 芯片引脚定义 |
+| [K230_PINOUT_V1.1_20240321](zh/00_hardware/K230_PINOUT_V1.1_20240321.xlsx) | K230 芯片引脚定义 |
 | [K230_datasheet.md](zh/00_hardware/K230_datasheet.md) | K230 Datasheet |
 
 ### K230 LP3工程设计文件
@@ -162,7 +162,6 @@
 | [K230_RVV优化性能说明.md](zh/02_applications/tutorials/K230_RVV优化性能说明.md) | K230 RVV优化性能说明|
 | [K230_USB应用实战_UVC传输YUV及编码码流.md](zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md) | K230 USB应用实战 UVC传输YUV及编码码流|
 | [K230_图像实战_开机视频和开机logo.md](zh/02_applications/tutorials/K230_图像实战_开机视频和开机logo.md) | K230 图像实战 开机视频和开机logo|
-| [K230_图像采集实战_如何支持一款新sensor.md](zh/02_applications/tutorials/K230_图像采集实战_如何支持一款新sensor.md) | K230 图像采集实战 如何支持一款新sensor|
 | [K230_音频实战_音频采集_播放和编解码.md](zh/02_applications/tutorials/K230_音频实战_音频采集_播放和编解码.md) | K230 实战基础篇 音频采集、播放和编解码|
 | [K230_编码实战_rtsp_server搭建和推流.md](zh/02_applications/tutorials/K230_编码实战_rtsp_server搭建和推流.md) | K230 编码实战 rtsp server 搭建和推流|
 | [K230_AI实战_HHB神经网络模型部署工具.md](zh/02_applications/tutorials/K230_AI实战_HHB神经网络模型部署工具.md) | K230 AI实战 HHB神经网络模型部署工具|
@@ -190,8 +189,11 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_SDK_版本说明.md](zh/03_other/K230_SDK_版本说明.md) | K230 SDK 版本说明|
-| [K230_常见问题解答.md](zh/03_other/K230_常见问题解答.md) | K230 SDK 常见问题解答|
+| [K230_SDK_版本说明.md](zh/03_other/K230_SDK_版本说明.md) | K230 SDK 版本说明 |
+| [K230_SDK常见问题解答_C.md](zh/03_other/K230_SDK常见问题解答_C.md) | K230_SDK常见问题解答 |
+| [K230_AI_demo常见问题解答_C++.md](zh/03_other/K230_AI_demo常见问题解答_C++.md) | K230_AI_demo常见问题解答 |
+| [K230_nncase常见问题解答.md](zh/03_other/K230_nncase常见问题解答.md) | K230_nncase常见问题解答 |
+| [K230_AI_Cube常见问题.md](zh/03_other/K230_AI_Cube常见问题.md) | K230_AI_Cube常见问题 |
 
 ## 贡献指南
 

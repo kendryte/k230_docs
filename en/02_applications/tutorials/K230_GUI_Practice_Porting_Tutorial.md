@@ -1,71 +1,71 @@
-# K230 GUI in Action - LVGL Porting Tutorial
+# K230 GUI Practical - LVGL Porting Tutorial
 
 ![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for guidance reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
-### Reader object
+### Target Audience
 
-This document is intended primarily for:
+This document (this guide) is mainly applicable to the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate |
+| Abbreviation | Description |
 | --- | --- |
 | DRM | Direct Rendering Manager |
 | KMS | Kernel Mode Setting |
 | GUI | Graphical User Interface |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author | date |
+| Document Version | Modification Description | Modifier | Date |
 | --- | --- | --- | --- |
-| V1.0 | Initial edition | Author | 2023/06/25 |
+| V1.0 | Initial Version | Wang Quan | 2023/06/25 |
 
-## K230 GUI in action
+## K230 GUI Practical
 
-LVGL is a popular free and open source embedded graphics library that can be used for graphical user interface (GUI) development of embedded systems.
+LVGL is a popular free and open-source embedded graphics library that can be used for graphical user interface (GUI) development in embedded systems.
 
-### Hardware environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.1
-- LCD screen
+- Matching LCD module
 
 ### Overview
 
-The k230 uses DRM as a display driver, DRM (Direct Rendering Manager) is a subsystem in the Linux kernel that can support complex GPU operations such as hardware-accelerated graphics rendering compared to the outdated Framebuffer. lvgl can draw GUIs based on the interface provided by libdrm.
+K230 uses DRM as the display driver. DRM (Direct Rendering Manager) is a subsystem in the Linux kernel that supports complex GPU operations such as hardware-accelerated graphics rendering, compared to the outdated Framebuffer. LVGL can use the interfaces provided by libdrm for GUI rendering.
 
-The lvgl component has been ported to the SDK, and a runnable demo has been compiled by default, which is /usr/bin/lvgl_demo_widgets.
+The LVGL component has already been ported in the SDK, and a runnable demo is compiled by default, located at `/usr/bin/lvgl_demo_widgets`. After booting, enter the command `lvgl_demo_widgets` in the Linux terminal on the small core to experience it.
 
-### LVGL source location
+### LVGL Source Code Location
 
-The SDK already contains the ported LVGL at the path src/little/buildroot-ext/package/lvgl. during the buildroot compilation of the SDK, the source code will be placed in a directory output/k230_evb_defconfig/little/buildroot-ext/build/lvgl-v8.3.7 that contains the lvgl source code package pulled from GitHub and the ported files under the src path mentioned above. The directory structure is as follows:
+The SDK already includes the ported LVGL, located at `src/little/buildroot-ext/package/lvgl`. During the buildroot compilation process of the SDK, the source code is placed in the directory `output/k230_evb_defconfig/little/buildroot-ext/build/lvgl-v8.3.7`, which contains the LVGL source package pulled from GitHub as well as the porting files under the src path mentioned earlier. The directory structure is as follows:
 
 ```sh
 .
@@ -91,77 +91,70 @@ The SDK already contains the ported LVGL at the path src/little/buildroot-ext/pa
 └── mouse_cursor_icon.c
 ```
 
-### lvgl DRM driver
+### LVGL's DRM Driver
 
-After the DRM driver in the Linux kernel is successfully loaded, the following device nodes will appear /dev/dri/card0.
+After the DRM driver is successfully loaded in the Linux kernel, the following node will appear: `/dev/dri/card0`.
 
-#### DRM configuration related
+#### DRM Configuration
 
-in the header file src/little/buildroot-ext/package/lvgl/port_src/lv_drv_conf.h
+In the header file `src/little/buildroot-ext/package/lvgl/port_src/lv_drv_conf.h`:
 
-- Configure macro definitions to enable DRM display drivers
+- Configure the macro definition `#define USE_DRM 1` to enable the DRM display driver.
+- Configure the macro definition `#define DRM_CARD "/dev/dri/card0"` to specify the DRM driver node.
 
-    `define USE_DRM 1`
+#### Introduction to DRM Driver Source Code
 
-- The configuration macro definition specifies the DRM driver node
+The DRM driver program of LVGL is located at `src/little/buildroot-ext/package/lvgl/port_src/lv_drivers/display/drm.c`.
+To operate DRM, the file node needs to be opened first.
+The following functions are mainly used in LVGL:
 
-    `define DRM_CARD  "/dev/dri/card0"`
+- drm_init()        DRM initialization.
+- drm_get_sizes()   Get display resolution information.
+- drm_flush()       Display drawing callback interface.
 
-#### Specific introduction to DRM driver source code
+During DRM initialization, DRM resources are automatically obtained, including the connect id, plane id, crtc id, etc., and the corresponding supported plane is automatically matched according to the color format selected in the configuration file.
 
-LVGL's DRM driver is located src/little/buildroot-ext/package/lvgl/port_src/lv_drivers/display/drm.c
-to operate on DRM, you need to open the file node first.
-The following functions are mainly used in the use of LVGL:
+The DRM driver enables double buffering by default, but without hardware acceleration, the double buffering refresh rate is low. You can comment out the following code to refresh in single buffering mode for better display performance:
 
-- drm_init() DRM initialization.
-- drm_get_sizes() to get monitor resolution information.
-- drm_flush() displays the drawing callback interface.
-
-DRM resources will be automatically obtained during the drm initialization process, including connect id, plane id, crtc id, etc., and will automatically match the corresponding supported plane according to the color format selected in the configuration file.
-
-The DRM driver has double buffer enabled by default, but in the absence of hardware acceleration, the double buffer refresh rate is low, you can comment out the following code to refresh in single buffering, the display effect will be better:
-
-``` c
+```c
 void drm_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
 {
     ...
- if (!drm_dev.cur_bufs[0])
-  drm_dev.cur_bufs[1] = &drm_dev.drm_bufs[1];
- else
-  drm_dev.cur_bufs[1] = drm_dev.cur_bufs[0];
-  drm_dev.cur_bufs[0] = fbuf;
+    if (!drm_dev.cur_bufs[0])
+        drm_dev.cur_bufs[1] = &drm_dev.drm_bufs[1];
+    else
+        drm_dev.cur_bufs[1] = drm_dev.cur_bufs[0];
+    drm_dev.cur_bufs[0] = fbuf;
     ...
 }
 ```
 
-### Use of LVGL
+### Using LVGL
 
-LVGL's main program file is located at: src/little/buildroot-ext/package/lvgl/port_src/main.c
+The main program file of LVGL is located at `src/little/buildroot-ext/package/lvgl/port_src/main.c`.
 
-#### LVGL configuration related
+#### LVGL Configuration
 
-The LVGL configuration file is located at: src/little/buildroot-ext/package/lvgl/port_src/lv_conf.h
+The LVGL configuration file is located at: `src/little/buildroot-ext/package/lvgl/port_src/lv_conf.h`.
 
-The following are a few commonly used configuration items:
+Here are a few common configuration items:
 
-| Macro | description |
-| --- | --- |
-| #define LV_COLOR_DEPTH 32 | Set the color depth |
-| #define LV_COLOR_SCREEN_TRANSP 1 | Set screen transparency |
-| #define LV_DPI_DEF 300 | Set the screen DPI |
-| #define LV_USE_PERF_MONITOR 1 | Displays FPS and CPU usage for debugging |
-| #define LV_USE_MEM_MONITOR 1 | Displays memory usage for debugging |
-| #define LV_USE_DEMO_WIDGETS  1 | compile lvgl widgets demo |
+- `#define LV_COLOR_DEPTH 32`           Set color depth.
+- `#define LV_COLOR_SCREEN_TRANSP 1`    Set screen transparency.
+- `#define LV_DPI_DEF 300`              Set screen DPI.
+- `#define LV_USE_PERF_MONITOR 1`       Display fps and CPU usage for debugging.
+- `#define LV_USE_MEM_MONITOR 1`        Display memory usage for debugging.
+- `#define LV_USE_DEMO_WIDGETS 1`       Enable LVGL widgets demo.
 
-#### The main steps used by LVGL
+#### Main Steps to Use LVGL
 
-1. LVGL initialization:
+1. Initialize LVGL:
 
     `lv_init();`
 
-1. Display driver initialization:
+1. Initialize display driver:
 
-    ``` c
+    ```c
     drm_init();
     drm_get_sizes(&lcd_w, &lcd_h, &lcd_dpi);
     printf("lcd w,h,dpi:%d,%d,%d \n", lcd_w, lcd_h, lcd_dpi);
@@ -183,9 +176,9 @@ The following are a few commonly used configuration items:
     lv_disp_drv_register(&disp_drv);
     ```
 
-1. Touch Drive:
+1. Touch driver:
 
-    ``` c
+    ```c
     evdev_init();
     static lv_indev_drv_t indev_drv_1;
     lv_indev_drv_init(&indev_drv_1); /*Basic initialization*/
@@ -196,27 +189,26 @@ The following are a few commonly used configuration items:
     lv_indev_t *mouse_indev = lv_indev_drv_register(&indev_drv_1);
     ```
 
-1. Demo routine:
+1. Demo example:
 
     `lv_demo_widgets();`
 
-For more detailed usage of lvgl, please refer to the lvgl website <https://lvgl.io>,
-API documentation and examples: <https://docs.lvgl.io/8.3/index.html>
+For more detailed usage of LVGL, please refer to the LVGL official website: `https://lvgl.io`, API documentation, and examples: `https://docs.lvgl.io/8.3/index.html`.
 
-It is also possible to use LVGL's drag-and-drop UI editor, SquareLine Studio, to simplify development: <https://squareline.io>
+You can also use LVGL's drag-and-drop UI editor SquareLine Studio to simplify development: `https://squareline.io`.
 
-### compile
+### Compilation
 
-Perform default compilation all in the root directory of the SDK make.
+Execute `make` in the root directory of the SDK to compile everything by default.
 
-### Run lv_demo_widgets
+### Running lv_demo_widgets
 
- ```sh
+```sh
 lvgl_demo_widgets
- ```
+```
 
-After executing the above command, the configuration interface will be displayed on the LCD screen, and the relevant configuration can be made through the touch screen, as follows:
+After executing the above command, the configuration interface will be displayed on the LCD screen, and related configurations can be made through the touch screen, as shown below:
 
-![Display content](../../../zh/02_applications/tutorials/images/lvgl_demo_widgets.png)
+![Display Content](../../../zh/02_applications/tutorials/images/lvgl_demo_widgets.png)
 
-Of course, lvgl application development can also be compiled as a standalone project instead of in the SDK, you can refer to the <https://github.com/lvgl/lv_port_linux_frame_buffer> project to replace the port files in the SDK, and then configure the K230 cross-compilation toolchain and the corresponding libdrm reference.
+Of course, LVGL application development can also be done as an independent project rather than compiled in the SDK. You can refer to the `https://github.com/lvgl/lv_port_linux_frame_buffer` project to replace the porting files from the SDK, then configure the K230 cross-compilation toolchain and the corresponding libdrm reference.

@@ -1,154 +1,151 @@
-# K230 Scene Pratice-Peephole POC
+# K230 Practical Scenario - Maoyan POC
 
 ![cover](../../../zh/02_applications/business_poc/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not fall within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not make any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only.
 
 Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/02_applications/business_poc/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/business_poc/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## K230 Peephole
+## K230 Maoyan
 
-A set of product-level programs developed on the K230 platform that integrate UI, video intercom, and person detection functions. Peephole products support remote peephole and local peephole. The remote peephole is the peephole device can interact with the remote mobile phone device.
+A product-grade program developed on the K230 platform that integrates UI, video intercom, and human detection functions. The Maoyan product supports both remote and local peephole functionalities, where the remote peephole allows interaction between the peephole device and a remote mobile device.
 
-### Hardware environment
+### Hardware Environment
 
-- K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 * 2个
-- LCD module * 2 pcs
-- K230-USIP-IMX335-SENSOR-V1.1 module * 2 pcs
-- typeC to network port interface * 2
-- An external audio board
-- One network cable
+- K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1 * 2 units
+- Matching LCD modules * 2 units
+- K230-USIP-IMX335-SENSOR-V1.1 modules * 2 units
+- Type-C to Ethernet adapters * 2 units
+- One external audio sub-board
+- One Ethernet cable
 
-In addition to the audio board and network cable, remote peephole requires two sets of equipment, one as a peephole device and one as mobile phone device. The audio board is used on the peephole device side.
+Apart from the external audio sub-board and Ethernet cable, two sets of devices are needed for the remote peephole: one set as the peephole device and one set to simulate the mobile device. The audio sub-board is used on the peephole device end.
 
 ![peephole boards](../../../zh/02_applications/business_poc/images/peephole_boards.jpg)
 
-In the figure above, the EVB board on the left runs the peephole device side, and the EVB board on the right runs the simulated mobile phone end.
-The key functions on the interface UI are as follows:
+In the above image, the EVB board on the left runs the peephole device end, while the EVB board on the right runs the simulated mobile end. The button functions on the UI interface are as follows:
 
 - Intercom button: Controls the start/cancel of the intercom.
-- Voice Change button: Controls the enable/disable of voice changer.
-- Play button: Go to the playback interface to play back the recorded video or captured picture.
-- Shutdown button: Controls the shutdown of the peephole device.
+- Voice change button: Controls the enable/cancel of the voice change.
+- Playback button: Enters the playback interface to replay recorded videos or captured images.
+- Shutdown button: Controls the shutdown of the peephole device end.
 
-## overview
+## Overview
 
-As a POC project, peephole program provides a reference on how to use LVGL, big and little core communication, network communication, multimedia pipeline, and AI.
+The Maoyan program, as a POC project, provides a reference for customers on how to use lvgl, big-small core communication, network communication, multimedia pipelines, and AI functions.
 
-The main features of the program:
+Main functions of the program:
 
-1. Two wake-up modes: PIR wake-up and doorbell wake-up.
-
-   - PIR唤醒：
-     - peephole device performs person detection and captures, which will be saved.
+1. Simulates two wake-up modes: PIR wake-up and doorbell wake-up.
+   - PIR wake-up:
+     - The peephole device end performs human detection and captures snapshots for storage.
    - Doorbell wake-up:
-     - Remote video intercom, local voice intercom, save and playback.
-
-1. RTSP network services as well as RPC services.
-1. Big and little core events, data communication.
-1. Image capture, recording, and playback.
+     - Supports remote video intercom, local voice intercom, storage, and playback.
+1. RTSP network service and RPC service.
+1. Big-small core event and data communication.
+1. Image capture, video recording, and playback.
 1. GUI display.
 
-There are two main parts of the program:
+The program consists of two main parts:
 
-- Peephole device programs: including big core program and little core program
+- Peephole device side program: includes both big core and small core programs.
   1. Big core program
-  It mainly perform AI detection, video input, video/image encoding, audio input and encoding, audio decoding and output functions.
-  1. little core program
-  It mainly perform UI interface control, audio and video pushing, saving, playback, interaction with mobile phone devices to realize video intercom function, and local voice intercom function.
+     - Mainly handles AI human detection, video input, video/image encoding, audio input and encoding, audio decoding, and output functions.
+  1. Small core program
+     - Mainly handles UI interface control, audio and video streaming, storage, playback, interaction with mobile devices for video intercom, and local voice intercom functions.
 
-- Mobile phone device program: only includes little core program
-  The little core program mainly perform the function of controlling the start, end, and voice change of video intercom through the UI interface, and interacts with peephole device to realize the video intercom function.
+- Mobile device side program: includes only the small core program.
+  - The small core program mainly handles the start, end, and voice change functions of video intercom through the UI interface and interaction with the peephole device for video intercom.
 
-## Feature demo
+## Functional Demonstration
 
-### Doorbell mode
+### Doorbell Mode
 
-Peephole device
-Start by long pressing the button, start the UI interface, and the button functions are as follows:
+Peephole Device
+Start by long-pressing the button to launch the UI interface. The button functions are as follows:
 
-- Intercom button: Intercom enable/cancel, only for local doorbell intercom. After pressing the first time the program runs up, the intercom begins.
-- Voice change key: Control voice change enable/disable, only for local doorbell intercom, default value is disable.
-- Play key: The key is playback, which is used to play locally stored videos and images. (Note that when local intercom, you need to cancel the intercom before playback)
-- Shutdown button: Controls the shutdown of the device.
+- Intercom button: Enables/cancels the intercom, used only for local doorbell intercom. The first press after the program runs starts the intercom.
+- Voice change button: Controls the enable/cancel of voice change, used only for local doorbell intercom, default is no voice change.
+- Playback button: Used for playback, to play locally stored videos and images. (Note: During local intercom, cancel the intercom first before playback)
+- Shutdown button: Controls the device shutdown.
 
 The local IP address is displayed above the intercom button.
 
-When the doorbell wakes up the peephole device, the screen displays the video captured by the local camera, and video intercom can be performed in two ways. One is a local doorbell voice intercom, and the other is a remote doorbell video intercom.
+When the doorbell wakes up the peephole device, the screen displays the video captured by the local camera. Video intercom can be conducted in two ways: local doorbell voice intercom and remote doorbell video intercom.
 
-#### Local doorbell voice intercom
+#### Local Doorbell Voice Intercom
 
-Click the intercom button on the peephole device to start the intercom inside and outside the door. Connect the headphones to the EVB onboard headphone jack and audio board headphone jack of the peephole device, and you can hear the peer sound.
+Click the intercom button on the peephole device to start the intercom between inside and outside the door. Connect the headset to the EVB board's onboard headset interface and the sub-board headset interface to hear the sound from the other end.
 
-#### Remote doorbell video intercom
+#### Remote Doorbell Video Intercom
 
-For remote intercom, another development board is required to run the mobile program. When connected to the device, the mobile phone will display "Connected" in a pop-up box, and then the pop-up box disappears to continue to display the main interface. The three buttons below function it:
+For remote intercom, an additional development board is needed to run the mobile end program. When connected to the device end, the mobile end will pop up a "Connected" message, then disappear, and continue to display the main interface. The three buttons at the bottom have the following functions:
 
-- Intercom key: control the intercom enable/disable, after the program runs, a pop-up box of wake-up mode will appear. After that, the intercom is triggered by this button, and after the first press, the intercom begins.
-- Voice change key: control voice change enable/disable, default value is disable.
-- Shutdown button: remote control of peephole device shutdown.
+- Intercom button: Controls the enable/cancel of the intercom. After the program runs, a wake-up mode pop-up will appear. Subsequently, this button triggers the intercom, and the first press starts the intercom.
+- Voice change button: Controls the enable/cancel of voice change, default is no voice change.
+- Shutdown button: Remotely controls the shutdown of the peephole device end.
 
-## Restrictions and Descriptions
+## Limitations and Notes
 
-1. Currently, only network direct connection testing is supported, and static IP addresses are configured on both mobile phones and devices.
-1. After the remote video intercom hangs up, it cannot be connected again.
-1. After the playback is over, remote video intercom is not supported.
-1. After the doorbell mode is turned on, it starts to store video, and the storage format is mp4. Starting again in doorbell mode overwrites the previous saved.
-1. The PIR mode detects the captured image after detected person, and you need to wake up through the doorbell mode and click the playback button to view it.
+1. Currently, only direct network connection tests are supported, with both the mobile end and device end configured with static IPs.
+1. After a remote video intercom is disconnected, re-connection is not supported.
+1. After playback ends, remote video intercom is not supported.
+1. After the doorbell mode starts, storage begins, and the storage format is mp4. Restarting in doorbell mode will overwrite the previous storage.
+1. Images captured after human detection in PIR mode can be viewed by waking up the device in doorbell mode and clicking the playback button.
 1. The currently configured storage space is 256MB.
 
-## Source code location
+## Source Code Location
 
-- The source code path of the peephole device big core program is located`k230_sdk/src/reference/business_poc/peephole/big`
-- The source code path of the peephole device applet program is located `k230_sdk/src/reference/business_poc/peephole/peephole_device`
-- The source code path of the analog mobile phone device program is located`k230_sdk/src/reference/business_poc/peephole/peephole_phone`
+- The source code for the big core program of the peephole device is located at `k230_sdk/src/reference/business_poc/peephole/big`
+- The source code for the small core program of the peephole device is located at `k230_sdk/src/reference/business_poc/peephole/peephole_device`
+- The source code for the simulated mobile device program is located at `k230_sdk/src/reference/business_poc/peephole/peephole_phone`
 
-## Compile the program
+## Compiling the Program
 
-### Peephole equipment
+### Peephole Device
 
-The peephole device needs to be compiled with the peephole device configuration script, and the compilation command is as follows`make CONF=k230_evb_peephole_device_defconfig`.
-**It should be noted that after configuring CONF, even if CONF is not configured, the subsequent compilation commands will be compiled with the previous CONF, and the compiled outputs are in the`k230_sdk/output/${CONF}` directory**
-The default CONF is`k230_evb_defconfig`.
-The generated image is `output/k230_evb_peephole_device_defconfig/images/sysimage-spinor32m.img`, load this image, automatically run on the peephole device after startup.
+The peephole device end needs to be compiled using the peephole device configuration script. The compile command is `make CONF=k230_evb_peephole_device_defconfig`.
+**Note that after configuring CONF, subsequent compile commands will use the last CONF even if CONF is not specified. The compile output is located in the `k230_sdk/output/${CONF}` directory.**
+The default CONF is `k230_evb_defconfig`.
+The generated image is located at `output/k230_evb_peephole_device_defconfig/images/sysimage-spinor32m.img`. Flash this image to automatically run the peephole device end after startup.
 
-### Emulates a cell phone device
+### Simulated Mobile Device
 
-You can generate a mobile phone image by `make CONF=k230_evb_peephole_phone_defconfig`compiling, burn the image in the generated image`output/k230_evb_peephole_phone_defconfig/images/sysimage-sdcard.img.gz`, and automatically run the mobile phone program after starting.
+You can compile the mobile end image using `make CONF=k230_evb_peephole_phone_defconfig`. The generated image is located at `output/k230_evb_peephole_phone_defconfig/images/sysimage-sdcard.img.gz`. Flash this image to automatically run the simulated mobile end program after startup.
 
-## Run the program
+## Running the Program
 
-### Run the peephole device-side program
+### Running the Peephole Device End Program
 
-The peephole device is shown in the figure below and can be started in two ways.
+The peephole device end can be started in two ways as shown below.
 
-- Method 1: Dial the DIP switch to`ON`, this method simulates PIR wake-up.
-  - The device will capture the first frame, detect the humanoid, and capture the humanoid 10 seconds after it is detected. The humanoid detection referred to in this article is the entire humanoid.
-  - Once this mode is activated, doorbell mode can be entered by pressing the doorbell button shortly.
-- Method 2: Long press the button, this method simulates the doorbell wake-up.
-  - The MIC and earphone on the EVB board simulate the scene outside the door; the MIC and earphone on the audio daughter board simulate the scene inside the door.
+- Method 1: Toggle the dip switch to `ON` to simulate PIR wake-up.
+  - The device will perform the first frame capture, human detection, and capture 10 seconds after detecting a human. Human detection here refers to the whole human body.
+  - After starting this mode, you can enter doorbell mode by briefly pressing the doorbell button.
+- Method 2: Long press the button to simulate doorbell wake-up.
+  - The mic and headset on the EVB board simulate the outside door scene; the mic and headset on the audio sub-board simulate the inside door scene.
 
 ![peephole_device](./images/peephole_device.png)
 
-After burning the peehole image, you need to short-connect the 1 and 2 pins, 13 and 14 pins, 9 and 15 pins of J1 respectively, as shown in the figure below.
+The peephole image is in self-start mode. After flashing the peephole image, short the 1, 2 pins, 13, 14 pins, and 9, 15 pins of J1 as shown below.
 
 ![pmu connection](../../../zh/02_applications/business_poc/images/pmu_connection.jpg)
 
-### Run a simulated mobile terminal
+### Running the Simulated Mobile End
 
-After burning the simulated mobile phone image, the mobile phone program will be automatically run after startup. After the pop-up box prompts that it is successfully connected, you can control the interaction with the peephole device through the button.
+After flashing the simulated mobile end image, the mobile end program will automatically run after startup. Once the pop-up message indicates a successful connection, you can control the interaction with the peephole device end through the buttons.

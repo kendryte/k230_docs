@@ -2,69 +2,69 @@
 
 ![cover](../../../../zh/01_software/board/middleware/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
-## disclaimer
+## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contract and terms of Beijing Canaan Creative Information Technology Co., Ltd. (“the Company”) and its affiliates. All or part of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise agreed in the contract, the Company does not provide any express or implied statement or warranty regarding the correctness, reliability, completeness, merchantability, suitability for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/middleware/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/middleware/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
-### overview
+### Overview
 
-This document focuses on the K230 OpenBLAS.
+This document mainly introduces K230 OpenBLAS.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (guide) is primarily intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate                                                        |
-|------|-------------------------------------------------------------|
-| OpenBLAS  | Open Basic Linear Algebra Subprograms                   |
+| Abbreviation | Description                                        |
+|--------------|-----------------------------------------------------|
+| OpenBLAS     | Open Basic Linear Algebra Subprograms              |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Modified by     | date       |
-| ---------- | -------- | ---------- | ---------- |
-| V1.0       | first edition     | Algorithm Department | 2023-05-30 |
+| Document Version | Modification Description | Modifier | Date       |
+|------------------|--------------------------|----------|------------|
+| V1.0             | Initial Version          | Algorithm Department | 2023-05-30 |
 
-## 1.Introduction to OpenBLAS
+## 1. Introduction to OpenBLAS
 
-OpenBLAS is an optimized BLAS computing library based on the BSD license (open source). BLAS (Basic Linear Algebra Subprograms) is an application program interface (API) standard that specifies the publication of numerical libraries for basic linear algebra operations (such as vector or matrix multiplication), OpenBLAS is a concrete implementation of the BLAS standard.
-In the SDK, the pre-cross-compiled OpenBLAS library (located under the path) is included,`k230_sdk/src/big/utils/lib/openblas/` and users can directly use this static library to compile their own executable programs.
+OpenBLAS is an optimized BLAS computation library distributed under the BSD license (open-source). BLAS (Basic Linear Algebra Subprograms) is an API standard for releasing numerical libraries for basic linear algebra operations (such as vector or matrix multiplication). OpenBLAS is a specific implementation of the BLAS standard.
+In the SDK, a pre-cross-compiled OpenBLAS library is included (located at the path `k230_sdk/src/big/utils/lib/openblas/`). Users can directly use this static library to compile their own executable programs.
 
-## 2. Test case compilation
+## 2. Test Case Compilation
 
 Note:
->This section explains how to compile executable programs using the default OpenBLAS static libraries in the SDK. The SDK already contains several examples of compiled executable programs based on OpenBLAS implementations (located`k230_sdk/src/big/utils/examples/openblas/` in the path), and this section builds on these examples.
+>This section explains how to compile executable programs using the pre-set OpenBLAS static library in the SDK. The SDK includes multiple examples of executable program compilation based on OpenBLAS (located at `k230_sdk/src/big/utils/examples/openblas/`). This section explains based on these examples.
 
-`k230_sdk/src/big/utils/examples/openblas/`The directory structure under the path is described as follows:
+The directory structure under the path `k230_sdk/src/big/utils/examples/openblas/` is as follows:
 
 ```text
 |-- 1_openblas_level1             # OpenBLAS Example 1
-|   |-- CMakeLists.txt            # CMake Configuration File for OpenBLAS Example 1
+|   |-- CMakeLists.txt            # CMake configuration file for OpenBLAS Example 1
 |   `-- openblas_level1.cpp
 |-- 2_openblas_level2
 |   |-- CMakeLists.txt
@@ -75,20 +75,20 @@ Note:
 |-- 4_fortran_example
 |   |-- CMakeLists.txt
 |   `-- openblas_fortran.cpp
-|-- CMakeLists.txt               # Overall CMake Configuration File
-|-- build_app.sh                 # Overall Compilation Script
-|-- cmake                        # Default CMaek configuration
+|-- CMakeLists.txt               # Overall CMake configuration file
+|-- build_app.sh                 # Overall compilation script
+|-- cmake                        # Default CMake configuration
 |   |-- Riscv64.cmake
 |   `-- link.lds
 ```
 
-First, `k230_sdk/src/big/utils/examples/openblas/`under the path, run`build_app.sh` the file:
+First, run the `build_app.sh` file under the path `k230_sdk/src/big/utils/examples/openblas/`:
 
 ```shell
 ./build_app.sh
 ```
 
-The following prompt appears in the terminal to indicate that the executable program is compiled successfully:
+If the following prompt appears in the terminal, it indicates that the executable program has been successfully compiled:
 
 ```text
 Install the project...
@@ -99,18 +99,18 @@ Install the project...
 -- Installing: /data/zhanglimin/code_kmodel_export_build_inference_k230/k230_sdk/src/big/utils/examples/openblas/out/bin/4_openblas_fortran.elf
 ```
 
-Finally, all `k230_sdk/src/big/utils/examples/openblas/out/bin`the compiled ELF files are included in the folder:
+Finally, the `k230_sdk/src/big/utils/examples/openblas/out/bin` folder contains all the compiled elf files:
 
 - `1_openblas_level1.elf`
 - `2_openblas_level2.elf`
 - `3_openblas_level3.elf`
 - `4_openblas_fortran.elf`
 
-## 3. Test case run demo
+## 3. Test Case Execution Demonstration
 
-### 3.1 level_1 Test Cases
+### 3.1 level_1 Test Case
 
-The following is an example of the operation mode and output result:
+Execution method and output example:
 
 ```shell
 msh /sharefs/bin_openblas>./1_openblas_level1.elf
@@ -123,9 +123,9 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.2 level_2 Test Cases
+### 3.2 level_2 Test Case
 
-The following is an example of the operation mode and output result:
+Execution method and output example:
 
 ```shell
 msh /sharefs/bin_openblas>./2_openblas_level2.elf
@@ -138,9 +138,9 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.3 level_3 Test Cases
+### 3.3 level_3 Test Case
 
-The following is an example of the operation mode and output result:
+Execution method and output example:
 
 ```shell
 msh /sharefs/bin_openblas>./3_openblas_level3.elf
@@ -153,9 +153,9 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.4 Fortran Interface Test Cases
+### 3.4 Fortran Interface Test Case
 
-The following is an example of the operation mode and output result:
+Execution method and output example:
 
 ```shell
 msh /sharefs/bin_openblas>./4_openblas_fortran.elf
@@ -175,34 +175,33 @@ This is the reference:
 {Test PASS}.
 ```
 
-## 4.OpenBLAS cross-compilation
+## 4. OpenBLAS Cross Compilation
 
 Note:
->Although the SDK already contains pre-cross-compiled OpenBLAS libraries (located `k230_sdk/src/big/utils/lib/openblas/`in the path), interested users can also cross-compile OpenBLAS themselves to get OpenBLAS static libraries adapted to K230.
+>Although the SDK includes a pre-cross-compiled OpenBLAS library (located at the path `k230_sdk/src/big/utils/lib/openblas/`), interested users can also cross-compile OpenBLAS themselves to obtain the OpenBLAS static library adapted to K230.
 
-### 4.1 OpenBLAS compilation environment is set up
+### 4.1 Setting Up the OpenBLAS Compilation Environment
 
-#### 4.1.1 Git code download
+#### 4.1.1 Git Code Download
 
-First use git to get the OpenBLAS repository, since OpenBLAS comes from Github, the cloning speed is normal, please be patient:
+First, use git to obtain the OpenBLAS repository. Since OpenBLAS comes from GitHub, slow cloning speed is normal, please be patient:
 
 ```shell
 git clone https://github.com/xianyi/OpenBLAS.git
 ```
 
-There are many versions in OpenBLAS, and since version 0.3.21 lacks some features compared to the latest branch, we choose the current one
-Submit:
+OpenBLAS has many versions. Since version 0.3.21 lacks some features compared to the latest branch, we use the current latest commit:
 
 ```shell
 git checkout e9a911fb9f011c886077e68eab81c48817cdb782
 ```
 
-#### 4.1.2 Patch Service Pack Application
+#### 4.1.2 Applying Patch Package
 
 Note:
->The path of the patch service pack in the SDK is`k230_sdk/src/big/rt-smart/userapps/openblas/`.
+>The patch package is located in the SDK at `k230_sdk/src/big/rt-smart/userapps/openblas/`.
 
-First, in the root directory of OpenBLAS, create a new`patch` directory, copy the patch service package to `patch`the directory, and the folder directory structure is shown below:
+First, create a `patch` directory in the root directory of OpenBLAS and copy the patch package to the `patch` directory. The directory structure after placing the folder is shown as follows:
 
 ```text
 ├── appveyor.yml
@@ -218,7 +217,7 @@ First, in the root directory of OpenBLAS, create a new`patch` directory, copy th
 ├── common_linux.h
 ├── common_loongarch64.h
 ├── common_macro.h
-|-- patch # Patch Pack for OpenBLAS
+|-- patch # Patch package for OpenBLAS
 | |-- 0001-****.patch
 | |-- 0002-****.patch
 | |-- 0003-****.patch
@@ -233,24 +232,24 @@ First, in the root directory of OpenBLAS, create a new`patch` directory, copy th
 └── version.h
 ```
 
-Run the following command in the OpenBLAS root directory to apply the patch:
+Execute the following command in the root directory of OpenBLAS to apply the patches:
 
 ```shell
 git am ./patch/*.patch
 ```
 
-### 4.3 OpenBLAS compilation
+### 4.3 OpenBLAS Compilation
 
-Go to the root directory of OpenBLAS and execute the following command to compile:
+Enter the root directory of OpenBLAS and execute the following command to compile:
 
 ```shell
-# Note: The tool chain path may vary depending on the developer's specific environment, and the path prefix may vary for reference only.
+# Note: The toolchain path will vary depending on the developer's specific environment, and the path prefix is for reference only.
 make TARGET=C908V HOSTCC=gcc BINARY=64 FC=k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknown-linux-musl-gfortran CC=k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknownlinux-musl-gcc NOFORTRAN=0 USE_THREAD=0 LIBPREFIX="./libopenblas" LAPACKE="NO_LAPACKE=0" INTERFACE64=0 NO_STATIC=0 NO_SHARED=1 -Wimplicit-functiondeclaration
 ```
 
-After the compilation is complete, the compiled library is installed in the specified folder, and this example is installed in the folder`./install`:
+After the compilation is complete, install the compiled library to a specified folder. In this example, it is installed in the `./install` folder:
 
 ```shell
-# Note: You can modify the corresponding installation path according to your own needs.
+# Note: You can modify the installation path according to your needs.
 make PREFIX=./install NO_STATIC=0 NO_SHARED=1 install
 ```

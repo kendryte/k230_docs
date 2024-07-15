@@ -1,263 +1,239 @@
-# K230 DEMO BOARD Resource Usage Instructions
+# K230 DEMO BOARD Resource Usage Guide
 
-![cover](../../zh/images/canaan-cover.png)
-
-<div style="page-break-after:always"></div>
-
-## disclaimer
-
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
-
-## Trademark Notice
-
-![The logo](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image3.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
-
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+![cover](../../zh/00_hardware/images/HDG/canaan-cover.png)
 
 <div style="page-break-after:always"></div>
 
-## directory
+## Disclaimer
+
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (“the Company,” hereinafter) and its affiliates. Some or all of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise agreed in the contract, the Company does not make any explicit or implicit statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only.
+
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
+
+## Trademark Statement
+
+![logo](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image3.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
+
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
+
+<div style="page-break-after:always"></div>
+
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
-### overview
+### Overview
 
-THIS DOCUMENT MAINLY INTRODUCES THE INSTRUCTIONS FOR USING THE K230 DEMO BOARD.
+This document primarily introduces the usage instructions for the K230 DEMO BOARD.
 
-### Reader object
+### Intended Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate |
-|------|------|
-|      |      |
-|      |      |
+| Abbreviation | Description |
+|--------------|-------------|
+|              |             |
+|              |             |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description                        | Modified by | date       |
-|------------|---------------------------------|--------|------------|
-| V1.0       | first edition                            | Du Lingyi | 2023-03-10 |
-| V1.1       | Changed to the description corresponding to EVB V1.1          | Du Lingyi | 2023-05-05 |
-| V1.2       | Updated J5, USB OTG pin header | Du Lingyi | 2023-05-10 |
-| V1.3       | CHANGE THE CONTENT FROM EVB TO K230 DEMO BOARD|Du Lingyi|2023-06-07|
+| Document Version | Description of Changes               | Author  | Date       |
+|------------------|--------------------------------------|---------|------------|
+| V1.0             | Initial version                      | Du Lingyi | 2023-03-10 |
+| V1.1             | Updated to correspond to EVB V1.1    | Du Lingyi | 2023-05-05 |
+| V1.2             | Updated the usage method of J5, USB OTG pin header | Du Lingyi | 2023-05-10 |
+| V1.3             | Changed content from EVB to K230 DEMO BOARD | Du Lingyi | 2023-06-07 |
 
-## Overview of the development board
+## Development Board Overview
 
-### K230 DEMO BOARD概要
+### K230 DEMO BOARD Overview
 
-The K230 DEMO BOARD is a complete development test board with a camera daughter board and screen, which is already in the plug-and-play state, and the follow-up development work for the K230 can be started after powering on. The K230 DEMO BOARD will be delivered as a motherboard assembly with multiple daughter boards. THIS DOCUMENT WILL BRIEFLY SUMMARIZE THE COMPONENT DAUGHTER BOARDS AND USAGE PROCESS OF THE K230 DEMO BOARD through various interfaces on the motherboard.
+The K230 DEMO BOARD is a fully equipped development and testing board with an attached camera sub-board and screen, ready for plug-and-play. Once powered on, you can immediately begin subsequent development work for the K230. The K230 DEMO BOARD is delivered in a mainboard-assembled-with-multiple-sub-boards form. This document will briefly summarize the various component sub-boards and usage processes of the K230 DEMO BOARD through the interfaces on the mainboard.
 
-### Schematic diagram of the K230 DEMO BOARD motherboard
+### K230 DEMO BOARD Mainboard Diagram
 
-![SAMPLE K230 DEMO BOARD](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image4.png)
-(**Figure 1.2.1**: Example of a K230 DEMO BOARD sample, daughter plate not assembled).
+![K230 DEMO BOARD Sample](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image4.png)
+(**Figure 1.2.1**: K230 DEMO BOARD Sample, Sub-boards Unassembled)
 
-### K230 DEMO BOARD is equipped with assembly daughter boards
+### K230 DEMO BOARD Supporting Assembled Sub-Boards
 
-To ensure verification flexibility, the K230 DEMO BOARD is equipped with a variety of interfaces and the ability to communicate with different types of daughter cards for more comprehensive development of chip functions. The types of daughter boards that can be equipped with the motherboard are as follows:
+To ensure verification flexibility, the K230 DEMO BOARD is equipped with multiple interfaces and has the ability to connect with different types of sub-cards for more comprehensive chip function development. The types of sub-boards that the mainboard can support are as follows:
 
-- Flash module daughter card (see **Section 2.2** for details).
+- Flash Module Sub-Card (refer to **Section 2.2** for usage details)
+- DSI Screen and Adapter Board (refer to **Section 2.4** for usage details)
+- IMX335 Module Sensor Board (refer to **Section 2.4** for usage details)
+- WIFI Sub-Card (refer to **Section 2.6** for usage details)
+- I2S/PDM Interface Digital Audio Sub-Card (refer to **Section 2.7** for usage details)
 
-- Screen and DSI interposer board (see **Section 2.4** for details).
+The usage methods of the interfaces and sub-cards will be detailed in **Section 2** when introducing the corresponding interface of each sub-card. Among the above sub-cards, the Flash Module Sub-Card, DSI Screen, and Adapter Board, and IMX335 Module Sensor Board will be assembled on the K230 DEMO BOARD mainboard for delivery. The remaining sub-cards are **not included** in the K230 DEMO BOARD delivery list by default and are listed here only to assist in explaining the relevant interface functions and usage.
 
-- IMX335 Module Sensor Board (see **Section 2.4** for details).
+Additionally, the following development cables will be included with the K230 DEMO BOARD upon delivery:
 
-- WIFI daughter card (see **Section 2.6** for details).
+- 2 USB Type-C Cables
+- 1 OTG Adapter Cable, Type-C Male to USB-A Female
+- 1 Type-C Male to Ethernet Cable
 
-- I2S/PDM interface digital audio daughter card (see **Section 2.7** for details).
+For a fully assembled DEMO board, refer to **Figure 1.3.1**.
 
-The use of interfaces and daughter cards is described in detail when describing the interfaces corresponding to the daughter card in Chapter 2**. Among the above daughter cards, Flash module daughter card, DSI screen and adapter board, IMX335 module Sensor board will be assembled on the K230 DEMO BOARD motherboard for delivery, and the remaining daughter cards are not included in the delivery list of the K230 DEMO BOARD by default, and are listed here only to assist in illustrating the relevant interface functions and usage.
+![K230 DEMO BOARD Sample, Fully Assembled](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image5.png)
+(**Figure 1.3.1**: K230 DEMO BOARD Sample, Fully Assembled)
 
-IN ADDITION, THE FOLLOWING DEVELOPMENT CABLES ARE INCLUDED WHEN DELIVERED USING THE K230 DEMO BOARD:
+## DEMO BOARD Hardware Function Description
 
-- 2 USB Type C cables
+### K230 DEMO BOARD Mainboard Function Modules and All Interfaces
 
-- OTG adapter, Type C male to USB-A female 1
+![K230 DEMO BOARD Functional Area Division](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image6.png)
+![All Supported Interfaces and Their Corresponding Positions on the DEMO BOARD](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image7.png)
+(**Figure 2.1.1**: The top image shows the K230 DEMO BOARD functional area division, and the bottom image shows all supported interfaces and their corresponding positions on the DEMO BOARD)
 
-- Type C male to network port cable 1
+The K230 DEMO BOARD can be roughly divided into 6 areas as shown in the left image of **Figure 2.1.1**, in the order of the marked numbers:
 
-To assemble the complete DEMO board, please refer to **Figure 1.3.1**
+1. (Blue) Core Area - This is where the main chip K230 and its storage DDR, flash, eMMC, and system main clock are located.
+1. (Red) Power Area - This is where all power supplies and power control components on the DEMO BOARD mainboard are located.
+1. (Green) Video Input and Output - This is where the camera and screen connect to the mainboard.
+1. (Orange) Audio Input and Output - This is where the microphone and headphones are located.
+1. (Purple) General Interface - This area contains the interfaces for data exchange with other devices.
+1. (Yellow) Pin Header Interface - This area contains pin headers corresponding to key signals on the DEMO BOARD, which can be used as test points or connection points for external signals and expansion sub-cards.
 
-![K230 DEMO BOARD sample example, fully assembled](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image5.png)
-(**Figure 1.3.1**: Example of K230 DEMO BOARD sample, fully assembled).
+Each area in the left image contains several components/interfaces listed in the right image. In the following sections of this chapter, each component/interface covered in each area will be listed in the above sequence. Additional information or usage instructions will be provided as needed when listing the corresponding components/interfaces.
 
-## DEMO BOARD HARDWARE FUNCTION DESCRIPTION
+**In cases where schematics appear in this chapter, unless otherwise specified, it is assumed that the pin configurations of the components on the DEMO BOARD are completely consistent with the pin configurations in the schematics (referring to single or dual rows, pin-out order). Additionally, all pin numbers and component numbers mentioned are marked with white silkscreen on the K230 DEMO BOARD. Please confirm with the actual DEMO BOARD.**
 
-### K230 DEMO BOARD motherboard function module and all interfaces
+### Core Area (Basic Parameters)
 
-![K230 DEMO BOARD functional area division](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image6.png)
-![ALL SUPPORTED INTERFACES CORRESPOND TO THEIR LOCATIONS ON THE DEMO BOARD](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image7.png)
-(**FIGURE 2.1.1**: THE UPPER FIGURE IS THE FUNCTIONAL AREA DIVISION OF THE K230 DEMO BOARD, AND THE FOLLOWING FIGURE SHOWS ALL THE SUPPORTED INTERFACES AND THEIR CORRESPONDING POSITIONS ON THE DEMO BOARD).
+This section is the core processing and storage area of the DEMO BOARD, containing the following 5 interfaces/components listed in the right image of **Figure 2.1.1**:
 
-The K230 DEMO BOARD can be roughly divided into 6 regions as shown in the left figure in **Figure 2.1.1**, in the order of the serial number:
+1. **K230-USIP (Component Number on DEMO BOARD: U1)**
+1. **LPDDR3 (Component Number on DEMO BOARD: U5)**
+   The selected model is NT6CL128M32DM-H0, Nanya 32bits - 4Gbits LPDDR3, with a maximum rate of 2133Mbps.
+1. **eMMC (Component Number on DEMO BOARD: U30)**
+   The selected model is KLM4G1FETE-B041, Samsung 8bits - 4GBytes eMMC, compatible up to Ver. 5.1, clock rate 200MHz.
+1. **Flash Expansion (Component Number on DEMO BOARD: J9)**
 
-1. (Blue) Core Area - This is where the main chip K230 and its storage DDR, flash, eMMC, and system master clock are located.
+![Flash Module Sub-Card Example](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image8.png)
+![Flash Expansion-J9 Schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image9.png)
+(**Figure 2.2.1**: The top image is an example of the flash module sub-card, with the white dot at the top left indicating pin 1. The bottom image is the Flash Expansion-J9 schematic)
 
-1. (Red) Power Zone - That is, the location of all power supplies on the DEMO BOARD motherboard and power control devices.
+The FLASH expansion on the DEMO board has already been soldered with a verified flash module, requiring no further modification. The selected model is NOR flash, OSPI interface (GD25LX256E, Manufacturer: Giga Device, 256Mbits).
 
-1. (Green) Video Zone - This is where the camera is connected to the screen and motherboard.
+### Power Area (Power-On Method)
 
-1. (Orange) Audio Zone - This is where the microphone and headphones are located.
+![Main Component Locations](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image10.png)
+(**Figure 2.3.1**: Main Component Locations in the Power Area, showing the power-on mode via switch)
 
-1. (purple) Generally Interface -- Interface area for data exchange with other devices.
+This area generates all the power required on the DEMO BOARD. All components related to DEMO BOARD power control are located in this area, and there are 2 power-on modes to choose from (the selection method will be explained later). The numbered components/interfaces in **Figure 2.3.1** correspond to the following 6 main components/interfaces (names are consistent with the list in the right image of **Figure 2.1.1**):
 
-1. (Yellow) Pin header -- This area contains pins corresponding to critical signals on the DEMO BOARD, which can be used as test points or connection points to external signals, expansion daughter cards, etc.
+1. **Boot Mode Selection Switch (Component Number on DEMO BOARD: SW1)**
+   The K230 supports loading boot files from four different locations, selected via four high and low logic states on the DIP switch. The four states correspond to the boot locations and the SW1 schematic as shown in **Figure 2.3.2** below.
+   ![SW1 Schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image11.png)
+   (**Figure 2.3.2**: SW1 Schematic)
+   Switches 1 and 2 correspond to BOOT0 and BOOT1, respectively. Flip the switch to pins 1 and 2 for high logic levels (H side marked on the DEMO BOARD) and to pins 3 and 4 for low logic levels (L side marked on the DEMO BOARD). All numbers are marked on the DEMO BOARD surface with silkscreen.
 
-Each region in the figure on the left contains several devices/interfaces listed in the figure on the right. The devices/interfaces covered in each area are displayed in the following order in the following sections of this section. If necessary, additional information or instructions on how to use the corresponding device/interface will be displayed.
+1. **System Reset Button (Component Number on DEMO BOARD: K2)**
+   Low-active reset button. When pressed, it pulls the reset low; when released, the default state is high. You can determine the current reset status by checking the voltage at pin 2.
 
-**In the case of schematic diagrams in this section, unless otherwise specified, the pins of the device package on the DEMO BOARD are exactly the same as the package pins on the schematic (referring to single and double rows, pin out order). In addition, all pin numbers mentioned and device numbers are indicated on the K230 DEMO BOARD through white silkscreen, please confirm in conjunction with the DEMO BOARD.**
+1. **Power Switch (Component Number on DEMO BOARD: K3)**
 
-### Core area (basic parameters)
+1. **Interrupt Signal Button (Component Number on DEMO BOARD: K1)**
+   A test button used to manually generate an interrupt signal.
 
-THIS PART IS THE CORE PROCESSING AND STORAGE AREA OF THE DEMO BOARD, INCLUDING THE FOLLOWING FIVE INTERFACES/DEVICES LISTED IN THE RIGHT FIGURE OF **FIGURE 2.1.1**
+1. **Power Input DC 5V: 2A (Component Number on DEMO BOARD: J2)**
 
-1. **K230-USIP (DEMO BOARD PART NUMBER: U1)**
+1. **PMU Expansion (Component Number on DEMO BOARD: J1)**
+   Pin header expansion used for power testing, not needed during normal use of the DEMO board.
+   ![PMU Expansion J1 Schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image12.png)
+   (**Figure 2.3.3**: PMU Expansion J1 Schematic)
 
-1. **LPDDR3 (DEMO BOARD PART NUMBER: U5).**
-The selection is NT6CL128M32DM-H0, Nanya 32bits - 4Gbits lpddr3, and support 2133Mbps
+1. **Red LED Power Indicator (Component Number on DEMO BOARD: LED1)**
 
-1. **eMMC (DEMO BOARD: U30).**
-Selected as KLM4G1FETE-B041, Samsung 8bits - 4GBytes eMMC, compatible with Ver.
-5.1, clock rate 200MHz
+**Normal Power-On Procedure:**
 
-1. **Flash Extension (Part No. J9 on DEMO BOARD)**
+- Set SW1 to the desired BOOT position.
+- Connect the 5V power supply to the power input-J2 via the Type-C power cable.
+- Flip K3 to the ON position to power on. If the power is successfully connected, the red LED indicator in **Figure 2.3.1** will light up.
+- Under normal power conditions, you can check if the reset status is high to ensure the K230 has successfully started.
+- If the power indicator does not light up during power-on, check if the jumper cap at pins 15 and 16 of the PMU expansion (J6) (specifically marked in the box labeled 6 in **Figure 2.3.1**) is correctly inserted.
 
-![Example diagram
-](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image8.png)of the flash module daughter card![Flash extension - schematic of J9](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image9.png)
-(**Figure 2.2.1**: The above figure is an example diagram of the flash module daughter card, pin 1 is at the upper left white point, and the following figure is the schematic of Flash Extension-J9).
+### Video Input and Output (Camera Sub-Board and Screen Sub-Board)
 
-THE EXTENSION OF THE FLASH OF THE DEMO BOARD HAS BEEN WELDED WITH THE VERIFIED FLASH MODULE, AND NO FURTHER CHANGES ARE REQUIRED. The selection is NOR flash
-OSPI interface(GD25LX256E, manufacturer: Giga Device, 256Mbits)
+![Video Area Main Component Locations](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image13.png)
+(**Figure 2.4.1**: Main Component Locations in the Video Area)
 
-### Power zone (power-on mode)
+This is where the camera and screen sub-cards delivered with the DEMO BOARD are connected. The numbered components/interfaces in **Figure 2.4.1** correspond to the following 2 main components/interfaces (names are consistent with the list in the right image of **Figure 2.1.1**).
 
-![Primary device location](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image10.png)
+1. **Display Expansion (Component Number on DEMO BOARD: J4)**
+   MIPI DSI interface, transmitting video signals from MIPI to the display through an FPC cable, also known as the MIPI TX interface. This is where the **DSI Touch Screen Adapter Board** mentioned in **Section 1.3** connects, directly connecting J4 and the adapter board via a 30-pin wide FPC cable. The pin definition schematic for J4 is shown in **Figure 2.4.2**.
+   ![Display Expansion Pin Definition Schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image14.png)
+   (**Figure 2.4.2**: Display Expansion Pin Definition Schematic. Pins 31 and 32 are fixed pins, not signal pins, and can be ignored.)
 
-(**Figure 2.3.1**: Location of the main device in the power region, shown in the mode of power-up through the switch).
+1. **Sensor Expansion (Component Number on DEMO BOARD: J3)**
+   MIPI CSI interface, transmitting video signals received from the camera through a board-to-board connector, also known as the MIPI RX interface. This is where the **IMX335 Module Sensor Board** mentioned in **Section 1.3** connects. The pin definition schematic for **J3** is shown in **Figure 2.4.3**.
+   ![Sensor Expansion Pin Definition Schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image15.png)
+   (**Figure 2.4.3**: Sensor Expansion Pin Definition Schematic)
 
-THIS AREA GENERATES ALL THE POWER NEEDED ON THE DEMO BOARD. ALL INTERACTIVE DEVICES RELATED TO THE DEMO BOARD POWER CONTROL ARE LOCATED IN THIS AREA, AND THERE ARE 2 POWER-ON MODES TO CHOOSE FROM (SELECTION WILL BE EXPLAINED LATER). The numbers in Figure 2.3.1 correspond to the following six main interfaces/devices (names are consistent with the list in the right figure in **Figure 2.1.1**).
+All module sub-boards are fully assembled upon delivery, as shown in **Figure 1.3.1**.
 
-1. **START-UP OPTION SELECTOR SWITCH (PART NUMBER SW1 ON DEMO BOARD**).
-The K230 supports loading boot files from four different places, and a DIP switch to select the K230's startup position through four high and low states. For the schematic diagram of the startup position and SW1 corresponding to the four states, please refer to **Figure 2.3.2** below.
-![W1 schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image11.png)
-(**Figure 2.3.2**: SW1 schematic)
-Among them, switches 1 and 2 correspond to BOOT0 and BOOT1 respectively. DIAL THE SWITCH TO PIN 1, 2 CORRESPONDS TO HIGH LOGIC 1 (THE H SIDE MARKED ON THE DEMO BOARD), AND TO PIN 3, 4 CORRESPONDS TO LOW LOGIC 0 (THE L SIDE MARKED ON THE DEMO BOARD). The above numbers are indicated by silkscreen on the DEMO BOARD board.
+### Audio Input and Output
 
-1. **SYSTEM RESET BUTTON (PART NUMBER ON DEMO BOARD: K2).
-Low valid key reset. Pull the reset low when pressed, and the normal high level when released. The current reset condition can be determined by sensing the voltage at pin 2.
+![Headphones and Microphone](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image17.png)
+(**Figure 2.5.1**: Location of Headphones and Microphone on the DEMO BOARD)
 
-1. **SWITCH ON AND OFF TOGGLE SWITCH (PART NUMBER ON DEMO BOARD: K3)**
+This area is for connecting external audio devices. All sound signal processing in this area is completed within the K230, allowing direct connection of headphones to output analog signals without any modifications. This section only supports analog signals; digital sound signals are extracted via pin headers and converted externally using the I2S/PDM interface digital audio adapter board, which will be introduced separately in **Section 2.7**. The numbered components/interfaces in **Figure 2.5.1** correspond to the following two main interfaces/devices (names are consistent with the list in the right image of **Figure 2.1.1**):
 
-1. **Interrupt signal button (PART NUMBER ON DEMO BOARD: K1)**
-Test keys for manual interrupt generation.
+1. **Headphones (Component Number on DEMO BOARD: J7)**
+1. **Microphone (Component Number on DEMO BOARD: U29)**
 
-1. **Power Inlet DC 5V: 2A (PART NUMBER ON DEMO BOARD: J2)**
+### General Interface (Standard Development Methods)
 
-1. **PMU EXTENSION (PART NUMBER ON DEMO BOARD: J1)**
-The pin header extensions used for power supply testing are not required when using the DEMO board.
-![PMU extension J1 schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image12.png)
-(**Figure 2.3.3**:P MU extension J1 schematic).
+![Data Interface](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image18.png)
+(**Figure 2.6.1**: Location of Data Interfaces on the DEMO BOARD)
 
-1. **RED LED POWER INDICATOR (PART NUMBER ON DEMO BOARD: LED1)**
+This area is for connecting to external computers/information sources. The numbered components/interfaces in **Figure 2.6.1** correspond to the following three main interfaces/devices (names are consistent with the list in the right image of **Figure 2.1.1**):
 
-**The normal boot process is as follows:**
+1. **USB 2.0 (Component Numbers on DEMO BOARD: J11, J13)**
+   Two USB 2.0 interfaces supporting OTG, directly interacting with the K230. J11 corresponds to USB0, and J13 corresponds to USB1.
 
-- Dial SW1 to the desired BOOT position
+1. **TF Card Slot/WIFI Expansion (Component Number on DEMO BOARD: U4)**
+   The K230 supports booting from the TF card slot, which is where the TF card with the K230 boot program is loaded. The method for selecting TF card booting is described in **Section 2.3**. Additionally, this slot can also accommodate the **WIFI sub-card** mentioned in the list in **Section 1.3**, which is a shared relationship. The **WIFI sub-card** is used to add a WIFI module for network functionality verification. This sub-card has TF card slot gold fingers and can be directly inserted into the TF card slot for normal use.
 
-- Connect the 5V voltage to the power inlet-J2 through the Type-C power cable.
+1. **Serial Debugging (Component Number on DEMO BOARD: J6)**
+   Use a Type-C data cable for UART serial debugging, with the default baud rate set to 115200.
 
-- Toggle K3 to the ON position to power on. If the power supply is successfully applied, the red LED in **Figure 2.3.1** will illuminate
+### Pin Header Interface
 
-- In the case of good power, you can ensure that the K230 starts successfully by checking whether the reset status is high.
+![Pin Headers](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image19.png)
+(**Figure 2.7.1**: Location of Pin Headers on the DEMO BOARD, with pin 1 of each pin header circled)
 
-- If the power LED does not light up when powering on the system, verify that the jumper caps at pins 15 and 16 of the PMU extension (J6) (i.e., the locations additionally indicated in the box numbered 6 in **Figure 2.3.1**) are properly seated.
+This area outputs power and some signals from the K230 GPIO through pin headers. The numbered components/interfaces in **Figure 2.7.1** correspond to the following three main interfaces/devices (names are consistent with the list in the right image of **Figure 2.1.1**):
 
-### Video input and output (camera daughter board and screen daughter board)
+1. **Power Monitoring Expansion (Component Number on DEMO BOARD: J10)**
+   This is an internal test interface used during development and is not needed when using the K230 for product development.
 
-![The main device location in the video area](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image13.png)
-(**Figure 2.4.1**: Main device locations in the video region).
+1. **SDIO/I2S/PDM/IOMUX Expansion (Component Number on DEMO BOARD: J8)**
+   Pin headers connected to GPIO26-37 of the K230, with a corresponding IO voltage level of 1.8V. As mentioned in **Section 2.5**, the **I2S/PDM interface digital audio adapter board** listed in **Section 1.3** should be placed here to convert the digital audio generated by the K230 externally. Align the female header of the sub-board with pin 1 of the pin header here to use it. The pin definitions can be found in the schematic.
+   ![SDIO/I2S/PDM/IOMUX Expansion](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image21.png)
+   (**Figure 2.7.2**: SDIO/I2S/PDM/IOMUX Expansion-J8 Schematic)
 
-THE CONNECTION BETWEEN THE CAMERA AND THE SCREEN DAUGHTER CARD DELIVERED WITH THE DEMO BOARD. The numbers in **Figure 2.4.1** correspond to the following two main interfaces/devices (the names match the list in the right figure in **Figure 2.1.1**).
+1. **JTAG Expansion (Component Number on DEMO BOARD: J12)**
+   Port for connecting a JTAG debugger. Use jumper wires to connect the pins on the JTAG expansion to the corresponding JTAG debugger ports. The pin definitions are shown in **Figure 2.7.4**.
+   ![JTAG Expansion](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image22.png)
+   (**Figure 2.7.3**: JTAG Expansion Pin Definition Schematic, with data lines pulled up to 1.8V via 10K resistors)
 
-1. **DISPLAY EXTENSION (PART NUMBER ON DEMO BOARD: J4).**
-The interface of MIPI DSI is to transmit video signals sent from MIPI to the display screen through the FPC cable, also known as MIPI TX interface. Here is the connection of the DSI touch screen adapter board in the list described in **Section 1.3**, and J4 and the adapter board can be directly connected through the 30Pin-wide FPC cable. The pin definition schematic for J4 is shown in **Figure 2.4.2.**
-![The display expansion pins define the schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image14.png)
-(Figure 2.4.2: Display expansion pin definition schematic, pins 31, 32 are fixed pins are not signal pins, can be ignored).
+1. **IOMUX/Power Expansion (Component Number on DEMO BOARD: J5)**
+   Control pin headers for USB and serial ports. By shorting certain pins on J5, you can change the modes of the two USB interfaces mentioned in **Section 2.6**. The pin definitions of J5 are shown in **Figure 2.7.5**.
+   If USB0 is to be used as a HOST or for Ethernet port conversion, short pins 1 and 2 of J5; for DEVICE mode, leave pins 1 and 2 open (default delivery is shorted).
+   Similarly, if USB1 is to be used as a HOST or for Ethernet port conversion, add a jumper cap on pins 3 and 4 of J5 (default delivery is not shorted).
+   Additionally, pins 8 and 10 can be used as an extra serial debug port with UART_RX and UART_TX, respectively.
+   ![IOMUX/Power Expansion](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image23.png)
+   (**Figure 2.7.4**: IOMUX/Power Expansion-J5 Schematic)
 
-1. **Sensor extension (part number J3 on DEMO BOARD).**
- The interface of MIPI CSI is to transmit the video signal received from the camera by MIPI through a board-to-board connector, also known as the MIPI RX interface. Here is the connection of the IMX335 module Sensor board in the list described in **Section 1.3.** The pin definition schematic for J3 is shown in **Figure 2.4.3.**
-
-![ The sensor expansion pin defines the schematic](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image15.png)
-(**Figure 2.4.3**: Sensor expansion pin definition schematic).
-
-All module daughter boards are assembled at the time of delivery, as shown in **Figure 1.3.1.**
-
-### Audio input and output
-
-![Headset and microphone](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image17.png)
-
-(**FIGURE 2.5.1**: POSITION OF HEADPHONES AND MICROPHONES ON THE DEMO BOARD).
-
-The area of the external audio device, where the sound signal processing has been completed in the K230, can be directly connected to the headphones to output analog signals without modification. This block is only available for analog signals, and digital sound signals are led out of the header pins and externally converted externally through the I2S/PDM interface digital audio adapter board, which will be described separately in **Section 2.7.**  The numbers in **Figure 2.5.1** correspond to the following two main interfaces/devices (names are consistent with the list in the right figure in **Figure 2.1.1**):
-
-1. **HEADPHONES (PART NUMBER ON DEMO BOARD: J7)**
-
-1. **MICROPHONE (PART NUMBER ON DEMO BOARD: U29)**
-
-### Common Interface (General Development Methodology)
-
-![Data interface](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image18.png)
-(**FIGURE 2.6.1**: LOCATION OF THE DATA INTERFACE ON THE DEMO BOARD).
-
-Where the connection port to the external computer/information source is concentrated. The numbers in **Figure 2.6.1** correspond to the following three main interfaces/devices (names are consistent with the list in the right figure in **Figure 2.1.1**):
-
-1. **USB 2.0 (DEMO BOARD: J11, J13).**
-A total of two USB 2.0 interfaces supporting OTG interact directly with the K230. J11 corresponds to USB0 and J13 corresponds to USB1.
-
-1. **TF CARD SLOT/WIFI EXTENSION (DEVICE NUMBER ON DEMO BOARD: U4).**
-The K230 supports booting from the TF card slot, here is where the K230 bootloader TF card is loaded. The way to choose to boot from a TF card is described in **Chapter 2.3.** In addition, the card slot can be connected to the WIFI daughter card described in the list of **Section 1.3**, and the two are multiplexed relationships. The WIFI daughter card is used to add a WIFI module to the board to verify the networking function. The daughter card has a TF card slot gold finger, which can be used normally by directly inserting the TF card slot.
-
-1. **SERIAL PORT DEBUGGING (DEVICE NUMBER ON DEMO BOARD: J6).**
-Use Type C data cable for UART serial port debugging, and the serial port rate is 115200 by default.
-
-### Pin header
-
-![Pin header](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image19.png)
-(**FIG. 2.7.1**: POSITION OF PIN HEADERS ON THE DEMO BOARD, PIN 1 OF EACH PIN HEADER IS CIRCLED).
-
-The power supply on the board and some of the signal from the K230 GPIO are connected through the pin headers here. The numbers in **Figure 2.7.1** correspond to the following three main interfaces/devices (names are consistent with the list in the right figure in **Figure 2.1.1**):
-
-1. **POWER MONITORING EXTENSION (PART NUMBER J10 ON DEMO BOARD).**
-It is an internal test interface during R&D, and does not need to be used when using K230 for product development.
-
-1. **SDIO/I2S/PDM/IOMUX EXTENSION (PART NUMBER J8 ON DEMO BOARD).**
-The pin header connected to the GPIO26-37 on the K230 corresponds to an IO level voltage of 1.8V. As mentioned in **Section 2.5** above, the I2S/PDM interface digital audio adapter board in the daughter card list described in **Section 1.3** should be placed here for external digital-to-analog conversion of the digital audio generated by the K230. Align the daughter board's female header with pin header pin 1 here and use it on the buckle. The pin definitions are detailed in their schematics.
-![SDIO/I2S/PDM/IOMUX extensions](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image21.png)
-(**Figure 2.7.2**: Schematic of SDIO/I2S/PDM/IOMUX Extension-J8).
-
-1. **JTAG EXTENSION (PART NUMBER J12 ON DEMO BOARD).**
-Connect the port to the JTAG debugger. When in use, use a DuPont cable to connect the pins on the JTAG extension to the corresponding JTAG debugger port. Its pins are defined in **Figure 2.7.4**
-![JTAG extension](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image22.png)
-(**Figure 2.7.3**: Pin-defined schematic for JTAG extension with data lines pulled up to 1.8V through 10K resistors).
-
-1. **IOMUX/Power Extension (J5 on DEMO BOARD**).
-The control pin of the USB and serial ports can change the mode of the two USB interfaces mentioned in **Section 2.6** by shorting the J5 part pins. The pin definition for J5 is shown in **Figure 2.7.5**
-If USB0 is required as HOST, or when used to transfer to Ethernet, pin 1,2 of J5 needs to be shortened with a jumper cap, and pin 1,2 is kept open when used as DEVICE. (Shorted by default at the time of delivery)
-Correspondingly, USB1 is used as HOST, or when used to convert to Ethernet, add jumping caps on pins 3 and 4 of J5. (Not shorted by default when delivered)
-In addition, pins 8 and 10 can be used as additional debug serial ports with UART_RX and UART_TX, respectively.
-![IOMUX/Power Extension](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image23.png)
-(**Figure 2.7.4**: Schematic of IOMUX/Power Extension-J5).
-
-1. **ADC extension (J15 on demo board**).
-The K230 has a total of 6 ADC inputs leading out to J15, which can collect sensor data or feedback signals according to the needs of the application. The input location of the ADC is located next to the MIPI CSI interface. Please note that ADC5 (**the second hole in the lower right of Figure 2.7.1**) is multiplexed with the headphones, and the ADC input will always be grounded and cannot be used properly when the headphones are not connected. If ADC5 does not read, plug the headphones into the headphone jack.
+1. **ADC Expansion (Component Number on DEMO BOARD: J15)**
+   The K230 has a total of 6 ADC input ports routed to J15. These can be used to collect sensor data or feedback signals as needed. The ADC input location is next to the MIPI CSI interface. Note that ADC5 (second hole from the bottom right in **Figure 2.7.1**) is shared with the headphone jack. When headphones are not connected, this ADC input will always be grounded and cannot be used normally. If ADC5 has no reading, connect headphones to the headphone jack.
