@@ -2961,7 +2961,7 @@ k_char mod_name[16];
 | 0xa0058008 | K_ERR_SYS_NOT_SUPPORT   | 不支持的功能                 |
 | 0xa0058009 | K_ERR_SYS_NOT_PERM      | 操作不允许                   |
 | 0xa0058010 | K_ERR_SYS_NOTREADY      | 系统控制属性未配置           |
-| 0xa0058011 | K_ERR_SYS_BADADDR       | 系统忙                       |
+| 0xa0058011 | K_ERR_SYS_BADADDR       | 错误的地址                       |
 | 0xa005800c | K_ERR_SYS_NOMEM         | 分配内存失败，如系统内存不足 |
 
 ### 4.3 日志管理错误码
