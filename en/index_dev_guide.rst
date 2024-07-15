@@ -5,7 +5,7 @@ K230 SDK Development Guide
 
   02_applications/tutorials/K230_RVV_optimization_performance_description.md
   02_applications/tutorials/K230_Memory_Optimization_Guide.md
-  02_applications/tutorials/K230_Memory_Analysis_Guide.md
+  02_applications/tutorials/K230_Memory_Usage_Analysis_Guide.md
   02_applications/tutorials/K230_Boot_Optimization_Guide.md
   02_applications/tutorials/K230_Inter_Processer_Communication_sharefs_Usage.md
   01_software/board/middleware/K230_OpenBLAS_Development_Guide.md
