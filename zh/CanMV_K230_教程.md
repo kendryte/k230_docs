@@ -115,13 +115,13 @@ Linux串口显示如下：
 
 #### 固件获取
 
-CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/developer/k230`
+CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/k230/release/sdk_images/`
 
-CanMV-K230-V1.0/V1.1请下载“k230_canmv_sdcard”开头的gz压缩包，解压得到sysimage-sdcard.img文件，即为CanMV-K230-V1.0/V1.1的固件。
+里面有各个版本的镜像。
 
-`CanMV-K230-V2.0请下载k230_canmv_v2开头的压缩包。`
+k230_canmv_defconfig：对应CanMV-K230 1.0/1.1板的Linux+rtt双系统镜像。
 
-`注意：不要将k230_canmv_sdcard...gz（CanMV-K230-V1.0/V1.1的镜像）的压缩包烧至2.0板子，板子可能会烧毁。`
+k230_canmv_only_rtt_defconfig：对应CanMV-K230 1.0/1.1板的rtt-only系统镜像。
 
 #### 固件烧录
 
@@ -173,9 +173,9 @@ Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `ht
 
 ![CanMV-K230-aidemo](images/CanMV-K230-aidemo.png)
 
-## Linux+RT-smart双系统开发
+## 系统开发
 
-本章节介绍如何使用K230 SDK进行Linux、RT-smart系统的开发。K230 SDK 包含了基于Linux和RT-smart 双核异构系统开发需要用到的源代码，工具链和其他相关资源。
+本章节介绍如何使用K230 SDK进行Linux+RTT或者RTT-only系统的开发。K230 SDK 包含了基于Linux和RT-smart的源代码，工具链和其他相关资源。
 
 ### 开发环境搭建
 
@@ -232,13 +232,17 @@ Step 5: 进入docker环境，
 
 Step 6: Docker环境下执行下面命令编译SDK
 
-make CONF=k230_canmv_defconfig  #编译CanMV-K230板子镜像
+make CONF=k230_canmv_defconfig  #编译CanMV-K230 1.0/1.1 板子Linux+RTT双系统镜像
+
+或者
+
+make CONF=k230_canmv_only_rtt_defconfig  #编译CanMV-K230 1.0/1.1 板子RTT-only系统镜像
 
 sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
 #### 编译输出产物
 
-编译完成后，在`output/k230_canmv_defconfig/images`目录下可以看到编译输出产物
+编译完成后，在`output/xx_defconfig/images`目录下可以看到编译输出产物
 
 `images`目录下镜像文件说明如下：
 
@@ -652,7 +656,7 @@ nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安�
     ```Python
     cd /path/to/nncase_sdk
     docker pull ghcr.io/kendryte/k230_sdk
-    docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/  bin/bash"  
+    docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/  bin/bash"
     ```
 
     > Tips：目前仅支持py3.6-3.10，如果pip安装失败请检查pip对应的Python版本。
@@ -810,7 +814,7 @@ def compile_kmodel(model_path, dump_path, calib_data):
     compile_options.dump_asm = True
     compile_options.dump_dir = dump_path
     compile_options.input_file = ""
-  
+
     # preprocess args
     compile_options.preprocess = False
     if compile_options.preprocess:
@@ -839,10 +843,10 @@ def compile_kmodel(model_path, dump_path, calib_data):
     ptq_options.export_quant_scheme = False
     ptq_options.export_weight_range_by_channel = False
     ############################################
-  
+
     ptq_options.samples_count = len(calib_data[0])
     ptq_options.set_tensor_data(calib_data)
-  
+
     print("Compiling...")
     compiler = nncase.Compiler(compile_options)
     # import
@@ -851,13 +855,13 @@ def compile_kmodel(model_path, dump_path, calib_data):
         compiler.import_onnx(model_content, import_options)
     elif model_path.split(".")[-1] == "tflite":
         compiler.import_tflite(model_content, import_options)
-  
+
     compiler.use_ptq(ptq_options)
-  
+
     # compile
     compiler.compile()
     kmodel = compiler.gencode_tobytes()
-  
+
     # 可自行修改kmodel_path,在推理时需要传入正确的kmodel_path
     kmodel_path = os.path.join(dump_path, "test.kmodel")
     with open(kmodel_path, 'wb') as f:
@@ -878,9 +882,9 @@ if __name__ == "__main__":
     kmodel_path = "./tmp_tflite/test.kmodel"
     input_data = [np.random.rand(1, 240, 320, 3).astype(np.float32)]
     input_data[0].tofile(os.path.join(dump_path,"input_0.bin"))
-  
+
     result = run_kmodel(kmodel_path, input_data)
-  
+
     for idx, i in enumerate(result):
         print(i.shape)
         i.tofile(os.path.join(dump_path,"nncase_result_{}.bin".format(idx)))
@@ -1382,7 +1386,7 @@ protected:
     vector<vector<int>> output_shapes_;    //{{N,C,H,W},{N,C,H,W}...}} 或 {{N,C},{N,C}...}}等
     vector<int> each_input_size_by_byte_;  //{0,layer1_length,layer1_length+layer2_length,...}
     vector<int> each_output_size_by_byte_; //{0,layer1_length,layer1_length+layer2_length,...}
-    
+
 private:
     /**
      * @brief 首次初始化kmodel输入，并获取输入shape
@@ -1619,7 +1623,7 @@ classification.h中的Classification类继承自AIBase类，实现了图像分�
 #ifndef _CLASSIFICATION_H
 #define _CLASSIFICATION_H
 #include "utils.h"
-#include "ai_base.h" 
+#include "ai_base.h"
 
 /**
  * @brief 分类任务
@@ -1652,7 +1656,7 @@ class Classification : public AIBase
     * @return None
     */
     Classification(string &kmodel_path, string &image_path,std::vector<std::string> labels,float cls_thresh, FrameCHWSize isp_shape, uintptr_t vaddr, uintptr_t paddr,const int debug_mode);
-    
+
     /**
     * @brief Classification析构函数
     * @return None
@@ -1684,7 +1688,7 @@ class Classification : public AIBase
     * @return None
     */
     void post_process(vector<cls_res> &results);
-    
+
     private:
 
     /**
@@ -1726,7 +1730,7 @@ class Classification : public AIBase
 */
 Classification::Classification(std::string &kmodel_path, std::string &image_path,std::vector<std::string> labels_,float cls_thresh_,const int debug_mode)
 :AIBase(kmodel_path.c_str(),"Classification", debug_mode)
-{   
+{
     cls_thresh=cls_thresh_;
     labels=labels_;
     num_class = labels.size();
@@ -1836,7 +1840,7 @@ void Classification::post_process(vector<cls_res> &results)
         {
             output[i] = exp(output[i]) / sum;
         }
-        max_index = max_element(output,output+num_class) - output; 
+        max_index = max_element(output,output+num_class) - output;
         if (output[max_index] >= b.score)
         {
             b.label = labels[max_index];
@@ -2083,7 +2087,7 @@ void Utils::draw_cls_res(cv::Mat& frame, vector<cls_res>& results)
     }
 
     for(int i = 0; i < results.size(); i++)
-    {   
+    {
         std::string text = "class: " + results[i].label + ", score: " + std::to_string(round(results[i].score * 100) / 100.0).substr(0, 4);
 
         cv::putText(frame, text, cv::Point(1, 40), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
@@ -2095,7 +2099,7 @@ void Utils::draw_cls_res(cv::Mat& frame, vector<cls_res>& results, FrameSize osd
 {
     double fontsize = (frame.cols * frame.rows * 1.0) / (1100 * 1200);
     for(int i = 0; i < results.size(); i++)
-    {   
+    {
         std::string text = "class: " + results[i].label + ", score: " + std::to_string(round(results[i].score * 100) / 100.0).substr(0, 4);
         cv::putText(frame, text, cv::Point(1, 40), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 255, 0), 2);
         std::cout << text << std::endl;
@@ -2135,7 +2139,7 @@ public:
     /**
      * @brief ScopedTiming析构,结束计时，并打印耗时
      * @return None
-     */ 
+     */
      ~ScopedTiming()
     {
         if (enable_profile)
@@ -2175,7 +2179,7 @@ void image_proc_cls(string &kmodel_path, string &image_path,vector<string> label
     cls.post_process(results);
     Utils::draw_cls_res(ori_img,results);
     cv::imwrite("result_cls.jpg", ori_img);
-    
+
 }
 ```
 
@@ -2199,7 +2203,7 @@ cls.post_process(results);
 这是k230_code/k230_deploy目录下的CMakeLists.txt脚本，设置编译的C++文件和生成的elf可执行文件名称，由下面：
 
 ```Shell
-set(src main.cc utils.cc ai_base.cc classification.cc) 
+set(src main.cc utils.cc ai_base.cc classification.cc)
 set(bin main.elf)
 
 include_directories(${PROJECT_SOURCE_DIR})：添加项目的根目录到头文件搜索路径中。
@@ -2409,13 +2413,13 @@ test_cls
 # "  image_path      待推理图片路径/摄像头(None)\n"
 # "  labels_txt      类别标签文件路径\n"
 # "  debug_mode      是否需要调试，0、1、2分别表示不调试、简单调试、详细调试\n"
-main.elf best.kmodel test.jpg labels.txt 2 
+main.elf best.kmodel test.jpg labels.txt 2
 ```
 
 如执行摄像头视频流推理，执行下述代码：
 
 ```Shell
-main.elf best.kmodel None labels.txt 2 
+main.elf best.kmodel None labels.txt 2
 ```
 
 #### 上板部署效果
