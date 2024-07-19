@@ -217,7 +217,7 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_SDK_CanMV_Board_Demo使用指南.md](zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo使用指南.md) | K230 SDK CanMV-K230 Board Demo使用指南|
+| [K230_SDK_CanMV_Board_RTT_ONLY_Demo使用指南.md](zh/01_software/board/examples/K230_SDK_CanMV_Board_RTT_ONLY_Demo使用指南.md) | K230 SDK CanMV-K230 Board Demo使用指南|
 
 ##### K230 SDK RTT ONLY middleware 文档
 
