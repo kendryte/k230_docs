@@ -10,6 +10,7 @@ SOURCEDIR_EN  = en
 SOURCEDIR_ZH  = zh
 SOURCEDIR = .
 CONFDIR       = .
+CONFDIRRTT    = rtt-config
 BUILDDIR      = _build
 WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~zhengshanshan/web-docs-builder
 
@@ -27,7 +28,7 @@ help:
 # mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 # 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-html: html-en html-zh
+html: html-en html-zh html-zh-rtt
 
 html-en: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 	SPHINX_LANGUAGE=en $(SPHINXBUILD) -b html "$(SOURCEDIR_EN)" "$(BUILDDIR)/html/en" -c "$(CONFDIR)"
@@ -35,13 +36,19 @@ html-en: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/t
 html-zh: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_ZH)" "$(BUILDDIR)/html/zh" -c "$(CONFDIR)"
 
-mhtml: mhtml_cn mhtml_en
+html-zh-rtt: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
+	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_ZH)" "$(BUILDDIR)/html/zh/rtt" -c "$(CONFDIRRTT)"
+
+mhtml: mhtml_cn mhtml_en mhtml_cn_rtt
 
 # mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 # 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 mhtml_cn: _static/init_mermaid.js  _static/topbar.css _static/custom-theme.css  _templates/versionsFlex.html
 	SPHINX_LANGUAGE=zh_CN $(SPHINXMULTIVERSION) "$(SOURCEDIR_ZH)" "$(BUILDDIR)/zh" $(SPHINXOPTS) -c "$(CONFDIR)"
+
+mhtml_cn_rtt: _static/init_mermaid.js  _static/topbar.css _static/custom-theme.css  _templates/versionsFlex.html
+	SPHINX_LANGUAGE=zh_CN $(SPHINXMULTIVERSION) "$(SOURCEDIR_ZH)" "$(BUILDDIR)/zh/rtt" $(SPHINXOPTS) -c "$(CONFDIRRTT)"
 
 # 英文
 mhtml_en: _static/init_mermaid.js  _static/topbar.css _static/custom-theme.css  _templates/versionsFlex.html
