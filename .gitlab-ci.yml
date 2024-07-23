@@ -83,7 +83,7 @@ markdown-link-check:
     - git fetch
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v ; fi
+    - time markdown-link-check -p -q -v $(find . -name \*.md)
 
 # new MR open
 markdownlint:
@@ -101,7 +101,7 @@ markdownlint:
     - git fetch --tags
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
+    - markdownlint-cli2 $(find . -name \*.md)
 
 .setup_env:
   before_script:
