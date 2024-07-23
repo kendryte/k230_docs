@@ -14,6 +14,7 @@ sys.path.append(os.path.abspath('exts'))
 project = 'K230'
 copyright = f'{datetime.datetime.now().year} Canaan Inc'
 author = 'Canaan'
+smv_default_version = 'dev'
 # release = '0.1'
 
 # -- General configuration ---------------------------------------------------
