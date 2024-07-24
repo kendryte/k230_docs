@@ -39,6 +39,9 @@ html-zh: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/t
 html-zh-rtt: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
 	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_ZH)" "$(BUILDDIR)/html/zh/rtt" -c "$(CONFDIRRTT)"
 
+html-en-rtt: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
+	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_EN)" "$(BUILDDIR)/html/en/rtt" -c "$(CONFDIRRTT)"
+
 mhtml: mhtml_cn mhtml_en mhtml_cn_rtt
 
 # mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
