@@ -11,7 +11,7 @@ Welcome to K230's documentation!
 
    CanMV_K230_Tutorial.md
    01_software/board/K230_SDK_User_Manual.md
-   index_normal_tutorial.rst
+   index_normal_tutorial_rtt_only.rst
    index_dev_guide.rst
    00_hardware/index.rst
    index_api.rst
