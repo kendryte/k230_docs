@@ -6,7 +6,6 @@ K230 SDK 开发指南
    02_applications/tutorials/K230_RVV优化性能说明.md
    02_applications/tutorials/K230_内存优化指南.md
    02_applications/tutorials/K230_内存占用分析指南.md
-   02_applications/tutorials/K230_启动优化指南.md
    01_software/board/middleware/K230_openblas_开发使用指南.md
    01_software/board/middleware/K230_opencv_开发使用指南.md
    01_software/board/mpp/K230_Camera_Sensor适配指南.md
