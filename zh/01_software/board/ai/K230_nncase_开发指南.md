@@ -29,7 +29,7 @@
 
 ### 概述
 
-本文档为K230 nncase的使用说明文档，提供给用户如何安装nncase, 如何调用compiler APIs编译神经网络模型和runtime APIs编写AI推理程序.
+本文档为K230 nncase的使用说明文档，提供给用户如何安装nncase, 如何调用compiler APIs编译神经网络模型和runtime APIs编写AI推理程序。
 
 ### 读者对象
 
@@ -59,9 +59,9 @@
 
 ### 1.1 什么是nncase
 
-nncase是一个为 AI 加速器设计的神经网络编译器, 目前支持的 target有cpu/K210/K510/K230等.
+nncase是一个为 AI 加速器设计的神经网络编译器, 目前支持的 target有CPU/K210/K510/K230等。
 
-nncase提供的功能
+nncase提供的功能：
 
 - 支持多输入多输出网络，支持多分支结构
 - 静态内存分配，不需要堆内存
@@ -70,10 +70,10 @@ nncase提供的功能
 - 支持训练后量化，使用浮点模型和量化校准集
 - 平坦模型，支持零拷贝加载
 
-nncase支持的神经网络模型格式
+nncase支持的神经网络模型格式：
 
-- tflite
-- onnx
+- TFLite
+- ONNX
 
 ### 1.2 nncase架构
 
@@ -83,23 +83,23 @@ nncase软件栈包括compiler和runtime两部分。
 
 Compiler: 用于在PC上编译神经网络模型，最终生成kmodel文件。主要包括importer, IR, Evaluator, Quantize, Transform优化, Tiling, Partition, Schedule, Codegen等模块。
 
-- Importer: 将其它神经网络框架的模型导入到nncase中
-- IR: 中间表示, 分为importer导入的Neutral IR(设备无关)和Neutral IR经lowering转换生成的Target IR(设备相关)
-- Evaluator: Evaluator提供IR的解释执行能力，常被用于Constant Folding/PTQ Calibration等场景
-- Transform: 用于IR转换和图的遍历优化等
-- Quantize: 训练后量化, 对要量化的tensor加入量化标记, 根据输入的校正集, 调用 Evaluator进行解释执行, 收集tensor的数据范围, 插入量化/反量化结点, 最后优化消除不必要的量化/反量化结点等
-- Tiling: 受限于NPU较低的存储器容量，需要将大块计算进行拆分. 另外, 计算存在大量数据复用时选择Tiling参数会对时延和带宽产生影响
-- Partition: 将图按ModuleType进行切分, 切分后的每个子图会对应RuntimeModule, 不同类型的RuntimeModule对应不同的Device(cpu/K230)
-- Schedule: 根据优化后图中的数据依赖关系生成计算顺序并分配Buffer
-- Codegen: 对每个子图分别调用ModuleType对应的codegen，生成RuntimeModule
+- Importer: 将其它神经网络框架的模型导入到nncase中；
+- IR: 中间表示, 分为importer导入的Neutral IR(设备无关)和Neutral IR经lowering转换生成的Target IR(设备相关)；
+- Evaluator: Evaluator提供IR的解释执行能力，常被用于Constant Folding/PTQ Calibration等场景；
+- Transform: 用于IR转换和图的遍历优化等；
+- Quantize: 训练后量化, 对要量化的tensor加入量化标记, 根据输入的校正集, 调用 Evaluator进行解释执行, 收集tensor的数据范围, 插入量化/反量化结点, 最后优化消除不必要的量化/反量化结点等；
+- Tiling: 受限于NPU较低的存储器容量，需要将大块计算进行拆分。另外，计算存在大量数据复用时选择Tiling参数会对时延和带宽产生影响；
+- Partition: 将图按ModuleType进行切分, 切分后的每个子图会对应RuntimeModule, 不同类型的RuntimeModule对应不同的Device(CPU/K230)；
+- Schedule: 根据优化后图中的数据依赖关系生成计算顺序并分配Buffer；
+- Codegen: 对每个子图分别调用ModuleType对应的codegen，生成RuntimeModule；
 
-Runtime: 集成于用户App， 提供加载kmodel/设置输入数据/KPU执行/获取输出数据等功能.
+Runtime: 集成于用户App， 提供加载kmodel/设置输入数据/KPU执行/获取输出数据等功能。
 
 ### 1.3 开发环境
 
 #### 1.3.1 操作系统
 
-支持的操作系统包括Ubuntu 18.04/Ubuntu 20.04
+支持的操作系统包括Ubuntu 18.04/Ubuntu 20.04。
 
 #### 1.3.2 软件环境
 
@@ -120,11 +120,11 @@ K230 evb
 
 ## 2. 编译模型APIs(Python)
 
-nncase提供了Python APIs, 用于在PC上编译神经网络模型
+nncase提供了Python APIs, 用于在PC上编译神经网络模型。
 
 ### 2.1 支持的算子
 
-#### 2.1.1 tflite算子
+#### 2.1.1 TFLite算子
 
 | Operator                | Is Supported |
 | ----------------------- | ------------ |
@@ -207,7 +207,7 @@ nncase提供了Python APIs, 用于在PC上编译神经网络模型
 | SPLIT                   | Yes          |
 | HARD_SWISH              | Yes          |
 
-#### 2.1.2 onnx算子
+#### 2.1.2 ONNX算子
 
 | Operator              | Is Supported |
 | --------------------- | ------------ |
@@ -331,13 +331,13 @@ nncase提供了Python APIs, 用于在PC上编译神经网络模型
 
 ### 2.2 APIs
 
-目前编译模型APIs支持tflite/onnx等格式的深度学习模型。
+目前编译模型APIs支持TFLite/ONNX等格式的深度学习模型。
 
 #### 2.2.1 CompileOptions
 
 【描述】
 
-CompileOptions类, 用于配置nncase编译选项，各属性说明如下
+CompileOptions类, 用于配置nncase编译选项，各属性说明如下：
 
 | 属性名称                    |         类型          | 是否必须 | 描述                                                                                                                   |
 | :-------------------------- | :-------------------: | :------: | ---------------------------------------------------------------------------------------------------------------------- |
@@ -345,7 +345,7 @@ CompileOptions类, 用于配置nncase编译选项，各属性说明如下
 | dump_ir                     |         bool          |    否    | 指定是否dump IR, 默认为False                                                                                           |
 | dump_asm                    |         bool          |    否    | 指定是否dump asm汇编文件, 默认为False                                                                                  |
 | dump_dir                    |        string         |    否    | 前面指定dump_ir等开关后, 这里指定dump的目录, 默认为""                                                                  |
-| input_file                  |        string         |    否    | onnx模型超过2GB时，用于指定参数文件路径，默认为""                                                                      |
+| input_file                  |        string         |    否    | ONNX模型超过2GB时，用于指定参数文件路径，默认为""                                                                      |
 |                             |                       |          |                                                                                                                        |
 | preprocess                  |         bool          |    否    | 是否开启前处理，默认为False。以下参数仅在 `preprocess=True`时生效                                                      |
 | input_type                  |        string         |    否    | 开启前处理时指定输入数据类型，默认为"float"。当 `preprocess`为 `True`时，必须指定为"uint8"或者"float32"                |
@@ -369,7 +369,7 @@ CompileOptions类, 用于配置nncase编译选项，各属性说明如下
 
 <div class="mermaid">
 graph TD;
-    NewInput("NewInput\n(shape = input_shape\ndtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty\nmean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
+    NewInput("NewInput<br>(shape = input_shape<br>dtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty<br>mean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
     a--N-->b--N-->c--N-->d--N-->e--N-->OldInput; f--N-->NewOutput;
     subgraph origin_model
         OldInput; Model_body ; OldOutput;
@@ -386,8 +386,8 @@ graph TD;
 
    <div class="mermaid">
     graph TD;
-        NewInput_uint8("NewInput_uint8 \n[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
-        NewInput_uint81("NewInput_uint8 \n[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
+        NewInput_uint8("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
+        NewInput_uint81("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
    </div>
 
 1. `input_shape`为输入数据的shape，layout为 `input_layout`，现在支持字符串（`"NHWC"`、`"NCHW"`）和index两种方式作为 `input_layout`，并且支持非4D的数据处理。
@@ -412,8 +412,8 @@ subgraph B
     OldOutput1("OldOutput: 1,10,4,5,2") --"output_layout: "0,2,3,1,4""--> Transpose5("Transpose perm: 0,2,3,1,4") --> NewOutput1("NewOutput: 1,4,5,10,2");
     end
 subgraph A
-    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput\nNHWC");
-    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput\nNHWC");
+    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput<br>NHWC");
+    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput<br>NHWC");
     end
 </div>
 
@@ -421,16 +421,16 @@ subgraph A
 
 ShapeBucket是针对动态shape的一种解决方案，会根据输入长度的范围以及指定的段的数量来对动态shape进行优化。该功能默认为false，需要打开对应的option才能生效，除了指定对应的字段信息，其他流程与编译静态模型没有区别。
 
-- onnx
+- ONNX
 
-在模型的shape中会有些维度为变量名字，这里以一个onnx模型的输入为例
+在模型的shape中会有些维度为变量名字，这里以一个ONNX模型的输入为例。
 
 > tokens: int64[batch_size, tgt_seq_len]
 > step: float32[seq_len, batch_size]
 
-shape的维度信息中存在seq_len，tgt_seq_len，batch_size这三个变量。
-首先是batch_size，虽然是变量的但实际应用的时候固定为3，因此在**fix_var_map**中添加batch_size = 3，在运行的时候会将这个维度固定为3。
-seq_len，tgt_seq_len两个是实际会发生改变的，因此需要配置这两个变量的实际范围，也就是**range_info**的信息。**segments_count**是实际分段的数量，会根据范围等分为几份，对应的编译时间也会相应增加几倍。
+shape的维度信息中存在`seq_len`，`tgt_seq_len`，`batch_size`这三个变量。
+首先是batch_size，虽然是变量的但实际应用的时候固定为3，因此在**fix_var_map**中添加`batch_size = 3`，在运行的时候会将这个维度固定为3。
+`seq_len`，`tgt_seq_len`两个是实际会发生改变的，因此需要配置这两个变量的实际范围，也就是**range_info**的信息。**segments_count**是实际分段的数量，会根据范围等分为几份，对应的编译时间也会相应增加几倍。
 
 以下为对应的编译参数示例：
 
@@ -442,9 +442,9 @@ compile_options.shape_bucket_segments_count = 2
 compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-- tflite
+- TFLite
 
-tflite的模型与onnx不同，shape上暂未标注维度的名称，目前只支持输入中具有一个维度是动态的，并且名称统一配置为-1，配置方式如下：
+TFLite的模型与ONNX不同，shape上暂未标注维度的名称，目前只支持输入中具有一个维度是动态的，并且名称统一配置为-1，配置方式如下：
 
 ```cpp
 compile_options = nncase.CompileOptions()
@@ -494,7 +494,7 @@ if compile_options.shape_bucket_enable:
 
 【描述】
 
-ImportOptions类, 用于配置nncase导入选项
+ImportOptions类, 用于配置nncase导入选项。
 
 【定义】
 
@@ -506,7 +506,7 @@ class ImportOptions:
 
 【示例】
 
-实例化ImportOptions, 配置各属性的值
+实例化ImportOptions, 配置各属性的值。
 
 ```python
 #import_options
@@ -517,29 +517,22 @@ import_options = nncase.ImportOptions()
 
 【描述】
 
-PTQTensorOptions类, 用于配置nncase PTQ选项
+PTQTensorOptions类, 用于配置nncase PTQ选项。
 
-| 名称                           | 类型   | 描述 |
-| ------------------------------ | ------ | ---- |
-| calibrate_method               | string | 否   |
-| samples_count                  | int    | 否   |
-| finetune_weights_method        | string | 否   |
-| quant_type                     | string | 否   |
-| w_quant_type                   | string | 否   |
-|                                |        |      |
-| quant_scheme                   | string | 否   |
-| quant_scheme_strict_mode       | bool   | 否   |
-| export_quant_scheme            | bool   | 否   |
-| export_weight_range_by_channel | bool   | 否   |
+| 名称                           | 类型   | 是否必须 | 描述 |
+| ------------------------------ | ------ | -------- | ---- |
+| samples_count                  | int    |    否    |  指定用于量化的校正集数量    |
+| calibrate_method               | string |    否    |  指定量化方法，可选'NoClip'、'Kld'，默认为'Kld'   |
+| finetune_weights_method        | string |    否    |  指定是否对权重进行微调，可选'NoFineTuneWeights'、'UseSquant'，默认为'NoFineTuneWeights'  |
+| quant_type                     | string |    否    |  指定数据量化类型，可选'uint8'，'int8'，'int16'  |
+| w_quant_type                   | string |    否    |  指定权重量化类型，可选'uint8'，'int8'，'int16' |
+|                                |        |    否    |  以上两种类型不可同时为'int16'   |
+| quant_scheme                   | string |    否    |  导入量化参数配置文件的路径 |
+| quant_scheme_strict_mode       | bool   |    否    |  是否严格按照quant_scheme执行量化  |
+| export_quant_scheme            | bool   |    否    |  是否导出量化参数配置文件  |
+| export_weight_range_by_channel | bool   |    否    |  是否导出 `bychannel`形式的weights量化参数，该参数建议设置为 `True`  |
 
-- 混合量化参数说明
-
-  - quant_scheme：导入量化参数配置文件的路径
-  - quant_scheme_strict_mode：是否严格按照quant_scheme执行量化
-  - export_quant_scheme：是否导出量化参数配置文件
-  - export_weight_range_by_channel：是否导出 `bychannel`形式的weights量化参数，为了保证量化效果，该参数建议设置为 `True`
-
-​   具体使用流程见 [MixQuant说明](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md)
+混合量化具体使用流程见 [MixQuant说明](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md)。
 
 【示例】
 
@@ -564,7 +557,7 @@ compiler.use_ptq(ptq_options)
 
 【描述】
 
-设置tensor数据
+设置tensor数据。
 
 【定义】
 
@@ -583,7 +576,7 @@ compiler.use_ptq(ptq_options)
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -599,7 +592,7 @@ compiler.use_ptq(ptq_options)
 
 【描述】
 
-Compiler类, 用于编译神经网络模型
+Compiler类, 用于编译神经网络模型。
 
 【定义】
 
@@ -617,7 +610,7 @@ class Compiler:
 
 【描述】
 
-导入tflite模型
+导入TFLite模型。
 
 【定义】
 
@@ -636,7 +629,7 @@ def import_tflite(self, model_content: bytes, options: ImportOptions) -> None:
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -649,7 +642,7 @@ compiler.import_tflite(model_content, import_options)
 
 【描述】
 
-导入onnx模型
+导入ONNX模型。
 
 【定义】
 
@@ -668,7 +661,7 @@ def import_onnx(self, model_content: bytes, options: ImportOptions) -> None:
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -681,7 +674,7 @@ compiler.import_onnx(model_content, import_options)
 
 【描述】
 
-设置PTQ配置选项.
+设置PTQ配置选项。
 
 - K230默认必须使用量化。
 
@@ -697,7 +690,7 @@ compiler.import_onnx(model_content, import_options)
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -707,7 +700,7 @@ compiler.import_onnx(model_content, import_options)
 
 【描述】
 
-编译神经网络模型
+编译神经网络模型。
 
 【定义】
 
@@ -715,11 +708,11 @@ compiler.import_onnx(model_content, import_options)
 
 【参数】
 
-无
+无。
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -729,7 +722,7 @@ compiler.import_onnx(model_content, import_options)
 
 【描述】
 
-生成kmodel字节流
+生成kmodel字节流。
 
 【定义】
 
@@ -737,7 +730,7 @@ compiler.import_onnx(model_content, import_options)
 
 【参数】
 
-无
+无。
 
 【返回值】
 
@@ -753,14 +746,14 @@ with open(os.path.join(infer_dir, 'test.kmodel'), 'wb') as f:
 
 ### 2.3 示例
 
-下面示例中使用到的模型和python编译脚本
+下面示例中使用到的模型和python编译脚本：
 
 - 原始模型文件位于/path/to/k230_sdk/src/big/nncase/examples/models目录
 - python编译脚本位于/path/to/k230_sdk/src/big/nncase/examples/scripts目录
 
-#### 2.3.1 编译tflite模型
+#### 2.3.1 编译TFLite模型
 
-mbv2_tflite.py脚本如下
+mbv2_tflite.py脚本如下：
 
 ```python
 import os
@@ -837,18 +830,18 @@ if __name__ == '__main__':
     main()
 ```
 
-执行如下命令即可编译mobilenetv2的tflite模型, target为k230
+执行如下命令即可编译mobilenetv2的TFLite模型, target为k230。
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/mbv2_tflite.py --target k230 --model models/mbv2.tflite --dataset calibration_dataset
 ```
 
-#### 2.3.2 编译onnx模型
+#### 2.3.2 编译ONNX模型
 
-针对onnx模型, 建议先使用[ONNX Simplifier](https://github.com/daquexian/onnx-simplifier)进行简化, 然后再使用nncase编译.
+针对ONNX模型, 建议先使用[ONNX Simplifier](https://github.com/daquexian/onnx-simplifier)进行简化, 然后再使用nncase编译。
 
-yolov5s_onnx.py 脚本如下
+yolov5s_onnx.py 脚本如下：
 
 ```python
 import os
@@ -979,7 +972,7 @@ if __name__ == '__main__':
     main()
 ```
 
-执行如下命令即可编译onnx模型, target为k230
+执行如下命令即可编译ONNX模型, target为k230。
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples
@@ -988,7 +981,7 @@ root@c285a41a7243: /mnt/src/big/nncase/examples # python3 ./scripts/yolov5s_onnx
 
 ## 3. 模拟器APIs(Python)
 
-除了编译模型APIs, nncase还提供了推理模型的APIs, 在PC上可推理编译模型生成的kmodel, 用来验证nncase推理结果和相应深度学习框架的runtime的结果是否一致等.
+除了编译模型APIs，nncase还提供了推理模型的APIs，在PC上可推理编译模型生成的kmodel，用来验证nncase推理结果和相应深度学习框架的runtime的结果是否一致等。
 
 ### 3.1 APIs
 
@@ -996,7 +989,7 @@ root@c285a41a7243: /mnt/src/big/nncase/examples # python3 ./scripts/yolov5s_onnx
 
 【描述】
 
-MemoryRange类, 用于表示内存范围
+MemoryRange类, 用于表示内存范围。
 
 【定义】
 
@@ -1027,7 +1020,7 @@ py::class_<memory_range>(m, "MemoryRange")
 
 【描述】
 
-RuntimeTensor类, 用于表示运行时tensor
+RuntimeTensor类, 用于表示运行时tensor。
 
 【定义】
 
@@ -1078,7 +1071,7 @@ py::class_<runtime_tensor>(m, "RuntimeTensor")
 
 【描述】
 
-从numpy.ndarray构造RuntimeTensor对象
+从numpy.ndarray构造RuntimeTensor对象。
 
 【定义】
 
@@ -1092,7 +1085,7 @@ py::class_<runtime_tensor>(m, "RuntimeTensor")
 
 【返回值】
 
-RuntimeTensor
+RuntimeTensor对象。
 
 【示例】
 
@@ -1102,7 +1095,7 @@ RuntimeTensor
 
 【描述】
 
-拷贝RuntimeTensor
+拷贝RuntimeTensor。
 
 【定义】
 
@@ -1116,7 +1109,7 @@ RuntimeTensor
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -1126,7 +1119,7 @@ RuntimeTensor
 
 【描述】
 
-将RuntimeTensor转换为numpy.ndarray对象
+将RuntimeTensor转换为numpy.ndarray对象。
 
 【定义】
 
@@ -1134,11 +1127,11 @@ RuntimeTensor
 
 【参数】
 
-无
+无。
 
 【返回值】
 
-numpy.ndarray对象
+numpy.ndarray对象。
 
 【示例】
 
@@ -1148,7 +1141,7 @@ numpy.ndarray对象
 
 【描述】
 
-Simulator类, 用于在PC上推理kmodel
+Simulator类, 用于在PC上推理kmodel。
 
 【定义】
 
@@ -1182,7 +1175,7 @@ py::class_<interpreter>(m, "Simulator")
 
 【描述】
 
-加载kmodel
+加载kmodel。
 
 【定义】
 
@@ -1196,7 +1189,7 @@ py::class_<interpreter>(m, "Simulator")
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -1206,7 +1199,7 @@ py::class_<interpreter>(m, "Simulator")
 
 【描述】
 
-获取指定索引的输入的描述信息
+获取指定索引的输入的描述信息。
 
 【定义】
 
@@ -1220,7 +1213,7 @@ py::class_<interpreter>(m, "Simulator")
 
 【返回值】
 
-MemoryRange
+`MemoryRange`
 
 【示例】
 
@@ -1230,7 +1223,7 @@ MemoryRange
 
 【描述】
 
-获取指定索引的输出的描述信息
+获取指定索引的输出的描述信息。
 
 【定义】
 
@@ -1244,7 +1237,7 @@ MemoryRange
 
 【返回值】
 
-MemoryRange
+`MemoryRange`
 
 【示例】
 
@@ -1254,7 +1247,7 @@ MemoryRange
 
 【描述】
 
-获取指定索引的输入的RuntimeTensor
+获取指定索引的输入的RuntimeTensor。
 
 【定义】
 
@@ -1268,7 +1261,7 @@ MemoryRange
 
 【返回值】
 
-RuntimeTensor
+`RuntimeTensor`
 
 【示例】
 
@@ -1278,7 +1271,7 @@ RuntimeTensor
 
 【描述】
 
-设置指定索引的输入的RuntimeTensor
+设置指定索引的输入的RuntimeTensor。
 
 【定义】
 
@@ -1293,7 +1286,7 @@ RuntimeTensor
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -1303,7 +1296,7 @@ RuntimeTensor
 
 【描述】
 
-获取指定索引的输出的RuntimeTensor
+获取指定索引的输出的RuntimeTensor。
 
 【定义】
 
@@ -1317,7 +1310,7 @@ RuntimeTensor
 
 【返回值】
 
-RuntimeTensor
+`RuntimeTensor`
 
 【示例】
 
@@ -1327,7 +1320,7 @@ RuntimeTensor
 
 【描述】
 
-设置指定索引的输出的RuntimeTensor
+设置指定索引的输出的RuntimeTensor。
 
 【定义】
 
@@ -1342,7 +1335,7 @@ RuntimeTensor
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -1352,7 +1345,7 @@ RuntimeTensor
 
 【描述】
 
-运行kmodel推理
+运行kmodel推理。
 
 【定义】
 
@@ -1360,11 +1353,11 @@ RuntimeTensor
 
 【参数】
 
-无
+无。
 
 【返回值】
 
-无
+无。
 
 【示例】
 
@@ -1372,9 +1365,9 @@ RuntimeTensor
 
 ### 3.2 示例
 
-**前置条件**: yolov5s_onnx.py脚本已编译过yolov5s.onnx模型
+**前置条件**: yolov5s_onnx.py脚本已编译过yolov5s.onnx模型。
 
-yolov5s_onnx_simu.py位于/path/to/k230_sdk/src/big/nncase/examples/scripts子目录， 内容如下
+yolov5s_onnx_simu.py位于/path/to/k230_sdk/src/big/nncase/examples/scripts子目录，内容如下：
 
 ```python
 import os
@@ -1456,7 +1449,7 @@ root@5f718e19f8a7:/mnt/src/big/nncase/examples # export PATH=$PATH:/usr/local/li
 root@5f718e19f8a7:/mnt/src/big/nncase/examples # python3 scripts/yolov5s_onnx_simu.py --model models/yolov5s.onnx --model_input object_detect/data/input_fp32.bin --kmodel tmp/yolov5s_onnx/test.kmodel --kmodel_input object_detect/data/input_uint8.bin
 ```
 
-nncase simulator和cpu推理结果对比如下
+nncase simulator和CPU推理结果对比如下
 
 ```sh
 output 0 cosine similarity : 0.9997244477272034
@@ -1468,9 +1461,9 @@ output 2 cosine similarity : 0.9997308850288391
 
 ### 4.1 简介
 
-KPU运行时APIs用于在AI设备加载kmodel，设置输入数据，执行kpu/cpu计算， 获取输出数据等.
+KPU运行时APIs用于在AI设备加载kmodel，设置输入数据，执行KPU/CPU计算，获取输出数据等。
 
-目前只提供C++ APIs, 相关的头文件和静态库在/path/to/k230_sdk/src/big/nncase/riscv64目录下.
+目前只提供C++ APIs，相关的头文件和静态库在/path/to/k230_sdk/src/big/nncase/riscv64目录下。
 
 ```shell
 $ tree -L 3 riscv64/
@@ -1501,7 +1494,7 @@ riscv64/
 
 【描述】
 
-创建runtime_tensor
+创建runtime_tensor。
 
 【定义】
 
@@ -1542,7 +1535,7 @@ auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape
 
 同步tensor的cache。
 
-- 对用户的输入数据， 需要调用 此接口的sync_write_back确保数据已刷入ddr.
+- 对用户的输入数据， 需要调用 此接口的sync_write_back确保数据已刷入ddr。
 - 对gnne/ai2d计算后输出数据，默认gnne/ai2d runtime已做了sync_invalidate处理。
 
 【定义】
@@ -1571,7 +1564,7 @@ hrt::sync(input_tensor, sync_op_t::sync_write_back, true).expect("sync write_bac
 
 【描述】
 
-加载kmodel模型
+加载kmodel模型。
 
 【定义】
 
@@ -1599,7 +1592,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【描述】
 
-获取模型输入的个数
+获取模型输入的个数。
 
 【定义】
 
@@ -1607,7 +1600,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【参数】
 
-无
+无。
 
 【返回值】
 
@@ -1621,7 +1614,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【描述】
 
-获取模型输出的个数
+获取模型输出的个数。
 
 【定义】
 
@@ -1629,7 +1622,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【参数】
 
-无
+无。
 
 【返回值】
 
@@ -1643,7 +1636,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【描述】
 
-获取模型指定输入的形状
+获取模型指定输入的形状。
 
 【定义】
 
@@ -1667,7 +1660,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【描述】
 
-获取模型指定输出的形状
+获取模型指定输出的形状。
 
 【定义】
 
@@ -1691,7 +1684,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 【描述】
 
-获取/设置指定索引的输入 tensor
+获取/设置指定索引的输入tensor。
 
 【定义】
 
@@ -1725,7 +1718,7 @@ interp.input_tensor(0, input_tensor).expect("cannot set input tensor");
 
 【描述】
 
-获取/设置指定索引的输出tensor
+获取/设置指定索引的输出tensor。
 
 【定义】
 
@@ -1759,7 +1752,7 @@ auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 
 【描述】
 
-执行kpu计算
+执行KPU计算。
 
 【定义】
 
@@ -1767,11 +1760,11 @@ auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 
 【参数】
 
-无
+无。
 
 【返回值】
 
-返回result \<void\>
+返回result \<void\>。
 
 【示例】
 
@@ -2001,7 +1994,7 @@ AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配
 
 【描述】
 
-ai2d_format用于配置输入输出的可选数据格式.
+ai2d_format用于配置输入输出的可选数据格式。
 
 【定义】
 
@@ -2021,7 +2014,7 @@ enum class ai2d_format
 
 【描述】
 
-ai2d_interp_method用于配置可选的插值方式.
+ai2d_interp_method用于配置可选的插值方式。
 
 【定义】
 
@@ -2039,7 +2032,7 @@ ai2d_interp_method用于配置可选的插值方式.
 
 【描述】
 
-ai2d_interp_mode 用于配置可选的插值模式.
+ai2d_interp_mode 用于配置可选的插值模式。
 
 【定义】
 
@@ -2056,7 +2049,7 @@ enum class ai2d_interp_mode
 
 【描述】
 
-ai2d_pad_mode用于配置可选的padding模式， 目前只支持常数padding.
+ai2d_pad_mode用于配置可选的padding模式，目前只支持常数padding。
 
 【定义】
 
@@ -2073,7 +2066,7 @@ enum class ai2d_pad_mode
 
 【描述】
 
-ai2d_datatype_t 用于设置AI2D计算过程中的数据类型.
+ai2d_datatype_t 用于设置AI2D计算过程中的数据类型。
 
 【定义】
 
@@ -2110,7 +2103,7 @@ ai2d_datatype_t ai2d_dtype { ai2d_format::RAW16, ai2d_format::NCHW_FMT, datatype
 
 【描述】
 
-ai2d_crop_param_t用于配置crop相关的参数.
+ai2d_crop_param_t用于配置crop相关的参数。
 
 【定义】
 
@@ -2145,7 +2138,7 @@ ai2d_crop_param_t crop_param { true, 40, 30, 400, 600 };
 
 【描述】
 
-ai2d_shift_param_t用于配置shift相关的参数.
+ai2d_shift_param_t用于配置shift相关的参数。
 
 【定义】
 
@@ -2172,7 +2165,7 @@ struct ai2d_shift_param_t
 
 【描述】
 
-ai2d_pad_param_t 用于配置pad相关的参数.
+ai2d_pad_param_t 用于配置pad相关的参数。
 
 【定义】
 
@@ -2205,7 +2198,7 @@ ai2d_pad_param_t pad_param { false, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 60, 60 } }
 
 【描述】
 
-ai2d_resize_param_t 用于配置resize相关的参数.
+ai2d_resize_param_t 用于配置resize相关的参数。
 
 【定义】
 
@@ -2236,7 +2229,7 @@ ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_i
 
 【描述】
 
-ai2d_affine_param_t 用于配置affine相关的参数.
+ai2d_affine_param_t 用于配置affine相关的参数。
 
 【定义】
 
@@ -2275,7 +2268,7 @@ ai2d_affine_param_t affine_param { true, ai2d_interp_method::cv2_bilinear, 0, 0,
 
 【描述】
 
-ai2d_builder的构造函数.
+ai2d_builder的构造函数。
 
 【定义】
 
@@ -2319,7 +2312,7 @@ ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param
 
 【描述】
 
-生成AI2D计算需要的参数.
+生成AI2D计算需要的参数。
 
 【定义】
 
@@ -2329,7 +2322,7 @@ result<void> build_schedule();
 
 【参数】
 
-无
+无。
 
 【返回值】
 
@@ -2345,7 +2338,7 @@ ai2d_builder_->build_schedule();
 
 【描述】
 
-配置寄存器并启动AI2D的计算.
+配置寄存器并启动AI2D的计算。
 
 【定义】
 
@@ -2362,7 +2355,7 @@ result<void> invoke(runtime_tensor &input, runtime_tensor &output);
 
 【返回值 】
 
-result\<void\>
+result\<void\>。
 
 【示例】
 
@@ -2424,8 +2417,8 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
 
 ### 5.4 注意事项
 
-1. Affine和Resize功能是互斥的，不能同时开启
-1. Shift功能的输入格式只能是Raw16
-1. Pad value是按通道配置的，对应的list元素个数要与channel数相等
-1. 当前版本中，当只需要AI2D的一个功能时，其他参数也需要配置，flag置为false即可，其他字段不用配置。
+1. Affine和Resize功能是互斥的，不能同时开启；
+1. Shift功能的输入格式只能是Raw16；
+1. Pad value是按通道配置的，对应的list元素个数要与channel数相等；
+1. 当前版本中，当只需要AI2D的一个功能时，其他参数也需要配置，flag置为false即可，其他字段不用配置；
 1. 当配置了多个功能时，执行顺序是Crop->Shift->Resize/Affine->Pad, 配置参数时注意要匹配。
