@@ -27,7 +27,7 @@
 
 ## 前言
 
-本文基于CanMV-K230开发板，介绍K230 SDK、nncase及AI的开发流程。
+本文基于CanMV-K230开发板，介绍K230 SDK、nncase及AI的开发流程。其中K230 SDK包含Linux+RT-Smart双系统以及RT-Smart单系统。SDK文档有关Linux或小核linux介绍的内容均为Linux+RT-Smart双系统相关，Rt-Smart单系统不必关注。
 
 ## 快速上手
 
