@@ -477,6 +477,8 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 ### 2.9 Rtsp推流Demo
 
+多媒体demo可参看[../middleware/K230_RTT_only_多媒体中间件_API参考.md](../middleware/K230_RTT_only_多媒体中间件_API参考.md)中demo章节。
+
 ### 2.10 FaceAeDemo
 
 #### 2.10.1 Demo介绍
