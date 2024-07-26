@@ -37,11 +37,11 @@ Without the company's written permission, no unit or individual may excerpt, cop
 
 ### 2.1 `System.NotSupportedException: Not Supported *** op: XXX`
 
-- A: This exception indicates that the XXX operator is not yet supported. You can request it in the [nncase Github Issue](https://github.com/kendryte/nncase/issues). You can refer to the `***_ops.md` document in the current directory to see which operators are already supported in various inference frameworks. If `XXX` belongs to FAKE_QUANT, `DEQUANTIZE`, `QUANTIZE`, etc., it indicates that the current model is a quantized model, which `nncase` currently does not support. Please use a floating-point model to compile the `kmodel`.
+- A: This exception indicates that the `XXX` operator is not yet supported. You can submit a feature request in the [nncase Github Issue](https://github.com/kendryte/nncase/issues). For a list of supported operators, please refer to the `***_ops.md` document in the [nncase repository](https://github.com/kendryte/nncase/tree/release/2.0/docs). If `XXX` belongs to FAKE_QUANT, `DEQUANTIZE`, `QUANTIZE`, etc., it indicates that the current model is a quantized model, which `nncase` currently does not support. Please use a floating-point model to compile the `kmodel`.
 
 ### 2.2 `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached, or the per-process limit on the number of open file descriptors has been reached`
 
-- A: Modify the value of 128 to a larger value using sudo gedit /proc/sys/fs/inotify/max_user_instances.
+- A: Modify the value of 128 to a larger value using `sudo gedit /proc/sys/fs/inotify/max_user_instances`.
 
 ### 2.3 `RuntimeError: Failed to initialize hostfxr.` or `RuntimeError: Failed to get hostfxr path.`
 
@@ -107,8 +107,8 @@ Or the following cases:
 ### 4.2 `std::bad_alloc`
 
 - A: This is usually due to memory allocation failure. The following checks can be made:
-Check if the generated kmodel exceeds the available memory of the current system.
-Check if the App has memory leaks.
+- Check if the generated kmodel exceeds the available memory of the current system.
+- Check if the App has memory leaks.
 
 ### 4.3 `terminate:Invalid kmodel`
 

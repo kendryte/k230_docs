@@ -201,7 +201,6 @@ Users can choose to use GitHub or Gitee according to their network conditions.
 The K230 SDK supports one-click compilation of the large and small core operating systems and public components, generating a burnable image file for deployment to the development board for startup and operation. The username of the Linux system on the device is root without a password;
 
 Step 1: Refer to the above to obtain the SDK development package
-
 Step 2: Enter the SDK root directory
 
 `cd k230_sdk`
@@ -598,7 +597,7 @@ The above code and comments provide a detailed introduction to the initializatio
 
 ## nncase Development
 
-`nncase` is a neural network compiler for AI accelerators, used to generate the model files `.kmodel` required for inference on `Kendryte` series chips, and provides the `runtime lib` needed for model inference.
+`nncase` is a neural network compiler for AI accelerators, used to generate the `.kmodel` required for inference on `Kendryte` series chips, and provides the `runtime lib` needed for model inference.
 
 This tutorial mainly includes the following content:
 
@@ -608,7 +607,7 @@ This tutorial mainly includes the following content:
 > Tips:
 >
 > 1. This tutorial aims to familiarize users with the usage process of nncase. The model input data in the text are all random numbers. For specific processes in actual application scenarios, please refer to the subsequent chapters "AI Development".
-> 1. The nncase version in the official CanMV image may be outdated. If you need to use the latest nncase, you need to update the runtime library and recompile the CanMV image.
+> 1. The nncase version in the official image may be outdated. If you need to use the latest nncase, you need to update the runtime library. Refer to [Tutorial](./03_other/K230_SDK_Updating_nncase_Runtime_Library_Guide.md).
 
 ### Model Compilation and Simulator Inference
 
@@ -644,7 +643,7 @@ The nncase toolchain includes the `nncase` and `nncase-kpu` plugin packages. Bot
     docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/bin/bash"
     ```
 
-    > Tips: Currently, only py3.6-3.10 is supported. If pip installation fails, please check the Python version corresponding to pip.
+    > Tips: Currently, only py3.7-3.10 is supported. If pip installation fails, please check the Python version corresponding to pip.
 
 #### Environment Configuration
 
@@ -665,12 +664,12 @@ export PATH=$PATH:/path/to/python/site-packages/
 
 #### Compilation Script Explanation
 
-This [Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/user_guide/k230_simulate-ZH.ipynb) describes in detail the steps to compile and infer kmodel using nncase. The notebook covers:
+This [Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/user_guide/k230_simulate-EN.ipynb) describes in detail the steps to compile and infer kmodel using nncase. The notebook covers:
 
 - Parameter Configuration: Introduces how to correctly configure compilation parameters to meet actual deployment needs.
 - Obtaining Model Information: Explains how to obtain key data such as network structure and layer information from the original model.
 - Setting Calibration Data: Describes how to prepare calibration sample data, including for single-input and multi-input models, for the quantization calibration process.
-- Setting Inference Data Format: Explains how to configure input data for inference deployment, supporting different scenarios.
+- Setting Inference Data: Explains how to configure input data for inference deployment, supporting different scenarios.
 - Configuring Multi-Input Models: Introduces how to correctly set the shape and data format for each input when dealing with multi-input models.
 - PC Simulator Inference: Explains how to use the simulator to infer `kmodel` on a PC, which is a key step to verify the compilation effect.
 - Comparing Inference Results: Verifies the correctness of `kmodel` by comparing inference results with different frameworks (TensorFlow, PyTorch, etc.).
@@ -679,7 +678,7 @@ This [Jupyter notebook](https://github.com/kendryte/nncase/blob/master/examples/
 
 #### Sample Code
 
-After reading the complete tutorial in the Jupyter notebook, you can modify the following sample code.
+After reading the complete tutorial in the Jupyter notebook, you can modify the following sample code to complete your own model compilation.
 
 ```Python
 import nncase
@@ -890,12 +889,12 @@ Currently, `CanMV` supports two sets of development APIs, `C++` and `MicroPython
 
 For inference on the development board, we provide two modules to accelerate model inference:
 
-- Hardware-based preprocessing module: `AI2D`. For detailed functionality, see [AI2D Runtime APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#5-ai2d-%E8%BF%90%E8%A1%8C%E6%97%B6apisc).
-- Hardware-based model inference module: `KPU`. For detailed functionality, see [KPU Runtime APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#4-kpu%E8%BF%90%E8%A1%8C%E6%97%B6apisc).
+- Hardware-based preprocessing module: `AI2D`. For detailed functionality, see [AI2D Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#5-ai2d-runtime-apis-c).
+- Hardware-based model inference module: `KPU`. For detailed functionality, see [KPU Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#6-kpu-runtime-apis-c).
 
 Next, we will explain how to use these two modules and what to pay attention to in a C++ code example.
 
-Here, we take face detection as an example. The following will explain the directory structure of the compiled code and the important functions of the code. For the complete code example, see `k230_sdk/src/big/nncase/examples/image_face_detect`.
+Here, we take `face detection` as an example. The following will explain the directory structure of the compiled code and the important functions of the code. For the complete code example, see `k230_sdk/src/big/nncase/examples/image_face_detect`.
 Directory Structure
 
 In the `example` directory, the file structure related to model inference is as follows:
@@ -923,7 +922,7 @@ k230_sdk/src/big/nncase/examples/
 
 #### AI2D Configuration
 
-In `mobile_retinaface.cc`, the `Pad` and `Resize` functionalities of AI2D are used. Next, we will explain the code block of the constructor of the `MobileRetinaface` class, where the `AI2D` parameters are configured:
+In `mobile_retinaface.cc`, the `Pad` and `Resize` functionalities of AI2D are used. Next, we will explain the code of the `MobileRetinaface` class, where the `AI2D` parameters are configured:
 
 1. Set the output tensor of `AI2D`.
 
@@ -975,7 +974,7 @@ First, set the basic parameters of `AI2D`, including input format, output format
     ai2d_builder_->build_schedule();
 ```
 
-First, create an `ai2d_builder` object. If the object already exists, use the `reset` function to update its parameters, then call the `build_schedule()` function to generate the instructions.
+First, create an `ai2d_builder` object. If the object already exists, use the `reset` function to update its parameters. Then call the `build_schedule()` function to generate the instructions.
 
 This completes the `AI2D` configuration. Next, we will look at the `KPU` configuration.
 
@@ -1005,11 +1004,9 @@ Model::Model(const char *model_name, const char *kmodel_file): model_name_(model
 1. Read the model.
 
 ```C++
-std::ifstream ifs(kmodel_file, std::ios::binary);
-interp_.load_model(ifs).expect("load_model failed");
+kmodel_ = read_binary_file<unsigned char>(kmodel_file);
+interp_.load_model({ (const gsl::byte *)kmodel_.data(), kmodel_.size() }).expect("cannot load kmodel.");
 ```
-
-First, convert the file path to a stream, then use `load_model()` to load it in a streaming manner.
 
 1. Allocate memory for the input tensor.
 
@@ -1072,7 +1069,11 @@ void Model::kpu_run()
 
 In the `preprocess` function, `AI2D` inference is started with `invoke`, and in the `kpu_run` function, `kpu` inference is started. Before starting inference, the input of `AI2D` needs to be set by directly binding the input data to the input device using the physical address.
 
-> Tips: The `postprocess()` function calls the model's post-processing part. Since different models have different post-processing, and even the same model may have different versions of post-processing, ensure that the results of your C++ post-processing code are consistent with your Python model post-processing results before performing complete inference!
+> Tips: The `postprocess()` function calls the model's post-processing part. Since different models have different post-processing, and even the same model may have different versions of post-processing.
+>
+> **Before you start reasoning, you need to do this first!**
+>
+> Ensure that the results of your C++ post-processing code are consistent with your Python model post-processing results!
 >
 > Ensure that the results of your C++ post-processing code are consistent with your Python model post-processing results!
 >

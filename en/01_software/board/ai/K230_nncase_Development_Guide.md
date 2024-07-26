@@ -72,8 +72,8 @@ Features provided by nncase:
 
 Supported neural network model formats by nncase:
 
-- tflite
-- onnx
+- TFLite
+- ONNX
 
 ### 1.2 nncase Architecture
 
@@ -124,7 +124,7 @@ nncase provides Python APIs for compiling neural network models on a PC
 
 ### 2.1 Supported Operators
 
-#### 2.1.1 tflite Operators
+#### 2.1.1 TFLite Operators
 
 | Operator                | Is Supported |
 | ----------------------- | ------------ |
@@ -207,7 +207,7 @@ nncase provides Python APIs for compiling neural network models on a PC
 | SPLIT                   | Yes          |
 | HARD_SWISH              | Yes          |
 
-#### 2.1.2 onnx Operators
+#### 2.1.2 ONNX Operators
 
 | Operator              | Is Supported |
 | --------------------- | ------------ |
@@ -331,7 +331,7 @@ nncase provides Python APIs for compiling neural network models on a PC
 
 ### 2.2 APIs
 
-Currently, the model compilation APIs support deep learning models in tflite/onnx formats.
+Currently, the model compilation APIs support deep learning models in TFLite/ONNX formats.
 
 #### 2.2.1 CompileOptions
 
@@ -345,7 +345,7 @@ The `CompileOptions` class is used to configure nncase compilation options. The 
 | dump_ir                     |        bool         |    No    | Specifies whether to dump IR, defaults to False                                                                       |
 | dump_asm                    |        bool         |    No    | Specifies whether to dump asm assembly files, defaults to False                                                       |
 | dump_dir                    |       string        |    No    | Specifies the directory to dump files when dump_ir or other dump options are enabled, defaults to ""                  |
-| input_file                  |       string        |    No    | Specifies the parameter file path when the onnx model exceeds 2GB, defaults to ""                                     |
+| input_file                  |       string        |    No    | Specifies the parameter file path when the ONNX model exceeds 2GB, defaults to ""                                     |
 |                             |                     |          |                                                                                                                       |
 | preprocess                  |        bool         |    No    | Specifies whether to enable preprocessing, defaults to False. The following parameters are effective only when `preprocess=True` |
 | input_type                  |       string        |    No    | Specifies the input data type when preprocessing is enabled, defaults to "float". When `preprocess` is `True`, must be "uint8" or "float32" |
@@ -369,7 +369,7 @@ Currently, custom preprocessing order is not supported. You can configure the re
 
 <div class="mermaid">
 graph TD;
-    NewInput("NewInput\n(shape = input_shape\ndtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty\nmean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
+    NewInput("NewInput<br>(shape = input_shape<br>dtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty<br>mean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
     a--N-->b--N-->c--N-->d--N-->e--N-->OldInput; f--N-->NewOutput;
     subgraph origin_model
         OldInput; Model_body ; OldOutput;
@@ -386,8 +386,8 @@ Parameter explanations:
 
    <div class="mermaid">
     graph TD;
-        NewInput_uint8("NewInput_uint8 \n[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
-        NewInput_uint81("NewInput_uint8 \n[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
+        NewInput_uint8("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
+        NewInput_uint81("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
    </div>
 
 1. `input_shape` specifies the shape of the input data, and `input_layout` specifies its layout. It currently supports both string (e.g., `"NHWC"`, `"NCHW"`) and index formats. Non-4D data processing is also supported. When configured as a string, `input_layout` specifies the layout of the input data. When configured as an index, `input_layout` specifies the permutation parameter for a `Transpose` operation.
@@ -411,23 +411,23 @@ subgraph B
     OldOutput1("OldOutput: 1,10,4,5,2") --"output_layout: "0,2,3,1,4""--> Transpose5("Transpose perm: 0,2,3,1,4") --> NewOutput1("NewOutput: 1,4,5,10,2");
     end
 subgraph A
-    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput\nNHWC");
-    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput\nNHWC");
+    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput<br>NHWC");
+    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput<br>NHWC");
     end
 </div>
 
 ##### 2.2.1.2 Dynamic Shape Parameters
 
-ShapeBucket is a solution for dynamic shapes that optimizes based on the range of input lengths and the specified number of segments. This feature is disabled by default and needs to be enabled through the corresponding option. Apart from specifying the relevant field information, the rest of the process is the same as compiling a static model.
+ShapeBucket is a solution for dynamic shapes that optimizes based on the range of input lengths and the specified number of segments. This feature is disabled by default and needs to be enabled through the corresponding option. Apart from specifying the relevant field information, the rest of the compilation process is the same as compiling a static model.
 
-- onnx
+- ONNX
 
-In the shape information of a model, some dimensions may be variable names. For example, consider an onnx model with the following inputs:
+In the shape information of a model, some dimensions may be variable names. For example, consider an ONNX model with the following inputs:
 
 > tokens: int64[batch_size, tgt_seq_len]  
 > step: float32[seq_len, batch_size]
 
-The shape information contains three variables: seq_len, tgt_seq_len, and batch_size. Although batch_size is a variable, it is fixed to 3 in actual use. Therefore, add batch_size = 3 to **fix_var_map** to fix this dimension to 3 during runtime. The variables seq_len and tgt_seq_len are dynamic and need to be configured with their actual ranges in **range_info**. **segments_count** specifies the number of segments to divide the range into, which will proportionally increase the compilation time.
+The shape information contains three variables: `seq_len`, `tgt_seq_len`, and `batch_size`. Although `batch_size` is a variable, it is fixed to 3 in actual use. Therefore, add `batch_size = 3` to **fix_var_map** to fix this dimension to 3 during runtime. The variables `seq_len` and `tgt_seq_len` are dynamic and need to be configured with their actual ranges in **range_info**. **segments_count** specifies the number of segments to divide the range into, which will proportionally increase the compilation time.
 
 Here is an example of the corresponding compilation parameters:
 
@@ -439,9 +439,9 @@ compile_options.shape_bucket_segments_count = 2
 compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-- tflite
+- TFLite
 
-Unlike onnx models, tflite models do not currently label dimension names in the shape. Currently, only one dimension in the input can be dynamic, and it is uniformly named as -1. The configuration is as follows:
+Unlike ONNX models, TFLite models do not currently label dimension names in the shape. Currently, only one dimension in the input can be dynamic, and it is uniformly named as -1. The configuration is as follows:
 
 ```python
 compile_options = nncase.CompileOptions()
@@ -451,7 +451,7 @@ compile_options.shape_bucket_segments_count = 2
 compile_options.shape_bucket_fix_var_map = {"batch_size" : 3}
 ```
 
-After configuring these options, the entire compilation process is the same as for a static shape.
+After configuring these options, the entire compilation process is the same as for a static shape model.
 
 ##### 2.2.1.3 Parameter Configuration Example
 
@@ -516,27 +516,20 @@ import_options = nncase.ImportOptions()
 
 The `PTQTensorOptions` class is used to configure nncase PTQ options.
 
-| Name                           | Type   | Description |
-| ------------------------------ | ------ | ----------- |
-| calibrate_method               | string | No          |
-| samples_count                  | int    | No          |
-| finetune_weights_method        | string | No          |
-| quant_type                     | string | No          |
-| w_quant_type                   | string | No          |
-|                                |        |             |
-| quant_scheme                   | string | No          |
-| quant_scheme_strict_mode       | bool   | No          |
-| export_quant_scheme            | bool   | No          |
-| export_weight_range_by_channel | bool   | No          |
+| Name                            | Type   | Required | Description |
+| ------------------------------- | ------ | -------- | ----------- |
+| samples_count                   | int    |    No    | Specifies the number of samples used for the quantization calibration set |
+| calibrate_method                | string |    No    | Specifies the quantization method, options are 'NoClip' and 'Kld', default is 'Kld' |
+| finetune_weights_method         | string |    No    | Specifies whether to fine-tune weights, options are 'NoFineTuneWeights' and 'UseSquant', default is 'NoFineTuneWeights' |
+| quant_type                      | string |    No    | Specifies the data quantization type, options are 'uint8', 'int8', 'int16' |
+| w_quant_type                    | string |    No    | Specifies the weight quantization type, options are 'uint8', 'int8', 'int16' |
+|                                 |        |    No    | The above two types cannot both be 'int16' |
+| quant_scheme                    | string |    No    | Path to the quantization parameter configuration file |
+| quant_scheme_strict_mode        | bool   |    No    | Whether to strictly follow quant_scheme for quantization |
+| export_quant_scheme             | bool   |    No    | Whether to export the quantization parameter configuration file |
+| export_weight_range_by_channel  | bool   |    No    | Whether to export weights quantization parameters in `bychannel` form, it is recommended to set this parameter to `True` |
 
-- Mixed Quantization Parameter Explanations
-
-  - quant_scheme: Path to the imported quantization parameter configuration file
-  - quant_scheme_strict_mode: Whether to strictly follow the quant_scheme for quantization
-  - export_quant_scheme: Whether to export the quantization parameter configuration file
-  - export_weight_range_by_channel: Whether to export weights quantization parameters in `bychannel` format. For better quantization results, it is recommended to set this parameter to `True`.
-
-For detailed usage, see [MixQuant说明](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md).
+For detailed usage of mixed quantization, see [MixQuant Guide](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md)
 
 **Example**:
 
@@ -614,7 +607,7 @@ class Compiler:
 
 **Description**:
 
-Imports a tflite model.
+Imports a TFLite model.
 
 **Definition**:
 
@@ -646,7 +639,7 @@ compiler.import_tflite(model_content, import_options)
 
 **Description**:
 
-Imports an onnx model.
+Imports an ONNX model.
 
 **Definition**:
 
@@ -755,7 +748,7 @@ The following examples use models and Python compilation scripts.
 - The original model files are located in `/path/to/k230_sdk/src/big/nncase/examples/models`
 - The Python compilation scripts are located in `/path/to/k230_sdk/src/big/nncase/examples/scripts`
 
-#### 2.3.1 Compiling a tflite Model
+#### 2.3.1 Compiling a TFLite Model
 
 The `mbv2_tflite.py` script is as follows:
 
@@ -834,16 +827,16 @@ if __name__ == '__main__':
     main()
 ```
 
-Run the following command to compile the mobilenetv2 tflite model with the target set to k230:
+Run the following command to compile the mobilenetv2 TFLite model with the target set to k230:
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/mbv2_tflite.py --target k230 --model models/mbv2.tflite --dataset calibration_dataset
 ```
 
-#### 2.3.2 Compiling an onnx Model
+#### 2.3.2 Compiling an ONNX Model
 
-For onnx models, it is recommended to use the [ONNX Simplifier](https://github.com/daquexian/onnx-simplifier) to simplify the model before using nncase to compile it.
+For ONNX models, it is recommended to use the [ONNX Simplifier](https://github.com/daquexian/onnx-simplifier) to simplify the model before using nncase to compile it.
 
 The `yolov5s_onnx.py` script is as follows:
 
@@ -976,7 +969,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Run the following command to compile the onnx model with the target set to k230:
+Run the following command to compile the ONNX model with the target set to k230:
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples

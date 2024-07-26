@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
 > Tips：
 >
 > 1. 本教程旨在让用户熟悉nncase的使用流程,文中模型输入数据均为随机数。实际应用场景的具体流程请参阅后续章节《AI开发》。
-> 1. 官方CanMV镜像中的nncase版本可能已过时，如果需使用最新nncase，需自行更新运行时库并重新编译CanMV镜像。
+> 1. 官方镜像中的nncase版本可能已过时，如果需使用最新nncase，需自行更新运行时库，详见[教程](./03_other/K230_SDK更新nncase运行时库指南.md)。
 
 ### 模型编译和模拟器推理
 
@@ -659,7 +659,7 @@ nncase工具链包括 `nncase`和 `nncase-kpu`插件包，两者均需正确安�
     docker run -it --rm -v `pwd`:/mnt -w /mnt ghcr.io/kendryte/k230_sdk /bin/bash -c "/  bin/bash"
     ```
 
-    > Tips：目前仅支持py3.6-3.10，如果pip安装失败请检查pip对应的Python版本。
+    > Tips：目前仅支持py3.7-3.10，如果pip安装失败请检查pip对应的Python版本。
 
 #### 环境配置
 
@@ -685,7 +685,7 @@ export PATH=$PATH:/path/to/python/site-packages/
 - 参数配置:介绍如何正确配置编译参数,以满足实际部署需求；
 - 获取模型信息:说明从原始模型中获取网络结构、层信息等关键数据的方法；
 - 设置校正集数据:阐述如何准备好校正集样本数据，包括单输入和多输入模型两种情况，以用于量化校准过程；
-- 设置推理数据格式:讲解推理部署时如何配置输入数据，支持不同需求场景；
+- 设置推理数据:讲解推理部署时如何配置输入数据，支持不同需求场景；
 - 配置多输入模型:介绍处理多输入模型时,如何正确设置每个输入的形状、数据格式等信息；
 - PC模拟器推理:说明如何在PC上利用模拟器推理`kmodel`，这是验证编译效果的关键步骤；
 - 比较推理结果:通过与不同框架(TensorFlow、PyTorch等)的推理结果比较,验证kmodel的正确性；
@@ -694,7 +694,7 @@ export PATH=$PATH:/path/to/python/site-packages/
 
 #### 示例代码
 
-当您阅读了Jupyter笔记本中的完整教程后，可以基于以下示例代码进行修改。
+当您阅读了Jupyter笔记本中的完整教程后，可以基于以下示例代码进行修改，完成自己的模型编译。
 
 ```Python
 import nncase
@@ -905,8 +905,8 @@ if __name__ == "__main__":
 
 在开发板上推理时，我们提供两个模块用于加速模型推理
 
-- 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#5-ai2d-%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
-- 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/ai/K230_nncase_%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97.md#4-kpu%E8%BF%90%E8%A1%8C%E6%97%B6apisc)；
+- 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#5-ai2d-运行时apisc)；
+- 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#4-kpu运行时apisc)；
 
 接下来，我们将在C++代码示例中说明这两个模块如何使用，有哪些需要注意的地方。
 
@@ -939,7 +939,7 @@ k230_sdk/src/big/nncase/examples/
 
 #### AI2D 配置
 
-在 `mobile_retinaface.cc`中使用了AI2D功能中的 `Pad`和 `Resize`功能，接下来将对类 `MobileRetinaface`的构造函数进行代码块解释，这里完成了 `AI2D`的参数配置：
+在 `mobile_retinaface.cc`中使用了AI2D功能中的 `Pad`和 `Resize`功能，接下来将对 `MobileRetinaface`类进行代码解释，这里完成了 `AI2D`的参数配置：
 
 1. 设置 `AI2D`的输出tensor
 
@@ -1022,11 +1022,9 @@ Model::Model(const char *model_name, const char *kmodel_file): model_name_(model
 1. 读取模型
 
 ```C++
-std::ifstream ifs(kmodel_file, std::ios::binary);
-interp_.load_model(ifs).expect("load_model failed");
+kmodel_ = read_binary_file<unsigned char>(kmodel_file);
+interp_.load_model({ (const gsl::byte *)kmodel_.data(), kmodel_.size() }).expect("cannot load kmodel.");
 ```
-
-首先将文件路径转换为流，然后通过 `load_model()` 进行流式加载。
 
 1. 输入tensor内存分配
 
