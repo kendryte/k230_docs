@@ -262,7 +262,6 @@
 | [K230_AI实战_HHB神经网络模型部署工具.md](zh/02_applications/tutorials/K230_AI实战_HHB神经网络模型部署工具.md) | K230 AI实战 HHB神经网络模型部署工具|
 | [K230_内存占用分析指南.md](zh/02_applications/tutorials/K230_内存占用分析指南.md) | K230 内存占用分析指南|
 | [K230_内存优化指南.md](zh/02_applications/tutorials/K230_内存优化指南.md) | K230 内存优化指南|
-| [K230_启动优化指南.md](zh/02_applications/tutorials/K230_启动优化指南.md) | K230 启动优化指南|
 
 ### K230 SDK RTT ONLY 其它文档
 

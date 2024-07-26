@@ -130,36 +130,7 @@ sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 ./sample_venc.elf 0 -sensor 39 -o out.265 // Canmv-K230-V2.0板
 ```
 
-##### 2.2.4.2 MAPI编码demo
-
-sample_venc默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR，目前该demo支持3路编码，可通过命令行传参的方式修改sensor类型以及其他参数，具体说明如下：
-
-启动开发板后:
-
-1. 通过 ` lsmod ` 检查小核侧是否加载k_ipcm模块，如未加载，执行 `insmod k_ipcm.ko` 加载k_ipcm模块
-1. 在大核侧启动核间通信进程，执行 `./sample_sys_inif.elf`
-1. 在小核侧 /mnt 目录下，执行 `./sample_venc`，默认执行1路h264视频编码，分辨率为1280x720，生成的码流文件存放在 /tmp 目录下面，如需传参可参考如下参数说明：
-
-```shell
-Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0            // Canmv-K230-V1.0/1.1板
-                     -s or --sensor_type [sensor_index],\n");
-                            see vicap doc
-                     -n or --chn_num [number], 1, 2, 3
-                     -t or --type [type_index]
-                            0: h264 type
-                            1: h265 type
-                            2: jpeg type
-                     -o or --out_path [output_path]
-                     -h or --help, will print usage
-
-Usage: ./sample_venc -s 39 -n 2 -o /tmp -t 0            // Canmv-K230-V2.0板
-```
-
-sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，默认值为7
-
-可通过` ctrl+c `停止运行，根据不同的编码类型，会在小核指定的输出目录下生成不同的码流文件，对于h264类型，会生成形如`stream_chn0.264`文件，其中 0 代表0通道；对于h265类型，会生成形如 `stream_chn0.265`文件，同样 0 代表0通道；对于jpeg类型，会生成形如`chn0_0.jpg`的jpg图片，代表0通道第0张图片，默认会生成10张jpg图片。
-
-##### 2.2.4.3 查看结果
+##### 2.2.4.2 查看结果
 
 输出文件可以导出到本地，用视频播放软件查看。
 
@@ -228,10 +199,6 @@ Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显�
 其中type取值参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，设置为0
 
 ###### 2.4.4.1.1 VDEC绑定VO解码显示
-
-`./sample_vdec.elf -type 1 -i canaan.264`
-
-###### 2.4.4.1.2 MAPI VDEC绑定VO解码显示
 
 `./sample_vdec.elf -type 1 -i canaan.264`
 
@@ -364,34 +331,6 @@ api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enabl
 输入`cat /proc/umap/sysbind` 可查看模块间系统绑定。
 
 ![图片描述](images/23f111756ad924f5538cce7c691da0df.png)
-
-###### 2.5.3.2.8 mapi音频测试
-
-确保大核已启动核间通信进程：先确认小核加载k_ipcm.ko模块，再确认大核启动:`/sharefs/app/sample_sys_init.elf &`
-
-- 可输入`/mnt/sample_audio -help`查看demo使用方法。
-- `-type`选项来测试不同模块功能。
-- `-samplerate`选项来配置音频输入和输出不同采样率（8k-192k）,默认为44.1k。
-- `-enablecodec`使用内置codec或者片外的音频子板，默认使用内置codec。
-- `-filename`加载或存储g711文件名称。
-- `-channels`:指定声道数。8
-
-![image-20230530101801685](images/image-20230530101801685.png)
-
-- ai->aenc测试
-
-小核上执行命令:`/mnt/sample_audio -type 0 -filename test.g711a`,按q键可退出测试。demo能够实时采集音频数据并编码成g711a格式并保存到文件中。
-![image-20230530102014642](images/image-20230530102014642.png)
-
-- adec->ao测试
-
-小核上执行命令:`/mnt/sample_audio -type 1 -filename tes.g711a`,按q键可退出测试。demo能够循环解码播放本地g711a格式的文件。
-![image-20230530102747862](images/image-20230530102747862.png)
-
-- ai->aenc adec->ao loopback测试
-
-小核上执行命令:/mnt/sample_audio -type 2 ,按q键可退出测试。demo能够实时采集音频数据并编码成g711a格式，再解码g711a格式数据后播放输出。
-![image-20230530102916366](images/image-20230530102916366.png)
 
 ### 2.6 Vicap_demo
 
@@ -536,286 +475,21 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 ### 2.8 USB_demo
 
-#### 2.8.1 USB_demo简介
+### 2.9 Rtsp推流Demo
 
-USB demo目前调试了4个功能，
+### 2.10 FaceAeDemo
 
-作为device，模拟U盘，模拟鼠标键盘。
-
-作为host，连接U盘，连接鼠标键盘。
-
-#### 2.8.2 Feature说明
-
-USB demo的功能是linux系统原始集成的功能。
-
-#### 2.8.3 依赖资源
-
-typeC线，typeC转typeA。
-
-#### 2.8.4 使用说明
-
-##### 2.8.4.1 作为device模拟U盘
-
-```shell
-#规划一块内存空间作为模拟U盘的磁盘空间。
-[root@canaan / ]#gadget-storage-mem.sh
-2+0 records in
-2+0 records out
-mkfs.fat 4.1 (2017-01-24)
-[ 1218.882053] Mass Storage Function, version: 2009/09/11
-[ 1218.887308] LUN: removable file: (no medium)
-[ 1218.895464] dwc2 91500000.usb-otg: bound driver configfs-gadget
-[root@canaan / ]#[ 1219.019554] dwc2 91500000.usb-otg: new device is high-speed
-[ 1219.056629] dwc2 91500000.usb-otg: new address 5
-
-##使用SD/eMMC的FAT分区当作模拟U盘的磁盘空间。
-[root@canaan ~ ]#gadget-storage.sh
-[  359.995510] Mass Storage Function, version: 2009/09/11
-[  360.000762] LUN: removable file: (no medium)
-[  360.013138] dwc2 91500000.usb-otg: bound driver configfs-gadget
-[root@canaan ~ ]#[  360.136809] dwc2 91500000.usb-otg: new device is high-speed
-[  360.173543] dwc2 91500000.usb-otg: new address 43
-```
-
-连接开发板的USB口，typeC连接PC，PC上显示U盘连接。
-
-##### 2.8.4.2 作为HOST连接U盘
-
-K230开发板USB口通过typeC转typeA连接U盘。
-
-##### 2.8.4.3 作为device模拟鼠标键盘
-
-K230开发板USB口通过typeC连接另外一台电脑设备来进行测试
-
-```shell
-[root@canaan / ]#gadget-hid.sh
-
-[root@canaan / ]#hid_gadget_test /dev/hidg0 mouse
-#根据提示输入相应的操作，比如-123 -123，可以看到PC上的鼠标指针移动。
-
-[root@canaan / ]#hid_gadget_test /dev/hidg1 keyboard
-#根据提示输入相应的操作，可以看到PC上的类似键盘输入。比如a b c --return
-```
-
-##### 2.8.4.4 作为HOST连接鼠标键盘
-
-K230开发板USB通过typeC转typeA连接鼠标或键盘。
-
-```shell
-#通过以下命令确定input设备对应的event。K230开发板如果没有连接屏幕，连接鼠标键盘对应的event会改变。
-[root@canaan ~ ]#cat /proc/bus/input/devices
-...
-I: Bus=0003 Vendor=046d Product=c52f Version=0111
-N: Name="Logitech USB Receiver"
-P: Phys=usb-91500000.usb-otg-1/input0
-S: Sysfs=/devices/platform/soc/91500000.usb-otg/usb1/1-1/1-1:1.0/0003:046D:C52F.0001/input/input2
-U: Uniq=
-H: Handlers=event2
-B: PROP=0
-B: EV=17
-B: KEY=ffff0000 0 0 0 0
-B: REL=1943
-B: MSC=10
-```
-
-```shell
-[root@canaan / ]$ test_mouse /dev/input/event2
-#点击或移动鼠标，串口会有对应的显示。
-
-[root@canaan / ]$ test_keyboard /dev/input/event2
-#按下键盘不同的按键，串口会有对应的显示。
-```
-
-### 2.9 GPU_demo
-
-#### 2.9.1 GPU_demo简介
-
-GPU demo共包含三个可执行程序
-
-- `tiger`：绘制老虎的矢量图示例
-- `linearGrad`: 绘制线性渐变示例
-- `imgIndex`: 绘制颜色查找表示例
-
-#### 2.9.2 Feature说明
-
-GPU demo主要覆盖GPU的矢量绘制、线性渐变（通过pattern实现）、颜色查找表三个功能。
-
-#### 2.9.3 依赖资源
-
-文件系统可写。
-
-#### 2.9.4 使用说明
-
-进入一个可写的目录，执行程序
-
-##### 2.9.4.1 tiger
-
-运行`tiger`命令，执行完成后在当前目录下生成tiger.png，如下图所示
-
-![老虎图像](images/e54764629a9e9fb63ec4340d316e4f42.png)
-
-##### 2.9.4.2 linearGrad
-
-运行`linearGrad`命令，执行完成后在当前目录生成linearGrad.png，如下图所示
-
-![线性渐变](images/24db1c231608cd26a5a981e055aa6910.png)
-
-##### 2.9.4.3 imgIndex
-
-运行`imgIndex`命令，执行完成后在当前目录生成4个图片文件，如下图所示
-
-- `imgIndex1.png`: index1模式，支持2种颜色
-
-![index1](images/9f7f9bfaedf0f183b63b59ace6e1569e.png)
-
-- `imgIndex2.png`: index2模式，支持4种颜色
-
-![index2](images/c4bb92a96fd0ba1f4973a27ecd6f60eb.png)
-
-- `imgIndex4.png`: index4模式，支持16种颜色
-
-![index4](images/9a3c47da0975b0226e75453a79a8da2c.png)
-
-- `imgIndex8.png`: index8模式，支持256种颜色
-
-![index8](images/1f24a6530d8c0d1ed22bb3eea26a33fb.png)
-
-##### 2.9.4.4 vglite_drm
-
-运行`vglite_drm`命令，会在LCD屏幕上显示由GPU绘制的图案，再按一次`Enter`键显示下一个图案，如图所示
-
-![第一个图案](../../../02_applications/tutorials/images/gpu-hdmi-2.jpg)
-
-##### 2.9.4.5 vglite_cube
-
-运行`vglite_cube`命令，会在LCD屏幕上显示由GPU绘制的旋转的正方体，如下图所示
-
-![Cube](../../../02_applications/tutorials/images/gpu-hdmi-1.jpg)
-
-这个demo运行时内核会有大量的打印消息，如果不希望显示这些消息可以降低内核打印级别
-
-```shell
-sysctl -w kernel.printk=6
-```
-
-### 2.10 DRM显示demo
-
-#### 2.10.1 demo使用简介
-
-该demo运行在K230小核的Linux系统上，具体是将图片显示到屏幕上。
-
-#### 2.10.2 Features说明
-
-1. DRM支持5个图层操作，具体包括：1个video层和4个OSD层；
-1. video层支持NV12、NV21、NV16、NV61颜色空间
-1. OSD层支持ARGB8888、ARGB4444、RGB888、RGB565颜色空间
-
-#### 2.10.3 依赖资源
-
-HDMI显示器
-
-#### 2.10.4 使用说明
-
-##### 2.10.4.1 编译
-
-软件编译参考release sdk软件包中的README.md
-
-##### 2.10.4.2 执行
-
-```shell
-modetest -M canaan-drm -D 0 -a -s 38@36:1920x1080-30  -P 32@36:1920x1080@AR24 -v -F smpte
-```
-
-执行完上述命令，会在HDMI显示器上显示彩条，具体如下所示：
-
-![图片描述](images/modetest_ar24_smpte_hdmi.png)
-
-### 2.11 LVGL demo
-
-#### 2.11.1 demo使用简介
-
-该demo运行在K230小核的Linux系统上，会在HDMI显示器上显示一个配置界面。
-
-#### 2.11.3 依赖资源
-
-HDMI显示器
-
-#### 2.11.3 使用说明
-
-##### 2.11.3.1 编译
-
-软件编译参考release sdk软件包中的README.md
-
-##### 2.11.3.2 执行
-
-```shell
-lvgl_demo_widgets
-```
-
-执行完上述命令，会在HDMI显示器上显示配置界面，具体如下所示：
-
-![图片描述](images/lvgl_demo_widgets_hdmi.png)
-
-### 2.12 Rtsp推流Demo
-
-#### 2.12.1 Demo简介
-
-该demo实现rtsp推流。
-
-#### 2.12.2 Feature说明
-
-该demo支持音视频码流同时推流到rtsp server上，其中通过`mapi venc&aenc`接口实现对音视频的编码；推流之后通过url进行拉取，目前该demo支持3路url推拉流。
-
-#### 2.12.3 依赖资源
-
-需要usb转eth网口转换器，将开发板连接网线
-
-#### 2.12.4 使用说明
-
-##### 2.12.4.1 编译
-
-参考release sdk软件包中的`README.md`中介绍，在docker环境编译cdk-user即可，编译完成后在`k230_sdk/src/common/cdk/user/out/little`下生成可执行程序rtsp_demo
-
-##### 2.12.4.2 执行
-
-rtsp_demo默认使用的sensor类型是IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR，可通过命令行传参的方式修改sensor类型以及其他参数，具体说明如下：
-
-启动开发板后:
-
-1. 通过 ` lsmod ` 检查小核侧是否加载k_ipcm模块，如未加载，执行 `insmod k_ipcm.ko` 加载k_ipcm模块
-1. 在大核侧启动核间通信进程，执行 `./sample_sys_inif.elf`
-1. 在小核侧/mnt目录下，执行 ` ./rtsp_demo `，默认为1路h265视频编码推流，分辨率为1280x720，如需传参参看如下参数说明，当推流mjpeg码流时，分辨率目前最大支持2032x1944，最小分辨率为640x480.
-
-```shell
-Usage: ./rtsp_demo -s 24 -n 2 -t h265 -w 1280 -h 720 -a 0  // Canmv-K230-V1.0/1.1板
-Usage: ./rtsp_demo -s 39 -n 2 -t h265 -w 1280 -h 720 -a 0  // Canmv-K230-V2.0板
-                    -s: the sensor type:
-                        see vicap doc
-                    -n: the session number, range: 1, 2，3
-                    -t: the video encoder type: h264/h265/mjpeg
-                    -w: the video encoder width
-                    -h: the video encoder height
-                    -a: audio input type(0:mic input  1:headphone input):default 0.
-```
-
-其中sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
-音频输入类型可选择：板载mic或者耳机输入。
-
-小核上正常运行rtsp_demo后，会打印出形如：`rtsp://ip:8554/session0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放；如需停止运行，请先停止vlc拉流，然后执行` ctrl+c `停止运行 rtsp_demo。
-
-### 2.13 FaceAeDemo
-
-#### 2.13.1 Demo介绍
+#### 2.10.1 Demo介绍
 
 该demo在大核使用，是VICAP、KPU、VO（视频输出）、AERoi联调的demo，可通过人脸检测的接口适当调节人脸曝光亮度。
 
-#### 2.13.2 编译
+#### 2.10.2 编译
 
 1. 首先参考release sdk软件包中的README.md，使用docker编译镜像。
 1. 编译完成后，默认将该sample（sample_face_ae.elf）存放在该路径下`k230_sdk/src/big/mpp/userapps/sample/elf`
 1. 由于KPU联动需要使用检测模型test.kmodel，编译后存放路径`k230_sdk/src/big/mpp/userapps/sample/elf`
 
-#### 2.13.3 执行
+#### 2.10.3 执行
 
 ```shell
 cd /sharefs/app
@@ -825,27 +499,27 @@ cd /sharefs/app
 执行成功后，会打印每一帧图像的物理地址
 ```
 
-### 2.14 FFT Demo
+### 2.11 FFT Demo
 
-#### 2.14.1 Demo 简介
+#### 2.11.1 Demo 简介
 
 本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
-#### 2.14.2 Feature说明
+#### 2.11.2 Feature说明
 
 先进行fft计算，在进行ifft计算
 
-#### 2.14.3 依赖资源
+#### 2.11.3 依赖资源
 
 无
 
-#### 2.14.4 使用说明
+#### 2.11.4 使用说明
 
-##### 2.14.4.1 编译
+##### 2.11.4.1 编译
 
 > 请参考release sdk软件包中的README.md。
 
-##### 2.14.4.2 执行
+##### 2.11.4.2 执行
 
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
@@ -907,258 +581,4 @@ cd /sharefs/app
 
    ```
 
-### 2.15 SDIO WIFI
-
-#### 2.15.1 Demo介绍
-
-CANMV开发板上使用了一颗支持2.4G的SDIO WIFI，AP6212。支持STA与softAP模式。
-
-#### 2.15.2 编译
-
-k230_sdk编译CANMV的配置默认是支持AP6212 WIFI的。
-
-make menuconfig
-
-```shell
-K230 SDK Configuration
-    wifi configurations  --->
-        [*] enable ap6212a
-```
-
-使能ap6212a后，k230_sdk 会把WIFI需要的固件或nvram配置拷贝到文件系统中。
-
-make linux-menuconfig
-
-```shell
-Linux/riscv 5.10.4 Kernel Configuration
-    Device Drivers  --->
-        [*] Network device support  --->
-            [*]   Wireless LAN  --->
-                <M>   Broadcom FullMAC wireless cards support
-                (/etc/firmware/fw_bcm43456c5_ag.bin) Firmware path
-                (/etc/firmware/nvram.txt) NVRAM path
-                    Enable Chip Interface (SDIO bus interface support)  --->
-                    Interrupt type (In-Band Interrupt)  --->
-```
-
-配置LINUX编译WIFI驱动，CANMV默认WIFI的STA与softAP共存模式。源码路径：
-
-src/little/linux/drivers/net/wireless/bcmdhd
-
-make buildroot-menuconfig
-
-```shell
-Buildroot 2021.02-git Configuration
-    Target packages  --->
-        Networking applications  --->
-            [*] hostapd
-            [*]   Enable hostap driver
-            [*]   Enable nl80211 driver
-            [ ]   Enable wired driver
-            [*]   Enable ACS
-            [*]   Enable EAP
-            [*]   Enable WPS
-            [*]   Enable WPA3 support
-            [*]   Enable VLAN support
-            [*]     Enable dynamic VLAN support
-            [*]     Use netlink-based API for VLAN operations
-
-            [*] wireless tools
-                [*]   Install shared library
-
-            [*] wpa_supplicant
-                [*]   Enable nl80211 support
-                [*]   Enable AP mode
-                [*]     Enable Wi-Fi Display
-                [*]     Enable mesh networking
-                [*]   Enable autoscan
-                [*]   Enable EAP
-                [*]   Enable HS20
-                [*]   Enable syslog support
-                [*]   Enable WPS
-                [*]   Enable WPA3 support
-                [*]   Install wpa_clibinary
-                [ ]   Install wpa_client shared library
-                [*]   Install wpa_passphrase binary
-                [*]   Enable support for the DBus control interface
-```
-
-编译buildroot，增加无线使用的工具。
-
-WIFI模块在系统启动时在uboot中进行复位。源码：
-
-src/little/uboot/board/canaan/k230_canmv/board.c : board_late_init
-
-WIFI模块在系统启动后，if wlan down/up 对WIFI模块进行上电下电操作。源码：
-
-```c
-&gpio1 {
-    status = "okay";
-};
-
-&mmc_sd0{
-    status = "okay";
-    io_fixed_1v8;
-    rx_delay_line = <0x00>;
-    tx_delay_line = <0x00>;
-    bcmdhd_wlan {
-        compatible = "android,bcmdhd_wlan";
-        gpio_wl_reg_on = <&port1 0 GPIO_ACTIVE_HIGH>;
-    };
-};
-```
-
-#### 2.14.5 执行
-
-STA是Station的缩写，它是无线网络中的一个终端站点设备，可以看成是一个客户端，一般来说，处在STA模式下的设备本身不接受无线的接入，该设备连接到AP节点进行网络访问，我们的手机就是作为STA连接路由器。
-
-AP是Access Point的缩写，即无线接入点，它是一个无线网络的中心节点，可以看成是一个服务器。它作为一个网络的中心节点，提供无线接入服务，其他的无线设备允许接入该节点，所有接入该节点设备的无线信号数据都要通过它才能进行交换和互相访问。一般的无线路由器、网关、热点就是工作在AP模式下，AP节点和AP节点之间允许相互连接。
-
-##### 2.14.5.1 STA测试
-
-```shell
-ifconfig -a
-ifconfig  wlan0 up
-wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
-wpa_cli -i wlan0 scan
-wpa_cli -i wlan0 scan_result
-wpa_cli -i wlan0 add_network
-wpa_cli -i wlan0 set_network 1 psk '"12345678"'
-wpa_cli -i wlan0 set_network 1 ssid '"wifi_test"'
-wpa_cli -i wlan0 select_network 1
-udhcpc -i wlan0 -q
-```
-
-##### 2.14.5.2 AP测试
-
-```shell
-[root@canaan ~ ]#cat /etc/hostapd.conf
-ctrl_interface=/var/run/hostapd
-driver=nl80211
-ieee80211n=1
-interface=wlan1
-hw_mode=g
-channel=6
-beacon_int=100
-dtim_period=1
-ssid=k230_ap
-auth_algs=1
-ap_isolate=0
-ignore_broadcast_ssid=0
-```
-
-```shell
-ifconfig wlan1 192.168.1.1
-udhcpd /etc/udhcpd.conf &
-hostapd /etc/hostapd.conf &
-```
-
-sta可以直接连接无密码的k230_ap热点。
-
-### 2.15 UVC_demo
-
-#### 2.15.1 uvc_demo简介
-
-uvc demo把K230开发板当作一个USB摄像头，USB线连接到PC，PC的播放器可以播放真实摄像头的图像。
-
-#### 2.15.2 Feature说明
-
-当前版本支持bulk传输与ISO传输。
-
-当前版本只支持640x480 NV12格式图像 1280x720 H264/MJPEG格式图像。
-
-支持PID、VID以及设备名称通过修改shell脚本配置。
-
-#### 2.15.3 依赖资源
-
-type c线连接USB0与PC
-
-PC的相机应用或安装PotPlayer软件
-
-#### 2.15.4 使用说明
-
-##### 2.15.4.1 编译
-
-软件编译环境参考SDK中的README.md。
-
-1. 小核用户程序源码位于`cdk/user/mapi/sample/camera`
-1. 小核驱动程序位于`linux/drivers/usb/dwc2`
-1. 小核驱动程序位于`linux/drivers/usb/gadget`
-1. 大核程序涉及到mpp仓库以及cdk
-
-大核rtt实现摄像头驱动功能。
-
-小核linux实现USB驱动功能，通过mapi从大核获取摄像头图像。
-
-参考 [K230_USB应用实战_UVC传输YUV及编码码流](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
-
-##### 2.15.4.2 执行
-
-进入大核rt-smart系统后，进入/bin目录下，执行
-
-```shell
-msh /sharefs/app>./sample_sys_init.elf
-```
-
-进入小核linux系统后，进入`/mnt`目录下，执行
-
-```shell
-./canaan-camera.sh start otg0
-
-./camera -t 24
-```
-
-typec USB线连接USB0与PC，potplayer播放器播放摄像头。
-
-默认使用BULK传输，使用以下命令可以更改为ISO传输。
-
-```shell
-./canaan-camera.sh stop
-
-./canaan-camera.sh start otg0 iso
-
-./camera -i -t 24  // Canmv-K230-V1.0/1.1板
-./camera -i -t 39  // Canmv-K230-V2.0板
-```
-
--t 选项用于指定vicap sensor 类型，请参考`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述，CanMV需指定为24。
-
-进入PotPlayer -> `选项` -> `设备` -> `摄像头` 界面,
-`视频录制设备`->`设备`，选择`UVC Camera`
-`视频录制设备`-> `格式`，选择`H264 1280*720 30(P 16:9)`或`MJPG 1280*720 30(P 16:9)`或`NV12 640*360p 30(P 16:9)`
-
-PotPlayer -> `打开` -> `摄像头/其他设备`
-
-### 2.16 YUV Sensor demo
-
-#### 2.16.1 Demo简介
-
-三路YUV sensor输入，通过vicap的MCM硬件输出yuv444 packed格式到ddr，利用nonai_2d硬件的CSC功能转成nv12格式。
-
-vicap绑定nonai_2d，nonai_2d一出二绑定venc和vo，做rtsp推流和屏显。
-
-#### 2.16.2 Feature说明
-
-只支持1280x720分辨率。
-
-#### 2.16.3 依赖资源
-
-依赖特殊的转接板硬件，见下图：
-
-![图片描述](images/yuv_sensor.png)
-
-#### 2.16.4 使用说明
-
-进入大核rt-smart系统后，执行
-
-```shell
-/sharefs/app/sample_yuv_sensor.elf
-```
-
-进入小核linux系统后，执行
-
-```shell
-/mnt/yuv_sensor_demo -n 3
-```
-
-小核上正常运行rtsp_demo后，会打印出形如：`rtsp://10.100.228.150:8554/BackChannelTest0` 的url地址，其中 0 代表第0路，可通过vlc拉取url的流进行播放，也可接HDMI输出到屏幕观看
+### 2.12 SDIO WIFI

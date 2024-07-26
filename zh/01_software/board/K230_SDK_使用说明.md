@@ -64,11 +64,15 @@
 
 K230 SDK 是面向K230 开发板的软件开发包，包含了基于Linux&RT-smart 双核异构系统及RT-smart单系统开发需要用到的源代码，工具链和其他相关资源。
 
-K230 SDK 软件架构层次如图 1-1 所示：
+K230 SDK Linux+RT-smart双系统软件架构层次如图 1-1 所示：
 
 ![logo](images/cee49715351f6dd3496baf19af1262ed.png)
 
 图1-1 K230 SDK 软件架构图
+
+K230 SDK RT-smart 单系统软件架构层次如图 1-2 所示：
+
+![logo1](images/rtt-only_program.png)
 
 ## 2. 开发环境搭建
 
@@ -147,9 +151,8 @@ K230 SDK目录结构如下图所示：
 ```shell
 k230_sdk
 ├── configs
-│   ├── k230_evb_defconfig
-│   └── k230_evb_usiplpddr4_defconfig
-│   └── k230d_defconfig
+│   ├── k230_canmv_defconfig
+│   └── k230_canmv_only_rtt_defconfig
 ├── Kconfig
 ├── LICENSE
 ├── Makefile
@@ -219,7 +222,7 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 
 `k230_canmv_defconfig` ：基于CanMV-K230 V1.0/V1.1 的Linux+RTT双系统配置文件，为默认配置文件
 
-`k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板RTT-only系统配置文件
+`k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板RT-smart单系统配置文件
 
 ### 4.3 编译 SDK
 
