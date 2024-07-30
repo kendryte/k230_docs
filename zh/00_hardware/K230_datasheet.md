@@ -2,8 +2,8 @@
 
 ![cover](images/canaan-cover.png)
 
-Document version: V1.0
-Release date: 2023-7-6
+Document version: V1.1
+Release date: 2024-7-1
 
 <div style="page-break-after:always"></div>
 
@@ -47,8 +47,8 @@ The main people to whom this document (this guide) applies:
 
 | Version Number | Modified by    | Revision Date | Revision Notes                                                                    |
 | -------------- | -------------- | ------------- | --------------------------------------------------------------------------------- |
-| V1.0           | Ruizheng Li,Heng Wen | 2023-7-6     | Revised version |
-|                |                |              |           |
+| V1.0           | Ruizheng Li,Heng Wen | 2023-7-6 | Revised version |
+| V1.1           | Jimmy Huang          | 2024-7-1 | Add description for ADC |
 
 <div style="page-break-after:always"></div>
 
@@ -795,6 +795,11 @@ K230 audio supports the following features:
   - Supports programmable serial data frame length: 4 bits to 32 bits
   - Programmable delay on the sample time of received serial data bit(rxd)
   - Programmable clock bit rate
+
+- ADC
+  - support 6 channels low speed analog-to-digital converter
+  - resolution is 12 bits
+  - sampling clock is 16 MHZ, conversion speed is up to 1MS/s for single channel
 
 #### 1.2.13 security
 

@@ -229,10 +229,13 @@ The K230 DDR controller has the following features:
 - Supports LPDDR3/LPDDR4
 - Supports 2 ranks
 - Supports 16-bit, 32-bit DDR data bus width
-- Verified models: | Type  | Model            | Manufacturer | Capacity |
+- Verified models:
+  | Type  | Model            | Manufacturer | Capacity |
   | ------ | ---------------- | ------------ | -------- |
-  | LPDDR3 | NT6CL128M32DM-H0 | Nanya        | 4Gb      |
-  | LPDDR4 | W66AP6NBUAF/G/HI | Winbond      | 4Gb      |
+  | LPDDR3 | NT6CL128M32DM-H0 | Nanya     | 4Gb  |
+  | LPDDR3 | RS128M32LD3D1LMZ-125BT | Rayson     | 4Gb  |
+  | LPDDR4 | W66AP6NBUAF/G/HI | Winbond     | 4Gb  |
+  | LPDDR4 | K4F8E304HB-MGCJ  | Samsung     | 8Gb  |
 
 The schematic of the K230 DDR PHY and each DRAM chip must be consistent with the reference schematic, including power decoupling capacitors.
 
