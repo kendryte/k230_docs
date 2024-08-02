@@ -242,7 +242,7 @@ cd k230_sdk/src/reference/ai_poc
 **注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
 
 ```bash
-#若是没有上述依赖，执行一下命令下载
+#若是没有上述依赖，执行以下命令下载
 cd k230_sdk
 make prepare_sourcecode
 ```
@@ -345,7 +345,7 @@ cd k230_sdk/src/reference/ai_poc
 **注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
 
 ```bash
-#若是没有上述依赖，执行一下命令下载
+#若是没有上述依赖，执行以下命令下载
 cd k230_sdk
 make prepare_sourcecode
 ```

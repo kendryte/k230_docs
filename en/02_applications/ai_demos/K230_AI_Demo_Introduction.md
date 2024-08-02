@@ -215,7 +215,7 @@ The paths for kmodel, images, and related dependencies are located at `k230_sdk/
 
 ### Compiling and Running the Program
 
-#### a. Self-Compiling and Uploading the Image
+#### a. Self-Compiling Board Image
 
 - Ensure that you have constructed the Docker container and built the image according to the [official K230 SDK instructions](https://github.com/kendryte/k230_sdk).
 
@@ -266,7 +266,7 @@ Copy the entire k230_bin/ folder to the board, and execute the sh script on the 
 # Navigate to the sharefs directory of the small core on the development board
 scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
 
-# Navigate to the sharefs directory of the main core on the development board
+# Navigate to the sharefs directory of the big core on the development board
 cd /sharefs/k230_bin/face_detection
 # Execute the corresponding script to run face detection
 # Detailed face detection instructions can be found in k230_sdk/src/reference/ai_poc/face_detection/README.md
@@ -306,7 +306,7 @@ Copy the entire k230_bin/ folder to the board, and execute the sh script on the 
 # Navigate to the sharefs directory of the small core
 scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
 
-# Navigate to the sharefs directory of the main core
+# Navigate to the sharefs directory of the big core
 cd /sharefs/k230_bin/face_detection
 # Execute the corresponding script to run face detection
 # Detailed face detection instructions can be found in k230_sdk/src/reference/ai_poc/face_detection/README.md
@@ -363,13 +363,13 @@ k230_bin/
 │   └── face_detect_isp.sh
 ```
 
-Copy the entire k230_bin folder to the board, and execute the sh script on the main core to run the corresponding AI demo.
+Copy the entire k230_bin folder to the board, and execute the sh script on the big core to run the corresponding AI demo.
 
 ```shell
 # Navigate to the sharefs directory of the small core on the development board
 scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
 
-# Navigate to the sharefs directory of the main core on the development board
+# Navigate to the sharefs directory of the big core on the development board
 cd /sharefs/k230_bin/face_detection
 # Execute the corresponding script to run face detection
 # Detailed face detection instructions can be found in k230_sdk/src/reference/ai_poc/face_detection/README.md
@@ -403,13 +403,13 @@ k230_bin/
 ......
 ```
 
-Copy the entire k230_bin folder to the board, and execute the sh script on the main core to run the corresponding AI demo.
+Copy the entire k230_bin folder to the board, and execute the sh script on the big core to run the corresponding AI demo.
 
 ```shell
 # Navigate to the sharefs directory of the small core
 scp -r username@ip:/xxx/k230_sdk/src/big/kmodel/ai_poc/k230_bin .
 
-# Navigate to the sharefs directory of the main core
+# Navigate to the sharefs directory of the big core
 cd /sharefs/k230_bin/face_detection
 # Execute the corresponding script to run face detection
 # Detailed face detection instructions can be found in k230_sdk/src/reference/ai_poc/face_detection/README.md
