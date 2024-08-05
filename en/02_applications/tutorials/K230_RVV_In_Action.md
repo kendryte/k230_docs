@@ -218,7 +218,7 @@ scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Building targets ...
 scons: building associated VariantDir targets: build/scale
-CC build/scale/scal.o
+CC build/scale/scale.o
 LINK scale.elf
 /home/haohaibo/work/k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/../lib/gcc/riscv64-unknown-linux-musl/12.0.1/../../../../riscv64-unknown-linux-musl/bin/ld: warning: scale.elf has a LOAD segment with RWX permissions
 scons: done building targets.
