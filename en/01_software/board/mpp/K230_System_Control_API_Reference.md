@@ -95,7 +95,6 @@ Table 11
 |                   | AENC              | AI processed data can be directly sent to the audio encoding module for encoding |
 |                   | AO                | AI processed data can be directly played            |
 | ADEC (Audio Decoder) | AO             | ADEC processed data can be directly played          |
-| AREC (Audio Recognize) | AO           | AREC processed data can be directly played, such as local offline voice translation |
 | AENC (Audio Encoder) | None           | Does not support binding relationships               |
 | AO (Audio Output)  | None             | AO is the endpoint of audio data, does not support binding relationships |
 
@@ -3016,7 +3015,7 @@ Table 43
 | 0xa0058008     | K_ERR_SYS_NOT_SUPPORT       | Unsupported feature                      |
 | 0xa0058009     | K_ERR_SYS_NOT_PERM          | Operation not permitted                  |
 | 0xa0058010     | K_ERR_SYS_NOTREADY          | System control attributes not configured |
-| 0xa0058011     | K_ERR_SYS_BADADDR           | System busy                              |
+| 0xa0058011     | K_ERR_SYS_BADADDR           | System bad address                           |
 | 0xa005800c     | K_ERR_SYS_NOMEM             | Memory allocation failure, e.g., insufficient system memory|
 
 ### 4.3 Log Management Error Codes
