@@ -1133,13 +1133,13 @@ conda activate myenv
 
 #### 安装python库
 
-按照项目内的requriements.txt安装训练所用的python库,等待安装：
+按照项目内的requirements.txt安装训练所用的python库,等待安装：
 
 ```Shell
-pip install -r requriements.txt
+pip install -r requirements.txt
 ```
 
-在requriments.txt中会安装模型转换的包nncase和nncase-kpu，nncase 是一个为 AI 加速器设计的神经网络编译器。
+在requirements.txt中会安装模型转换的包nncase和nncase-kpu，nncase 是一个为 AI 加速器设计的神经网络编译器。
 
 #### 配置训练参数
 
