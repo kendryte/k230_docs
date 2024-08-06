@@ -41,7 +41,7 @@ exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
 language = os.getenv('SPHINX_LANGUAGE', 'en')
 
 # Set the title based on the language
-html_title = 'RT-Smart SDK'
+html_title = 'K230 RT-Smart SDK'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
