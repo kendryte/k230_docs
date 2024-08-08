@@ -63,6 +63,14 @@ Please note:
 - In K230 HDR mode, the K230 CSI (Camera Serial Interface) module does not support sensor data modes where Hsync precedes Vsync, and there should be no overlap when each frame (L/S/VS) Vsync is high (valid data output).
 - When enabling TNR in 3DNR, the ISP requires the sensor Hblank to be no less than 180 pixel clocks (it is recommended to set it to no less than 256 pixel clocks). Recommendation: Frame length – Active lines >= 92 lines.
 
+K230 ISP pipeline as following figure:
+![flow](../../../../zh/01_software/pc/ISP_tuning/images/K230_isp-pipe-line.jpg)
+
+Please note:
+
+- In K230 HDR mode, the K230 CSI (Camera serial interface) module does not support the sensor data mode of Hsync before Vsync. And when the Vsync of each frame (L/S/VS) is high (effective data output), there should be no overlap.
+- When enabling TNR in 3DNR, the ISP requires that the sensor Hblank should not be less than 180 pixel clocks (it is recommended to set it to not less than 256 pixel clocks), and it is recommended： the Frame length - Active lines >= 92 lines.
+
 ## 2. Calibration
 
 ### 2.1 Overview
@@ -656,13 +664,13 @@ The Demosaic module primarily converts input Bayer format data into RGB format d
 
    Setting sharpen_factor & clip: The larger the factor value, the stronger the sharpening effect; the larger the clip value, the weaker the truncation effect, and the more details are retained. It is advisable to avoid setting factor > clip as much as possible, as this would result in less detail retention while having high sharpening strength, leading to a lack of gradation.
 
-1. Moiré Removal
+1. Moire Removal
 
-   Moiré conversion curve:
+   Moire conversion curve:
 
    ![image-20230904094148683](../../../../zh/01_software/pc/ISP_tuning/images/20.png)
 
-   Moiré calibration curve:
+   Moire calibration curve:
 
    ![image-20230904094333522](../../../../zh/01_software/pc/ISP_tuning/images/21.png)
 
