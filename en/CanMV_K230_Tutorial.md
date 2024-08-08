@@ -106,13 +106,11 @@ You can use the Linux minicom or other serial tools to connect and debug, with s
 
 #### Firmware Acquisition
 
-CanMV-K230 firmware download address: `https://kendryte-download.canaan-creative.com/developer/k230`
+CanMV-K230 firmware download address: `https://kendryte-download.canaan-creative.com/k230/release/sdk_images/`
 
-For CanMV-K230-V1.0/V1.1, download the gz package starting with "k230_canmv_sdcard" and extract the sysimage-sdcard.img file, which is the firmware for CanMV-K230-V1.0/V1.1.
+k230_canmv_defconfig: CanMV-K230 1.0/1.1 Linux+rtt image.
 
-For CanMV-K230-V2.0, download the package starting with "k230_canmv_v2".
-
-**Note: Do not burn the gz package image (CanMV-K230-V1.0/V1.1) to the 2.0 board, as it may damage the board.**
+k230_canmv_only_rtt_defconfig: CanMV-K230 1.0/1.1 rtt-only image.
 
 #### Firmware Burning
 
@@ -253,7 +251,7 @@ The corresponding program is located at k230_sdk/src/big/mpp/userapps/sample/elf
 
 ##### Execution
 
-On the large core side, navigate to `/sharefs/app` and execute the `./sample_vicap` command in this directory to get command help information. When you input the `sample_vicap` command, the following prompt information will be printed:
+On the large core side, enter to `/sharefs/app` and execute the `./sample_vicap` command in this directory to get command help information. When you input the `sample_vicap` command, the following prompt information will be printed:
 
 ```shell
 usage: ./sample_vicap -mode 0 -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1
@@ -798,7 +796,7 @@ def compile_kmodel(model_path, dump_path, calib_data):
     compile_options.dump_asm = True
     compile_options.dump_dir = dump_path
     compile_options.input_file = ""
-  
+
     # preprocess args
     compile_options.preprocess = False
     if compile_options.preprocess:
@@ -827,10 +825,10 @@ def compile_kmodel(model_path, dump_path, calib_data):
     ptq_options.export_quant_scheme = False
     ptq_options.export_weight_range_by_channel = False
     ############################################
-  
+
     ptq_options.samples_count = len(calib_data[0])
     ptq_options.set_tensor_data(calib_data)
-  
+
     print("Compiling...")
     compiler = nncase.Compiler(compile_options)
     # import
@@ -839,13 +837,13 @@ def compile_kmodel(model_path, dump_path, calib_data):
         compiler.import_onnx(model_content, import_options)
     elif model_path.split(".")[-1] == "tflite":
         compiler.import_tflite(model_content, import_options)
-  
+
     compiler.use_ptq(ptq_options)
-  
+
     # compile
     compiler.compile()
     kmodel = compiler.gencode_tobytes()
-  
+
     # You can modify kmodel_path as needed. Pass the correct kmodel_path during inference.
     kmodel_path = os.path.join(dump_path, "test.kmodel")
     with open(kmodel_path, 'wb') as f:
@@ -866,9 +864,9 @@ if __name__ == "__main__":
     kmodel_path = "./tmp_tflite/test.kmodel"
     input_data = [np.random.rand(1, 240, 320, 3).astype(np.float32)]
     input_data[0].tofile(os.path.join(dump_path,"input_0.bin"))
-  
+
     result = run_kmodel(kmodel_path, input_data)
-  
+
     for idx, i in enumerate(result):
         print(i.shape)
         i.tofile(os.path.join(dump_path,"nncase_result_{}.bin".format(idx)))
@@ -1187,14 +1185,14 @@ The files needed for the subsequent deployment steps include:
 
 ```Shell
 # Download the docker compilation image
-docker pull ghcr.io/kendryte/k230_sdk 
+docker pull ghcr.io/kendryte/k230_sdk
 # Confirm if the docker image was successfully pulled
-docker images | grep ghcr.io/kendryte/k230_sdk 
+docker images | grep ghcr.io/kendryte/k230_sdk
 # Download the 1.0.1 version SDK
 git clone -b v1.0.1 --single-branch https://github.com/kendryte/k230_sdk.git
-cd k230_sdk 
+cd k230_sdk
 # Download the toolchain for Linux and RT-Smart, buildroot package, AI package, etc.
-make prepare_sourcecode 
+make prepare_sourcecode
 # Create a docker container, $(pwd):$(pwd) maps the current directory to the same directory inside the docker container, mapping the toolchain directory to /opt/toolchain inside the docker container
 docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) ghcr.io/kendryte/k230_sdk /bin/bash
 ```
@@ -1363,7 +1361,7 @@ protected:
     vector<vector<int>> output_shapes_;    // {{N,C,H,W},{N,C,H,W}...}} or {{N,C},{N,C}...}} etc.
     vector<int> each_input_size_by_byte_;  // {0,layer1_length,layer1_length+layer2_length,...}
     vector<int> each_output_size_by_byte_; // {0,layer1_length,layer1_length+layer2_length,...}
-    
+
 private:
     /**
      * @brief Initializes kmodel input for the first time and gets input shape
@@ -1601,7 +1599,7 @@ Sure, here is the translation of the provided code comments and documentation in
 #ifndef _CLASSIFICATION_H
 #define _CLASSIFICATION_H
 #include "utils.h"
-#include "ai_base.h" 
+#include "ai_base.h"
 
 /**
  * @brief Classification task
@@ -1634,7 +1632,7 @@ class Classification : public AIBase
     * @return None
     */
     Classification(string &kmodel_path, string &image_path, std::vector<std::string> labels, float cls_thresh, FrameCHWSize isp_shape, uintptr_t vaddr, uintptr_t paddr, const int debug_mode);
-    
+
     /**
     * @brief Classification destructor
     * @return None
@@ -1666,7 +1664,7 @@ class Classification : public AIBase
     * @return None
     */
     void post_process(vector<cls_res> &results);
-    
+
     private:
 
     /**
@@ -1708,7 +1706,7 @@ Static image inference, constructor
 */
 Classification::Classification(std::string &kmodel_path, std::string &image_path, std::vector<std::string> labels_, float cls_thresh_, const int debug_mode)
 :AIBase(kmodel_path.c_str(),"Classification", debug_mode)
-{   
+{
     cls_thresh = cls_thresh_;
     labels = labels_;
     num_class = labels.size();
@@ -1818,7 +1816,7 @@ void Classification::post_process(vector<cls_res> &results)
         {
             output[i] = exp(output[i]) / sum;
         }
-        max_index = max_element(output, output + num_class) - output; 
+        max_index = max_element(output, output + num_class) - output;
         if (output[max_index] >= b.score)
         {
             b.label = labels[max_index];
@@ -2066,7 +2064,7 @@ void Utils::draw_cls_res(cv::Mat& frame, vector<cls_res>& results)
     }
 
     for(int i = 0; i < results.size(); i++)
-    {   
+    {
         std::string text = "class: " + results[i].label + ", score: " + std::to_string(round(results[i].score * 100) / 100.0).substr(0, 4);
 
         cv::putText(frame, text, cv::Point(1, 40), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 0), 2);
@@ -2078,7 +2076,7 @@ void Utils::draw_cls_res(cv::Mat& frame, vector<cls_res>& results, FrameSize osd
 {
     double fontsize = (frame.cols * frame.rows * 1.0) / (1100 * 1200);
     for(int i = 0; i < results.size(); i++)
-    {   
+    {
         std::string text = "class: " + results[i].label + ", score: " + std::to_string(round(results[i].score * 100) / 100.0).substr(0, 4);
         cv::putText(frame, text, cv::Point(1, 40), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(255, 255, 255, 0), 2);
         std::cout << text << std::endl;
@@ -2118,7 +2116,7 @@ public:
     /**
      * @brief ScopedTiming destructor, ends timing and prints the elapsed time
      * @return None
-     */ 
+     */
      ~ScopedTiming()
     {
         if (enable_profile)
@@ -2158,7 +2156,7 @@ void image_proc_cls(string &kmodel_path, string &image_path,vector<string> label
     cls.post_process(results);
     Utils::draw_cls_res(ori_img,results);
     cv::imwrite("result_cls.jpg", ori_img);
-    
+
 }
 ```
 
@@ -2182,21 +2180,21 @@ For convenience, we have encapsulated the video stream processing part. You can 
 This is the `CMakeLists.txt` script in the `k230_code/k230_deploy` directory, which sets the C++ files to be compiled and the name of the generated ELF executable file:
 
 ```Shell
-set(src main.cc utils.cc ai_base.cc classification.cc) 
+set(src main.cc utils.cc ai_base.cc classification.cc)
 set(bin main.elf)
 
-include_directories(${PROJECT_SOURCE_DIR}): Adds the project's root directory to the header file search path. 
-include_directories(${nncase_sdk_root}/riscv64/rvvlib/include): Adds the header file directory of the nncase RISC-V vector library. 
-include_directories(${k230_sdk}/src/big/mpp/userapps/api/): Adds the user application API header file directory from the k230 SDK. 
-include_directories(${k230_sdk}/src/big/mpp/include): Adds the general header file directory from the k230 SDK. 
-include_directories(${k230_sdk}/src/big/mpp/include/comm): Adds the communication-related header file directory. 
-include_directories(${k230_sdk}/src/big/mpp/userapps/sample/sample_vo): Adds the sample VO (video output) application header file directory. 
+include_directories(${PROJECT_SOURCE_DIR}): Adds the project's root directory to the header file search path.
+include_directories(${nncase_sdk_root}/riscv64/rvvlib/include): Adds the header file directory of the nncase RISC-V vector library.
+include_directories(${k230_sdk}/src/big/mpp/userapps/api/): Adds the user application API header file directory from the k230 SDK.
+include_directories(${k230_sdk}/src/big/mpp/include): Adds the general header file directory from the k230 SDK.
+include_directories(${k230_sdk}/src/big/mpp/include/comm): Adds the communication-related header file directory.
+include_directories(${k230_sdk}/src/big/mpp/userapps/sample/sample_vo): Adds the sample VO (video output) application header file directory.
 
-link_directories(${nncase_sdk_root}/riscv64/rvvlib/): Adds the linker search path pointing to the nncase RISC-V vector library directory. 
-add_executable(${bin} ${src}): Creates an executable file, using the previously set list of source files as input. 
-target_link_libraries(${bin} ...): Sets the libraries that the executable file needs to link. The list includes various libraries, including nncase-related libraries, k230 SDK libraries, and some other libraries. 
-target_link_libraries(${bin} opencv_imgproc opencv_imgcodecs opencv_core zlib libjpeg-turbo libopenjp2 libpng libtiff libwebp csi_cv): Links some OpenCV-related libraries and other libraries to the executable file. 
-install(TARGETS ${bin} DESTINATION bin): Installs the generated executable file to the specified target path (bin directory). 
+link_directories(${nncase_sdk_root}/riscv64/rvvlib/): Adds the linker search path pointing to the nncase RISC-V vector library directory.
+add_executable(${bin} ${src}): Creates an executable file, using the previously set list of source files as input.
+target_link_libraries(${bin} ...): Sets the libraries that the executable file needs to link. The list includes various libraries, including nncase-related libraries, k230 SDK libraries, and some other libraries.
+target_link_libraries(${bin} opencv_imgproc opencv_imgcodecs opencv_core zlib libjpeg-turbo libopenjp2 libpng libtiff libwebp csi_cv): Links some OpenCV-related libraries and other libraries to the executable file.
+install(TARGETS ${bin} DESTINATION bin): Installs the generated executable file to the specified target path (bin directory).
 ```
 
 - Explanation of `k230_code/CMakeLists.txt`
@@ -2208,15 +2206,15 @@ project(nncase_sdk C CXX)
 set(nncase_sdk_root "${PROJECT_SOURCE_DIR}/../../nncase/")
 set(k230_sdk ${nncase_sdk_root}/../../../)
 set(CMAKE_EXE_LINKER_FLAGS "-T ${PROJECT_SOURCE_DIR}/cmake/link.lds --static")
- 
+
 #  set opencv
 set(k230_opencv ${k230_sdk}/src/big/utils/lib/opencv)
 include_directories(${k230_opencv}/include/opencv4/)
 link_directories(${k230_opencv}/lib ${k230_opencv}/lib/opencv4/3rdparty)
- 
+
 #  set mmz
 link_directories(${k230_sdk}/src/big/mpp/userapps/lib)
- 
+
 #  set nncase
 include_directories(${nncase_sdk_root}/riscv64)
 include_directories(${nncase_sdk_root}/riscv64/nncase/include)
@@ -2241,8 +2239,8 @@ add_subdirectory(k230_deploy): Adds the project subdirectory to be compiled. If 
 ```Shell
 #!/bin/bash
 set -x
- 
-#  set cross build toolchain 
+
+#  set cross build toolchain
 #  Adds the path of the cross-compilation toolchain to the system PATH environment variable for subsequent commands. This toolchain is the one used for large-core compilation.
 ```
 
@@ -2283,7 +2281,7 @@ Copy the `k230_code` folder from the project to the `src/big/nncase` directory i
 
 ```bash
 # Execute in the root directory of k230_SDK
-make CONF=k230_canmv_defconfig prepare_memory 
+make CONF=k230_canmv_defconfig prepare_memory
 # Return to the current project directory and grant permissions
 chmod +x build_app.sh
 ./build_app.sh
@@ -2315,9 +2313,9 @@ Enter the small core command line and execute:
 
 ```bash
 # Check if eth0 exists
-ifconfig 
+ifconfig
 # Configure the IP of the development board to be on the same subnet as the PC
-ifconfig eth0 192.168.1.22 
+ifconfig eth0 192.168.1.22
 # Check IP configuration
 ifconfig
 ```
@@ -2334,18 +2332,18 @@ Start tftpd64, configure the directory for storing files to be transferred and t
 
 ```bash
 # Enter the root directory of the small core
-cd / 
+cd /
 # View the directory
-ls 
+ls
 # The sharefs directory is shared by the big and small cores, so files copied to the sharefs directory from the small core are also visible to the big core
 ```
 
 - **File Transfer**
 
 ```bash
-# The following code is executed on the small core serial port 
+# The following code is executed on the small core serial port
 # Transfer files from the PC's tftpd64 configured file storage directory to the current directory of the development board
-tftp -g -r your_file 192.168.1.2 
+tftp -g -r your_file 192.168.1.2
 # Transfer files from the current directory of the development board to the tftpd64 configured file storage directory
 tftp -p -r board_file 192.168.1.2
 ```
@@ -2360,9 +2358,9 @@ Power on the development board, enter the big and small core COM interface, and 
 # Copy files from the PC to the development board
 scp username@domain_or_IP:source_directory destination_directory_on_board
 # Copy a directory
-scp -r username@domain_or_IP:source_directory destination_directory_on_board 
+scp -r username@domain_or_IP:source_directory destination_directory_on_board
 # Copy files from the development board to the PC
-scp source_directory_on_board username@domain_or_IP:destination_directory_on_PC 
+scp source_directory_on_board username@domain_or_IP:destination_directory_on_PC
 # Copy a directory
 scp -r source_directory_on_board username@domain_or_IP:destination_directory_on_PC
 ```
@@ -2394,20 +2392,20 @@ Enter the `/sharefs/test_cls` directory on the big core COM port,
 Execute static image inference by executing the following code (Note: The code needs to be executed on the big core, and file copying needs to be completed on the small core):
 
 ```bash
-# "Model inference parameter description:" 
-# "<kmodel_path> <image_path> <labels_txt> <debug_mode>" 
-# "Options:" 
-# "  kmodel_path     Path to the Kmodel\n" 
-# "  image_path      Path to the image to be inferred / camera (None)\n" 
-# "  labels_txt      Path to the label file\n" 
+# "Model inference parameter description:"
+# "<kmodel_path> <image_path> <labels_txt> <debug_mode>"
+# "Options:"
+# "  kmodel_path     Path to the Kmodel\n"
+# "  image_path      Path to the image to be inferred / camera (None)\n"
+# "  labels_txt      Path to the label file\n"
 # "  debug_mode      Whether debugging is needed, 0, 1, and 2 represent no debugging, simple debugging, and detailed debugging respectively\n"
-main.elf best.kmodel test.jpg labels.txt 2 
+main.elf best.kmodel test.jpg labels.txt 2
 ```
 
 To perform video stream inference, execute the following code:
 
 ```bash
-main.elf best.kmodel None labels.txt 2 
+main.elf best.kmodel None labels.txt 2
 ```
 
 #### Deployment Effect on Board
