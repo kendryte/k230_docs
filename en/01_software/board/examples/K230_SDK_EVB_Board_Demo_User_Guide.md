@@ -699,7 +699,7 @@ The large core RTT implements the camera driver functionality.
 
 The small core Linux implements the USB driver functionality and obtains camera images from the large core through mapi.
 
-Refer to [K230_USB Application Practical_UVC Transmission of YUV and Encoded Streams](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md).
+Refer to [K230_USB Application Practical_UVC Transmission of YUV and Encoded Streams](../../../../en/02_applications/tutorials/K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md).
 
 ##### 2.9.4.2 Execution
 
