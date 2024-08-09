@@ -47,7 +47,7 @@ This document (this guide) is mainly for the following personnel:
 
 ### Revision History
 
-| Document Version | Modification Description                                       | Modifier | Date       |
+| Document Version | Modification Description                                       | Author | Date       |
 |------------------|----------------------------------------------------------------|----------|------------|
 | V1.0             | Initial version                                                | Liu Suntao | 2023/3/7  |
 | V1.1             | Modified some descriptions of binding mode; added function interface description for frame number release. | Liu Suntao | 2023/3/31 |
