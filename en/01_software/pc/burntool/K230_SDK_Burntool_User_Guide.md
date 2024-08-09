@@ -100,7 +100,7 @@ The first row is for selecting loader.bin. You can open the file and select the 
 
 ## 3. K230 USB Burning Mechanism
 
-![k230_dfu](../../../../zh/01_software/pc/burntool/images/k230_dfu.png)
+![k230_dfu](../../../../en/01_software/pc/burntool/images/0.png)
 
 The USB burning function of K230 is implemented in bootrom. When the bootrom fails to start during the startup process, it will jump to the USB burning mode. For example, if the device uses an SD card as storage media, one solution is to switch to other media through bootio, so that K230 will enter USB burning mode when it fails to start. Another solution is to remove the SD card, so that K230 will also enter USB burning mode when it fails to start. For emmc/nand/nor devices, only the first solution can be adopted.
 
