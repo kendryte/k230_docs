@@ -1422,22 +1422,22 @@ dpu 短周期参数结构体
 
 | 错误代码    | 宏定义                  | 描述                         |
 |-------------|-------------------------|------------------------------|
-| 0xa00118001 | K_ERR_DPU_INVALID_DEVID | 无效的设备号                 |
-| 0xa00118002 | K_ERR_DPU_INVALID_CHNID | 无效的通道号                 |
-| 0xa00118003 | K_ERR_DPU_ILLEGAL_PARAM | 参数错误                     |
-| 0xa00118004 | K_ERR_DPU_EXIST         | DPU 设备已经存在             |
-| 0xa00118005 | K_ERR_DPU_UNEXIST       | DPU 设备不存在               |
-| 0xa00118006 | K_ERR_DPU_NULL_PTR      | 空指针错误                   |
-| 0xa00118007 | K_ERR_DPU_NOT_CONFIG    | 尚未配置 DPU                 |
-| 0xa00118008 | K_ERR_DPU_NOT_SUPPORT   | 不支持的功能                 |
-| 0xa00118009 | K_ERR_DPU_NOT_PERM      | 操作不允许                   |
-| 0xa0011800c | K_ERR_DPU_NOMEM         | 分配内存失败，如系统内存不足 |
-| 0xa0011800d | K_ERR_DPU_NOBUF         | BUFF 不足                    |
-| 0xa0011800e | K_ERR_DPU_BUF_EMPTY     | BUFF 为空                    |
-| 0xa0011800f | K_ERR_DPU_BUF_FULL      | BUFF 已满                    |
-| 0xa00118010 | K_ERR_DPU_NOTREADY      | 设备未就绪                   |
-| 0xa00118011 | K_ERR_DPU_BADADDR       | 错误的地址                   |
-| 0xa00118012 | K_ERR_DPU_BUSY          | DPU 处与忙状态               |
+| 0xa0118001 | K_ERR_DPU_INVALID_DEVID | 无效的设备号                 |
+| 0xa0118002 | K_ERR_DPU_INVALID_CHNID | 无效的通道号                 |
+| 0xa0118003 | K_ERR_DPU_ILLEGAL_PARAM | 参数错误                     |
+| 0xa0118004 | K_ERR_DPU_EXIST         | DPU 设备已经存在             |
+| 0xa0118005 | K_ERR_DPU_UNEXIST       | DPU 设备不存在               |
+| 0xa0118006 | K_ERR_DPU_NULL_PTR      | 空指针错误                   |
+| 0xa0118007 | K_ERR_DPU_NOT_CONFIG    | 尚未配置 DPU                 |
+| 0xa0118008 | K_ERR_DPU_NOT_SUPPORT   | 不支持的功能                 |
+| 0xa0118009 | K_ERR_DPU_NOT_PERM      | 操作不允许                   |
+| 0xa011800c | K_ERR_DPU_NOMEM         | 分配内存失败，如系统内存不足 |
+| 0xa011800d | K_ERR_DPU_NOBUF         | BUFF 不足                    |
+| 0xa011800e | K_ERR_DPU_BUF_EMPTY     | BUFF 为空                    |
+| 0xa011800f | K_ERR_DPU_BUF_FULL      | BUFF 已满                    |
+| 0xa0118010 | K_ERR_DPU_NOTREADY      | 设备未就绪                   |
+| 0xa0118011 | K_ERR_DPU_BADADDR       | 错误的地址                   |
+| 0xa0118012 | K_ERR_DPU_BUSY          | DPU 处与忙状态               |
 
 ## 5. 调试信息
 

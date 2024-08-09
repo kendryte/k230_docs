@@ -47,7 +47,7 @@ This document (this guide) is mainly intended for the following personnel:
 
 ### Revision History
 
-| Document Version | Modification Description                                                                 | Modifier | Date       |
+| Document Version | Modification Description                                                                 | Author | Date       |
 |------------------|------------------------------------------------------------------------------------------|----------|------------|
 | v1.0             | Initial version                                                                          | Liu Suntao | 2023/3/30  |
 | v1.1             | Added the interface function for setting the reference image after offline processing [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image); added module debugging information. | Liu Suntao | 2023/4/20  |

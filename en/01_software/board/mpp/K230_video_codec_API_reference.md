@@ -47,7 +47,7 @@ This document (guide) is mainly applicable to the following personnel:
 
 ### Revision History
 
-| Document Version | Modifier | Date       | Modification Description |
+| Document Version | Author | Date       | Modification Description |
 |------------------|----------|------------|--------------------------|
 | V1.0             | System Software Department | 2023.03.10 | Initial version |
 | V1.1             | System Software Department | 2023.03.31 | 1. Added 2D mode setting/getting interfaces kd_mpi_venc_set_2d_mode, kd_mpi_venc_get_2d_mode 2. Modified 2D parameter setting/getting interfaces kd_mpi_venc_set_2d_osd_param, kd_mpi_venc_get_2d_osd_param 3. Added interface for setting image format conversion coefficients in 2D computation kd_mpi_venc_set_2d_set_custom_coef 4. Removed pic_format attribute from encoder attribute structure k_venc_attr |
@@ -2846,12 +2846,12 @@ Defines the rate control mode for the encoding channel.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_RC_MODE_CBR = 1,  
-    K_VENC_RC_MODE_VBR,  
-    K_VENC_RC_MODE_FIXQP,  
-    K_VENC_RC_MODE_MJPEG_FIXQP,  
-    K_VENC_RC_MODE_BUTT,  
+typedef enum {
+    K_VENC_RC_MODE_CBR = 1,
+    K_VENC_RC_MODE_VBR,
+    K_VENC_RC_MODE_FIXQP,
+    K_VENC_RC_MODE_MJPEG_FIXQP,
+    K_VENC_RC_MODE_BUTT,
 } k_venc_rc_mode;
 ```
 
@@ -2881,11 +2881,11 @@ Defines the JPEG stream pack type enumeration.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_P_FRAME = 1,  
-    K_VENC_I_FRAME = 2,  
-    K_VENC_HEADER = 3,  
-    K_VENC_BUTT  
+typedef enum {
+    K_VENC_P_FRAME = 1,
+    K_VENC_I_FRAME = 2,
+    K_VENC_HEADER = 3,
+    K_VENC_BUTT
 } k_venc_pack_type;
 ```
 
@@ -2914,12 +2914,12 @@ Defines the calculation mode enumeration for 2D operations.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_2D_CALC_MODE_CSC = 0,  
-    K_VENC_2D_CALC_MODE_OSD,  
-    K_VENC_2D_CALC_MODE_BORDER,  
-    K_VENC_2D_CALC_MODE_OSD_BORDER,  
-    K_VENC_2D_CALC_MODE_BUTT  
+typedef enum {
+    K_VENC_2D_CALC_MODE_CSC = 0,
+    K_VENC_2D_CALC_MODE_OSD,
+    K_VENC_2D_CALC_MODE_BORDER,
+    K_VENC_2D_CALC_MODE_OSD_BORDER,
+    K_VENC_2D_CALC_MODE_BUTT
 } k_venc_2d_calc_mode;
 ```
 
@@ -2949,28 +2949,28 @@ Defines the input/output data format enumeration for 2D operations.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_2D_SRC_DST_FMT_YUV420_NV12 = 0,  
-    K_VENC_2D_SRC_DST_FMT_YUV420_NV21,  
-    K_VENC_2D_SRC_DST_FMT_YUV420_I420,  
-    K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,  
-    K_VENC_2D_SRC_DST_FMT_ARGB4444,  
-    K_VENC_2D_SRC_DST_FMT_ARGB1555,  
-    K_VENC_2D_SRC_DST_FMT_XRGB8888,  
-    K_VENC_2D_SRC_DST_FMT_XRGB4444,  
-    K_VENC_2D_SRC_DST_FMT_XRGB1555,  
-    K_VENC_2D_SRC_DST_FMT_BGRA8888,  
-    K_VENC_2D_SRC_DST_FMT_BGRA4444,  
-    K_VENC_2D_SRC_DST_FMT_BGRA5551,  
-    K_VENC_2D_SRC_DST_FMT_BGRX8888,  
-    K_VENC_2D_SRC_DST_FMT_BGRX4444,  
-    K_VENC_2D_SRC_DST_FMT_BGRX5551,  
-    K_VENC_2D_SRC_DST_FMT_RGB888,  
-    K_VENC_2D_SRC_DST_FMT_BGR888,  
-    K_VENC_2D_SRC_DST_FMT_RGB565,  
-    K_VENC_2D_SRC_DST_FMT_BGR565,  
-    K_VENC_2D_SRC_DST_FMT_SEPARATE_RGB,  
-    K_VENC_2D_SRC_DST_FMT_BUTT  
+typedef enum {
+    K_VENC_2D_SRC_DST_FMT_YUV420_NV12 = 0,
+    K_VENC_2D_SRC_DST_FMT_YUV420_NV21,
+    K_VENC_2D_SRC_DST_FMT_YUV420_I420,
+    K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,
+    K_VENC_2D_SRC_DST_FMT_ARGB4444,
+    K_VENC_2D_SRC_DST_FMT_ARGB1555,
+    K_VENC_2D_SRC_DST_FMT_XRGB8888,
+    K_VENC_2D_SRC_DST_FMT_XRGB4444,
+    K_VENC_2D_SRC_DST_FMT_XRGB1555,
+    K_VENC_2D_SRC_DST_FMT_BGRA8888,
+    K_VENC_2D_SRC_DST_FMT_BGRA4444,
+    K_VENC_2D_SRC_DST_FMT_BGRA5551,
+    K_VENC_2D_SRC_DST_FMT_BGRX8888,
+    K_VENC_2D_SRC_DST_FMT_BGRX4444,
+    K_VENC_2D_SRC_DST_FMT_BGRX5551,
+    K_VENC_2D_SRC_DST_FMT_RGB888,
+    K_VENC_2D_SRC_DST_FMT_BGR888,
+    K_VENC_2D_SRC_DST_FMT_RGB565,
+    K_VENC_2D_SRC_DST_FMT_BGR565,
+    K_VENC_2D_SRC_DST_FMT_SEPARATE_RGB,
+    K_VENC_2D_SRC_DST_FMT_BUTT
 } k_venc_2d_src_dst_fmt;
 ```
 
@@ -2991,25 +2991,25 @@ Defines the enumeration of OSD layer data formats for 2D operations.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_2D_OSD_FMT_ARGB8888 = 0,  
-    K_VENC_2D_OSD_FMT_ARGB4444,  
-    K_VENC_2D_OSD_FMT_ARGB1555,  
-    K_VENC_2D_OSD_FMT_XRGB8888,  
-    K_VENC_2D_OSD_FMT_XRGB4444,  
-    K_VENC_2D_OSD_FMT_XRGB1555,  
-    K_VENC_2D_OSD_FMT_BGRA8888,  
-    K_VENC_2D_OSD_FMT_BGRA4444,  
-    K_VENC_2D_OSD_FMT_BGRA5551,  
-    K_VENC_2D_OSD_FMT_BGRX8888,  
-    K_VENC_2D_OSD_FMT_BGRX4444,  
-    K_VENC_2D_OSD_FMT_BGRX5551,  
-    K_VENC_2D_OSD_FMT_RGB888,  
-    K_VENC_2D_OSD_FMT_BGR888,  
-    K_VENC_2D_OSD_FMT_RGB565,  
-    K_VENC_2D_OSD_FMT_BGR565,  
-    K_VENC_2D_OSD_FMT_SEPARATE_RGB,  
-    K_VENC_2D_OSD_FMT_BUTT  
+typedef enum {
+    K_VENC_2D_OSD_FMT_ARGB8888 = 0,
+    K_VENC_2D_OSD_FMT_ARGB4444,
+    K_VENC_2D_OSD_FMT_ARGB1555,
+    K_VENC_2D_OSD_FMT_XRGB8888,
+    K_VENC_2D_OSD_FMT_XRGB4444,
+    K_VENC_2D_OSD_FMT_XRGB1555,
+    K_VENC_2D_OSD_FMT_BGRA8888,
+    K_VENC_2D_OSD_FMT_BGRA4444,
+    K_VENC_2D_OSD_FMT_BGRA5551,
+    K_VENC_2D_OSD_FMT_BGRX8888,
+    K_VENC_2D_OSD_FMT_BGRX4444,
+    K_VENC_2D_OSD_FMT_BGRX5551,
+    K_VENC_2D_OSD_FMT_RGB888,
+    K_VENC_2D_OSD_FMT_BGR888,
+    K_VENC_2D_OSD_FMT_RGB565,
+    K_VENC_2D_OSD_FMT_BGR565,
+    K_VENC_2D_OSD_FMT_SEPARATE_RGB,
+    K_VENC_2D_OSD_FMT_BUTT
 } k_venc_2d_osd_fmt;
 ```
 
@@ -3030,19 +3030,19 @@ Defines the enumeration of OSD overlay order (video, OSD, and background layers)
 **Definition**:
 
 ```c
-typedef enum {  
-    /* bottom ------> top */  
-    K_VENC_2D_ADD_ORDER_VIDEO_OSD = 0,  
-    K_VENC_2D_ADD_ORDER_OSD_VIDEO,  
-    K_VENC_2D_ADD_ORDER_VIDEO_BG,  
-    K_VENC_2D_ADD_ORDER_BG_VIDEO,  
-    K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,  
-    K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,  
-    K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,  
-    K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,  
-    K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,  
-    K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,  
-    K_VENC_2D_ADD_ORDER_BUTT  
+typedef enum {
+    /* bottom ------> top */
+    K_VENC_2D_ADD_ORDER_VIDEO_OSD = 0,
+    K_VENC_2D_ADD_ORDER_OSD_VIDEO,
+    K_VENC_2D_ADD_ORDER_VIDEO_BG,
+    K_VENC_2D_ADD_ORDER_BG_VIDEO,
+    K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,
+    K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,
+    K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,
+    K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,
+    K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,
+    K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,
+    K_VENC_2D_ADD_ORDER_BUTT
 } k_venc_2d_add_order;
 ```
 
@@ -3078,12 +3078,12 @@ Defines the enumeration of rotation angles for encoding.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VPU_ROTATION_0 = 0,  
-    K_VPU_ROTATION_90 = 1,  
-    K_VPU_ROTATION_180 = 2,  
-    K_VPU_ROTATION_270 = 3,  
-    K_VPU_ROTATION_BUTT  
+typedef enum {
+    K_VPU_ROTATION_0 = 0,
+    K_VPU_ROTATION_90 = 1,
+    K_VPU_ROTATION_180 = 2,
+    K_VPU_ROTATION_270 = 3,
+    K_VPU_ROTATION_BUTT
 } k_rotation;
 ```
 
@@ -3113,10 +3113,10 @@ Defines the enumeration of mirroring methods for encoding.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VENC_MIRROR_HORI = 0,  
-    K_VENC_MIRROR_VERT = 1,  
-    K_VENC_MIRROR_BUTT  
+typedef enum {
+    K_VENC_MIRROR_HORI = 0,
+    K_VENC_MIRROR_VERT = 1,
+    K_VENC_MIRROR_BUTT
 } k_venc_mirror;
 ```
 
@@ -3144,11 +3144,11 @@ Defines the enumeration of color gamuts for 2D operations.
 **Definition**:
 
 ```c
-typedef enum {  
-    VENC_2D_COLOR_GAMUT_BT601 = 0,  
-    VENC_2D_COLOR_GAMUT_BT709,  
-    VENC_2D_COLOR_GAMUT_BT2020,  
-    VENC_2D_COLOR_GAMUT_BUTT  
+typedef enum {
+    VENC_2D_COLOR_GAMUT_BT601 = 0,
+    VENC_2D_COLOR_GAMUT_BT709,
+    VENC_2D_COLOR_GAMUT_BT2020,
+    VENC_2D_COLOR_GAMUT_BUTT
 } k_venc_2d_color_gamut;
 ```
 
@@ -3207,13 +3207,13 @@ Defines the structure of encoder attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_payload_type type;  
-    k_u32 stream_buf_size;  
-    k_u32 stream_buf_cnt;  
-    k_u32 pic_width;  
-    k_u32 pic_height;  
-    k_venc_profile profile;  
+typedef struct {
+    k_payload_type type;
+    k_u32 stream_buf_size;
+    k_u32 stream_buf_cnt;
+    k_u32 pic_width;
+    k_u32 pic_height;
+    k_venc_profile profile;
 } k_venc_attr;
 ```
 
@@ -3245,14 +3245,14 @@ Defines the structure of rate controller attributes for encoding channels.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_venc_rc_mode rc_mode;  
-    union { 
-        k_venc_cbr cbr;  
-        k_venc_vbr vbr;  
-        k_venc_fixqp fixqp;  
-        k_venc_mjpeg_fixqp mjpeg_fixqp;  
-    };  
+typedef struct {
+    k_venc_rc_mode rc_mode;
+    union {
+        k_venc_cbr cbr;
+        k_venc_vbr vbr;
+        k_venc_fixqp fixqp;
+        k_venc_mjpeg_fixqp mjpeg_fixqp;
+    };
 } k_venc_rc_attr;
 ```
 
@@ -3283,12 +3283,12 @@ Defines the structure of CBR attributes for H.264/H.265 encoding channels.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 gop;  
-    k_u32 stats_time;  
-    k_u32 src_frame_rate;  
-    k_u32 dst_frame_rate;  
-    k_u32 bit_rate;  
+typedef struct {
+    k_u32 gop;
+    k_u32 stats_time;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 bit_rate;
 } k_venc_cbr;
 ```
 
@@ -3319,13 +3319,13 @@ Defines the structure of VBR attributes for H.264/H.265 encoding channels.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 gop;  
-    k_u32 stats_time;  
-    k_u32 src_frame_rate;  
-    k_u32 dst_frame_rate;  
-    k_u32 max_bit_rate;  
-    k_u32 bit_rate;  
+typedef struct {
+    k_u32 gop;
+    k_u32 stats_time;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 max_bit_rate;
+    k_u32 bit_rate;
 } k_venc_vbr;
 ```
 
@@ -3357,12 +3357,12 @@ Defines the structure for H.264/H.265 encoding channel Fixqp attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 gop;  
-    k_u32 src_frame_rate;  
-    k_u32 dst_frame_rate;  
-    k_u32 i_qp;  
-    k_u32 p_qp;  
+typedef struct {
+    k_u32 gop;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 i_qp;
+    k_u32 p_qp;
 } k_venc_fixqp;
 ```
 
@@ -3393,10 +3393,10 @@ Defines the structure for MJPEG encoding channel Fixqp attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 src_frame_rate;  
-    k_u32 dst_frame_rate;  
-    k_u32 q_factor;  
+typedef struct {
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 q_factor;
 } k_venc_mjpeg_fixqp;
 ```
 
@@ -3425,10 +3425,10 @@ Defines the structure for the status of encoding channels.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 cur_packs;  
-    k_u64 release_pic_pts;  
-    k_bool end_of_stream;  
+typedef struct {
+    k_u32 cur_packs;
+    k_u64 release_pic_pts;
+    k_bool end_of_stream;
 } k_venc_chn_status;
 ```
 
@@ -3457,9 +3457,9 @@ Defines the structure for frame stream type.
 **Definition**:
 
 ```c
-typedef struct {  
-    [k_venc_pack](#3124-k_venc_pack) *pack;  
-    k_u32 pack_cnt;  
+typedef struct {
+    [k_venc_pack](#3124-k_venc_pack) *pack;
+    k_u32 pack_cnt;
 } k_venc_stream;
 ```
 
@@ -3487,11 +3487,11 @@ Defines the structure for frame stream packets.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u64 phys_addr;  
-    k_u32 len;  
-    k_u64 pts;  
-    [k_venc_pack_type](#317-k_venc_pack_type) type;  
+typedef struct {
+    k_u64 phys_addr;
+    k_u32 len;
+    k_u64 pts;
+    [k_venc_pack_type](#317-k_venc_pack_type) type;
 } k_venc_pack;
 ```
 
@@ -3521,18 +3521,18 @@ Defines the structure for 2D overlay attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u16 width;  
-    k_u16 height;  
-    k_u16 startx;  
-    k_u16 starty;  
-    k_u32 phys_addr[3];  
-    k_u8 bg_alpha;  
-    k_u8 osd_alpha;  
-    k_u8 video_alpha;  
-    [k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;  
-    k_u32 bg_color;  
-    [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;  
+typedef struct {
+    k_u16 width;
+    k_u16 height;
+    k_u16 startx;
+    k_u16 starty;
+    k_u32 phys_addr[3];
+    k_u8 bg_alpha;
+    k_u8 osd_alpha;
+    k_u8 video_alpha;
+    [k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;
+    k_u32 bg_color;
+    [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;
 } k_venc_2d_osd_attr;
 ```
 
@@ -3571,13 +3571,13 @@ Defines the structure for 2D border drawing.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u16 width;  
-    k_u16 height;  
-    k_u16 line_width;  
-    k_u32 color;  
-    k_u16 startx;  
-    k_u16 starty;  
+typedef struct {
+    k_u16 width;
+    k_u16 height;
+    k_u16 line_width;
+    k_u32 color;
+    k_u16 startx;
+    k_u16 starty;
 } k_venc_2d_border_attr;
 ```
 
@@ -3611,9 +3611,9 @@ Defines the structure for H.265 protocol encoding channel SAO.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 slice_sao_luma_flag;  
-    k_u32 slice_sao_chroma_flag;  
+typedef struct {
+    k_u32 slice_sao_luma_flag;
+    k_u32 slice_sao_chroma_flag;
 } k_venc_h265_sao;
 ```
 
@@ -3641,11 +3641,11 @@ Defines the structure for rectangular area information.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_s32 left;  
-    k_s32 right;  
-    k_u32 top;  
-    k_u32 bottom;  
+typedef struct {
+    k_s32 left;
+    k_s32 right;
+    k_u32 top;
+    k_u32 bottom;
 } k_venc_rect;
 ```
 
@@ -3675,12 +3675,12 @@ Defines the structure for encoding region of interest (ROI) information.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 idx;  
-    k_bool enable;  
-    k_bool is_abs_qp;  
-    k_s32 qp;  
-    [k_venc_rect](#3128-k_venc_rect) rect;  
+typedef struct {
+    k_u32 idx;
+    k_bool enable;
+    k_bool is_abs_qp;
+    k_s32 qp;
+    [k_venc_rect](#3128-k_venc_rect) rect;
 } k_venc_roi_attr;
 ```
 
@@ -3711,9 +3711,9 @@ Defines the structure for H.264 protocol encoding channel entropy coding.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 entropy_coding_mode;  
-    k_u32 cabac_init_idc;  
+typedef struct {
+    k_u32 entropy_coding_mode;
+    k_u32 cabac_init_idc;
 } k_venc_h264_entropy;
 ```
 
@@ -3741,8 +3741,8 @@ Defines the structure for H.265 protocol encoding channel entropy coding.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 cabac_init_flag;  
+typedef struct {
+    k_u32 cabac_init_flag;
 } k_venc_h265_entropy;
 ```
 
@@ -3801,10 +3801,10 @@ Defines the structure for decoding channel attributes.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VDEC_SEND_MODE_STREAM = 0,  
-    K_VDEC_SEND_MODE_FRAME,  
-    K_VDEC_SEND_MODE_BUTT  
+typedef enum {
+    K_VDEC_SEND_MODE_STREAM = 0,
+    K_VDEC_SEND_MODE_FRAME,
+    K_VDEC_SEND_MODE_BUTT
 } k_vdec_send_mode;
 ```
 
@@ -3832,15 +3832,15 @@ Defines the structure for decoding channel attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_payload_type type;  
-    [k_vdec_send_mode](#322-k_vdec_send_mode) mode;  
-    k_u32 pic_width;  
-    k_u32 pic_height;  
-    k_u32 stream_buf_size;  
-    k_u32 frame_buf_size;  
-    k_u32 frame_buf_cnt;  
-    k_pixel_format pic_format;  
+typedef struct {
+    k_payload_type type;
+    [k_vdec_send_mode](#322-k_vdec_send_mode) mode;
+    k_u32 pic_width;
+    k_u32 pic_height;
+    k_u32 stream_buf_size;
+    k_u32 frame_buf_size;
+    k_u32 frame_buf_cnt;
+    k_pixel_format pic_format;
 } k_vdec_chn_attr;
 ```
 
@@ -3883,16 +3883,16 @@ Defines the structure for channel status.
 【Definition】
 
 ```c
-typedef struct {  
-    k_payload_type type;  
-    k_bool is_started;  
-    k_u32 recv_stream_frames;  
-    k_u32 dec_stream_frames;  
-    [k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;  
-    k_u32 width;  
-    k_u32 height;  
-    k_u64 latest_frame_pts;  
-    k_bool end_of_stream;  
+typedef struct {
+    k_payload_type type;
+    k_bool is_started;
+    k_u32 recv_stream_frames;
+    k_u32 dec_stream_frames;
+    [k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;
+    k_u32 width;
+    k_u32 height;
+    k_u64 latest_frame_pts;
+    k_bool end_of_stream;
 } k_vdec_chn_status;
 ```
 
@@ -3927,10 +3927,10 @@ Defines the structure for decoding error information.
 【Definition】
 
 ```c
-typedef struct {  
-    k_s32 set_pic_size_err;  
-    k_s32 format_err;  
-    k_s32 stream_unsupport;  
+typedef struct {
+    k_s32 set_pic_size_err;
+    k_s32 format_err;
+    k_s32 stream_unsupport;
 } k_vdec_dec_err;
 ```
 
@@ -3959,11 +3959,11 @@ Defines the structure for video decoding stream.
 【Definition】
 
 ```c
-typedef struct {  
-    k_bool end_of_stream;  
-    k_u64 pts;  
-    k_u32 len;  
-    k_u8 *addr;  
+typedef struct {
+    k_bool end_of_stream;
+    k_u64 pts;
+    k_u32 len;
+    k_u8 *addr;
 } k_vdec_stream;
 ```
 
@@ -3993,10 +3993,10 @@ Defines the structure for output frame supplementary information.
 【Definition】
 
 ```c
-typedef struct {  
-    k_payload_type type;  
-    k_bool is_valid_frame;  
-    k_bool end_of_stream;  
+typedef struct {
+    k_payload_type type;
+    k_bool is_valid_frame;
+    k_bool end_of_stream;
 } k_vdec_supplement_info;
 ```
 
@@ -4025,10 +4025,10 @@ Defines the enumeration for decoding downscale mode.
 【Definition】
 
 ```c
-typedef enum {  
-    K_VDEC_DSL_MODE_BY_SIZE,  
-    K_VDEC_DSL_MODE_BY_RATIO,  
-    K_VDEC_DSL_MODE_BUTT  
+typedef enum {
+    K_VDEC_DSL_MODE_BY_SIZE,
+    K_VDEC_DSL_MODE_BY_RATIO,
+    K_VDEC_DSL_MODE_BUTT
 } k_vdec_dsl_mode;
 ```
 
@@ -4056,9 +4056,9 @@ Defines the structure for downscaling size parameters.
 【Definition】
 
 ```c
-typedef struct {  
-    k_u32 dsl_frame_width;  
-    k_u32 dsl_frame_height;  
+typedef struct {
+    k_u32 dsl_frame_width;
+    k_u32 dsl_frame_height;
 } k_vdec_dsl_size;
 ```
 
@@ -4086,9 +4086,9 @@ Defines the structure for downscaling ratio parameters.
 【Definition】
 
 ```c
-typedef struct {  
-    k_u8 dsl_ratio_hor;  
-    k_u8 dsl_ratio_ver;  
+typedef struct {
+    k_u8 dsl_ratio_hor;
+    k_u8 dsl_ratio_ver;
 } k_vdec_dsl_ratio;
 ```
 
@@ -4116,13 +4116,13 @@ Defines the structure for downscaling.
 【Definition】
 
 ```c
-typedef struct {  
-    [k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;  
-    union  
-    {  
-        [k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;  
-        [k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;  
-    };  
+typedef struct {
+    [k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;
+    union
+    {
+        [k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;
+        [k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;
+    };
 } k_vdec_downscale;
 ```
 
@@ -4683,10 +4683,10 @@ Encoding callback function structure.
 【Definition】
 
 ```c
-typedef struct  
-{  
-    [pfn_venc_dataproc](#4142-pfn_venc_dataproc);  
-    k_u8 *p_private_data;  
+typedef struct
+{
+    [pfn_venc_dataproc](#4142-pfn_venc_dataproc);
+    k_u8 *p_private_data;
 } kd_venc_callback_s;
 ```
 
@@ -4780,13 +4780,13 @@ Encoded data packet type.
 【Definition】
 
 ```c
-typedef struct  
-{  
-    k_char *vir_addr;  
-    k_u64 phys_addr;  
-    k_u32 len;  
-    k_u64 pts;  
-    k_venc_pack_type type;  
+typedef struct
+{
+    k_char *vir_addr;
+    k_u64 phys_addr;
+    k_u32 len;
+    k_u64 pts;
+    k_venc_pack_type type;
 } k_venc_data_pack_s;
 ```
 

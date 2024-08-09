@@ -47,10 +47,10 @@
 
 ### 修订记录
 
-| 文档版本号 | 修改者 | 日期 | 修改说明 |
+| 文档版本号 | 修改说明 | 修改者 | 日期     |
 |---|---|---|---|
-| V1.0       | 系统软件部 | 2024.02.02 | 初版  |
-| V1.1       | 系统软件部 | 2024.07.01 | 增加功能描述和修订错误 |
+| V1.0       | 初版 | 龙轶珞 | 2024.02.02  |
+| V1.1       | 增加功能描述和修订错误 | 龙轶珞 | 2024.07.01 |
 
 ## 1. 概述
 
@@ -759,22 +759,22 @@ k_s32 kd_mapi_nonai_2d_stop(k_s32 chn_num);
 表 41  API 错误码
 | 错误代码   | 宏定义                       | 描述                                         |
 | ---------- | ---------------------------- | -------------------------------------------- |
-| 0xa0098001 | K_ERR_NONAI_2D_INVALID_DEVID | 设备ID超出合法范围                           |
-| 0xa0098002 | K_ERR_NONAI_2D_INVALID_CHNID | 通道ID超出合法范围                           |
-| 0xa0098003 | K_ERR_NONAI_2D_ILLEGAL_PARAM | 参数超出合法范围                             |
-| 0xa0098004 | K_ERR_NONAI_2D_EXIST         | 试图申请或者创建已经存在的设备、通道或者资源 |
-| 0xa0098005 | K_ERR_NONAI_2D_UNEXIST       | 试图使用或者销毁不存在的设备、通道或者资源   |
-| 0xa0098006 | K_ERR_NONAI_2D_NULL_PTR      | 函数参数中有空指针                           |
-| 0xa0098007 | K_ERR_NONAI_2D_NOT_CONFIG    | 使用前未配置                                 |
-| 0xa0098008 | K_ERR_NONAI_2D_NOT_SUPPORT   | 不支持的参数或者功能                         |
-| 0xa0098009 | K_ERR_NONAI_2D_NOT_PERM      | 该操作不允许，如试图修改静态配置参数         |
-| 0xa009800c | K_ERR_NONAI_2D_NOMEM         | 分配内存失败，如系统内存不足                 |
-| 0xa009800d | K_ERR_NONAI_2D_NOBUF         | 分配缓存失败，如申请的数据缓冲区太大         |
-| 0xa009800e | K_ERR_NONAI_2D_BUF_EMPTY     | 缓冲区中无数据                               |
-| 0xa009800f | K_ERR_NONAI_2D_BUF_FULL      | 缓冲区中数据满                               |
-| 0xa0098010 | K_ERR_NONAI_2D_NOTREADY      | 系统没有初始化或没有加载相应模块             |
-| 0xa0098011 | K_ERR_NONAI_2D_BADADDR       | 地址超出合法范围                             |
-| 0xa0098012 | K_ERR_NONAI_2D_BUSY          | NONAI_2D系统忙                               |
+| 0xa0188001 | K_ERR_NONAI_2D_INVALID_DEVID | 设备ID超出合法范围                           |
+| 0xa0188002 | K_ERR_NONAI_2D_INVALID_CHNID | 通道ID超出合法范围                           |
+| 0xa0188003 | K_ERR_NONAI_2D_ILLEGAL_PARAM | 参数超出合法范围                             |
+| 0xa0188004 | K_ERR_NONAI_2D_EXIST         | 试图申请或者创建已经存在的设备、通道或者资源 |
+| 0xa0188005 | K_ERR_NONAI_2D_UNEXIST       | 试图使用或者销毁不存在的设备、通道或者资源   |
+| 0xa0188006 | K_ERR_NONAI_2D_NULL_PTR      | 函数参数中有空指针                           |
+| 0xa0188007 | K_ERR_NONAI_2D_NOT_CONFIG    | 使用前未配置                                 |
+| 0xa0188008 | K_ERR_NONAI_2D_NOT_SUPPORT   | 不支持的参数或者功能                         |
+| 0xa0188009 | K_ERR_NONAI_2D_NOT_PERM      | 该操作不允许，如试图修改静态配置参数         |
+| 0xa018800c | K_ERR_NONAI_2D_NOMEM         | 分配内存失败，如系统内存不足                 |
+| 0xa018800d | K_ERR_NONAI_2D_NOBUF         | 分配缓存失败，如申请的数据缓冲区太大         |
+| 0xa018800e | K_ERR_NONAI_2D_BUF_EMPTY     | 缓冲区中无数据                               |
+| 0xa018800f | K_ERR_NONAI_2D_BUF_FULL      | 缓冲区中数据满                               |
+| 0xa0188010 | K_ERR_NONAI_2D_NOTREADY      | 系统没有初始化或没有加载相应模块             |
+| 0xa0188011 | K_ERR_NONAI_2D_BADADDR       | 地址超出合法范围                             |
+| 0xa0188012 | K_ERR_NONAI_2D_BUSY          | NONAI_2D系统忙                               |
 
 ## 6. 调试信息
 
