@@ -6,7 +6,6 @@ K230 SDK API Reference
   01_software/board/mpp/K230_DMA_API_Reference.md
   01_software/board/mpp/K230_DPU_API_Reference.md
   01_software/board/mpp/K230_FFT_API_Reference.md
-  01_software/board/mpp/K230_GPU_API_Reference.md
   01_software/board/mpp/K230_SHA256_API_Reference.md
   01_software/board/mpp/K230_VICAP_API_Reference.md
   01_software/board/mpp/K230_VICAP_SENSOR_Parameter_Partition_Reference.md

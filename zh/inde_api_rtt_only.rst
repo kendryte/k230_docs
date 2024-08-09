@@ -6,7 +6,6 @@ K230 SDK API 参考
    01_software/board/mpp/K230_DMA_API参考.md
    01_software/board/mpp/K230_DPU_API参考.md
    01_software/board/mpp/K230_FFT_API参考.md
-   01_software/board/mpp/K230_GPU_API参考.md
    01_software/board/mpp/K230_SHA256_API参考.md
    01_software/board/mpp/K230_VICAP_API参考.md
    01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md
