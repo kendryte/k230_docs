@@ -314,7 +314,6 @@ DATABASE_CFLAGS="-I$DATABASE_CURRENT_DIR/../include \
  -I$DATABASE_CURRENT_DIR/../../t_json_c/include/    \
  -I$DATABASE_CURRENT_DIR/../../t_mxml_c/mxml-3.3.1/ \
  -I$DATABASE_CURRENT_DIR/../../../../../../../../../include/comm"
-```
 
 DATABASE_SELECT 0: imx335 2592x1944, 1: ov9732 1280x720, 2: ov9286 1280x720, ...
 echo -n
@@ -348,6 +347,8 @@ cat sensor_cfg_calib_header.bin\
     sensor_cfg_02.bin\
     padding.bin\
     ../../../../../../../sensor/dewarp/imx335-2592x1944.bin > sensor_cfg.bin
+
+```
 
 ##### 2.2.2.6 Applying Parameter Partition
 
