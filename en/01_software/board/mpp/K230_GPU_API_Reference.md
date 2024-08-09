@@ -212,6 +212,7 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 - This enumeration type specifies the color format used for the buffer.
 
     Note: For a summary of image format alignment requirements, see the [Memory Alignment Requirements](#3221-memory-alignment-requirements) after the numerical descriptions.
+
 | vg_lite_buffer_format_t | Description                       | Supported as Source | Supported as Target | Alignment (Bytes) |
 |-------------------------|-----------------------------------|---------------------|---------------------|-------------------|
 | VG_LITE_ABGR8888        | 8 bits per channel, alpha in low 8 bits | Yes                 | Yes                 | 64                |
@@ -468,7 +469,7 @@ Colors are displayed at 100% and 50% opacity.
 | VG_LITE_BLEND_ADDITIVE | S + D                      |
 | VG_LITE_BLEND_DST_IN   | Sa * D                     |
 | VG_LITE_BLEND_DST_OVER | (1 - Da) * S + D           |
-| VG_LITE_BLEND_MULTIPLY | S *(1 - Da) + D* (1 - Sa) + S * D |
+| VG_LITE_BLEND_MULTIPLY | S \* (1 - Da) + D \* (1 - Sa) + S * D |
 | VG_LITE_BLEND_NONE     | S                          |
 | VG_LITE_BLEND_SCREEN   | S + D - S * D              |
 | VG_LITE_BLEND_SRC_IN   | Da * S                     |
