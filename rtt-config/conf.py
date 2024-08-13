@@ -70,5 +70,8 @@ html_theme_options = {
     "repository_url": "https://github.com/kendryte/k230_docs",
     'navigation_depth': 7,
     "primary_sidebar_end": ["versionsFlex.html"],
-    "use_repository_button": True
+    "use_repository_button": True,
+    "footer_start": ["Fleft.html"],
+	"footer_center": ["Footer.html"],
+	"footer_end" : ["Fright.html"]
 }
