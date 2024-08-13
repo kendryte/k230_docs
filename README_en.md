@@ -157,7 +157,7 @@
 | [K230_Practical_Basics_hello_world.md](en/02_applications/tutorials/K230_Practical_Basics_hello_world.md) | K230 Practical Basics - hello world|
 | [K230_Inter_Processer_Communication_sharefs_Usage.md](en/02_applications/tutorials/K230_Inter_Processer_Communication_sharefs_Usage.md) | K230 Inter Processer Communication Sharefs Usage|
 | [K230_GPU_Practice.md](en/02_applications/tutorials/K230_GPU_Practice.md) | K230 GPU in action - VGLite paints cool graphics|
-| [KK230_GUI_Practice_Porting_Tutorial.md](en/02_applications/tutorials/K230_GUI_Practice_Porting_Tutorial.md) | K230 GUI in Action - LVGL Porting Tutorial|
+| [K230_GUI_Practice_LVGL_Porting_Tutorial.md](en/02_applications/tutorials/K230_GUI_Practice_LVGL_Porting_Tutorial.md) | K230 GUI in Action - LVGL Porting Tutorial|
 | [K230_RVV_In_Action.md](en/02_applications/tutorials/K230_RVV_In_Action.md) | K230 RVV in action|
 | [K230_RVV_optimization_performance_description.md](en/02_applications/tutorials/K230_RVV_optimization_performance_description.md) | K230 RVV optimization performance description|
 | [K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md](en/02_applications/tutorials/K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md) | K230 USB Application Practice - UVC Transmission YUV and Encoding Stream|
