@@ -13,7 +13,7 @@ CONFDIR       = .
 CONFDIRRTT    = rtt-config
 BUILDDIR      = _build
 WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~zhengshanshan/web-docs-builder
-TEMPLATE = _static/init_mermaid.js _templates/versionsFlex.html _templates/Fleft.html _templates/Footer.html _templates/Fright.html  _templates/layout.html _static/topbar.css _static/custom-theme.css
+TEMPLATE = _static/init_mermaid.js _static/mermaid.min.js _templates/versionsFlex.html _templates/Fleft.html _templates/Footer.html _templates/Fright.html  _templates/layout.html _static/topbar.css _static/custom-theme.css
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -75,4 +75,7 @@ _static/custom-theme.css:
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/init_mermaid.js: 
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_static/mermaid.min.js: 
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
