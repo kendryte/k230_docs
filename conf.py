@@ -27,7 +27,7 @@ extensions = [
     'sphinxcontrib.mermaid'
 ]
 html_js_files = [
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.8/mermaid.min.js',
+    'mermaid.min.js',
     'init_mermaid.js',
 ]
 source_suffix = {
