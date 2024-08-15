@@ -154,4 +154,101 @@ You can configure the memory regions for each module by entering `make menuconfi
 | 27 | K230 SDK V1.3     | Added three-camera demo | Added demo for Canmv-K230 board with three cameras (ov5647) working simultaneously                                                |         |
 | 28 | K230 SDK V1.4     | Vicap MCM only mode | Vicap MCM only mode adapted for YUV sensor                                                                                         |         |
 | 29 | K230 SDK V1.4     | linear mode supports adaptive | linear mode supports adaptive                                                                                                      |         |
-| 29 | K230 SDK V1.5     | gc2053           | Added gc2053 driver                                                                                                                |         |
+| 30 | K230 SDK V1.5     | GC2053           | Added GC2053 driver                                                                  |         |
+
+### 4.3 Platform
+
+| ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
+|----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
+| 1  | K230 SDK V0.5     | Boot Peripherals  | Supports eMMC, 1/4 wire SD card                                                      |         |
+| 2  | K230 SDK V0.5     | Big Core DPU Driver | Image input, output driver development; Basic functions, e.g., read parameters, support dynamic update of long-cycle parameters, output buffer, timestamp, algorithm, etc.; support pipeline binding |         |
+| 3  | K230 SDK V0.5     | Small Core UBOOT  | DDR training, disk driver (eMMC, SD, SPI 1 wire); supports PUFs and gzip decompression |         |
+| 4  | K230 SDK V0.5     | Small Core SPI Driver | 1 wire                                                                              |         |
+| 5  | K230 SDK V0.5     | Small Core SDIO Driver | Supports SDIO0/1 connecting SDCard                                                   |         |
+| 6  | K230 SDK V0.5     | Small Core USB (UVC) Driver | Supports UVC driver (K230 chip as slave)                                             |         |
+| 7  | K230 SDK V0.5     | Small Core GPIO Driver | Supports each IO as a separate logical resource allocation; supports IO and interrupt |         |
+| 8  | K230 SDK V0.5     | Small Core Disk and File System | Supports SDIO0/1 connecting SDCard, supports SDIO0/1 connecting eMMC; supports ext2/3/4, FAT32 file system |         |
+| 9  | K230 SDK V0.5     | I2C Driver        | Big and small core I2C bus driver                                                    |         |
+| 10 | K230 SDK V0.5     | UART Driver       | Big and small core UART driver                                                       |         |
+| 11 | K230 SDK V0.5     | UVC Basic Demo    | UVC camera, using the board as a camera                                              |         |
+| 12 | K230 SDK V0.5     | GSDMA (Big Core Driver) | Supports using GDMA for image transfer, through configuration of channel attributes to achieve image rotation and mirroring, transfer multiple image formats (e.g., YUV400, YUV420, YUV444), transfer images with multiple pixel bit widths (e.g., 8bit, 10bit, 16bit); supports using SDMA for data transfer, supports 1D mode and 2D mode transfer; supports pipeline binding |         |
+| 13 | K230 SDK V0.6     | Big Core GPIO Driver | Supports independent configuration and use of IO functions, independent configuration and triggering of interrupts, added hardware mutex lock to ensure mutual exclusion of register access |         |
+| 14 | K230 SDK V0.6     | Boot Peripherals  | Supports SPI NOR flash image generation and boot                                      |         |
+| 15 | K230 SDK V0.6     | UBOOT SPI NOR Flash Driver | Supports 8-wire DMA                                                                  |         |
+| 16 | K230 SDK V0.6     | Big Core ADC Driver | Supports ADC voltage reading                                                         |         |
+| 17 | K230 SDK V0.7     | Big and Small Core WDT Driver | Supports watchdog reset SOC                                                          |         |
+| 18 | K230 SDK V0.7     | Big Core SPI Driver | Supports SPI single-wire mode, supports NAND flash                                    |         |
+| 19 | K230 SDK V0.7     | Small Core SPI Driver | Supports SPI single-wire, 8-wire mode, supports NOR flash                             |         |
+| 20 | K230 SDK V0.7     | Quick Boot        | SDK defaults to quick boot, non-quick boot version can disable CONFIG_QUICK_BOOT macro via make menuconfig; quick boot version UBOOT will not enter command line |         |
+| 21 | K230 SDK V0.7     | Secure Image      | SDK defaults to not generating secure image, can configure CONFIG_GEN_SECURITY_IMG via make menuconfig to generate secure image |         |
+| 22 | K230 SDK V0.7     | UVC Basic Demo    | Added support for H264 format, currently has bugs, can only run for a short time      |         |
+| 23 | K230 SDK V0.7     | DPU, GSDMA        | Buffer quantity configurable                                                         |         |
+| 24 | K230 SDK V0.8     | Big Core Timer, RTC, PWM | Added timer driver and demo for big core; added PWM driver and demo for big core; added RTC driver and demo for big core |         |
+| 25 | K230 SDK V0.8     | SPI NAND Support  | Small core (UBOOT, Linux) supports 4-wire SPI NAND driver, SDK supports boot from SPI NAND |         |
+| 26 | K230 SDK V0.8     | UVC Basic Demo    | UVC supports IMX335 camera, UVC supports MJPEG format                                 |         |
+| 27 | K230 SDK V0.8     | SPI NOR Adds Face Feature and Other Parameter Partitions | SPI NOR adds face feature, AI model, calibration parameters, big core app, speckle, quick boot parameters and other parameter partitions; when booting from SPI NOR, UBOOT will parse and load each partition data |         |
+| 28 | K230 SDK V0.9     | Small Core PWM Driver | Supports small core PWM driver                                                       |         |
+| 29 | K230 SDK V0.9     | Small Core ADC Driver | Supports small core ADC driver                                                       |         |
+| 30 | K230 SDK V0.9     | Supports K230D Development Board | SDK supports K230D development board (SD card boot)                                   |         |
+| 31 | K230 SDK V0.9     | OTA               | Supports OTA upgrade                                                                 |         |
+| 32 | K230 SDK V1.0     | Big Core FFT      | Supports FFT driver                                                                  |         |
+| 33 | K230 SDK V1.0.1   | Supports CanMV-K230 Development Board | SDK supports CanMV-K230 development board (SD card boot)                              |         |
+| 34 | K230 SDK V1.1     | Small Core WiFi Driver | Small core supports AP6256 driver                                                    |         |
+| 35 | K230 SDK V1.1     | Small Core Tri-Color LED Driver | Small core supports I2S interface WS2812 driver                                       |         |
+| 36 | K230 SDK V1.1     | Small Core SPI LCD Driver | Small core supports SPI interface ST7735S 0.96-inch LCD screen driver                 |         |
+| 37 | K230 SDK V1.1     | Burntool V2       | Removed full image burning page, added loader_sip.bin support for SIP burning, for details see [K230_SDK_Burntool Usage Guide.md](../01_software/pc/burntool/K230_SDK_Burntool_User_Guide.md  ) |         |
+| 38 | K230 SDK V1.1     | USB Port Usage    | USB1 fixed as host mode, can connect USB-ETH or U disk and other peripherals, connect pin 3 and pin 4 of J5 header on EVB with jumper cap to enable power supply to peripherals; USB0 used for USB gadget testing and USB upgrade, no longer connect pin 1 and pin 2 of J5 header on EVB with jumper cap |         |
+| 39 | K230 SDK V1.2     | CanMV WiFi AP6212 | CanMV supports AP6212                                                                |         |
+| 40 | K230 SDK V1.2     | CanMV Only Linux  | CanMV adds configuration for running vector Linux on big core (k230_canmv_only_linux_defconfig) |         |
+| 41 | K230 SDK V1.3     | Added Debian and Ubuntu Release Images | Added Debian and Ubuntu release images for CanMV                                       |         |
+| 42 | K230 SDK V1.3     | OTA               | Buildroot adds swupdate OTA upgrade function, supports dual partition switch upgrade (requires dual partition boot scheme) | Refer to description in k230_sdk/tools/ota/README |
+| 43 | K230 SDK V1.5     | USB to Ethernet   | Fixed instability issue of USB to Ethernet network                                    |         |
+| 44 | K230 SDK V1.5     | Touch Control     | Added touch control for LCD screen                                                   |         |
+| 45 | K230 SDK V1.5     | CanMV 2.0         | Supports CanMV-K230-V2.0 board                                                       |         |
+| 46 | K230 SDK V1.6     | 01Studio-CanMV-K230 | Supports 01Studio-CanMV-K230 board                                                   |         |
+| 47 | K230 SDK V1.6     | Supports RTT Only System | Supports RTT only single system                                                      |         |
+
+### 4.4 Architecture
+
+| ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
+|----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
+| 1  | K230 SDK V0.5     | Multimedia Memory Management | Multimedia memory management driver, MPI, MAPI; video buffer pool driver, MPI, MAPI   |         |
+| 2  | K230 SDK V0.5     | Log Management    | Multimedia log management driver, MPI, MAPI                                          |         |
+| 3  | K230 SDK V0.5     | System Binding    | Multimedia system binding driver, MPI                                                |         |
+| 4  | K230 SDK V0.5     | Big Core Multimedia Debugging | Provides proc file system for debugging                                              |         |
+| 5  | K230 SDK V0.5     | Inter-Core Communication | Inter-core communication driver                                                      |         |
+| 6  | K230 SDK V0.5     | Inter-Core Control Communication | IPCMSG library                                                                      |         |
+| 7  | K230 SDK V0.5     | Inter-Core Data Communication | DATAFIFO library                                                                     |         |
+| 8  | K230 SDK V0.5     | Shared File System | sharefs                                                                              | Small core as server, big core as client |
+| 9  | K230 SDK V0.5     | System Control    | Big and small core clock power and reset driver                                      |         |
+| 10 | K230 SDK V0.5     | KPU               | KPU driver                                                                           |         |
+| 11 | K230 SDK V0.5     | Big Core System Debugging | JTAG debugging; local serial port                                                    |         |
+| 12 | K230 SDK V0.5     | Small Core System Debugging | JTAG debugging, serial port debugging, network port debugging, CPU usage statistics and analysis, performance debugging methods, debugging and log output ports (physical serial port), kernel and exception information output, dump, debug version | perf is not configured by default in the kernel and buildroot |
+| 13 | K230 SDK V0.7     | Software SHA256   | Added software implementation of SHA256 under big core MPP                            |         |
+| 14 | K230 SDK V0.7     | OTP Read/Write Function | Added OTP read/write function in big core rt-smart, added OTP read function in small core Linux |         |
+| 15 | K230 SDK V0.7     | Tsensor Read Function | Added Tsensor read function in big core rt-smart, added Tsensor read function in small core Linux, used to read chip junction temperature |         |
+| 16 | K230 SDK V0.7     | TRNG Read Function | Added TRNG read function in small core Linux                                          |         |
+| 17 | K230 SDK V0.7     | Quick Start Demo  | Added quick start face detection demo for big core                                    |         |
+| 18 | K230 SDK V0.7     | PMU Function      | Added PMU standby and wake-up function for small core Linux                           |         |
+| 19 | K230 SDK V0.8     | Door Lock POC     | Added POC door lock function in big core, added UI function in small core, register and recognize faces via UI interface or SD card |         |
+| 20 | K230 SDK V0.9     | Door Lock POC     | Supports ov9286, face detection and recognition (including IR and speckle liveness detection, speckle includes DPU depth extraction) |         |
+| 21 | K230 SDK V0.9     | Encryption/Decryption | Added AES-GCM encryption/decryption function for small core Linux                     |         |
+| 22 | K230 SDK V0.9     | Power Consumption Control | Added chip clock/power domain management in uboot, added power consumption control for CPU1, DPU, VPU, KPU, and display in big core rt-smart, added power consumption control for display in small core Linux |         |
+| 23 | K230 SDK V1.0     | Door Lock POC     | Added face feature encryption/decryption function                                     |         |
+| 24 | K230 SDK V1.0     | SH256 Driver      | Added hardware SH256 driver for both big and small cores                              |         |
+| 25 | K230 SDK V1.1     | Big Core Encryption/Decryption Driver | Added hardware AES-GCM driver and SM4-ECB/CBC/CFB/OFB/CTR driver for big core |         |
+| 26 | K230 SDK V1.2     | Door Lock OTA Function | Added door lock OTA function                                                          |         |
+| 27 | K230 SDK V1.3     | OTP Space Adjustment | Adjusted the OTP space operated by SDK, users can read/write 768 bytes. The remaining space is reserved for chip manufacturers |         |
+
+### 4.5 Others
+
+| ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
+|----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
+| 1  | K230 SDK V0.5     | AI Demo           | Provides three AI demos: door_lock, object_detect, image_classify                     |         |
+| 2  | K230 SDK V0.5     | AiW4211LV10 WiFi Driver | Supports network data communication; supports control command sending                |         |
+| 3  | K230 SDK V0.6     | AiW4211LV10 WiFi Firmware | Firmware compatible with commands and network configuration, supports reconnection after disconnection, supports K230 level detection and wake-up |         |
+| 4  | K230 SDK V0.6     | Touch Screen Support | Touch screen support                                                                 |         |
+| 5  | K230 SDK V0.7     | Software Image    | SDK compilation will generate demo executable files, but by default not packaged into the image; secure image files are not generated by default, can be manually configured |         |
+| 6  | K230 SDK V0.7     | Toolchain         | Big core toolchain version updated to: riscv64-unknown-linux-musl-rv64imafdcv-lp64d-20230420.tar.bz2 |         |
+| 7  | K230 SDK V0.8     | Software Image    | When packaging Emmc/Sdcard images, the big core demos will be packaged into the small core/sharefs |         |
+| 8  | K230 SDK V0.8     | Demo              | Modified related demos to adapt to different camera modules, such as encoding/UVC. Specific usage can be found in the "K230 SDK Demo Usage Guide" |         |
