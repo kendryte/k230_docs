@@ -59,7 +59,7 @@ System control, based on the characteristics of the K230 chip, completes the res
 
 ### 1.2 Function Description
 
-MAPI features cross-OS calls, enabling the same API to be called on both the big and small cores of the K230 to achieve the required functionality. The overall system architecture is shown in the following diagram.
+MAPI features cross-OS calls, enabling the same API to be called on both the big and small cores of the K230 to achieve the required functionality.
 
 For specific details on binding and memory management in MAPI, please refer to the document "K230 System Control API Reference V1.0".
 
