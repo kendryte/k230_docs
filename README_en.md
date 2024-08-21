@@ -4,7 +4,7 @@
 [![Gitee repository](https://img.shields.io/badge/gitee-repository-blue?logo=gitee&style=plastic)](https://gitee.com/kendryte/k230_docs)
 [![GitHub release](https://img.shields.io/github/v/release/kendryte/k230_docs?color=brightgreen&display_name=tag&logo=github&style=plastic)](https://github.com/kendryte/k230_docs/releases)
 
-[中文文档](README.md) | [English Docs](README_en.md)
+[中文文档](https://developer.canaan-creative.com/k230/zh/dev/index.html) | [English Docs](https://developer.canaan-creative.com/k230/en/dev/index.html)
 
 [TOC]
 
@@ -65,6 +65,7 @@
 | [K230-SIP-EVB-V1_0-A_1_20230316-BOM](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1_20230316-BOM.xlsx) | The BOM of the device used in the K230D Demo Board |
 | [K230-SIP-EVB-V1_0-A_1-20230316.DSN](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1-20230316.DSN) | K230D Demo Board Cadence CIS Capture File |
 | [K230-SIP-EVB-V1.0-A.1-20230317.pdf](zh/00_hardware/K230D/K230-SIP-EVB-V1.0-A.1-20230317.pdf) | K230D Demo Board schematic pdf file |
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230D%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230D-Zero_V1.0_2024-07-09.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件 |
 
 ### CanMV-K230 engineering design file
 
@@ -72,6 +73,7 @@
 | --- | --- |
 | [CanMV-K230-V1.0_2023-09-15.pdf](zh/00_hardware/CanMV_K230/CanMV-K230-V1.0_2023-09-15.pdf) | CanMV-K230 Demo Board schematic pdf file|
 | [CanMV-K230_2023-10-11.html](zh/00_hardware/CanMV_K230/CanMV-K230_2023-10-11.html) | CanMV-K230 Demo Board bitmap file|
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/CanMV-K230%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230-LP4-V3.0-20240509.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件|
 
 ## K230 SDK software documentation
 
