@@ -300,6 +300,22 @@ k230_bin/
 ......
 ```
 
+（5）对于01studio开发板，支持编译hdmi显示和lcd显示的aidemo，编译命令如下：
+
+```shell
+./build_app.sh face_detection hdmi
+./build_app.sh face_detection lcd
+```
+
+上述命令会生成单个demo不同显示模式下的编译产物。如果想编译全部的AI Demo，编译命令如下：
+
+```shell
+./build_app.sh all hdmi
+./build_app.sh all lcd
+```
+
+上述命令会按照指定的显示模式编译所有的AI Demo。hdmi生成的编译产物位于k230_bin目录下，lcd显示模式下生成的编译产物位于k230_bin_lcd目录下。
+
 将k230_bin/整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
 
 ```shell

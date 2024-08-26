@@ -300,6 +300,22 @@ k230_bin/
 ......
 ```
 
+(5) For the 01studio development board, which supports compiling AI demos for HDMI display and LCD display, the compilation commands are as follows:
+
+```shell
+./build_app.sh face_detection hdmi
+./build_app.sh face_detection lcd
+```
+
+The above commands will generate compiled outputs for a single demo under different display modes. If you want to compile all AI demos, the compilation commands are as follows:
+
+```shell
+./build_app.sh all hdmi
+./build_app.sh all lcd
+```
+
+The above commands will compile all AI demos according to the specified display mode. The compiled outputs for HDMI will be located in the k230_bin directory, while the compiled outputs for LCD display mode will be located in the k230_bin_lcd directory.
+
 Copy the entire k230_bin/ folder to the board, and execute the sh script on the main core to run the corresponding AI demo.
 
 ```shell
