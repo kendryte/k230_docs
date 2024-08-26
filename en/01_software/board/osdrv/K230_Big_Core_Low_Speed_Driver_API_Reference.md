@@ -183,8 +183,7 @@ msgs.buf = buf;
 msgs.len = 2;
 ```
 
-1. T
-ransmit
+1. Transmit
 
 `rt_i2c_transfer(bus, &msgs, 1)`
 

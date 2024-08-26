@@ -617,19 +617,19 @@ python3  ${firmware_gen}   -i ${filename}.gzu -o fh_${filename} ${arg}; # add k2
 The corresponding execution process prints as follows:
 
 ```bash
-##  + k230_priv_gzip -n8 -f -k speckle.bin 
-##  + sed -i -e '1s/\x08/\x09/' speckle.bin.gz 
-##  + mkimage -A riscv -O linux -T firmware -C gzip -a 0x14040000 -e 0x14040000 -n speckle -d speckle.bin.gz speckle.bin.gzu 
-##  Image Name:   speckle 
-##  Created:      Wed Jul  5 15:37:49 2023 
-##  Image Type:   RISC-V Linux Firmware (gzip compressed) 
-##  Data Size:    45 Bytes = 0.04 KiB = 0.00 MiB 
-##  Load Address: 14040000 
-##  Entry Point:  14040000 
-##  + python3 /home/wangjianxin/k230_sdk/tools/firmware_gen.py -i speckle.bin.gzu -o fh_speckle.bin -n 
-##  the magic is:  b'K230' 
-##  ----- NO ENCRYPTION + HASH-256 ----- 
-##  the encryption type:  0 
+##  + k230_priv_gzip -n8 -f -k speckle.bin
+##  + sed -i -e '1s/\x08/\x09/' speckle.bin.gz
+##  + mkimage -A riscv -O linux -T firmware -C gzip -a 0x14040000 -e 0x14040000 -n speckle -d speckle.bin.gz speckle.bin.gzu
+##  Image Name:   speckle
+##  Created:      Wed Jul  5 15:37:49 2023
+##  Image Type:   RISC-V Linux Firmware (gzip compressed)
+##  Data Size:    45 Bytes = 0.04 KiB = 0.00 MiB
+##  Load Address: 14040000
+##  Entry Point:  14040000
+##  + python3 /home/wangjianxin/k230_sdk/tools/firmware_gen.py -i speckle.bin.gzu -o fh_speckle.bin -n
+##  the magic is:  b'K230'
+##  ----- NO ENCRYPTION + HASH-256 -----
+##  the encryption type:  0
 ##  mesg_hash:  b'3543e2038aedad88a29f8ee98983064367cc79f6e709ed7571df9b391884b8b1'
 ```
 
@@ -768,4 +768,4 @@ With the default compiled image, after burning it to the board, the large core w
 
 ## 10. K230 Debian and Ubuntu Image Instructions
 
-For the image and build methods, refer to [K230_debian_ubuntu说明.md](../../../zh/03_other/K230_debian_ubuntu说明.md).
+For the image and build methods, refer to [K230_debian_ubuntu.md](../../../en/03_other/K230_debian_ubuntu.md).
