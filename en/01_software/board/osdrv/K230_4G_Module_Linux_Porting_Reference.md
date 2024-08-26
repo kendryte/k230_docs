@@ -511,6 +511,5 @@ ping www.163.com
 
 - "Quectel_UMTS_LTE_5G_Linux_USB_Driver_User_Guide"
 - "Quectel_LTE_Standard(A)_Series_AT_Commands_Manual_V1.1"
-- <https://www.cnblogs.com/zhuangquan/p/12191214.html>
 - <https://doc.embedfire.com/linux/rk356x/quick_start/zh/latest/quick_start/wireless/4g/4g.html#quectel-cm>
 - <https://github.com/turmary/linux-ppp-scripts>
