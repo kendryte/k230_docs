@@ -83,7 +83,7 @@ markdown-link-check:
     - git fetch
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v ; fi
+    - time markdown-link-check -p -q -v $(find . -name \*.md)
 
 # new MR open
 markdownlint:
@@ -101,7 +101,7 @@ markdownlint:
     - git fetch --tags
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdownlint-cli2; fi
+    - markdownlint-cli2 $(find . -name \*.md)
 
 .setup_env:
   before_script:
@@ -201,13 +201,18 @@ build web docs:
     url: https://ai.b-bug.org/k230/docs/dev/
   script:
     - git fetch --tags
+    - git branch main origin/main
+    - git checkout main
+    - python3 preprocess.py
+    - python3 preprocessEn.py
+    - git config --global user.email "auto@canaan-creative.com"
+    - git config --global user.name "GitLab CI"
+    - git commit "*.md" -m "remove cover"
     - git checkout dev
     - git tag --list
     - git reset --hard origin/dev
     - python3 preprocess.py
     - python3 preprocessEn.py
-    - git config --global user.email "auto@canaan-creative.com"
-    - git config --global user.name "GitLab CI"
     - git commit "*.md" -m "remove cover"
     - make mhtml
     - rm -rf /data1/k230/docs/*

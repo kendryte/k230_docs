@@ -943,6 +943,17 @@ UART模块提供以下API：
 
 #### 2.1.2 I2C
 
+将引脚配置为 I2C 时，需要在外部接上拉电阻，或者配置 IOMUX 使用引脚内部上拉，配置 IOMUX 可以通过修改 uboot 中的设备树文件来实现，文件位置在 `src/little/uboot/arch/riscv/dts/<board>.dts`，例如 K230-CanMV 的 uboot 设备树文件就是 `src/little/uboot/arch/riscv/dts/k230_canmv.dts`，在设备树的 iomux 节点中有全部引脚的配置，例如使用 32、33 两个引脚作为 `IIC0_SCL` 和 `IIC0_SDA` 时，可以将 `IO32` 和 `IO33` 的配置修改为如下内容
+
+```plaintext
+(IO32) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO26_IO37<<MSC | 1<<IE | 1<<OE | 1<<PU | 0<<PD | 7<<DS | 1<<ST )
+(IO33) ( 1<<SEL | 0<<SL | BANK_VOLTAGE_IO26_IO37<<MSC | 1<<IE | 1<<OE | 1<<PU | 0<<PD | 7<<DS | 1<<ST )
+```
+
+其中 `PU` 为内部上拉，`SEL` 为引脚功能，`IE` 为输入使能，`OE` 为输出使能。
+
+同时还需要确保其他 IIC0 相关引脚（例如48、49、60、61，具体见原理图）的功能没有选中为 IIC0。
+
 I2C模块提供以下API：
 
 - [rt_i2c_bus_device_find](#2121-rt_i2c_bus_device_find)
@@ -995,7 +1006,7 @@ rt_uint32_t count);
 |----------|-----------------------------------------------------------------------|-----------|
 | bus      | I2c总线句柄                                                           | 输入      |
 | addr     | I2C 从设备地址                                                        | 输入      |
-| flags    | 标志位，可为`RT_I2C_WR RT_I2C_RD`及之外的其他标志位，可以进行 `|` 操作 | 输入      |
+| flags    | 标志位，可为`RT_I2C_WR RT_I2C_RD`及之外的其他标志位，可以进行 `OR` 操作 | 输入      |
 | buf      | 待发送数据数据缓冲区                                                  | 输入      |
 | count    | 待发送数据大小（单位：字节）                                          | 输入      |
 
@@ -1028,7 +1039,7 @@ rt_uint32_t count)
 |----------|-----------------------------------------------------------------------|-----------|
 | bus      | I2c总线句柄                                                           | 输入      |
 | addr     | I2C 从设备地址                                                        | 输入      |
-| flags    | 标志位，可为`RT_I2C_WR` `RT_I2C_RD`及之外的其他标志位，可以进行 `|` 操作 | 输入      |
+| flags    | 标志位，可为`RT_I2C_WR` `RT_I2C_RD`及之外的其他标志位，可以进行 `OR` 操作 | 输入      |
 | buf      | 接收数据数据缓冲区                                                    | 输入      |
 | count    | 接收数据大小（单位：字节）                                            | 输入      |
 
@@ -1088,6 +1099,37 @@ rt_uint32_t num)
 【相关主题】
 
 无
+
+##### 2.1.2.5 I2C slave
+
+K230 的 5 个 I2C 模块均支持从机模式，在 `src/big/rt-smart/kernel/bsp/maix3/rtconfig.h` 中声明相应的宏定义即可打开 I2C slave 功能，开启后默认将 I2C 模拟为一个 256 字节的 EEPROM 设备，在用户态可以通过读写 `/dev/slave-eeprom` 文件来使用，也可以 poll 这个文件来监听变更，示例程序放在 `/sharefs/app/sample_i2c_slave.elf`，其代码在 `src/big/mpp/userapps/sample/sample_i2c_slave/sample_i2c_slave.c`。
+
+在 `rtconfig.h` 中添加如下宏定义
+
+- `RT_USING_I2C_SLAVE_EEPROM` 将 I2C slave 模拟为一个256字节的 EEPROM
+- `RT_USING_I2C0_SLAVE` 将`I2C0`设置为从机模式
+- `RT_USING_I2C1_SLAVE` 将`I2C1`设置为从机模式
+- `RT_USING_I2C2_SLAVE` 将`I2C2`设置为从机模式
+- `RT_USING_I2C3_SLAVE` 将`I2C3`设置为从机模式
+- `RT_USING_I2C4_SLAVE` 将`I2C4`设置为从机模式
+
+I2C 驱动的代码在 `src/big/rt-smart/kernel/bsp/maix3/board/interdrv/i2c/drv_i2c.c`，如果不满足于模拟 EEPROM，需要实现其他功能，可以通过编写 `slave_callback` 回调函数的方式实现，建议参考参考函数 `i2c_slave_eeprom_callback`
+
+简单来说，`slave_callback` 回调函数会在被外部主机访问时被调用，接收三个参数
+
+- `void* ctx` 自定义的上下文
+- `enum i2c_slave_event event` 事件类型
+- `rt_uint8_t* val` 数据
+
+`event` 为访问事件类型
+
+- `I2C_SLAVE_READ_REQUESTED` 主机请求读，赋值 `*val` 以响应一个字节
+- `I2C_SLAVE_WRITE_REQUESTED` 主机请求写，一个字节的数据放在 `*val`
+- `I2C_SLAVE_READ_PROCESSED` 主机持续读，赋值 `*val` 以响应一个字节
+- `I2C_SLAVE_WRITE_RECEIVED` 主机持续写，一个字节的数据放在 `*val`
+- `I2C_SLAVE_STOP` 停止
+
+编写完你的 `slave_callback` 回调函数后，将其赋值给 `i2c_buses` 数组中对应的 I2C 结构体即可。
 
 #### 2.1.3 GPIO
 

@@ -62,13 +62,17 @@
 
 ### 1.1 SDK软件架构概述
 
-K230 SDK 是面向K230 开发板的软件开发包，包含了基于Linux&RT-smart 双核异构系统开发需要用到的源代码，工具链和其他相关资源。
+K230 SDK 是面向K230 开发板的软件开发包，包含了基于Linux&RT-smart 双核异构系统及RT-smart单系统开发需要用到的源代码，工具链和其他相关资源。
 
-K230 SDK 软件架构层次如图 1-1 所示：
+K230 SDK Linux+RT-smart双系统软件架构层次如图 1-1 所示：
 
 ![logo](images/cee49715351f6dd3496baf19af1262ed.png)
 
 图1-1 K230 SDK 软件架构图
+
+K230 SDK RT-smart 单系统软件架构层次如图 1-2 所示：
+
+![logo1](images/rtt-only_program.png)
 
 ## 2. 开发环境搭建
 
@@ -78,11 +82,7 @@ K230平台支持的硬件信息文档可以参考目录:[00_hardware](../../00_h
 
 | 主板类型  | 主板硬件参考目录|
 | --- | --- |
-| K230-USIP-LP3-EVB |具体硬件信息参考: [00_hardware/K230_LP3](../../00_hardware/K230_LP3) |
-| K230-USIP-LP4-EVB | 具体硬件信息参考: [00_hardware/K230_LP4](../../00_hardware/K230_LP4)|
-| K230-SIP-LP3-EVB | 具体硬件信息参考: [00_hardware/K230D](../../00_hardware/K230D)|
 | CanMV-K230 | 具体硬件信息参考: [00_hardware](../../00_hardware/CanMV_K230)|
-| CanMV-K230D-Zero | |
 
 ### 2.2 开发环境搭建
 
@@ -105,7 +105,7 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 
 ### 2.3 单板准备
 
-本章节以K230-USIP-LP3-EVB和CanMV-K230 主板使用为例
+本章节以CanMV-K230 主板使用为例
 
 #### 2.3.1 CanMV-K230
 
@@ -121,20 +121,6 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 说明：CanMV-K230主板电源和串口共用一个TypeC口，如下图：
 
 ![图形用户界面, 文本, 应用程序 描述已自动生成](images/canmv_power_001.png)
-
-#### 2.3.2 K230-USIP-LP3-EVB
-
-请准备如下硬件：
-
-- K230-USIP-LP3-EVB
-- Typec USB线  至少2根
-- TypeC USB 转以太网转换器(可选)
-- 网线一根(可选)
-- SD卡(可选)
-
-说明：TypeC USB 转以太网推荐型号是 `https://item.jd.com/5326738.html`
-
-参考《K230 DEMO BOARD 资源使用说明》准备开发板。
 
 #### 2.3.3 串口
 
@@ -165,9 +151,8 @@ K230 SDK目录结构如下图所示：
 ```shell
 k230_sdk
 ├── configs
-│   ├── k230_evb_defconfig
-│   └── k230_evb_usiplpddr4_defconfig
-│   └── k230d_defconfig
+│   ├── k230_canmv_defconfig
+│   └── k230_canmv_only_rtt_defconfig
 ├── Kconfig
 ├── LICENSE
 ├── Makefile
@@ -235,29 +220,9 @@ K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在co
 
 #### 4.2.1 部分配置文件说明
 
-`k230_evb_defconfig` ：基于K230 USIP LP3 EVB的默认SDK配置文件
+`k230_canmv_defconfig` ：基于CanMV-K230 V1.0/V1.1 的Linux+RTT双系统配置文件，为默认配置文件
 
-`k230_evb_usiplpddr4_defconfig` ：基于K230 USIP LP4 EVB的默认SDK配置文件
-
-`k230d_defconfig` ：基于K230-SIP-LP3-EVB的默认SDK配置文件
-
-`k230_evb_nand_defconfig` ：基于K230 USIP LP3 EVB会生成nand镜像的默认SDK配置文件
-
-`k230_canmv_defconfig` ：基于CanMV-K230 V1.0/V1.1 的默认SDK配置文件
-
-`k230_evb_doorlock_defconfig` ：基于K230 USIP LP3 EVB的门锁poc默认SDK配置文件
-
-`k230_evb_peephole_device_defconfig` ：基于K230 USIP LP3 EVB的猫眼POC
-
-`k230d_doorlock_defconfig` ：基于K230-SIP-LP3-EVB的门锁POC
-
-`k230_canmv_v2_defconfig` ：基于Canmv-K230 V2.0板的默认SDK配置文件
-
-`k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板rt-thread系统配置文件
-
-`k230_canmv_v2_only_rtt_defconfig` ：基于Canmv-K230 V2.0板rt-thread系统配置文件
-
-`k230d_canmv_only_rtt_defconfig` ：基于CanMV-K230-Zero板的rt-thread系统配置文件
+`k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板RT-smart单系统配置文件
 
 ### 4.3 编译 SDK
 
@@ -291,17 +256,9 @@ Step 5: 进入docker环境，
 Step 6: Docker环境下执行下面命令进行编译SDK
 
 ```bash
-make CONF=k230_evb_defconfig  #编译K230-USIP-LP3-EVB板子镜像
-#make CONF=k230_evb_usiplpddr4_defconfig  #编译K230-USIP-LP4-EVB板子镜像
-#make CONF=k230d_defconfig  #编译K230-SIP-LP3-EVB板子镜像
-#make CONF=k230_evb_nand_defconfig  #编译K230-USIP-LP3-EVB板子nand镜像
+make CONF=k230_canmv_defconfig  #编译CanMV-K230 1.0/1.1 板子Linux+RTT双系统镜像
+make CONF=k230_canmv_only_rtt_defconfig  #编译CanMV-K230 1.0/1.1 板子RTT-only系统镜像
 ```
-
-> - 编译K230-USIP-LP4-EVB板子镜像使用`make CONF=k230_evb_usiplpddr4_defconfig`命令
-> - 编译K230-USIP-LP3-EVB板子镜像使用`make CONF=k230_evb_defconfig`  命令。
-> - 编译K230-SIP-LP3-EVB板子镜像使用`make CONF=k230d_defconfig`  命令。
-> - 编译K230-USIP-LP3-EVB板子的nand镜像使用 `make CONF=k230_evb_nand_defconfig`  命令
-> - 编译CanMV-K230板子的镜像使用 `make CONF=k230_canmv_defconfig`  命令
 >
 > 备注：
 sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
@@ -412,13 +369,15 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 
 3)切成emmc启动，重启板子
 
+> RTT-only无法使用此方法
+
 #### 5.2.1 Uboot下烧写emmc参考
 
 1）把ssysimage-sdcard.img.gz镜像下载到内存。
 
 ```bash
 usb start; dhcp;  tftp 0x900000010.10.1.94:wjx/sysimage-sdcard.img.gz;
- #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2400000 
+ #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2400000
 ```
 
 2）把镜像写到emmc
@@ -429,293 +388,9 @@ gzwrite mmc  0   0x${fileaddr}  0x${filesize};
 
 3）重启板子
 
-### 5.3 Spinor镜像烧写参考
+## 6. SDK内存配置
 
-#### 5.3.1 Uboot下烧写参考
-
-1）把sysimage-spinor32m.img镜像下载到内存。
-
-`usb start; dhcp; tftp 0x9000000 10.10.1.94:wjx/sysimage-spinor32m.img;
- #注意：需要根据内存大小替换下0x9000000，比如内存只有128M的话，可以替换为0x2400000
-
-2）把镜像写到spi nor flash
-
-`sf probe 0:0;sf erase 0 0x2000000;sf write 0x$fileaddr 0 0x$filesize; sf remove;`
-
-3）重启板子
-
-#### 5.3.2 linux烧写spinor
-
-1)把spinor镜像sysimage-spinor32m.img下载到sd卡
-
-从sd卡启动linux，在linux下可以参考如下命令把镜像到sd卡
-
-```bash
-ifconfig eth0 up; udhcpc; mount /dev/mmcblk1p4 /mnt;cd /mnt/;
-scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/images/sysimage-spinor32m.img  .
-```
-
-2)参考下面命令把镜像写入spi nor flash
-
-```bash
-[root@canaan /mnt ]#flashcp -v sysimage-spinor32m.img  /dev/mtd9
-Erasing blocks: 508/508 (100%)
-Writing data: 32512k/32512k (100%)
-Verifying data: 32512k/32512k (100%)
-[root@canaan /mnt ]#
-```
-
-3)切成spi nor启动，重启板子
-
-#### 5.3.3 Spinor镜像说明
-
-由于spinor flash比较小， linux删掉了ko、rtt删掉了部分demo程序。
-
-### 5.4. Spinand镜像烧写参考
-
-#### 5.4.1 Uboot下烧写参考
-
-1）把sysimage-spinand32m.img镜像下载到内存。
-
-`usb start; dhcp;  tftp 0x9000000 10.10.1.94:wjx/sysimage-spinand32m.img;`
-
-2）把镜像写到spi nand flash
-
-`mtd erase spi-nand0 0 0x2000000;mtd write spi-nand0 0x$fileaddr  0 0x$filesize;`
-
-3）重启板子
-
-## 6. sdk启动介质分区及修改
-
-### 6.1 spi nor
-
-#### 6.1.1 spi nor默认分区
-
-![image-spi_nor_default_part](images/image-spi_nor_default_part.png)
-
-| spinor分区    |           |          |        |         |
-| ------------- | --------- | -------- | ------ | ------- |
-| 内容          | 开始地址  | 大小     | 大小MB | 大小    |
-| 一级uboot     | 0x0       | 512KB    | 0.5    | 512KB   |
-| 二级uboot     | 0x80000   | 0x160000 | 1.375  | 1.375MB |
-| uboot环境变量 | 0x1e0000  | 128KB    | 0.125  | 128KB   |
-| 快起参数      | 0x200000  | 512KB    | 0.5    | 512KB   |
-| 人脸特性      | 0x280000  | 512kB    | 0.5    | 512kB   |
-| 标定参数      | 0x300000  | 256KB    | 0.25   | 256KB   |
-| ai模型        | 0x340000  | 3MB      | 3      | 3MB     |
-| 散斑          | 0x640000  | 2MB      | 2      | 2MB     |
-| rtt           | 0x840000  | 0x1c0000 | 1.75   | 1.75MB  |
-| rtapp         | 0xa00000  | 0x5c0000 | 5.75   | 3.75MB  |
-| linux         | 0xfc0000  | 0x700000 | 7      | 7MB     |
-| rootfs        | 0x16c0000 | 0xb00000 | 13     | 13MB    |
-
-#### 6.1.2 分区修改及实现说明
-
-在sdk主目录执行 make menuconfig --->storage configurations--->spi nor partion config 进行分区修改(界面如下)；修改完后执行下make build-image;
-
-![image-image-menuconfig_spi_nor_part](images/image-menuconfig_spi_nor_part.png)
-
-通过menuconfig修改分区详细实现说明：
-
-make menuconfig配置完后会生成.config(部分内容如下)
-
-```bash
-CONFIG_SPI_NOR_SENSOR_CFG_CFG_BASE=0x300000
-CONFIG_SPI_NOR_SENSOR_CFG_CFG_SIZE=0x40000
-CONFIG_SPI_NOR_AI_MODE_CFG_BASE=0x340000
-CONFIG_SPI_NOR_AI_MODE_CFG_SIZE=0x300000
-CONFIG_SPI_NOR_SPECKLE_CFG_BASE=0x640000
-CONFIG_SPI_NOR_SPECKLE_CFG_SIZE=0x200000
-CONFIG_SPI_NOR_RTTK_BASE=0x840000
-CONFIG_SPI_NOR_RTTK_SIZE=0x1c0000
-CONFIG_SPI_NOR_RTT_APP_BASE=0xa00000
-CONFIG_SPI_NOR_RTT_APP_SIZE=0x5c0000
-CONFIG_SPI_NOR_LK_BASE=0xfc0000
-CONFIG_SPI_NOR_LK_SIZE=0x700000
-CONFIG_SPI_NOR_LR_BASE=0x16c0000
-CONFIG_SPI_NOR_LR_SIZE=0x900000
-```
-
-tools/menuconfig_to_code.sh 脚本会根据这些定义动态(关键脚本如下)修改linux设备树和board/common/gen_image_cfg/genimage-spinor.cfg文件；
-
-```bash
-image sysimage-spinor32m.img {
-    flash  {}
-    flashtype = "spinor-32M-gd25lx256e"
-    .....
-    partition quick_boot_cfg {
-        offset = ${CONFIG_SPI_NOR_QUICK_BOOT_CFG_BASE}
-        image = "${quick_boot_cfg_data_file}"
-        size = ${CONFIG_SPI_NOR_QUICK_BOOT_CFG_SIZE}
-    }
-
-    partition face_db {
-        offset = ${CONFIG_SPI_NOR_FACE_DB_CFG_BASE}
-        image = "${face_database_data_file}"
-        size = ${CONFIG_SPI_NOR_FACE_DB_CFG_SIZE}
-    }
-
-    partition sensor_cfg {
-        offset = ${CONFIG_SPI_NOR_SENSOR_CFG_CFG_BASE}
-        image = "${sensor_cfg_data_file}"
-        size = ${CONFIG_SPI_NOR_SENSOR_CFG_CFG_SIZE}
-    }
-
-    partition ai_mode {
-        offset = ${CONFIG_SPI_NOR_AI_MODE_CFG_BASE}
-        image = "${ai_mode_data_file}"
-        size = ${CONFIG_SPI_NOR_AI_MODE_CFG_SIZE}
-    }
-
-    partition speckle_cfg {
-        offset = ${CONFIG_SPI_NOR_SPECKLE_CFG_BASE}
-        image = "${speckle_data_file}"
-        size = ${CONFIG_SPI_NOR_SPECKLE_CFG_SIZE}
-    }
-
-    partition rtt {
-        offset = ${CONFIG_SPI_NOR_RTTK_BASE}
-        image = "big-core/rtt_system.bin"
-        size = ${CONFIG_SPI_NOR_RTTK_SIZE}
-    }
-    partition rtt_app {
-        offset = ${CONFIG_SPI_NOR_RTT_APP_BASE}
-        image = "${rtapp_data_file}"
-        size = ${CONFIG_SPI_NOR_RTT_APP_SIZE}
-    }
-
-    partition linux {
-        offset = ${CONFIG_SPI_NOR_LK_BASE}
-        image = "little-core/linux_system.bin"
-        size = ${CONFIG_SPI_NOR_LK_SIZE}
-    }
-    partition rootfs_ubi {
-        offset = ${CONFIG_SPI_NOR_LR_BASE}
-        image = "rootfs.ubi"
-        size = ${CONFIG_SPI_NOR_LR_SIZE}
-    }
-}
-```
-
-最后genimage 会解析board/common/gen_image_cfg/genimage-spinor.cfg 文件并生成正确的镜像。
-
-```bash
-genimage --rootpath little-core/rootfs/ --tmppath genimage.tmp --inputpath images --outputpath images
---config board/common/gen_image_cfg/genimage-spinor.cfg
-```
-
-#### 6.1.3分区数据格式及生成过程
-
-目前快起参数、人脸特性、标定参数、ai模型、散斑、rtt、rtapp等参数分区的数据均不加密，其格式及生成过程如下：
-
-![image-20230705151949318](images/image-non_crypt.png)
-
-主要生成脚本如下：
-
-```bsh
-#更详细的生成细节请阅读 board/common/gen_image_script/gen_image_comm_func.sh 脚本的gen_cfg_part_bin函数
-${k230_gzip} -f -k ${filename}  #gzip
-sed -i -e "1s/\x08/\x09/"  ${filename}.gz
-#add uboot head
-${mkimage} -A riscv -O linux -T firmware -C gzip -a ${add} -e ${add} -n ${name}  -d ${filename}.gz  ${filename}.gzu;
-python3  ${firmware_gen}   -i ${filename}.gzu -o fh_${filename} ${arg}; #add k230 firmware head
-
-对应执行过程打印如下：
-## + k230_priv_gzip -n8 -f -k speckle.bin
-## + sed -i -e '1s/\x08/\x09/' speckle.bin.gz
-## + mkimage -A riscv -O linux -T firmware -C gzip -a 0x14040000 -e 0x14040000 -n speckle -d speckle.bin.gz speckle.bin.gzu
-## Image Name:   speckle
-## Created:      Wed Jul  5 15:37:49 2023
-## Image Type:   RISC-V Linux Firmware (gzip compressed)
-## Data Size:    45 Bytes = 0.04 KiB = 0.00 MiB
-## Load Address: 14040000
-## Entry Point:  14040000
-## + python3 /home/wangjianxin/k230_sdk/tools/firmware_gen.py -i speckle.bin.gzu -o fh_speckle.bin -n
-## the magic is:  b'K230'
-## ----- NO ENCRYPTION + HASH-256 -----
-## the encryption type:  0
-## mesg_hash:  b'3543e2038aedad88a29f8ee98983064367cc79f6e709ed7571df9b391884b8b1'
-```
-
-uboot启动的时候会解析校验参数分区(快起参数、人脸特性、标定参数、ai模型、散斑、rtt、rtapp)数据,并把解析后的原始数据读到内存的正确位置。
-
-各个参数分区在内存的位置可以通过make menuconfig--Memory configuration进行配置(参考界面如下)
-
-![image-20230705153242437](images/image-memconfig_part.png)
-
-#### 6.1.4 rtapp和ai mode分区特殊说明
-
-rtapp分区的app不能重复执行，设计这个分区的目的是节省内存，这个分区的app执行一遍后内存可能会被释放掉，不能重复执行；
-
-编译的时候会把大核romfs文件系统里面模型文件的指针修改到ai模型区域(见下面脚本)，使用方法和普通文件一样使用就行。
-
-```bash
-#详见board/common/gen_image_script/gen_image.sh 文件
-for f in ${all_kmode};
-    do
-        eval fstart="\${${f%%\.*}_start}"
-        eval fsize="\${${f%%\.*}_size}"
-        fstart=$(printf "0x%x" $((${fstart} + ${CONFIG_MEM_AI_MODEL_BASE})))
-        fsize=$(printf "0x%x" ${fsize})
-        sed -i "s/_bin_$f,/(char*)${fstart},/g" ${RTSMART_SRC_DIR}/kernel/bsp/maix3/applications/romfs.c
-        sed -i "s/sizeof(_bin_$f)/${fsize}/g" ${RTSMART_SRC_DIR}/kernel/bsp/maix3/applications/romfs.c
-    done
-```
-
-#### 6.1.5 spi nor验证过的型号
-
-gd25lx256e
-
-### 6.2 sd和emmc
-
-#### 6.2.1 sd和emmc默认分区
-
-![image-20230705100321637](images/sd_emmc_default_partion.png)
-
-| SD、emmc卡默认分区 |           |            |        |       |
-| ------------------ | --------- | ---------- | ------ | ----- |
-| 内容               | 开始地址  | 大小值     | 大小MB | 大小  |
-| mbr分区表          | 0x0       | 0x100000   | 1      | 1MB   |
-| 一级uboot          | 0x100000  | 0x80000    | 0.5    | 512KB |
-| 备用一级boot       | 0x180000  | 0x60000    | 0.375  | 384KB |
-| uboot环境变量      | 0x1e0000  | 0x20000    | 0.125  | 128KB |
-| 二级uboot          | 0x200000  | 0x800000   | 0.5    | 8MB   |
-| rtt                | 0xa00000  | 0x1400000  | 20     | 20MB  |
-| linux              | 0x1e00000 | 0x6200000  | 98     | 98MB  |
-| rootfs             | 0x8000000 | 0x5000000  | 80     | 80MB  |
-| 测试分区           | 0xd000000 | 0x10000000 | 256    | 256MB |
-
-#### 6.2.2 sd和emmc分区修改
-
-如果需要分区请修改board/common/gen_image_cfg/genimage-sdcard.cfg 文件，修改完后执行下make build-image
-
-### 6.3 spi nand
-
-#### 6.3 spi nand默认分区
-
-![image-20230705111015174](images/image-spi_nand_part.png)
-
-| spinand分区   |           |          |           |        |         |
-| ------------- | --------- | -------- | --------- | ------ | ------- |
-| 内容          | 开始地址  | 大小     | 开始地址  | 大小MB | 大小    |
-| 一级uboot     | 0x0       | 512KB    | 0x0       | 0.5    | 512KB   |
-| 二级uboot     | 0x80000   | 0x160000 | 0x80000   | 1.375  | 1.375MB |
-| uboot环境变量 | 0x1e0000  | 128KB    | 0x1e0000  | 0.125  | 128KB   |
-| rtt           | 0x200000  | 0x800000 | 0x200000  | 8      | 8MB     |
-| linux         | 0xa00000  | 0x700000 | 0xa00000  | 7      | 7MB     |
-| rootfs        | 0x1100000 | 0xf00000 | 0x1100000 | 15     | 15MB    |
-
-#### 6.3.2 spi nand分区修改
-
-如果需要分区请修改board/common/gen_image_cfg/genimage-spinand.cfg 文件，修改完后执行下make build-image
-
-#### 6.3.4  spi nand验证过的型号
-
-w25n01gw
-
-## 7. SDK内存配置
-
-在k230_sdk下运行`make menuconfig->Memory configuration`可以配置各个区域使用的内存空间，也可以直接编译configs/k230_evb_defconfig修改，各区域说明如下
+在k230_sdk下运行`make menuconfig->Memory configuration`可以配置各个区域使用的内存空间，也可以直接编译configs/k230_canmv_defconfig修改，各区域说明如下
 
 ``` shell
 CONFIG_MEM_TOTAL_SIZE="0x20000000"      #内存总体容量          不支持配置
@@ -735,6 +410,8 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 ```
 
 > CONFIG_MEM_LINUX_SYS_BASE 地址需要2MB对齐
+>
+> RTT-only系统没有Linux内存的配置
 
 ## 8. SDK单板调试
 
@@ -776,3 +453,5 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 ## 10.k230 debian和ubuntu 镜像说明
 
 镜像及构建方法详见[K230_debian_ubuntu说明.md](../../../zh/03_other/K230_debian_ubuntu说明.md)
+
+> 上文有关Linux相关的内容不适用于RTT-only系统

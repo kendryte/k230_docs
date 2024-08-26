@@ -211,4 +211,4 @@ y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
 
 ### 2.5 tips
 
-如果遇到尚未支持RVV优化的算子，且需要进行支持的，欢迎在[nncase提issue和PR](https://github.com/kendryte/nncase/issues)。
+如果遇到尚未支持RVV优化的算子，且需要进行支持的，欢迎在nncase提[issue](https://github.com/kendryte/nncase/issues)和PR。

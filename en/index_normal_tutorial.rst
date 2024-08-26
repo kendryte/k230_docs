@@ -15,10 +15,10 @@ K230 SDK Practical Tutorial
   02_applications/business_poc/K230_Scene_Practice_Smart_Door_Lock_POC.md
   02_applications/business_poc/K230_Scene_Practice_Smart_Door_Lock_POC_OV9286.md
   02_applications/business_poc/K230_Scene_Pratice-Peephole_POC.md
-..   02_applications/business_poc/K230_场景实战_词典笔.md
-..   02_applications/business_poc/K230_场景实战_dpu深度相机.md
-
+  02_applications/business_poc/K230_Scenario_Practice_Dictionary_Pen.md
+  02_applications/business_poc/K230_Scenario_Practice_DPU_Depth_Camera.md
   02_applications/ai_demos/K230_AI_Demo_Introduction.md
   02_applications/fancy_poc/K230_Fancy_Poc_Introduction.md
   01_software/board/examples/K230_SDK_CanMV_Board_Demo_User_Guide.md
   01_software/board/examples/K230_SDK_EVB_Board_Demo_User_Guide.md
+  01_software/board/examples/K230D_SDK_Zero_Board_Demo_Usage.md

@@ -39,8 +39,8 @@
 | 简称 | 说明 |
 | --- | --- |
 | DRM | Direct Rendering Manager |
-| KMS | Kernel Mode Setting
-| GUI | Graphical User Interface
+| KMS | Kernel Mode Setting |
+| GUI | Graphical User Interface |
 
 ### 修订记录
 

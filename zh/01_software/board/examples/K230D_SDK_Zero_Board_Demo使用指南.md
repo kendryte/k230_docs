@@ -269,49 +269,27 @@ B: MSC=10
 #按下键盘不同的按键，串口会有对应的显示。
 ```
 
-### 2.4 FaceAeDemo
+### 2.4 FFT Demo
 
-#### 2.4.1 Demo介绍
-
-该demo在大核使用，是VICAP、KPU、VO（视频输出）、AERoi联调的demo，可通过人脸检测的接口适当调节人脸曝光亮度。
-
-#### 2.4.2 编译
-
-1. 首先参考release sdk软件包中的README.md，使用docker编译镜像。
-1. 编译完成后，默认将该sample（sample_face_ae.elf）存放在该路径下`k230_sdk/src/big/mpp/userapps/sample/elf`
-1. 由于KPU联动需要使用检测模型test.kmodel，编译后存放路径`k230_sdk/src/big/mpp/userapps/sample/elf`
-
-#### 2.4.3 执行
-
-```shell
-cd /sdcard/app
-./sample_face_ae.elf test.kmodel 1 # arg1: 模型名称， arg2： 开启face ae
-等待初始化完成提示任意字母+enter
-键入a，键入回车，运行face ae demo
-执行成功后，会打印每一帧图像的物理地址
-```
-
-### 2.5 FFT Demo
-
-#### 2.5.1 Demo 简介
+#### 2.4.1 Demo 简介
 
 本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
-#### 2.5.2 Feature说明
+#### 2.4.2 Feature说明
 
 先进行fft计算，在进行ifft计算
 
-#### 2.5.3 依赖资源
+#### 2.4.3 依赖资源
 
 无
 
-#### 2.5.4 使用说明
+#### 2.4.4 使用说明
 
-##### 2.5.4.1 编译
+##### 2.4.4.1 编译
 
 > 请参考release sdk软件包中的README.md。
 
-##### 2.5.4.2 执行
+##### 2.4.4.2 执行
 
 1. 系统都起来后，在大核命令行执行下面命令：
 

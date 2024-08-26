@@ -2,36 +2,36 @@
 
 ![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright©2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may extract, copy part or all of the content of this document, nor disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## K230 boot sequence
+## K230 Boot Sequence
 
-The overall startup process of the K230 is shown in the figure below
+The overall boot process of K230 is shown in the following diagram:
 
-![K230 overall startup flowchart](images/boot.png)
+![K230 Overall Boot Process Diagram](../../../zh/02_applications/tutorials/images/boot.png)
 
-## Start-up time measurement
+## Boot Time Measurement
 
-### Software measurement
+### Software Measurement
 
-The CPU core of the k230 is RISCV, and the user can use the following code to obtain the current time in any software of the large and little cores.
+The CPU core of K230 is RISCV. Users can use the following code in any software on the large or small core to get the current time.
 
 ``` C
 uint64_t perf_get_smodecycles(void)
@@ -44,32 +44,32 @@ uint64_t perf_get_smodecycles(void)
 }
 ```
 
-The obtained value is the number of clock cycles that the current CPU is running, divided by the frequency of the CPU to make the current running time. k230_sdk default clock frequency is 1.6GHz for big cores and 800MHz for little cores.
+The obtained value is the number of clock cycles the CPU has run. Dividing it by the CPU frequency gives the current running time. The default clock frequency of the large core in k230_sdk is 1.6GHz, and the clock frequency of the small core is 800MHz.
 
-### Hardware measurement
+### Hardware Measurement
 
-Adding GPIO edge changes at the point that needs to be measured allows for more accurate timing with a logic analyzer or oscilloscope.
-The power signal on the development board can be detected by the 14th pin of the K230_EVB_LPDDR3_UNSIP board J1 (15 and 16 pins need to be shorted with jumper caps).
-![The logic analyzer counts the startup time](images/boot_time_edge.jpg)
+Add GPIO edge changes at the points that need to be measured. More accurate time can be obtained through a logic analyzer or oscilloscope.
+You can detect the power-on signal of the development board through pin 14 of J1 on the K230_EVB_LPDDR3_UNSIP board (you need to short-circuit pins 15 and 16 with a jumper cap).
+![Logic Analyzer Statistics Boot Time](../../../zh/02_applications/tutorials/images/boot_time_edge.jpg)
 
-### External observations
+### External Observation
 
-Video recording of the entire system boot process, the on-board power light on means that the system is powered on, and the VO display VI image represents that the video pipeline has been established and can be displayed. A frame appears to frame the face to indicate that face recognition is completed.
-![Editing software analyzes start time](images/boot_time_video.jpg)
+Record the entire system boot process via video. The onboard power light turning on represents the system powering up, and the VO displaying the VI image indicates that the video pipeline is established and can be displayed. A frame appearing around a face indicates that face recognition is completed.
+![Editing Software Analysis Boot Time](../../../zh/02_applications/tutorials/images/boot_time_video.jpg)
 
-## System cropping
+## System Trimming
 
-As can be seen from the figure in the previous section, the first step after bootROM is to load the image of the large and little cores, so the first step to optimize the boot time is to crop the large and little core images first.
+As seen from the diagram in the previous section, the first step after bootrom starts is to load the large and small core images. Therefore, the first step in optimizing boot time is to trim the large and small core images.
 
-### Little core cropping
+### Small Core Trimming
 
-#### Linux image pruning
+#### Linux Image Trimming
 
-Please refer to the Linux Module Removal section in [K230_Memory Optimization Guide.md.](K230_Memory_Optimization_Guide.md)
+Please refer to the "Linux Module Deletion" section in the document [K230_Memory_Optimization_Guide.md](K230_Memory_Optimization_Guide.md).
 
-#### rootfs cropping
+#### Rootfs Trimming
 
-Delete the programs or libraries that will not be used in rootfs, for the door lock POC project mainly includes the following content, the cutting process reference file`k230_sdk/board/k230_evb_doorlock/gen_image_script/gen_doorlock_image.sh`
+Delete programs or libraries in rootfs that will not be used. For the door lock POC project, this mainly includes the following content. The trimming process refers to the file `k230_sdk/board/k230_evb_doorlock/gen_image_script/gen_doorlock_image.sh`.
 
 ``` shell
 rm -rf usr/bin/fio;
@@ -86,33 +86,33 @@ rm -rf lib/tuning-server;
 rm -rf usr/bin/stress-ng  bin/bash usr/sbin/sshd usr/bin/trace-cmd usr/bin/lvgl_demo_widgets;
 ```
 
-#### File system selection
+#### File System Selection
 
-Currently, the file systems supported by nor flash are ubifs and jffs2, and the door lock POC uses the image of ubifs by default. They are both compressed file systems, and ubifs has better read and write performance than jffs2. Note that when using the ubifs file system, before the system is powered down, the little core needs to enter the halt command before powering down, otherwise it may cause damage to the file system
+The current file systems supported by nor flash are ubifs and jffs2. The door lock POC uses the ubifs image by default. They are both compressed file systems, and the read/write performance of ubifs is stronger than jffs2. Note that when using the ubifs file system, the small core needs to input the halt command before powering off, otherwise, it may damage the file system.
 
-### Big core cropping
+### Large Core Trimming
 
-#### Big core app cropping
+#### Large Core Application Trimming
 
-Strip removes the symbolic information and debugging information of applications and libraries, greatly reducing the space occupation. When compiling the door lock POC, the`k230_sdk/board/k230_evb_doorlock/gen_image_script/gen_doorlock_image.sh` big core application is trimmed in .
+The strip command will remove symbol information and debugging information from applications and libraries, greatly reducing space occupation. When compiling the door lock POC, the large core application is trimmed in `k230_sdk/board/k230_evb_doorlock/gen_image_script/gen_doorlock_image.sh`.
 
 ``` shell
 /opt/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknown-linux-musl-strip fastboot_app.elf;
 ```
 
-### Crop effect
+### Trimming Effects
 
-The door lock POC project uses the cropped image by default, and the size of each image is as follows
+The door lock POC project uses trimmed images by default. The sizes of each image are as follows:
 
-- Little core rootfs.ubifs 11M
-- Little core system compressed image linux_system.bin (OpenSBI + Image + DTB) 3.8M
-- Big core system compressed image rtt_system.bin (opensbi + rtthread.bin) 1.2M
-- Big core applications fastboot_app.elf 11M
-- Big core AI model mbface.kmodel + retinaface.kmodel 1.9M
+- Small core rootfs.ubifs 11M
+- Small core system compressed image linux_system.bin (opensbi + image + dtb) 3.8M
+- Large core system compressed image rtt_system.bin (opensbi + rtthread.bin) 1.2M
+- Large core application fastboot_app.elf 11M
+- Large core AI models mbface.kmodel + retinaface.kmodel 1.9M
 
-## uboot startup optimization
+## Uboot Boot Optimization
 
-k230_sdk for uboot code, integrated fast start configuration, uboot itself operation is divided into two segments SPL+UBOOT, when enable fast start SPL will be responsible for loading subsequent large and little core images and running, when not enabled fast start, SPL will load the second half of UBOOT code to run. Code location`little/uboot/board/canaan/common/k230_spl.c`
+k230_sdk integrates quick boot configuration for uboot code. Uboot itself runs in two stages: SPL + UBOOT. When quick boot is enabled, SPL will load and run the subsequent large and small core images. When quick boot is not enabled, SPL will load and run the latter half of the UBOOT code. Code location: `little/uboot/board/canaan/common/k230_spl.c`.
 
 ``` C
 int spl_board_init_f(void)
@@ -122,7 +122,7 @@ int spl_board_init_f(void)
     g_bootmod = sysctl_boot_get_boot_mode();
     ddr_init_training();
     memset(__bss_start, 0, (ulong)&__bss_end - (ulong)__bss_start);
-    if(quick_boot()){//默认快起
+    if(quick_boot()){//default quick boot
         //record_boot_time_info("ls");
         ret += k230_img_load_boot_sys(BOOT_SYS_AUTO);
     }
@@ -134,13 +134,13 @@ int spl_board_init_f(void)
 }
 ```
 
-The return result of the quick_boot is affected by the quick_boot of uboot's environment variables, and users can manually configure it through the setenv command under uboot or through the configuration quick_boot in the k230_sdk`make menuconfig-->board configuration`.
+The return result of quick_boot is affected by the uboot environment variable quick_boot. Users can manually configure it under uboot through the setenv command, or configure quick_boot in k230_sdk through `make menuconfig-->board configuration`.
 
-## Linux boot optimization
+## Linux Boot Optimization
 
-### Remove kernel boot printing
+### Remove Kernel Boot Print
 
-In the default environment variable configuration of uboot, set the fw_devlink in bootargs when flash starts to off, and the code file location is .`src/little/uboot/board/canaan/common/k230_img.c` When Linux starts, the console no longer prints boot logs, and after entering the Linux command line, you can view kernel boot logs through DMEG.
+In the default environment variable configuration of uboot, set fw_devlink to off in the bootargs during flash boot. The code file location is `src/little/uboot/board/canaan/common/k230_img.c`. The console will no longer print boot logs when Linux starts. After entering the Linux command line, you can view the kernel boot logs through dmesg.
 
 ``` C
 char *board_fdt_chosen_bootargs(void){
@@ -159,13 +159,13 @@ char *board_fdt_chosen_bootargs(void){
     return bootargs;
 ```
 
-### Organize time-consuming drivers into modules
+### Compile Time-Consuming Drivers as Modules
 
-The door lock POC needs to use a USB driver to connect to the network, and the mmc driver to import face data. These two driver probes are time-consuming and trigger the probe process of peripheral drivers, so these drivers need to be compiled into modules, and they will be automatically loaded using the modprobe mechanism after the kernel starts. For reference to the config configuration`k230_sdk/src/little/linux/arch/riscv/configs/k230_evb_doorlock_defconfig`
+The door lock POC needs to use USB drivers to connect to the network and MMC drivers to import facial data. These two drivers' probes are time-consuming and will trigger the probe process of peripheral drivers. Therefore, these drivers need to be compiled as modules. They will be automatically loaded using the modprobe mechanism after the kernel starts. Configurations can be referred to in `k230_sdk/src/little/linux/arch/riscv/configs/k230_evb_doorlock_defconfig`.
 
 ``` shell
-CONFIG_MMC=m
-# CONFIG_MMC_TEST is not set
+CONFIG_MMC=m 
+#  CONFIG_MMC_TEST is not set
 CONFIG_MMC_SDHCI=m
 CONFIG_MMC_SDHCI_PLTFM=m
 CONFIG_MMC_SDHCI_OF_KENDRYTE=m
@@ -182,15 +182,15 @@ CONFIG_USB_CONFIGFS_F_LB_SS=y
 CONFIG_USB_CONFIGFS_F_UVC=y
 ```
 
-### Application startup optimization
+### Application Startup Optimization
 
-Advance the running time of the application, modify the /etc/inittab file in the root file system so that the first process it runs is the program we need to start first. For example, in`k230_sdk/board/k230_evb_doorlock/inittab` a file, the first process started by the system is `sysinit:nice -n -20 /app/door_lock/ui/ui &`. This initab file replaces the original /etc/inittab file in rootfs when compiling the door lock image. Among them, the ui program is a little core application for door lock POC
+Advance the running time of the application. Modify the /etc/inittab file in the root file system to make the first process it runs the program we need to start first. For example, in the `k230_sdk/board/k230_evb_doorlock/inittab` file, the first process the system starts is `sysinit:nice -n -20 /app/door_lock/ui/ui &`. This inittab file will replace the original /etc/inittab file in rootfs when compiling the door lock image. The ui program is the small core application program of the door lock POC.
 
-## Big Core startup optimization
+## Large Core Boot Optimization
 
-### RT-Smart starts
+### RT-Smart Boot
 
-Modify the rt-smart kernel source code, run a init.sh script before the shell thread is established, and define the large kernel program to be run in the script. Code location`big/rt-smart/kernel/rt-thread/components/finsh/shell.c`
+Modify the rt-smart kernel source code to run an init.sh script before the shell thread is established. Define the large core program to run in the script. Code location: `big/rt-smart/kernel/rt-thread/components/finsh/shell.c`.
 
 ``` C
 if(shell_thread_first_run) {
@@ -200,11 +200,11 @@ if(shell_thread_first_run) {
 }
 ```
 
-### Application optimization
+### Application Optimization
 
-Take door lock POC as an example:`k230_sdk/src/reference/business_poc/doorlock/big/`
+Taking the door lock POC as an example: `k230_sdk/src/reference/business_poc/doorlock/big/`
 
-Applications can initialize devices in a multithreaded and parallel manner. For example, inter-core communication and VO initialization are performed separately in separate threads.
+The application can initialize various devices through multi-threaded parallelism. For example, inter-core communication and VO initialization can be performed separately in different threads.
 
 ``` C
     pthread_create(&ipc_message_handle, NULL, ipc_msg_server, NULL);
@@ -212,10 +212,11 @@ Applications can initialize devices in a multithreaded and parallel manner. For 
     pthread_create(&vo_thread_handle, NULL, sample_vo_thread, NULL);
 ```
 
-## Other optimizations
+## Other Optimizations
 
-- K230 has a built-in hardware decompression unit, the flash image compiled by the SDK is a compressed image, uboot will use the hardware decompression unit to decompress subsequent core images of various sizes, which has improved the loading speed.
+- K230 has a built-in hardware decompression unit. The SDK compiled flash image is a compressed image. Uboot will use the hardware decompression unit to decompress the subsequent large and small core images to improve loading speed.
 
-## Optimize performance
+## Optimization Effects
 
-Door lock POC start time statistics, the measurement time of this statistic is June 9, and there may be errors with the current latest SDK version data door lock ![POC start time](images/door_lock_boot_time.png)
+The boot time statistics of the door lock POC. This statistical data was measured on June 9th, and there may be discrepancies with the current latest SDK version data.
+![Door Lock POC Boot Time](../../../zh/02_applications/tutorials/images/door_lock_boot_time.png)

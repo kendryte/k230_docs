@@ -1,100 +1,100 @@
-# K230 DMA API reference
+# K230 DMA API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
+![cover](../../../../zh/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for usage guidance and reference.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/images/logo.png), "Canaan," and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or distribute any part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
 This document mainly introduces the design of the K230 GSDMA software, including the GSDMA driver framework and software implementation.
 
-### Reader object
+### Intended Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate                         |
-|------|------------------------------|
-| GDMA | Graphic Direct Memory Access |
-| SDMA | System Direct Memory Access  |
+| Abbreviation | Description                       |
+|--------------|-----------------------------------|
+| GDMA         | Graphic Direct Memory Access      |
+| SDMA         | System Direct Memory Access       |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description                                                  | Author | date      |
-|------------|-----------------------------------------------------------|--------|-----------|
-| V1.0       | Initial                                                     | Liu Suntao | 2023/3/7  |
-| V1.1       | Modified some descriptions of binding modes; Added function interface description to release frame number. | Liu Suntao | 2023/3/31 |
-| V1.2       | Replaced the data structure of the image address; Added frame number transparent transmission function.           | Liu Suntao | 2023/4/26 |
-| V1.3       | Added configurable functionality of buffer                             | Liu Suntao | 2023/5/31 |
+| Document Version | Modification Description                                       | Author | Date       |
+|------------------|----------------------------------------------------------------|----------|------------|
+| V1.0             | Initial version                                                | Liu Suntao | 2023/3/7  |
+| V1.1             | Modified some descriptions of binding mode; added function interface description for frame number release. | Liu Suntao | 2023/3/31 |
+| V1.2             | Replaced the data structure of the image address; added frame number passthrough function. | Liu Suntao | 2023/4/26 |
+| V1.3             | Added configurable buffer functionality                        | Liu Suntao | 2023/5/31 |
 
 ## 1. Overview
 
 ### 1.1 Overview
 
-GSDMA: DMA stands for Direct Memory Access, which copies data from one address space to another, providing high-speed data transfer between memory and memory. GDMA stands for Graphic Direct Memory Access, which is responsible for copying images in memory to another piece of memory, while completing functions such as rotating and mirroring images. SDMA stands for System Direct Memory Access, which is responsible for copying data from memory to another piece of memory, which is DMA in the traditional sense.
+GSDMA: DMA stands for Direct Memory Access, which copies data from one address space to another, providing high-speed data transfer between memory and memory. GDMA stands for Graphic Direct Memory Access, responsible for copying images in memory to another memory area, and can also perform image rotation and mirroring functions. SDMA stands for System Direct Memory Access, responsible for copying data in memory to another memory area, which is the traditional DMA.
 
-The software code provides the various functions of the GSDMA hardware to the user in the form of APIs, helping the user quickly realize image transmission, rotation, mirroring, 2D functions and data transmission functions. At the same time, the functions of module status information statistics are realized.
+The software code provides the various functions of the GSDMA hardware in the form of APIs to users, helping them quickly achieve image transfer, rotation, mirroring, 2D functions, and data transfer functions. It also implements module status information statistics and other functions.
 
 ### 1.2 Function Description
 
-DMA hardware is a device, eight channels, where channel 0\~3 is the GDMA channel and channel 4\~7 is the SDMA channel.
+Abstract the DMA hardware as a device with eight channels, where channels 0 to 3 are GDMA channels, and channels 4 to 7 are SDMA channels.
 
-#### 1.2.1 gdma
+#### 1.2.1 GDMA
 
-Users use GDMA to rotate and mirror images, and the main call process is as follows:
+Users can achieve image rotation and mirroring work through GDMA, and the main call flow is as follows:
 
-1. Configure DMA device properties;
-1. Start the DMA device. After calling this function, the driver automatically requests VB space as the data buffer for the destination address;
-1. Configure GDMA channel properties;
+1. Configure DMA device attributes;
+1. Start the DMA device. After calling this function, the driver will automatically request VB space as the data buffer for the destination address;
+1. Configure GDMA channel attributes;
 1. Start the GDMA channel;
-1. The user requests VB space as a data buffer for the source data in user mode, and calls kd_mpi_dma_send_frame to send the source address of the data to gdma;
-1. The driver will transfer the data from the source address to the destination address data buffer requested in Step 2.
-1. The user calls kd_mpi_dma_get_frame to get the data address in the destination address.
+1. Users request VB space in user mode as the data buffer for the source data, and call `kd_mpi_dma_send_frame` to send the source address of the data to GDMA;
+1. The driver will transfer the data from the source address to the data buffer of the destination address requested in step two;
+1. Users call `kd_mpi_dma_get_frame` to get the data address in the destination address.
 
 #### 1.2.2 SDMA
 
-Users use SDMA to migrate data, and the main call process is as follows:
+Users can achieve data transfer work through SDMA, and the main call flow is as follows:
 
-1. Configure DMA device properties;
-1. Start the DMA device. After calling this function, the driver automatically requests VB space as the data buffer for the destination address;
-1. Configure SDMA channel properties;
+1. Configure DMA device attributes;
+1. Start the DMA device. After calling this function, the driver will automatically request VB space as the data buffer for the destination address;
+1. Configure SDMA channel attributes;
 1. Start the SDMA channel;
-1. The user requests VB space as a data buffer for the source data in user mode, and calls kd_mpi_dma_send_frame to send the source address of the data to sdma;
-1. The driver will transfer the data from the source address to the destination address data buffer requested in Step 2.
-1. The user calls kd_mpi_dma_get_frame to get the data address in the destination address.
+1. Users request VB space in user mode as the data buffer for the source data, and call `kd_mpi_dma_send_frame` to send the source address of the data to SDMA;
+1. The driver will transfer the data from the source address to the data buffer of the destination address requested in step two;
+1. Users call `kd_mpi_dma_get_frame` to get the data address in the destination address.
 
 ## 2. API Reference
 
-### 2.1 DMA Use
+### 2.1 DMA Usage
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
 - [kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
@@ -110,544 +110,568 @@ This function module provides the following APIs:
 
 #### 2.1.1 kd_mpi_dma_set_dev_attr
 
-【Description】
+**Description**:
 
-Configure DMA device properties
+Configure DMA device attributes
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_set_dev_attr(k_dma_dev_attr_t \*attr);
+```c
+k_s32 kd_mpi_dma_set_dev_attr(k_dma_dev_attr_t *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                      | Input/output |
-|----------|---------------------------|-----------|
-| attr     | DMA device property structure pointer.  | input      |
+| Parameter Name | Description                      | Input/Output |
+|----------------|----------------------------------|--------------|
+| attr           | Pointer to DMA device attribute structure. | Input       |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
 
 #### 2.1.2 kd_mpi_dma_get_dev_attr
 
-【Description】
+**Description**:
 
-Gets the configured DMA device properties.
+Get the configured DMA device attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_get_dev_attr(k_dma_dev_attr_t \*attr);
+```c
+k_s32 kd_mpi_dma_get_dev_attr(k_dma_dev_attr_t *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                   | Input/output |
-|----------|------------------------|-----------|
-| attr     | DMA device property structure pointer | input      |
+| Parameter Name | Description                   | Input/Output |
+|----------------|-------------------------------|--------------|
+| attr           | Pointer to DMA device attribute structure | Input       |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-DMA device properties cannot be obtained until you configure them.
+You need to configure DMA device attributes before you can get DMA device attributes.
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
 
 #### 2.1.3 kd_mpi_dma_start_dev
 
-【Description】
+**Description**:
 
 Start the DMA device.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dma_start_dev();
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
-|----------|------|-----------|
-| not       | not   | not        |
+| Parameter Name | Description | Input/Output |
+|----------------|-------------|--------------|
+| None           | None        | None         |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- DMA device properties need to be configured before this function can be called to start DMA
+You need to configure DMA device attributes before you can call this function to start DMA.
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
-None.
+None
 
 #### 2.1.4 kd_mpi_dma_stop_dev
 
-【Description】
+**Description**:
 
 Stop the DMA device.
 
-【Syntax】
+**Syntax**:
 
+```c
 kd_mpi_dma_stop_dev();
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
-|----------|------|-----------|
-| not       | not   | not        |
+| Parameter Name | Description | Input/Output |
+|----------------|-------------|--------------|
+| None           | None        | None         |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- You can call this function to stop the DMA device only after you start it.
+You can only call this function to stop the DMA device after starting the DMA device.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-None.
+None
 
 #### 2.1.5 kd_mpi_dma_set_chn_attr
 
-【Description】
+**Description**:
 
-Configure DMA channel properties.
+Configure DMA channel attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_set_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
+```c
+k_s32 kd_mpi_dma_set_chn_attr(k_u8 chn_num, k_dma_chn_attr_u *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                                                                                             | Input/output |
-|----------|----------------------------------------------------------------------------------------------------------------------------------|-----------|
-| chn_num  | Channel number                                                                                                                           | input      |
-| attr     | DMA channel properties, which are a federation and can optionally configure either GDMA channel properties or SDMA channel properties. Channel 0\~3 is GDMA, and channel 4\~7 is SDMA | input      |
+| Parameter Name | Description                                                                                                                               | Input/Output |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| chn_num        | Channel number                                                                                                                            | Input        |
+| attr           | DMA channel attributes, this parameter is a union, you can choose to configure GDMA channel attributes or SDMA channel attributes. Channels 0-3 are GDMA, channels 4-7 are SDMA | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 
 #### 2.1.6 kd_mpi_dma_get_chn_attr
 
-【Description】
+**Description**:
 
-Gets the configured DMA channel properties.
+Get the configured DMA channel attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_get_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
+```c
+k_s32 kd_mpi_dma_get_chn_attr(k_u8 chn_num, k_dma_chn_attr_u *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                                                                                             | Input/output |
-|----------|----------------------------------------------------------------------------------------------------------------------------------|-----------|
-| chn_num  | Channel number                                                                                                                           | input      |
-| attr     | DMA channel properties, which are a federation that can optionally get either GDMA channel properties or SDMA channel properties. Channel 0\~3 is GDMA, and channel 4\~7 is SDMA | output      |
+| Parameter Name | Description                                                                                                                               | Input/Output |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| chn_num        | Channel number                                                                                                                            | Input        |
+| attr           | DMA channel attributes, this parameter is a union, you can choose to get GDMA channel attributes or SDMA channel attributes. Channels 0-3 are GDMA, channels 4-7 are SDMA | Output       |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- DMA channel properties cannot be obtained until you configure them.
+You need to configure DMA channel attributes before you can get DMA channel attributes.
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 
 #### 2.1.7 kd_mpi_dma_start_chn
 
-【Description】
+**Description**:
 
 Start the DMA channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dma_start_chn(k_u8 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description     | Input/output |
-|----------|----------|-----------|
-| chn_num  | Channel number. | input      |
+| Parameter Name | Description  | Input/Output |
+|----------------|--------------|--------------|
+| chn_num        | Channel number | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- You can start a DMA channel only after you configure the boot DMA device and configure the DMA channel properties.
+You can only start the DMA channel after configuring and starting the DMA device and configuring the DMA channel attributes.
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
-None.
+None
 
 #### 2.1.8 kd_mpi_dma_stop_chn
 
-【Description】
+**Description**:
 
-Pause the DMA channel
+Pause the DMA channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dma_stop_chn(k_u8 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description     | Input/output |
-|----------|----------|-----------|
-| chn_num  | Channel number. | input      |
+| Parameter Name | Description  | Input/Output |
+|----------------|--------------|--------------|
+| chn_num        | Channel number | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description         |
+|--------------|---------------------|
+| 0            | Success             |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- You can call this function to stop a DMA channel only after you start it.
+You can only call this function to stop the DMA channel after starting the DMA channel.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-None.
+None
 
 #### 2.1.9 kd_mpi_dma_send_frame
 
-【Description】
+**Description**:
 
 Send data from user space to the destination address.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_send_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 millisec);
+```c
+k_s32 kd_mpi_dma_send_frame(k_u8 chn_num, k_video_frame_info *df_info, k_s32 millisec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                                                                                                                                  | Input/output |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| chn_num  | Channel number.                                                                                                                                                              | input      |
-| df_info  | The address information where the data is sent.                                                                                                                                                  | input      |
-| millisec | Waiting time. When this parameter is set to -1, blocking; when this parameter is set to 0, it is non-blocking; when this parameter is set to a value greater than 0, it waits for the appropriate amount of time until the data is successfully sent, and returns a failure if it is not sent successfully after the timeout. | input      |
+| Parameter Name | Description                                                                                                    | Input/Output |
+|----------------|----------------------------------------------------------------------------------------------------------------|--------------|
+| chn_num        | Channel number                                                                                                 | Input        |
+| df_info        | Address information of the data to be sent                                                                     | Input        |
+| millisec       | Waiting time. When this parameter is set to -1, it is blocking; when set to 0, it is non-blocking; when set to a value greater than 0, it will wait for the corresponding time until the data is successfully sent. If it times out and still fails to send, it returns a failure. | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description          |
+|--------------|----------------------|
+| 0            | Success              |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
-None.
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_video_frame_info](#316-k_video_frame_info)
 
 #### 2.1.10 kd_mpi_dma_get_frame
 
-【Description】
+**Description**:
 
-Gets the data after DMA is moved.
+Get the data transferred by DMA.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_get_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 millisec);
+```c
+k_s32 kd_mpi_dma_get_frame(k_u8 chn_num, k_video_frame_info *df_info, k_s32 millisec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                                                                                                                                  | Input/output |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| chn_num  | Channel number.                                                                                                                                                              | input      |
-| df_info  | Obtain the address information for the data.                                                                                                                                                  | output      |
-| millisec | Waiting time. When this parameter is set to -1, blocking; when this parameter is set to 0, it is non-blocking; when this parameter is set to a value greater than 0, it waits for the corresponding time to know that the data was successfully obtained, and if it is not sent successfully after the timeout, it returns a failure. | input      |
+| Parameter Name | Description                                                                                                                                                                  | Input/Output |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| chn_num        | Channel number                                                                                                                                                               | Input        |
+| df_info        | Address information for getting the data                                                                                                                                     | Output       |
+| millisec       | Waiting time. When this parameter is set to -1, it is blocking; when set to 0, it is non-blocking; when set to a value greater than 0, it will wait for the corresponding time until the data is successfully obtained. If it times out and still fails to send, it returns a failure. | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description          |
+|--------------|----------------------|
+| 0            | Success              |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
-None.
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_video_frame_info](#316-k_video_frame_info)
 
 #### 2.1.11 kd_mpi_dma_release_frame
 
-【Description】
+**Description**:
 
-Release the acquired DMA data.
+Release the obtained DMA data.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dma_release_frame(k_u8 chn_num, k_video_frame_info \*df_info);
+```c
+k_s32 kd_mpi_dma_release_frame(k_u8 chn_num, k_video_frame_info *df_info);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description           | Input/output |
-|----------|----------------|-----------|
-| chn_num  | Channel number.       | input      |
-| df_info  | The data to be released. | input      |
+| Parameter Name | Description        | Input/Output |
+|----------------|--------------------|--------------|
+| chn_num        | Channel number     | Input        |
+| df_info        | Data to be released | Input        |
 
-【Return value】
+**Return Value**:
 
-| Return value | description                 |
-|--------|----------------------|
-| 0      | succeed                 |
-| Non-0    | Failed, see Error Code for value |
+| Return Value | Description          |
+|--------------|----------------------|
+| 0            | Success              |
+| Non-zero     | Failure, see error codes for details |
 
-【Differences】
+**Chip Differences**:
 
-None.
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_dma_api.h
 - Library file: libdma.a
 
-【Note】
+**Notes**:
 
-- In the current design, the DMA output buffer is 3, and if 3 frames of data are not called to release it, the input data cannot continue. Therefore, the user should release the data in time after it is obtained.
+- In the current design, the DMA output buffer is 3. If you obtain 3 frames of data without calling this function to release them, you cannot continue to input data. Therefore, users should release the data promptly after obtaining and using it.
 
-【Example】
+**Example**:
 
-None.
+None
 
-【See Also】
+**Related Topics**:
 
 [k_video_frame_info](#316-k_video_frame_info)
 
-## 3 Data type
+## 3 Data Types
 
 ### 3.1 Common Data Types
 
 #### 3.1.1 DMA_MAX_DEV_NUMS
 
-【Description】
+**Description**:
 
-DMA maximum number of devices
+Maximum number of DMA devices
 
-【Definition】
+**Definition**:
 
 ```c
 #define DMA_MAX_DEV_NUMS (1)
 ```
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-None.
+None
 
 #### 3.1.2 DMA_MAX_CHN_NUMS
 
-【Description】
+**Description**:
 
-DMA maximum number of channels
+Maximum number of DMA channels
 
-【Definition】
+**Definition**:
 
-\#define DMA_MAX_CHN_NUMS (8)
+```c
+#define DMA_MAX_CHN_NUMS (8)
+```
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-None.
+None
 
 #### 3.1.3 k_dma_mode_e
 
-【Description】
+**Description**:
 
-Define the DMA operating mode.
+Defines the DMA working mode.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef enum
@@ -657,29 +681,29 @@ typedef enum
 } k_dma_mode_e;
 ```
 
-【Members】
+**Members**:
 
-| Member name | description       |
-|----------|------------|
-| BIND     | Binding mode. |
-| UNBIND   | Unbound mode |
+| Member Name | Description        |
+|-------------|--------------------|
+| BIND        | Binding mode       |
+| UNBIND      | Non-binding mode   |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
 
 #### 3.1.4 k_dma_dev_attr_t
 
-【Description】
+**Description**:
 
-Define DMA device properties.
+Defines the DMA device attributes.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef struct
@@ -690,30 +714,30 @@ typedef struct
 } k_dma_dev_attr_t;
 ```
 
-【Members】
+**Members**:
 
-| Member name    | description                     |
-|-------------|--------------------------|
-| burst_len   | Configure the burst length of DMA |
-| outstanding | 配置 dma outstanding     |
-| ckg_bypass  | 配置 clock gate bypass   |
+| Member Name | Description                  |
+|-------------|------------------------------|
+| burst_len   | Configures the DMA burst length |
+| outstanding | Configures the DMA outstanding |
+| ckg_bypass  | Configures the clock gate bypass |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
 [kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
 
 #### 3.1.5 k_dma_chn_attr_u
 
-【Description】
+**Description**:
 
-Define DMA channel properties.
+Defines the DMA channel attributes.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef union
@@ -723,19 +747,18 @@ typedef union
 } k_dma_chn_attr_u;
 ```
 
-【Members】
+**Members**:
 
-| Member name   | description                   |
-|------------|------------------------|
-| gdma_attr  | GDMA channel properties          |
-| sdma_attr  | SDMA channel properties          |
-| ckg_bypass | Set clock gate bypass |
+| Member Name | Description         |
+|-------------|---------------------|
+| gdma_attr   | GDMA channel attributes |
+| sdma_attr   | SDMA channel attributes |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
@@ -744,11 +767,11 @@ None.
 
 #### 3.1.6 k_video_frame_info
 
-【Description】
+**Description**:
 
-Define the DMA data address.
+Defines the DMA data address.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef struct
@@ -759,19 +782,19 @@ typedef struct
 } k_video_frame_info;
 ```
 
-【Members】
+**Members**:
 
-| Member name | description                     |
-|----------|--------------------------|
-| v_frame  | Timestamp, valid in bound mode. |
-| pool_id  | Pool ID of the data VB pool.   |
-| mod_id   | Module ID                  |
+| Member Name | Description                         |
+|-------------|-------------------------------------|
+| v_frame     | Timestamp, valid in binding mode    |
+| pool_id     | Pool ID of the data VB pool         |
+| mod_id      | Module ID                           |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
 [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
@@ -779,11 +802,11 @@ None.
 
 #### 3.1.7 k_video_frame
 
-【Description】
+**Description**:
 
-Define the DMA data address. The common data structure k_video_frame used, only a subset of its members are used.
+Defines the DMA data address. Uses the common data structure k_video_frame, only part of the members are used.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef struct
@@ -795,27 +818,27 @@ typedef struct
 } k_video_frame;
 ```
 
-【Members】
+**Members**:
 
-| Member name  | description                                                                                                                                         |
-|-----------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| phys_addr | The physical address of the image, if it is a single-channel image, only the first physical address needs to be configured; if it is a dual-channel image, only the first two physical addresses need to be configured; if it is a three-channel image, you need to configure three physical addresses. |
-| virt_addr | The virtual address of the image, if it is a single-channel image, you only need to configure the first two virtual addresses, if it is a dual-channel image, you only need to configure the first two virtual addresses; if it is a three-channel image, you need to configure three virtual addresses. |
-| time_ref  | The frame number transmitted through, in binding mode, is entered by the pre-stage                                                                                                         |
-| pts       | The passthrough timestamp, in binding mode, is entered by the predecessor                                                                                                       |
+| Member Name | Description                                                                                                                                 |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| phys_addr   | Physical address of the image. If it is a single-channel image, only configure the first physical address; if it is a dual-channel image, configure the first two physical addresses; if it is a three-channel image, configure all three physical addresses. |
+| virt_addr   | Virtual address of the image. If it is a single-channel image, only configure the first virtual address; if it is a dual-channel image, configure the first two virtual addresses; if it is a three-channel image, configure all three virtual addresses. |
+| time_ref    | Frame number for passthrough, valid in binding mode                                                                                          |
+| pts         | Timestamp for passthrough, valid in binding mode                                                                                            |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
 [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
 
-### 3.2 GDMA channel data type
+### 3.2 GDMA Channel Data Types
 
-The module has the following data types
+This module has the following data types:
 
 - [GDMA_MAX_CHN_NUMS](#321-gdma_max_chn_nums)
 - [k_gdma_rotation_e](#322-k_gdma_rotation_e)
@@ -824,31 +847,31 @@ The module has the following data types
 
 #### 3.2.1 GDMA_MAX_CHN_NUMS
 
-【Description】
+**Description**:
 
-GDMA maximum number of channels
+Maximum number of GDMA channels
 
-【Definition】
+**Definition**:
 
 ```c
-define GDMA_MAX_CHN_NUMS (4)
+#define GDMA_MAX_CHN_NUMS (4)
 ```
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-None.
+None
 
 #### 3.2.2 k_gdma_rotation_e
 
-【Description】
+**Description**:
 
 Defines the GDMA channel rotation angle.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef enum
@@ -860,21 +883,21 @@ typedef enum
 } k_gdma_rotation_e;
 ```
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
 
 #### 3.2.3 k_pixel_format_dma_e
 
-【Description】
+**Description**:
 
 Defines the GDMA image format.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef enum
@@ -932,11 +955,11 @@ typedef enum
 
 #### 3.2.4 k_gdma_chn_attr_t
 
-【Description】
+**Description**:
 
-Define GDMA channel properties.
+Defines the GDMA channel attributes.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef struct
@@ -954,33 +977,33 @@ typedef struct
 } k_gdma_chn_attr_t;
 ```
 
-【Members】
+**Members**:
 
-| Member name     | description                                                                                                                                                                                                                     |
-|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| buffer_num   | The number of GDMA channel buffers, at least 1. |
-| rotation     | GDMA channel rotation angle.                                                                                                                                                                                                      |
-| x_mirror     | Whether the GDMA channel is horizontally mirrored                                                                                                                                                                                                |
-| y_mirror     | Whether the GDMA channel is mirrored vertically                                                                                                                                                                                                |
-| width        | GDMA channel width, in pixels.                                                                                                                                                                                            |
-| height       | GDMA channel height, in pixels.                                                                                                                                                                                            |
-| src_stride   | GDMA source data stride. If the image format is single-channel mode, only configuration is required; if the image format is dual-channel mode, `src_stride[0]` configuration is `src_stride[0]`required; `src_stride[1]`if the image format is three-channel mode, configuration `src_stride[0]`is required.`src_stride[1]``src_stride[2]`  |
-| dst_stride   | Data for GDMA purposes Stride. If`dst_stride[0]` the image format is single-channel mode, only configuration is required; if the image format is dual-channel mode, `dst_stride[0]` configuration is required; `dst_stride[1]`if the image format is three-channel mode, configuration `dst_stride[0]`is required.`dst_stride[1]``dst_stride[2]` |
-| work_mode    | Working mode, you can choose bound mode or unbound mode.                                                                                                                                                                               |
-| pixel_format | Image format.                                                                                                                                                                                                               |
+| Member Name  | Description                                                                                                                                                                                                                     |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| buffer_num   | Number of GDMA channel buffers, at least 1.                                                                                                                                                                                     |
+| rotation     | GDMA channel rotation angle.                                                                                                                                                                                                    |
+| x_mirror     | Whether the GDMA channel performs horizontal mirroring.                                                                                                                                                                         |
+| y_mirror     | Whether the GDMA channel performs vertical mirroring.                                                                                                                                                                           |
+| width        | GDMA channel width, in pixels.                                                                                                                                                                                                  |
+| height       | GDMA channel height, in pixels.                                                                                                                                                                                                 |
+| src_stride   | GDMA source data stride. If the image format is single-channel mode, configure `src_stride[0]` only; if it is dual-channel mode, configure `src_stride[0]` and `src_stride[1]`; if it is three-channel mode, configure `src_stride[0]`, `src_stride[1]`, and `src_stride[2]`. |
+| dst_stride   | GDMA destination data stride. If the image format is single-channel mode, configure `dst_stride[0]` only; if it is dual-channel mode, configure `dst_stride[0]` and `dst_stride[1]`; if it is three-channel mode, configure `dst_stride[0]`, `dst_stride[1]`, and `dst_stride[2]`. |
+| work_mode    | Work mode, can choose binding mode or non-binding mode.                                                                                                                                                                         |
+| pixel_format | Image format.                                                                                                                                                                                                                   |
 
-【Note】
+**Notes**:
 
-- None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 - [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
 - [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
 
-### 3.3 SDMA channel data type
+### 3.3 SDMA Channel Data Types
 
-This module has the following data types
+This module has the following data types:
 
 - [SDMA_MAX_CHN_NUMS](#331-sdma_max_chn_nums)
 - [k_sdma_data_mode_e](#332-k_sdma_data_mode_e)
@@ -988,31 +1011,31 @@ This module has the following data types
 
 #### 3.3.1 SDMA_MAX_CHN_NUMS
 
-【Description】
+**Description**:
 
-SDMA maximum number of channels
+Maximum number of SDMA channels
 
-【Definition】
+**Definition**:
 
 ```c
 #define SDMA_MAX_CHN_NUMS (4)
 ```
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-None.
+None
 
-#### 3.3.2 k_sdma_data_mode_e
+### 3.3.2 k_sdma_data_mode_e
 
-【Description】
+**Description**:
 
-Defines the mode in which SDMA channels transmit data
+Defines the data transfer mode of the SDMA channel.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef enum
@@ -1022,28 +1045,28 @@ typedef enum
 } k_sdma_data_mode_e;
 ```
 
-【Members】
+**Members**:
 
-| Member name   | description              |
-|------------|-------------------|
-| DIMENSION1 | One-dimensional DMA transfer mode |
-| DIMENSION1 | 2D DMA transmission mode |
+| Member Name | Description              |
+|-------------|--------------------------|
+| DIMENSION1  | 1D DMA transfer mode     |
+| DIMENSION2  | 2D DMA transfer mode     |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
 
-#### 3.3.3 k_sdma_chn_attr_t
+### 3.3.3 k_sdma_chn_attr_t
 
-【Description】
+**Description**:
 
-Define SDMA channel properties.
+Defines the attributes of the SDMA channel.
 
-【Definition】
+**Definition**:
 
 ```c
 typedef struct
@@ -1057,86 +1080,86 @@ typedef struct
 } k_sdma_chn_attr_t;
 ```
 
-【Members】
+**Members**:
 
-| Member name   | description                                                                       |
-|------------|----------------------------------------------------------------------------|
-| buffer_num | The number of SDMA channel buffers, at least 1.                                      |
-| line_size  | The total length of the transmitted data for 1D mode and a single line of data for 2D mode. |
-| line_num   | This member is not valid for 1D mode; for 2D mode, the number of rows transferred.         |
-| line_space | This member is not valid for 1D mode; for 2D mode, it is the interval between rows.       |
-| data_mode  | SDMA's modes for transferring data, including 1D mode and 2D mode.                              |
-| work_mode  | Working mode, you can choose bound mode or unbound mode.                                 |
+| Member Name | Description                                                                 |
+|-------------|----------------------------------------------------------------------------|
+| buffer_num  | Number of SDMA channel buffers, at least 1.                                 |
+| line_size   | For 1D mode, it is the total length of the transfer data; for 2D mode, it is the length of a single line of data. |
+| line_num    | For 1D mode, this member is invalid; for 2D mode, it is the number of lines to transfer. |
+| line_space  | For 1D mode, this member is invalid; for 2D mode, it is the space between lines. |
+| data_mode   | SDMA data transfer mode, includes 1D mode and 2D mode.                     |
+| work_mode   | Work mode, can choose binding mode or non-binding mode.                     |
 
-【Note】
+**Notes**:
 
-None.
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 [k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
 
-## 4. Error codes
+## 4. Error Codes
 
-### 4.1 DMA error code
+### 4.1 DMA Error Codes
 
 Table 41
 
-| Error code    | Macro definitions                  | description                         |
-|-------------|-------------------------|------------------------------|
-| 0xa00148001 | K_ERR_DMA_INVALID_DEVID | Invalid device number                 |
-| 0xa00148002 | K_ERR_DMA_INVALID_CHNID | Invalid channel number                 |
-| 0xa00148003 | K_ERR_DMA_ILLEGAL_PARAM | Parameter error                     |
-| 0xa00148004 | K_ERR_DMA_EXIST         | The DMA device already exists             |
-| 0xa00148005 | K_ERR_DMA_UNEXIST       | The DMA device does not exist               |
-| 0xa00148006 | K_ERR_DMA_NULL_PTR      | Null pointer error                   |
-| 0xa00148007 | K_ERR_DMA_NOT_CONFIG    | DMA has not been configured                 |
-| 0xa00148008 | K_ERR_DMA_NOT_SUPPORT   | Unsupported features                 |
-| 0xa00148009 | K_ERR_DMA_NOT_PERM      | Operation is not allowed                   |
-| 0xa0014800c | K_ERR_DMA_NOMEM         | Failed to allocate memory, such as low system memory |
-| 0xa0014800d | K_ERR_DMA_NOBUF         | BUFF is insufficient                    |
-| 0xa0014800e | K_ERR_DMA_BUF_EMPTY     | BUFF is empty                    |
-| 0xa0014800f | K_ERR_DMA_BUF_FULL      | BUFF is full                    |
-| 0xa00148010 | K_ERR_DMA_NOTREADY      | The device is not ready                   |
-| 0xa00148011 | K_ERR_DMA_BADADDR       | Wrong address                   |
-| 0xa00148012 | K_ERR_DMA_BUSY          | DMA is in a busy state               |
+| Error Code   | Macro Definition           | Description                   |
+|--------------|----------------------------|-------------------------------|
+| 0xa00148001  | K_ERR_DMA_INVALID_DEVID    | Invalid device ID             |
+| 0xa00148002  | K_ERR_DMA_INVALID_CHNID    | Invalid channel ID            |
+| 0xa00148003  | K_ERR_DMA_ILLEGAL_PARAM    | Illegal parameter             |
+| 0xa00148004  | K_ERR_DMA_EXIST            | DMA device already exists     |
+| 0xa00148005  | K_ERR_DMA_UNEXIST          | DMA device does not exist     |
+| 0xa00148006  | K_ERR_DMA_NULL_PTR         | Null pointer error            |
+| 0xa00148007  | K_ERR_DMA_NOT_CONFIG       | DMA not configured            |
+| 0xa00148008  | K_ERR_DMA_NOT_SUPPORT      | Unsupported function          |
+| 0xa00148009  | K_ERR_DMA_NOT_PERM         | Operation not permitted       |
+| 0xa0014800c  | K_ERR_DMA_NOMEM            | Memory allocation failed, e.g., insufficient system memory |
+| 0xa0014800d  | K_ERR_DMA_NOBUF            | Insufficient buffer           |
+| 0xa0014800e  | K_ERR_DMA_BUF_EMPTY        | Buffer is empty               |
+| 0xa0014800f  | K_ERR_DMA_BUF_FULL         | Buffer is full                |
+| 0xa00148010  | K_ERR_DMA_NOTREADY         | Device not ready              |
+| 0xa00148011  | K_ERR_DMA_BADADDR          | Invalid address               |
+| 0xa00148012  | K_ERR_DMA_BUSY             | DMA is busy                   |
 
-## 5. Debugging information
+## 5. Debug Information
 
 ### 5.1 Overview
 
-The debug information uses the PROC file system, which can reflect the current operating status of the system in real time, and the recorded information can be used for problem location and analysis
+Debug information uses the proc file system, which can reflect the current system running status in real-time. The recorded information can be used for problem localization and analysis.
 
-【File Directory】
+**File Directory**:
 
 /proc/
 
-【Document List】
+**File List**:
 
-| File name  | description                        |
-|-----------|-----------------------------|
-| umap/dma  | Record the current usage of the DMA module |
+| File Name  | Description                 |
+|------------|-----------------------------|
+| umap/dma   | Records the current usage of the DMA module |
 
 ### 5.2 System Binding
 
-#### 5.2.1 System binding debugging information
+#### 5.2.1 System Binding Debug Information
 
-【Debugging Information】
+**Debug Information**:
 
 ```shell
-msh /\>cat /proc/umap/dma
+msh />cat /proc/umap/dma
 -------------------------------dma dev attr info---------------------------------
 DevId burst_len outstanding ckg_bypass
 0 0 0 0
 
--------------------------------dma chn 0\~3 attr info-------------------------------
+-------------------------------dma chn 0~3 attr info-------------------------------
 ChnId rotation x_mirror y_mirror width height work_mode
 0 0 false false 0 0 BIND
 1 0 false false 0 0 BIND
 2 0 false false 0 0 BIND
 3 0 false false 0 0 BIND
 
--------------------------------dma chn 4\~7 attr info-------------------------------
+-------------------------------dma chn 4~7 attr info-------------------------------
 ChnId line_size line_num line_space data_mode work_mode
 4 0 0 0 1 DIMENSION BIND
 5 0 0 0 1 DIMENSION BIND
@@ -1144,60 +1167,60 @@ ChnId line_size line_num line_space data_mode work_mode
 7 0 0 0 1 DIMENSION BIND
 ```
 
-【Debugging Information Analysis】
+**Debug Information Analysis**:
 
-Record the current usage of the DMA module
+Records the current usage of the DMA module.
 
-【Equipment parameter description】
+**Device Parameter Description**:
 
-| parameter        | **Description**         |
-|-------------|------------------|
-| DevId       | Device number           |
-| burst_len   | dma burst length |
-| outstanding | dma outstanding  |
+| Parameter    | **Description**:          |
+|--------------|--------------------------|
+| DevId        | Device ID                |
+| burst_len    | DMA burst length         |
+| outstanding  | DMA outstanding          |
 
-【GDMA channel parameter description】
+**GDMA Channel Parameter Description**:
 
-| parameter      | **Description**               |
-|-----------|------------------------|
-| ChnId     | Channel number                 |
-| rotation  | The degree of rotation               |
-| x_mirror  | Whether horizontal mirroring is performed     |
-| y_mirror  | Whether vertical mirroring is performed     |
-| width     | Image width, in pixels |
-| height    | Image height, in pixels |
-| work_mode | Working mode               |
+| Parameter   | **Description**:            |
+|-------------|----------------------------|
+| ChnId       | Channel ID                 |
+| rotation    | Rotation degree            |
+| x_mirror    | Whether horizontal mirroring is applied |
+| y_mirror    | Whether vertical mirroring is applied   |
+| width       | Image width in pixels       |
+| height      | Image height in pixels      |
+| work_mode   | Work mode                   |
 
-【SDMA channel parameter description】
+**SDMA Channel Parameter Description**:
 
-| parameter       | **Description**                                                                   |
-|------------|----------------------------------------------------------------------------|
-| ChnId      | Channel number                                                                     |
-| line_size  | The total length of the transmitted data for 1D mode and a single line of data for 2D mode. |
-| ine_num    | This member is not valid for 1D mode; for 2D mode, the number of rows transferred.         |
-| line_space | This member is not valid for 1D mode; for 2D mode, it is the interval between rows.       |
-| data_mode  | SDMA's modes for transferring data, including 1D mode and 2D mode                                |
-| work_mode  | Working mode, you can choose bound mode or unbound mode.                                 |
+| Parameter   | **Description**:                                                                 |
+|-------------|---------------------------------------------------------------------------------|
+| ChnId       | Channel ID                                                                       |
+| line_size   | For 1D mode, it is the total length of the transfer data; for 2D mode, it is the length of a single line of data. |
+| line_num    | For 1D mode, this member is invalid; for 2D mode, it is the number of lines to transfer. |
+| line_space  | For 1D mode, this member is invalid; for 2D mode, it is the space between lines. |
+| data_mode   | SDMA data transfer mode, includes 1D mode and 2D mode.                           |
+| work_mode   | Work mode, can choose binding mode or non-binding mode.                          |
 
-## 6. Demo description
+## 6. Demo Description
 
-### 6.1 Unbound mode demo
+### 6.1 Non-binding Mode Demo
 
-The unbound mode demo is located at /bin/sample_dma.elf, start cyclic running after executing /bin/sample_dma.elf, and press e + Enter to end the run.
-
-The demo mainly implements the following functions:
-
-- Use channel 0 to transport images with a resolution of 1920\*1080, 8bit, YUV400 single-channel, and output after gdma rotation of 90 degrees;
-- Use channel 1 to carry images with a resolution of 1280\*720, 8bit, YUV420 dual-channel, and output after gdma rotation of 180 degrees;
-- Use channel 2 to carry images with a resolution of 1280\*720, 10bit, YUV420 three-channel, and output after horizontal and vertical mirroring by gdma;
-- Use channel 4 to move data, and SDMA is handled using 1D mode;
-- Use channel 5 to move data, and SDMA is handled using 2D mode.
-
-### 6.2 Binding mode demo
-
-The binding mode demo is located at /bin/sample_dma_bind.elf, and after executing /bin/sample_dma_bind.elf, start the loop run, and press e + enter to end the run.
+The non-binding mode demo is located at /bin/sample_dma.elf. After executing /bin/sample_dma.elf, it starts running in a loop. Press 'e' + Enter to stop running.
 
 The demo mainly implements the following functions:
 
-- The VVI module is used as the analog input of GSDMA pre-binding to realize the test of binding function;
-- The two channels input the image with a resolution of 640\*320, 8bit, YUV400 single-channel, and the gdma is rotated 90 degrees and 180 degrees respectively.
+- Use channel 0 to transfer an image with a resolution of 1920x1080, 8-bit, YUV400 single channel, and output it after GDMA rotates it by 90 degrees.
+- Use channel 1 to transfer an image with a resolution of 1280x720, 8-bit, YUV420 dual channel, and output it after GDMA rotates it by 180 degrees.
+- Use channel 2 to transfer an image with a resolution of 1280x720, 10-bit, YUV420 triple channel, and output it after GDMA performs horizontal and vertical mirroring.
+- Use channel 4 to transfer data using SDMA in 1D mode.
+- Use channel 5 to transfer data using SDMA in 2D mode.
+
+### 6.2 Binding Mode Demo
+
+The binding mode demo is located at /bin/sample_dma_bind.elf. After executing /bin/sample_dma_bind.elf, it starts running in a loop. Press 'e' + Enter to stop running.
+
+The demo mainly implements the following functions:
+
+- Use the VVI module as the front-end bound simulated input for GSDMA to test the binding function.
+- Two channels respectively input images with a resolution of 640x320, 8-bit, YUV400 single channel, and output them after GDMA rotates them by 90 degrees and 180 degrees respectively.

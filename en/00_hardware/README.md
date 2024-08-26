@@ -8,7 +8,7 @@
 | --- | --- |
 | [K230 DEMO_BOARD_Resource_Usage_Instructions.md](K230 DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board Hardware Resource Usage Documentation |
 | [K230_Hardware_Design_Guide.md](K230_Hardware_Design_Guide.md) | K230 Hardware Design Guide document |
-| [K230_PINOUT_V1.0_20230524](../../zh/00_hardware/K230_PINOUT_V1.0_20230524.xlsx) | K230 chip pin definition |
+| [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx) | K230 chip pin definition |
 | [K230_datasheet.md](K230_datasheet.md) | K230 Datasheet |
 
 ## K230 LP3 engineering design file

@@ -2,26 +2,26 @@
 
 ![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase shall be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
@@ -29,281 +29,283 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document mainly introduces the functions and usage of the video output system control module, and the functions and usage of other modules will be discussed in special documents.
+This document primarily introduces the functions and usage of the video output system control module. The functionalities and usage of other modules will be discussed in dedicated documents.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate                     |
-|------|--------------------------|
-| VO | Video output             |
-| DSI  | Display Serial Interface |
+| Abbreviation | Description                |
+|--------------|----------------------------|
+| VO           | Video output               |
+| DSI          | Display Serial Interface   |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author     | date       |
-|------------|----------|------------|------------|
-| V1.0       | Initial edition     | System Software Department | 2023-03-10 |
+| Document Version | Description | Author         | Date       |
+|------------------|-------------|----------------|------------|
+| V1.0             | Initial Version | System Software Dept. | 2023-03-10 |
 
 ## 1. Overview
 
-VO (Video Output) module actively reads video and graphics data from the corresponding location in memory, and outputs video and graphics through the corresponding display device. Display/write-back devices, video layers, and graphics layer conditions supported by the chip.
+The VO (Video Output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The chip supports display/write-back devices, video layers, and graphic layers.
 
-LAYER SUPPORT:
+Layer support:
 
 |            | LAYER0             | LAYER1             | LAYER2                    |
 |------------|--------------------|--------------------|---------------------------|
-| Input format   | YUV420 NV12        | YUV420 NV12        | YUV420 NV12 YUV422 NV16 ? |
-| Maximum resolution | 1920x1080          | 1920x1080          | 1920x1080                 |
-| Overlay display   | Supports configurable overlay order | Supports configurable overlay order | Supports configurable overlay order        |
+| Input Format | YUV420 NV12        | YUV420 NV12        | YUV420 NV12 YUV422 NV16 ? |
+| Max Resolution | 1920x1080          | 1920x1080          | 1920x1080                 |
+| Overlay Display | Supports configurable overlay order | Supports configurable overlay order | Supports configurable overlay order |
 | Rotation   | √                  | √                  | -                         |
 | Scaler     | √                  | -                  | -                         |
 | Mirror     | √                  | √                  | -                         |
 | Gray       | √                  | √                  | -                         |
-| Independent switch   | √                  | √                  | √                         |
+| Independent Switch | √                  | √                  | √                         |
 
-OSD layer support
+OSD Layer support:
 
 |                    | OSD0                                                      | OSD1                                                      | OSD2                                                      | OSD3                                                      |
 |--------------------|-----------------------------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------|
-| Input format           | RGB888 RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888 RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888 RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888 RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  |
-| Maximum resolution         | 1920x1080                                                 | 1920x1080                                                 | 1920x1080                                                 | 1920x1080                                                 |
-| Overlay display           | Supports configurable overlay order                                        | Supports configurable overlay order                                        | Supports configurable overlay order                                        | Supports configurable overlay order                                        |
-| ARGB 265 grade ALPHA | √                                                         | √                                                         | √                                                         | √                                                         |
-| Independent switch           | √                                                         | √                                                         | √                                                         | √                                                         |
+| Input Format       | RGB888  RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888  RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888  RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  | RGB888  RGB565 ARGB8888 Monochrome-8-bit RGB4444 RGB1555  |
+| Max Resolution     | 1920x1080                                                 | 1920x1080                                                 | 1920x1080                                                 | 1920x1080                                                 |
+| Overlay Display    | Supports configurable overlay order                       | Supports configurable overlay order                       | Supports configurable overlay order                       | Supports configurable overlay order                       |
+| ARGB 265 Level ALPHA | √                                                         | √                                                         | √                                                         | √                                                         |
+| Independent Switch | √                                                         | √                                                         | √                                                         | √                                                         |
 
 ### 1.1 Hardware Description
 
-This hardware introduction is based on EVBLP3
+This hardware description is based on the evblp3.
 
-#### 1.1.1 MIPI interface
+#### 1.1.1 Mipi Interface
 
-The hardware pins on EVBLP3 are as follows:
+The hardware pins on the evblp3 are as follows:
 
-![The image contains an illustrated description that has been automatically generated](../../../../zh/01_software/board/mpp/images/d7197713d3821fdd3e5c0f2b10dfd5b1.png)
+![Image containing diagram](../../../../zh/01_software/board/mpp/images/d7197713d3821fdd3e5c0f2b10dfd5b1.png)
 
-- screen touch is I2C4  (SCL: GPIO7, SDA GPIO8)
-- screen touch rst：gpio29， int：gpio30
-- screen rst：gpio9，backlight：gpio31
-- The pins of MIPI correspond one-to-one with the pins of the screen
+- Screen touch IIC uses iic4 (scl: gpio7, sda gpio8)
+- Screen touch rst: gpio29, int: gpio30
+- Screen rst: gpio9, backlight: gpio31
+- Mipi pins correspond one-to-one with the screen pins
 
-#### 1.1.2 Physical drawings
+#### 1.1.2 Physical Diagram
 
-![Image contains game console, electronics, circuit description has been automatically generated](../../../../zh/01_software/board/mpp/images/69dbfc0ef3144c90f5978f1019482030.png)
+![Image containing game console, electronics, circuit](../../../../zh/01_software/board/mpp/images/69dbfc0ef3144c90f5978f1019482030.png)
 
-- Figure 1 is the MIPI interface, using a flexible cable
-- Figure 2 is the MIPI signal test point, including four data lines and one CLK line
+- In the figure, 1 is the mipi interface, using a soft ribbon cable
+- In the figure, 2 is the mipi signal test point, containing four data lines and one clk line
 
 ### 1.2 Software Description
 
-Video output software configuration is divided into 3 parts configuration: phy configuration, DSI configuration, VO configuration,
+The video output software configuration is divided into three parts: phy configuration, dsi configuration, and VO configuration.
 
-#### 1.2.1 PHY configuration process
+#### 1.2.1 PHY Configuration Process
 
-The frequency of PHY needs to configure three parameters, calculate PLL, configure VOCs, configure FREQ, according to these three parameters can determine the frequency of TXPHY, each parameter is calculated as follows.
+The phy frequency requires three parameters to be configured: calculate PLL, configure voc, and configure freq. Based on these three parameters, the txphy frequency can be determined. Each parameter calculation is as follows.
 
-##### 1.2.1.1 Calculate the PLL of PHY
+##### 1.2.1.1 Calculate the PHY PLL
 
-The data rate is given by twice the PLL output clock phase frequency: data rate (Gbps) = PLL Fout(GHz) \* 2, and the output frequency is a function of the input reference frequency and the multiplier/divider ratio. The PLL for calculating PHY is divided into 4 ranges to do calculations, different frequencies correspond to different frequencies, which can be determined in the following ways:
+The data rate is given by twice the PLL output clock phase frequency: Data rate (Gbps) = PLL Fout (GHz) * 2. The output frequency is a function of the input reference frequency and the multiplication/division ratio. The calculation of the phy PLL is divided into 4 ranges, each corresponding to a different frequency. It can be determined as follows:
 
 | M      | m+2 |
 |--------|-----|
 | N      | n+1 |
 | Fclkin | 24M |
 
-For：
+For:
 
-![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/e99b3eec46b58875ae936ea4ab23d86b.png)
+![Text, letter](../../../../zh/01_software/board/mpp/images/e99b3eec46b58875ae936ea4ab23d86b.png)
 
-However in this need to follow the following restrictions:
+However, the following restrictions must be followed:
 
-![The image contains a text description that has been automatically generated](../../../../zh/01_software/board/mpp/images/cfd696fc1b6157fbf0220a4f1545a963.png)
+![Image containing text](../../../../zh/01_software/board/mpp/images/cfd696fc1b6157fbf0220a4f1545a963.png)
 
-For：
+For:
 
-![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/e0df5cfd79b26cd1c688cb8f82000188.png)
+![Text, letter](../../../../zh/01_software/board/mpp/images/e0df5cfd79b26cd1c688cb8f82000188.png)
 
-For：
+For:
 
-![Text, letter description is automatically generated](../../../../zh/01_software/board/mpp/images/fb853b016887c1d58cc45f4507d9276c.png)
+![Text, letter](../../../../zh/01_software/board/mpp/images/fb853b016887c1d58cc45f4507d9276c.png)
 
-![The Text description is automatically generated](../../../../zh/01_software/board/mpp/images/9cd0c8d3bd975f1f19a5eec9b846d00b.png)
+![Text](../../../../zh/01_software/board/mpp/images/9cd0c8d3bd975f1f19a5eec9b846d00b.png)
 
-For：
+For:
 
-![The text Medium confidence description has been automatically generated](../../../../zh/01_software/board/mpp/images/659e3d039a5c3c623b3ffd6fb24ee777.png)
+![Text](../../../../zh/01_software/board/mpp/images/659e3d039a5c3c623b3ffd6fb24ee777.png)
 
-Each of the above for corresponds to a PLL level, and different levels correspond to different calculation formulas and limits, and the calculation example is as follows:
+Each of the above corresponds to a pll level, with different levels corresponding to different calculation formulas and restrictions. An example calculation is as follows:
 
-Example：
+Example:
 
-The rate of mipi is 445.5M: so the rate of pll is 222.75M, and the second formula should be selected, calculated as follows
+The mipi rate is 445.5M, so the pll rate is 222.75M. The second formula should be chosen, and the calculation is as follows:
 
-222750000 = 1M / 2N = (m+2) / 2(n+1) \* 24000000 , the finishing formula is as follows:
+222750000 = 1M / 2N = (m+2) / 2(n+1) * 24000000. The formula is rearranged as follows:
 
-222.75n + 198.75 = 12m is calculated by excel as follows:
+222.75n + 198.75 = 12m. The calculation using Excel is as follows:
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/8ff8dac9c9f9b815001733e37e44e4cc.png)
+![Table](../../../../zh/01_software/board/mpp/images/8ff8dac9c9f9b815001733e37e44e4cc.png)
 
-The resulting m = 295 and n = 15.
+The resulting m = 295, n = 15.
 
-Configure the m and n in the PLL are integer values, if all the values are not integers, you need to add 1 and subtract 1 from the values of m and n, push back to see which frequency you need to be the closest, and then verify whether it is available, you can't repeat the above operation.
+The configuration of m and n in the pll must be integer values. If none of the values are integers, m and n need to be adjusted by adding or subtracting 1, then recalculating to find the closest frequency, and verifying if it's usable. If not, repeat the above steps.
 
-##### 1.2.1.2 Configure VOC for PHY
+##### 1.2.1.2 Configure the PHY VOC
 
-The VOC configured with PHY can be queried according to the table:
+The configuration of the phy voc can be determined by referring to the table:
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/174b1b96f4a280ab5350f4ed5452d43f.png)
+![Table](../../../../zh/01_software/board/mpp/images/174b1b96f4a280ab5350f4ed5452d43f.png)
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/8e1970bbd7ffb862547feaf8a59cab48.png)
+![Table](../../../../zh/01_software/board/mpp/images/8e1970bbd7ffb862547feaf8a59cab48.png)
 
-Example：
+Example:
 
-The rate of mipi is 445.5M: so the rate of the pll is 222.75M, and VOC = 010111 = 0x17
+The mipi rate is 445.5M, so the pll rate is 222.75M, voc = 010111 = 0x17.
 
-##### 1.2.1.3 Configure FreQ
+##### 1.2.1.3 Configure the Frequency
 
-The FREQ of the configured PHY can be queried according to the table:
+The configuration of the phy frequency can be determined by referring to the table:
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/95941399975cca1c16253927129d8e19.png)
+![Table](../../../../zh/01_software/board/mpp/images/95941399975cca1c16253927129d8e19.png)
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/22628c5b4acf510370e51188734fe172.png)
+![Table](../../../../zh/01_software/board/mpp/images/22628c5b4acf510370e51188734fe172.png)
 
-![The table description is automatically generated](../../../../zh/01_software/board/mpp/images/4a233637850b4e84b5208317666c4314.png)
+![Table](../../../../zh/01_software/board/mpp/images/4a233637850b4e84b5208317666c4314.png)
 
-Example：
+Example:
 
-The rate of mipi is 445.5M: the rate of pll is 222.75M, freq selects 0100101, when configuring this, you need to set the highest bit \[7\] = 1, all freq = 10100101 = 0xa5
+The mipi rate is 445.5M, so the pll rate is 222.75M. The frequency is chosen as 0100101. When configuring this, the highest bit bit\[7\] = 1, so freq = 10100101= 0xa5.
 
-#### 1.2.2 Configuration of DSI
+#### 1.2.2 DSI Configuration
 
-DSI (Display Serial Interface) is part of a consortium of MIPI-defined communication protocols, mainly digital controllers that implement all protocol functions defined in the MIPI DSI specification, including bidirectional PHYs with two and four channels.
+DSI (Display Serial Interface) is part of a set of communication protocols defined by the MIPI alliance, mainly implementing all the protocol functions defined in the MIPI DSI specification, including a bidirectional PHY with two and four channels.
 
-DSI mainly configures the screen in the software to display functions with timing and sending commands.
+DSI mainly configures the timing used for screen display and the functionality for sending commands.
 
-##### 1.2.2.1 Configure the timing of the display
+##### 1.2.2.1 Configuring Display Timing
 
-Each manufacturer's screen will have a set of timing for screen control, mainly including the control timing of the frame and the control timing of a line, as shown in the following figure:
+Each manufacturer's screen has a set of timings used for screen control, mainly including frame control timing and line control timing, as shown in the following figure:
 
-![The Illustrative description has been automatically generated](../../../../zh/01_software/board/mpp/images/01cabbb3d5c1dc60d0baa95a0f87104f.png)
+![Diagram](../../../../zh/01_software/board/mpp/images/01cabbb3d5c1dc60d0baa95a0f87104f.png)
 
-![Illustrative, Schematic description is automatically generated](../../../../zh/01_software/board/mpp/images/507a7bd277508dc177ebb0c4cfb49b9e.png)
+![Diagram](../../../../zh/01_software/board/mpp/images/507a7bd277508dc177ebb0c4cfb49b9e.png)
 
-These parameters are also used in DSI, and the configured timing and screen are consistent.
+The timing used in DSI is consistent with the screen's timing configuration.
 
-##### 1.2.2.2 DSI send command
+##### 1.2.2.2 Sending DSI Commands
 
-DSI needs to enter LP mode before sending commands, and the APIs required are as follows:
+DSI needs to enter lp mode first, and then commands can be sent. The required APIs are as follows:
 
 - [kd_mpi_dsi_set_lp_mode_send_cmd](#226-kd_mpi_dsi_set_lp_mode_send_cmd)
 - [kd_mpi_dsi_send_cmd](#223-kd_mpi_dsi_send_cmd)
 
-The data sent is sent in 8 bits, and the long or short packet will be automatically selected according to the quantity.
+The sent data is in 8-bit format, and it will automatically choose to send long or short packets based on the quantity.
 
-##### 1.2.2.3 DSI's self-test mode
+##### 1.2.2.3 DSI Self-Test Mode
 
-The DSI self-test mode will send the data of the color bar according to the self-configured DSI timing to be sent, so that it does not rely on VO to read data from the DDR, and the test mode is shown as follows:
+The DSI self-test mode generates color bar data according to the configured DSI timing and sends it out, thus not relying on the VO to read data from DDR. The test mode display is as follows:
 
-![Background pattern The medium confidence description has been automatically generated](../../../../zh/01_software/board/mpp/images/25246d8f3ff85d6e9b1de1b03369fbb3.png)
+![Pattern](../../../../zh/01_software/board/mpp/images/25246d8f3ff85d6e9b1de1b03369fbb3.png)
 
-The 24-bit interface is used between DSI and vo, so the configured color bar is the effect shown above, and the use method only needs to enable the color bar after configuring DSI, and the API is as follows
+The DSI and VO use a 24-bit interface, so the configured color bar appears as shown above. The usage method is to enable the color bar after configuring the DSI. The API is as follows:
 
 - [kd_mpi_dsi_set_test_pattern](#225-kd_mpi_dsi_set_test_pattern)
 
-#### 1.2.3 Configuration of VO
+#### 1.2.3 VO Configuration
 
-VO (video output) is mainly VO (Video Output) module actively read video and graphics data from the corresponding position of memory, and output video and graphics through the corresponding display device, VO This part contains two configurations, one is the configuration of the time, the other is the configuration of the video layer
+The VO (video output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The VO part includes two configurations: timing configuration and video layer configuration.
 
-##### 1.2.3.1 VO timing configuration
+##### 1.2.3.1 VO Timing Configuration
 
-The timing configuration of VO and the timing configuration of DSI use the same configuration parameters, and the specific rows and columns are the same, just see the introduction of DSI timing
+The VO timing configuration uses the same parameters as the DSI timing configuration, as described in the DSI timing introduction.
 
-##### 1.2.3.2 Layer configuration for VO
+##### 1.2.3.2 VO Layer Configuration
 
-The VO layer currently supports 3 layers and 4 OSD layers. The layer  can only display the image format of the YUV (the features supported by layer0 and layer1 are shown in the diagram).
+The VO layer currently supports 3 layers and 4 OSD layers. The layer can only display YUV image formats (the functions supported by layer0 and layer1 are listed in the [Overview](#1-overview) table).
 
-##### 1.2.3.3 Configuration of the write-back function of VO
+##### 1.2.3.3 VO Write-Back Function Configuration
 
-VO also supports the write-back function, which can verify whether the VO configuration is correct, and after the VO configuration is completed, the data will be written back to DDR to facilitate verification of whether the VO configuration is abnormal
+The VO also supports a write-back function, which can verify whether the VO configuration is correct. After the VO configuration is completed, the data will be written back to the DDR, making it easy to verify whether there is any anomaly in the VO configuration.
 
-#### 1.2.4 Debugging method of VO module
+#### 1.2.4 VO Module Debugging Methods
 
-##### 1.2.4.1 Test method for screens
+##### 1.2.4.1 Screen Testing Methods
 
-- You can enter the self-test mode through the LP command configuration screen to see if the resulting image is normal
-- Read the screen registers with the LP command to see if they are returned
+- Configure the screen to enter self-test mode through LP commands and check if the generated image is normal.
+- Read the screen registers through LP commands to see if there is a response.
 
-##### 1.2.4.2 Test methods for DSI
+##### 1.2.4.2 DSI Testing Methods
 
-- After configuring DSI, let the screen enter the self-test mode, measure the signal to see that it is normal, and you can also see whether the screen produces a color bar image
-- Check the PHY's err status register to see if there is an err status, which can be viewed through proc
+- After configuring the DSI, let the screen enter self-test mode, measure the signals to see if they are normal, and check if the screen generates a color bar image.
+- Check the phy error status register to see if there is an error status, which can be viewed through proc.
 
-##### 1.2.4.3 Test methods for VO
+##### 1.2.4.3 VO Testing Methods
 
-- After the VO configuration is completed, turn on the writeback function to check whether it is consistent with the configuration requirements
-- Read the err status register of DSI to see if there is underflow and overflow in the data transfer between VO and dsi, and if so, try again with the appropriate timing
+- After the VO configuration is completed, enable the write-back function and check if it meets the configuration requirements.
+- Read the DSI error status register to check if there is any underflow or overflow in the data transmission between VO and DSI. If so, adjust the timing appropriately and try again.
 
 ## 2. API Reference
 
 ### 2.1 TXPHY
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_set_mipi_phy_attr](#211-kd_mpi_set_mipi_phy_attr)
 
-#### 2.1.1 kd_mpi_set_mipi_phy_attr
+### 2.1.1 kd_mpi_set_mipi_phy_attr
 
-【Description】
+**Description**:
 
-Set the frequency of PHY
+Sets the frequency of the PHY.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_set_mipi_phy_attr(k_vo_mipi_phy_attr \*attr)
+```c
+k_s32 kd_mpi_set_mipi_phy_attr(k_vo_mipi_phy_attr *attr)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description               | Input/output |
-|----------|--------------------|-----------|
-| attr     | Description of the frequency structure of the PHY | input      |
+| Parameter | Description                  | Input/Output |
+|-----------|------------------------------|--------------|
+| attr      | Description of the PHY frequency structure | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
-### 2.2 CIO
+### 2.2 DSI
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_dsi_set_attr](#221-kd_mpi_dsi_set_attr)
 - [kd_mpi_dsi_enable](#222-kd_mpi_dsi_enable)
@@ -314,261 +316,275 @@ This function module provides the following APIs:
 
 #### 2.2.1 kd_mpi_dsi_set_attr
 
-【Description】
+**Description**:
 
-Configure the DSI property parameters
+Configures DSI attribute parameters.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dsi_set_attr(k_display_mode \*ATTR)【Parameters】
+```c
+k_s32 kd_mpi_dsi_set_attr(k_display_mode *attr)
+```
 
-| Parameter name | description         | Input/output |
-|----------|--------------|-----------|
-| attr     | DSI property parameter | input      |
+**Parameters**:
 
-【Return value】
+| Parameter | Description         | Input/Output |
+|-----------|---------------------|--------------|
+| attr      | DSI attribute parameters | Input        |
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+**Return Values**:
 
-【Differences】
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-none
+**Chip Differences**:
 
-【Requirement】
+None
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+**Requirements**:
+
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.2.2 kd_mpi_dsi_enable
 
-【Description】
+**Description**:
 
-Open DSI
+Enables DSI.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dsi_enable(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.2.3 kd_mpi_dsi_send_cmd
 
-【Description】
+**Description**:
 
-DSI sends  command
+Sends a command via DSI.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dsi_send_cmd(k_u8 \*data, k_s32 cmd_len)
+```c
+k_s32 kd_mpi_dsi_send_cmd(k_u8 *data, k_s32 cmd_len)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description       | Input/output |
-|----------|------------|-----------|
-| data     | Data sent | input      |
-| cmd_len  | Data length   | input      |
+| Parameter | Description       | Input/Output |
+|-----------|-------------------|--------------|
+| data      | Data to be sent   | Input        |
+| cmd_len   | Length of the data | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.2.4 kd_mpi_dsi_read_pkg
 
-【Description】
+**Description**:
 
-DSI read command
+Reads a package via DSI.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_dsi_read_pkg(k_u8 \*rx_buf, k_s32 cmd_len)
+```c
+k_s32 kd_mpi_dsi_read_pkg(k_u8 *rx_buf, k_s32 cmd_len)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description       | Input/output |
-|----------|------------|-----------|
-| rx_buf,  | Accepted data | input      |
-| cmd_len  | Data length   | input      |
+| Parameter | Description       | Input/Output |
+|-----------|-------------------|--------------|
+| rx_buf    | Buffer to receive data | Input        |
+| cmd_len   | Length of the data | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.2.5 kd_mpi_dsi_set_test_pattern
 
-【Description】
+**Description**:
 
-Configure DSI to enter self-test mode
+Configures DSI to enter test mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dsi_set_test_pattern(void)
+```
 
-【Parameters】、
+**Parameters**:
 
-not
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.2.6 kd_mpi_dsi_set_lp_mode_send_cmd
 
-【Description】
+**Description**:
 
-Configure DSI to enter LP Mode to send commands
+Configures DSI to enter LP mode and send commands.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_dsi_set_lp_mode_send_cmd(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 ### 2.3 VO
 
@@ -593,1803 +609,2102 @@ none
 
 #### 2.3.1 kd_mpi_vo_init
 
-【Description】
+**Description**:
 
-VO initializes the default parameters
+Initializes VO with default parameters.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_init(void);
+```c
+k_s32 kd_mpi_vo_init(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.2 kd_mpi_vo_set_dev_param
 
-【Description】
+**Description**:
 
-DSI sends the command
+Sets device parameters for VO.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_set_dev_param(k_vo_pub_attr \*attr)
+```c
+k_s32 kd_mpi_vo_set_dev_param(k_vo_pub_attr *attr)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                             | Input/output |
-|----------|----------------------------------|-----------|
-| attr     | Video output device public property structure pointer. | input      |
+| Parameter | Description                             | Input/Output |
+|-----------|-----------------------------------------|--------------|
+| attr      | Pointer to the public attribute structure of the video output device. | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.3 kd_mpi_vo_enable_video_layer
 
-【Description】
+**Description**:
 
-Configure layer layer property parameters
+Configures layer attribute parameters.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_enable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
+```c
+k_s32 kd_mpi_vo_enable_video_layer(k_vo_layer layer)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                 | Input/output |
-|----------|------------------------------------------------------|-----------|
-| layer    | Video output video layer number Value range [0 – K_MAX_VO_LAYER_NUM] |  input     |
-| attr     | Video layer property structure pointer                                 | input      |
+| Parameter | Description                                         | Input/Output |
+|-----------|-----------------------------------------------------|--------------|
+| layer     | Video output layer number, range [0 – K_MAX_VO_LAYER_NUM] | Input        |
+| attr      | Pointer to the video layer attribute structure      | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h
+- Header files: mpi_vo_api.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.4 kd_mpi_vo_disable_video_layer
 
-【Description】
+**Description**:
 
-Turn off the video layer
+Disables the video layer.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_disable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
+```c
+k_s32 kd_mpi_vo_disable_video_layer(k_vo_layer layer)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                                 | Input/output |
-|----------|------------------------------------------------------|-----------|
-| layer    | Video output video layer number Value range [0 – K_MAX_VO_LAYER_NUM] | input      |
+| Parameter | Description                                         | Input/Output |
+|-----------|-----------------------------------------------------|--------------|
+| layer     | Video output layer number, range [0 – K_MAX_VO_LAYER_NUM] | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file:
+- Header files:
 - Library file:
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.5 kd_mpi_vo_enable
 
-【Description】
+**Description**:
 
-Open VO
+Enables VO.
 
-【Syntax】
+**Syntax**:
 
-k_u8 kd_mpi_vo_enable(void);
+```c
+k_u8 kd_mpi_vo_enable(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file:
+- Header files:
 - Library file:
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.6 kd_mpi_vo_chn_insert_frame
 
-【Description】
+**Description**:
 
-Insert frames into VO's channel
+Inserts a frame into the VO channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video_frame_info) \*vf_info)
+```c
+k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, k_video_frame_info *vf_info)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                 | Input/output |
-|----------|----------------------|-----------|
-| chn_num  | Number of channels             | input      |
-| vf_info  | The structure pointer for the video frame. | input      |
+| Parameter | Description               | Input/Output |
+|-----------|---------------------------|--------------|
+| chn_num   | Channel number            | Input        |
+| vf_info   | Pointer to the video frame structure | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_video_comm.h
+- Header files: mpi_vo_api.h, k_video_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.7 kd_mpi_vo_chn_dump_frame
 
-【Description】
+**Description**:
 
-Grab one frame of data from VO's channel
+Captures a frame from the VO channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video_frame_info) \*vf_info, k_u32 timeout_ms);
+```c
+k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, k_video_frame_info *vf_info, k_u32 timeout_ms)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name   | description               | Input/output |
-|------------|--------------------|-----------|
-| chn_num    | Channel ID             | input      |
-| vf_info    | The structure pointer for the video frame | input      |
-| timeout_ms | Timeout           | input      |
+| Parameter   | Description               | Input/Output |
+|-------------|---------------------------|--------------|
+| chn_num     | Channel ID                | Input        |
+| vf_info     | Pointer to the video frame structure | Input        |
+| timeout_ms  | Timeout duration          | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_video_comm.h
+- Header files: mpi_vo_api.h, k_video_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.8 kd_mpi_vo_chn_dump_release
 
-【Description】
+**Description**:
 
-Release the grab frame
+Releases the captured frame.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const [k_video_frame_info](#3119-k_video_frame_info) \*vf_info);
+```c
+k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const k_video_frame_info *vf_info)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description               | Input/output |
-|----------|--------------------|-----------|
-| chn_num  | Channel ID             | input      |
-| vf_info  | The structure pointer for the video frame | input      |
+| Parameter | Description               | Input/Output |
+|-----------|---------------------------|--------------|
+| chn_num   | Channel ID                | Input        |
+| vf_info   | Pointer to the video frame structure | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_video_comm.h
+- Header files: mpi_vo_api.h, k_video_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.9 kd_mpi_vo_osd_enable
 
-【Description】
+**Description**:
 
-Open the OSD layer
+Enables the OSD layer.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_osd_enable([k_vo_osd](#314-k_vo_osd) layer)
+```c
+k_s32 kd_mpi_vo_osd_enable(k_vo_osd layer)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                               | Input/output |
-|----------|----------------------------------------------------|-----------|
-| layer    | Video output video layer number Value range [0 – K_MAX_VO_OSD_NUM] | input      |
+| Parameter | Description                                         | Input/Output |
+|-----------|-----------------------------------------------------|--------------|
+| layer     | Video output layer number, range [0 – K_MAX_VO_OSD_NUM] | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
-#### 2.3.10 kd_mpi_vo_osd_disable
+### 2.3.10 kd_mpi_vo_osd_disable
 
-【Description】
+**Description**:
 
-Turn off the OSD layer
+Disables the OSD layer.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_osd_disable([k_vo_osd](#314-k_vo_osd) layer)
+```c
+k_s32 kd_mpi_vo_osd_disable(k_vo_osd layer)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                               | Input/output |
-|----------|----------------------------------------------------|-----------|
-| layer    | Video output video layer number Value range [0 – K_MAX_VO_OSD_NUM] | input      |
+| Parameter | Description                                         | Input/Output |
+|-----------|-----------------------------------------------------|--------------|
+| layer     | Video output layer number, range [0 – K_MAX_VO_OSD_NUM] | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.11 kd_mpi_vo_set_video_osd_attr
 
-【Description】
+**Description**:
 
-Set OSD layer properties
+Sets the attributes of the OSD layer.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_set_video_osd_attr([k_vo_osd](#314-k_vo_osd) layer, [k_vo_video_osd_attr](#3118-k_vo_video_osd_attr) \*attr)
+```c
+k_s32 kd_mpi_vo_set_video_osd_attr(k_vo_osd layer, k_vo_video_osd_attr *attr)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name       | description                                               | Input/output |
-|----------------|----------------------------------------------------|-----------|
-| layer          | Video output video layer number Value range [0 – K_MAX_VO_OSD_NUM] | input      |
-| OSD layer property parameters | OSD layer property parameters                                     | input      |
+| Parameter       | Description                                         | Input/Output |
+|-----------------|-----------------------------------------------------|--------------|
+| layer           | Video output layer number, range [0 – K_MAX_VO_OSD_NUM] | Input        |
+| attr            | OSD layer attribute parameters                      | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.12 kd_mpi_vo_set_wbc_attr
 
-【Description】
+**Description**:
 
-Set the write-back property
+Sets the writeback attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_set_wbc_attr([k_vo_wbc_attr](#3112-k_vo_wbc_attr) \*attr)
+```c
+k_s32 kd_mpi_vo_set_wbc_attr(k_vo_wbc_attr *attr)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description               | Input/output |
-|----------|--------------------|-----------|
-| attr     | The writeback property parameter | input      |
+| Parameter | Description               | Input/Output |
+|-----------|---------------------------|--------------|
+| attr      | Writeback attribute parameters | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.13 kd_mpi_vo_enable_wbc
 
-【Description】
+**Description**:
 
-使能writeback
+Enables writeback.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vo_enable_wbc(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.14 kd_mpi_vo_disable_wbc
 
-【Description】
+**Description**:
 
-Close writeback
+Disables writeback.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vo_disable_wbc(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.15 kd_display_reset
 
-【Description】
+**Description**:
 
-Reset the video output subsystem
+Resets the video output subsystem.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_display_reset(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.16 kd_display_set_backlight
 
-【Description】
+**Description**:
 
-Reset the screen and turn on the backlight
+Resets the screen and turns on the backlight.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_display_set_backlight(void)
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.17 kd_mpi_vo_set_user_sync_info
 
-【Description】
+**Description**:
 
-Set the user interface timing information to configure the clock source, clock size, and clock division ratio
+Sets user interface timing information for configuring clock source, clock size, and clock division ratio.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_set_user_sync_info([k_vo_user_sync_info](#318-k_vo_user_sync_info) \*sync_info)
+```c
+k_s32 kd_mpi_vo_set_user_sync_info(k_vo_user_sync_info *sync_info)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description            | Input/output |
-| -------- | --------------- | --------- |
-| pre_div  | Number of user crossovers      | input      |
-| clk_en   | Crossover enable enable |           |
+| Parameter | Description               | Input/Output |
+|-----------|---------------------------|--------------|
+| sync_info | User sync information     | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.18 kd_mpi_vo_draw_frame
 
-【Description】
+**Description**:
 
-Picture frame
+Draws a frame.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vo_draw_frame([k_vo_draw_frame](#3115-k_vo_draw_frame) \*frame)
+```c
+k_s32 kd_mpi_vo_draw_frame(k_vo_draw_frame *frame)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description           | Input/output |
-|----------|----------------|-----------|
-| frame    | Property parameters for the picture frame | input      |
+| Parameter | Description           | Input/Output |
+|-----------|-----------------------|--------------|
+| frame     | Frame attribute parameters | Input  |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h
+- Header files: mpi_vo_api.h, k_vo_comm.h
 - Library file: libvo.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.19 kd_mpi_get_connector_info
 
-【Description】
+**Description**:
 
-Gets the data structure of the Connecor connector by connection type
+Retrieves the connector data structure based on the connection type.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_get_connector_info([k_connector_type](#3120-k_connector_type) connector_type, [k_connector_info](#3125-k_connector_info) \*connector_info)
+```c
+k_s32 kd_mpi_get_connector_info(k_connector_type connector_type, k_connector_info *connector_info)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name        | description           | Input/output |
-|----------------|----------------|-----------|
-| connector_type | The type of connector    | input      |
-| connector_info | The data structure of the connector | input      |
+| Parameter       | Description               | Input/Output |
+|-----------------|---------------------------|--------------|
+| connector_type  | Type of the connector     | Input        |
+| connector_info  | Connector data structure  | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h k_connector_comm.h
-- Library file: libvo.a libconnector.a
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.20 kd_mpi_connector_open
 
-【Description】
+**Description**:
 
-Gets the data structure of the Connecor connector by connection type
+Opens the connector device node based on the connector name.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_connector_open(const char \*connector_name)
+```c
+k_s32 kd_mpi_connector_open(const char *connector_name)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name        | description           | Input/output |
-|----------------|----------------|-----------|
-| connector_name | The device node of the connector    | input      |
+| Parameter       | Description               | Input/Output |
+|-----------------|---------------------------|--------------|
+| connector_name  | Device node of the connector | Input     |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| fd     | Successfully returns the ID of the open fd             |
-| Less than 0   | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| fd           | Success, returns the file descriptor ID |
+| < 0          | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h k_connector_comm.h
-- Library file: libvo.a libconnector.a
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.21 kd_mpi_connector_power_set
 
-【Description】
+**Description**:
 
-Power on the connector
+Turns the power of the connector on or off.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_connector_power_set(k_s32 fd, k_bool is)
+```c
+k_s32 kd_mpi_connector_power_set(k_s32 fd, k_bool on)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name        | description           | Input/output |
-|----------------|----------------|-----------|
-| fd             | The device node of the connector    | input      |
-| on             | Switch of connector device    | input      |
+| Parameter       | Description               | Input/Output |
+|-----------------|---------------------------|--------------|
+| fd              | File descriptor of the connector | Input   |
+| on              | Power state of the connector | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h k_connector_comm.h
-- Library file: libvo.a libconnector.a
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.3.22 kd_mpi_connector_init
 
-【Description】
+**Description**:
 
-vo connector init
+Initializes the VO connector.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_connector_init(k_s32 fd, [k_connector_info](#3125-k_connector_info) info)
+```c
+k_s32 kd_mpi_connector_init(k_s32 fd, k_connector_info info)
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name        | description           | Input/output |
-|----------------|----------------|-----------|
-| fd             | The device node of the connector    | input      |
-| info           | Parameters for connector initialization    | input      |
+| Parameter       | Description               | Input/Output |
+|-----------------|---------------------------|--------------|
+| fd              | File descriptor of the connector | Input   |
+| info            | Initialization parameters of the connector | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | Succeed.             |
-| Non-0    | For failures, see Error codes. |
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| Non-zero     | Failure, refer to error codes. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
-- Header file: mpi_vo_api.h k_vo_comm.h k_connector_comm.h
-- Library file: libvo.a libconnector.a
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
-## 3. Data Type
+#### 2.3.23 kd_mpi_connector_get_negotiated_data
 
-### 3.1 VO
+**Description**:
 
-#### 3.1.1 k_vo_intf_sync
+Automatically negotiates the resolution between the display driver and the monitor. The negotiated data is saved in the `negotiated_data` variable.
 
-【Description】
+**Syntax**:
 
-Define the resolution and frame rate in the video
+```c
+k_s32 kd_mpi_connector_get_negotiated_data(k_s32 fd, k_connector_negotiated_data *negotiated_data)
+```
 
-【Definition】
+**Parameters**:
 
-typedef enum {
-&emsp;K_VO_OUT_1080P30,
-&emsp;K_VO_OUT_1080P60,
+| Parameter        | Description                                   | Input/Output |
+|------------------|-----------------------------------------------|--------------|
+| fd               | File descriptor                               | Input        |
+| negotiated_data  | Data negotiated between the display driver and HDMI monitor | Input |
+
+**Return Values**:
+
+| Return Value | Description                                               |
+|--------------|-----------------------------------------------------------|
+| >= 1         | Success, number of resolutions supported by the display driver after negotiation |
+| -1           | Failure, refer to error codes.                            |
+
+**Chip Differences**:
+
+None
+
+**Requirements**:
+
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
+
+**Notes**:
+
+`kd_mpi_connector_get_negotiated_data()` only negotiates with the monitor. It does not set the best resolution to the VO, DSI, or HDMI modules.
+
+**Example**:
+
+None
+
+**Related Topics**:
+
+None
+
+#### 2.3.24 kd_mpi_connector_adapt_resolution
+
+**Description**:
+
+Automatically negotiates the resolution between the display driver and the monitor. The negotiated data is saved in the `negotiated_data` variable, and the best resolution is set to the VO, DSI, and HDMI modules.
+
+**Syntax**:
+
+```c
+k_s32 kd_mpi_connector_adapt_resolution(k_connector_type type, k_connector_negotiated_data *negotiated_data)
+```
+
+**Parameters**:
+
+| Parameter        | Description                                   | Input/Output |
+|------------------|-----------------------------------------------|--------------|
+| type             | Device node of the connector, HDMI interface is usually set to `LT9611_MIPI_ADAPT_RESOLUTION` | Input |
+| negotiated_data  | Data negotiated between the display driver and HDMI monitor | Input |
+
+**Return Values**:
+
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| -1           | Failure, refer to error codes. |
+
+**Chip Differences**:
+
+None
+
+**Requirements**:
+
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
+
+**Notes**:
+
+1. `kd_mpi_connector_adapt_resolution()` internally calls `kd_mpi_connector_get_negotiated_data()` to negotiate with the monitor.
+1. After the application calls `kd_mpi_connector_adapt_resolution()` to complete the adaptive setting, it can still call `kd_mpi_get_connector_info()`, `kd_mpi_connector_open()`, `kd_mpi_connector_power_set()`, and `kd_mpi_connector_init()` to reset the output resolution.
+
+**Example**:
+
+None
+
+**Related Topics**:
+
+None
+
+#### 2.3.25 kd_mpi_connector_set_mirror
+
+**Description**:
+
+Sets the screen mirror function.
+
+**Syntax**:
+
+```c
+k_s32 kd_mpi_connector_set_mirror(k_s32 fd, k_connector_mirror mirror)
+```
+
+**Parameters**:
+
+| Parameter | Description           | Input/Output |
+|-----------|-----------------------|--------------|
+| fd        | File descriptor       | Input        |
+| mirror    | Screen mirror function | Input       |
+
+**Return Values**:
+
+| Return Value | Description               |
+|--------------|---------------------------|
+| 0            | Success.                  |
+| -1           | Failure, refer to error codes. |
+
+**Chip Differences**:
+
+None
+
+**Requirements**:
+
+- Header files: mpi_vo_api.h, k_vo_comm.h, k_connector_comm.h
+- Library file: libvo.a, libconnector.a
+
+**Notes**:
+
+1. `kd_mpi_connector_adapt_resolution()` internally calls `kd_mpi_connector_get_negotiated_data()` to negotiate with the monitor.
+1. After the application calls `kd_mpi_connector_adapt_resolution()` to complete the adaptive setting, it can still call `kd_mpi_get_connector_info()`, `kd_mpi_connector_open()`, `kd_mpi_connector_power_set()`, and `kd_mpi_connector_init()` to reset the output resolution.
+
+**Example**:
+
+None
+
+**Related Topics**:
+
+None
+
+### 3.1.1 k_vo_intf_sync
+
+**Description**:
+
+Defines the resolution and frame rate in video.
+
+**Definition**:
+
+```c
+typedef enum {  
+    K_VO_OUT_1080P30,  
+    K_VO_OUT_1080P60,  
 } k_vo_intf_sync;
+```
 
-【Members】
+**Members**:
 
-| Member name               | description                                           |
-|------------------------|------------------------------------------------|
-| K_VO_OUT_1080P30       | 1080 represents 1920x1080 PIX. 30 means 30fps      |
-| K_VO_OUT_1080P60       | 1080 represents 1920x1080 PIX. 60 means 60fps      |
-| K_VO_OUT_1080x1920P30  | 1080x1920 represents 1080x1920 PIX. 30 means 30fps |
-| K_VO_OUT_11080x1920P60 | 1080x1920 represents 1080x1920 PIX. 60 means 60fps |
+| Member Name           | Description                                      |
+|-----------------------|--------------------------------------------------|
+| K_VO_OUT_1080P30      | 1080 indicates 1920x1080 pixels. 30 indicates 30fps |
+| K_VO_OUT_1080P60      | 1080 indicates 1920x1080 pixels. 60 indicates 60fps |
+| K_VO_OUT_1080x1920P30 | 1080x1920 indicates 1080x1920 pixels. 30 indicates 30fps |
+| K_VO_OUT_1080x1920P60 | 1080x1920 indicates 1080x1920 pixels. 60 indicates 60fps |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-#### 3.1.2 k_vo_intf_type
+None
 
-【Description】
+### 3.1.2 k_vo_intf_type
 
-Define the resolution and frame rate in the video
+**Description**:
 
-【Definition】
+Defines the resolution and frame rate in video.
 
-typedef enum {
-&emsp;K_VO_INTF_MIPI = 0,
+**Definition**:
+
+```c
+typedef enum {  
+    K_VO_INTF_MIPI = 0,  
 } k_vo_intf_type;
+```
 
-【Members】
+**Members**:
 
-| Member name       | description      |
-|----------------|-----------|
+| Member Name   | Description |
+|---------------|-------------|
 | K_VO_INTF_MIPI | MIPI interface |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-#### 3.1.3 k_pixel_format
+None
 
-【Description】
+### 3.1.3 k_pixel_format
 
-The data formats supported by the layer in the display, only the supported data formats are listed in the structure below, not all data formats
+**Description**:
 
-【Definition】
+Data formats supported by the display layer. The following structure lists only the data formats supported by the display, not all data formats.
 
-typedef enum {
-&emsp;PIXEL_FORMAT_YVU_PLANAR_420,
-&emsp;PIXEL_FORMAT_YVU_PLANAR_422,
-&emsp;PIXEL_FORMAT_RGB_565,
-&emsp;PIXEL_FORMAT_RGB_888,
-&emsp;PIXEL_FORMAT_ARGB_8888,
-&emsp;PIXEL_FORMAT_ARGB_4444,
-&emsp;PIXEL_FORMAT_ARGB_1555,
-&emsp;PIXEL_FORMAT_RGB_MONOCHROME_8BPP,
+**Definition**:
+
+```c
+typedef enum {  
+    PIXEL_FORMAT_YVU_PLANAR_420,  
+    PIXEL_FORMAT_YVU_PLANAR_422,  
+    PIXEL_FORMAT_RGB_565,  
+    PIXEL_FORMAT_RGB_888,  
+    PIXEL_FORMAT_ARGB_8888,  
+    PIXEL_FORMAT_ARGB_4444,  
+    PIXEL_FORMAT_ARGB_1555,  
+    PIXEL_FORMAT_RGB_MONOCHROME_8BPP,  
 } k_pixel_format;
+```
 
-【Members】
+**Members**:
 
-| Member name                         | description        |
-|----------------------------------|-------------|
-| PIXEL_FORMAT_YVU_PLANAR_420      | YUV420 NV12 |
-| PIXEL_FORMAT_YVU_PLANAR_422      | YUV422 NV16 |
-| PIXEL_FORMAT_RGB_565             | RGB565      |
-| PIXEL_FORMAT_RGB_888             | RGB888      |
-| PIXEL_FORMAT_RGB_MONOCHROME_8BPP |  8 BIT RGB  |
-| PIXEL_FORMAT_ARGB_8888           | ARGB8888    |
-| PIXEL_FORMAT_ARGB_4444           | ARGB4444    |
-| PIXEL_FORMAT_ARGB_1555           | ARGB1444    |
+| Member Name               | Description |
+|---------------------------|-------------|
+| PIXEL_FORMAT_YVU_PLANAR_420 | YUV420 NV12 |
+| PIXEL_FORMAT_YVU_PLANAR_422 | YUV422 NV16 |
+| PIXEL_FORMAT_RGB_565        | RGB565      |
+| PIXEL_FORMAT_RGB_888        | RGB888      |
+| PIXEL_FORMAT_RGB_MONOCHROME_8BPP | 8-bit RGB |
+| PIXEL_FORMAT_ARGB_8888      | ARGB8888    |
+| PIXEL_FORMAT_ARGB_4444      | ARGB4444    |
+| PIXEL_FORMAT_ARGB_1555      | ARGB1555    |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.4 k_vo_osd
+### 3.1.4 k_vo_osd
 
-【Description】
+**Description**:
 
-The number of OSDs and the number of each OSD
+Number of OSDs and the ID of each OSD.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_VO_OSD0,
-&emsp;K_VO_OSD1,
-&emsp;K_VO_OSD2,
-&emsp;K_VO_OSD3,
-&emsp;K_MAX_VO_OSD_NUM,
+```c
+typedef enum {  
+    K_VO_OSD0,  
+    K_VO_OSD1,  
+    K_VO_OSD2,  
+    K_VO_OSD3,  
+    K_MAX_VO_OSD_NUM,  
 } k_vo_osd;
+```
 
-【Members】
+**Members**:
 
-| Member name         | description                |
-|------------------|---------------------|
-| K_VO_OSD0        | OSD 0          |
-| K_VO_OSD1        | OSD 1          |
-| K_VO_OSD2        | OSD 2          |
-| K_VO_OSD3        | OSD 3          |
-| K_MAX_VO_OSD_NUM |  OSD layer maximum number flag |
+| Member Name      | Description      |
+|------------------|------------------|
+| K_VO_OSD0        | OSD layer 0      |
+| K_VO_OSD1        | OSD layer 1      |
+| K_VO_OSD2        | OSD layer 2      |
+| K_VO_OSD3        | OSD layer 3      |
+| K_MAX_VO_OSD_NUM | Maximum number of OSD layers |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.5 k_vo_layer
+### 3.1.5 k_vo_layer
 
-【Description】
+**Description**:
 
-The number of layers and the number of each layer
+Number of layers and the ID of each layer.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_VO_LYAER0 = 0,
-&emsp;K_VO_LYAER1,
-&emsp;K_VO_LYAER2,
-&emsp;K_MAX_VO_LAYER_NUM,
+```c
+typedef enum {  
+    K_VO_LAYER0 = 0,  
+    K_VO_LAYER1,  
+    K_VO_LAYER2,  
+    K_MAX_VO_LAYER_NUM,  
 } k_vo_layer;
+```
 
-Members】
+**Members**:
 
-| Member name           | description                  |
-|--------------------|-----------------------|
-| K_VO_LYAER0        | Layer 0            |
-| K_VO_LYAER1        | Layer 1            |
-| K_VO_LYAER2        | Layer 2            |
-| K_VO_LYAER3        | Layer 3            |
-| K_MAX_VO_LAYER_NUM |  Maximum number of layers flag |
+| Member Name       | Description      |
+|-------------------|------------------|
+| K_VO_LAYER0       | Layer 0          |
+| K_VO_LAYER1       | Layer 1          |
+| K_VO_LAYER2       | Layer 2          |
+| K_MAX_VO_LAYER_NUM | Maximum number of layers |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.6 k_vo_rotation
+### 3.1.6 k_vo_rotation
 
-【Description】
+**Description**:
 
-Features supported by Layer rotation
+Supported layer rotation functions.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_ROTATION_0 = (0x01L \<\< 0),
-&emsp;K_ROTATION_90 = (0x01L \<\< 1),
-&emsp;K_ROTATION_180 = (0x01L \<\< 2),
-&emsp;K_ROTATION_270 = (0x01L \<\< 3),
+```c
+typedef enum {  
+    K_ROTATION_0 = (0x01L << 0),  
+    K_ROTATION_90 = (0x01L << 1),  
+    K_ROTATION_180 = (0x01L << 2),  
+    K_ROTATION_270 = (0x01L << 3),  
 } k_vo_rotation;
+```
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.7 k_vo_mirror_mode
+### 3.1.7 k_vo_mirror_mode
 
-【Description】
+**Description**:
 
-Features supported by Layer mirror.
+Supported layer mirror functions.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_VO_MIRROR_NONE = (0x01L \<\< 4),
-&emsp;K_VO_MIRROR_HOR = (0x01L \<\< 5),
-&emsp;K_VO_MIRROR_VER = (0x01L \<\< 6),
-&emsp;K_VO_MIRROR_BOTH = (0x01L \<\< 7),
+```c
+typedef enum {  
+    K_VO_MIRROR_NONE = (0x01L << 4),  
+    K_VO_MIRROR_HOR = (0x01L << 5),  
+    K_VO_MIRROR_VER = (0x01L << 6),  
+    K_VO_MIRROR_BOTH = (0x01L << 7),  
 } k_vo_mirror_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name         | description                    |
-|------------------|-------------------------|
-| K_VO_MIRROR_NONE | Layer no mirror     |
-| K_VO_MIRROR_HOR  | Layer horizontal mirror |
-| K_VO_MIRROR_VER  | Layer vertical mirror |
-| K_VO_MIRROR_BOTH | Layer does vertical and horizontal mirrors |
+| Member Name     | Description               |
+|------------------|---------------------------|
+| K_VO_MIRROR_NONE | No mirror for the layer   |
+| K_VO_MIRROR_HOR  | Horizontal mirror         |
+| K_VO_MIRROR_VER  | Vertical mirror           |
+| K_VO_MIRROR_BOTH | Both horizontal and vertical mirror |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.8 k_vo_user_sync_info
+### 3.1.8 k_vo_user_sync_info
 
-【Description】
+**Description**:
 
-User-defined clock crossover.
+User-defined clock division.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 ext_div;
-&emsp;k_u32 dev_div;
-&emsp;k_u32 clk_en;
+```c
+typedef struct {  
+    k_u32 ext_div;  
+    k_u32 dev_div;  
+    k_u32 clk_en;  
 } k_vo_user_sync_info;
+```
 
-【Members】
+**Members**:
 
-| Member name | description             |
-|----------|------------------|
-| ext_div; | CLKEXT crossover      |
-| dev_div  | Clk crossover         |
-| clk_en   | Display clock enable |
+| Member Name | Description        |
+|-------------|--------------------|
+| ext_div     | External clock division |
+| dev_div     | Clock division     |
+| clk_en      | Display clock enable |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.9 k_vo_point
+### 3.1.9 k_vo_point
 
-【Description】
+**Description**:
 
-Define the coordinate information structure.
+Defines a coordinate information structure.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 x;
-&emsp;k_u32 y;
-}k_vo_point;
+```c
+typedef struct {  
+    k_u32 x;  
+    k_u32 y;  
+} k_vo_point;
+```
 
-【Members】
+**Members**:
 
-| Member name | description   |
-|----------|--------|
-| x        | abscissa |
-| y       | ordinate |
+| Member Name | Description |
+|-------------|-------------|
+| x           | X coordinate |
+| y           | Y coordinate |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.10 k_vo_size
+### 3.1.10 k_vo_size
 
-【Description】
+**Description**:
 
-Defines the size information structure.
+Defines a size information structure.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 width;
-&emsp;k_u32 height;
+```c
+typedef struct {  
+    k_u32 width;  
+    k_u32 height;  
 } k_vo_size;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|----------|------|
-| width    | width |
-| height   | height |
+| Member Name | Description |
+|-------------|-------------|
+| width       | Width       |
+| height      | Height      |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.11 k_vo_video_layer_attr
+### 3.1.11 k_vo_video_layer_attr
 
-【Description】
+**Description**:
 
-Define the display layer layer properties
+Defines the attributes of the display layer.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_point display_rect;
-&emsp;k_size img_size;
-&emsp;k_pixel_format pixel_format;
-&emsp;k_u32 stride;
-&emsp;k_u32 uv_swap_en;
-&emsp;k_u32 alptha_tpye;
+```c
+typedef struct {  
+    k_vo_point display_rect;  
+    k_vo_size img_size;  
+    k_pixel_format pixel_format;  
+    k_u32 stride;  
+    k_u32 uv_swap_en;  
+    k_u32 alpha_type;  
 } k_vo_video_layer_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name      | description                                                                                                                                                            |
-|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| display_rect; | The starting position of the OSD layer                                                                                                                                             |
-| img_size      | Image resolution structure, that is, the size of the composite picture                                                                                                                              |
-| pixel_format  | Supported data formats for the video layer                                                                                                                                            |
-| stride        | Stride of images                                                                                                                                                    |
-| uv_swap_en    | UV swap                                                                                                                                                         |
-| alptha_tpye   | The type of Alptha that is used only in the OSD layer. It is divided into fixed alpha (which can be divided into 256 levels), R in RGB as the alpha channel, G in RGB as the alpha channel, B in RGB as the alpha channel, and alpha channel as alpha |
+| Member Name   | Description                                                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| display_rect  | Starting position of the OSD layer                                                                                                  |
+| img_size      | Image resolution structure, i.e., the size of the composite image                                                                   |
+| pixel_format  | Data format supported by the video layer                                                                                            |
+| stride        | Image stride                                                                                                                        |
+| uv_swap_en    | UV swap                                                                                                                             |
+| alpha_type    | Type of alpha, only used by OSD layers. Divided into fixed alpha (256 levels), using R from RGB as alpha, using G from RGB as alpha, using B from RGB as alpha, or using the alpha channel as alpha |
 
-【Note】
+**Notes**:
 
-alptha_tpye is only used for the OSD layer
+alpha_type is only used by OSD layers.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.12 k_vo_wbc_attr
+### 3.1.12 k_vo_wbc_attr
 
-【Description】
+**Description**:
 
-Define the writeback property.
+Defines writeback attributes.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;[k_vo_size](#3110-k_vo_size) target_size;
-&emsp;[k_pixel_format](#313-k_pixel_format) pixel_format;
-&emsp;k_u32 stride;
-&emsp;k_u32 y_phy_addr;
+```c
+typedef struct {  
+    k_vo_size target_size;  
+    k_pixel_format pixel_format;  
+    k_u32 stride;  
+    k_u32 y_phy_addr;  
 } k_vo_wbc_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name       | description       |
-|---------------|------------|
-| target_size   | The target size for write-back  |
-| pixel_format  | The format of the data that is written back |
-| pixel_format  | data format   |
-| stride;       | Stride written back   |
-| y_addr        | The physical address of the image write-back    |
+| Member Name  | Description       |
+|--------------|-------------------|
+| target_size  | Target size for writeback |
+| pixel_format | Data format for writeback |
+| stride       | Writeback stride  |
+| y_phy_addr   | Physical address for image writeback |
 
-【Note】
+**Notes**:
 
-y_addr Space needs to be allocated
+y_phy_addr needs allocated space.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.13 k_vo_pub_attr
+### 3.1.13 k_vo_pub_attr
 
-【Description】
+**Description**:
 
-Configure the public properties of the video output device.
+Configures the public attributes of the video output device.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 bg_color;
-&emsp;[k_vo_intf_type](#312-k_vo_intf_type) intf_type;
-&emsp;[k_vo_intf_sync](#311-k_vo_intf_sync) intf_sync;
-&emsp;[k_vo_display_resolution](#3116-k_vo_display_resolution) \*sync_info;
-&emsp;} k_vo_pub_attr;
+    k_u32 bg_color;  
+    k_vo_intf_type intf_type;  
+    k_vo_intf_sync intf_sync;  
+    k_vo_display_resolution *sync_info;  
+} k_vo_pub_attr;
+```
 
-【Members】
+**Members**:
 
-|           |                          |
-|-----------|--------------------------|
-| Member name  | description                     |
-| bg_color  | Background color                   |
-| type      | Interface type, currently only MIPI is supported |
-| intf_sync | Resolution and frame rate in the video     |
-| sync_info | The timing of the image output           |
+| Member Name | Description                   |
+|-------------|-------------------------------|
+| bg_color    | Background color              |
+| intf_type   | Interface type, currently only supports MIPI |
+| intf_sync   | Resolution and frame rate in video |
+| sync_info   | Timing information for image output |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.14 k_vo_scaler_attr
+### 3.1.14 k_vo_scaler_attr
 
-【Description】
+**Description**:
 
-Define the scaler property
+Defines the scaler attributes.
 
-【Definition】
+**Definition**:
 
-typedef struct{
-&emsp;k_size in_size;
-&emsp;k_size out_size;
-&emsp;k_u32 stride;
-}k_vo_scaler_attr;
+```c
+typedef struct {  
+    k_vo_size in_size;  
+    k_vo_size out_size;  
+    k_u32 stride;  
+} k_vo_scaler_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name | description               |
-|----------|--------------------|
-| in_size  | The dimensions entered         |
-| out_size | The dimensions of the output         |
-| stride   | stride       |
-| y_addr   | The physical address of the image write-back |
+| Member Name | Description        |
+|-------------|--------------------|
+| in_size     | Input size         |
+| out_size    | Output size        |
+| stride      | Input stride       |
+| y_phy_addr  | Physical address for image writeback |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.15 k_vo_draw_frame
+### 3.1.15 k_vo_draw_frame
 
-【Description】
+**Description**:
 
-Defines the properties of the frame
+Defines the attributes for drawing a frame.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 draw_en;
-&emsp;k_u32 line_x_start;
-&emsp;k_u32 line_y_start;
-&emsp;k_u32 line_x_end;
-&emsp;k_u32 line_y_end;
-&emsp;k_u32 frame_num;
-}k_vo_draw_frame;
+```c
+typedef struct {  
+    k_u32 draw_en;  
+    k_u32 line_x_start;  
+    k_u32 line_y_start;  
+    k_u32 line_x_end;  
+    k_u32 line_y_end;  
+    k_u32 frame_num;  
+} k_vo_draw_frame;
+```
 
-【Members】
+**Members**:
 
-| Member name     | description                     |
-|--------------|--------------------------|
-| draw_en      | Picture frame enabled                 |
-| line_x_start | The start in the X direction             |
-| line_y_start | The start of the y direction         |
-| line_x_end   | The end point in the X direction          |
-| line_y_end   | The end point in the y direction          |
-| frame_num    | num sign in the current box [0 - 16] |
+| Member Name   | Description               |
+|---------------|---------------------------|
+| draw_en       | Enable drawing frame      |
+| line_x_start  | X-axis start position     |
+| line_y_start  | Y-axis start position     |
+| line_x_end    | X-axis end position       |
+| line_y_end    | Y-axis end position       |
+| frame_num     | Frame number (0 - 16)     |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.16 k_vo_display_resolution
+### 3.1.16 k_vo_display_resolution
 
-【Description】
+**Description**:
 
-Display timing。
+Display timing attributes.
 
-【Definition】
+**Definition**:
 
-typedef struct{
-&emsp;k_u32 PCLK;
-&emsp;k_u32 phyclk;
-&emsp;k_u32 htotal;
-&emsp;k_u32 hdisplay;
-&emsp;k_u32 hsync_len;
-&emsp;k_u32 hback_porch;
-&emsp;k_u32 hfront_porch;
-&emsp;k_u32 vtotal;
-&emsp;k_u32 vdisplay;
-&emsp;k_u32 vsync_len;
-&emsp;k_u32 vback_porch;
-&emsp;k_u32 vfront_porch;
+```c
+typedef struct {  
+    k_u32 pclk;  
+    k_u32 phyclk;  
+    k_u32 htotal;  
+    k_u32 hdisplay;  
+    k_u32 hsync_len;  
+    k_u32 hback_porch;  
+    k_u32 hfront_porch;  
+    k_u32 vtotal;  
+    k_u32 vdisplay;  
+    k_u32 vsync_len;  
+    k_u32 vback_porch;  
+    k_u32 vfront_porch;  
 } k_vo_display_resolution;
+```
 
-【Members】
+**Members**:
 
-| Member name     | description               |
-|--------------|--------------------|
-| pclk         | The pix clk frequency of VO  |
-| phyclk       |  The frequency of D-Phy      |
-| htotal       | The total pixels of a row       |
-| hdisplay     | The number of valid pixels per row |
-| hsync_len    | The number of pixels that the row synchronizes   |
-| hback_porch  | The number of pixels on the back porch |
-| hfront_porch | The number of pixels on the front porch |
-| vtotal       | Total number of rows             |
-| vdisplay     | The number of rows valid for one frame     |
-| vsync_len    | The number of pixels in which the frame is synchronized   |
-| vback_porch  | The number of rows on the back porch   |
-| vfront_porch | The number of rows on the front porch   |
+| Member Name   | Description           |
+|---------------|-----------------------|
+| pclk          | Pixel clock frequency |
+| phyclk        | D-PHY frequency       |
+| htotal        | Total pixels per line |
+| hdisplay      | Active pixels per line|
+| hsync_len     | Horizontal sync length|
+| hback_porch   | Horizontal back porch |
+| hfront_porch  | Horizontal front porch|
+| vtotal        | Total lines per frame |
+| vdisplay      | Active lines per frame|
+| vsync_len     | Vertical sync length  |
+| vback_porch   | Vertical back porch   |
+| vfront_porch  | Vertical front porch  |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.17 k_vo_mipi_phy_attr
+### 3.1.17 k_vo_mipi_phy_attr
 
-【Description】
+**Description**:
 
-A structure that defines the MIPI PHY frequency
+Defines the structure for MIPI PHY frequency.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 n;
-&emsp;k_u32 m;
-&emsp;k_u32 voc;
-&emsp;k_u32 phy_lan_num;
-&emsp;k_u32 hs_freq;
-}k_vo_mipi_phy_attr;
+```c
+typedef struct {  
+    k_u32 n;  
+    k_u32 m;  
+    k_u32 voc;  
+    k_u32 phy_lan_num;  
+    k_u32 hs_freq;  
+} k_vo_mipi_phy_attr;  
+```
 
-【Members】
+**Members**:
 
-| Member name    | description           |
-|-------------|----------------|
-| n           | Pll coefficient       |
-| m           | Pll coefficient       |
-| voc         | Pll coefficient       |
-| hs_freq     | The frequency range of Phy |
-| phy_lan_num | The number of LANs for Phy |
+| Member Name  | Description         |
+|--------------|---------------------|
+| n            | PLL coefficient     |
+| m            | PLL coefficient     |
+| voc          | PLL coefficient     |
+| hs_freq      | PHY frequency range |
+| phy_lan_num  | Number of PHY lanes |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.18 k_vo_video_osd_attr
+### 3.1.18 k_vo_video_osd_attr
 
-【Description】
+**Description**:
 
-Configure the public properties of the OSD layer.
+Configures the public attributes of the OSD layer.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;[k_vo_point](#3110-k_vo_size) display_rect;
-&emsp;[k_vo_size](#3110-k_vo_size) img_size;
-&emsp;[k_pixel_format](#313-k_pixel_format) pixel_format;
-&emsp;k_u32 stride;
-&emsp;k_u8 global_alptha;
+```c
+typedef struct {  
+    k_vo_point display_rect;  
+    k_vo_size img_size;  
+    k_pixel_format pixel_format;  
+    k_u32 stride;  
+    k_u8 global_alpha;  
 } k_vo_video_osd_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name      | description       |
-|---------------|------------|
-| display_rect  | Location information   |
-| img_size      | Valid size |
-| pixel_format  | data format   |
-| stride;       | Stride     |
-| global_alptha | transparency     |
+| Member Name   | Description     |
+|---------------|-----------------|
+| display_rect  | Position info   |
+| img_size      | Effective size  |
+| pixel_format  | Data format     |
+| stride        | Stride          |
+| global_alpha  | Transparency    |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.19 k_video_frame_info
+### 3.1.19 k_video_frame_info
 
-【Description】
+**Description**:
 
-One frame of information.
+Information of a frame.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_video_frame v_frame;
-&emsp;k_u32 pool_id;
-&emsp;k_mod_id mod_id;
+```c
+typedef struct {  
+    k_video_frame v_frame;  
+    k_u32 pool_id;  
+    k_mod_id mod_id;  
 } k_video_frame_info;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| v_frame  | Information of the frame |
-| pool_id  | VB Party ID  |
-| mod_id   | The ID of the video frame |
+| Member Name | Description       |
+|-------------|-------------------|
+| v_frame     | Frame information |
+| pool_id     | VB pool ID        |
+| mod_id      | Video frame ID    |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.20 k_connector_type
+### 3.1.20 k_connector_type
 
-【Description】
+**Description**:
 
-The type of connection screen.
+Type of screen connection.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;HX8377_V2_MIPI_4LAN_1080X1920_30FPS;
-&emsp;LT9611_MIPI_4LAN_1920X1080_30FPS;
+```c
+typedef enum {  
+    HX8377_V2_MIPI_4LAN_1080X1920_30FPS,
+    LT9611_MIPI_4LAN_1920X1080_60FPS,
+    LT9611_MIPI_4LAN_1920X1080_30FPS,
 } k_connector_type;
+```
 
-【Members】
+**Members**:
 
-| Member name | description                                           |
-|----------|-----------------------------------------------|
-| v_frame  | Information about the frame                                      |
-| HX8377_V2_MIPI_4LAN_1080X1920_30FPS  | HX8377 Screen initialization  |
-| LT9611_MIPI_4LAN_1920X1080_30FPS   | HDMI 1080p initialization |
+| Member Name                           | Description                    |
+|---------------------------------------|--------------------------------|
+| HX8377_V2_MIPI_4LAN_1080X1920_30FPS   | HX8377 screen initialization   |
+| LT9611_MIPI_4LAN_1920X1080_60FPS      | HDMI 1080p60 initialization    |
+| LT9611_MIPI_4LAN_1920X1080_30FPS      | HDMI 1080p30 initialization    |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.21 k_dsi_lan_num
+### 3.1.21 k_dsi_lan_num
 
-【Description】
+**Description**:
 
-The number of lanes for DSI.
+Number of DSI lanes.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_DSI_1LAN = 0,
-&emsp;K_DSI_2LAN = 1,
-&emsp;K_DSI_4LAN = 3,
+```c
+typedef enum {  
+    K_DSI_1LAN = 0,  
+    K_DSI_2LAN = 1,  
+    K_DSI_4LAN = 3,  
 } k_dsi_lan_num;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| K_DSI_1LAN  | 1-line mode    |
-| K_DSI_2LAN  | 2-wire mode |
-| K_DSI_4LAN   | 4-wire mode |
+| Member Name | Description |
+|-------------|-------------|
+| K_DSI_1LAN  | 1-lane mode |
+| K_DSI_2LAN  | 2-lane mode |
+| K_DSI_4LAN  | 4-lane mode |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.22 k_dsi_work_mode
+### 3.1.22 k_dsi_work_mode
 
-【Description】
+**Description**:
 
-The operating mode of DSI
+DSI work mode.
 
-【Definition】
+**Definition**:
 
-typedef enum{
-&emsp;K_BURST_MODE = 0,
-&emsp;K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,
-&emsp;K_NON_BURST_MODE_WITH_PULSES = 2,
+```c
+typedef enum {  
+    K_BURST_MODE = 0,  
+    K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,  
+    K_NON_BURST_MODE_WITH_PULSES = 2,  
 } k_dsi_work_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| K_BURST_MODE  | DSI works in Brust Mode    |
-| K_NON_BURST_MODE_WITH_SYNC_EVENT  | DSi work in Non Brust Event Mode |
-| K_NON_BURST_MODE_WITH_PULSES   | DSI work in Non Brust Pulses Mode |
+| Member Name                        | Description                       |
+|------------------------------------|-----------------------------------|
+| K_BURST_MODE                       | DSI works in burst mode           |
+| K_NON_BURST_MODE_WITH_SYNC_EVENT   | DSI works in non-burst sync event mode |
+| K_NON_BURST_MODE_WITH_PULSES       | DSI works in non-burst pulses mode |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.23 k_vo_dsi_cmd_mode
+### 3.1.23 k_vo_dsi_cmd_mode
 
-【Description】
+**Description**:
 
-The pattern in which DSI sends commands.
+DSI command transmission mode.
 
-【Definition】
+**Definition**:
 
-typedef enum {
-&emsp;K_VO_LP_MODE,
-&emsp;K_VO_HS_MODE,
+```c
+typedef enum {  
+    K_VO_LP_MODE,  
+    K_VO_HS_MODE,  
 } k_vo_dsi_cmd_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| K_VO_LP_MODE  | LP mode sends commands    |
-| K_VO_HS_MODE  | HS mode sends commands |
+| Member Name | Description           |
+|-------------|-----------------------|
+| K_VO_LP_MODE | Send command in LP mode |
+| K_VO_HS_MODE | Send command in HS mode |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.24 k_connectori_phy_attr
+### 3.1.24 k_connectori_phy_attr
 
-【Description】
+**Description**:
 
-Connector Connector Configuration PHY information.
+Configuration information for the PHY of the connector.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;k_u32 n;
-&emsp;k_u32 m;
-&emsp;k_u32 voc;
-&emsp;k_u32 hs_freq;
+```c
+typedef struct {  
+    k_u32 n;  
+    k_u32 m;  
+    k_u32 voc;  
+    k_u32 hs_freq;  
 } k_connectori_phy_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| n        | Pll coefficient    |
-| m        | Pll coefficient    |
-| voc      | Pll coefficient    |
-| hs_freq  | The frequency range of Phy |
+| Member Name | Description         |
+|-------------|---------------------|
+| n           | PLL coefficient     |
+| m           | PLL coefficient     |
+| voc         | PLL coefficient     |
+| hs_freq     | PHY frequency range |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-#### 3.1.25 k_connector_info
+### 3.1.25 k_connector_info
 
-【Description】
+**Description**:
 
-Information about the connector.
+Information of the connector.
 
-【Definition】
+**Definition**:
 
-typedef struct {
-&emsp;const char *connector_name;
-&emsp;k_u32 screen_test_mode;
-&emsp;k_u32 dsi_test_mode;
-&emsp;k_u32 bg_color;
-&emsp;k_u32 intr_line;
-&emsp;[k_dsi_lan_num](#3121-k_dsi_lan_num) lan_num;
-&emsp;[k_dsi_work_mode](#3122-k_dsi_work_mode) work_mode;
-&emsp;[k_vo_dsi_cmd_mode](#3123-k_vo_dsi_cmd_mode) cmd_mode;
-&emsp;[k_connectori_phy_attr](#3124-k_connectori_phy_attr) phy_attr;
-&emsp;[k_vo_display_resolution](#3116-k_vo_display_resolution) resolution;
-&emsp;[k_connector_type](#3120-k_connector_type) type;
+```c
+typedef struct {  
+    const char *connector_name;  
+    k_u32 screen_test_mode;  
+    k_u32 dsi_test_mode;  
+    k_u32 bg_color;  
+    k_u32 intr_line;  
+    k_dsi_lan_num lan_num;  
+    k_dsi_work_mode work_mode;  
+    k_vo_dsi_cmd_mode cmd_mode;  
+    k_connectori_phy_attr phy_attr;  
+    k_vo_display_resolution resolution;  
+    k_connector_type type;  
 } k_connector_info;
+```
 
-【Members】
+**Members**:
 
-| Member name | description        |
-|----------|-------------|
-| connector_name | connector name |
-| screen_test_mode | screen test mode |
-| dsi_test_mode | dsi test mode |
-| bg_color | background color |
-| intr_line | Break line number |
-| work_mode | dsi work mode |
-| phy_attr | Parameters of mipi phy |
-| lan_num | mipi lan num |
-| resolution | Parameters of display |
-| type | connector type |
+| Member Name     | Description            |
+|-----------------|------------------------|
+| connector_name  | Name of the connector  |
+| screen_test_mode| Screen test mode       |
+| dsi_test_mode   | DSI test mode          |
+| bg_color        | Background color       |
+| intr_line       | Interrupt line         |
+| lan_num         | Number of DSI lanes    |
+| work_mode       | DSI work mode          |
+| cmd_mode        | DSI command mode       |
+| phy_attr        | PHY attributes         |
+| resolution      | Display resolution     |
+| type            | Connector type         |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
-## 4. Error codes
+### 3.1.26 k_connector_negotiated_data
 
-Table 41 VO API error codes
+**Description**:
 
-| Error code   | Macro definitions                 | description           |
-|------------|------------------------|----------------|
-| 0xa00b8006 | K_ERR_VO_NULL_PTR      | Parameter null pointer error |
-| 0xa00b8001 | K_ERR_VO_INVALID_DEVID | Invalid dev id     |
-| 0xa00b8002 | K_ERR_VO_INVALID_CHNID | Invalid chn id    |
-| 0xa00b8005 | K_ERR_VO_UNEXIST       | The video cache does not exist |
-| 0xa00b8004 | K_ERR_VO_EXIST         | Video cache exists   |
-| 0xa00b8003 | K_ERR_VO_ILLEGAL_PARAM | The parameter setting is invalid   |
-| 0xa00b8010 | K_ERR_VO_NOTREADY      | VO is not ready     |
-| 0xa00b8012 | K_ERR_VO_BUSY          | The system is busy         |
-| 0xa00b8007 | K_ERR_VO_NOT_CONFIG    | Configuration is not allowed     |
-| 0xa00b8008 | K_ERR_VO_NOT_SUPPORT   | Unsupported operations   |
-| 0xa00b8009 | K_ERR_VO_NOT_PERM      | Operation is not allowed     |
-| 0xa00b800c | K_ERR_VO_NOMEM         | Failed to allocate memory   |
-| 0xa00b800d | K_ERR_VO_NOBUF         | No buffs       |
-| 0xa00b800e | K_ERR_VO_BUF_EMPTY     | Buf is empty       |
-| 0xa00b800f | K_ERR_VO_BUF_FULL      | Buf is full       |
-| 0xa00b8011 | K_ERR_VO_BADADDR       | Wrong address     |
-| 0xa00b8012 | K_ERR_VO_BUSY          | The system is busy         |
+Data negotiated between the display driver and the HDMI display.
+
+**Definition**:
+
+```c
+typedef struct {  
+    k_u32 connection_status;  
+    k_u32 negotiated_count;  
+    k_connector_type negotiated_types[256];  
+} k_connector_negotiated_data;
+```
+
+**Members**:
+
+| Member Name         | Description                                                                 |
+|---------------------|-----------------------------------------------------------------------------|
+| connection_status   | HDMI interface connection status                                            |
+| negotiated_count    | Number of resolutions supported by the display driver after negotiation with HDMI display |
+| negotiated_types[256] | List of resolutions supported by the display driver after negotiation with HDMI display, negotiated_types[0] indicates the best resolution |
+
+**Notes**:
+
+None
+
+**Related Data Types and Interfaces**:
+
+None
+
+### 3.1.27 k_connector_mirror
+
+**Description**:
+
+Mirror function of the display driver.
+
+**Definition**:
+
+```c
+typedef enum {  
+    K_CONNECTOR_MIRROR_HOR = 1,  
+    K_CONNECTOR_MIRROR_VER,  
+    K_CONNECTOR_MIRROR_BOTH,  
+} k_connector_mirror;
+```
+
+**Members**:
+
+| Member Name             | Description                  |
+|-------------------------|------------------------------|
+| K_CONNECTOR_MIRROR_HOR  | Horizontal mirror            |
+| K_CONNECTOR_MIRROR_VER  | Vertical mirror              |
+| K_CONNECTOR_MIRROR_BOTH | Both horizontal and vertical mirror |
+
+**Notes**:
+
+None
+
+**Related Data Types and Interfaces**:
+
+None
+
+## 4. Error Codes
+
+Table 41 VO API Error Codes
+
+| Error Code  | Macro Definition         | Description              |
+|-------------|--------------------------|--------------------------|
+| 0xa00b8006  | K_ERR_VO_NULL_PTR        | Null pointer error       |
+| 0xa00b8001  | K_ERR_VO_INVALID_DEVID   | Invalid device ID        |
+| 0xa00b8002  | K_ERR_VO_INVALID_CHNID   | Invalid channel ID       |
+| 0xa00b8005  | K_ERR_VO_UNEXIST         | Video buffer does not exist |
+| 0xa00b8004  | K_ERR_VO_EXIST           | Video buffer exists      |
+| 0xa00b8003  | K_ERR_VO_ILLEGAL_PARAM   | Invalid parameter settings |
+| 0xa00b8010  | K_ERR_VO_NOTREADY        | VO not ready             |
+| 0xa00b8012  | K_ERR_VO_BUSY            | System busy              |
+| 0xa00b8007  | K_ERR_VO_NOT_CONFIG      | Configuration not allowed |
+| 0xa00b8008  | K_ERR_VO_NOT_SUPPORT     | Unsupported operation    |
+| 0xa00b8009  | K_ERR_VO_NOT_PERM        | Operation not permitted  |
+| 0xa00b800c  | K_ERR_VO_NOMEM           | Memory allocation failure |
+| 0xa00b800d  | K_ERR_VO_NOBUF           | No buffer available      |
+| 0xa00b800e  | K_ERR_VO_BUF_EMPTY       | Buffer is empty          |
+| 0xa00b800f  | K_ERR_VO_BUF_FULL        | Buffer is full           |
+| 0xa00b8011  | K_ERR_VO_BADADDR         | Invalid address          |
+| 0xa00b8012  | K_ERR_VO_BUSY            | System busy              |

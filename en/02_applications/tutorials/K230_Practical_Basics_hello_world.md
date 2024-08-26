@@ -1,105 +1,105 @@
-# K230 Practical Basics - hello world
+# K230 Practical Basics - Hello World
 
 ![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+All rights reserved ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**All rights reserved © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+No part of this document may be excerpted, copied, or disseminated in any form by any unit or individual without the written permission of the Company.
 
 <div style="page-break-after:always"></div>
 
-## overview
+## Overview
 
-This article will explain how to use the cross-compilation tool on the PC side to compile a Hello World basic program and run it on the large-core RT-Smart or small-core Linux.
+This document explains how to use a cross-compilation tool on a PC to compile a basic Hello World program and run it on a big core RT-Smart or a small core Linux.
 
-## Environment preparation
+## Environment Preparation
 
-### Hardware environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.0/K230-USIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
-- Typec USB cable * 2 at least
-- USB TypeC to Ethernet (if using TFTP loading and NFS file system)
-- One network cable
-- SD card (if booting with an SD card, or software requires access to the SD card)
+- At least 2 Type-C USB cables
+- USB Type-C to Ethernet adapter (if using TFTP loading and NFS file system)
+- One Ethernet cable
+- SD card (if using SD card boot or if software needs to access the SD card)
 
-### Software environment
+### Software Environment
 
-The toolchains are provided in the k230_sdk and are available in the following paths.
+The k230_sdk provides toolchains located at the following paths.
 
-- Big core RT-SAMRT toolchain
+- Big core RT-Smart toolchain
 
-``` shell
+```shell
 k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu
 ```
 
-- Small-core Linux toolchain
+- Small core Linux toolchain
 
-``` shell
+```shell
 k230_sdk/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0
 ```
 
-The toolchain can also be downloaded via the link below
+You can also download the toolchains from the following links:
 
-``` shell
+```shell
 wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-rv64imafdcv-lp64d-20230222.tar.bz2
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
-### Code writing
+### Code Writing
 
-Create a C file hello.c on ubuntu and add the following code
+Create a C file named `hello.c` on Ubuntu and add the following code:
 
-```C
+```c
 #include <stdio.h>
-int main (void)
+int main(void)
 {
     printf("hello world\n");
     return 0;
 }
 ```
 
-Put hello.c in the same directory as k230_sdk
+Place `hello.c` in the same directory level as `k230_sdk`.
 
-``` shell
+```shell
 canaan@develop:~/work$ ls
 hello.c   k230_sdk
 ```
 
-### Compile executable programs for small-core Linux
+### Compiling an Executable for Small Core Linux
 
-``` shell
+```shell
 k230_sdk/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin/riscv64-unknown-linux-gnu-gcc hello.c -o hello
 ```
 
-### Compile executable programs for large-core rt-smart
+### Compiling an Executable for Big Core RT-Smart
 
-``` shell
+```shell
 k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknown-linux-musl-gcc -o hello.o -c -mcmodel=medany -march=rv64imafdcv -mabi=lp64d hello.c
 
 k230_sdk/toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin/riscv64-unknown-linux-musl-gcc -o hello.elf -mcmodel=medany -march=rv64imafdcv -mabi=lp64d -T k230_sdk/src/big/mpp/userapps/sample/linker_scripts/riscv64/link.lds  -Lk230_sdk/src/big/rt-smart/userapps/sdk/rt-thread/lib -Wl,--whole-archive -lrtthread -Wl,--no-whole-archive -n --static hello.o -Lk230_sdk/src/big/rt-smart/userapps/sdk/lib/risc-v/rv64 -Lk230_sdk/src/big/rt-smart/userapps/sdk/rt-thread/lib/risc-v/rv64 -Wl,--start-group -lrtthread -Wl,--end-group
 ```
 
-### Run the program
+### Running the Program
 
-Copy the compiled hello and hello.elf to the vfat partition of the sd card (you can see an available drive letter on the PC after the sd card has flashed the image), or copy the executable program to the /sharefs directory of the little core by other means (refer to the SDK user documentation).
+Copy the compiled `hello` and `hello.elf` to the vfat partition of the SD card (you can see an accessible drive letter on the PC after burning the image to the SD card), or use other methods (refer to the SDK usage documentation) to copy the executables to the `/sharefs` directory of the small core.
 
-- After the board starts, run the test program on the little core side, and enter the console after the little core is started`root`
+- After the development board starts, run the test program on the small core. Enter `root` to access the console after the small core starts.
 
-``` shell
+```shell
 Welcome to Buildroot
 canaan login: root
 [root@canaan ~ ]#cd /sharefs
@@ -107,31 +107,31 @@ canaan login: root
 hello world
 ```
 
-- Run the test program on the big core side
+- Run the test program on the big core
 
-``` shell
+```shell
 msh /sharefs>hello.elf
 hello world
 ```
 
-### Advanced compilation of big core programs
+### Advanced Big Core Program Compilation
 
-If the big core is compiled directly with musl-gcc, the compilation parameters are more, which is very inconvenient for beginners and not easy to understand, the current SDK provides two ways for compiling big core programs, respectively scons and Makefile, here we introduce the compilation method of scons, the compilation and construction of Makefile is more complicated, not the compilation method provided by rt-smart officially, interested readers can refer to`src/big/mpp/userapps/sample`Makefile structure to compile.
+When using musl-gcc to compile for the big core directly, the compilation parameters are quite extensive, which can be inconvenient and hard to understand for beginners. The current SDK provides two methods for compiling big core programs: SCons and Makefile. Here, we introduce the SCons compilation method. The Makefile compilation build is more complex and is not the official RT-Smart compilation method. Interested readers can refer to the Makefile structure in `src/big/mpp/userapps/sample` for compilation.
 
-Go to the `k230_sdk/src/big/rt-smart/userapps`directory and create a folder named hello
+Create a folder named `hello` under `k230_sdk/src/big/rt-smart/userapps`.
 
-``` shell
+```shell
 cd k230_sdk/src/big/rt-smart/userapps
 mkdir hello
 cd hello
 ```
 
-Create the following three files
+Create the following three files:
 
 - hello.c
 - SConscript
 
-``` python
+```python
 # RT-Thread building script for component
 
 from building import *
@@ -150,32 +150,30 @@ Return('group')
 
 - SConstruct
 
-``` python
+```python
 import os
 import sys
 
 # add building.py path
-sys.path = sys.path + [os.path.join('..','..','tools')]
+sys.path = sys.path + [os.path.join('..', '..', 'tools')]
 from building import *
 
-BuildApplication('hello', 'SConscript', usr_root = '../')
-
+BuildApplication('hello', 'SConscript', usr_root='../')
 ```
 
-After that, go back to the `k230_sdk/src/big/rt-smart/`directory and configure the environment variables
+Then return to the `k230_sdk/src/big/rt-smart/` directory and configure the environment variables.
 
-``` shell
+```shell
 canaan@develop:~/k230_sdk/src/big/rt-smart$ source smart-env.sh riscv64
 Arch         => riscv64
 CC           => gcc
 PREFIX       => riscv64-unknown-linux-musl-
 EXEC_PATH    => /home/canaan/k230_sdk/src/big/rt-smart/../../../toolchain/riscv64-linux-musleabi_for_x86_64-pc-linux-gnu/bin
-
 ```
 
-Go to `k230_sdk/src/big/rt-smart/userapps`the directory and compile the program
+Go to the `k230_sdk/src/big/rt-smart/userapps` directory and compile the program.
 
-``` shell
+```shell
 canaan@develop:~/k230_sdk/src/big/rt-smart/userapps$ scons --directory=hello
 scons: Entering directory `/home/canaan/k230_sdk/src/big/rt-smart/userapps/hello'
 scons: Reading SConscript files ...
@@ -188,11 +186,11 @@ LINK hello.elf
 scons: done building targets.
 ```
 
-The compiled program is in the hello folder
+The compiled program is in the `hello` folder.
 
-``` shell
+```shell
 canaan@develop:~/k230_sdk/src/big/rt-smart/userapps$ ls hello/
 build  cconfig.h  hello.c  hello.elf  SConscript  SConstruct
 ```
 
-Hello.Elf can then be copied to the small-core Linux, and the large-core rt-smart can run the program through /sharefs
+Afterwards, you can copy `hello.elf` to the small core Linux, and the big core RT-Smart can run the program via `/sharefs`.

@@ -242,7 +242,7 @@ cd k230_sdk/src/reference/ai_poc
 **注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
 
 ```bash
-#若是没有上述依赖，执行一下命令下载
+#若是没有上述依赖，执行以下命令下载
 cd k230_sdk
 make prepare_sourcecode
 ```
@@ -300,6 +300,22 @@ k230_bin/
 ......
 ```
 
+（5）对于01studio开发板，支持编译hdmi显示和lcd显示的aidemo，编译命令如下：
+
+```shell
+./build_app.sh face_detection hdmi
+./build_app.sh face_detection lcd
+```
+
+上述命令会生成单个demo不同显示模式下的编译产物。如果想编译全部的AI Demo，编译命令如下：
+
+```shell
+./build_app.sh all hdmi
+./build_app.sh all lcd
+```
+
+上述命令会按照指定的显示模式编译所有的AI Demo。hdmi生成的编译产物位于k230_bin目录下，lcd显示模式下生成的编译产物位于k230_bin_lcd目录下。
+
 将k230_bin/整个文件夹拷贝到板子，在大核上执行sh脚本即可运行相应AI demo
 
 ```shell
@@ -345,7 +361,7 @@ cd k230_sdk/src/reference/ai_poc
 **注**：执行build_app.sh前，确保已经准备好依赖，即`k230_sdk/src/big/kmodel/ai_poc`下已经有相应kmodel、images、utils
 
 ```bash
-#若是没有上述依赖，执行一下命令下载
+#若是没有上述依赖，执行以下命令下载
 cd k230_sdk
 make prepare_sourcecode
 ```

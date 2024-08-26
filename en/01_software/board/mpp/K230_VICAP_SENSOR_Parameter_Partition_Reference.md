@@ -1,88 +1,88 @@
 # K230 VICAP SENSOR Parameter Partition Reference
 
-![cover](../../../../zh/images/canaan-cover.png)
+![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for use as a reference guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified without notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy any part or all of the content of this document, nor may it be disseminated in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document mainly guides image tuning and application developers how to create VICAP debugging parameter files for use in SPI-NOR-FLASH mode.
+This document mainly guides image tuning and application developers on how to create VICAP debugging parameter files for use in SPI NOR FLASH mode.
 
-### Reader object
+### Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
-- Image tuning engineer
+- Technical Support Engineers
+- Software Development Engineers
+- Image Tuning Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate |
-|------|------|
-|      |      |
+| Abbreviation | Description |
+|--------------|-------------|
+|              |             |
 
-### Revision history
+### Revision Record
 
-| Document version number | Modify the description                                                                                                                                   | Author        | date      |
-|------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------|-----------|
-| V1.0       | Initial edition                                                                                                                                       | Guo Shidong        | 2023/10/07  |
+| Document Version | Modification Description | Modifier | Date |
+|------------------|--------------------------|----------|------|
+| V1.0             | Initial version          | Shidong Guo | 2023/10/07 |
 
 ## 1. Overview
 
 ### 1.1 Overview
 
-In the process of real-time processing of the signal output by the sensor, the tuning parameters and calibration parameters play a key role in the ISP processing method and the restoration and enhancement of the image. By default, calibration xml, auto json, and manual json files are used as tuning parameters and calibration parameter configurations imported by VICAP runtime. In the fast startup mode, the default parameter import method is time-consuming, so it provides a scheme for importing configuration parameters by parameter partition.
+In the real-time processing of signals output by the sensor by the ISP, tuning parameters and calibration parameters play a key role in the ISP processing method and image restoration and enhancement. The SDK uses default calibration xml, auto json, and manual json files as tuning and calibration parameter configurations imported at runtime by VICAP. In the fast start mode, the default parameter import method is time-consuming, so a parameter partition import configuration scheme is provided.
 
-This document describes how to create a parameter partition and how VICAP uses it.
+This document mainly describes the method of creating parameter partitions and how VICAP uses these partitions.
 
-## 2. Production process reference
+## 2. Production Process Reference
 
 ### 2.1 Flowchart
 
-The production flow chart is as follows:
+The production flowchart is as follows:
 
-![ISP-parse-database](images/isp_database_parameter_partition.png)
+![isp param](../../../../zh/01_software/board/mpp/images/ISP_param.png)
 
-Figure 2-1 Parameter partition production flowchart
+Figure 2-1 Parameter Partition Production Flowchart
 
 The production steps are as follows:
 
-- [Step 1: Convert the header file](#221-convert-header-files)
-- [Step 2: Convert the binary](#222-converting-binaries)
-- [Step 3: How to use it](#223-usage)
+- [Step 1, Convert Header File](#221-convert-header-file)
+- [Step 2, Convert Binary File](#222-convert-binary-file)
+- [Step 3, Usage Method](#223-usage-method)
 - [Precautions](#224-precautions)
 
-### 2.2 Production steps
+### 2.2 Production Steps
 
-#### 2.2.1 Convert header files
+#### 2.2.1 Convert Header File
 
-Take senosr: IMX335, resolution: 2592x1944 as an example
+Take sensor: IMX335, resolution: 2592x1944 as an example
 
-Copy the parameter file to the directory where the conversion header file
+Copy the parameter file to the directory for converting header files
 
 ```shell
 cp k230_sdk/src/big/mpp/userapps/src/sensor/config/imx335-2592x1944.xml k230_sdk/src/big/mpp/userapps/src/vicap/src/isp/sdk/t_frameworks/t_database_c/calibration_data/
@@ -90,13 +90,13 @@ cp k230_sdk/src/big/mpp/userapps/src/sensor/config/imx335-2592x1944_auto.json k2
 cp k230_sdk/src/big/mpp/userapps/src/sensor/config/imx335-2592x1944_manual.json k230_sdk/src/big/mpp/userapps/src/vicap/src/isp/sdk/t_frameworks/t_database_c/calibration_data/
 ```
 
-Jump to the conversion operation directory (tool source code and script storage directory)
+Navigate to the conversion operation directory (tool source code and script storage directory)
 
 ```shell
 cd k230_sdk/src/big/mpp/userapps/src/vicap/src/isp/sdk/t_frameworks/t_database_c/calibration_data/
 ```
 
-Execute the Convert Header File Tool *parse_convert.py* to parse and convert the copied three configuration files into a single parameter header file (Python 3.x is recommended by the conversion tool).
+Execute the conversion header file tool *parse_convert.py*, parse and convert the three copied configuration files into a parameter header file (it is recommended to use python3.x for the conversion tool)
 
 ![parse_convert](../../../../zh/01_software/board/mpp/images/parse_convert.png)
 
@@ -125,28 +125,28 @@ static const TUNING_PARAM_T database_tuning_param =
 #endif
 ```
 
-After conversion, you will get the structure above, which consists of five parts:
+After conversion, a structure similar to the above will be obtained, consisting of five parts:
 
-Calib Data, Auto Data, and Manual Data are generated by externally specified configuration file parse
+calib data, auto data, manual data are generated by parsing the specified external configuration files
 
-Dewarp data needs to be replaced in the structure according to the actual configuration, refer to[Dewarp parameter configuration](#2224-dewarp-parameter-configuration)
+dewarp data needs to be replaced in the structure according to actual configuration, refer to [dewarp parameter configuration](#2224-dewarp-parameter-configuration)
 
-Version Info is automatically generated for the transformation tool, describing the sensor name and creation date
+version info is automatically generated by the conversion tool, describing the sensor name and creation date
 
-#### 2.2.2 Converting binaries
+#### 2.2.2 Convert Binary File
 
-The binary file is composed of four files: header, configuration parameters, padding, and dewarp parameters, considering the actual allocation size of parameter partitions, it is recommended to add up to three sets of configuration files
+The binary file is composed of four files: header, configuration parameters, padding, and dewarp parameters. Considering the actual allocation size of the parameter partition, it is recommended to add up to three sets of configuration files.
 
-- [Step 1: Header creation](#2221-header-creation)
-- [Step 2: Configure the parameter binary file creation](#2222-configuration-parameter-binary-file-creation)
-- [Step 3: Pad the file production](#2223-padding-file)
-- [Step 4: Configure the dewarp parameters](#2224-dewarp-parameter-configuration)
-- [Step 5: Merge the files](#2225-merge-files)
-- [Other: Scripted production method (recommended)](#2226-punching-into-the-parameter-partition)
+- [Step 1, Header Production](#2221-header-production)
+- [Step 2, Configuration Parameter Binary File Production](#2222-configuration-parameter-binary-file-production)
+- [Step 3, Padding File Production](#2223-padding-generation)
+- [Step 4, Dewarp Parameter Configuration](#2224-dewarp-parameter-configuration)
+- [Step 5, Merging Files](#2225-merging-files)
+- [Others, Scripted Production Method (Recommended)](#2226-scripted-production-of-binary-files)
 
-##### 2.2.2.1 Header creation
+##### 2.2.2.1 Header Production
 
-Modify the definitions of *FILENAME_00, FILENAME_01 and FILENAME_02* in *gen_database_param_bin_calib_header.c* as follows:
+Modify the definitions of FILENAME_00, FILENAME_01, FILENAME_02 in *gen_database_param_bin_calib_header.c*, as shown below:
 
 ```c
 #define FILENAME_00 "imx335-2592x1944"
@@ -154,21 +154,21 @@ Modify the definitions of *FILENAME_00, FILENAME_01 and FILENAME_02* in *gen_dat
 #define FILENAME_02 "ov9286-1280x720"
 ```
 
-If the configuration of IMX335-2592x1944 is IMX335 and the resolution is 2592x1944, the FILENAME_0X is modified to "IMX335-2592x1944" , the definition will be used as the check header when using parameter partitioning, if the check header does not match, it will be read by default using the configuration file loading method, and the corresponding warning prompt will be printed in the log, and the name of the check header definition is unique and cannot be repeated.
+The format requirement is the sensor name corresponding to the driver - width x height. For example, if the configuration of imx335-2592x1944 corresponds to the sensor name imx335 and the resolution is 2592x1944 in the driver, then modify FILENAME_0X to "imx335-2592x1944". This definition will serve as the verification header when using the parameter partition. If the verification header does not match, the default method of loading configuration files will be used, and corresponding warning messages will be printed in the log. The name defined by the verification header must be unique and cannot be duplicated.
 
-Three sets of check headers can be added, once the order is fixed, the order of parameter partitions also needs to be synchronized with the check header, and the synchronization method refers to the[binary file](#2222-configuration-parameter-binary-file-creation) made later.
+Up to three verification headers can be added. Once the order is fixed, the order of the parameter partition must also be synchronized with the verification header. The synchronization method is referred to in the subsequent [Binary File Production](#2222-configuration-parameter-binary-file-production).
 
-After modifying the definition, compile the source code into an executable program and execute it, resulting in header: sensor_cfg_calib_header.bin
+After modifying the definition, compile the source code into an executable program and execute it to obtain the header: sensor_cfg_calib_header.bin
 
 ```shell
 gcc -o main_header gen_database_param_bin_calib_header.c
-./main_header
-# obtained sensor_cfg_calib_header.bin
+./main_header 
+# Obtain sensor_cfg_calib_header.bin
 ```
 
-##### 2.2.2.2 Configuration parameter binary file creation
+##### 2.2.2.2 Configuration Parameter Binary File Production
 
-Modify the *DATABASE_SELECT* definition in *gen_database_param_bin.c* to make different configuration binaries by passing in different parameters at external compilation time, as shown in the following example:
+Modify the DATABASE_SELECT definition in *gen_database_param_bin.c*, and create different configuration binary files by passing in different parameters during external compilation, as shown below:
 
 ```c
 #if DATABASE_SELECT == 0
@@ -181,7 +181,7 @@ Modify the *DATABASE_SELECT* definition in *gen_database_param_bin.c* to make di
 #endif
 ```
 
-The number of the *DATABASE_SELECT* determines the order in which the different sensor configuration parameters are arranged, and this order needs to be synchronized with the order of the headers. In the example imx335_2592x1944_param_data.h, ov9732_param_data.h, and ov9286_param_data.h are generated by three sets of XML JSON.
+The number of DATABASE_SELECT determines the order of different sensor configuration parameters. This order needs to be synchronized with the header. In the example, imx335_2592x1944_param_data.h, ov9732_param_data.h, and ov9286_param_data.h are generated by three sets of xml and json files.
 
 Compile the source code and execute
 
@@ -197,19 +197,19 @@ gcc -o main_02 gen_database_param_bin.c $DATABASE_CFLAGS -DDATABASE_SELECT=1
 gcc -o main_03 gen_database_param_bin.c $DATABASE_CFLAGS -DDATABASE_SELECT=2
 $DATABASE_CURRENT_DIR/main_01 0
 $DATABASE_CURRENT_DIR/main_02 1
-$DATABASE_CURRENT_DIR/main_03 2
-# obtained sensor_cfg_00.bin(imx335)、sensor_cfg_01.bin(ov9732)、sensor_cfg_02.bin(ov9286)
+$DATABASE_CURRENT_DIR/main_03 2 
+# Obtain files sensor_cfg_00.bin (imx335), sensor_cfg_01.bin (ov9732), sensor_cfg_02.bin (ov9286)
 ```
 
-Compile multiple executors and execute them, and the 0 1 2 arguments passed in at execution time are the ordinal numbers in the generated binary file names.
+Compile multiple executable programs and execute them. The 0, 1, 2 parameters passed in during execution are the sequence numbers in the generated binary file names.
 
-##### 2.2.2.3 padding file
+##### 2.2.2.3 Padding Generation
 
-The purpose of the padding file is to align the subsequent dewarp parameters for ease of use, and the padding length will change according to the total length of the header + parameter structure, which is automatically generated by the script.
+The purpose of the padding file is to align the subsequent dewarp parameters for ease of use. The length of the padding will vary based on the total length of the header and parameter structure, and it is automatically generated by the script.
 
-##### 2.2.2.4 Dewarp parameter configuration
+##### 2.2.2.4 Dewarp Parameter Configuration
 
-The basic parameters of the LUT table of DeWarp are defined in the parameter partition, and the LUT file corresponding to DeWarp can be correctly found when using the partition
+The parameter partition defines the basic parameters of the dewarp LUT table. Based on this parameter, the correct dewarp corresponding LUT file can be found when using the partition.
 
 ```c
 typedef struct {
@@ -222,15 +222,15 @@ typedef struct {
 } DEWARP_SPLIT_T;
 ```
 
-has_lut: Whether there is a Dewarp lut file, this member is set to 0 to indicate that the DeWarp parameter is not required, and set to 1 to indicate that the DeWarp parameter is required
+has_lut: Indicates whether there is a dewarp LUT file. Setting this member to 0 means that dewarp parameters are not needed. Setting it to 1 means that dewarp parameters are needed.
 
-lut_offset: When the has_lut is set to 1, the member takes effect, and the value will correspond to the offset of the address of the dewarp parameter in the parameter partition, the specific calculation method is *parameter partition base address + header size + parameter structure size + padding size* , and the *parameter partition base address* is defined in *k_autoconf_comm.h* *CONFIG_MEM_SENSOR_CFG_BASE*, this definition varies depending on the hardware on which it is compiled. It can be calculated through *gen_database.sh* script provided by the SDK and printed when executed:
+lut_offset: When has_lut is set to 1, this member is effective. The value corresponds to the offset of the dewarp parameter in the parameter partition. The specific calculation method is parameter partition base address + header size + parameter structure size + padding size. The parameter partition base address is defined as *CONFIG_MEM_SENSOR_CFG_BASE* in k_autoconf_comm.h. This definition varies with different compiled hardware. It can be calculated by the *gen_database.sh* script provided by the SDK. The execution will print the result:
 
 ![calc_isp_param_data_size](../../../../zh/01_software/board/mpp/images/calc_isp_param_data_size.png)
 
-Figure 2-2 The parameter partition automatically calculates the dewarp offset
+Figure 2-2 Parameter Partition Automatically Calculates Dewarp Offset
 
-split_enable: The default setting is 0
+split_enable: Default set to 0
 
 split_horizon_line: Default 8191
 
@@ -238,18 +238,18 @@ split_vertical_line_up: Default 8191
 
 split_vertical_line_down: Default 8191
 
-The dewarp parameter file needs to specify the path in the script, see below
+The dewarp parameter file needs to specify the path in the production script, refer to the subsequent sections
 
-Examples are shown when using Dewarp and when not using DeWarp
+The following examples show the configuration when using dewarp and not using dewarp
 
 ```c
-// use dewarp configuration
+// Configuration using dewarp
 /* dewarp data */
 {
     /* has_lut */
     1,
     /* lut_offset */
-    CONFIG_MEM_SENSOR_CFG_BASE + 426528, // 426528: calc from the script
+    CONFIG_MEM_SENSOR_CFG_BASE + 426528, // 426528 is calculated by the script
     /* split_enable */
     0,
     /* split_horizon_line */
@@ -260,7 +260,7 @@ Examples are shown when using Dewarp and when not using DeWarp
     8191,
 },
 
-// not use dewarp configuration
+// Configuration not using dewarp
 /* dewarp data */
 {
     /* has_lut */
@@ -279,17 +279,17 @@ Examples are shown when using Dewarp and when not using DeWarp
 
 ```
 
-##### 2.2.2.5 Merge files
+##### 2.2.2.5 Merging Files
 
-The documents produced through 2.2.2.1 - 2.2.2.4 are as follows:
-| **File name**| **Description**                       |
-|------------|--------------------------------|
-| sensor_cfg_calib_header.bin | header file    |
-| sensor_cfg_0X.bin           | Configuration parameter file  |
-| padding.bin                 | Files used for alignment|
-| imx335-2592x1944.bin        | Dewarp parameter file, and refer to the Dewarp User Guide for the generation method|
+The files produced by steps 2.2.2.1 - 2.2.2.4 are as follows:
+| **Filename**                | **Description**          |
+|-----------------------------|--------------------------|
+| sensor_cfg_calib_header.bin | Header file              |
+| sensor_cfg_0X.bin           | Configuration parameter files |
+| padding.bin                 | File for alignment       |
+| imx335-2592x1944.bin        | Dewarp parameter file, refer to the dewarp usage guide for generation method |
 
-Combine the above files to get the binary sensor_cfg.bin that is finally used for parameter partitioning **
+Merge the above files to get the final binary file *sensor_cfg.bin* for the parameter partition.
 
 ```shell
 cat sensor_cfg_calib_header.bin \
@@ -299,11 +299,11 @@ cat sensor_cfg_calib_header.bin \
     ../../../../../../../sensor/dewarp/imx335-2592x1944.bin > sensor_cfg.bin
 ```
 
-In order, the last merged file is the dewarp parameter file generated in k230_sdk/src/big/mpp/userapps/src/sensor/dewarp, if you add a new dewarp parameter file, you can append it at the end in order.
+In order, the last merged file is the dewarp parameter file generated in k230_sdk/src/big/mpp/userapps/src/sensor/dewarp. If new dewarp parameter files are added, they can be appended at the end in sequence.
 
-##### 2.2.2.6 Scripting binary files
+##### 2.2.2.6 Scripted Production of Binary Files
 
-The SDK provides semi-automated scripts for the concatenation process 2.2.2.1 - 2.2.2.5 named *gen_database.sh*, and users can directly compile the SDK by executing the source code definition of header, dewarp, and parameter parsing after completing the source code definition of header, dewarp, and parameter parsing.
+The SDK provides a semi-automated script *gen_database.sh* that links processes 2.2.2.1 - 2.2.2.5. After completing the source code definitions for header, dewarp, and parameter parsing, users can execute this script to produce the binary file, or even compile the SDK directly without manually executing the script.
 
 ```shell
 #!/bin/sh
@@ -315,7 +315,7 @@ DATABASE_CFLAGS="-I$DATABASE_CURRENT_DIR/../include \
  -I$DATABASE_CURRENT_DIR/../../t_mxml_c/mxml-3.3.1/ \
  -I$DATABASE_CURRENT_DIR/../../../../../../../../../include/comm"
 
-# DATABASE_SELECT 0: imx335 2592x1944, 1: ov9732 1280x720, 2: ov9286 1280x720, ...
+DATABASE_SELECT 0: imx335 2592x1944, 1: ov9732 1280x720, 2: ov9286 1280x720, ...
 echo -n
 
 gcc -o main_01 gen_database_param_bin.c $DATABASE_CFLAGS -DDATABASE_SELECT=0
@@ -347,19 +347,20 @@ cat sensor_cfg_calib_header.bin\
     sensor_cfg_02.bin\
     padding.bin\
     ../../../../../../../sensor/dewarp/imx335-2592x1944.bin > sensor_cfg.bin
+
 ```
 
-##### 2.2.2.6 Punching into the parameter partition
+##### 2.2.2.6 Applying Parameter Partition
 
-After the binary file is made, you need to put the file in the parameter partition storage location, which is completed by the SDK compilation script, and does not require users to operate by themselves. You only need to make a file in k230_sdk/src/big/mpp/userapps/src/vicap/src/isp/sdk/t_frameworks/t_database_c/calibration_data/.
+After creating the binary file, it needs to be placed in the parameter partition storage location. This operation is completed by the SDK compilation script and does not require user intervention. You only need to create the file in k230_sdk/src/big/mpp/userapps/src/vicap/src/isp/sdk/t_frameworks/t_database_c/calibration_data/ for it to be automatically included during compilation.
 
-#### 2.2.3 Usage
+#### 2.2.3 Usage Method
 
-After completing the correct production process, it is used through the API provided by VICAP
+After completing the correct production process, use the API provided by VICAP.
 
-【Description】ViCap parses the mode of configuration parameters
+**Note**: VICAP configuration parameter parsing modes
 
-【Definition】
+**Definition**:
 
 ```c
 typedef enum {
@@ -368,54 +369,54 @@ typedef enum {
 } k_vicap_database_parse_mode;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**                       | value   | **Description**                    |
-|------------------------------------| ---- |-----------------------------|
-| VICAP_DATABASE_PARSE_XML_JSON      | 0    | Use XML, Auto JSON, Manual JSON modes|
-| VICAP_DATABASE_PARSE_HEADER        | 1    | Use the parameter partition loading mode  |
+| **Member Name**               | Value | **Description**                          |
+|-------------------------------|-------|------------------------------------------|
+| VICAP_DATABASE_PARSE_XML_JSON  | 0     | Use xml, auto json, manual json mode     |
+| VICAP_DATABASE_PARSE_HEADER    | 1     | Use parameter partition loading mode     |
 
-【Note】
-Only 0 and 1 are internally validated, and other values are invalid
+**Notes**:
+Only 0 and 1 are validated internally, other values are invalid.
 
-【Note】vicap sets the parameter loading mode
+**Description**: VICAP sets parameter loading mode
 
-【Description】
+**Description**:
 
-According to the dev_num, set the default value of different vicap devices to load ISP parameters, which is 0
+Set different VICAP devices to load ISP parameters based on dev_num, default is 0.
 
-【Syntax】
+**Syntax**:
 
 k_s32 kd_mpi_vicap_set_database_parse_mode(k_vicap_dev dev_num, k_vicap_database_parse_mode parse_mode)
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**       | **Input/output** |
-|--------------|----------------|---------------|
-| dev_num      | VICAP device number    | input          |
-| parse_mode   | Parameter loading mode   | input          |
+| **Parameter Name** | **Description** | **Input/Output** |
+|--------------------|-----------------|------------------|
+| dev_num            | VICAP device number | Input       |
+| parse_mode         | Parameter loading mode | Input   |
 
-【Return value】
+**Return Value**:
 
-| **Return value** | **Description**               |
-|------------|------------------------|
-| positive value       | Succeed. Returns the device descriptor   |
-| Negative       | Failed, refer to Error Code Definition. |
+| **Return Value** | **Description**            |
+|------------------|----------------------------|
+| Positive Value   | Success. Returns device descriptor |
+| Negative Value   | Failure, refer to error codes.     |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
 
-【Note】
+**Note**:
 
-The call needs to be completed before kd_mpi_vicap_init
+Must be called before kd_mpi_vicap_init.
 
-【Example】
+**Example**:
 
 ```c
 typedef enum {
@@ -436,9 +437,9 @@ if (ret) {
 
 #### 2.2.4 Precautions
 
-1. When generating the parameter header file, the structure of dewarp is the default value, which needs to be filled in according to the actual situation, and the offset value is calculated, and the offset value can be automatically calculated by executing *gen_database.sh* , and the corresponding position is filled in after calculation
-1. *gen_database_param_bin.c* Decide which set of header files to include and make them into parameter files based on the value of the compilation option definition *gcc -D DATABASE_SELECT*, in the same order as the sequence numbers defined in the header
-1. The parameter partitioning function is currently only available in SPI NOR Flash mode, and other modes have no parameter partitioning and cannot be used even if loaded
-1. The definition format of the *FILENAME_0X* in the header production source code is: *sensor_name-width x height*, the header will be verified when used inside VICAP, and the check header is generated by splicing inside VICAP for comparison, and the format of the check header is *sensor_name-input_widthxinput_height* used in the driver configuration
-1. The conversion tool matches the calibrated XML, Auto JSON, Manual JSON, and VICAP versions, and different versions are not compatible
-1. When using parameter partitioning, VICAP will check the parameter partition according to the currently used sensor configuration and the set parsing mode, and when the verification is successful, it will take out the set of parameters for loading without additional user settings. When the check header comparison fails, it automatically switches back to the default configuration parameter parse mode
+1. When generating the parameter header file, the dewarp structure is default. Fill in based on actual conditions and calculate the offset. The offset can be automatically calculated by executing *gen_database.sh* and then filled into the corresponding position.
+1. *gen_database_param_bin.c* uses the gcc -D compilation option to define the value of DATABASE_SELECT to determine which set of header files to include and convert into parameter files. The order must match the sequence number defined in the header.
+1. The parameter partition function is currently only used in SPI NOR FLASH mode. Other modes do not have parameter partitions, and even if loaded, they cannot be used.
+1. In the header production source code, the definition format for FILENAME_0X is: sensor_name-width x height. This header will be verified internally when used by VICAP. VICAP uses a concatenation method to generate the verification header for comparison. The verification header format is the sensor_name used in the driver configuration - input width x input height.
+1. The conversion tool and calibration xml, auto json, manual json, and VICAP versions must match. Different versions are not compatible.
+1. When using parameter partitions, VICAP will automatically verify the parameter partition based on the current sensor configuration and the set parsing mode. If the verification is successful, it will extract the parameters for loading without additional user settings. If the verification header comparison fails, it will automatically switch back to the default configuration parameter parsing mode.

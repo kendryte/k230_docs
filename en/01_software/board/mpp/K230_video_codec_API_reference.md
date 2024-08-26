@@ -1,27 +1,27 @@
-# K230 video codec API reference
+# K230 Video Encoding and Decoding API Reference
 
 ![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliated companies. All or part of the products, services, or features described in this document may not be within the scope of your purchase or usage. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for guidance and reference.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+The content of this document may be updated or modified periodically without any notice due to product version upgrades or other reasons.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/mpp/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Information Technology Co., Ltd. and its affiliated companies. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy any part or all of the content of this document, or disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## contents
+## Table of Contents
 
 [TOC]
 
@@ -29,269 +29,271 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document describes the functions and usage of the video codec module.
+This document mainly introduces the functions and usage of the video encoding and decoding module.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (guide) is mainly applicable to the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate |
-|------|------|
-|      |      |
-|      |      |
+| Abbreviation | Description |
+|--------------|-------------|
+|              |             |
+|              |             |
 
-### Revision history
+### Revision History
 
-| Document version number | Author | date | Modify the description |
-|---|---|---|---|
-| V1.0       |Yan Cui | 2023.03.10 | Init edition  |
-| V1.1       |Yan Cui | 2023.03.31 | 1. Add 2D setting/acquisition operation mode interface kd_mpi_venc_set_2d_mode, kd_mpi_venc_get_2d_mode 2. Modify 2D parameter setting/acquisition interface, kd_mpi_venc_set_2d_osd_param, kd_mpi_venc_get_2d_osd_param 3. Added interface for setting image format conversion coefficient in 2D operation kd_mpi_venc_set_2d_set_custom_coef 4. kd_mpi_venc_set_2d_set_custom_coef delete the pic_format properties in the encoder property structure k_venc_attr |
-| V1.1.1     |Yan Cui | 2023.04.11 |1. Added encoding image rotation setting/acquisition interface  kd_mpi_venc_set_rotaion, kd_mpi_venc_get_rotaion 2. Added 2D frame property setting/acquisition interface kd_mpi_venc_set_2d_border_param. kd_mpi_venc_get_2d_border_param 3. Delete the 2D operation attribute structure`k_venc_2d_attr` 4. Add OSD background layer format description 5. Add some MAPI function interfaces and data types, referenct to Section 4 MAPI. |
-| V1.2       |Yan Cui | 2023.04.27 | 1. Modify the linewidth parameter of the 2D frame structure k_venc_2d_border_attr 2. Modify the 2D User-Defined Conversion coefficient API name as kd_mpi_venc_set_2d_custom_coef 3. Modify the conversion factor parameter type for the kd_mpi_venc_set_2d_custom_coef. 4. Add the interface to obtain the conversion coefficient kd_mpi_venc_get_2d_custom_coef 5. Add gamut settings and get interface kd_mpi_venc_set_2d_color_gamut, kd_mpi_venc_get_2d_color_gamut 6. Modify the rotation angle parameters of the kd_mpi_venc_set_rotaion. 7. Modify the input format of JPEG in the video encoding function description |
-| V1.2.1     |Yan Cui | 2023-04-28 | 1. Add GOP attribute to k_venc_chn_attr |
-| V1.2.2     |Yan Cui | 2023-05-24 | 1. Add image flipping settings/acquisition interface kd_mpi_venc_set_mirror, kd_mpi_venc_get_mirror 2. Added IDR frame enable interface kd_mpi_venc_enable_idr |
-| V1.3       |Yan Cui |  2023-05-25  | 1. Add IDR frame enable interface kd_mapi_venc_request_idr in mapi|
-| V1.3.1       |Yan Cui |  2023-06-14  | 1. Add MPI to set the decoding downscale. kd_mpi_vdec_set_downscale |
-| V1.3.2       |Yan Cui |  2023-06-19  | 1. Modification kd_mapi_venc_request_idr 2. Add kd_mpi_venc_request_idr, kd_mapi_venc_enable_idr 3. Add H.265 SAO settings and obtain interface kd_mpi_venc_set_h265_sao, kd_mpi_venc_get_h265_sao 4. Add deblocking setting/getting interface kd_mpi_venc_set_dblk, kd_mpi_venc_get_dblk 5. Add ROI interface kd_mpi_venc_set_roi_attr and kd_mpi_venc_get_roi_attr |
-| V1.3.3       |Yan Cui |  2023-06-20  | 1. Add H.264/H.265 entropy coding mode setting/obtain interface kd_mpi_venc_set_h264_entropy, kd_mpi_venc_get_h264_entropy, kd_mpi_venc_set_h265_entropy, kd_mpi_venc_get_h265_entropy 2. Rename enumeration k_venc_rotation as k_rotation 3. Add decoding rotation setting interface kd_mpi_vdec_set_rotation |
-| V1.3.4 |Yan Cui | 2023-06-30 | Modify codec and 2D supported data types |
+| Document Version | Author | Date       | Modification Description |
+|------------------|----------|------------|--------------------------|
+| V1.0             | System Software Department | 2023.03.10 | Initial version |
+| V1.1             | System Software Department | 2023.03.31 | 1. Added 2D mode setting/getting interfaces kd_mpi_venc_set_2d_mode, kd_mpi_venc_get_2d_mode 2. Modified 2D parameter setting/getting interfaces kd_mpi_venc_set_2d_osd_param, kd_mpi_venc_get_2d_osd_param 3. Added interface for setting image format conversion coefficients in 2D computation kd_mpi_venc_set_2d_set_custom_coef 4. Removed pic_format attribute from encoder attribute structure k_venc_attr |
+| V1.1.1           | System Software Department | 2023.04.11 | 1. Added encoding image rotation setting/getting interfaces kd_mpi_venc_set_rotaion, kd_mpi_venc_get_rotaion 2. Added 2D border attribute setting/getting interfaces kd_mpi_venc_set_2d_border_param, kd_mpi_venc_get_2d_border_param 3. Deleted 2D computation attribute structure `k_venc_2d_attr` 4. Added description of OSD background layer format 5. Added some MAPI function interfaces and data types, specifically in Chapter 4 MAPI |
+| V1.2             | System Software Department | 2023.04.27 | 1. Modified line width parameter of 2D border structure k_venc_2d_border_attr 2. Modified 2D user-defined conversion coefficient API name kd_mpi_venc_set_2d_custom_coef 3. Modified conversion coefficient parameter type of kd_mpi_venc_set_2d_custom_coef 4. Added interface for getting conversion coefficients kd_mpi_venc_get_2d_custom_coef 5. Added color gamut setting/getting interfaces kd_mpi_venc_set_2d_color_gamut, kd_mpi_venc_get_2d_color_gamut 6. Modified rotation angle parameter of kd_mpi_venc_set_rotaion 7. Modified input format description of JPEG in video encoding function |
+| V1.2.1           | System Software Department | 2023-04-28 | 1. Added GOP attribute in k_venc_chn_attr |
+| V1.2.2           | System Software Department | 2023-05-24 | 1. Added image flip setting/getting interfaces kd_mpi_venc_set_mirror, kd_mpi_venc_get_mirror 2. Added IDR frame enable interface kd_mpi_venc_enable_idr |
+| V1.3             | System Software Department | 2023-05-25 | 1. Added IDR frame enable interface in MAPI kd_mapi_venc_request_idr |
+| V1.3.1           | System Software Department | 2023-06-14 | 1. Added mpi setting for decoding output downscaled image kd_mpi_vdec_set_downscale |
+| V1.3.2           | System Software Department | 2023-06-19 | 1. Modified kd_mapi_venc_request_idr 2. Added kd_mpi_venc_request_idr, kd_mapi_venc_enable_idr 3. Added H.265 SAO setting/getting interfaces kd_mpi_venc_set_h265_sao, kd_mpi_venc_get_h265_sao 4. Added deblocking setting/getting interfaces kd_mpi_venc_set_dblk, kd_mpi_venc_get_dblk 5. Added ROI interfaces kd_mpi_venc_set_roi_attr, kd_mpi_venc_get_roi_attr |
+| V1.3.3           | System Software Department | 2023-06-20 | 1. Added H.264/H.265 entropy coding mode setting/getting interfaces kd_mpi_venc_set_h264_entropy, kd_mpi_venc_get_h264_entropy, kd_mpi_venc_set_h265_entropy, kd_mpi_venc_get_h265_entropy 2. Renamed k_venc_rotation enumeration to k_rotation 3. Added decoding rotation setting interface kd_mpi_vdec_set_rotation |
+| V1.3.4           | System Software Department | 2023-06-30 | Modified data types supported by encoding, decoding, and 2D |
 
 ## 1. Overview
 
 ### 1.1 Overview
 
-Video codec module, support H.264, H.265, JPEG codec. The VENC module implements 2D arithmetic and encoding functions, both of which can be enabled simultaneously or separately. The VDEC module implements the decoding function.
+The video encoding and decoding module supports H.264, H.265, and JPEG encoding and decoding. The VENC module implements 2D computation and encoding functions, which can be enabled simultaneously or used separately. The VDEC module implements decoding functions.
 
-VENC, VENC+2D, and VDEC support system binding, and system binding is not supported when 2D is operated alone.
+VENC, VENC+2D, and VDEC support system binding, while 2D computation alone does not support system binding.
 
 ### 1.2 Function Description
 
-#### 1.2.1 Video Coding
+#### 1.2.1 Video Encoding
 
-![encode flow](./images/9f7f41ea96a97ae9bf514535f6af1622.jpeg)
+![encode flow](../../../../zh/01_software/board/mpp/images/9f7f41ea96a97ae9bf514535f6af1622.jpeg)
 
-Figure 1-1 Encoding data flow diagram
+Figure 1-1 Encoding Data Flow Diagram
 
-A typical encoding process includes the reception of the input image, the overlay of the image content, the encoding of the image, and the output of the code stream.
+The typical encoding process includes receiving the input image, masking and overlaying the image content, encoding the image, and outputting the code stream.
 
-The coding module is composed of VENC receiving channel, coding channel, 2D receiving channel and 2D operation module. The coding power and 2D computing power are shown in the table below.
+The encoding module consists of the VENC receiving channel, encoding channel, 2D receiving channel, and 2D computation module. The encoding and 2D computation capabilities are shown in the table below.
 
-The path shown by the green arrow in the encoded data flow diagram is a separate 2D operation. The path shown by the blue arrow is the flow of separate encoding operations. The path shown by the purple arrow is the process of doing 2D operations before coding.
+The green arrows in the encoding data flow diagram indicate the process of 2D computation alone. The blue arrows indicate the process of encoding alone. The purple arrows indicate the process of 2D computation followed by encoding.
 
-Table 1-1 Coding capabilities
+Table 1-1 Encoding Capabilities
 
 | | H264 | HEVC | JPEG |
 |---|---|---|---|
-| Input format | YUV420 NV12 8bit, ARGB8888, BGRA8888 | YUV420 NV12 8bit, ARGB8888, BGRA8888 | YUV420 NV12 8bit, YUV422 UYVY 8bit, ARGB8888, BGRA8888 |
-| Output format | YUV420 H.264 Baseline Profile(BP) ; H.264 Main Profile(MP) ; H.264 High Profile(HP);  H.264 High 10 Profile(HP) | YUV420 HEVC (H.265) Main ; HEVC (H.265) Main 10 Profile | YUV420 and YUV422 JPEG baseline sequential |
-| Maximum resolution | 3840x2160 | 3840x2160 | 8192x8192 |
-| Bitrate control mode | CBR/VBR/FIXQP | CBR/VBR/FIXQP | FIXQP |
+| Input Format | YUV420 NV12 8bit, ARGB8888, BGRA8888 | YUV420 NV12 8bit, ARGB8888, BGRA8888 | YUV420 NV12 8bit, YUV422 UYVY 8bit, ARGB8888, BGRA8888 |
+| Output Format | YUV420 H.264 Baseline Profile(BP); H.264 Main Profile(MP); H.264 High Profile(HP); H.264 High 10 Profile(HP) | YUV420 HEVC (H.265) Main; HEVC (H.265) Main 10 Profile | YUV420 and YUV422 JPEG baseline sequential |
+| Maximum Resolution | 3840x2160 | 3840x2160 | 8192x8192 |
+| Bitrate Control Mode | CBR/VBR/FIXQP | CBR/VBR/FIXQP | FIXQP |
 | GOP | I/P frames | I/P frames | - |
-| Encode the channel | 4-way | 4-way | 4-way |
+| Encoding Channels | 4 channels | 4 channels | 4 channels |
 
 Note: H264/HEVC/JPEG share 4 channels.
 
-Table 1-2 2D computing capabilities
+Table 1-2 2D Computation Capabilities
 
-| Video input format | Video output format | Overlay data format | Maximum resolution |
-|---|---|---|---|
-| I420/NV12/ARGB8888/BGRA8888 | Same input format | ARGB8888/ARGB4444/ARGB1555 | 3840x2160  |
+| Video Input Format | Video Output Format | Overlay Data Format | Maximum Resolution |
+|--------------------|---------------------|---------------------|--------------------|
+| I420/NV12/ARGB8888/BGRA8888 | Same as input format | ARGB8888/ARGB4444/ARGB1555 | 3840x2160 |
 
-##### 1.2.1.1 Encoded channels
+##### 1.2.1.1 Encoding Channel
 
-The encoding channel is the basic container that holds multi user settings for the encoding channel and manages multi internal resources of the encoding channel. The encoding channel completes the function of image overlay and encoding. The 2D module realizes image overlay operations and the encoder module realizes image encoding, and they separately or in cooperation.
+The encoding channel serves as the basic container, storing various user settings and managing various internal resources of the encoding channel. The encoding channel completes the functions of image overlay and encoding. The 2D module performs image overlay computation, and the encoder module performs image encoding. Both can be used separately or in conjunction.
 
-![encode channel](./images/d8ea12750bef3150afebf98c8a4563fd.jpeg)
+![encode channel](../../../../zh/01_software/board/mpp/images/d8ea12750bef3150afebf98c8a4563fd.jpeg)
 
-Figure 1-2 Encoding channel
+Figure 1-2 Encoding Channel
 
-##### 1.2.1.2 Bitrate control
+##### 1.2.1.2 Bitrate Control
 
-The bitrate controller controls the encoding bitrate.
+The bitrate controller manages the control of the encoding bitrate.
 
-From the perspective of informatics, the lower the compression ratio of the image, the higher the quality of the compressed image; the higher the compression ratio of the image, the lower the quality of the compressed image. In the case of scene changes, the encoding code rate will fluctuate greatly if the image quality is stable, and if the encoding code rate is stable, the image quality will fluctuate greatly.
+From an information theory perspective, the lower the compression ratio of an image, the higher the quality of the compressed image; the higher the compression ratio, the lower the quality of the compressed image. Under varying scene conditions, if stable image quality is pursued, the encoding bitrate will fluctuate significantly; if stable encoding bitrate is pursued, the image quality will fluctuate significantly.
 
-H264/H265 encoding supports three bitrate control modes: CBR, VBR and FIXQP three bitrate control modes.
+H264/H265 encoding supports CBR, VBR, and FIXQP bitrate control modes.
 
 MJPEG only supports FIXQP mode.
 
 ###### 1.2.1.2.1 CBR
 
-(Constant Bit Rate) A fixed bit rate. That is, the coding bitrate is guaranteed to be stable during the bitrate statistics time.
+(Constant Bit Rate) Fixed bitrate. Ensures stable encoding bitrate within the bitrate statistics time.
 
 ###### 1.2.1.2.2 VBR
 
-VBR (Variable Bit Rate) variable bit rate, that is, allows the encoding bit rate to fluctuate during the bitrate statistical time, so as to ensure the smooth quality of the encoded image.
+(Variable Bit Rate) Allows bitrate fluctuations within the bitrate statistics time to ensure stable image quality.
 
 ###### 1.2.1.2.3 FIXQP
 
-FIXQP fixed QP value. During the bitrate statistics time, all macroblock QP values of the encoded images are the same, and the QP values set by the user are used.
+Fixed QP value. Within the bitrate statistics time, all macroblock QP values of the encoded image are the same, using the user-set image QP value.
 
-##### 1.2.1.3 GOP structure
+##### 1.2.1.3 GOP Structure
 
-This module only supports I-frames and P-frames
+This module only supports I-frames and P-frames.
 
-##### 1.2.1.4 2D operations
+##### 1.2.1.4 2D Computation
 
-The 2D computing module can realize the OSD overlay of image data, and the OSD mode can realize 8 regions image overlay, and each region does not overlap. The supported OSD formats are: ARGB4444/ARGB1555/ARGB8888.
+The 2D computation module can achieve OSD overlay on image data. The OSD mode can achieve overlay of 8 regions, with no overlap between regions. Supported OSD formats are: ARGB4444/ARGB1555/ARGB8888.
 
-###### 1.2.1.4.1 Calculation of 2D conversion coefficients
+###### 1.2.1.4.1 2D Conversion Coefficient Calculation
 
-During the OSD overlay operation, if the format of the input video is YUV, the OSD layer needs to convert RGB to YUV. The kernel state has a set of default conversion factors, and users can customize a set of 12-bit conversion factors if needed. The conversion coefficient is obtained by the conversion formula of RGB to YUV.
+During OSD overlay computation, if the input video format is YUV, the OSD layer needs to perform RGB to YUV conversion. The kernel has a set of default conversion coefficients. If the user needs to customize a set of 12-bit conversion coefficients, they can be obtained from the RGB to YUV conversion formula.
 
-It is known that the conversion formula of RGB to YUV is as follows:
+The known RGB to YUV conversion formula is as follows:
 
 ![osd formula](../../../../zh/01_software/board/mpp/images/osd_formula.png)
 
-Then, the coefficient in the 3\*3 matrix is rounded to get the corresponding conversion coefficient after multiplying by 256, and the value in the 3\*1 matrix is the corresponding conversion coefficient.
+The coefficients in the 3x3 matrix are obtained by multiplying by 256 and rounding to the nearest integer, and the values in the 3x1 matrix are the corresponding conversion coefficients.
 
-Taking BT709 LIMITED as an example, the conversion formula of RGB-\>YUV is:
+For example, for BT709 LIMITED, the RGB to YUV conversion formula is:
 
 Y = 0.1826\*R + 0.6142\*G + 0.0620\*B + 16
 
-SD = -0.1007\*R-0.3385\*G+0.4392\*B+128
+U = -0.1007\*R - 0.3385\*G + 0.4392\*B + 128
 
 V = 0.4392\*R - 0.3990\*G - 0.0402\*B + 128
 
-The conversion factor is: { 47, 157, 16, 16, -26, -86, 112, 128, 112, -102, -10, 128 }
+The conversion coefficients are: { 47, 157, 16, 16, -26, -86, 112, 128, 112, -102, -10, 128 }
 
-###### 1.2.1.4.2 Configuration of 2D conversion coefficients
+###### 1.2.1.4.2 2D Conversion Coefficient Configuration
 
-The 2D conversion factor can be configured via the user-defined coefficient[interface kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef)and the color gamut configuration interface[kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut), either by selecting one of the two interfaces. If neither interface is called before the operation begins, the default coefficient is used for gamut conversion.
+2D conversion coefficients can be configured through the user-defined coefficient interface [kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef) and the color gamut configuration interface [kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut). Either interface can be used for configuration. If neither interface is called before the computation starts, the default coefficients will be used for color gamut conversion.
 
-##### 1.2.1.5 Restrictions
+##### 1.2.1.5 Limitations
 
 Encoding operations have the following limitations:
 
-1. If the input data format is YUV420, the physical start addresses of the image data of Y, U, and V components must be 4k aligned.
-1. If the input data format is NV12, the physical start address of the image data needs to be 4k aligned with the image data for Y and UV data.
+1. If the input data format is YUV420, the physical starting address of the image data for each component (Y, U, V) must be 4k aligned.
+1. If the input data format is NV12, the physical starting address of the image data for Y and UV must be 4k aligned.
 
 2D operations have the following limitations:
 
-1. The physical start address of the source image as well as the destination image in the DDR should be guaranteed to be 8byte align.
-1. Images, OSDs, and borders are only supported with even sizes.
-1. The src and dst addresses of the video data in the overlay and frame operations must be the same.
+1. The physical starting address of the source and destination images in DDR must be 8-byte aligned.
+1. The dimensions of the image, OSD, and frame in the overlay and frame operations must be even numbers.
+1. The src and dst addresses of video data in overlay and frame operations must be the same.
 
-The decoding operation has the following limitations:
+Decoding operations have the following limitations:
 
-1. The physical start address of each frame of input data requires 4K alignment.
+1. The physical starting address of the input data for each frame must be 4k aligned.
 
-##### 1.2.1.6 Examples of coding application
+##### 1.2.1.6 Typical Encoding Application Example
 
-![venc sample flow](./images/e57bfe4e5657980663f22e7cdef1f182.jpeg)
+![venc sample flow](../../../../zh/01_software/board/mpp/images/e57bfe4e5657980663f22e7cdef1f182.jpeg)
 
-Figure 1-3 Flowchart of typical coding application
+Figure 1-3 Typical Encoding Application Scenario Flow Diagram
 
-#### 1.2.2 Video decoding
+### 1.2.2 Video Decoding
 
-Table 12 VPU decoding capabilities
+Table 12 VPU Decoding Capabilities
 
 | | H264 | HEVC | JPEG |
 |:--|:--|:--|:--|
-| Input format | H.264 Baseline; H.264 Main; H.264 High; H.264 High10; 支持interlaced stream | HEVC (H.265) Main/Main10 | JPEG, baseline sequential |
-| Output format | YUV420 NV12 | YUV420 NV12 | YUV422 UYVY, YUV420 NV12 |
-| Decoding channel | 4-way | 4-way | 4-way |
+| Input Format | H.264 Baseline; H.264 Main; H.264 High; H.264 High10; supports interlaced stream | HEVC (H.265) Main/Main10 | JPEG, baseline sequential |
+| Output Format | YUV420 NV12 | YUV420 NV12 | YUV422 UYVY, YUV420 NV12 |
+| Decoding Channels | 4 channels | 4 channels | 4 channels |
 
 Note: H264/HEVC/JPEG share 4 channels.
 
 VDEC supports streaming mode:
 
-- Streaming (K_VDEC_SEND_MODE_STREAM): Users can send any length of code stream to the decoder each time, and the decoder completes the identification process of one frame code stream internally. It should be noted that for H.264/H.265, the end of the current frame stream can only be recognized when the next frame stream is received, so in this transmit mode, enter a frame of H.264/H.265 stream, and you cannot expect to start decoding the image immediately.
+- Streaming Mode (K_VDEC_SEND_MODE_STREAM): Users can send any length of code stream to the decoder each time, and the decoder will internally complete the identification process of one frame of the code stream. Note that for H.264/H.265, the end of the current frame code stream can only be identified after receiving the next frame code stream, so in this sending mode, if you input one frame of H.264/H.265 code stream, you cannot expect the image decoding to start immediately.
 
-##### 1.2.2.1 Examples of decoding applications
+#### 1.2.2.1 Typical Decoding Application Example
 
-![vdec sample flow](./images/e49f8a05613f3b2524e3dc075009146e.jpeg)
+![vdec sample flow](../../../../zh/01_software/board/mpp/images/e49f8a05613f3b2524e3dc075009146e.jpeg)
 
-Figure 1-3 Flowchart of typical coding application scenarios
+Figure 1-3 Typical Encoding Application Scenario Flow Diagram
 
 ## 2. API Reference
 
-### 2.1 Video Coding
+### 2.1 Video Encoding
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn): Create an encoding channel.
-- [kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn):Destory an encoding channel.
-- [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn): Turn on the encoding channel to receive the input image.
-- [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn): Stop the encoding channel from receiving the input image.
-- [kd_mpi_venc_query_status](#215-kd_mpi_venc_query_status): Query the encoding channel status.
-- [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream): Obtain the encoded code stream.
-- [kd_mpi_venc_release_stream](#217-kd_mpi_venc_release_stream):Release encodeing frame.
+- [kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn): Destroy an encoding channel.
+- [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn): Start the encoding channel to receive input images.
+- [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn): Stop the encoding channel from receiving input images.
+- [kd_mpi_venc_query_status](#215-kd_mpi_venc_query_status): Query the status of the encoding channel.
+- [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream): Get the encoded stream.
+- [kd_mpi_venc_release_stream](#217-kd_mpi_venc_release_stream): Release the stream buffer.
 - [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame): Support users to send raw images for encoding.
-- [kd_mpi_venc_set_rotaion](#219-kd_mpi_venc_set_rotaion): Set the encoded image rotation angle.
-- [kd_mpi_venc_get_rotaion](#2110-kd_mpi_venc_get_rotaion): Gets the rotation angle of the encoded image.
-- [kd_mpi_venc_set_mirror](#2111-kd_mpi_venc_set_mirror): Set the encoded image rotation angle.
-- [kd_mpi_venc_get_mirror](#2112-kd_mpi_venc_get_mirror): Get the encoded image flip method.
-- [kd_mpi_venc_enable_idr](#2113-kd_mpi_venc_enable_idr)to generate IDR frames based on GOP intervals.
-- [kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode): Set the 2D calculation mode.
-- [kd_mpi_venc_get_2d_mode](#2115-kd_mpi_venc_get_2d_mode): Get the 2D operation mode.
-- [kd_mpi_venc_set_2d_osd_param](#2116-kd_mpi_venc_set_2d_osd_param): Set the region properties of the OSD in 2D operations.
-- [kd_mpi_venc_get_2d_osd_param](#2117-kd_mpi_venc_get_2d_osd_param): Get the region attribute of the OSD specified in the 2D operation.
-- [kd_mpi_venc_set_2d_border_param](#2118-kd_mpi_venc_set_2d_border_param): Set the frame properties in 2D operations.
-- [kd_mpi_venc_get_2d_border_param](#2119-kd_mpi_venc_get_2d_border_param): Get the frame properties in 2D operations.
-- [kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef): Set the image format conversion coefficient in 2D operations.
-- [kd_mpi_venc_get_2d_custom_coef](#2121-kd_mpi_venc_get_2d_custom_coef): Get the image format conversion coefficient in 2D operation.
-- [kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut): Set the color gamut for 2D operations.
-- [kd_mpi_venc_get_2d_color_gamut](#2123-kd_mpi_venc_get_2d_color_gamut): Get the color gamut of 2D operations
-- [kd_mpi_venc_attach_2d](#2124-kd_mpi_venc_attach_2d): Attach 2D operations with venc.
-- [kd_mpi_venc_detach_2d](#2125-kd_mpi_venc_detach_2d): Detach 2D operations from venc.
+- [kd_mpi_venc_set_rotation](#219-kd_mpi_venc_set_rotation): Set the rotation angle of the encoded image.
+- [kd_mpi_venc_get_rotation](#2110-kd_mpi_venc_get_rotation): Get the rotation angle of the encoded image.
+- [kd_mpi_venc_set_mirror](#2111-kd_mpi_venc_set_mirror): Set the rotation angle of the encoded image.
+- [kd_mpi_venc_get_mirror](#2112-kd_mpi_venc_get_mirror): Get the mirroring method of the encoded image.
+- [kd_mpi_venc_enable_idr](#2113-kd_mpi_venc_enable_idr): Enable IDR frame, generating IDR frames according to the GOP interval.
+- [kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode): Set the 2D computation mode.
+- [kd_mpi_venc_get_2d_mode](#2115-kd_mpi_venc_get_2d_mode): Get the 2D computation mode.
+- [kd_mpi_venc_set_2d_osd_param](#2116-kd_mpi_venc_set_2d_osd_param): Set the region attributes of OSD in 2D computation.
+- [kd_mpi_venc_get_2d_osd_param](#2117-kd_mpi_venc_get_2d_osd_param): Get the region attributes of the specified index OSD in 2D computation.
+- [kd_mpi_venc_set_2d_border_param](#2118-kd_mpi_venc_set_2d_border_param): Set the frame attributes in 2D computation.
+- [kd_mpi_venc_get_2d_border_param](#2119-kd_mpi_venc_get_2d_border_param): Get the frame attributes in 2D computation.
+- [kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef): Set the image format conversion coefficients in 2D computation.
+- [kd_mpi_venc_get_2d_custom_coef](#2121-kd_mpi_venc_get_2d_custom_coef): Get the image format conversion coefficients in 2D computation.
+- [kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut): Set the color gamut for 2D computation.
+- [kd_mpi_venc_get_2d_color_gamut](#2123-kd_mpi_venc_get_2d_color_gamut): Get the color gamut for 2D computation.
+- [kd_mpi_venc_attach_2d](#2124-kd_mpi_venc_attach_2d): Associate 2D computation with VENC.
+- [kd_mpi_venc_detach_2d](#2125-kd_mpi_venc_detach_2d): Disassociate 2D computation from VENC.
 - [kd_mpi_venc_send_2d_frame](#2126-kd_mpi_venc_send_2d_frame): Send a frame of data to the 2D module.
-- [kd_mpi_venc_get_2d_frame](#2127-kd_mpi_venc_get_2d_frame): Get 2D calculation results.
-- [kd_mpi_venc_start_2d_chn](#2128-kd_mpi_venc_start_2d_chn): Start the 2D channel to receive the input image.
-- [kd_mpi_venc_stop_2d_chn](#2129-kd_mpi_venc_stop_2d_chn): Stop the 2D channel from receiving the input image.
-- [kd_mpi_venc_request_idr](#2130-kd_mpi_venc_request_idr)and generate an IDR frame immediately after the call.
-- [kd_mpi_venc_set_h265_sao](#2131-kd_mpi_venc_set_h265_sao): Set the Sao property of the H.265 channel.
-- [kd_mpi_venc_get_h265_sao](#2132-kd_mpi_venc_get_h265_sao): Get the Sao properties of the H.265 channel.
-- [kd_mpi_venc_set_dblk](#2133-kd_mpi_venc_set_dblk): Set the Deblocking enable of the protocol encoding channel.
-- [kd_mpi_venc_get_dblk](#2134-kd_mpi_venc_get_dblk): Gets the deblocking status of the protocol encoding channel.
-- [kd_mpi_venc_set_roi_attr](#2135-kd_mpi_venc_set_roi_attr): Set the ROI properties of H.264/H.265 channels.
-- [kd_mpi_venc_get_roi_attr](#2136-kd_mpi_venc_get_roi_attr): Obtain the ROI properties of H.264/H.265 channels.
-- [kd_mpi_venc_set_h264_entropy](#2137-kd_mpi_venc_set_h264_entropy): Set the entropy encoding mode of the H.264 protocol encoding channel.
-- [kd_mpi_venc_get_h264_entropy](#2138-kd_mpi_venc_get_h264_entropy): Get the entropy encoding mode of the H.264 protocol encoding channel.
-- [kd_mpi_venc_set_h265_entropy](#2139-kd_mpi_venc_set_h265_entropy): Set the entropy encoding mode of the H.265 protocol encoding channel.
-- [kd_mpi_venc_get_h265_entropy](#2140-kd_mpi_venc_get_h265_entropy): Get the entropy encoding mode of the H.265 protocol encoding channel.
+- [kd_mpi_venc_get_2d_frame](#2127-kd_mpi_venc_get_2d_frame): Get the result of 2D computation.
+- [kd_mpi_venc_start_2d_chn](#2128-kd_mpi_venc_start_2d_chn): Start the 2D channel to receive input images.
+- [kd_mpi_venc_stop_2d_chn](#2129-kd_mpi_venc_stop_2d_chn): Stop the 2D channel from receiving input images.
+- [kd_mpi_venc_request_idr](#2130-kd_mpi_venc_request_idr): Request an IDR frame, generating an IDR frame immediately after calling.
+- [kd_mpi_venc_set_h265_sao](#2131-kd_mpi_venc_set_h265_sao): Set the Sao attributes for the H.265 channel.
+- [kd_mpi_venc_get_h265_sao](#2132-kd_mpi_venc_get_h265_sao): Get the Sao attributes for the H.265 channel.
+- [kd_mpi_venc_set_dblk](#2133-kd_mpi_venc_set_dblk): Enable deblocking for the codec channel.
+- [kd_mpi_venc_get_dblk](#2134-kd_mpi_venc_get_dblk): Get the deblocking status of the codec channel.
+- [kd_mpi_venc_set_roi_attr](#2135-kd_mpi_venc_set_roi_attr): Set the ROI attributes for the H.264/H.265 channel.
+- [kd_mpi_venc_get_roi_attr](#2136-kd_mpi_venc_get_roi_attr): Get the ROI attributes for the H.264/H.265 channel.
+- [kd_mpi_venc_set_h264_entropy](#2137-kd_mpi_venc_set_h264_entropy): Set the entropy encoding mode for the H.264 codec channel.
+- [kd_mpi_venc_get_h264_entropy](#2138-kd_mpi_venc_get_h264_entropy): Get the entropy encoding mode for the H.264 codec channel.
+- [kd_mpi_venc_set_h265_entropy](#2139-kd_mpi_venc_set_h265_entropy): Set the entropy encoding mode for the H.265 codec channel.
+- [kd_mpi_venc_get_h265_entropy](#2140-kd_mpi_venc_get_h265_entropy): Get the entropy encoding mode for the H.265 codec channel.
 
 #### 2.1.1 kd_mpi_venc_create_chn
 
-【Description】
+**Description**:
 
 Create an encoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#3115-k_venc_chn_attr) \*attr);
+```c
+k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#3115-k_venc_chn_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input      |
-| attr     | Encodes the channel property pointer.                                                   | input      |
+| chn_num  | Encoding channel information. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| attr     | Pointer to encoding channel attributes. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
+| Return Value | Description |
 |---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5. Error Codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- The encoder supported channel widths and heights as shown in the following table:
+- The encoder supports channel width and height as shown in the table below:
 
 | H.264/H.265 | JPEG   |       |        |      |     |      |     |
 |-------------|--------|-------|--------|------|-----|------|-----|
@@ -299,3338 +301,3576 @@ None.
 | MAX         | MIN    | MAX   | MIN    | MAX  | MIN | MAX  | MIN |
 | 4096        | 128    | 4096  | 64     | 8192 | 128 | 8192 | 64  |
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.2 kd_mpi_venc_destory_chn
 
-【Description】
+**Description**:
 
-Destroy the encoding channel.
+Destroy an encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_destory_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input      |
+| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5. Error Codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If will return fails if not stop receiving images before destroying.
+- Must stop receiving images before destroying, otherwise returns failure.
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.3 kd_mpi_venc_start_chn
 
-【Description】
+**Description**:
 
-Start encoding channel to receive the input image.
+Start the encoding channel to receive input images.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_start_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5. Error Codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If the channel is not created, the failed K_ERR_VENC_UNEXIST is returned.
-- If the channel has already started receiving images and  not stoped, call this interface again to receive specify the number of frames, will return operation is not allowed.
-- Only after receiving is started, the encoder start receiving image encoding.
+- If the channel is not created, it returns failure K_ERR_VENC_UNEXIST.
+- If the channel has already started receiving images and calls this interface again without stopping, it returns operation not allowed.
+- The encoder starts receiving images for encoding only after starting reception.
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
-[](#211-kd_mpi_venc_create_chn)
- kd_mpi_venc_create_chn[kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
+[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
+[kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.4 kd_mpi_venc_stop_chn
 
-【Description】
+**Description**:
 
-Stop the encoding channel from receiving the input image.
+Stop the encoding channel from receiving input images.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_stop_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5. Error Codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If the channel is not created, return fails.
-- This interface does not determine whether the current reception is stopped, that is, it allows repeated stops without returning an error.
-- This interface is used to stop receiving an image, it supports stop receiving images before the encoding channel is destroyed or reset.
-- Calling this interface only stops receiving the original data encoding, and the stream buffer is not cleared.
+- If the channel is not created, it returns failure.
+- This interface does not check if the reception is already stopped, allowing repeated stops without returning an error.
+- This interface is used to stop receiving images for encoding, and must be called before destroying or resetting the encoding channel.
+- Calling this interface only stops receiving raw data for encoding, the stream buffer will not be cleared.
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn)
 
 #### 2.1.5 kd_mpi_venc_query_status
 
-【Description】
+**Description**:
 
-Query the encoding channel status.
+Query the status of the encoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#3115-k_venc_chn_attr) \*status);
+```c
+k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#3115-k_venc_chn_attr) *status);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
-| status   | pointer of the encoded channel status.                                                     | output |
+| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| status   | Pointer to the status of the encoding channel. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
+| Return Value | Description |
 |---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5. Error Codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-- If the channel is not created, the return fails.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Examples**:
+
+None.
+
+**Related Topics**:
+
+None.
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+
+**Chip Differences**:
+
+None.
+
+**Requirements**:
+
+- Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
+- Library files: libvenc.a
+
+**Notes**:
+
+- If the channel is not created, it returns failure.
+
+**Examples**:
+
+None.
+
+**Related Topics**:
 
 [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
 
 #### 2.1.6 kd_mpi_venc_get_stream
 
-【Description】
+**Description**:
 
-Get the encoded bitstream.
+Get the encoded stream.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) \*stream, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) *stream, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name  | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
-| stream    | Bitstream structure pointer. | output |
-| milli_sec | Obtain the bitstream timeout period. Value range: [-1, +∞ ) -1: Blocking. 0: Non-blocking. Greater than 0: Timeout period | input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| stream  | Pointer to the stream structure. | Output |
+| milli_sec | Timeout for getting the stream. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. Greater than 0: Timeout | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If the channel is not created, the return fails.
-- If stream is empty, return the K_ERR_VENC_NULL_PTR.
-- If the milli_sec is less than -1, the K_ERR_VENC_ILLEGAL_PARAM is returned.
+- If the channel is not created, it returns failure.
+- If `stream` is null, it returns K_ERR_VENC_NULL_PTR.
+- If `milli_sec` is less than -1, it returns K_ERR_VENC_ILLEGAL_PARAM.
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
-[](#211-kd_mpi_venc_create_chn)
- kd_mpi_venc_create_chn[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.7 kd_mpi_venc_release_stream
 
-【Description】
+**Description**:
 
-Release the bitstream buffer.
+Release the stream buffer.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) \*stream);
+```c
+k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) *stream);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
-| stream   | Bitstream structure pointer. | output |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| stream  | Pointer to the stream structure. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If the channel is not created, an error code K_ERR_VENC_UNEXIST is returned.
-- If the stream is empty, the error code K_ERR_VENC_NULL_PTR is returned.
+- If the channel is not created, it returns error code K_ERR_VENC_UNEXIST.
+- If `stream` is null, it returns error code K_ERR_VENC_NULL_PTR.
 
-【Example】
+**Examples**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
-[](#211-kd_mpi_venc_create_chn)
- kd_mpi_venc_create_chn[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.8 kd_mpi_venc_send_frame
 
-【Description】
+**Description**:
 
-Allows users to send raw images for encoding.
+Support users to send raw images for encoding.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name  | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)]. | input |
-| frame | Pointer to the original image information structure, refer to the K230 System Control API Reference. | input |
-| milli_sec | Send image timeout. Value range: [-1,+∞ ) -1: Blocking. 0: Non-blocking. \> 0: Timeout. | input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| frame   | Pointer to the raw image information structure, refer to "K230 System Control API Reference". | Input |
+| milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. Greater than 0: Timeout. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
-
-【Differences】
-
-None.
-
-【Requirement】
-
-- Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
-
-【Note】
-
-- This interface allows the user to send images to the encoding channel.
-- If the milli_sec is less than -1, the K_ERR_VENC_ILLEGAL_PARAM is returned.
-- To call this API to send an image, the user needs to ensure that the encoding channel has been created and the receiving input image is enabled.
-
-【Example】
-
-None.
-
-【See Also】
-
-(#211-kd_mpi_venc_create_chn)
- kd_mpi_venc_create_chn[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
-
-#### 2.1.9 kd_mpi_venc_set_rotaion
-
-【Description】
-
-Set the encoded image rotation angle.
-
-【Syntax】
-
-k_s32 kd_mpi_venc_set_rotaion(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
-
-【Parameters】
-
-| Parameter name | description | Input/output |
-|---|---|---|
-| chn_num  | Encode channel number. Value range[0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| rotation | Rotation angle enumeration. | input      |
-
-【Return value】
-
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-None.
+- This interface supports users sending images to the encoding channel.
+- If `milli_sec` is less than -1, it returns K_ERR_VENC_ILLEGAL_PARAM.
+- When calling this interface to send images, users need to ensure that the encoding channel is created and started to receive input images.
 
-【Example】
-
-None.
-
-【See Also】
+**Examples**:
 
 None.
 
-#### 2.1.10 kd_mpi_venc_get_rotaion
+**Related Topics**:
 
-【Description】
+[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+
+#### 2.1.9 kd_mpi_venc_set_rotation
+
+**Description**:
+
+Set the rotation angle of the encoded image.
+
+**Syntax**:
+
+```c
+k_s32 kd_mpi_venc_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
+```
+
+**Parameters**:
+
+| Parameter Name | Description | Input/Output |
+|---|---|---|
+| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| rotation | Rotation angle enumeration. | Input |
+
+**Return Values**:
+
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+
+**Chip Differences**:
+
+None.
+
+**Requirements**:
+
+- Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
+- Library files: libvenc.a
+
+**Notes**:
+
+None.
+
+**Example**:
+
+None.
+
+**Related Topics**:
+
+None.
+
+#### 2.1.10 kd_mpi_venc_get_rotation
+
+**Description**:
 
 Get the rotation angle of the encoded image.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_rotaion(k_u32 chn_num, [k_rotation](#3112-k_rotation) \*rotation);
+```c
+k_s32 kd_mpi_venc_get_rotation(k_u32 chn_num, [k_rotation](#3112-k_rotation) *rotation);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | input      |
-| rotation | Rotation angle enumeration pointer.                                                   | output      |
+| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| rotation | Pointer to the rotation angle enumeration. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.11 kd_mpi_venc_set_mirror
 
-【Description】
+**Description**:
 
-Set the encoded image flip mode.
+Set the mirroring method of the encoded image.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_mirror) mirror);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number. Value range: [0, VENC_MAX_CHN_NUM]. | input |
-| mirror | Flip mode enumeration. | input |
+| chn_num | Channel number. Value range: [0, VENC_MAX_CHN_NUM). | Input |
+| mirror  | Mirroring method enumeration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
-【Requirement】
+
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-【Example】
+**Notes**:
 
 None.
-【See Also】
+
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.12 kd_mpi_venc_get_mirror
 
-【Description】
+**Description**:
 
-Set the encoded image flip mode.
-【Syntax】
+Get the mirroring method of the encoded image.
 
-| k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror) mirror);|
+**Syntax**:
 
-【Parameters】
+```c
+k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror) *mirror);
+```
 
-| Parameter name | description | Input/output |
+**Parameters**:
+
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number. Value range: [0, VENC_MAX_CHN_NUM]. | input |
-| mirror | Flip mode enumeration. | output |
+| chn_num | Channel number. Value range: [0, VENC_MAX_CHN_NUM). | Input |
+| mirror  | Pointer to the mirroring method enumeration. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
-【Requirement】
+
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-【Example】
+**Notes**:
 
 None.
-【See Also】
+
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.13 kd_mpi_venc_enable_idr
 
-【Description】
+**Description**:
 
-Set IDR frame enable.
+Enable IDR frame.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_enable_idr(k_u32 chn_num, const k_bool idr_enable);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| idr_enable | Whether IDR frames are enabled. 0: Not enabled. 1: Enable. | input |
+| chn_num   | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| idr_enable | Enable IDR frame. 0: Disable. 1: Enable. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface needs to be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.14 kd_mpi_venc_set_2d_mode
 
-【Description】
+**Description**:
 
-Set the 2D calculation mode.
+Set the 2D computation mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) mode);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| mode     | 2D arithmetic mode enumeration. | input |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| mode    | 2D computation mode enumeration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- Currently, the arithmetic mode does not support K_VENC_2D_CALC_MODE_CSC mode.
+- Currently, the computation mode does not support K_VENC_2D_CALC_MODE_CSC mode.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.15 kd_mpi_venc_get_2d_mode
 
-【Description】
+**Description**:
 
-Get the 2D calculation mode.
+Get the 2D computation mode.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) \*fashion);
+```c
+k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) *mode);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| mode     | 2D arithmetic mode enumerates pointers.                                                      | output |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| mode    | Pointer to the 2D computation mode enumeration. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
+- Library files: libvenc.a
 
-- Library file: libvenc.a
+**Notes**:
 
-【Note】
+- Currently, the computation mode does not support K_VENC_2D_CALC_MODE_CSC mode.
 
-- Currently, the arithmetic mode does not support K_VENC_2D_CALC_MODE_CSC mode.
-
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.16 kd_mpi_venc_set_2d_osd_param
 
-【Description】
+**Description**:
 
-Set the region properties of the OSD in 2D operations.
+Set the region attributes of OSD in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) \*attr);
+```c
+k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| index    | OSD区域索引。 取值范围:[0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num))。 | input |
-| attr     | OSD property pointer.                                                                               | input |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num)). | Input |
+| attr     | Pointer to OSD attributes. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If there are n overlay regions, the index values should be set to 0\~n-1, respectively.
+- If there are n overlay regions, the index values should be set to 0~n-1 respectively.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.17 kd_mpi_venc_get_2d_osd_param
 
-【Description】
+**Description**:
 
-Get the region attribute of the OSD specified in the 2D operation.
+Get the region attributes of the OSD with the specified index in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) \*attr);
+```c
+k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| index    | OSD origin index。 Value range:[0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num))。 | input |
-| attr     | Pointer of OSD property. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num)). | Input |
+| attr     | Pointer to OSD attributes. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.18 kd_mpi_venc_set_2d_border_param
 
-【Description】
+**Description**:
 
-Set the border properties in 2D operations.
+Set the border attributes in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) \*attr);
+```c
+k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)).        | input |
-| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num))。 | input |
-| attr     | Picture frame property pointer. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num)). | Input |
+| attr     | Pointer to border attributes. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- If there are n boxes, the index value should be set to 0\~n-1, respectively.
+- If there are n borders, the index values should be set to 0~n-1 respectively.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.19 kd_mpi_venc_get_2d_border_param
 
-【Description】
+**Description**:
 
-Get the border properties in 2D operations.
+Get the border attributes in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) \*attr);
+```c
+k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| index    | Border index. Value range:[0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num))。 | input |
-| attr     | Picture frame property pointer. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num)). | Input |
+| attr     | Pointer to border attributes. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.20 kd_mpi_venc_set_2d_custom_coef
 
-【Description】
+**Description**:
 
-Set the image format conversion coefficient in 2D operations.
+Set the image format conversion coefficients in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_set_2d_custom_coef(k_u32 chn_num, const k_s16 \*coef);
+```c
+k_s32 kd_mpi_venc_set_2d_custom_coef(k_u32 chn_num, const k_s16 *coef);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| coef     | Conversion factor pointer. Refer to [Configuration of 2D conversion coefficients](#12141-Configuration of 2D conversion coefficients)                    | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- The kernel state has a set of default conversion factors, which can be configured through this interface if you need to customize the conversion factors.
-- This API call should be made after setting the operation mode.
-- For a description of the conversion factor, see[ Configuration of 2D conversion coefficientst](#12141-Configuration of 2D conversion coefficients)
-- If the operation mode is K_VENC_2D_CALC_MODE_BORDER, the conversion coefficient is not applicable, and an error is reported when calling this interface.
+- The kernel has a set of default conversion coefficients. If custom conversion coefficients are needed, they can be configured through this interface.
+- This interface should be called after setting the computation mode.
+- For details on conversion coefficients, refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation).
+- When the computation mode is K_VENC_2D_CALC_MODE_BORDER, conversion coefficients are not applicable, and calling this interface will result in an error.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode)
 
 #### 2.1.21 kd_mpi_venc_get_2d_custom_coef
 
-【Description】
+**Description**:
 
-Get the image format conversion coefficient in 2D operation.
+Get the image format conversion coefficients in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_custom_coef(k_u32 chn_num, k_s16 \*coef);
+```c
+k_s32 kd_mpi_venc_get_2d_custom_coef(k_u32 chn_num, k_s16 *coef);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| coef     | Conversion factor pointer. Refer to [Configuration of 2D conversion coefficients](#12141-Configuration of 2D conversion coefficients)  | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation). | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API call should be called after setting the operation mode.
-- If the operation mode is K_VENC_2D_CALC_MODE_BORDER, the conversion coefficient is not applicable, and an error is reported when calling this interface.
+- This interface should be called after setting the computation mode.
+- When the computation mode is K_VENC_2D_CALC_MODE_BORDER, conversion coefficients are not applicable, and calling this interface will result in an error.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.22 kd_mpi_venc_set_2d_color_gamut
 
-【Description】
+**Description**:
 
-Set the gamut for 2D operations.
+Set the color gamut in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, Const [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) color_gamut);
+```c
+k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) color_gamut);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name    | description | Input/output |
+| Parameter Name    | Description | Input/Output |
 |---|---|---|
-| chn_num     | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| color_gamut | Gamut enumeration. | input |
+| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| color_gamut | Color gamut enumeration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- The kernel state has a set of default conversion coefficient, which can be configured through this interface if you need to customize the conversion factors.
-- This API should be called after setting the operation mode.
-- When the operation mode is K_VENC_2D_CALC_MODE_BORDER, the color gamut is not applicable, and an error will be returne when calling this interface.
+- The kernel has a set of default conversion coefficients. If custom conversion coefficients are needed, they can be configured through this interface.
+- This interface should be called after setting the computation mode.
+- When the computation mode is K_VENC_2D_CALC_MODE_BORDER, color gamut is not applicable, and calling this interface will result in an error.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.23 kd_mpi_venc_get_2d_color_gamut
 
-【Description】
+**Description**:
 
-Get the gamut for 2D operations.
+Get the color gamut in 2D computation.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) \*color_gamut);
+```c
+k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) *color_gamut);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name    | description | Input/output |
+| Parameter Name    | Description | Input/Output |
 |---|---|---|
-| chn_num     | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| color_gamut | Gamut enumeration pointer. | output |
+| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| color_gamut | Pointer to color gamut enumeration. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- The kernel state has a set of default conversion coefficient, which can be configured through this interface if you need to customize the conversion coefficient.
-- This API call should be made after setting the operation mode.
-- When the operation mode is K_VENC_2D_CALC_MODE_BORDER, the color gamut is not applicable, and an error will be reported when calling this interface.
+- The kernel has a set of default conversion coefficients. If custom conversion coefficients are needed, they can be configured through this interface.
+- This interface should be called after setting the computation mode.
+- When the computation mode is K_VENC_2D_CALC_MODE_BORDER, color gamut is not applicable, and calling this interface will result in an error.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.24 kd_mpi_venc_attach_2d
 
-【Description】
+**Description**:
 
-Attach 2D operations with venc.
+Attach 2D computation to VENC.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_attach_2d(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- Currently, the binding only supports the encoding channel number same as the 2D operation channel number. Only the first 3 encodings support attach 2D operation.
+- Currently, binding only supports the mode where the encoding channel number and the 2D computation channel number are the same. Only the first 3 encoding channels support the attach 2D operation.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.25 kd_mpi_venc_detach_2d
 
-【Description】
+**Description**:
 
-Separate 2D operations from venc.
+Detach 2D computation from VENC.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number of 2D operation. Value range:[0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | input |
+| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
-|---|---|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|--------|-------------------------------|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- To call this interface, the user needs to ensure that the encoding channel is stopped.
+- When calling this interface, users need to ensure that the encoding channel has stopped.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
 
 #### 2.1.26 kd_mpi_venc_send_2d_frame
 
-【Description】
+**Description**:
 
 Send a frame of data to the 2D module.
 
-【Syntax】
+**Syntax**:
 
-| k_s32 kd_mpi_venc_send_2d_frame(k_u32 chn_num, const k_video_frame_info \*frame, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_venc_send_2d_frame(k_u32 chn_num, const k_video_frame_info *frame, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name  | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number of 2D operation. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | input |
-| frame | Pointer to the original image information structure, refer to the K230 System Control API Reference. | input |
-| milli_sec | Send image timeout. Value range: [-1,+∞ ) -1: Blocking. 0: Non-blocking. \> 0: Timeout. | input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| frame | Pointer to the original image information structure. Refer to the "K230 System Control API Reference". | Input |
+| milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. > 0: Timeout duration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description |
+| Return Value | Description |
 |---|---|
-| 0      | Succeed.                      |
-| Non-0    | Failed with [error code](#5-error codes) returned|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This interface is only used in scenarios with only single 2D operation, and in scenarios where encoding is performed after 2D operation, you need to use the venc interface to send image[kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame).
+- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use the VENC interface [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame) to send the image.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame)
 
 #### 2.1.27 kd_mpi_venc_get_2d_frame
 
-【Description】
+**Description**:
 
-Get the results of 2D operations.
+Get the 2D computation result.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info \*frame, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name  | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number of 2D operation. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | input  |
-| frame | Pointer of an output image information structure, reference to the K230 System Control API Reference.                          | input |
-| milli_sec | Send image timeout. Value range: [-1,+∞ ) -1: Blocking. 0: Non-blocking. \> 0: Timeout. | input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| frame | Pointer to the output image information structure. Refer to the "K230 System Control API Reference". | Output |
+| milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. > 0: Timeout duration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API is only used in scenarios where a single 2D operation is performed, and in scenarios where the encoding is performed after the 2D operation, the kd_mpi_venc_get_stream is required to get the encoded code stream[kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream)
+- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream) to get the encoded stream.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream)
 
 #### 2.1.28 kd_mpi_venc_start_2d_chn
 
-【Description】
+**Description**:
 
-Start the 2D channel to receive the input image.
+Start the 2D channel to receive input images.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_start_2d_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number of 2D operation. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | input      |
+| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
 
-【Note】
+**Notes**:
 
-- This API is only used in scenarios of single 2D operations, and in VENC+2D scenarios, you need to call[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+- This interface is used only in scenarios involving single 2D computation. For VENC+2D scenarios, use [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn).
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
 
 #### 2.1.29 kd_mpi_venc_stop_2d_chn
 
-【Description】
+**Description**:
 
-Stop the 2D channel from receiving the input image.
+Stop the 2D channel from receiving input images.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_stop_2d_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number of 2D operation. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num))。 | input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.30 kd_mpi_venc_request_idr
 
-【Description】
+**Description**:
 
-Requested an IDR frame, and an IDR frame is generated immediately after the call.
+Request an IDR frame, generating one immediately after the call.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_request_idr(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.31 kd_mpi_venc_set_h265_sao
 
-【Description】
+**Description**:
 
-Set the Sao property of the H.265 channel.
+Set the Sao attributes for the H.265 channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h265_sao | SAO configuration of H.265 protocol encoding channels. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h265_sao | Sao configuration for the H.265 encoding channel. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface should be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.32 kd_mpi_venc_get_h265_sao
 
-【Description】
+**Description**:
 
-Get the Sao properties of the H.265 channel.
+Get the Sao attributes for the H.265 channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h265_sao | SAO configuration of H.265 protocol encoding channels. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h265_sao | Sao configuration for the H.265 encoding channel. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.33 kd_mpi_venc_set_dblk
 
-【Description】
+**Description**:
 
-Set the Deblocking enable for the H.264/H.265 protocol encoding channel.
+Enable or disable deblocking for the H.264/H.265 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_dblk(k_u32 chn_num, const k_bool dblk_en);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| dblk_en | Whether deblocking is enabled. K_TRUE: Enable. K_FALSE: Not enabled. Enabled by default. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| dblk_en | Enable or disable deblocking. K_TRUE: Enable. K_FALSE: Disable. Default is enabled. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface should be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.34 kd_mpi_venc_get_dblk
 
-【Description】
+**Description**:
 
-Get the Deblocking status of the H.264/H.265 protocol encoding channel.
+Get the deblocking status of the H.264/H.265 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_get_dblk(k_u32 chn_num, k_bool *dblk_en);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| dblk_en | Whether deblocking is enabled. K_TRUE: Enable. K_FALSE: Not enabled. Enabled by default. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| dblk_en | Enable or disable deblocking. K_TRUE: Enable. K_FALSE: Disable. Default is enabled. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.35 kd_mpi_venc_set_roi_attr
 
-【Description】
+**Description**:
 
-Set the ROI properties of H.264/H.265 channels.
+Set the ROI attributes for the H.264/H.265 channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| dblk_en | Whether deblocking is enabled. K_TRUE: Enable. K_FALSE: Not enabled. Enabled by default. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| roi_attr | ROI attributes for the H.264/H.265 encoding channel. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface should be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.36 kd_mpi_venc_get_roi_attr
 
-【Description】
+**Description**:
 
-Get the ROI properties of H.264/H.265 channels.
+Get the ROI attributes for the H.264/H.265 channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| dblk_en | Whether deblocking is enabled. K_TRUE: Enable. K_FALSE: Not enabled. Enabled by default. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| roi_attr | ROI attributes for the H.264/H.265 encoding channel. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| Return Value | Description |
+|---|---|
+| 0      | Success. |
+| Non-zero | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.37 kd_mpi_venc_set_h264_entropy
 
-【Description】
+**Description**:
 
-Set the entropy encoding mode of the H.264 protocol encoding channel.
+Set the entropy encoding mode for the H.264 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h264_entropy | The entropy coding mode of the H.264 protocol encoding channel. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h264_entropy | Entropy encoding mode for the H.264 encoding channel. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface should be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.38 kd_mpi_venc_get_h264_entropy
 
-【Description】
+**Description**:
 
-Get the entropy encoding mode of the H.264 protocol encoding channel.
+Get the entropy encoding mode for the H.264 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h264_entropy | The entropy coding mode of the H.264 protocol encoding channel. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h264_entropy | Entropy encoding mode for the H.264 encoding channel. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.1.39 kd_mpi_venc_set_h265_entropy
 
-【Description】
+**Description**:
 
-Set the entropy encoding mode of the H.265 protocol encoding channel.
+Set the entropy encoding mode for the H.265 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h265_entropy | The entropy coding mode of the H.265 protocol encoding channel. | input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h265_entropy | Entropy encoding mode for the H.265 encoding channel. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
+**Notes**:
 
-- This API needs to be called after the encoding channel is created and before the encoding channel is started.
+- This interface should be called after creating the encoding channel and before starting the encoding channel.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.1.40 kd_mpi_venc_get_h265_entropy
 
-【Description】
+**Description**:
 
-Get the entropy encoding mode of the H.265 protocol encoding channel.
+Get the entropy encoding mode for the H.265 encoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0,  [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | input |
-| h265_entropy | The entropy coding mode of the H.265 protocol encoding channel. | output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| h265_entropy | Entropy encoding mode for the H.265 encoding channel. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, an [error code](#5-error codes) is returned. |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_venc_api.h, k_type.h, k_module.h, k_sys_comm.h, k_venc_comm.h
-- Library file: libvenc.a
+- Library files: libvenc.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 ### 2.2 Video Decoding
 
-This function module provides the following APIs:
+This module provides the following APIs:
 
 - [kd_mpi_vdec_create_chn](#221-kd_mpi_vdec_create_chn): Create a video decoding channel.
-- [kd_mpi_vdec_destroy_chn](#222-kd_mpi_vdec_destroy_chn): Destroy the video decoding channel.
-- [kd_mpi_vdec_start_chn](#223-kd_mpi_vdec_start_chn): Enable the video decoding channel.
-- [kd_mpi_vdec_stop_chn](#224-kd_mpi_vdec_stop_chn): Stop the video decoding channel.
-- [kd_mpi_vdec_query_status](#225-kd_mpi_vdec_query_status): The decoder stops receiving the code stream sent by the user.
+- [kd_mpi_vdec_destroy_chn](#222-kd_mpi_vdec_destroy_chn): Destroy a video decoding channel.
+- [kd_mpi_vdec_start_chn](#223-kd_mpi_vdec_start_chn): Start a video decoding channel.
+- [kd_mpi_vdec_stop_chn](#224-kd_mpi_vdec_stop_chn): Stop a video decoding channel.
+- [kd_mpi_vdec_query_status](#225-kd_mpi_vdec_query_status): Query the status of the decoding channel.
 - [kd_mpi_vdec_send_stream](#226-kd_mpi_vdec_send_stream): Send stream data to the video decoding channel.
-- [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame): Get the decoded image of the video decoding channel.
-- [kd_mpi_vdec_release_frame](#228-kd_mpi_vdec_release_frame): Get the decoded image of the video decoding channel.
-- [kd_mpi_vdec_set_downscale](#229-kd_mpi_vdec_set_downscale): Set the decoded output to reduce the image (specify length, width, or proportion).
-- [kd_mpi_vdec_set_rotation](#2210-kd_mpi_vdec_set_rotation): Set the decoding rotation angle.
+- [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame): Get the decoded image from the video decoding channel.
+- [kd_mpi_vdec_release_frame](#228-kd_mpi_vdec_release_frame): Release the decoded image from the video decoding channel.
+- [kd_mpi_vdec_set_downscale](#229-kd_mpi_vdec_set_downscale): Set the downscaling of the output image (specify width and height or by ratio).
+- [kd_mpi_vdec_set_rotation](#2210-kd_mpi_vdec_set_rotation): Set the rotation angle of the decoded image.
 
 #### 2.2.1 kd_mpi_vdec_create_chn
 
-【Description】
+**Description**:
 
 Create a video decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) \*attr);
+```c
+k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| attr     | Decodes the channel property pointer. | input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| attr     | Pointer to the decoding channel attributes. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.2 kd_mpi_vdec_destroy_chn
 
-【Description】
+**Description**:
 
-Destroy the video decoding channel.
+Destroy a video decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vdec_destroy_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description  | Input/output |
+| Parameter Name | Description  | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.3 kd_mpi_vdec_start_chn
 
-【Description】
+**Description**:
 
-Turn on the video decoding channel.
+Start a video decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vdec_start_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.4 kd_mpi_vdec_stop_chn
 
-【Description】
+**Description**:
 
-Stop the video decoding channel.
+Stop a video decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vdec_stop_chn(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.5 kd_mpi_vdec_query_status
 
-【Description】
+**Description**:
 
 Query the status of the decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#324-k_vdec_chn_status) \*status);
+```c
+k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#324-k_vdec_chn_status) *status);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| status   | Video decoding channel status structure pointer.                                               | output |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| status   | Pointer to the video decoding channel status structure. | Output |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.6 kd_mpi_vdec_send_stream
 
-【Description】
+**Description**:
 
-Sends stream data to the video decoding channel.
+Send stream data to the video decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_stream) \*stream, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_stream) *stream, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name  | description | Input/output |
+| Parameter Name  | Description | Input/Output |
 |---|---|---|
-| chn_num   | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| stream    | Decode the bitstream data pointer. | input |
-| milli_sec | Flag of the code stream mode. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout period, no upper limit, in ms. | input |
+| chn_num   | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| stream    | Pointer to the decoding stream data. | Input |
+| milli_sec | Timeout flag for sending stream. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout duration in milliseconds, no upper limit. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.7 kd_mpi_vdec_get_frame
 
-【Description】
+**Description**:
 
-Gets the decoded image of the video decoding channel.
+Get the decoded image from the video decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info \*frame_info, [k_vdec_supplement_info](#327-k_vdec_supplement_info) \*supplement, k_s32 milli_sec);
+```c
+k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info *frame_info, [k_vdec_supplement_info](#327-k_vdec_supplement_info) *supplement, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name   | description | Input/output |
+| Parameter Name   | Description | Input/Output |
 |---|---|---|
-| Chn | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)].  Enter |
-| frame_info | For the obtained decoded image information, refer to the K230 System Control API Reference.| output |
-| supplement | Obtain supplementary information for the decoded image. | output |
-| milli_sec  | Flag of the code stream mode. Value range: -1: Blocking. 0: Non-blocking. Positive value: timeout period, no upper value, in ms Dynamic property. | input |
+| chn | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| frame_info | Pointer to the decoded image information. Refer to the "K230 System Control API Reference". | Output |
+| supplement | Pointer to the decoded image supplementary information. | Output |
+| milli_sec  | Timeout flag for sending stream. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout duration in milliseconds. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
+
+None.
+**Positive Value**: Timeout duration, no upper limit, in milliseconds. Dynamic attribute. | Input |
+
+**Return Values**:
+
+| Return Value | Description                          |
+|--------|-------------------------------|
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
+
+**Chip Differences**:
+
+None.
+
+**Requirements**:
+
+- Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
+- Library files: libvdec.a
+
+**Notes**:
+
+None.
+
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 #### 2.2.8 kd_mpi_vdec_release_frame
 
-【Description】
+**Description**:
 
-Gets the decoded image of the video decoding channel.
+Release the decoded image from the video decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_release_frame(k_u32 chn_num, const k_video_frame_info \*frame_info);
+```c
+k_s32 kd_mpi_vdec_release_frame(k_u32 chn_num, const k_video_frame_info *frame_info);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name   | description | Input/output |
+| Parameter Name   | Description | Input/Output |
 |---|---|---|
-| Chn        | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| frame_info | The decoded image information pointer, geted by[kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame)interface, refer to the K230 System Control API Reference. | input |
+| chn        | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| frame_info | Pointer to the decoded image information obtained by the [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame) interface. Refer to the "K230 System Control API Reference". | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
-
-None.
-
-【Example】
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame)
 
 #### 2.2.9 kd_mpi_vdec_set_downscale
 
-【Description】
+**Description**:
 
-Set the decoded output to reduce the image (specify length, width, or proportion).
+Set the downscaling of the output image (specify width and height or by ratio).
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const  [k_vdec_downscale](#3211-k_vdec_downscale)  *downscale)
+```c
+k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const [k_vdec_downscale](#3211-k_vdec_downscale) *downscale);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| downscale    | Downsize parameter structure pointer. | input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| downscale    | Pointer to the downscaling parameter structure. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
+**Notes**:
 
-Set after kd_mpi_vdec_create_chn and before kd_mpi_vdec_start_chn.
+Set between kd_mpi_vdec_create_chn and kd_mpi_vdec_start_chn.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
 #### 2.2.10 kd_mpi_vdec_set_rotation
 
-【Description】
+**Description**:
 
-Set the decoding rotation angle.
+Set the rotation angle of the decoded image.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#3112-k_rotation) rotation)
+```c
+k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
+| Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encode channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| rotation | Rotation angle enumeration. | input      |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| rotation | Rotation angle enumeration. | Input |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
+| Return Value | Description                          |
 |--------|-------------------------------|
-| 0      | Succeed.                        |
-| Non-0    | Failed, see[Error codes](#5-error codes). |
+| 0      | Success.                         |
+| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
 
-【Differences】
+**Chip Differences**:
 
 None.
 
-【Requirement】
+**Requirements**:
 
 - Header files: mpi_vdec_api.h, k_type.h, k_module.h, k_sys_comm.h, k_vdec_comm.h
-- Library file: libvdec.a
+- Library files: libvdec.a
 
-【Note】
+**Notes**:
 
 Set between kd_mpi_vdec_create_chn and kd_mpi_vdec_start_chn.
 
-【Example】
+**Example**:
 
 None.
 
-【See Also】
+**Related Topics**:
 
 None.
 
-## 3. Data Type
+## 3. Data Types
 
-### 3.1 Video Coding
+### 3.1 Video Encoding
 
-The relevant data types for this function module are defined as follows:
+The related data type definitions for this module are as follows:
 
-- [VENC_MAX_CHN_NUM](#311-venc_max_chn_num):Define maximum channel number of encoding.
-- [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num): Define the maximum number of regions for 2D operations to overlay OSDs.
-- [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num): Define the maximum number of 2D frames.
-- [K_VENC_2D_COFF_NUM](#314-k_venc_2d_coff_num): Define the number of CSC conversion coefficients for 2D operations.
-- [K_VENC_2D_MAX_CHN_NUM](#315-k_venc_2d_max_chn_num):Define maximum channel number of 2D operation.
-- [k_venc_rc_mode](#316-k_venc_rc_mode): Define the code channel bitrate controller mode.
-- [k_venc_pack_type](#317-k_venc_pack_type): Define a JPEG stream PACK type enumeration.
-- [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode): Define the enumeration of calculation modes for 2D operations.
-- [k_venc_2d_src_dst_fmt](#319-k_venc_2d_src_dst_fmt): Define the enumeration of input and output data formats for 2D operations.
+- [VENC_MAX_CHN_NUM](#311-venc_max_chn_num): Defines the maximum number of channels.
+- [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num): Defines the maximum number of 2D OSD regions.
+- [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num): Defines the maximum number of 2D borders.
+- [K_VENC_2D_COFF_NUM](#314-k_venc_2d_coff_num): Defines the number of 2D CSC conversion coefficients.
+- [K_VENC_2D_MAX_CHN_NUM](#315-k_venc_2d_max_chn_num): Defines the number of 2D channels.
+- [k_venc_rc_mode](#316-k_venc_rc_mode): Defines the rate control mode for the encoding channel.
+- [k_venc_pack_type](#317-k_venc_pack_type): Defines the JPEG stream pack type enumeration.
+- [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode): Defines the calculation mode enumeration for 2D operations.
+- [k_venc_2d_src_dst_fmt](#319-k_venc_2d_src_dst_fmt): Defines the input/output data format enumeration for 2D operations.
 - [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt): Defines the OSD layer data format enumeration for 2D operations.
-- [k_venc_2d_add_order](#3111-k_venc_2d_add_order): Define OSD overlay enumeration for 2D operations.
-- [k_rotation](#3112-k_rotation): Define encoded rotation angle enumeration.
-- [k_venc_mirror](#3113-k_venc_mirror): Define encoding flipping mode enumeration.
-- [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut): Defines gamut enumeration for 2D operations.
-- [k_venc_chn_attr](#3115-k_venc_chn_attr): Define the encoding channel property structure.
-- [k_venc_attr](#3116-k_venc_attr): Define the encoder property structure.
-- [k_venc_rc_attr](#3117-k_venc_rc_attr): Define the of H.264/H.265 encoded channel CBR attribution structure.
-- [k_venc_cbr](#3118-k_venc_cbr): Define the H.264/H.265 coded channel CBR attribute structure.
-- [k_venc_vbr](#3119-k_venc_vbr): Define the VBR attribute structure of the H.264/H.265 encoding channel.
-- [k_venc_fixqp](#3120-k_venc_fixqp): Define the H.264/H.265 encoding channel Fixqp attribute structure.
-- [k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp): Define the MJPEG encoding channel Fixqp attribute structure.
-- [k_venc_chn_status](#3122-k_venc_chn_status): Define the state struct of the encoding channel.
-- [k_venc_stream](#3123-k_venc_stream): Define the frame stream type structure.
-- [k_venc_pack](#3124-k_venc_pack): Define the frame stream packet structure.
-- [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr): 2D overlay attribute structure.
-- [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr): 2D frame structure.
-- [k_venc_h265_sao](#3127-k_venc_h265_sao): Define the structure of the H.265 protocol encoding channel Sao.
-- [k_venc_rect](#3128-k_venc_rect): Define the rectangular area information structure.
-- [k_venc_roi_attr](#3129-k_venc_roi_attr): Define and encode region of interest information.
-- [k_venc_h264_entropy](#3130-k_venc_h264_entropy): Define the entropy coding structure of the H.264 protocol encoding channel.
-- [k_venc_h265_entropy](#3131-k_venc_h265_entropy): Define the entropy coding structure of the H.265 protocol encoding channel.
+- [k_venc_2d_add_order](#3111-k_venc_2d_add_order): Defines the OSD overlay enumeration for 2D operations.
+- [k_rotation](#3112-k_rotation): Defines the rotation angle enumeration.
+- [k_venc_mirror](#3113-k_venc_mirror): Defines the mirror mode enumeration.
+- [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut): Defines the color gamut enumeration for 2D operations.
+- [k_venc_chn_attr](#3115-k_venc_chn_attr): Defines the attributes structure for the encoding channel.
+- [k_venc_attr](#3116-k_venc_attr): Defines the encoder attributes structure.
+- [k_venc_rc_attr](#3117-k_venc_rc_attr): Defines the rate controller attributes structure for the encoding channel.
+- [k_venc_cbr](#3118-k_venc_cbr): Defines the CBR attributes structure for H.264/H.265 encoding channels.
+- [k_venc_vbr](#3119-k_venc_vbr): Defines the VBR attributes structure for H.264/H.265 encoding channels.
+- [k_venc_fixqp](#3120-k_venc_fixqp): Defines the Fixqp attributes structure for H.264/H.265 encoding channels.
+- [k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp): Defines the Fixqp attributes structure for MJPEG encoding channels.
+- [k_venc_chn_status](#3122-k_venc_chn_status): Defines the status structure for the encoding channel.
+- [k_venc_stream](#3123-k_venc_stream): Defines the frame stream type structure.
+- [k_venc_pack](#3124-k_venc_pack): Defines the frame stream pack structure.
+- [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr): Defines the 2D overlay attributes structure.
+- [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr): Defines the 2D border attributes structure.
+- [k_venc_h265_sao](#3127-k_venc_h265_sao): Defines the SAO structure for H.265 protocol encoding channels.
+- [k_venc_rect](#3128-k_venc_rect): Defines the rectangle region information structure.
+- [k_venc_roi_attr](#3129-k_venc_roi_attr): Defines the ROI information for encoding.
+- [k_venc_h264_entropy](#3130-k_venc_h264_entropy): Defines the entropy encoding structure for H.264 protocol encoding channels.
+- [k_venc_h265_entropy](#3131-k_venc_h265_entropy): Defines the entropy encoding structure for H.265 protocol encoding channels.
 
 #### 3.1.1 VENC_MAX_CHN_NUM
 
-【Description】
+**Description**:
 
-Define the maximum number of channels.
+Defines the maximum number of channels.
 
-【Definition】
+**Definition**:
 
-\#define VENC_MAX_CHN_NUM 4
+```c
+#define VENC_MAX_CHN_NUM 4
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.2 K_VENC_MAX_2D_OSD_REGION_NUM
 
-【Description】
+**Description**:
 
-Define the maximum number of regions for overlaying OSDs for 2D operations.
+Defines the maximum number of 2D OSD regions.
 
-【Definition】
+**Definition**:
 
-\#define K_VENC_MAX_2D_OSD_REGION_NUM 8
+```c
+#define K_VENC_MAX_2D_OSD_REGION_NUM 8
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.3 K_VENC_MAX_2D_BORDER_NUM
 
-【Description】
+**Description**:
 
-Define the maximum number of frames for 2D operations.
+Defines the maximum number of 2D borders.
 
-【Definition】
+**Definition**:
 
-\#define K_VENC_MAX_2D_BORDER_NUM 32
+```c
+#define K_VENC_MAX_2D_BORDER_NUM 32
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.4 K_VENC_2D_COFF_NUM
 
-【Description】
+**Description**:
 
-Define the number of CSC conversion coefficients for 2D operations.
+Defines the number of 2D CSC conversion coefficients.
 
-【Definition】
+**Definition**:
 
-\#define K_VENC_2D_COFF_NUM 12
+```c
+#define K_VENC_2D_COFF_NUM 12
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.5 K_VENC_2D_MAX_CHN_NUM
 
-【Description】
+**Description**:
 
-Define the number of channels for 2D operations.
+Defines the number of 2D channels.
 
-【Definition】
+**Definition**:
 
-\#define K_VENC_2D_MAX_CHN_NUM 3
+```c
+#define K_VENC_2D_MAX_CHN_NUM 3
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.6 k_venc_rc_mode
 
-【Description】
+**Description**:
 
-Define the code channel bitrate controller mode.
+Defines the rate control mode for the encoding channel.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_RC_MODE_CBR = 1,
-&emsp;K_VENC_RC_MODE_VBR,
-&emsp;K_VENC_RC_MODE_FIXQP,
-&emsp;K_VENC_RC_MODE_MJPEG_FIXQP,
-&emsp;K_VENC_RC_MODE_BUTT,
+    K_VENC_RC_MODE_CBR = 1,
+    K_VENC_RC_MODE_VBR,
+    K_VENC_RC_MODE_FIXQP,
+    K_VENC_RC_MODE_MJPEG_FIXQP,
+    K_VENC_RC_MODE_BUTT,
 } k_venc_rc_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
+| Member Name | Description |
 |---|---|
 | K_VENC_RC_MODE_CBR | H.264/H.265 CBR mode. |
 | K_VENC_RC_MODE_VBR | H.264/H.265 VBR mode. |
 | K_VENC_RC_MODE_FIXQP | H.264/H.265 Fixqp mode. |
-| K_VENC_RC_MODE_MJPEG_FIXQP | MJPEG Fixqp模式。 |
+| K_VENC_RC_MODE_MJPEG_FIXQP | MJPEG Fixqp mode. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.7 k_venc_pack_type
 
-【Description】
+**Description**:
 
-Definesa JPEG bitstream PACK type enumeration.
+Defines the JPEG stream pack type enumeration.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_P_FRAME = 1,
-&emsp;K_VENC_I_FRAME = 2,
-&emsp;K_VENC_HEADER = 3,
-&emsp;K_VENC_BUTT
+    K_VENC_P_FRAME = 1,
+    K_VENC_I_FRAME = 2,
+    K_VENC_HEADER = 3,
+    K_VENC_BUTT
 } k_venc_pack_type;
+```
 
-【Members】
+**Members**:
 
-| Member name       | description     |
+| Member Name       | Description     |
 |----------------|----------|
-| K_VENC_P_FRAME | I-frame.    |
-| K_VENC_I_FRAME | P帧。    |
-| K_VENC_HEADER  | Header。 |
+| K_VENC_P_FRAME | I frame.     |
+| K_VENC_I_FRAME | P frame.     |
+| K_VENC_HEADER  | Header.  |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.8 k_venc_2d_calc_mode
 
-【Description】
+**Description**:
 
-Define the calculation mode enumeration for 2D operations.
+Defines the calculation mode enumeration for 2D operations.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_2D_CALC_MODE_CSC = 0,
-&emsp;K_VENC_2D_CALC_MODE_OSD,
-&emsp;K_VENC_2D_CALC_MODE_BORDER,
-&emsp;K_VENC_2D_CALC_MODE_OSD_BORDER,
-&emsp;K_VENC_2D_CALC_MODE_BUTT
+    K_VENC_2D_CALC_MODE_CSC = 0,
+    K_VENC_2D_CALC_MODE_OSD,
+    K_VENC_2D_CALC_MODE_BORDER,
+    K_VENC_2D_CALC_MODE_OSD_BORDER,
+    K_VENC_2D_CALC_MODE_BUTT
 } k_venc_2d_calc_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name                       | description                     |
+| Member Name                       | Description                     |
 |--------------------------------|--------------------------|
-| K_VENC_2D_CALC_MODE_CSC        | Image format conversion.           |
-| K_VENC_2D_CALC_MODE_OSD        | Image overlay.               |
-| K_VENC_2D_CALC_MODE_BORDER     | Picture frame.                   |
-| K_VENC_2D_CALC_MODE_OSD_BORDER | Overlay the picture first, then draw the frame. |
+| K_VENC_2D_CALC_MODE_CSC        | Image format conversion.            |
+| K_VENC_2D_CALC_MODE_OSD        | Image overlay.                |
+| K_VENC_2D_CALC_MODE_BORDER     | Border drawing.                    |
+| K_VENC_2D_CALC_MODE_OSD_BORDER | Image overlay followed by border drawing.  |
 
-【Note】
+**Notes**:
 
-- K_VENC_2D_CALC_MODE_CSC mode is not currently supported.
+- Currently, K_VENC_2D_CALC_MODE_CSC mode is not supported.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.9 k_venc_2d_src_dst_fmt
 
-【Description】
+**Description**:
 
-Define an enumeration of input and output data formats for 2D operations.
+Defines the input/output data format enumeration for 2D operations.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV12= 0,
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV21,
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_I420,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB1555,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB1555,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA5551,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX8888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX4444,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX5551,
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB888,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR888,
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB565,
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR565,
-&emsp;K_VENC_2D_SRC_DST_FMT_SEPERATE_RGB,
-&emsp;K_VENC_2D_SRC_DST_FMT_BUTT
+    K_VENC_2D_SRC_DST_FMT_YUV420_NV12 = 0,
+    K_VENC_2D_SRC_DST_FMT_YUV420_NV21,
+    K_VENC_2D_SRC_DST_FMT_YUV420_I420,
+    K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,
+    K_VENC_2D_SRC_DST_FMT_ARGB4444,
+    K_VENC_2D_SRC_DST_FMT_ARGB1555,
+    K_VENC_2D_SRC_DST_FMT_XRGB8888,
+    K_VENC_2D_SRC_DST_FMT_XRGB4444,
+    K_VENC_2D_SRC_DST_FMT_XRGB1555,
+    K_VENC_2D_SRC_DST_FMT_BGRA8888,
+    K_VENC_2D_SRC_DST_FMT_BGRA4444,
+    K_VENC_2D_SRC_DST_FMT_BGRA5551,
+    K_VENC_2D_SRC_DST_FMT_BGRX8888,
+    K_VENC_2D_SRC_DST_FMT_BGRX4444,
+    K_VENC_2D_SRC_DST_FMT_BGRX5551,
+    K_VENC_2D_SRC_DST_FMT_RGB888,
+    K_VENC_2D_SRC_DST_FMT_BGR888,
+    K_VENC_2D_SRC_DST_FMT_RGB565,
+    K_VENC_2D_SRC_DST_FMT_BGR565,
+    K_VENC_2D_SRC_DST_FMT_SEPARATE_RGB,
+    K_VENC_2D_SRC_DST_FMT_BUTT
 } k_venc_2d_src_dst_fmt;
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.10 k_venc_2d_osd_fmt
 
-【Description】
+**Description**:
 
-Defines OSD layer data format enumeration for 2D operations.
+Defines the enumeration of OSD layer data formats for 2D operations.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_2D_OSD_FMT_ARGB8888= 0,
-&emsp;K_VENC_2D_OSD_FMT_ARGB4444,
-&emsp;K_VENC_2D_OSD_FMT_ARGB1555,
-&emsp;K_VENC_2D_OSD_FMT_XRGB8888,
-&emsp;K_VENC_2D_OSD_FMT_XRGB4444,
-&emsp;K_VENC_2D_OSD_FMT_XRGB1555,
-&emsp;K_VENC_2D_OSD_FMT_BGRA8888,
-&emsp;K_VENC_2D_OSD_FMT_BGRA4444,
-&emsp;K_VENC_2D_OSD_FMT_BGRA5551,
-&emsp;K_VENC_2D_OSD_FMT_BGRX8888,
-&emsp;K_VENC_2D_OSD_FMT_BGRX4444,
-&emsp;K_VENC_2D_OSD_FMT_BGRX5551,
-&emsp;K_VENC_2D_OSD_FMT_RGB888,
-&emsp;K_VENC_2D_OSD_FMT_BGR888,
-&emsp;K_VENC_2D_OSD_FMT_RGB565,
-&emsp;K_VENC_2D_OSD_FMT_BGR565,
-&emsp;K_VENC_2D_OSD_FMT_SEPERATE_RGB,
-&emsp;K_VENC_2D_OSD_FMT_BUTT
+    K_VENC_2D_OSD_FMT_ARGB8888 = 0,
+    K_VENC_2D_OSD_FMT_ARGB4444,
+    K_VENC_2D_OSD_FMT_ARGB1555,
+    K_VENC_2D_OSD_FMT_XRGB8888,
+    K_VENC_2D_OSD_FMT_XRGB4444,
+    K_VENC_2D_OSD_FMT_XRGB1555,
+    K_VENC_2D_OSD_FMT_BGRA8888,
+    K_VENC_2D_OSD_FMT_BGRA4444,
+    K_VENC_2D_OSD_FMT_BGRA5551,
+    K_VENC_2D_OSD_FMT_BGRX8888,
+    K_VENC_2D_OSD_FMT_BGRX4444,
+    K_VENC_2D_OSD_FMT_BGRX5551,
+    K_VENC_2D_OSD_FMT_RGB888,
+    K_VENC_2D_OSD_FMT_BGR888,
+    K_VENC_2D_OSD_FMT_RGB565,
+    K_VENC_2D_OSD_FMT_BGR565,
+    K_VENC_2D_OSD_FMT_SEPARATE_RGB,
+    K_VENC_2D_OSD_FMT_BUTT
 } k_venc_2d_osd_fmt;
+```
 
-【Note】
+**Notes**:
 
-- Currently, overlay images only support ARGB8888, ARGB4444, and ARGB1555 formats.
+- Currently, only ARGB8888, ARGB4444, and ARGB1555 formats are supported for image overlay.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.11 k_venc_2d_add_order
 
-【Description】
+**Description**:
 
-Define sequential enumeration of OSD overlays (video, osd, and background layers) of 2D operations.
+Defines the enumeration of OSD overlay order (video, OSD, and background layers) for 2D operations.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-/\* bottom ------\> top \*/
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD= 0,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG,
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,
-&emsp;K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,
-&emsp;K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,
-&emsp;K_VENC_2D_ADD_ORDER_BUTT
+    /* bottom ------> top */
+    K_VENC_2D_ADD_ORDER_VIDEO_OSD = 0,
+    K_VENC_2D_ADD_ORDER_OSD_VIDEO,
+    K_VENC_2D_ADD_ORDER_VIDEO_BG,
+    K_VENC_2D_ADD_ORDER_BG_VIDEO,
+    K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,
+    K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,
+    K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,
+    K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,
+    K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,
+    K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,
+    K_VENC_2D_ADD_ORDER_BUTT
 } k_venc_2d_add_order;
+```
 
-【Members】
+**Members**:
 
-| Member name                         | description                                     |
-|----------------------------------|------------------------------------------|
-| K_VENC_2D_ADD_ORDER_VIDEO_OSD    | Video is at the bottom layer and OSD is at the top level.                 |
-| K_VENC_2D_ADD_ORDER_OSD_VIDEO    | OSD is at the bottom and video is at the top level.                 |
-| K_VENC_2D_ADD_ORDER_VIDEO_BG     | Video is on the bottom layer, and the background color is on the top layer.                |
-| K_VENC_2D_ADD_ORDER_BG_VIDEO     | The background color is on the bottom layer, and the video is on the top layer.                |
-| K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD | Video is on the bottom layer, background color is in the middle layer, and OSD is on the top layer. |
-| K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG | Video is on the bottom layer, OSD is in the middle layer, and the background color is on the top layer. |
-| K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD | The background color is on the bottom layer, the video is in the middle layer, and the OSD is on the top layer. |
-| K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO | The background color is on the bottom layer, the OSD is in the middle layer, and the video is on the top layer. |
-| K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG | OSD is on the bottom layer, video is in the middle layer, and the background color is on the top layer. |
-| K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO | The OSD is at the bottom layer, the background color is in the middle layer, and the video is on the top layer. |
+| Member Name                    | Description                                 |
+|--------------------------------|---------------------------------------------|
+| K_VENC_2D_ADD_ORDER_VIDEO_OSD  | Video at the bottom, OSD at the top.        |
+| K_VENC_2D_ADD_ORDER_OSD_VIDEO  | OSD at the bottom, video at the top.        |
+| K_VENC_2D_ADD_ORDER_VIDEO_BG   | Video at the bottom, background color on top.|
+| K_VENC_2D_ADD_ORDER_BG_VIDEO   | Background color at the bottom, video on top.|
+| K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD | Video at the bottom, background color in the middle, OSD at the top. |
+| K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG | Video at the bottom, OSD in the middle, background color at the top. |
+| K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD | Background color at the bottom, video in the middle, OSD at the top. |
+| K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO | Background color at the bottom, OSD in the middle, video at the top. |
+| K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG | OSD at the bottom, video in the middle, background color at the top. |
+| K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO | OSD at the bottom, background color in the middle, video at the top. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.12 k_rotation
 
-【Description】
+**Description**:
 
-Define an encoded rotation angle enumeration.
+Defines the enumeration of rotation angles for encoding.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VPU_ROTATION_0 = 0,
-&emsp;K_VPU_ROTATION_90 = 1,
-&emsp;K_VPU_ROTATION_180 = 2,
-&emsp;K_VPU_ROTATION_270 = 3,
-&emsp;K_VPU_ROTATION_BUTT
+    K_VPU_ROTATION_0 = 0,
+    K_VPU_ROTATION_90 = 1,
+    K_VPU_ROTATION_180 = 2,
+    K_VPU_ROTATION_270 = 3,
+    K_VPU_ROTATION_BUTT
 } k_rotation;
+```
 
-【Members】
+**Members**:
 
-| Member name             | description              |
-|----------------------|-------------------|
-| K_VPU_ROTATION_0    | Do not rotate, rotate 0 degrees. |
-| K_VPU_ROTATION_90   | Rotate 90 degrees.        |
-| K_VPU_ROTATION_180  | Rotate 180 degrees.       |
-| K_VPU_ROTATION_270  | Rotate 270 degrees.       |
+| Member Name         | Description       |
+|---------------------|-------------------|
+| K_VPU_ROTATION_0    | No rotation, 0 degrees. |
+| K_VPU_ROTATION_90   | Rotate 90 degrees.     |
+| K_VPU_ROTATION_180  | Rotate 180 degrees.    |
+| K_VPU_ROTATION_270  | Rotate 270 degrees.    |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.13 k_venc_mirror
 
-【Description】
+**Description**:
 
-Defines the encoding flipping mode enumeration.
+Defines the enumeration of mirroring methods for encoding.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VENC_MIRROR_HORI = 0,
-&emsp;K_VENC_MIRROR_VERT = 1,
-&emsp;K_VENC_MIRROR_BUTT
+    K_VENC_MIRROR_HORI = 0,
+    K_VENC_MIRROR_VERT = 1,
+    K_VENC_MIRROR_BUTT
 } k_venc_mirror;
+```
 
-【Members】
+**Members**:
 
-| Member name             | description              |
-|----------------------|-------------------|
-| K_VENC_MIRROR_HORI   | Flip horizontally. |
-| K_VENC_MIRROR_VERT   | Flip vertically. |
+| Member Name         | Description       |
+|---------------------|-------------------|
+| K_VENC_MIRROR_HORI  | Horizontal flip.  |
+| K_VENC_MIRROR_VERT  | Vertical flip.    |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.14 k_venc_2d_color_gamut
 
-【Description】
+**Description**:
 
-Define gamut enumeration for 2D operations.
+Defines the enumeration of color gamuts for 2D operations.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;VENC_2D_COLOR_GAMUT_BT601 = 0,
-&emsp;VENC_2D_COLOR_GAMUT_BT709,
-&emsp;VENC_2D_COLOR_GAMUT_BT2020,
-&emsp;VENC_2D_COLOR_GAMUT_BUTT
+    VENC_2D_COLOR_GAMUT_BT601 = 0,
+    VENC_2D_COLOR_GAMUT_BT709,
+    VENC_2D_COLOR_GAMUT_BT2020,
+    VENC_2D_COLOR_GAMUT_BUTT
 } k_venc_2d_color_gamut;
+```
 
-【Members】
+**Members**:
 
-| Member name                   | description        |
-|----------------------------|-------------|
-| VENC_2D_COLOR_GAMUT_BT601  | BT.601 color gamut  |
-| VENC_2D_COLOR_GAMUT_BT709, | BT.709 color gamut  |
-| VENC_2D_COLOR_GAMUT_BT2020 | BT.2020 color gamut |
+| Member Name                   | Description       |
+|-------------------------------|-------------------|
+| VENC_2D_COLOR_GAMUT_BT601     | BT.601 color gamut. |
+| VENC_2D_COLOR_GAMUT_BT709     | BT.709 color gamut. |
+| VENC_2D_COLOR_GAMUT_BT2020    | BT.2020 color gamut. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.15 k_venc_chn_attr
 
-【Description】
+**Description**:
 
-Defines the encoding channel property structure.
+Defines the structure of encoding channel attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;[k_venc_attr](#3116-k_venc_attr) venc_attr;
-&emsp;[k_venc_rc_attr](#3117-k_venc_rc_attr) rc_attr;
+    k_venc_attr venc_attr;
+    k_venc_rc_attr rc_attr;
 } k_venc_chn_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name  | description             |
-|-----------|------------------|
-| venc_attr | Encoder properties.     |
-| rc_attr   | Bitrate controller properties. |
+| Member Name  | Description       |
+|--------------|-------------------|
+| venc_attr    | Encoder attributes. |
+| rc_attr      | Rate controller attributes. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.16 k_venc_attr
 
-【Description】
+**Description**:
 
-Define the encoder property structure.
+Defines the structure of encoder attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_u32 stream_buf_size;
-&emsp;k_u32 stream_buf_cnt;
-&emsp;k_u32 pic_width;
-&emsp;k_u32 pic_height;
-&emsp;k_venc_profile profile;
+    k_payload_type type;
+    k_u32 stream_buf_size;
+    k_u32 stream_buf_cnt;
+    k_u32 pic_width;
+    k_u32 pic_height;
+    k_venc_profile profile;
 } k_venc_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|---|---|
-| type            | Encode the protocol type coin. |
-| stream_buf_size | Bitstream buffer size. |
-| stream_buf_size | Bitstream buffer size. |
-| stream_buf_cnt  | Number of code stream buffers.|
-| profile         | A hierarchical enumeration of the encoding.|
-| pic_width       | Encode the image width. Value range: `[MIN_WIDTH, MAX_WIDTH]`, in pixels. Must be an integer multiple of the MIN_ALIGN.   |
-| pic_height      | Encode the image height. Value range: `[MIN_HEIGHT, MAX_HEIGHT]`, in pixels. Must be an integer multiple of the MIN_ALIGN. |
+| Member Name       | Description       |
+|-------------------|-------------------|
+| type              | Encoding protocol type.  |
+| stream_buf_size   | Stream buffer size.      |
+| stream_buf_cnt    | Number of stream buffers.|
+| pic_width         | Encoding image width. Range: `[MIN_WIDTH, MAX_WIDTH]`, in pixels. Must be a multiple of MIN_ALIGN. |
+| pic_height        | Encoding image height. Range: `[MIN_HEIGHT, MAX_HEIGHT]`, in pixels. Must be a multiple of MIN_ALIGN. |
+| profile           | Encoding profile enumeration. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.17 k_venc_rc_attr
 
-【Description】
+**Description**:
 
-Define the encoding channel bitrate controller attribution structure.
+Defines the structure of rate controller attributes for encoding channels.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;[k_venc_rc_mode](#316-k_venc_rc_mode) rc_mode;
-&emsp;union { [k_venc_cbr](#3118-k_venc_cbr) cbr;
-&emsp;&emsp;[k_venc_vbr](#3119-k_venc_vbr) vbr;
-&emsp;&emsp;[k_venc_fixqp](#3120-k_venc_fixqp) fixqp;
-&emsp;&emsp;[k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp) mjpeg_fixqp;
-&emsp;};
+    k_venc_rc_mode rc_mode;
+    union {
+        k_venc_cbr cbr;
+        k_venc_vbr vbr;
+        k_venc_fixqp fixqp;
+        k_venc_mjpeg_fixqp mjpeg_fixqp;
+    };
 } k_venc_rc_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name     | description                                        |
-|--------------|---------------------------------------------|
-| rc_mode      | RC mode.                                    |
-| cbr          | Constant bit rate mode attribution, reference to H.264/H.265 protocol. |
-| VBR          | Varible bitrate mode attribution, reference to H.264/H.265 protocol. |
-| fixqp        | Fixed QP mode attribution, reference to H.264/H.265 protocol.     |
-| mjpeg_fixqp  | Fixed QP mode attributes, referenc to Mjpeg protocol. |            |
+| Member Name     | Description                                        |
+|-----------------|----------------------------------------------------|
+| rc_mode         | RC mode.                                           |
+| cbr             | CBR attributes for H.264/H.265 encoding channels.  |
+| vbr             | VBR attributes for H.264/H.265 encoding channels.  |
+| fixqp           | Fixqp attributes for H.264/H.265 encoding channels.|
+| mjpeg_fixqp     | Fixqp attributes for MJPEG encoding channels.      |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.18 k_venc_cbr
 
-【Description】
+**Description**:
 
-Define the structure of H.264/H.265 encoded channel CBR attribution.
+Defines the structure of CBR attributes for H.264/H.265 encoding channels.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 GOP;
-&emsp;k_u32 stats_time;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 bit_rate;
+    k_u32 gop;
+    k_u32 stats_time;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 bit_rate;
 } k_venc_cbr;
+```
 
-【Members】
+**Members**:
 
-| Member name        | description                                               |
-|-----------------|----------------------------------------------------|
-| gop             | GOP value.                                            |
-| stats_time      | CBR bitrate statistics time, in seconds. Value range: `[1, 60]`. |
-| src_frame_rate  | Enter the frame rate, in fps.                            |
-| dst_frame_rate  | The encoder outputs the frame rate, in fps.                      |
-| bit_rate        | Average bitrate, in kbps.                        |
+| Member Name       | Description                                               |
+|-------------------|-----------------------------------------------------------|
+| gop               | GOP value.                                                |
+| stats_time        | CBR rate statistics time in seconds. Range: `[1, 60]`.    |
+| src_frame_rate    | Input frame rate in fps.                                  |
+| dst_frame_rate    | Encoder output frame rate in fps.                         |
+| bit_rate          | Average bitrate in kbps.                                  |
 
-【Note】
+**Notes**:
 
-- If the bitrate set exceeds the maximum live bitrate specified in the chip manual, real-time encoding is not guaranteed.
+- If the set bitrate exceeds the maximum real-time bitrate specified in the chip manual, real-time encoding cannot be guaranteed.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.1.19 k_venc_vbr
 
-【Description】
+**Description**:
 
-Define the H.264/H.265 encoding channel VBR attribute structure.
+Defines the structure of VBR attributes for H.264/H.265 encoding channels.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 GOP;
-&emsp;k_u32 stats_time;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 max_bit_rate;
-&emsp;k_u32 bit_rate;
+    k_u32 gop;
+    k_u32 stats_time;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 max_bit_rate;
+    k_u32 bit_rate;
 } k_venc_vbr;
+```
 
-【Members】
+**Members**:
 
-| Member name        | description                                               |
-|-----------------|----------------------------------------------------|
-| gop             | GOP value.                                            |
-| stats_time      | VBR bitrate statistics time, in seconds. Value range: `[1, 60]`. |
-| src_frame_rate  | Enter the frame rate, in fps.                            |
-| dst_frame_rate  | The encoder outputs the frame rate, in fps.                      |
-| max_bit_rate    | Maximum bitrate, in kbps.                        |
-| bit_rate        | Average bitrate, in kbps.                        |
+| Member Name       | Description                                               |
+|-------------------|-----------------------------------------------------------|
+| gop               | GOP value.                                                |
+| stats_time        | VBR rate statistics time in seconds. Range: `[1, 60]`.    |
+| src_frame_rate    | Input frame rate in fps.                                  |
+| dst_frame_rate    | Encoder output frame rate in fps.                         |
+| max_bit_rate      | Maximum bitrate in kbps.                                  |
+| bit_rate          | Average bitrate in kbps.                                  |
 
-【Note】
+**Notes**:
 
-See [k_venc_cbr](#3118-k_venc_cbr)for src_frame_rate and dst_frame_rate instructions.
+Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on src_frame_rate and dst_frame_rate.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
-#### 3.1.20 k_venc_fixqp
+### 3.1.20 k_venc_fixqp
 
-【Description】
+**Description**:
 
-Define the H.264/H.265 encoding channel Fixqp attribute structure.
+Defines the structure for H.264/H.265 encoding channel Fixqp attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 GOP;
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 i_qp; k_u32 p_qp;
+    k_u32 gop;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 i_qp;
+    k_u32 p_qp;
 } k_venc_fixqp;
+```
 
-【Members】
+**Members**:
 
-| Member name        | description                                   |
-|-----------------|----------------------------------------|
-| gop             | GOP value.                                |
-| src_frame_rate  | Enter the frame rate, in fps.                |
-| dst_frame_rate  | The encoder outputs the frame rate, in fps.          |
-| i_qp            | I frame all macroblock Qp values. Value range: `[0, 51]`. |
-| q_qp            | P-frame all macroblock Qp values. Value range: `[0, 51]`. |
+| Member Name     | Description                                 |
+|-----------------|---------------------------------------------|
+| gop             | GOP value.                                  |
+| src_frame_rate  | Input frame rate, in fps.                   |
+| dst_frame_rate  | Encoder output frame rate, in fps.          |
+| i_qp            | QP value for all macroblocks in I-frames. Range: `[0, 51]`.  |
+| p_qp            | QP value for all macroblocks in P-frames. Range: `[0, 51]`.  |
 
-【Note】
+**Notes**:
 
-See [k_venc_cbr](#3118-k_venc_cbr)for src_frame_rate and dst_frame_rate instructions.
+Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
-#### 3.1.21 k_venc_mjpeg_fixqp
+### 3.1.21 k_venc_mjpeg_fixqp
 
-【Description】
+**Description**:
 
-Define the MJPEG encoding channel Fixqp attribute structure.
+Defines the structure for MJPEG encoding channel Fixqp attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 src_frame_rate;
-&emsp;k_u32 dst_frame_rate;
-&emsp;k_u32 q_factor;
+    k_u32 src_frame_rate;
+    k_u32 dst_frame_rate;
+    k_u32 q_factor;
 } k_venc_mjpeg_fixqp;
+```
 
-【Members】
+**Members**:
 
-| Member name        | description                                      |
-|-----------------|-------------------------------------------|
-| src_frame_rate  | Enter the frame rate, in fps.                   |
-| dst_frame_rate  | The encoder outputs the frame rate, in fps.             |
-| q_factor        | MJPEG encoded Qfactor. Value range: `[1, 99]`. |
+| Member Name     | Description                                  |
+|-----------------|----------------------------------------------|
+| src_frame_rate  | Input frame rate, in fps.                    |
+| dst_frame_rate  | Encoder output frame rate, in fps.           |
+| q_factor        | Q factor for MJPEG encoding. Range: `[1, 99]`. |
 
-【Note】
+**Notes**:
 
-src_frame_rate and dst_frame_rate instructions, reference to [k_venc_cbr](#3118-k_venc_cbr).
+Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
-#### 3.1.22 k_venc_chn_status
+### 3.1.22 k_venc_chn_status
 
-【Description】
+**Description**:
 
-Defines the state struct of the encoding channel.
+Defines the structure for the status of encoding channels.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 cur_packs;
-&emsp;k_u64 release_pic_pts;
-&emsp;k_bool end_of_stream;
+    k_u32 cur_packs;
+    k_u64 release_pic_pts;
+    k_bool end_of_stream;
 } k_venc_chn_status;
+```
 
-【Members】
+**Members**:
 
-| Member name         | description                    |
-|------------------|-------------------------|
-| cur_packs        | The number of bitstream packets for the current frame.    |
-| release_pic_pts  | Release the PTS of the image corresponding to the bitstream. |
-| end_of_stream    | Stream end flag bit.      |
+| Member Name      | Description                        |
+|------------------|------------------------------------|
+| cur_packs        | Number of stream packets in the current frame. |
+| release_pic_pts  | PTS of the released stream's corresponding image. |
+| end_of_stream    | End of stream flag.                |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.23 k_venc_stream
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Defines the frame stream type structure.
+### 3.1.23 k_venc_stream
 
-【Definition】
+**Description**:
 
+Defines the structure for frame stream type.
+
+**Definition**:
+
+```c
 typedef struct {
-&emsp;[k_venc_pack](#3124-k_venc_pack) \*pack;
-&emsp;k_u32 pack_cnt;
+    [k_venc_pack](#3124-k_venc_pack) *pack;
+    k_u32 pack_cnt;
 } k_venc_stream;
+```
 
-【Members】
+**Members**:
 
-| Member name | description                     |
-|----------|--------------------------|
-| pack     | Frame stream packet structure.           |
-| pack_cnt | The number of all packets in a frame stream. |
+| Member Name | Description                     |
+|-------------|---------------------------------|
+| pack        | Frame stream packet structure.  |
+| pack_cnt    | Number of packets in one frame stream. |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.24 k_venc_pack
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Define the frame stream packet structure.
+### 3.1.24 k_venc_pack
 
-【Definition】
+**Description**:
 
-&emsp;typedef struct {
-&emsp;k_u64 phys_addr;
-&emsp;k_u32 len;
-&emsp;k_u64 pts;
-&emsp;[k_venc_pack_type](#317-k_venc_pack_type) type;
+Defines the structure for frame stream packets.
+
+**Definition**:
+
+```c
+typedef struct {
+    k_u64 phys_addr;
+    k_u32 len;
+    k_u64 pts;
+    [k_venc_pack_type](#317-k_venc_pack_type) type;
 } k_venc_pack;
+```
 
-【Members】
+**Members**:
 
-| Member name   | description                |
-|------------|---------------------|
-| phys_addr  | The physical address of the stream packet.    |
-| only        | Stream packet length.        |
-| pts        | Timestamp. Unit: us. |
-| type       | Package data type.        |
+| Member Name  | Description                |
+|--------------|----------------------------|
+| phys_addr    | Physical address of the stream packet. |
+| len          | Length of the stream packet. |
+| pts          | Timestamp, in microseconds. |
+| type         | Data type of the packet.    |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.25 k_venc_2d_osd_attr
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-2D overlay attribute structure.
+### 3.1.25 k_venc_2d_osd_attr
 
-【Definition】
+**Description**:
 
-typedef struct{
-&emsp;k_u16 width;
-&emsp;k_u16 height;
-&emsp;k_u16 startx;
-&emsp;k_u16 starty;
-&emsp;k_u32 phys_addr`[3]`;
-&emsp;k_u8 bg_alpha;
-&emsp;k_u8 osd_alpha;
-&emsp;k_u8 video_alpha;
-&emsp;[k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;
-&emsp;k_u32 bg_color;
-&emsp;[k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;
+Defines the structure for 2D overlay attributes.
+
+**Definition**:
+
+```c
+typedef struct {
+    k_u16 width;
+    k_u16 height;
+    k_u16 startx;
+    k_u16 starty;
+    k_u32 phys_addr[3];
+    k_u8 bg_alpha;
+    k_u8 osd_alpha;
+    k_u8 video_alpha;
+    [k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;
+    k_u32 bg_color;
+    [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;
 } k_venc_2d_osd_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name    | description                                                                      |
-|-------------|---------------------------------------------------------------------------|
-| width       | The width of the OSD overlay area.                                                       |
-| height      | The height of the OSD overlay area.                                                       |
-| startx      | The upper left point of the OSD overlay area is offset in the x direction in the original image                                |
-| Starts      | The pixel shift of the upper left point of the OSD overlay area in the y direction in the original image                                |
-| phys_addr   | The physical address of the OSD image.                                                       |
-| bg_alpha    | The transparency of the background layer.                                                          |
-| osd_alpha   | Transparency of OSD images.                                                         |
-| video_alpha | video: Enter the transparency of the image.                                                   |
-| add_order   | OSD overlay order enumeration.                                                         |
-| bg_color    | OSD背景层颜色,YUV444格式。 Y: bit0\~bit7 U: bit8\~bit15 V: bit16\~bit 23 |
-| fmt         | OSD image format enumeration.                                                         |
+| Member Name    | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| width          | Width of the OSD overlay area.                                              |
+| height         | Height of the OSD overlay area.                                             |
+| startx         | X offset of the top-left point of the OSD overlay area in the original image.|
+| starty         | Y offset of the top-left point of the OSD overlay area in the original image.|
+| phys_addr      | Physical address of the OSD image.                                          |
+| bg_alpha       | Transparency of the background layer.                                       |
+| osd_alpha      | Transparency of the OSD image.                                              |
+| video_alpha    | Transparency of the video input image.                                      |
+| add_order      | Enumeration of OSD overlay order.                                           |
+| bg_color       | Background color of the OSD in YUV444 format. Y: bit0~bit7, U: bit8~bit15, V: bit16~bit23 |
+| fmt            | Enumeration of the OSD image format.                                        |
 
-【Note】
+**Notes**:
 
-- The source image and destination image should be guaranteed to be 8byte align at the start address of the DDR.
-- The size of the supported image and OSD is even.
-- The src and dst addresses of the OSD must be the same.
+- The starting address of the source image and the destination image in DDR must be 8-byte aligned.
+- Only even dimensions are supported for images and OSD.
+- The source and destination addresses for OSD must be the same.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
-#### 3.1.26 k_venc_2d_border_attr
+### 3.1.26 k_venc_2d_border_attr
 
-【Description】
+**Description**:
 
-2D frame structure.
+Defines the structure for 2D border drawing.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u16 width;
-&emsp;k_u16 height;
-&emsp;k_u16 line_width;
-&emsp;k_u32 color;
-&emsp;k_u16 startx;
-&emsp;k_u16 starty;
+    k_u16 width;
+    k_u16 height;
+    k_u16 line_width;
+    k_u32 color;
+    k_u16 startx;
+    k_u16 starty;
 } k_venc_2d_border_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name   | description                                                                 |
-|------------|----------------------------------------------------------------------|
-| width      | The width of the frame area, which is the width of the bounding box, including the line width.                             |
-| height     | The height of the frame area, which is the height of the bounding box, including the line width.                             |
-| line_width | The line width of the frame.                                                         |
-| color      | The color of the box. The format is YUV444 Y: bit0\~bit7 U: bit8\~bit15 V: bit16\~bit 23 |
-| startx     | The pixel offset of the upper-left point of the frame area in the x direction in the original image                              |
-| Starts     | The upper left point of the frame area is offset from pixels in the y direction in the original image                              |
+| Member Name   | Description                                                             |
+|---------------|-------------------------------------------------------------------------|
+| width         | Width of the border area, including the line width.                     |
+| height        | Height of the border area, including the line width.                    |
+| line_width    | Line width of the border.                                               |
+| color         | Color of the border in YUV444 format. Y: bit0~bit7, U: bit8~bit15, V: bit16~bit23 |
+| startx        | X offset of the top-left point of the border area in the original image. |
+| starty        | Y offset of the top-left point of the border area in the original image. |
 
-【Note】
+**Notes**:
 
-- The source image and destination image should be guaranteed to be 8byte align at the start address of the DDR.
-- Images and frames are supported with even sizes.
-- The src and dst addresses must be the same.
+- The starting address of the source image and the destination image in DDR must be 8-byte aligned.
+- Only even dimensions are supported for images and borders.
+- The source and destination addresses must be the same.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
-#### 3.1.27 k_venc_h265_sao
+### 3.1.27 k_venc_h265_sao
 
-【Description】
+**Description**:
 
-Define the structure of the H.265 protocol encoding channel Sao.
+Defines the structure for H.265 protocol encoding channel SAO.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_u32 slice_sao_luma_flag;
-&emsp;k_u32 slice_sao_chroma_flag;
+    k_u32 slice_sao_luma_flag;
+    k_u32 slice_sao_chroma_flag;
 } k_venc_h265_sao;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|:--|:--|
-| slice_sao_luma_flag | The default is 1. Value range: 0 or 1. |
-| slice_sao_chroma_flag | The default is 1. Value range: 0 or 1. |
+| Member Name           | Description                     |
+|-----------------------|---------------------------------|
+| slice_sao_luma_flag   | Default is 1. Range: 0 or 1.    |
+| slice_sao_chroma_flag | Default is 1. Range: 0 or 1.    |
 
-【Note】
+**Notes**:
 
 None.
 
-#### 3.1.28 k_venc_rect
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Defines a rectangular area information structure.
+### 3.1.28 k_venc_rect
 
-【Definition】
+**Description**:
 
+Defines the structure for rectangular area information.
+
+**Definition**:
+
+```c
 typedef struct {
-&emsp;k_s32 left;
-&emsp;k_s32 right;
-&emsp;k_u32 top;
-&emsp;k_u32 bottom;
+    k_s32 left;
+    k_s32 right;
+    k_u32 top;
+    k_u32 bottom;
 } k_venc_rect;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|:--|:--|
-| left   | Left offset。 |
-| right  | Right offset。 |
-| top    | Top offset。 |
-| bottom | Bottom offset。 |
+| Member Name | Description     |
+|-------------|-----------------|
+| left        | Left offset.    |
+| right       | Right offset.   |
+| top         | Top offset.     |
+| bottom      | Bottom offset.  |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.29 k_venc_roi_attr
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Define encoded region of interest information.
+### 3.1.29 k_venc_roi_attr
 
-【Definition】
+**Description**:
 
+Defines the structure for encoding region of interest (ROI) information.
+
+**Definition**:
+
+```c
 typedef struct {
-&emsp;k_u32 IDX;
-&emsp;k_bool enable;
-&emsp;k_bool is_abs_qp;
-&emsp;k_s32 qp;
-&emsp;[k_venc_rect](#3128-k_venc_rect) rect;
+    k_u32 idx;
+    k_bool enable;
+    k_bool is_abs_qp;
+    k_s32 qp;
+    [k_venc_rect](#3128-k_venc_rect) rect;
 } k_venc_roi_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|:--|:--|
-| idx | Index of ROI area, the index range supported by the system is ,`[0,15]` and indexes beyond this range are not supported. |
-| enable | Whether to enable this ROI region. |
-| is_abs_qp | ROI region QP mode. K_FALSE: Relative QP. K_TRUE: Absolute QP.|
-| qp | QP value, range`[0,51]`. |
-| rect | ROI region. left, right, top, bottom must be 16 aligned. |
+| Member Name | Description                                                   |
+|-------------|---------------------------------------------------------------|
+| idx         | Index of the ROI region. Supported index range: `[0, 15]`. Out of range indices are not supported. |
+| enable      | Whether to enable this ROI region.                            |
+| is_abs_qp   | QP mode of the ROI region. `K_FALSE`: relative QP. `K_TRUE`: absolute QP. |
+| qp          | QP value. Range: `[0, 51]`.                                   |
+| rect        | ROI region. `left`, `right`, `top`, and `bottom` must be 16-aligned. |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.30 k_venc_h264_entropy
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Define the H.264 protocol encoding channel entropy coding structure.
+### 3.1.30 k_venc_h264_entropy
 
-【Definition】
+**Description**:
 
+Defines the structure for H.264 protocol encoding channel entropy coding.
+
+**Definition**:
+
+```c
 typedef struct {
-&emsp;k_u32 entropy_coding_mode;
-&emsp;k_u32 cabac_init_idc;
+    k_u32 entropy_coding_mode;
+    k_u32 cabac_init_idc;
 } k_venc_h264_entropy;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|:--|:--|
-| entropy_coding_mode | Entropy encoding pattern. 0： cavlc。 1： cabac。 >=2 does not make sense. Baseline does not support cabac. The default value is 1.|
-| cabac_init_idc | Value range: `[0, 2]`, default value 0, see H.264 protocol for details. |
+| Member Name          | Description                                                                                       |
+|----------------------|---------------------------------------------------------------------------------------------------|
+| entropy_coding_mode  | Entropy coding mode. `0`: CAVLC. `1`: CABAC. Values >= `2` are not meaningful. Baseline does not support CABAC. Default value is `1`. |
+| cabac_init_idc       | Range: `[0, 2]`, default value `0`. For specific meanings, refer to the H.264 protocol.           |
 
-【Note】
-
-None.
-
-【See Also】
+**Notes**:
 
 None.
 
-#### 3.1.31 k_venc_h265_entropy
+**Related Data Types and Interfaces**:
 
-【Description】
+None.
 
-Define the H.265 protocol encoding channel entropy coding structure.
+### 3.1.31 k_venc_h265_entropy
 
-【Definition】
+**Description**:
 
+Defines the structure for H.265 protocol encoding channel entropy coding.
+
+**Definition**:
+
+```c
 typedef struct {
-&emsp;k_u32 cabac_init_flag;
+    k_u32 cabac_init_flag;
 } k_venc_h265_entropy;
+```
 
-【Members】
+**Members**:
 
-| Member name | description |
-|:--|:--|
-| cabac_init_flag | Value range:  , `[0, 1]`Default value 1, see H.265 protocol for details. |
+| Member Name       | Description                                               |
+|-------------------|-----------------------------------------------------------|
+| cabac_init_flag   | Range: `[0, 1]`, default value `1`. For specific meanings, refer to the H.265 protocol. |
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 ### 3.2 Video Decoding
 
-The relevant data types for this function module are defined as follows:
+The relevant data type definitions for this functional module are as follows:
 
-- [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num):Define the decoding maximum channel number.
-- [k_vdec_send_mode](#322-k_vdec_send_mode): Define the decoding channel property structure.
-- [k_vdec_chn_attr](#323-k_vdec_chn_attr): Define the decoding channel property structure.
-- [k_vdec_chn_status](#324-k_vdec_chn_status): Define the channel state structure.
-- [k_vdec_dec_err](#325-k_vdec_dec_err): Define the structure for decoding error messages.
-- [k_vdec_stream](#326-k_vdec_stream): Define the stream structure for video decoding.
-- [k_vdec_supplement_info](#327-k_vdec_supplement_info): Define the output frame supplemental information.
+- [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num): Defines the maximum number of channels.
+- [k_vdec_send_mode](#322-k_vdec_send_mode): Defines the structure for decoding channel attributes.
+- [k_vdec_chn_attr](#323-k_vdec_chn_attr): Defines the structure for decoding channel attributes.
+- [k_vdec_chn_status](#324-k_vdec_chn_status): Defines the structure for channel status.
+- [k_vdec_dec_err](#325-k_vdec_dec_err): Defines the structure for decoding error information.
+- [k_vdec_stream](#326-k_vdec_stream): Defines the structure for video decoding stream.
+- [k_vdec_supplement_info](#327-k_vdec_supplement_info): Defines the structure for output frame supplementary information.
 
 #### 3.2.1 K_VDEC_MAX_CHN_NUM
 
-【Description】
+**Description**:
 
-Define the maximum number of channels.
+Defines the maximum number of channels.
 
-【Definition】
+**Definition**:
 
-\#define K_VDEC_MAX_CHN_NUM 4
+```c
+#define K_VDEC_MAX_CHN_NUM 4
+```
 
-【Note】
+**Notes**:
 
 None.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.2.2 k_vdec_send_mode
 
-【Description】
+**Description**:
 
-Defines the decoding channel property structure.
+Defines the structure for decoding channel attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef enum {
-&emsp;K_VDEC_SEND_MODE_STREAM = 0,
-&emsp;K_VDEC_SEND_MODE_FRAME,
-&emsp;K_VDEC_SEND_MODE_BUTT
+    K_VDEC_SEND_MODE_STREAM = 0,
+    K_VDEC_SEND_MODE_FRAME,
+    K_VDEC_SEND_MODE_BUTT
 } k_vdec_send_mode;
+```
 
-【Members】
+**Members**:
 
-| Member name                | description                           |
-|-------------------------|--------------------------------|
-| K_VDEC_SEND_MODE_STREAM | Send streams by stream.             |
-| OT_VDEC_SEND_MODE_FRAME | Send the stream as a frame. In frames. |
+| Member Name           | Description                        |
+|-----------------------|------------------------------------|
+| K_VDEC_SEND_MODE_STREAM | Send stream by stream mode.        |
+| K_VDEC_SEND_MODE_FRAME  | Send stream by frame mode, in units of frames. |
 
-【Note】
+**Notes**:
 
-Currently only streaming is supported.
+Currently, only stream mode is supported.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 None.
 
 #### 3.2.3 k_vdec_chn_attr
 
-【Description】
+**Description**:
 
-Defines the decoding channel property structure.
+Defines the structure for decoding channel attributes.
 
-【Definition】
+**Definition**:
 
+```c
 typedef struct {
-&emsp;k_payload_type type;
-&emsp;[k_vdec_send_mode](#322-k_vdec_send_mode) mode;
-&emsp;k_u32 pic_width;
-&emsp;k_u32 pic_height;
-&emsp;k_u32 stream_buf_size;
-&emsp;k_u32 frame_buf_size;
-&emsp;k_u32 frame_buf_cnt;
-&emsp;k_pixel_format pic_format;
+    k_payload_type type;
+    [k_vdec_send_mode](#322-k_vdec_send_mode) mode;
+    k_u32 pic_width;
+    k_u32 pic_height;
+    k_u32 stream_buf_size;
+    k_u32 frame_buf_size;
+    k_u32 frame_buf_cnt;
+    k_pixel_format pic_format;
 } k_vdec_chn_attr;
+```
 
-【Members】
+**Members**:
 
-| Member name         | description                                              |
-|------------------|---------------------------------------------------|
-| type             | Decodes the protocol type enumeration value.                              |
-| mode             | The code stream transmission method.                                    |
-| pic_width        | The maximum width of the decoded image supported by the channel in pixels          |
-| pic_height       | The maximum height of the decoded image supported by the channel in pixels          |
-| stream_buf_size  | The size of the stream cache.                                  |
-| frame_buf_size   | The decoded image frame stores the buffer size.                          |
-| pic_format       | Input data format enumeration, refer to the K230 System Control API Reference. |
+| Member Name       | Description                                       |
+|-------------------|---------------------------------------------------|
+| type              | Enumeration value for decoding protocol type.     |
+| mode              | Stream sending mode.                              |
+| pic_width         | Maximum width of the decoded image supported by the channel (in pixels). |
+| pic_height        | Maximum height of the decoded image supported by the channel (in pixels). |
+| stream_buf_size   | Size of the stream buffer.                        |
+| frame_buf_size    | Size of the buffer for decoded image frames.      |
+| frame_buf_cnt     | Number of frame buffers.                          |
+| pic_format        | Enumeration of input data format. Refer to "K230 System Control API Reference". |
 
-【Note】
+**Notes**:
 
-- Currently supported pic_format are: PIXEL_FORMAT_YUV_SEMIPLANAR_420 and PIXEL_FORMAT_YVU_PLANAR_420.
+None.
 
-【See Also】
+**Related Data Types and Interfaces**:
+
+None.
+|
+
+【Notes】
+
+- Currently supported `pic_format` values are: `PIXEL_FORMAT_YUV_SEMIPLANAR_420` and `PIXEL_FORMAT_YVU_PLANAR_420`.
+
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3638,41 +3878,43 @@ None.
 
 【Description】
 
-Defines the channel state structure.
+Defines the structure for channel status.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_bool is_started;
-&emsp;k_u32 recv_stream_frames;
-&emsp;k_u32 dec_stream_frames;
-&emsp;[k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;
-&emsp;k_u32 width;
-&emsp;k_u32 height;
-&emsp;k_u64 latest_frame_pts;
-&emsp;k_bool end_of_stream;
+    k_payload_type type;
+    k_bool is_started;
+    k_u32 recv_stream_frames;
+    k_u32 dec_stream_frames;
+    [k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;
+    k_u32 width;
+    k_u32 height;
+    k_u64 latest_frame_pts;
+    k_bool end_of_stream;
 } k_vdec_chn_status;
+```
 
 【Members】
 
-| Member name            | description                                                           |
-|---------------------|----------------------------------------------------------------|
-| type                | Decoding protocol.                                                     |
-| is_started          | Whether the decoder has started receiving the bitstream.                                   |
-| recv_stream_frames  | "The number of frames of the stream received in the stream buffer. -1 means invalid. Invalid when streaming mode is sent. " |
-| dec_stream_frames   | The number of decoded frames in the stream buffer.                                       |
-| dec_err             | Decode error messages.                                                 |
+| Member Name         | Description                                                      |
+|---------------------|------------------------------------------------------------------|
+| type                | Decoding protocol.                                               |
+| is_started          | Whether the decoder has started receiving streams.               |
+| recv_stream_frames  | Number of stream frames received in the stream buffer. `-1` indicates invalid. Not applicable in stream mode. |
+| dec_stream_frames   | Number of decoded frames in the stream buffer.                   |
+| dec_err             | Decoding error information.                                      |
 | width               | Image width.                                                     |
-| height              | Image height.                                                     |
-| latest_frame_pts    | The timestamp of the most recently decoded image.                                         |
-| end_of_stream       | Stream end flag bit.                                             |
+| height              | Image height.                                                    |
+| latest_frame_pts    | Timestamp of the latest decoded image.                           |
+| end_of_stream       | End of stream flag.                                              |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3680,29 +3922,31 @@ None.
 
 【Description】
 
-Define a structure for decoding error messages.
+Defines the structure for decoding error information.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_s32 set_pic_size_err;
-&emsp;k_s32 format_err;
-&emsp;k_s32 stream_unsupport;
+    k_s32 set_pic_size_err;
+    k_s32 format_err;
+    k_s32 stream_unsupport;
 } k_vdec_dec_err;
+```
 
 【Members】
 
-| Member name          | description                                                     |
-|-------------------|----------------------------------------------------------|
-| set_pic_size_err  | The width (or height) of the image is greater than the width (or height) of the channel.                   |
-| format_err        | Unsupported format.                                           |
-| stream_unsupport  | Unsupported specifications (bitstream specifications are inconsistent with the specifications claimed to be supported by the solution). |
+| Member Name          | Description                                                      |
+|----------------------|------------------------------------------------------------------|
+| set_pic_size_err     | Image width (or height) exceeds the channel's width (or height). |
+| format_err           | Unsupported format.                                              |
+| stream_unsupport     | Unsupported specification (stream specification does not match the claimed supported specification). |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3710,31 +3954,33 @@ None.
 
 【Description】
 
-Defines the bitstream structure for video decoding.
+Defines the structure for video decoding stream.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_bool end_of_stream;
-&emsp;k_u64 pts;
-&emsp;k_u32 len;
-&emsp;k_u8 \* addr;
+    k_bool end_of_stream;
+    k_u64 pts;
+    k_u32 len;
+    k_u8 *addr;
 } k_vdec_stream;
+```
 
 【Members】
 
-| Member name      | description                         |
-|---------------|------------------------------|
-| end_of_stream | Whether all streams have been sent.           |
-| pts           | The timestamp of the stream packet. In μs. |
-| only           | The length of the stream packet. Units in byte. |
-| addr          | The address of the stream packet.               |
+| Member Name    | Description                        |
+|----------------|------------------------------------|
+| end_of_stream  | Whether all streams have been sent. |
+| pts            | Timestamp of the stream packet, in microseconds. |
+| len            | Length of the stream packet, in bytes. |
+| addr           | Address of the stream packet.      |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3742,29 +3988,31 @@ None.
 
 【Description】
 
-Defines the output frame supplemental information.
+Defines the structure for output frame supplementary information.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_payload_type type;
-&emsp;k_bool is_valid_frame;
-&emsp;k_bool end_of_stream;
+    k_payload_type type;
+    k_bool is_valid_frame;
+    k_bool end_of_stream;
 } k_vdec_supplement_info;
+```
 
 【Members】
 
-| Member name       | description                 |
-|----------------|----------------------|
-| type           | Decodes the protocol type enumeration value. |
-| is_valid_frame | Whether it is a valid frame.       |
-| end_of_stream  | Stream end flag bit.   |
+| Member Name     | Description                        |
+|-----------------|------------------------------------|
+| type            | Decoding protocol type enumeration. |
+| is_valid_frame  | Whether it is a valid frame.       |
+| end_of_stream   | End of stream flag.                |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3772,28 +4020,30 @@ None.
 
 【Description】
 
-Defines decoding reduced size mode enumeration.
+Defines the enumeration for decoding downscale mode.
 
 【Definition】
 
+```c
 typedef enum {
-&emsp;K_VDEC_DSL_MODE_BY_SIZE,
-&emsp;K_VDEC_DSL_MODE_BY_RATIO,
-&emsp;K_VDEC_DSL_MODE_BUTT
+    K_VDEC_DSL_MODE_BY_SIZE,
+    K_VDEC_DSL_MODE_BY_RATIO,
+    K_VDEC_DSL_MODE_BUTT
 } k_vdec_dsl_mode;
+```
 
 【Members】
 
-| Member name                | description                           |
-|-------------------------|--------------------------------|
-| K_VDEC_DSL_MODE_BY_SIZE | Reduced according to size.             |
-| K_VDEC_DSL_MODE_BY_RATIO | Decrease according to scale.            |
+| Member Name                | Description              |
+|----------------------------|--------------------------|
+| K_VDEC_DSL_MODE_BY_SIZE    | Downscale by size.       |
+| K_VDEC_DSL_MODE_BY_RATIO   | Downscale by ratio.      |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3801,27 +4051,29 @@ None.
 
 【Description】
 
-Define a decoding parameter structure that reduces size by size.
+Defines the structure for downscaling size parameters.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_u32 dsl_frame_width;
-&emsp;k_u32 dsl_frame_height;
+    k_u32 dsl_frame_width;
+    k_u32 dsl_frame_height;
 } k_vdec_dsl_size;
+```
 
 【Members】
 
-| Member name                | description                           |
-|-------------------------|--------------------------------|
-| dsl_frame_width | The width after reducing the size.             |
-| dsl_frame_height | Reduce the height after the size.            |
+| Member Name         | Description              |
+|---------------------|--------------------------|
+| dsl_frame_width     | Width after downscaling. |
+| dsl_frame_height    | Height after downscaling.|
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3829,27 +4081,29 @@ None.
 
 【Description】
 
-Define decoding the proportional size reduction parameter structure.
+Defines the structure for downscaling ratio parameters.
 
 【Definition】
 
+```c
 typedef struct {
-&emsp;k_u8 dsl_ratio_hor;
-&emsp;k_u8 dsl_ratio_ver;
+    k_u8 dsl_ratio_hor;
+    k_u8 dsl_ratio_ver;
 } k_vdec_dsl_ratio;
+```
 
 【Members】
 
-| Member name                | description                           |
-|-------------------------|--------------------------------|
-| dsl_frame_width | Reduce the horizontal scale of the dimension.             |
-| dsl_frame_height | Reduce the vertical ratio of the dimension.            |
+| Member Name       | Description                  |
+|-------------------|------------------------------|
+| dsl_ratio_hor     | Horizontal downscale ratio.  |
+| dsl_ratio_ver     | Vertical downscale ratio.    |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -3857,58 +4111,60 @@ None.
 
 【Description】
 
-Reduced size structure.
+Defines the structure for downscaling.
 
 【Definition】
 
+```c
 typedef struct {
-    &emsp;[k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;
-    &emsp;union
+    [k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;
+    union
     {
-    &emsp;&emsp;[k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;
-    &emsp;&emsp;[k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;
+        [k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;
+        [k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;
     };
 } k_vdec_downscale;
+```
 
 【Members】
 
-| Member name       | description                 |
-|----------------|----------------------|
-| dsl_mode       | Decrease size mode enumeration. |
-| dsl_size       | Reduce the size parameter structure by size.       |
-| dsl_ratio      | Reduce the size parameter structure proportionally.   |
+| Member Name       | Description                        |
+|-------------------|------------------------------------|
+| dsl_mode          | Downscale mode enumeration.        |
+| dsl_size          | Structure for downscale by size.   |
+| dsl_ratio         | Structure for downscale by ratio.  |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
 ## 4. MAPI
 
-### 4.1 Video Coding
+### 4.1 Video Encoding
 
 #### 4.1.1 Overview
 
-MAPI is called on a little core to obtain the stream data of the VENC.
+MAPI is called on the small core to obtain VENC stream data.
 
-#### 4.1.2 Encoded data flow diagram
+#### 4.1.2 Encoding Data Flow Diagram
 
 Figure 4-1
 
 ![mapi encode channel](../../../../zh/01_software/board/mpp/images/d71726ec1aa4be0868689b0b36beaa4f.png)
 
-Typical encoding processes include the reception of input images, the encoding of images, the cross-core transmission of data streams, and the output of code streams.
+A typical encoding process includes receiving input images, encoding the images, cross-core data stream transmission, and stream output.
 
-The coding module (VENC) above is composed of a VENC receiving channel, a coding channel, a 2D receiving channel, and a 2D computing module, see[1.2.1 Video Coding](#121-Video Coding).
+The encoding module (VENC) in the above figure consists of the VENC receiving channel, encoding channel, 2D receiving channel, and 2D operation module. For details, see [1.2.1 Video Encoding](#121-Video Encoding).
 
 #### 4.1.3 API
 
-The video coding module mainly provides functions such as the creation and destruction of video coding channels, the opening and stopping of video coding channels to receive images, the setting and acquisition of encoding channel properties, and the registration and unregistration of callback functions to obtain code streams.
+The video encoding module mainly provides functions for creating and destroying video encoding channels, starting and stopping the reception of images on encoding channels, setting and getting encoding channel attributes, registering and deregistering callback functions for stream acquisition, etc.
 
-This function module provides the following MAPIs:
+This functional module provides the following MAPI:
 
 [kd_mapi_venc_init](#4131-kd_mapi_venc_init)
 
@@ -3934,82 +4190,86 @@ This function module provides the following MAPIs:
 
 【Description】
 
-Initialize the encoding channel.
+Initializes the encoding channel.
 
 【Syntax】
 
-k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#3115-k_venc_chn_attr) \* pst_venc_attr)
+```c
+k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#3115-k_venc_chn_attr) *pst_venc_attr)
+```
 
 【Parameters】
 
-| Parameter name      | description                                        | Input/output |
-|---------------|---------------------------------------------|-----------|
-| chn_num       | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
-| pst_venc_attr | VENC channel property pointer. Static properties.              | input      |
+| Parameter Name  | Description                                | Input/Output |
+|-----------------|--------------------------------------------|--------------|
+| chn_num         | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
+| pst_venc_attr   | Pointer to VENC channel attributes. Static attributes. | Input      |
 
-【Return value】
+【Return Value】
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | succeed               |
-| Non-0    | Failed with a value of error code |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the error code |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
-- Initialization of kd_mapi_sys_init () and kd_mapi_media_init () is required before calling this interface, as detailed in the "SYS MAPI" section.
-- Repeated initialization returns success
+- Before calling this interface, `kd_mapi_sys_init()` and `kd_mapi_media_init()` need to be successfully initialized. See the "SYS MAPI" section for details.
+- Reinitialization returns success.
 
 【Example】
 
-Please refer to sample_venc code
+Please refer to the `sample_venc` code.
 
-【See Also】
+【Related Topics】
 
-[](#4132-kd_mapi_venc_deinit)
- kd_mapi_venc_deinit[k_venc_chn_attr](#3115-k_venc_chn_attr)
+[kd_mapi_venc_deinit](#4132-kd_mapi_venc_deinit)
+[k_venc_chn_attr](#3115-k_venc_chn_attr)
 
 ##### 4.1.3.2 kd_mapi_venc_deinit
 
 【Description】
 
-The encoding channel is deinitialized.
+Deinitializes the encoding channel.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_deinit(k_u32 chn_num)
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
 None.
 
@@ -4017,7 +4277,7 @@ None.
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_init](#4131-kd_mapi_venc_init)
 
@@ -4025,46 +4285,48 @@ None.
 
 【Description】
 
-Registers an encoding channel callback function for encoding data acquisition.
+Registers a callback function for the encoding channel to acquire encoding data.
 
 【Syntax】
 
-k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) \*pst_venc_cb);
+```c
+k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) *pst_venc_cb);
+```
 
 【Parameters】
 
-| Parameter name    | description                                        | Input/output |
-|-------------|---------------------------------------------|-----------|
-| chn_num     | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
-| pst_venc_cb | Encoder callback function structure pointer.                  | input      |
+| Parameter Name  | Description                                | Input/Output |
+|-----------------|--------------------------------------------|--------------|
+| chn_num         | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
+| pst_venc_cb     | Pointer to the encoder callback function structure. | Input      |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
-- The callback function struct pointer cannot be empty.
-- When the contents of the struct are exactly the same, it means that the structure of the callback function is equal.
+- The callback function structure pointer cannot be null.
+- The structure contents must be exactly the same to indicate that the callback function structures are equal.
 - Each channel supports up to five callback functions.
 
 【Example】
 
-none
+None.
 
-【See Also】
+【Related Topics】
 
 kd_mapi_venc_unregistercallback
 kd_venc_callback_s
@@ -4073,45 +4335,46 @@ kd_venc_callback_s
 
 【Description】
 
-Deregister the encoding channel callback function.
+Unregisters a callback function for the encoding channel.
 
 【Syntax】
 
-k_s32 kd_mapi_venc_unregistercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) \*pst_venc_cb);
+```c
+k_s32 kd_mapi_venc_unregistercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) *pst_venc_cb);
+```
 
 【Parameters】
 
-| Parameter name    | description                                        | Input/output |
-|-------------|---------------------------------------------|-----------|
-| chn_num     | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
-| pst_venc_cb | Encoder callback function structure pointer.                  | input      |
+| Parameter Name  | Description                                | Input/Output |
+|-----------------|--------------------------------------------|--------------|
+| chn_num         | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
+| pst_venc_cb     | Pointer to the encoder callback function structure. | Input      |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-库文件:libmapi.a libipcmsg.a libdatafifo.a
+【Notes】
 
-【Note】
-
-pst_venc_cb callback function structure content is exactly the same as the structure content at the time of registration, the callback function can be deregistered.
+The contents of the `pst_venc_cb` callback function structure must be exactly the same as when it was registered to unregister the callback function.
 
 【Example】
 
-none
+None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
 
@@ -4119,48 +4382,49 @@ none
 
 【Description】
 
-Start the encoding channel.
+Starts the encoding channel.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_start(k_s32 chn_num ,k_s32 s32_frame_cnt);
+```
 
 【Parameters】
 
-| Parameter name      | description                                        | Input/output |
-|---------------|---------------------------------------------|-----------|
-| chn_num       | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
-| s32_frame_cnt | The number of frames expected to be encoded                            | input      |
+| Parameter Name  | Description                                | Input/Output |
+|-----------------|--------------------------------------------|--------------|
+| chn_num         | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
+| s32_frame_cnt   | Expected number of encoded frames.         | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
+【Requirements】
 
-【Requirement】
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+【Notes】
 
-【Note】
-
-- Scenario 1: In the video stream encoding scenario, s32_frame_cnt value[KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
-- Scenario 2: In the scenario of single or multiple data encoding, you can start it again after the previous encoding is completed.
-- When scenario 1 switches to scenario 2, you need to call the kd_mapi_venc_stop interface first.
-- When scenario 2 switches to scenario 1, you can call the kd_mapi_venc_stop interface first, or you can start encoding again after coding.
-- For the encoded markup, see [kd_venc_data_s](#4143-kd_venc_data_s) end_of_stream in kd_venc_data_s.
+- Scenario 1: In the video stream encoding scenario, `s32_frame_cnt` should be set to `[KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)`.
+- Scenario 2: In the scenario of single or multiple data encoding, you can only restart after the previous encoding is finished.
+- When switching from Scenario 1 to Scenario 2, you need to call the `kd_mapi_venc_stop` interface first.
+- When switching from Scenario 2 to Scenario 1, you can call the `kd_mapi_venc_stop` interface first or restart encoding after the current encoding is finished.
+- For the encoding completion flag, please refer to `end_of_stream` in [kd_venc_data_s](#4143-kd_venc_data_s).
 
 【Example】
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_stop](#4136-kd_mapi_venc_stop)
 
@@ -4168,35 +4432,37 @@ None.
 
 【Description】
 
-Stop encoding the channel.
+Stops the encoding channel.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_stop(k_s32 chn_num);
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
 None.
 
@@ -4204,7 +4470,7 @@ None.
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
@@ -4212,37 +4478,39 @@ None.
 
 【Description】
 
-The encoding channel binds the input source VI
+Binds the encoding channel to the input source VI.
 
 【Syntax】
 
-k_s32 kd_mapi_venc_bind_vi(k_s32 src_dev, k_s32 src_chn,k_s32 chn_num);
+```c
+k_s32 kd_mapi_venc_bind_vi(k_s32 src_dev, k_s32 src_chn, k_s32 chn_num);
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| src_dev  | Enter the source Device ID                             | input      |
-| src_chn  | Enter the source Channel ID                            | input      |
-| chn_num  | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| src_dev        | Input source Device ID                     | Input        |
+| src_chn        | Input source Channel ID                    | Input        |
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
 None.
 
@@ -4250,7 +4518,7 @@ None.
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_unbind_vi](#4138-kd_mapi_venc_unbind_vi)
 
@@ -4258,37 +4526,39 @@ None.
 
 【Description】
 
-Unbind the input source VI of the encoding channel.
+Unbinds the input source VI from the encoding channel.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_unbind_vi(k_s32 src_dev, k_s32 src_chn, k_s32 chn_num);
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| src_dev  | Enter the source Device ID                             | input      |
-| src_chn  | Enter the source Channel ID                            | input      |
-| chn_num  | VENC channel number Value range: [0, VENC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| src_dev        | Input source Device ID                     | Input        |
+| src_chn        | Input source Channel ID                    | Input        |
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
 None.
 
@@ -4296,7 +4566,7 @@ None.
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_bind_vi](#4137-kd_mapi_venc_bind_vi)
 
@@ -4304,35 +4574,37 @@ None.
 
 【Description】
 
-An IDR frame is requested, and an IDR frame is generated immediately after the call.
+Requests an IDR frame, which is generated immediately after the call.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_request_idr(k_s32 chn_num);
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VENC channel number value range:`[0, VENC_MAX_CHN_NUM]`   | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM]` | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
 None.
 
@@ -4340,7 +4612,7 @@ None.
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
@@ -4348,44 +4620,46 @@ None.
 
 【Description】
 
-Enable IDR frames to generate IDR frames based on the GOP interval.
+Enables IDR frames, generating them according to the GOP interval.
 
 【Syntax】
 
+```c
 k_s32 kd_mapi_venc_enable_idr(k_s32 chn_num, k_bool idr_enable);
+```
 
 【Parameters】
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VENC channel number value range:`[0, VENC_MAX_CHN_NUM]`   | input      |
-| idr_enable  | Whether it is capable of IDR frames, 0: not enabled 1: enabled              | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VENC channel number. Range: `[0, VENC_MAX_CHN_NUM]` | Input       |
+| idr_enable     | Whether to enable IDR frames, 0: disable, 1: enable | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_venc_api.h`, `k_venc_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
-- The interface should be called after [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn) and before [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn).
+- This interface should be called after [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn) and before [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn).
 
 【Example】
 
 None.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
@@ -4404,30 +4678,31 @@ The data types related to video encoding are defined as follows:
 
 【Description】
 
-Encode the callback function structure.
+Encoding callback function structure.
 
 【Definition】
 
+```c
 typedef struct
 {
-&emsp;[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-&emsp;k_u8 \*p_private_data;
-&emsp;k_u8 \*p_private_data;
-}kd_venc_callback_s;
+    [pfn_venc_dataproc](#4142-pfn_venc_dataproc);
+    k_u8 *p_private_data;
+} kd_venc_callback_s;
+```
 
 【Members】
 
-| Member name       | description                                                  |
-|----------------|-------------------------------------------------------|
-| pfn_data_cb    | Callback handlers. Used to get encoded data                        |
-| p_private_data | Private data pointers. As a parameter, it is called in the pfn_venc_dataproc. |
+| Member Name     | Description                                |
+|-----------------|--------------------------------------------|
+| pfn_data_cb     | Callback processing function for obtaining encoded data. |
+| p_private_data  | Private data pointer, used as a parameter in `pfn_venc_dataproc`. |
 
-【Note】
+【Notes】
 
-- After the struct is registered, after the encoding is started, when there is encoded data, the pfn_data_cb function will be called. The user gets the encoded data through this function.
-- p_private_data is private data and can be used by users.
+- After this structure is registered and encoding starts, `pfn_data_cb` will be called when there is encoded data. Users obtain encoded data through this function.
+- `p_private_data` is optional and can be used by the user.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 - [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
 - [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
@@ -4437,25 +4712,27 @@ typedef struct
 
 【Description】
 
-Define an encoded data callback function.
+Defines the encoding data callback function.
 
 【Definition】
 
-typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_data_pack_s) \*p_vstream_data, k_u8 \*p_private_data);
+```c
+typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_data_pack_s) *p_vstream_data, k_u8 *p_private_data);
+```
 
 【Members】
 
-| Member name       | description         |
-|----------------|--------------|
-| chn_num        | Encode the channel handle |
-| kd_venc_data_s | Data pointer     |
-| p_private_data | Private data pointers |
+| Member Name     | Description             |
+|-----------------|-------------------------|
+| chn_num         | Encoding channel handle |
+| kd_venc_data_s  | Data pointer            |
+| p_private_data  | Private data pointer    |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 - [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
 - [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
@@ -4464,66 +4741,70 @@ None.
 
 【Description】
 
-The type of packet encoded.
+Encoded data packet type.
 
 【Definition】
 
+```c
 typedef struct
 {
-&emsp;[k_venc_chn_status](#3122-k_venc_chn_status);
-&emsp;k_u32 u32_pack_cnt;
-&emsp;[k_venc_data_pack_s](#4144-k_venc_data_pack_s) astPack `[`[KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)`]`;
-}kd_venc_data_s;
+    [k_venc_chn_status](#3122-k_venc_chn_status);
+    k_u32 u32_pack_cnt;
+    [k_venc_data_pack_s](#4144-k_venc_data_pack_s) astPack[KD_VENC_MAX_FRAME_PACKCOUNT];
+} kd_venc_data_s;
+```
 
 【Members】
 
-| Member name     | description     |
-|--------------|----------|
-| status       | Channel status |
-| u32_pack_cnt | The number of packages |
-| astPack      | Packets   |
+| Member Name   | Description   |
+|---------------|---------------|
+| status        | Channel status|
+| u32_pack_cnt  | Number of packs|
+| astPack       | Data packs    |
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
-[](#4142-pfn_venc_dataproc)
- pfn_venc_dataproc[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
 ##### 4.1.4.4 k_venc_data_pack_s
 
 【Description】
 
-The type of packet encoded.
+Encoded data packet type.
 
 【Definition】
 
+```c
 typedef struct
 {
-&emsp;k_char * vir_addr;
-&emsp;k_u64 phys_addr;
-&emsp;k_u32 len;
-&emsp;k_u64 pts;
-&emsp;k_venc_pack_type type;
-}k_venc_data_pack_s;
+    k_char *vir_addr;
+    k_u64 phys_addr;
+    k_u32 len;
+    k_u64 pts;
+    k_venc_pack_type type;
+} k_venc_data_pack_s;
+```
 
 【Members】
 
-| Member name  | description             |
-|-----------|------------------|
-| vir_addr  | The virtual address of the packet |
-| phys_addr | The physical address of the packet |
-| Len       | The length of the packet     |
-| pts       | timestamp           |
-| type      | Stream PACK type     |
+| Member Name  | Description           |
+|--------------|-----------------------|
+| vir_addr     | Virtual address of the data pack |
+| phys_addr    | Physical address of the data pack |
+| len          | Length of the data pack|
+| pts          | Timestamp             |
+| type         | Stream pack type      |
 
-【Note】
+【Notes】
 
-Both vir_addr and phys_addr have an address;
+Both `vir_addr` and `phys_addr` have one address.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 [kd_venc_data_s](#4143-kd_venc_data_s)
 
@@ -4531,17 +4812,19 @@ Both vir_addr and phys_addr have an address;
 
 【Description】
 
-Defines the maximum number of packets in each frame of data.
+Defines the maximum number of packs per frame.
 
 【Definition】
 
-\#define KD_VENC_MAX_FRAME_PACKCOUNT 12
+```c
+#define KD_VENC_MAX_FRAME_PACKCOUNT 12
+```
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 None.
 
@@ -4549,17 +4832,19 @@ None.
 
 【Description】
 
-Define unlimited encoding of videos.
+Defines unlimited video encoding.
 
 【Definition】
 
-\#define KD_VENC_LIMITLESS_FRAME_COUNT -1
+```c
+#define KD_VENC_LIMITLESS_FRAME_COUNT -1
+```
 
-【Note】
+【Notes】
 
 None.
 
-【See Also】
+【Related Data Types and Interfaces】
 
 [kd_mapi_venc_start](#4135-kd_mapi_venc_start)
 
@@ -4567,9 +4852,9 @@ None.
 
 #### 4.2.1 API
 
-The video decoding module mainly provides functions such as creating and destroying video decoding channels, opening and stopping video decoding channels to receive images, setting and obtaining decoding channel properties, and binding output decoded images with VO.
+The video decoding module mainly provides functions for creating and destroying video decoding channels, starting and stopping the reception of images on decoding channels, setting and getting decoding channel attributes, and binding output decoded images to VO.
 
-This function module provides the following MAPIs:
+This functional module provides the following MAPI:
 
 [kd_mapi_vdec_init](#4211-kd_mapi_vdec_init)
 
@@ -4591,45 +4876,47 @@ This function module provides the following MAPIs:
 
 【Description】
 
-Initialize the decoding channel.
+Initializes the decoding channel.
 
 【Syntax】
 
-k_s32 kd_mapi_vdec_init(k_u32 chn_num,const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
+```c
+k_s32 kd_mapi_vdec_init(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
+```
 
 【Parameters】
 
-| Parameter name      | description                                        | Input/output |
-|---------------|---------------------------------------------|-----------|
-| chn_num       | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM) | input      |
-| attr          | VDEC channel property pointer. Static properties.              | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
+| attr           | Pointer to VDEC channel attributes. Static attributes. | Input       |
 
-【Return value】
+【Return Value】
 
-| Return value | description               |
-|--------|--------------------|
-| 0      | succeed               |
-| Non-0    | Failed with a value of error code |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the error code |
 
-【Differences】
+【Chip Differences】
 
 None.
 
-【Requirement】
+【Requirements】
 
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
-【Note】
+【Notes】
 
-- Initialization of kd_mapi_sys_init () and kd_mapi_media_init () is required before calling this interface, as detailed in the "SYS MAPI" section.
-- Repeated initialization returns success
+- Before calling this interface, `kd_mapi_sys_init()` and `kd_mapi_media_init()` need to be successfully initialized. See the "SYS MAPI" section for details.
+- Reinitialization returns success.
 
 【Example】
 
-Please refer to sample_vdec code
+Please refer to the `sample_vdec` code.
 
-【See Also】
+【Related Topics】
 
 [kd_mapi_vdec_deinit](#4212-kd_mapi_vdec_deinit)
 
@@ -4637,358 +4924,373 @@ Please refer to sample_vdec code
 
 【Description】
 
-The encoding channel is deinitialized.
+Deinitializes the decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mapi_vdec_deinit(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mapi_vdec_init](#4211-kd_mapi_vdec_init)
 
 ##### 4.2.1.3 kd_mapi_vdec_start
 
-【Description】
+**Description**:
 
-Start the decoding channel.
+Starts the decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mapi_vdec_start(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name      | description                                        | Input/output |
-|---------------|---------------------------------------------|-----------|
-| chn_num       | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_venc_api.h, k_venc_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
-
-None.
-【Example】
+**Chip Differences**:
 
 None.
 
-【See Also】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
+
+None.
+
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mapi_vdec_stop](#4214-kd_mapi_vdec_stop)
 
 ##### 4.2.1.4 kd_mapi_vdec_stop
 
-【Description】
+**Description**:
 
-Stop the decoding channel.
+Stops the decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mapi_vdec_stop(k_u32 chn_num);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM) | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mapi_vdec_start](#4213-kd_mapi_vdec_start)
 
 ##### 4.2.1.5 kd_mapi_vdec_bind_vo
 
-【Description】
+**Description**:
 
-The decoding channel is bound to the output source VO
+Binds the decoding channel to the output source VO.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mapi_vdec_bind_vo(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
+```c
+k_s32 kd_mapi_vdec_bind_vo(k_s32 chn_num, k_s32 vo_dev, k_s32 vo_chn);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM)  | input      |
-| vo_dev   | 输出vo device id                            | input      |
-| vo_chn   | 输出vo device channel                       | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
+| vo_dev         | Output VO device ID                        | Input        |
+| vo_chn         | Output VO device channel                   | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mapi_vdec_unbind_vo](#4216-kd_mapi_vdec_unbind_vo)
 
 ##### 4.2.1.6 kd_mapi_vdec_unbind_vo
 
-【Description】
+**Description**:
 
-Debind the output source VO of the decoding channel.
+Unbinds the output source VO from the decoding channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mapi_vdec_unbind_ao(k_s32 chn_num,k_s32 vo_dev, k_s32 vo_chn);
+```c
+k_s32 kd_mapi_vdec_unbind_vo(k_s32 chn_num, k_s32 vo_dev, k_s32 vo_chn);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM)  | input      |
-| vo_dev   | 输出vo device id                            | input      |
-| vo_chn   | 输出vo device channel                       | input      |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
+| vo_dev         | Output VO device ID                        | Input        |
+| vo_chn         | Output VO device channel                   | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 [kd_mapi_vdec_bind_vo](#4215-kd_mapi_vdec_bind_vo)
 
 ##### 4.2.1.7 kd_mapi_vdec_send_stream
 
-【Description】
+**Description**:
 
-Send stream data decoding.
+Sends stream data for decoding.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mapi_vdec_send_stream(k_u32 chn_num, [k_vdec_stream](#326-k_vdec_stream) *stream, k_s32 milli_sec);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description                                        | Input/output |
-|----------|---------------------------------------------|-----------|
-| chn_num  | VDEC channel number Value range: [0, VDEC_MAX_CHN_NUM)  | input      |
-| stream    | Decode the bitstream data pointer. | input |
-| milli_sec | Flag of the code stream mode. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout period, no upper limit, in ms. | input |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | VDEC channel number. Range: `[0, VDEC_MAX_CHN_NUM)` | Input       |
+| stream         | Pointer to the stream data for decoding    | Input        |
+| milli_sec      | Flag for sending stream data. Range: `-1`: Blocking, `0`: Non-blocking, Positive value: Timeout period in milliseconds | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
+
+None.
+
+**Related Topics**:
 
 None.
 
 ##### 4.2.1.8 kd_mapi_vdec_query_status
 
-【Description】
+**Description**:
 
-Query the status of the decoding channel.
+Queries the status of the decoding channel.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mapi_vdec_query_status(k_u32 chn_num, k_vdec_chn_status *status);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name | description | Input/output |
-|---|---|---|
-| chn_num  | Encode channel information. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)]. | input |
-| status   | Video decoding channel status structure pointer.                                               | output |
+| Parameter Name | Description                                | Input/Output |
+|----------------|--------------------------------------------|--------------|
+| chn_num        | Encoding channel information. Range: `[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))` | Input       |
+| status         | Pointer to the video decoding channel status structure | Output      |
 
-【Return value】
+**Return Values**:
 
-| Return value | description                          |
-|--------|-------------------------------|
-| 0      | succeed                          |
-| Non-0    | Failed with the value of [error codes](#5-error codes) |
+| Return Value | Description             |
+|--------------|-------------------------|
+| 0            | Success                 |
+| Non-zero     | Failure, the value is the [error code](#5. Error Codes) |
 
-【Differences】
-
-None.
-
-【Requirement】
-
-Header files: mapi_vdec_api.h, k_vdec_comm.h
-Library file: libmapi.a libipcmsg.a libdatafifo.a
-
-【Note】
+**Chip Differences**:
 
 None.
 
-【Example】
+**Requirements**:
+
+Header files: `mapi_vdec_api.h`, `k_vdec_comm.h`
+Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
+
+**Notes**:
 
 None.
 
-【See Also】
+**Example**:
 
 None.
 
-## 5. error codes
+**Related Topics**:
 
-Table 41 Encodes API error codes
-| Error code   | Macro definitions                   | description                                         |
-|------------|--------------------------|----------------------------------------------|
-| 0xa0098001 | K_ERR_VENC_INVALID_DEVID | The device ID is outside the legal range                           |
-| 0xa0098002 | K_ERR_VENC_INVALID_CHNID | The channel ID is outside the legal range                           |
-| 0xa0098003 | K_ERR_VENC_ILLEGAL_PARAM | The parameter is outside the legal range                             |
-| 0xa0098004 | K_ERR_VENC_EXIST         | An attempt was made to request or create an existing device, channel, or resource |
-| 0xa0098005 | K_ERR_VENC_UNEXIST       | Attempting to use or destroy a device, channel, or resource that does not exist   |
-| 0xa0098006 | K_ERR_VENC_NULL_PTR      | There is a null pointer in the function parameter                           |
-| 0xa0098007 | K_ERR_VENC_NOT_CONFIG    | Not configured before use                                 |
-| 0xa0098008 | K_ERR_VENC_NOT_SUPPORT   | Unsupported parameters or features                         |
-| 0xa0098009 | K_ERR_VENC_NOT_PERM      | This operation is not allowed, such as attempting to modify static configuration parameters         |
-| 0xa009800c | K_ERR_VENC_NOMEM         | Failed to allocate memory, such as low system memory                 |
-| 0xa009800d | K_ERR_VENC_NOBUF         | Allocation cache failures, such as the requested data buffer is too large         |
-| 0xa009800e | K_ERR_VENC_BUF_EMPTY     | There is no data in the buffer                               |
-| 0xa009800f | K_ERR_VENC_BUF_FULL      | The buffer is full of data                               |
-| 0xa0098010 | K_ERR_VENC_NOTREADY      | The system is not initialized or the corresponding module is not loaded             |
-| 0xa0098011 | K_ERR_VENC_BADADDR       | The address is outside the legal range                             |
-| 0xa0098012 | K_ERR_VENC_BUSY          | The VENC system is busy                                   |
+None.
 
-Table 42 Decodes API error codes
-| Error code   | Macro definitions                   | description                                         |
-|------------|--------------------------|----------------------------------------------|
-| 0xa00a8001 | K_ERR_VDEC_INVALID_DEVID | The device ID is outside the legal range                           |
-| 0xa00a8002 | K_ERR_VDEC_INVALID_CHNID | The channel ID is outside the legal range                           |
-| 0xa00a8003 | K_ERR_VDEC_ILLEGAL_PARAM | The parameter is outside the legal range                             |
-| 0xa00a8004 | K_ERR_VDEC_EXIST         | An attempt was made to request or create an existing device, channel, or resource |
-| 0xa00a8005 | K_ERR_VDEC_UNEXIST       | Attempting to use or destroy a device, channel, or resource that does not exist   |
-| 0xa00a8006 | K_ERR_VDEC_NULL_PTR      | There is a null pointer in the function parameter                           |
-| 0xa00a8007 | K_ERR_VDEC_NOT_CONFIG    | Not configured before use                                 |
-| 0xa00a8008 | K_ERR_VDEC_NOT_SUPPORT   | Unsupported parameters or features                         |
-| 0xa00a8009 | K_ERR_VDEC_NOT_PERM      | This operation is not allowed, such as attempting to modify static configuration parameters         |
-| 0xa00a800c | K_ERR_VDEC_NOMEM         | Failed to allocate memory, such as low system memory                 |
-| 0xa00a800d | K_ERR_VDEC_NOBUF         | Allocation cache failures, such as the requested data buffer is too large         |
-| 0xa00a800e | K_ERR_VDEC_BUF_EMPTY     | There is no data in the buffer                               |
-| 0xa00a800f | K_ERR_VDEC_BUF_FULL      | The buffer is full of data                               |
-| 0xa00a8010 | K_ERR_VDEC_NOTREADY      | The system is not initialized or the corresponding module is not loaded             |
-| 0xa00a8011 | K_ERR_VDEC_BADADDR       | The address is outside the legal range                             |
-| 0xa00a8012 | K_ERR_VDEC_BUSY          | The VDEC system is busy                                   |
+## 5. Error Codes
 
-## 6. Debugging information
+Table 41 Encoding API Error Codes
+| Error Code | Macro Definition           | Description                                    |
+|------------|----------------------------|------------------------------------------------|
+| 0xa0098001 | K_ERR_VENC_INVALID_DEVID   | Device ID out of valid range                   |
+| 0xa0098002 | K_ERR_VENC_INVALID_CHNID   | Channel ID out of valid range                  |
+| 0xa0098003 | K_ERR_VENC_ILLEGAL_PARAM   | Parameters out of valid range                  |
+| 0xa0098004 | K_ERR_VENC_EXIST           | Attempt to create an existing device, channel, or resource |
+| 0xa0098005 | K_ERR_VENC_UNEXIST         | Attempt to use or destroy a non-existent device, channel, or resource |
+| 0xa0098006 | K_ERR_VENC_NULL_PTR        | Null pointer in function parameter             |
+| 0xa0098007 | K_ERR_VENC_NOT_CONFIG      | Not configured before use                      |
+| 0xa0098008 | K_ERR_VENC_NOT_SUPPORT     | Unsupported parameter or function              |
+| 0xa0098009 | K_ERR_VENC_NOT_PERM        | Operation not allowed, such as trying to modify static configuration parameters |
+| 0xa009800c | K_ERR_VENC_NOMEM           | Memory allocation failure, such as insufficient system memory |
+| 0xa009800d | K_ERR_VENC_NOBUF           | Buffer allocation failure, such as requested data buffer too large |
+| 0xa009800e | K_ERR_VENC_BUF_EMPTY       | No data in the buffer                          |
+| 0xa009800f | K_ERR_VENC_BUF_FULL        | Data in the buffer is full                     |
+| 0xa0098010 | K_ERR_VENC_NOTREADY        | System not initialized or corresponding module not loaded |
+| 0xa0098011 | K_ERR_VENC_BADADDR         | Address out of valid range                     |
+| 0xa0098012 | K_ERR_VENC_BUSY            | VENC system busy                               |
 
-For multimedia memory management and system-bound debugging information, refer to K230 System Control API Reference.
+Table 42 Decoding API Error Codes
+| Error Code | Macro Definition           | Description                                    |
+|------------|----------------------------|------------------------------------------------|
+| 0xa00a8001 | K_ERR_VDEC_INVALID_DEVID   | Device ID out of valid range                   |
+| 0xa00a8002 | K_ERR_VDEC_INVALID_CHNID   | Channel ID out of valid range                  |
+| 0xa00a8003 | K_ERR_VDEC_ILLEGAL_PARAM   | Parameters out of valid range                  |
+| 0xa00a8004 | K_ERR_VDEC_EXIST           | Attempt to create an existing device, channel, or resource |
+| 0xa00a8005 | K_ERR_VDEC_UNEXIST         | Attempt to use or destroy a non-existent device, channel, or resource |
+| 0xa00a8006 | K_ERR_VDEC_NULL_PTR        | Null pointer in function parameter             |
+| 0xa00a8007 | K_ERR_VDEC_NOT_CONFIG      | Not configured before use                      |
+| 0xa00a8008 | K_ERR_VDEC_NOT_SUPPORT     | Unsupported parameter or function              |
+| 0xa00a8009 | K_ERR_VDEC_NOT_PERM        | Operation not allowed, such as trying to modify static configuration parameters |
+| 0xa00a800c | K_ERR_VDEC_NOMEM           | Memory allocation failure, such as insufficient system memory |
+| 0xa00a800d | K_ERR_VDEC_NOBUF           | Buffer allocation failure, such as requested data buffer too large |
+| 0xa00a800e | K_ERR_VDEC_BUF_EMPTY       | No data in the buffer                          |
+| 0xa00a800f | K_ERR_VDEC_BUF_FULL        | Data in the buffer is full                     |
+| 0xa00a8010 | K_ERR_VDEC_NOTREADY        | System not initialized or corresponding module not loaded |
+| 0xa00a8011 | K_ERR_VDEC_BADADDR         | Address out of valid range                     |
+| 0xa00a8012 | K_ERR_VDEC_BUSY            | VDEC system busy                               |
+
+## 6. Debug Information
+
+For multimedia memory management and system binding debug information, please refer to the "K230 System Control API Reference".

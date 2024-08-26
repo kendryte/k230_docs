@@ -1,114 +1,114 @@
-# K230 AI in Action - HHB Neural Network Model Deployment Tool
+# K230 AI Practical - HHB Neural Network Model Deployment Tool
 
-![cover](../../images/canaan-cover.png)
+![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase should be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. Some or all of the products, services, or features described in this document may not fall within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate any part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
-### Briefly
+### Overview
 
-This document is the instruction document for the use of HHB on the k230 hardware platform, which guides users on how to compile the model on HHB to generate c code, and how to use the k230 cross-compilation toolchain to compile the program and run on the board.
+This document is a user manual for using HHB on the K230 hardware platform, guiding users on how to compile models on HHB to generate C code, how to use the K230 cross-compilation toolchain to compile programs, and how to run them on the board.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Software Development Engineer
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | description                               |
-| ---- | ---------------------------------- |
-| HHB  | Heterogeneous Honey Badger         |
-| SHL  | Structure of Heterogeneous Library |
+| Abbreviation | Description                          |
+| ------------ | ------------------------------------ |
+| HHB          | Heterogeneous Honey Badger           |
+| SHL          | Structure of Heterogeneous Library   |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author | date      |
-| ---------- | -------- | ------ | --------- |
-| V1.0       | First version of the document | Yang Zhang   | 2023/6/25 |
+| Document Version | Description  | Author | Date       |
+| ---------------- | ------------ | ------ | ---------- |
+| V1.0             | Initial Draft | Zhang Yang | 2023/6/25  |
 
 ## 1. Overview
 
-To deploy and run the HHB program on k230 RTT, the following steps are required
+To deploy and run the HHB program on the K230 RTT, the following steps are required:
 
-- Based on the HHB development environment, compile the model to generate C code
-- Compile C code using the K230 RTT cross-compilation toolchain
-- Run the executable program on the board
+- Compile the model to generate C code based on the HHB development environment.
+- Use the K230 RTT cross-compilation toolchain to compile the C code.
+- Run the executable program on the board.
 
 ### 1.1 HHB
 
-HHB (Heterogeneous Honey Badger) is a set of neural network model deployment toolsets provided by T-Head for the Xuan Tie chip platform. It includes a series of tools required for deployment, such as compilation optimization, performance analysis, process debugging, and result simulation.
+HHB (Heterogeneous Honey Badger) is a neural network model deployment toolset provided by T-Head for the Xuantie chip platform. It includes a series of tools needed for deployment, such as compilation optimization, performance analysis, process debugging, and result simulation.
 
-Functions and features of HHB:
+HHB's features and characteristics:
 
-- Supports models in the corresponding formats of Caffe, TensorFlow, ONNX and TFLite
-- Data types such as 8/16-bit fixed-point and 16/32-bit floating-point are supported
-- Supports symmetric and asymmetric fixed-point quantization, and supports channel quantization
-- You can optimize the network structure of the model before deployment
-- Compile and generate binaries that can be executed on Wujian SoC platforms
-- Supports behavior simulation on the host
-- The multi-component toolset facilitates secondary development
-- Both the traditional Unix command line and Python interfaces are provided
+- Supports models in formats corresponding to Caffe, TensorFlow, ONNX, and TFLite.
+- Supports data types such as 8/16-bit fixed-point and 16/32-bit floating-point.
+- Supports symmetric and asymmetric fixed-point quantization, as well as channel quantization.
+- Optimizes the network structure of the model before deployment.
+- Compiles and generates binaries executable on the Wujian SoC platform.
+- Supports behavioral simulation on the host.
+- Provides a multi-component toolset for secondary development.
+- Offers both traditional Unix command-line and Python interfaces.
 
-HHB already supports many different business algorithms for speech and vision, and can import models from different training frameworks such as PyTorch and TensorFlow.
+HHB supports various business algorithms for speech and vision and can import models from different training frameworks such as PyTorch and TensorFlow.
 
-Based on the open-source project [TVM](https://github.com/apache/tvm), HHB adds rich command line options to provide command mode; presets multi-class quantization algorithms to adapt to the data types supported by different platforms; outputs C code that calls SHL according to the characteristics of different platforms, or directly outputs executable binaries.
+HHB is based on the open-source project [TVM](https://github.com/apache/tvm), adding rich command-line options to provide command mode; it presets various quantization algorithms to adapt to data types supported by different platforms; and outputs C code calling SHL or directly outputs executable binaries according to different platform characteristics.
 
-![HHB frame structure](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6288173861/p668762.png)
+![HHB Framework Structure](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6288173861/p668762.png)
 
-For detailed instructions, please refer to [HHB User Manual](https://www.yuque.com/za4k4z/oxlbxl)
+For detailed usage, please refer to the [HHB User Manual](https://www.yuque.com/za4k4z/oxlbxl).
 
 ### 1.2 SHL
 
-SHL is a set of neural network library APIs provided by T-HEAD for the Xuantie CPU platform. It abstracts interfaces to various common network layers and provides a series of optimized binary libraries.
+SHL is a set of neural network library APIs provided by T-HEAD for the Xuantie CPU platform. It abstracts the interfaces of various commonly used network layers and provides a series of optimized binary libraries.
 
-Features of SHL:
+SHL's features:
 
-- Reference implementation for C code versions.
-- Provides an assembly optimization implementation of Xuantie series CPUs.
-- Supports symmetric and asymmetric quantization.
-- Supports data types such as 8-bit fixed point, 16-bit fixed point and 16-bit floating point.
+- Reference implementation in C code.
+- Provides assembly optimized implementation for the Xuantie series CPUs.
+- Supports symmetric quantization and asymmetric quantization.
+- Supports data types such as 8-bit fixed-point, 16-bit fixed-point, and 16-bit floating-point.
 - Compatible with NCHW and NHWC formats.
-- Use [HHB](https://www.yuque.com/za4k4z/oxlbxl) to implement automatic code invocation.
-- Cover different architectures such as CPU, NPU, etc.
-- Additional heterogeneous reference implementations.
+- Automatically calls code with [HHB](https://www.yuque.com/za4k4z/oxlbxl).
+- Covers different architectures such as CPU and NPU.
+- Provides heterogeneous reference implementations.
 
-SHL provides a completed interface declaration and a reference implementation of the interface, according to which each device provider can complete the optimization work of each interface.
+SHL provides complete interface declarations and reference implementations of the interfaces. Device vendors can complete the optimization of each interface as needed.
 
-For detailed instructions, please refer to [SHL User Manual](https://www.yuque.com/za4k4z/isgz8o/ayilv9)
+For detailed usage, please refer to the [SHL User Manual](https://www.yuque.com/za4k4z/isgz8o/ayilv9).
 
-## 2. HHB compilation model
+## 2. HHB Model Compilation
 
 ### 2.1 Environment Setup
 
-> Precondition: The local PC has docker installed
+> Prerequisite: Docker is installed on the local PC.
 
-- Go to [HHB](https://xuantie.t-head.cn/community/download?id=4212696449735004160)and download the hhb-2.2.35 docker image
+- Download the hhb-2.2.35 docker image from [HHB](https://xuantie.t-head.cn/community/download?id=4212696449735004160).
 
-- Unzip, load and then start docker image
+- Extract/load/start the docker image.
 
   ```shell
   tar xzf hhb-2.2.35.docker.tar.gz
@@ -117,9 +117,9 @@ For detailed instructions, please refer to [SHL User Manual](https://www.yuque.c
   ./start_hhb.sh
   ```
 
-### 2.2 Compiling the model
+### 2.2 Model Compilation
 
-At present, this version of Docker Image does not integrate C908 model compilation, here we can copy C906 and modify the relevant configuration.
+The current version of the docker image does not integrate the C908 model compilation. Here, we copy C906 and modify the relevant configuration.
 
 ```shell
 root@02297217e66d:~# cd /home/example/
@@ -127,13 +127,13 @@ root@02297217e66d:/home/example# cp -a c906 c908
 root@02297217e66d:/home/example# cd c908/onnx_mobilenetv2/
 ```
 
-run.sh relevant modifications
+Modify run.sh
 
-- Modify the value of the `--board` parameter (from `c906` to `c908`)
-- Add calibration set parameter ( `-cd` )
-- Add quantization parameter(`--quantization-scheme`)
+- Change the value of the --board parameter (from c906 to c908).
+- Add the calibration set parameter (-cd).
+- Add quantization parameters (--quantization-scheme).
 
-The final  content of run.sh is as follows
+The modified run.sh content is as follows:
 
 ```shell
 #!/bin/bash -x
@@ -141,9 +141,9 @@ The final  content of run.sh is as follows
 hhb -S --model-file mobilenetv2-12.onnx  --data-scale 0.017 --data-mean "124 117 104" --board c908 --input-name "input" --output-name "output" --input-shape "1 3 224 224" --postprocess save_and_top5 --simulate-data persian_cat.jpg -cd persian_cat.jpg   --quantization-scheme "int8_asym_w_sym" --fuse-conv-relu
 ```
 
-> Note: Different models may have different compilation parameters, which will cause performance data differences. Users need to understand the meaning of each parameter of HHB (hhb -h) based on their own model or consult T-Head.
+> Note: Different models may have different compilation parameters, which may cause performance data differences. Users need to understand the meaning of each HHB parameter (hhb -h) or consult T-Head.
 
-Execute run.sh to start compiling
+Execute run.sh to start compilation.
 
 ```shell
 root@02297217e66d:/home/example/c908/onnx_mobilenetv2# ./run.sh
@@ -178,7 +178,7 @@ The max_value of output: 16.053827
 The min_value of output: -8.026914
 The mean_value of output: 0.002078
 The std_value of output: 11.213154
- ============ top5: ===========
+============ top5: ===========
 283: 16.053827
 281: 14.920615
 282: 12.559759
@@ -186,7 +186,7 @@ The std_value of output: 11.213154
 287: 11.520982
 ```
 
-Finally, a hhb_out directory is generated, as follows
+Finally, the hhb_out directory is generated as follows:
 
 ```shell
 root@02297217e66d:/home/example/c908/onnx_mobilenetv2# ll hhb_out
@@ -210,7 +210,7 @@ drwxr-xr-x 5 root root    4096 Jun 21 09:02 ../
 -rw-r--r-- 1 root root    2040 Jun 21 09:03 process.h
 ```
 
-Copy the hhb_out directory to /mnt, export to your PC host,  which will be re-compiled by the k230 rtt toolchain in the future.
+Copy the hhb_out directory to /mnt and export it to the PC. You will need to re-cross-compile using the K230 RTT toolchain later.
 
 ```shell
 root@02297217e66d:/home/example/c908/onnx_mobilenetv2# cp -a hhb_out/ /mnt/
@@ -220,47 +220,47 @@ root@02297217e66d:/home/example/c908/onnx_mobilenetv2# cp -a hhb_out/ /mnt/
 
 ### 3.1 Environment Setup
 
-> Precondition: The user has compiled the docker image according to the k230_sdk documentation
+> Prerequisite: The user has compiled the docker image according to the k230_sdk documentation.
 
-start k230 docker image
+Start the K230 docker image.
 
 ```shell
 cd /path/to/k230_sdk
 docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) k230_docker /bin/bash
 ```
 
-### 3.2 Compile demo
+### 3.2 Compile the Demo
 
-We provide a demo of HHB in the k230_sdk, and users only need to copy the C code compiled by HHB to compile the executable program running on the board.
+We provide an HHB demo in k230_sdk. Users only need to copy the C code compiled by HHB to compile an executable program that can run on the board.
 
-Description of the relevant catalog
+Directory description:
 
-| directory                                                    | remark                                                       |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| /path/to/k230_sdk/src/big/utils/examples/hhb                 | Users can modify CMakeLists .txt to add new demos            |
-| /path/to/k230_sdk/src/big/utils/lib/csi-nn2 and /path/to/k230_sdk/src/big/utils/lib/hhb-prebuilt-decode | Precompiled libraries that C code depends on (CSI-NN2/JPEG/PNG/Zlib, etc., compiled using the MUSL cross-compilation toolchain) |
+| Directory                                                     | Remarks                                                        |
+| ------------------------------------------------------------- | -------------------------------------------------------------- |
+| /path/to/k230_sdk/src/big/utils/examples/hhb                  | Users can modify CMakeLists.txt to add demos                   |
+| /path/to/k230_sdk/src/big/utils/lib/csi-nn2 and hhb-prebuilt-decode | Precompiled libraries (csi-nn2/jpeg/png/zlib, compiled using musl cross-compilation toolchain) |
 
-Prepare the use case
+Prepare the example:
 
-The mbv2_onnx_int8 directory is the c code generated by HHB earlier, and after the user modifies the model compilation parameters, it needs to be updated synchronously.
+The mbv2_onnx_int8 directory is the C code generated by the previous HHB. Users need to update it after modifying the model compilation parameters.
 
-Users can also add demos and modify CMakeLists .txt according to their own model.
+Users can also add demos according to their models by modifying CMakeLists.txt.
 
-Start compiling
+### Start Compilation
 
 ```shell
 root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk# cd src/big/utils/examples/hhb/
 root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ./build_app.sh
 ```
 
-The final executable program generated is out/bin/mbv2_onnx_int8.elf
+The final generated executable program is `out/bin/mbv2_onnx_int8.elf`.
 
 ```shell
-root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf
+root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf 
 -rwxr-xr-x 1 root root 1172680 Jun 25 14:37 out/bin/mbv2_onnx_int8.elf*
 ```
 
-Transfer the files related to mbv2_onnx_int8 to the /sharefs directory of the little core linux
+Transfer the relevant files for running `mbv2_onnx_int8` to the `/sharefs` directory of the small core Linux.
 
 ```shell
 [root@canaan /sharefs/k230/mbv2_onnx_int8 ]#ls -l
@@ -271,9 +271,9 @@ total 5560
 -rw-r--r--    1 sshd     sshd        602112 Jun 25  2023 persian_cat.jpg.0.bin
 ```
 
-### 3.3 Run demo
+### 3.3 Running the Demo
 
-- Power on K230, execute the following command at serial port of the big core RTT
+- Start the K230, and execute the following commands in the large core RTT serial console.
 
 ```shell
 msh />cd /sharefs/k230/mbv2_onnx_int8/
@@ -282,38 +282,38 @@ msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg.0.b
 Run graph execution time: 64.71648ms, FPS=15.45
 
 === tensor info ===
-shape: 1 3 224 224
+shape: 1 3 224 224 
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000
+shape: 1 1000 
 data pointer: 0x300194c80
 The max_value of output: 15.581656
 The min_value of output: -8.026914
 The mean_value of output: 0.008405
 The std_value of output: 11.703238
- ============ top5: ===========
+============ top5: ===========
 283: 15.581656
 281: 14.731747
 282: 12.559759
 285: 11.709850
 287: 11.143245
 
-msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg
+msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg      
 Run graph execution time: 64.67589ms, FPS=15.46
 
 === tensor info ===
-shape: 1 3 224 224
+shape: 1 3 224 224 
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000
+shape: 1 1000 
 data pointer: 0x300194c80
 The max_value of output: 16.053827
 The min_value of output: -8.026914
 The mean_value of output: 0.009821
 The std_value of output: 12.815542
- ============ top5: ===========
+============ top5: ===========
 283: 16.053827
 281: 15.109484
 282: 13.220798

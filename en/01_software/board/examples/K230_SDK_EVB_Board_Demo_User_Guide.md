@@ -1,119 +1,116 @@
-# K230 SDK Demo User Guide
+# K230 SDK EVB Board Demo User Guide
 
 ![cover](../../../../zh/01_software/board/examples/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+All rights reserved ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as such) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company makes no express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/examples/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/examples/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**All rights reserved © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy part or all of the content of this document, nor disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document mainly introduces the demo program provided in the K230 SDK.
+This document mainly introduces the demo programs provided in the K230 SDK.
 
-### Reader object
+### Intended Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is primarily intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviations
 
-| abbreviation | illustrate                                                        |
-|------|-------------------------------------------------------------|
-| UVC  | USB video class（USB Camera）                                |
-| VVI  | Virtual Video Input, which mainly used for pipeline debugging |
+| Abbreviation | Description                                              |
+|--------------|----------------------------------------------------------|
+| UVC          | USB video class (USB camera)                             |
+| VVI          | Virtual video input, mainly used for pipeline debugging  |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description  | Author | date  |
-|---|---|---|---|
-| V1.0       | Initial | System Software Department | 2023-03-10 |
-| V1.1.     | Add description of VICAP、DPU demo、UVC demo   | System Software Department | 2023-04-07 |
-| V1.2.     | Add multi-channel venc encoding demo, add vi-\>venc-\>MAPI-\> little core storage file demo; Updated VICAP usage instructions ,which support multi-channel output 、 scaling and cropping of output image; Existing demos all support sharefs to load or save audio files; Add encoding demo: ai-\>aenc-\>file Add decoding demo: file-\> adec-\>ao; Add audio synthesis demo: ai-\>aenc adec-\>ao; UVC demo big core end execution command modification; Add MAPI video encoding demo operation description; Add VICAP, KPU, VO joint debugging demo; | System Software Department | 2023-05-06 |
-| V1.3     | Modify the instructions for using venc demo, vdec demo, and nonai_2d demo; Added RTSP push demo description | System Software Department | 2023-5-31 |
-| V1.4     | Add ShareFs usage instructions | SDK Department | 2023-6-1 |
-| V1.5     | Add  voice intercom demo description | SDK Department | 2023-6-12 |
-| V1.6     | Add DRM demo and LVGL demo | SDK Department | 2023-6-29 |
-| V1.7     | Modify the sensor parameter in the venc demo, and add the MAPI VDEC bound VO decoding display in the vdec demo | SDK Department | 2023-6-30 |
-| V1.8     | Modify the instructions for using the MAPI sample_venc and rtsp_demo | SDK Department | 2023-7-1 |
-| V1.9 | Modify the vicap demo instructions to support multiple sensor inputs | SDK Department | 2023-8-1 |
-| V2.0 | Modify the test command of the UVC demo | SDK Department | 2023-8-30 |
+| Document Version | Description of Changes | Author           | Date       |
+|------------------|------------------------|------------------|------------|
+| V1.0             | Initial version        | System Software Dept. | 2023-03-10 |
+| V1.1             | Added descriptions for VICAP, DPU demo, UVC demo | System Software Dept. | 2023-04-07 |
+| V1.2             | Added multi-channel venc encoding demo, added vi->venc->MAPI->small core file saving demo; Updated VICAP usage instructions, supporting multi-channel output and image scaling and cropping functions; All existing demos support loading or saving audio files via sharefs; Added encoding demo: ai->aenc->file, added decoding demo: file->adec->ao; Added comprehensive audio demo: ai->aenc adec->ao; Modified UVC demo command execution on the large core; Added MAPI video encoding demo execution description; Added VICAP, KPU, VO joint debugging demo | System Software Dept. | 2023-05-06 |
+| V1.3             | Modified usage instructions for venc demo, vdec demo, nonai_2d demo; Added rtsp streaming demo instructions | System Software Dept. | 2023-05-31 |
+| V1.4             | Added sharefs usage instructions | SDK Dept. | 2023-06-01 |
+| V1.5             | Added voice intercom demo instructions | SDK Dept. | 2023-06-12 |
+| V1.6             | Added DRM demo, added LVGL demo | SDK Dept. | 2023-06-29 |
+| V1.7             | Modified sensor parameters in venc demo, added MAPI VDEC binding VO decoding display in vdec demo | SDK Dept. | 2023-06-30 |
+| V1.8             | Modified usage instructions for mapi sample_venc and rtsp_demo | SDK Dept. | 2023-07-01 |
+| V1.9             | Modified usage instructions for vicap demo, supporting multi-channel sensor input | SDK Dept. | 2023-08-01 |
+| V2.0             | Modified test commands for uvc demo | SDK Dept. | 2023-08-30 |
 
 ## 1. Overview
 
-This document describes the demo functions and usage methods provided by the K230 SDK. The executable programs on rt-smart are compiled into  /sharefs directory of the little core by default.When testing the big core program, you need to wait for the little core to be fully started, and then the big core enter the /sharefs/app directory to test. The audio and video resource files used in the test demos can be obtained at the following link address <https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
+This document introduces the demo functions provided by the K230 SDK and their usage. The executable programs on rt-smart are all compiled into the small core/sharefs directory by default. When testing the large core program, you need to wait for the small core to fully start, then enter the /sharefs/app directory in the large core's msh to test. The audio and video resource files used in each test demo can be obtained from the following link:
+<https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
 
-## 2. Demo introduction
+## 2. Demo Introduction
 
 ### 2.1 Display_demo
 
 #### 2.1.1 Introduction to display_demo
 
-VO (Video Output) module actively reads video and graphics data from the corresponding location in memory, and outputs video and graphics through the corresponding display device. Display/write-back devices, video layers, and graphics layer conditions supported by the chip.
+The VO (Video Output) module actively reads video and graphic data from the corresponding position in the memory and outputs video and graphics through the corresponding display device. The chip supports display/write-back devices, video layers, and graphic layers.
 
-#### 2.1.2 Feature description
+#### 2.1.2 Feature Description
 
-Video output contains three cases, one is the self-test mode of DSI， the binding test of VO and VVI， and the test of VO layer inserting frames
+Video output includes three use cases: a self-test mode for DSI, a binding test for VO and VVI, and a frame insertion test for the VO layer.
 
-#### 2.1.3 Dependent Resources
+#### 2.1.3 Dependency Resources
 
-A screen is required
+A screen is needed.
 
-#### 2.1.4 Instructions for Use
+#### 2.1.4 Usage Instructions
 
 ##### 2.1.4.1 Compilation
 
-Software compilation refers to the README.md in the release SDK package
+Refer to the README.md in the release SDK software package for software compilation.
 
 ##### 2.1.4.2 Execution
 
-DSI self-test mode demo run command:
+To run the DSI self-test mode demo:
 
 `./sample_vo.elf 2`
 
-An image of the Color Bar is displayed on the screen, as follows:
+A color bar image will be displayed on the screen, as shown below:
 
-![The Background Pattern description is automatically generated](../../../../zh/01_software/board/examples/images/30666ad0db223389adabf15fe92e1e80.png)
+![Auto-generated background pattern description](../../../../zh/01_software/board/examples/images/30666ad0db223389adabf15fe92e1e80.png)
 
-1. VO and VVI bind demo run command:
+1. To run the VO and VVI binding demo:
 
     `./sample_vo.elf 9`
 
-    when  press Enter key once，VVI start sending argb data，press Enter key again, the program exits.
-
-    The display effect is alternating red, green and blue primary colors, and the effect is as follows:
+    Press Enter once to start sending ARGB data from VVI, press Enter again to exit the program. The display effect alternates between red, green, and blue primary colors, as shown below:
 
     ![Image description](../../../../zh/01_software/board/examples/images/fa40ad5ac1c894a2243c684096dcd8b.png)
 
-1. VO layer inserts frames demo run command:
+1. To run the VO layer frame insertion demo:
 
     `./sample_vo.elf 7`
 
-    After executing the command, press Enter key  to insert a picture from the user layer, and press Enter again to exit
-
-    The display effect is as follows:
+    After executing the command, press Enter once to insert an image from the user layer, press Enter again to exit the program. The display effect is as follows:
 
     ![Image description](../../../../zh/01_software/board/examples/images/965a442d281e6cc9d3ecbbedad808f10.png)
 
@@ -121,21 +118,21 @@ An image of the Color Bar is displayed on the screen, as follows:
 
 #### 2.2.1 Introduction to Venc_demo
 
-Venc demo encodes the graphics received by vi, and can frame and OSD overlay the input image. The supported encoding protocols are H.264/H.265/JPEG. The encoding results can be stored as a file, exported to the local computer, and played back using video software.
+The Venc demo encodes the graphics received by VI and can add frames and OSD overlays to the input image. It supports H.264/H.265/JPEG encoding protocols. The encoding results can be stored as files, exported locally, and played using video software.
 
-#### 2.2.2 Feature description
+#### 2.2.2 Feature Description
 
-Only 1280x720 resolution is supported.
+Only supports 1280x720 resolution.
 
-#### 2.2.3 Dependent Resources
+#### 2.2.3 Dependency Resources
 
-Camera
+A camera is needed.
 
-#### 2.2.4 Instructions for Use
+#### 2.2.4 Usage Instructions
 
 ##### 2.2.4.1 mpp_demo Execution
 
-After execution`./sample_venc.elf -h`, the instructions for using the demo are output as follows:
+After executing `./sample_venc.elf -h`, the usage instructions for the demo will be output, as follows:
 
 ```shell
 Usage : ./sample_venc.elf [index] -sensor [sensor_index] -o [filename]
@@ -148,7 +145,7 @@ index:
 sensor_index: see vicap doc
 ```
 
-For the value of sensor_index, please refer to the description of k_vicap_sensor_type in the document `k230_docs/en/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md`. The default value is 7
+The sensor_index value can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document under the description of k_vicap_sensor_type, with a default value of 7.
 
 Example:
 
@@ -156,15 +153,15 @@ Example:
 ./sample_venc.elf 0 -sensor 7 -o out.265
 ```
 
-##### 2.2.4.2 MAPI encoding demo
+##### 2.2.4.2 MAPI Encoding Demo
 
-sample_venc default sensor type used is IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR, the demo currently supports 3-way encoding, you can modify the sensor type and other parameters by passing parameters from the command line, the specific description is as follows:
+The sample_venc default sensor type is IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR. Currently, this demo supports 3-channel encoding. The sensor type and other parameters can be modified via command-line arguments, as described below:
 
-After launching the board:
+After starting the development board:
 
-1. Use `lsmod` to check whether the k_ipcm module is loaded on the little core side. If it is not loaded, execute `insmod k_ipcm.ko` to load the k_ipcm module.
-1. Start the internuclear communication process on the large nuclear side, execute `./sample_sys_inif.elf`
-1. In the /mnt directory on the little core side, execute  , `./sample_venc`by default, 1-channel H264 video encoding is executed, the resolution is 1280x720, and the generated code stream file is stored under the /tmp directory
+1. Check if the k_ipcm module is loaded on the small core side using `lsmod`. If not, execute `insmod k_ipcm.ko` to load the k_ipcm module.
+1. Start the inter-core communication process on the large core side by executing `./sample_sys_inif.elf`.
+1. On the small core side, in the /mnt directory, execute `./sample_venc`. By default, it performs 1-channel H.264 video encoding with a resolution of 1280x720. The generated stream file is stored in the /tmp directory. To pass parameters, refer to the following parameter description:
 
 ```shell
 Usage: ./sample_venc -s 0 -n 2 -o /tmp -t 0
@@ -179,38 +176,38 @@ Usage: ./sample_venc -s 0 -n 2 -o /tmp -t 0
                      -h or --help, will print usage
 ```
 
-sensor_index value refer to the `k230_docs/en/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md`description of the k_vicap_sensor_type in the document, and the default value is 7
+The sensor_index value can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document under the description of k_vicap_sensor_type, with a default value of 7.
 
-Depending on the encoding type, different stream files will be generated in the output directory specified by the little core, for the H264 type, a file will be generated, where 0 represents 0 channel, ` ctrl+c `for the H265 type, a file of the form  will be generated, and the same 0 will `stream_chn0.264`represent 0 channel; for the JPEG type, the shape will be generated`stream_chn0.265``chn0_0.jpg`The jpg image represents the 0th image of channel 0, and 10 jpg images will be generated by default.
+You can stop the execution using `ctrl+c`. Depending on the encoding type, different stream files will be generated in the specified output directory on the small core. For H.264 type, a file like `stream_chn0.264` will be generated, where 0 represents channel 0; For H.265 type, a file like `stream_chn0.265` will be generated, where 0 represents channel 0; For JPEG type, files like `chn0_0.jpg` will be generated, representing the 0th image of channel 0, with 10 JPEG images generated by default.
 
-##### 2.2.4.3 View results
+##### 2.2.4.3 Viewing Results
 
-The output file can be exported locally for viewing with video playback software.
+The output files can be exported locally and viewed using video playback software.
 
 ### 2.3 Nonai_2d_demo
 
 #### 2.3.1 Introduction to Nonai_2d_demo
 
-Nonai_2d demo implements the function of image overlay on the input file.
+The Nonai_2d demo implements image overlay functionality on input files.
 
-#### 2.3.2 Feature description
+#### 2.3.2 Feature Description
 
-Nonai_2d performs image overlay operations by reading a YUV (I420 format) file.
+Nonai_2d performs image overlay operations by reading YUV (I420 format) files.
 
-#### 2.3.3 Dependent Resources
+#### 2.3.3 Dependency Resources
 
-None
+None.
 
-#### 2.3.4 Instructions for Use
+#### 2.3.4 Usage Instructions
 
-The input parameters are as follows:
+Input parameters are as follows:
 
-| The parameter name | description | Default value |
-|---|---|---|
-| -i | Enter a file name | - |
-| -in | Image width  | - |
-| -h | Image height  | - |
-| -or | Output file name | - |
+| Parameter | Description     | Default Value |
+|-----------|-----------------|---------------|
+| -i        | Input file name | -             |
+| -w        | Image width     | -             |
+| -h        | Image height    | -             |
+| -o        | Output file name| -             |
 
 ##### 2.3.4.1 Execution
 
@@ -220,545 +217,550 @@ Example:
 ./sample_nonai_2d.elf -i /sharefs/foreman_128x64_3frames.yuv -w 128 -h 64 -o /sharefs/out_2d.yuv
 ```
 
-##### 2.3.4.2 View results
+##### 2.3.4.2 Viewing Results
 
-The output file can be exported to the local computer for viewing with the YUV playback software.
+The output file can be exported locally and viewed using YUV playback software.
 
 ### 2.4 Vdec_demo
 
 #### 2.4.1 Introduction to Vdec_demo
 
-Vdec demo implements the function of video decoding. The decoding function supports H.264/H.265/JPEG decoding. The supported input data formats are .264/.264/.jpeg.
+The Vdec demo implements video decoding functionality. It supports H.264/H.265/JPEG decoding. The supported input data formats are .264/.264/.jpeg.
 
-#### 2.4.2 Feature description
+#### 2.4.2 Feature Description
 
-Vdec demos are decoded by reading stream files. The decoding output is displayed on the screen.
+The Vdec demo decodes stream files and displays the decoded output on the screen.
 
-#### 2.4.3 Dependent Resources
+#### 2.4.3 Dependency Resources
 
-None
+None.
 
-#### 2.4.4 Instructions for Use
+#### 2.4.4 Usage Instructions
 
 ##### 2.4.4.1 Execution
 
-Execute, `./sample_vdec.elf -help`you can see the configurable parameters and descriptions, the default values of which are shown in the following table:
+Executing `./sample_vdec.elf -help` shows the configurable parameters and their descriptions, with default values as shown in the table below:
 
-| The parameter name | illustrate                                       | Default value |
-|--------|--------------------------------------------|--------|
-| i      | Enter a file name, which needs to be suffixed .264/.265/.jpg | -    |
-| type | vo connector type, please refer to vo document | 0 |
+| Parameter | Description                                      | Default Value |
+|-----------|--------------------------------------------------|---------------|
+| i         | Input file name, with extensions .264/.265/.jpg  | -             |
+| type      | VO connector type, refer to VO document description | 0             |
 
-The type value is set to 0 in the`k230_docs/en/01_software/board/mpp/K230_video_output_API_reference` description of the k_connector_type
+The type value is described in the `k230_docs/zh/01_software/board/mpp/K230_Video_Output_API_Reference.md` document under the description of k_connector_type, set to 0.
 
-###### 2.4.4.1.1 VDEC bound VO decoding display
-
-`./sample_vdec.elf -i canaan.264`
-
-###### 2.4.4.1.2 MAPI VIDEC bound VO decoding display
+###### 2.4.4.1.1 VDEC Binding VO Decoding Display
 
 `./sample_vdec.elf -i canaan.264`
 
-##### 2.4.4.2 View results
+###### 2.4.4.1.2 MAPI VDEC Binding VO Decoding Display
 
-The decoding result can be viewed on the screen.
+`./sample_vdec.elf -i canaan.264`
+
+##### 2.4.4.2 Viewing Results
+
+The decoding results can be viewed on the screen.
 
 ### 2.5 Audio_demo
 
 #### 2.5.1 Introduction to audio_demo
 
-Audio Demo implements audio input and output functions by calling API interfaces. The audio input includes I2S and PDM modules, and the audio output includes the I2S module. The demo includes use cases where audio input or audio output can be tested separately, as well as use cases where audio input and output can be tested at the same time.
+The audio demo implements audio input and output functions by calling API interfaces. Audio input includes I2S and PDM modules, and audio output includes the I2S module. The demo includes use cases for individually testing audio input or output, as well as use cases for simultaneously testing audio input and output.
 
-#### 2.5.2 Feature description
+#### 2.5.2 Feature Description
 
-##### 2.5.2.1 Audio input
+##### 2.5.2.1 Audio Input
 
-Audio input analyzes whether it is normal by capturing sounds from the environment and saving them as files.
+Audio input captures ambient sound and saves it to a file for analysis to determine if it is functioning correctly.
 
-The audio input includes the test of I2S and PDM modules, and the audio data of 15S clock is collected in the demo, and the file format collected is WAV, which can be played directly using VLC. There are 2 groups of i2S audio inputs, and group 0 is used as the audio input by default in the demo. There are 4 groups of PDM audio inputs, and group 0 is used as the audio input by default in the demo.
+Audio input includes tests for the I2S and PDM modules. The demo captures 15 seconds of audio data, and the captured file format is WAV, which can be played directly using VLC. The I2S audio input has 2 groups, with the demo defaulting to using group 0 for audio input. The PDM audio input has 4 groups, with the demo defaulting to using group 0 for audio input.
 
-##### 2.5.2.2 Audio output
+##### 2.5.2.2 Audio Output
 
-The audio output is judged by playing the WAV file, plugging in the headphones to listen to the sound.
+Audio output plays a WAV file, and the sound can be heard through headphones to determine if it is functioning correctly.
 
-The audio output only includes the I2S module test, and the audio output function is tested by playing WAV in the demo, and WAV files of different audio formats can be uploaded to test the audio output function. There are 2 groups of i2S audio outputs, and group 0 is used as the audio output by default in the demo.
+Audio output only includes the I2S module test. The demo tests the audio output function by playing a WAV file. Different audio format WAV files can be uploaded to test the audio output function. The I2S audio output has 2 groups, with the demo defaulting to using group 0 for audio output.
 
-##### 2.5.2.3 Audio input and output
+#### 2.5.2.3 Audio Input and Output
 
-Audio input and output can be tested at the same time.
+Audio input and output can be tested simultaneously.
 
-1. Test the function of the I2S module, that is: real-time acquisition of sound in the environment through the I2S audio input and sound in the environment through the I2S audio output, and connect the headphones to hear the sound in the environment in real time.
-1. Test the function of the PDM module, that is: real-time acquisition of ambient sound through PDM audio input and I2S audio output, plugging in headphones to hear the sound in the environment in real time.
+1. Test the i2s module functionality: Real-time collection of ambient sound through i2s audio input and output through i2s audio output. You can listen to the ambient sound in real-time using headphones.
+1. Test the pdm module functionality: Real-time collection of ambient sound through pdm audio input and output through i2s audio output. You can listen to the ambient sound in real-time using headphones.
 
-##### 2.5.2.4 Audio codec
+##### 2.5.2.4 Audio Codec
 
-Built-in G711A/U 16bit audio codec, users can register other external codecs.
+Built-in g711a/u 16bit audio codec, users can register other external codecs.
 
-##### 2.5.2.5 Data Links
+##### 2.5.2.5 Data Link
 
-1. The audio codec receives the signal from the analog microphone, converted into the PCM data in the I2S format, and input into the I2S in audio; the PCM data output by I2S, after the audio codec, becomes an analog signal emitted, the mode does not use digital IO, fixed use of I2S sdi0 and sdo0 interface.
-1. I2S interfaces directly with off-chip digital microphones and PAs. There are two sets of interfaces to choose from: SDI0, SDO0, and SDI1, SDO1.
-1. Off-chip PDM microphone with up to 8 PDM data inputs to Audio's 4 input data interfaces.
+1. The signal received from the analog microphone by the audio codec is converted into PCM data in I2S format and input into the I2S of the audio module. PCM data output from I2S is converted into an analog signal by the audio codec and sent out. This mode does not use digital IO and fixedly uses the sdi0 and sdo0 interfaces of I2S.
+1. Direct connection between I2S and external digital microphones and PA. Two sets of interfaces can be chosen: sdi0, sdo0, and sdi1, sdo1.
+1. External PDM microphones can input up to 8 channels of PDM data to the 4 input data interfaces of the audio module.
 
-You can use the built-in codec or an external device (audio daughter board) to test audio-related functions. Use the built-in codec to test one set of I2S audio input and output and audio codec related functions, and use the audio daughter board to test 2 sets of I2S audio input and output and 4 groups of PDM audio input functions.
+You can use the built-in codec or external devices (audio sub-board) to test audio-related functions. Using the built-in codec allows testing one set of I2S audio input and output and audio codec-related functions. Using the audio sub-board allows testing 2 sets of i2s audio input and output and 4 sets of pdm audio input functions.
 
-![audio hw](images/audio_001.png)
+![audio hw](../../../../zh/01_software/board/examples/images/173605eb81594328bcb17479f8ea0525.png)
 
-##### 2.5.2.6 Precautions
+##### 2.5.2.6 Notes
 
-1. The built-in codec supports 24bit maximum sampling accuracy, 32bit does not; therefore, when using the built-in codec to test I2S audio input and output, only 16/24 bit sampling accuracy is supported.
+1. The built-in codec supports a maximum sampling precision of 24bit; 32bit is not supported. Therefore, when testing i2s audio input and output using the built-in codec, only 16/24 bit sampling precision is supported.
+1. The audio sub-board i2s loopback test only supports 32bit sampling precision. The reason is as follows:
 
-1. The audio daughter board I2S transmits and receives loopback test, and only supports 32-bit sampling accuracy. Here's why:
+    The audio sub-board uses the MSM261S3526Z0CM silicon microphone for collection, which is in I2S Philips format. The audio sub-board output uses the codec tm8211, which is in i2s right-aligned format with 16bit sampling. Since the i2s module uses the same ws for transmission and reception, only one i2s alignment format can be configured when running simultaneously. To correctly collect audio data, the i2s transmission and reception are configured to I2S Philips format to adapt to the MSM261S3526Z0CM silicon microphone. However, the output is in right-aligned format, so the output data loses precision. But using 32bit precision for transmission and reception is not affected by the i2s alignment format, so there is no impact.
 
-    Audio daughter board acquisition uses MSM261S3526Z0CM silicon microphone, in I2S Philips format, and audio daughter board output uses codec TM8211, i2S right-aligned format, 16-bit sampling. Because the I2S module uses the same WS, only one I2S alignment format can be configured when sending and receiving are running at the same time. In order to obtain audio data correctly, MSM261S3526Z0CM silicon microphones need to be adapted, so the i2s transceiver is configured for I2S Philips format. However, the output is in right-aligned format, so the output data loses accuracy. However, when using 32-bit precision to send and receive, it is not displayed in the I2S-aligned format, so it has no effect.
+    If testing audio input or output separately, it is not affected by sampling precision, and 16/24/32bit are all supported.
 
-    If you test audio input or audio output separately, 16/24/32bit is supported, regardless of sampling accuracy.
+1. When collecting audio using the audio sub-board, the supported sampling rate range is (8k~48k).
 
-1. When using the audio daughter board to capture audio, the sample rate supports the range (8K~48K).
+    The audio sub-board collection module uses the MSM261S3526Z0CM silicon microphone, with a maximum clock of 4MHz. When the sampling rate is 96k (6.144MHz) and 192k (12.288MHz), the collected sound from the audio sub-board will be abnormal.
 
-    THE AUDIO DAUGHTER BOARD ACQUISITION MODULE USES A MSM261S3526Z0CM SILICON MICROPHONE WITH A MAXIMUM CLOCK OF 4MHZ. WHEN SAMPLING RATES ARE 96k (6.144MHZ) AND 192k (12.288MHZ), THE SOUND CAPTURED FROM THE AUDIO DAUGHTER BOARD IS ABNORMAL.
+#### 2.5.3 Dependency Resources
 
-#### 2.5.3 Dependent Resources
+1. Audio testing depends on the audio sub-board.
 
-1. Audio tests rely on audio daughter boards.
+The audio sub-board schematic is as follows:
 
-The audio daughter board schematic is as follows:
+![Diagram, schematic](../../../../zh/01_software/board/examples/images/e5a812cf93366dad91283fce4aea1008.png)
 
-![Illustrative, Schematic description is automatically generated](../../../../zh/01_software/board/examples/images/e5a812cf93366dad91283fce4aea1008.png)
+![Diagram, schematic](../../../../zh/01_software/board/examples/images/c2aafa076e1f78c99c824ed37f29592d.png)
 
-![Illustrative, Schematic description is automatically generated](../../../../zh/01_software/board/examples/images/c2aafa076e1f78c99c824ed37f29592d.png)
-
-When testing I2S input and output, the audio daughter board can be connected via jumper caps as follows:
+When testing i2s input and output, the audio sub-board can be connected as follows using jumper caps:
 
 ![Jumper caps for i2s](../../../../zh/01_software/board/examples/images/818c74d25d2fb4e277bd8cab41863b56.png)
 
-PDM audio acquisition, when acquiring group 0 PDM channel or group 1 PDM channel data, the use pin does not conflict with the I2S pin.
+For pdm audio collection, when collecting data from the 0th or 1st pdm channel, it does not conflict with i2s pins.
 
-When using Group 2 and Group 3 PDM channels, it is necessary to switch to PDM channel mode using jumper caps, as follows:
+When using the 2nd and 3rd pdm channels, jumper caps are needed to switch to pdm channel mode, as follows:
 
 ![Jumper caps for pdm](../../../../zh/01_software/board/examples/images/d655177a42702226fff924fd4c150aa2.png)
 
-#### 2.5.4 Instructions for Use
+#### 2.5.4 Usage Instructions
 
 ##### 2.5.4.1 Compilation
 
-1. For a detailed description of the software compilation environment, refer to the SDK`README.md`.
-1. Set up a sharefs environment, and rely on sharefs to read and write files.
+1. Refer to the `README.md` in the SDK for the software compilation environment.
+1. Set up the sharefs environment, as reading and writing files depend on sharefs.
 
 ##### 2.5.4.2 Execution
 
-After entering the rt-smart system, enter the /sharefs directory to`sample_audio.elf` test the demo.
+After entering the rt-smart system, navigate to the /sharefs directory. `sample_audio.elf` is the test demo.
 
-- You can enter `./sample_audio.elf -help`how to view the demo.
-- `-type`option to test different module functionality;
-- `-samplerate`Option to configure audio input and output different sample rates (8K-192K), default is 44.1K;
-- `-enablecodec`Use a built-in codec or off-chip audio daughter board;
-- `-loglevel`Print the kernel log level;
-- `-bitwidth`Set audio sampling accuracy (16/24/32);
-- `-filename`Load or store the WAV/G711 file name.
+- You can input `./sample_audio.elf -help` to view the demo usage method.
+- Use the `-type` option to test different module functions.
+- Use the `-samplerate` option to configure different sampling rates for audio input and output (8k-192k), with a default of 44.1k.
+- Use the `-enablecodec` option to use the built-in codec or external audio sub-board.
+- Use the `-loglevel` option to set the kernel log level.
+- Use the `-bitwidth` option to set audio sampling precision (16/24/32).
+- Use the `-filename` option to load or save wav/g711 files.
 
-![The Text description is automatically generated](../../../../zh/01_software/board/examples/images/e73b403fe42ae077746ee4e5928a1d86.png)
+![Text description auto-generated](../../../../zh/01_software/board/examples/images/e73b403fe42ae077746ee4e5928a1d86.png)
 
-###### 2.5.4.2.1 I2S audio input test
+###### 2.5.4.2.1 I2S Audio Input Test
 
-- Input `./sample_audio.elf -type 0`to acquire PCM audio data in 15S
-- `-samplerate`option to choose to capture audio at different sample rates,
-- `-bitwidth` to set different sampling accuracy,
-- `-enablecodec`Set whether to use the built-in codec,
-- `-filename` Save the data to a file. After collecting 15s data, the demo automatically exits.
+- Input `./sample_audio.elf -type 0` to collect 15s of pcm audio data.
+- Use the `-samplerate` option to select the sampling rate for audio collection.
+- Use the `-bitwidth` option to set the sampling precision.
+- Use the `-enablecodec` option to set whether to use the built-in codec.
+- Use the `-filename` option to save data to a file. After collecting 15s of data, the demo automatically exits.
 
-Demo implementation idea: This test collects data by calling the API function: AND in a loop`kd_mpi_ai_get_frame``kd_mpi_ai_release_frame`. Note that the AI dev number corresponding to i2s is 0.
+The demo implementation idea: This test collects data by looping the API functions: `kd_mpi_ai_get_frame` and `kd_mpi_ai_release_frame`. Note that the ai dev number corresponding to i2s is 0.
 
 ![i2s input](../../../../zh/01_software/board/examples/images/100ece476c397937609fc134d00b06f4.png)
 
-###### 2.5.4.2.2 PDM audio input test
+###### 2.5.4.2.2 PDM Audio Input Test
 
-- Input `./sample_audio.elf -type 1`to acquire PCM audio data in 15s
-- `-samplerate`option to choose to capture audio at different sample rates
-- `-bitwidth` to set different sampling accuracy
-- `-enablecodec`Set whether to use the built-in codec. After collecting 15s data, the demo automatically exits and saves the data to a file.
+- Input `./sample_audio.elf -type 1` to collect 15s of pcm audio data.
+- Use the `-samplerate` option to select the sampling rate for audio collection.
+- Use the `-bitwidth` option to set the sampling precision.
+- Use the `-enablecodec` option to set whether to use the built-in codec. After collecting 15s of data, the demo automatically exits and saves the data to a file.
 
-Demo implementation idea: This test collects data by calling the API function: AND in a loop`kd_mpi_ai_get_frame``kd_mpi_ai_release_frame`. Note that the AI dev number corresponding to PDM is 1
+The demo implementation idea: This test collects data by looping the API functions: `kd_mpi_ai_get_frame` and `kd_mpi_ai_release_frame`. Note that the ai dev number corresponding to pdm is 1.
 
-![PDM and log](../../../../zh/01_software/board/examples/images/f3da90949599f726a60f56b35b69f7cb.png)
+![pdm in log](../../../../zh/01_software/board/examples/images/f3da90949599f726a60f56b35b69f7cb.png)
 
-###### 2.5.4.2.3 I2S audio output test
+###### 2.5.4.2.3 I2S Audio Output Test
 
-To support playback of WAV files, you need to copy the WAV file to the sharefs path. The demo will loop the WAV file (any other WAV file can also be used), and the user can press any key to exit the function test.
+Supports playing wav files, which need to be copied to the sharefs path. This demo will loop playback of the wav file (any other wav file can also be used). Users can press any key to exit the function test.
 
-Demo implementation idea: This test outputs sound in real time by calling API functions in a loop`kd_mpi_ao_send_frame`.
+The demo implementation idea: This test outputs sound in real-time by looping the API function: `kd_mpi_ao_send_frame`.
 
-![The Text description is automatically generated](../../../../zh/01_software/board/examples/images/09cbde8d64c0df2f2cb4f7c96e00ec99.png)
+![Text description auto-generated](../../../../zh/01_software/board/examples/images/09cbde8d64c0df2f2cb4f7c96e00ec99.png)
 
-###### 2.5.4.2.4 I2S audio input and output API interface test
+###### 2.5.4.2.4 I2S Audio Input and Output API Interface Test
 
-input`./sample_audio.elf -type 3 -bitwidth 32`, real-time test of audio input and output functions through API interface.
+Input `./sample_audio.elf -type 3 -bitwidth 32` to test audio input and output functionalities in real-time through the API interface.
 
-Test the overall functionality of audio input and output by calling the API interface:`kd_mpi_ai_get_frame` Obtain audio data and call `kd_mpi_ao_send_frame`output audio data.The user can press any key to exit the feature test.During the test, the timestamp information collected by AI is output in real time.
+The overall functionality of audio input and output is tested by calling the API interface: `kd_mpi_ai_get_frame` to get audio data and `kd_mpi_ao_send_frame` to output audio data. Users can press any key to exit the function test. During the test, the timestamp information collected by ai is output in real-time.
 
-![The Text description is automatically generated](../../../../zh/01_software/board/examples/images/8438ab40fd6e987e1a8878660364143a.png)
+![Text description auto-generated](../../../../zh/01_software/board/examples/images/8438ab40fd6e987e1a8878660364143a.png)
 
 ![Image description](../../../../zh/01_software/board/examples/images/d8f4d2a4c90f58fe67a7343a836f1b18.png)
 
-###### 2.5.4.2.5 System binding test for I2S audio input and output modules
+###### 2.5.4.2.5 I2S Audio Input and Output Module System Binding Test
 
-Input`./sample_audio.elf -type 4`, real-time test of audio input and output functions through AI and AO module binding.
+Input `./sample_audio.elf -type 4` to test audio input and output functionalities in real-time by binding the ai and ao modules.
 
-By calling the system binding API interface: `kd_mpi_sys_bind`bind the AI and AO modules to test the overall function of audio input and output.The user can press any key to exit the feature test.
+The overall functionality of audio input and output is tested by calling the system binding API interface: `kd_mpi_sys_bind` to bind the ai and ao modules. Users can press any key to exit the function test.
 
-![The Text description is automatically generated](../../../../zh/01_software/board/examples/images/2bd93e4768f76c6af98aa69137156f09.png)
+![Text description auto-generated](../../../../zh/01_software/board/examples/images/2bd93e4768f76c6af98aa69137156f09.png)
 
-###### 2.5.4.2.6 PDM audio input, I2S output API interface test
+###### 2.5.4.2.6 PDM Audio Input, I2S Output API Interface Test
 
-input`./sample_audio.elf -type 5 -bitwidth 32`, real-time test of audio input and output functions through API interface.
+Input `./sample_audio.elf -type 5 -bitwidth 32` to test audio input and output functionalities in real-time through the API interface.
 
-Test the overall functionality of audio input and output by calling the API interface: kd_mpi_ai_get_frame get audio data and call `kd_mpi_ao_send_frame`output audio data.The user can press any key to exit the feature test.During the test, the timestamp information collected by AI is output in real time.![pdm in i2s out log](../../../../zh/01_software/board/examples/images/b7e6e2c2a324b2f5fd97cdafed0a1816.png)
+The overall functionality of audio input and output is tested by calling the API interface: `kd_mpi_ai_get_frame` to get audio data and `kd_mpi_ao_send_frame` to output audio data. Users can press any key to exit the function test. During the test, the timestamp information collected by ai is output in real-time.
 
-###### 2.5.4.2.7 PDM audio input, I2S output system binding test
+![pdm in i2s out log](../../../../zh/01_software/board/examples/images/b7e6e2c2a324b2f5fd97cdafed0a1816.png)
 
-Input`./sample_audio.elf -type 6 -bitwidth 32`, real-time test of audio input and output functions through AI and AO module binding.
+###### 2.5.4.2.7 PDM Audio Input, I2S Output System Binding Test
 
-By calling the system binding API interface: `kd_mpi_sys_bind`bind the AI and AO modules to test the overall function of audio input and output.The user can press any key to exit the feature test.
+Input `./sample_audio.elf -type 6 -bitwidth 32` to test audio input and output functionalities in real-time by binding the ai and ao modules.
 
-![PDM in IS2 out bind](../../../../zh/01_software/board/examples/images/db1519081e96825e6bf20f520a28ebb8.png)
+The overall functionality of audio input and output is tested by calling the system binding API interface: `kd_mpi_sys_bind` to bind the ai and ao modules. Users can press any key to exit the function test.
 
-###### 2.5.4.2.8 Coding Tests
+![pdm in is2 out bind](../../../../zh/01_software/board/examples/images/db1519081e96825e6bf20f520a28ebb8.png)
 
-Get AI data and encode it and save it to a file. The codec only supports G711A/U, 16bit.
+###### 2.5.4.2.8 Encoding Test
 
-System binding method:`./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+Collect ai data and encode it to save to a file. Encoding and decoding only support g711a/u, 16bit.
 
-![Audio Enc Bind Log](../../../../zh/01_software/board/examples/images/d100e8aff87b92e3903227ace2822675.png)
+System binding method: `./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
 
-API interface mode:`./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+![audio enc bind log](../../../../zh/01_software/board/examples/images/d100e8aff87b92e3903227ace2822675.png)
 
-![Audio Enc Log](../../../../zh/01_software/board/examples/images/8c32c668277867b2ab314e47c2d96d03.png)
+API interface method: `./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
 
-###### 2.5.4.2.9 Decoding test
+![audio enc log](../../../../zh/01_software/board/examples/images/8c32c668277867b2ab314e47c2d96d03.png)
 
-Read file data and decode playback. The codec only supports G711A/U, 16bit.
+###### 2.5.4.2.9 Decoding Test
 
-System binding method:`./sample_audio.elf -type 8 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+Read file data and decode it for playback. Encoding and decoding only support g711a/u, 16bit.
+
+System binding method: `./sample_audio.elf -type 8 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
 
 ![audio dec bind](../../../../zh/01_software/board/examples/images/764192b171dc3580719e4e2f6bfecaef.png)
 
-API interface mode:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+API interface method: `./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
 
 ![audio dec](../../../../zh/01_software/board/examples/images/48a50a418c0daae2a69d6bb70306b0b8.png)
 
-###### 2.5.4.2.10 Audio full-process test
+###### 2.5.4.2.10 Full Audio Process Test
 
-1) The recording module ai-\>aenc-\>file and the playback module file-\>adec-\>ao two links run at the same time, simulating the scene of voice intercom. Using the built-in codec, 16-bit precision to simulate. `-filename` to select the file to be played, for G711A format, select`-samplerate` the sampling accuracy. Recording file name: +: if -`_rec`filename is -filename`/sharefs/test.g711a`, the recording file name is:`/sharefs/test.g711a_rec`
+1. Recording module ai->aenc->file and playback module file->adec->ao two paths run simultaneously, simulating a voice intercom scenario. Use the built-in codec with 16bit precision for simulation. Use `-filename` to choose the file to be played, in g711a format, and `-samplerate` to choose the sampling precision. The recording file name is the playback file name followed by `_rec`: for example, if `-filename` is `/sharefs/test.g711a`, the recording file name will be `/sharefs/test.g711a_rec`.
 
 ![Image description](../../../../zh/01_software/board/examples/images/96d5c266517e45cfc95d9bcb65bcebaa.png)
 
-2.AI-\>AENC, ADC-\>AO two links are bound loopback test. Using the built-in codec, 16-bit precision to simulate.
+1. ai->aenc, adec->ao two paths binding loopback test. Use the built-in codec with 16bit precision for simulation.
 
-Also test the G711 encoded stream timestamp.
+Simultaneously test the timestamp of the stream after g711 encoding.
 
 ![Image description](../../../../zh/01_software/board/examples/images/4ecbd28b50bd69bd41b768f4f2755970.png)
 
-Enter`cat /proc/umap/sysbind` to view the inter-module system bindings.
+Input `cat /proc/umap/sysbind` to view the system binding between modules.
 
 ![Image description](../../../../zh/01_software/board/examples/images/23f111756ad924f5538cce7c691da0df.png)
 
 ###### 2.5.4.2.11 MAPI Audio Test
 
-Ensure that the internuclear communication process is started: Execute on the big core:`/bin/sample_sys_init.elf &`
-Make sure the little core is loaded with the intercore communication driver module:`insmod /mnt/k_ipcm.ko`
+Ensure the inter-core communication process is started on the large core: execute on the large core: `/bin/sample_sys_init.elf &`
+Ensure the small core loads the inter-core communication driver module: `insmod /mnt/k_ipcm.ko`
 
-- You can enter `/mnt/sample_audio -help`how to view the demo.
-- `-type`option to test different module functionality.
-- `-samplerate`option to configure audio input and output with different sample rates (8K-192K), default is 44.1K.
-- `-enablecodec`Use the built-in codec or off-chip audio daughter board, and use the built-in codec by default.
-- `-filename`Load or store the G711 file name.
-- `-channels`: Specifies the number of channels. 8
+- You can input `/mnt/sample_audio -help` to view the demo usage method.
+- Use the `-type` option to test different module functions.
+- Use the `-samplerate` option to configure different sampling rates for audio input and output (8k-192k), with a default of 44.1k.
+- Use the `-enablecodec` option to use the built-in codec or external audio sub-board, with the built-in codec used by default.
+- Use the `-filename` option to load or save g711 files.
+- Use the `-channels` option to specify the number of channels.
 
 ![image-20230530101801685](../../../../zh/01_software/board/examples/images/image-20230530101801685.png)
 
-- AI->AENC test
+- ai->aenc test
 
-Execute command on the little core: `/mnt/sample_audio -type 0 -filename test.g711a`Press the q key to exit the test. The demo captures audio data in real time and encodes it into G711A format and saves it to a file.
+Execute the command on the small core: `/mnt/sample_audio -type 0 -filename test.g711a`, press the q key to exit the test. The demo can collect audio data in real-time, encode it into g711a format, and save it to a file.
+
 ![image-20230530102014642](../../../../zh/01_software/board/examples/images/image-20230530102014642.png)
 
-- ADEC->AO test
+- adec->ao test
 
-Execute command on the little core: `/mnt/sample_audio -type 1 -filename tes.g711a`Press the q key to exit the test. The demo can loop decoding and play files in the local G711A format.
+Execute the command on the small core: `/mnt/sample_audio -type 1 -filename tes.g711a`, press the q key to exit the test. The demo can loop decode and play local g711a format files.
+
+### Translation to English
+
 ![image-20230530102747862](../../../../zh/01_software/board/examples/images/image-20230530102747862.png)
 
-- AI->aenc adec->ao loopback test
+- ai->aenc adec->ao loopback test
 
-Run the command on the little core: /mnt/sample_audio -type 2 , press the q key to exit the test. The demo can collect audio data in real time and encode it into G711A format, and then decode the G711A format data and play the output.
+Execute the command on the small core: `/mnt/sample_audio -type 2`, press the q key to exit the test. The demo can collect audio data in real-time, encode it into g711a format, and then decode the g711a format data for playback output.
 ![image-20230530102916366](../../../../zh/01_software/board/examples/images/image-20230530102916366.png)
 
 ### 2.6 Vicap_demo
 
 #### 2.6.1 Introduction to vicap_demo
 
-VICAP Demo implements the camera data acquisition preview function by calling the MPI interface.
+The vicap demo implements camera data collection and preview functionality by calling the mpi interface.
 
-#### 2.6.2 Feature description
+#### 2.6.2 Feature Description
 
-The current version supports image acquisition preview of OV9732, OV9286, and imx335 camera modules, and supports up to three data streams and up to three camera data inputs.
+The current version supports image collection and preview for three camera modules: OV9732, OV9286, and IMX335. It supports up to three data streams per camera and up to three camera data inputs.
 
-#### 2.6.3 Dependent Resources
+#### 2.6.3 Dependency Resources
 
 Camera module
 
-#### 2.6.4 Instructions for Use
+#### 2.6.4 Usage Instructions
 
 ##### 2.6.4.1 Compilation
 
-For a detailed description of the software compilation environment, refer to the SDK`README.md`.
+Refer to the `README.md` in the SDK for the software compilation environment.
 
-1. Executed in the k230_sdk directory, the `make mpp-clean && rt-smart && make build-image`modification of the big core is compiled into the SD card image, and the image`k230_sdk/output/k230_evb_defconfig/images/` file will be generated under the directory`sysimage-sdcard.img`.
+1. Execute `make mpp-clean && rt-smart && make build-image` in the k230_sdk directory to compile the modifications into the SD card image. The image file `sysimage-sdcard.img` will be generated in the `k230_sdk/output/k230_evb_defconfig/images/` directory.
 
 ##### 2.6.4.2 Execution
 
-1. Copy the `src/big/mpp/userapps/sample/elf/sample_vicap.elf`file to the directory specified locally
-1. Mount this directory to the little core Linux via nfs`/sharefs`
-1. On the large kernel end, enter via`cd /sharefs` the command`/sharefs`
-1. Execute commands in this directory`./sample_vicap` to obtain command help information
+1. Copy the `src/big/mpp/userapps/sample/elf/sample_vicap.elf` file to a specified local directory.
+1. Mount this directory to the small core Linux `/sharefs` via NFS.
+1. On the large core, navigate to `/sharefs` using the `cd /sharefs` command.
+1. Execute the `./sample_vicap` command in this directory to get command help information.
 
-When you enter the : `sample_vicap`command, print the following prompt:
+When the `sample_vicap` command is entered, the following prompt information is printed:
 
 ```shell
 usage: ./sample_vicap -mode 0 -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480 -preview 1 -rotation 1
 Options:
- -mode:         vicap work mode[0: online mode, 1: offline mode. only offline mode support multiple sensor input]     default 0
+ -mode:         vicap work mode[0: online mode, 1: offline mode. only offline mode supports multiple sensor input]     default 0
  -dev:          vicap device id[0,1,2]        default 0
  -dw:           enable dewarp[0,1]    default 0
  -sensor:       sensor type[0: ov9732@1280x720, 1: ov9286_ir@1280x720], 2: ov9286_speckle@1280x720]
  -ae:           ae status[0: disable AE, 1: enable AE]        default enable
- -awb:          awb status[0: disable AWB, 1: enable AWb]     default enable
+ -awb:          awb status[0: disable AWB, 1: enable AWB]     default enable
  -chn:          vicap output channel id[0,1,2]        default 0
  -ow:           the output image width, default same with input width
  -oh:           the output image height, default same with input height
  -ox:           the output image start position of x
  -oy:           the output image start position of y
  -crop:         crop enable[0: disable, 1: enable]
- -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
+ -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 supports raw data, default yuv
  -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
- -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion]
+ -rotation:     display rotation[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupported rotation]
  -help:         print this help
 ```
 
-The parameters are described as follows:
+Parameter description:
 
-| **Parameter name** | **Optional parameter value** | **Parameter description** |
+| **Parameter Name** | **Optional Values** | **Description** |
 |---|---|---|
-| -Dev         | 0: vicap device 0 1: vicap device 1 2: vicap device 2.                             | Specify the currently used vicap device, and the system supports up to three vicap devices. By specifying the device number, the binding relationship between the sensor and different vicap devices is realized. For example: -dev 1 -sensor 0 binds the ov9732 1280x720 RGB image output to vicap device 1.                   |
-| -mode | 0: Online mode; 1: Offline mode | Specify the vicap device working mode, current before online mode and offline mode. For multiple sensor inputs, it must be specified as offline mode. |
-| -sensor      | 0: ov9732@1280x720,  1: ov9286_ir@1280x720,  2: ov9286_speckle@1280x720, 3: imx335_2lan@1920x1080, 4:imx335_2lan@2592x1944, 5: imx335_4lan@2592x1944| Specify the sensor type currently used, the current system supports three types of image output: ov9732 1280x720 RGB image output, ov9286 1280x720 infrared image output, ov9286 1280x720 speckle image output. The IMX335 outputs an RGB image                                                         |
-| -Chn         | 0: vicap device output channel 0 1: vicap device output channel 1 2: vicap device output channel 2.     | Specify the output channel of the currently used vicap device, one vicap device supports up to three outputs, and only channel 0 supports RAW image format output  |
-| -ow          |                                                                         | Specifies the output image width, which defaults to the input image width. The width needs to be 16 bytes aligned. If the default width exceeds the maximum width of the display output, the display output width is used as the final output width of the image If the output width is smaller than the input image width and the ox or oy parameters are not specified, the default is the scaled output |
-| -oh          |                                                                         | Specifies the output image height, which defaults to the input image height. If the default height exceeds the maximum height of the display output, the display output height is used as the final output height of the image If the output height is less than the input image height and the ox or oy parameter is not specified, the default is the scaled output  |
-| -ox          |                                                                         | Specifies the horizontal start position of the image output, this parameter greater than 0 will perform the output cropping operation  |
-| -Limited liability company          |                                                                         | Specifies the vertical start position of the image output, this parameter greater than 0 will perform the output cropping operation |
-| -crop        | 0: Disable the cropping function 1: Enable the cropping function                                         | When the output image size is smaller than the input image size, the output is not scaled by default, or clipped if the flag is specified  |
-| -ofmt        | 0:YUV format output 1:RGB format output 2:RAW format output                            | Specify the output image format, the default is YUV output.  |
-| -preview     | 0: Disable preview display 1: Enable preview display                                         | Specifies the output image preview display function. The default is enabled. Currently, up to 2 output images can be previewed at the same time. |
-| -rotation    | 0: Rotate 0 degrees 1: Rotate 90 degrees 2: Rotate 180 degrees 3: Rotate 270 degrees 4: Rotation is not supported          | Specifies the rotation angle of the preview display window. By default, only the first output image window supports the rotation function. |
+| -dev         | 0: vicap device 0, 1: vicap device 1, 2: vicap device 2. | Specifies the vicap device to use. The system supports up to three vicap devices. By specifying the device number, the binding relationship between the sensor and different vicap devices is achieved. For example: `-dev 1 -sensor 0` means binding the OV9732 1280x720 RGB image output to vicap device 1. |
+| -mode | 0: online mode; 1: offline mode | Specifies the work mode of the vicap device. Currently supports online and offline modes. For multiple sensor inputs, it must be specified as offline mode. |
+| -sensor      | 0: ov9732@1280x720, 1: ov9286_ir@1280x720, 2: ov9286_speckle@1280x720, 3: imx335_2lan@1920x1080, 4: imx335_2lan@2592x1944, 5: imx335_4lan@2592x1944 | Specifies the type of sensor to use. The current system supports three types of image output: OV9732 1280x720 RGB image output, OV9286 1280x720 infrared image output, OV9286 1280x720 speckle image output. The IMX335 outputs RGB images. |
+| -chn         | 0: vicap device output channel 0, 1: vicap device output channel 1, 2: vicap device output channel 2. | Specifies the output channel of the vicap device. A vicap device supports up to three outputs, only channel 0 supports RAW image format output. |
+| -ow   |       | Specifies the output image width, default is the input image width. The width needs to be aligned to 16 bytes. If the default width exceeds the maximum display output width, the display output width will be used as the final output width. If the output width is smaller than the input image width and the `ox` or `oy` parameters are not specified, it defaults to scaled output. |
+| -oh   |       | Specifies the output image height, default is the input image height. If the default height exceeds the maximum display output height, the display output height will be used as the final output height. If the output height is smaller than the input image height and the `ox` or `oy` parameters are not specified, it defaults to scaled output. |
+| -ox   |       | Specifies the horizontal starting position of the image output. If this parameter is greater than 0, crop operation will be performed. |
+| -oy   |       | Specifies the vertical starting position of the image output. If this parameter is greater than 0, crop operation will be performed. |
+| -crop        | 0: Disable crop function, 1: Enable crop function | When the output image size is smaller than the input image size, it defaults to scaled output. If this flag is specified, it will crop the output. |
+| -ofmt        | 0: yuv format output, 1: rgb format output, 2: raw format output | Specifies the output image format, default is yuv output. |
+| -preview     | 0: Disable preview display, 1: Enable preview display | Specifies the output image preview display function. Default is enabled. Currently supports up to 2 output image previews simultaneously. |
+| -rotation    | 0: Rotate 0 degrees, 1: Rotate 90 degrees, 2: Rotate 180 degrees, 3: Rotate 270 degrees, 4: Unsupported rotation | Specifies the rotation angle of the preview display window. Default only the first output image window supports rotation function. |
 
 Example 1:
 
 `./sample_vicap -dev 0 -sensor 0 -chn 0 -chn 1 -ow 640 -oh 480`
 
-Note: Bind the ov9732@1280x720 RGB to vicap device 0 and enable vicap device output channel 0 and channel 1, where channel 0 output size defaults to the input image size (1280x720) and channel 1 output image size is 640x480
+Description: Binds OV9732@1280x720 RGB to vicap device 0, and enables vicap device output channels 0 and 1. Channel 0 output size defaults to input image size (1280x720), channel 1 output image size is 640x480.
 
 Example 2:
 
 `./sample_vicap.elf -mode 1 -dev 0 -sensor 0 -chn 0 -ow 1080 -oh 720 -dev 1 -sensor 1 -chn 0 -ow 1080 -oh 720 -dev 2 -sensor 2 -chn 0 -ow 1080 -oh 720 -preview 0`
 
-Note: Three inputs and outputs. Bind the ov9732@1280x720 RGB to vicap device 0 and set channel 0 to output an image with a size of 1080x720; bind ov9286@1280x720 infrared to vicap device 1 and set channel 0 to output an image with a size of 1080x720; bind ov9286@1280x720 speckle to vicap device 2 and set channel 0 to output an image with a size of 1080x720 (no preview);
+Description: Three-way input and output. Binds OV9732@1280x720 RGB to vicap device 0 and sets channel 0 output size to 1080x720; binds OV9286@1280x720 infrared to vicap device 1 and sets channel 0 output size to 1080x720; binds OV9286@1280x720 speckle to vicap device 2 and sets channel 0 output size to 1080x720 (no preview).
 
 ### 2.7 DMA_demo
 
 #### 2.7.1 Introduction to DMA_demo
 
-##### 2.7.1.1 Unbound mode
+##### 2.7.1.1 Non-binding Mode
 
-DMA channels 0-3 are GDMA and 4-7 are SDMA.
+DMA channels 0-3 are GDMA, channels 4-7 are SDMA.
 
-- Channel 0 continuous input image with 1920x1080 resolution, 8bit, YUV400, single channel mode, output after rotation 90 degrees, and golden data comparison
-- Channel 1 continuous input image with 1280x720 resolution, 8bit, YUV420, dual-channel mode, output after rotation 180 degrees, and golden data comparison
-- Channel 2 continuous input image with resolution of 1280x720, 10bit, YUV420, triple channel mode, x-mirror, y-mirror post output, and golden data comparison
-- Channel 4 loops a piece of data in 1D mode, and compares it with the golden data after the transfer is completed
-- Channel 5 loops a piece of data in 2D mode, and compares it with the golden data after the transfer is completed
+- Channel 0 continuously inputs images with a resolution of 1920x1080, 8bit, YUV400, single-channel mode, rotates 90 degrees and outputs, and compares with golden data.
+- Channel 1 continuously inputs images with a resolution of 1280x720, 8bit, YUV420, dual-channel mode, rotates 180 degrees and outputs, and compares with golden data.
+- Channel 2 continuously inputs images with a resolution of 1280x720, 10bit, YUV420, triple-channel mode, x-mirror, y-mirror and outputs, and compares with golden data.
+- Channel 4 performs 1D mode cyclic transfer of a segment of data, and compares with golden data after the transfer is complete.
+- Channel 5 performs 2D mode cyclic transfer of a segment of data, and compares with golden data after the transfer is complete.
 
-##### 2.7.1.2 Binding mode
+##### 2.7.1.2 Binding Mode
 
-Using VVI as the DMA analog input, channel 0 of VVI device 0 is bound to channel 0 of DMA, and channel 1 of VVI device 0 is bound to channel 1 of DMA. Every other second, vvi enters an image of 640x320, YUV400, 8bit, rotated 90°, and 640x320, YUV400, 8bit, rotated 180° to channel 1.
+Uses VVI as DMA simulated input. Channel 0 of VVI device 0 is bound to DMA channel 0, and channel 1 of VVI device 0 is bound to DMA channel 1. VVI inputs a 640x320, YUV400, 8bit, rotated 90° image to channel 0 every second, and inputs a 640x320, YUV400, 8bit, rotated 180° image to channel 1.
 
-#### 2.7.2 Feature description
+#### 2.7.2 Feature Description
 
-Including DMA device property configuration, channel property configuration, graphics input, output, release, pipeline binding and other functions.
+Includes DMA device attribute configuration, channel attribute configuration, graphic input, output, release, and pipeline binding functions.
 
-#### 2.7.3 Dependent Resources
+#### 2.7.3 Dependency Resources
 
-not
+None
 
-#### 2.7.4 Instructions for Use
+#### 2.7.4 Usage Instructions
 
 ##### 2.7.4.1 Compilation
 
-Software compilation refers to the README.md in the release SDK package.
+Refer to the README.md in the release SDK software package for software compilation.
 
 ##### 2.7.4.2 Execution
 
-1. Unbound mode demo runs
+1. Non-binding mode demo run
 
 `/bin/sample_dma.elf`
 
-The test information will be displayed on the screen, enter e to end the run.
+Test information will be displayed on the screen, input q to end the run.
 
-1. The bound mode demo runs
+1. Binding mode demo run
 
 `/bin/sample_dma_bind.elf`
 
-A test message will be displayed on the screen, enter q to finish the run.
+Test information will be displayed on the screen, input q to end the run.
 
 ### 2.8 DPU_demo
 
 #### 2.8.1 Introduction to dpu_demo
 
-##### 2.8.1.1 Unbound mode
+##### 2.8.1.1 Non-binding Mode
 
-Parse parameters from the configuration file and configure the device and channel properties of the DPU, read and configure the reference map and template map from the specified path, cycle through the input of infrared map and speckle map, obtain the result, and detect whether the calculation is correct.
+Parses parameters from the configuration file and configures the DPU's device and channel attributes, reads and configures reference and template images from the specified path, loops input of infrared and speckle images, obtains results and checks if the calculations are correct.
 
-##### 2.8.1.2 Binding mode
+##### 2.8.1.2 Binding Mode
 
-Parse parameters from the configuration file and configure the device properties and channel properties of the DPU, read and configure the reference map and template map from the specified path, use VVI as the simulation prestage for pipeline binding, input the infrared map and speckle map, DPU calculate the result, obtain the result in user mode and save the depth map in the form of a file (you can use the corresponding software to open the depth map), press q to exit the program.
+Parses parameters from the configuration file and configures the DPU's device and channel attributes, reads and configures reference and template images from the specified path, binds the pipeline using VVI as the simulated front-end, inputs infrared and speckle images, DPU calculates the results, user space obtains the results and saves the depth map as a file (the depth map can be opened with appropriate software), press q to exit the program.
 
-#### 2.8.2 Feature description
+#### 2.8.2 Feature Description
 
-Including configuration file resolution, device and channel attribute configuration, device and channel startup pause, user-mode input data, output results, release results, pipeline bound input and output.
+Includes configuration file parsing, device and channel attribute configuration, device and channel start and stop, user space input data, output results, release results, and pipeline binding input and output.
 
-#### 2.8.3 Dependent Resources
+#### 2.8.3 Dependency Resources
 
-not
+None
 
-#### 2.8.4 Instructions for Use
+#### 2.8.4 Usage Instructions
 
 ##### 2.8.4.1 Compilation
 
-For the software compilation environment, refer to the README.md in the SDK. Since this module requires dependent files, the following steps need to be performed at compile time:
+Refer to the README.md in the SDK for the software compilation environment. Since this module requires dependent files, the following steps need to be performed during compilation:
 
 ##### 2.8.4.2 Execution
 
-1. The configuration file required for demo and the golden data of input and output are stored in `k230_sdk/test_resource/dpu` the directory  , and the entire folder can be`dpu` copied to the directory for convenience `/sharefs/`(please `sharefs`refer to the corresponding document for use), and a directory will exist in the big core after`/sharefs/dpu/` copying.
-1. Copy`k230_sdk/src/big/mpp/userapps/sample/elf/sample_dpu.elf` to `/sharefs/`a directory.
-1. Unbound mode demo runs
+1. The configuration files and input/output golden data required for the demo are stored in the `k230_sdk/test_resource/dpu` directory. To facilitate use, you can copy the entire `dpu` folder to the `/sharefs/` directory (refer to the corresponding documentation for the use of `sharefs`). After copying, the `/sharefs/dpu/` directory will exist in the large core.
+1. Copy `k230_sdk/src/big/mpp/userapps/sample/elf/sample_dpu.elf` to the `/sharefs/` directory.
+1. Non-binding mode demo run
 
     `/sharefs/sample_dpu.elf /sharefs/dpu/`
 
-    The test information will be displayed on the screen and will end after 10 frames of running. In the above command, the parameters`/sharefs/dpu/` can be set according to the path where the user profile is actually stored.
+    Test information will be displayed on the screen, and the run will end after 10 frames. In the above command, the parameter `/sharefs/dpu/` can be set according to the actual path where the user's configuration files are stored.
 
-1. The bound mode demo runs
+1. Binding mode demo run
 
     `/sharefs/sample_dpu.elf /sharefs/dpu/ BOUND`
 
-    A test message will be displayed on the screen, enter q to finish the run. In the above command, the parameters`/sharefs/dpu/` can be set according to the path where the user profile is actually stored.
+    Test information will be displayed on the screen, input q to end the run. In the above command, the parameter `/sharefs/dpu/` can be set according to the actual path where the user's configuration files are stored.
 
 ### 2.9 UVC_demo
 
 #### 2.9.1 Introduction to uvc_demo
 
-The uvc demo uses the K230 development board as a USB camera, the USB cable is connected to the PC, and the PC player can play the image of the real camera.
+The uvc demo treats the K230 development board as a USB camera. When connected to a PC via a USB cable, the PC's player can display the real camera's image.
 
-#### 2.9.2 Feature description
+#### 2.9.2 Feature Description
 
-The current version supports bulk transport and ISO transfer.
+The current version supports bulk transfer and ISO transfer.
 
-The current version only supports images in 640x480 NV12 format and 1280x720 H264/MJPEG images.
+The current version only supports 640x480 NV12 format images and 1280x720 H264/MJPEG format images.
 
-Support PID, VID, and device name configuration by modifying shell scripts.
+Supports PID, VID, and device name configuration through modification of shell scripts.
 
-#### 2.9.3 Dependent Resources
+#### 2.9.3 Dependency Resources
 
 Camera module, OV9732/IMX335 camera.
 
-The type c cable connects USB0 to a PC
+Type-C cable to connect USB0 to the PC.
 
-PC camera app or install PotPlayer software
+PC camera application or PotPlayer software installed.
 
-#### 2.9.4 Instructions for Use
+#### 2.9.4 Usage Instructions
 
 ##### 2.9.4.1 Compilation
 
-For the software compilation environment, refer to the README.md in the SDK.
+Refer to the README.md in the SDK for the software compilation environment.
 
-1. The source code of the little core user program is located at`cdk/user/mapi/sample/camera`
-1. The little core driver is located at`linux/drivers/usb/dwc2`
-1. The little core driver is located at`linux/drivers/usb/gadget`
-1. The big core program involves MPP repositories as well as CDKs
+1. The source code for the small core user program is located at `cdk/user/mapi/sample/camera`.
+1. The small core driver program is located at `linux/drivers/usb/dwc2`.
+1. The small core driver program is located at `linux/drivers/usb/gadget`.
+1. The large core program involves the mpp repository and cdk.
 
-The large-core RTT implements the camera driver function.
+The large core RTT implements the camera driver functionality.
 
-The small-core Linux implements the USB driver function and obtains camera images from the big core through mapi.
+The small core Linux implements the USB driver functionality and obtains camera images from the large core through mapi.
 
-Refer to [K230_USB Application Practice_UVC Transmitting YUV and Encoding Streams](../../../../zh/02_applications/tutorials/K230_USB应用实战_UVC传输YUV及编码码流.md)
+Refer to [K230_USB Application Practical_UVC Transmission of YUV and Encoded Streams](../../../../en/02_applications/tutorials/K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md).
 
 ##### 2.9.4.2 Execution
 
-After entering the big core rt-smart system, enter the /bin directory and execute
+After entering the large core rt-smart system, navigate to the `/bin` directory and execute:
 
 ```shell
 msh /sharefs/app>./sample_sys_init.elf
 ```
 
-After entering the little core Linux system, enter the`/mnt` directory and execute
+After entering the small core Linux system, navigate to the `/mnt` directory and execute:
 
 ```shell
 ./canaan-camera.sh start otg0
 
-./camera
+./camera -t 7
 ```
 
-Typec USB cable connects USB0 with PC, potplayer player playback camera.
+Connect the USB0 of the development board to the PC using a type-C USB cable, and use PotPlayer to play the camera.
 
-By default, the BULK transport is used, and the following command can be used to change to ISO transport.
+By default, BULK transfer is used. You can switch to ISO transfer using the following commands:
 
 ```shell
 ./canaan-camera.sh stop
 
 ./canaan-camera.sh start otg0 iso
 
-./camera -i
+./camera -i -t 7
 ```
 
-The default is the IMX335 camera. If it is an OV9732 camera, use,`./camera -t 0` other cameras have not been tested.
+The `-t` option is used to specify the vicap sensor type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the description of `k_vicap_sensor_type`. The default value is 7.
 
-Enter the PotPlayer `选项` -> ->  -> `设备` `摄像头` interface,
-`视频录制设备`->`设备`, select ->`UVC Camera`, select`视频录制设备``格式`
- `H264 1280*720 30(P 16:9)`or `MJPG 1280*720 30(P 16:9)`or`NV12 640*360p 30(P 16:9)`
+In PotPlayer, go to `Options` -> `Device` -> `Camera` interface,
+`Video Capture Device` -> `Device`, select `UVC Camera`
+`Video Capture Device` -> `Format`, select `H264 1280*720 30(P 16:9)` or `MJPG 1280*720 30(P 16:9)` or `NV12 640*360p 30(P 16:9)`
 
-PotPlayer -> `打开` -> `摄像头/其他设备`
+PotPlayer -> `Open` -> `Camera/Other Device`
 
 ### 2.10 USB_demo
 
 #### 2.10.1 Introduction to USB_demo
 
-USB demo currently debugs 4 functions,
+The USB demo currently supports four functionalities.
 
-Since the upgrade function of K230 can only use USB0, USB0 is used as a device, simulating a U disk, and simulating a mouse and keyboard. The jumper cap cannot be connected to pin 1/pin 2 of J5, and cannot be powered by 5V as a device.
+Since the upgrade function of K230 can only use USB0, USB0 is set as a device to simulate a USB drive and a mouse/keyboard. The jumper cap should not connect pin1/pin2 of J5, as the device cannot enable 5V power supply.
 
-As host, connect a USB flash drive and connect a mouse and keyboard. A jumper cap is required to connect pin 3/pin 4 of J5 to enable 5V power supply.
+As a host, it can connect to a USB drive and a mouse/keyboard. The jumper cap needs to connect pin3/pin4 of J5 to enable 5V power supply.
 
-#### 2.10.2 Feature description
+#### 2.10.2 Feature Description
 
-The functionality of the USB demo is the original integration of Linux systems.
+The USB demo functionality is integrated into the Linux system.
 
-#### 2.10.3 Dependent Resources
+#### 2.10.3 Dependency Resources
 
-typeC line, typeC to typeA.
+Type-C cable, Type-C to Type-A adapter.
 
-#### 2.10.4 Instructions for Use
+#### 2.10.4 Usage Instructions
 
-##### 2.10.4.1 Simulate a USB flash drive as a device
+##### 2.10.4.1 Simulate a USB Drive as a Device
 
 ```shell
-#Plan a memory space as disk space to simulate a USB flash drive.
+# Allocate a memory space as the disk space for the simulated USB drive.
 [root@canaan / ]#gadget-storage-mem.sh
 2+0 records in
 2+0 records out
@@ -769,7 +771,7 @@ mkfs.fat 4.1 (2017-01-24)
 [root@canaan / ]#[ 1219.019554] dwc2 91500000.usb-otg: new device is high-speed
 [ 1219.056629] dwc2 91500000.usb-otg: new address 5
 
-#Use the FAT partition of SD/eMMC as disk space to simulate a USB flash drive.
+# Use the FAT partition of the SD/eMMC as the disk space for the simulated USB drive.
 [root@canaan ~ ]#gadget-storage.sh
 [  359.995510] Mass Storage Function, version: 2009/09/11
 [  360.000762] LUN: removable file: (no medium)
@@ -778,32 +780,32 @@ mkfs.fat 4.1 (2017-01-24)
 [  360.173543] dwc2 91500000.usb-otg: new address 43
 ```
 
-Connect the USB0 of the development board, typeC is connected to the PC, and the USB flash drive is displayed on the PC.
+Connect USB0 of the development board to the PC using a type-C cable. The PC will display a connected USB drive.
 
-##### 2.10.4.2 Connect the USB flash drive as HOST
+##### 2.10.4.2 Connect a USB Drive as a Host
 
-The K230 development board USB1 is connected to the U disk through typeC to typeA.
+The K230 development board connects USB1 to a USB drive using a Type-C to Type-A adapter.
 
-##### 2.10.4.3 Emulates a mouse and keyboard as a device
+##### 2.10.4.3 Simulate a Mouse/Keyboard as a Device
 
-The K230 development board USB0 is connected to another computer device by typeC for testing
+The K230 development board connects USB0 to another computer using a Type-C cable for testing.
 
 ```shell
 [root@canaan / ]#gadget-hid.sh
 
 [root@canaan / ]#hid_gadget_test /dev/hidg0 mouse
-#Enter the corresponding operations according to the prompts, such as -123 -123, and you can see the mouse pointer on the PC move.
+# Follow the prompts to input corresponding operations, such as -123 -123, to see the mouse pointer move on the PC.
 
 [root@canaan / ]#hid_gadget_test /dev/hidg1 keyboard
-#Enter the corresponding operations according to the prompts, and you can see similar keyboard input on the PC. For example a b c --return
+# Follow the prompts to input corresponding operations, which will simulate keyboard input on the PC. For example, a b c --return
 ```
 
-##### 2.10.4.4 Connect a mouse and keyboard as a HOST
+##### 2.10.4.4 Connect a Mouse/Keyboard as a Host
 
-The K230 development board USB1 connects a mouse or keyboard to typeC to typeA.
+The K230 development board connects USB1 to a mouse or keyboard using a Type-C to Type-A adapter.
 
 ```shell
-#Use the following command to determine the event corresponding to the input device.
+# Use the following command to determine the event corresponding to the input device. If the K230 development board is not connected to a screen, connecting a mouse or keyboard will change the corresponding event.
 [root@canaan ~ ]#cat /proc/bus/input/devices
 ...
 I: Bus=0003 Vendor=046d Product=c52f Version=0111
@@ -821,49 +823,49 @@ B: MSC=10
 
 ```shell
 [root@canaan / ]$ test_mouse /dev/input/event2
-#Click or move the mouse, and the serial port will display the corresponding display.
+# Click or move the mouse, and the corresponding display will appear in the serial port.
 
 [root@canaan / ]$ test_keyboard /dev/input/event2
-#Press different keys on the keyboard, and the serial port will have corresponding displays.
+# Press different keys on the keyboard, and the corresponding display will appear in the serial port.
 ```
 
 ### 2.11 GPU_demo
 
 #### 2.11.1 Introduction to GPU_demo
 
-The GPU demo contains a total of three executable programs
+The GPU demo includes three executable programs:
 
-- `tiger`: Example of drawing a vector drawing of a tiger
-- `linearGrad`: Draw a linear gradient example
-- `imgIndex`: Draw a color lookup table
+- `tiger`: Draws a vector illustration of a tiger.
+- `linearGrad`: Draws a linear gradient example.
+- `imgIndex`: Draws a color lookup table example.
 
-#### 2.11.2 Feature description
+#### 2.11.2 Feature Description
 
-GPU demo mainly covers the three functions of GPU vector drawing, linear gradient (achieved through pattern), and color lookup table.
+The GPU demo mainly covers three functionalities: vector drawing, linear gradient (implemented through pattern), and color lookup table.
 
-#### 2.11.3 Dependent Resources
+#### 2.11.3 Dependency Resources
 
-The file system is writable.
+Writable file system.
 
-#### 2.11.4 Instructions for Use
+#### 2.11.4 Usage Instructions
 
-Go to a writable directory and execute the program
+Navigate to a writable directory and execute the program.
 
 ##### 2.11.4.1 tiger
 
-Run the `tiger`command and generate a tiger .png in the current directory after execution, as shown in the following figure
+Run the `tiger` command. After execution, a `tiger.png` file will be generated in the current directory, as shown below:
 
-![Tiger image](../../../../zh/01_software/board/examples/images/e54764629a9e9fb63ec4340d316e4f42.png)
+![Tiger Image](../../../../zh/01_software/board/examples/images/e54764629a9e9fb63ec4340d316e4f42.png)
 
-##### 2.11.4.2 linear degrees
+##### 2.11.4.2 linearGrad
 
-Run the `linearGrad`command and generate a linearGrad .png in the current directory after execution, as shown in the following figure
+Run the `linearGrad` command. After execution, a `linearGrad.png` file will be generated in the current directory, as shown below:
 
-![Linear gradient](../../../../zh/01_software/board/examples/images/24db1c231608cd26a5a981e055aa6910.png)
+![Linear Gradient](../../../../zh/01_software/board/examples/images/24db1c231608cd26a5a981e055aa6910.png)
 
 ##### 2.11.4.3 imgIndex
 
-Run the `imgIndex`command and generate four image files in the current directory, as shown in the following figure
+Run the `imgIndex` command. After execution, four image files will be generated in the current directory, as shown below:
 
 - `imgIndex1.png`: index1 mode, supports 2 colors
 
@@ -883,45 +885,45 @@ Run the `imgIndex`command and generate four image files in the current directory
 
 ##### 2.11.4.4 vglite_drm
 
-Run the `vglite_drm`command, which displays the pattern drawn by the GPU on the LCD screen, and press`Enter` the key again to display the next pattern, as shown in the figure
+Run the `vglite_drm` command. The GPU will display the pattern on the LCD screen, and pressing the `Enter` key again will display the next pattern, as shown below:
 
-![The first pattern](../../../../zh/02_applications/tutorials/images/gpu-1.jpg)
+![First Pattern](../../../../zh/02_applications/tutorials/images/gpu-1.jpg)
 
-![Second pattern](../../../../zh/02_applications/tutorials/images/gpu-3.jpg)
+![Second Pattern](../../../../zh/02_applications/tutorials/images/gpu-3.jpg)
 
 ##### 2.11.4.5 vglite_cube
 
-Run the `vglite_cube`command and a rotating cube drawn by the GPU will be displayed on the LCD screen, as shown in the following figure
+Run the `vglite_cube` command. The GPU will display a rotating cube on the LCD screen, as shown below:
 
 ![Cube](../../../../zh/01_software/board/examples/images/gpu-1.jpg)
 
-This demo runtime kernel will have a large number of print messages, if you do not want these messages to be displayed, you can reduce the kernel print level
+During the demo run, the kernel will print a lot of messages. If you do not want to display these messages, you can reduce the kernel print level:
 
 ```shell
 sysctl -w kernel.printk=6
 ```
 
-### 2.12 DRM display demo
+### 2.12 DRM Display Demo
 
-#### 2.12.1 Introduction to using demo
+#### 2.12.1 Introduction to the Demo
 
-The demo runs on a K230 small-core Linux system and displays the image on the screen.
+This demo runs on the Linux system of the K230 small core and displays images on the screen.
 
-#### 2.12.2 Features Description
+#### 2.12.2 Feature Description
 
-1. DRM supports 5 layer operations, including: 1 video layer and 4 OSD layers;
-1. The video layer supports NV12, NV21, NV16, NV61 color spaces
-1. The OSD layer supports ARGB8888, ARGB4444, RGB888, RGB565 color spaces
+1. DRM supports operations on 5 layers, including 1 video layer and 4 OSD layers.
+1. The video layer supports NV12, NV21, NV16, NV61 color spaces.
+1. The OSD layer supports ARGB8888, ARGB4444, RGB888, RGB565 color spaces.
 
-#### 2.12.3 Dependent Resources
+#### 2.12.3 Dependency Resources
 
-LCD screen
+LCD screen.
 
-#### 2.12.4 Instructions for Use
+#### 2.12.4 Usage Instructions
 
 ##### 2.12.4.1 Compilation
 
-Software compilation refers to the README.md in the release SDK package
+Refer to the README.md in the release SDK software package for software compilation.
 
 ##### 2.12.4.2 Execution
 
@@ -929,30 +931,30 @@ Software compilation refers to the README.md in the release SDK package
 modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30  -P 31@36:1080x1920@NV12 -v -F smpte
 ```
 
-After executing the above command, a color bar will be displayed on the LCD screen, as follows:
+After executing the above command, a color bar will be displayed on the LCD screen, as shown below:
 
-![Image description](../../../../zh/01_software/board/examples/images/modetest_video0_nv12.jpg)
+![Image Description](../../../../zh/01_software/board/examples/images/modetest_video0_nv12.jpg)
 
-### 2.13 LVGL demo
+### 2.13 LVGL Demo
 
-#### 2.13.1 Introduction to using demo
+#### 2.13.1 Introduction to the Demo
 
-The demo runs on a K230 small-core Linux system and displays a configuration interface on the screen that supports touch operation.
+This demo runs on the Linux system of the K230 small core and displays a configuration interface on the screen, which supports touch operations.
 
-#### 2.13.3 Dependent Resources
+#### 2.13.3 Dependency Resources
 
-LCD screen
+LCD screen.
 
-#### 2.13.2 Features description
+#### 2.13.2 Feature Description
 
-1. Support button, slider function
-1. Support touch function
+1. Supports button and slider functionalities.
+1. Supports touch functionality.
 
-#### 2.13.4 Instructions for Use
+#### 2.13.4 Usage Instructions
 
 ##### 2.13.4.1 Compilation
 
-Software compilation refers to the README.md in the release SDK package
+Refer to the README.md in the release SDK software package for software compilation.
 
 ##### 2.13.4.2 Execution
 
@@ -960,71 +962,71 @@ Software compilation refers to the README.md in the release SDK package
 lvgl_demo_widgets
 ```
 
-After executing the above command, the configuration interface will be displayed on the LCD screen, and the relevant configuration can be made through the touch screen, as follows:
+After executing the above command, a configuration interface will be displayed on the LCD screen, which can be configured through the touchscreen, as shown below:
 
-![Image description](../../../../zh/01_software/board/examples/images/lvgl_demo_widgets.png)
+![Image Description](../../../../zh/01_software/board/examples/images/lvgl_demo_widgets.png)
 
-### 2.14 Rtsp push streaming Demo
+### 2.14 RTSP Streaming Demo
 
-#### 2.14.1 Introduction to Demo
+#### 2.14.1 Introduction to the Demo
 
 This demo implements RTSP streaming.
 
-#### 2.14.2 Feature description
+#### 2.14.2 Feature Description
 
-The demo supports simultaneous push of audio and video streams to RTSP Server, which `mapi venc&aenc`encodes audio and video through interfaces; after pushing, the demo supports three URL push and pull streams.
+This demo supports simultaneous streaming of audio and video streams to an RTSP server, using the `mapi venc&aenc` interface to encode audio and video. After streaming, the URL can be pulled for playback. Currently, this demo supports streaming and pulling for up to 3 URLs.
 
-#### 2.14.3 Dependent Resources
+#### 2.14.3 Dependency Resources
 
-A USB-to-ETH network port converter is required, and the development board is connected to the network cable
+A USB to Ethernet adapter is needed to connect the development board to a network cable.
 
-#### 2.14.4 Instructions for Use
+#### 2.14.4 Usage Instructions
 
 ##### 2.14.4.1 Compilation
 
-Refer to the introduction in the Release SDK package`README.md`, you can compile cdk-user in the docker environment, and`k230_sdk/src/common/cdk/user/out/little` generate the executable program rtsp_demo after the compilation is completed
+Refer to the `README.md` in the release SDK software package for compilation instructions. In the Docker environment, compile `cdk-user`, and the executable program `rtsp_demo` will be generated in `k230_sdk/src/common/cdk/user/out/little`.
 
 ##### 2.14.4.2 Execution
 
-rtsp_demo the sensor type used by default is IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR, the sensor type and other parameters can be modified by passing parameters from the command line, as follows:
+By default, `rtsp_demo` uses the sensor type `IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR`. You can modify the sensor type and other parameters through command-line arguments. Detailed instructions are as follows:
 
-After launching the board:
+After starting the development board:
 
-1. Use `lsmod` to check whether the k_ipcm module is loaded on the little core side. If it is not loaded, execute `insmod k_ipcm.ko` to load the k_ipcm module.
-1. Start the internuclear communication process on the large nuclear side, execute `./sample_sys_inif.elf`
-1. In the little core side/mnt directory, execute, the ` ./rtsp_demo `default is 1-channel H265 video encoding push, the resolution is 1280x720, if you need to refer to the following parameter description, when pushing the MJPEG code stream, the resolution currently supports a maximum of 2032x1944, and the minimum resolution is 640x480
+1. Use `lsmod` to check if the `k_ipcm` module is loaded on the small core side. If not, execute `insmod k_ipcm.ko` to load the `k_ipcm` module.
+1. On the large core side, start the inter-core communication process by executing `/sharefs/app/sample_sys_init.elf`.
+1. On the small core side, navigate to the `/mnt` directory and execute `./rtsp_demo`. By default, it streams one H.265 video stream with a resolution of 1280x720. For parameter descriptions, see below. When streaming MJPEG streams, the maximum supported resolution is currently 2032x1944, and the minimum resolution is 640x480.
 
 ```shell
 Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720 -a 0
                     -s: the sensor type:
                         see vicap doc
-                    -n: the session number, range: 1, 2，3
+                    -n: the session number, range: 1, 2, 3
                     -t: the video encoder type: h264/h265/mjpeg
                     -w: the video encoder width
                     -h: the video encoder height
-                    -a: audio input type(0:mic input  1:headphone input):default 0.
+                    -a: audio input type (0: mic input, 1: headphone input), default 0.
 ```
 
-The sensor type value is described in the `k230_docs/en/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md`k_vicap_sensor_type in the document
-Audio input type selectable: onboard MIC or headphone input.
+The sensor type values can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document under the description of `k_vicap_sensor_type`.
+The audio input type can be selected as onboard mic or headphone input.
 
-After the rtsp_demo on the little core runs normally, the URL address of the form will be printed, `rtsp://ip:8554/session0` where 0 represents the 0th way, which can be played through the stream of VLC pulling URLs; if you need to stop running, please stop VLC pulling the stream first, and then execute the` ctrl+c ` Stop Running rtsp_demo.
+After `rtsp_demo` runs successfully on the small core, it will print a URL in the form of `rtsp://ip:8554/session0`, where `0` represents the first stream. You can use VLC to pull the stream from the URL for playback. To stop the stream, first stop VLC from pulling the stream, then execute `ctrl+c` to stop `rtsp_demo`.
 
-### 2.15 FaceAe Demo
+### 2.15 FaceAeDemo
 
-#### 2.15.1 Demo introduction
+#### 2.15.1 Demo Introduction
 
-This demo is used in the big core, which is a demo of VICAP, KPU, VO (video output), and AERoi joint debugging, and can appropriately adjust the face exposure brightness through the face detection interface.
+This demo is used on the large core and is a demo for joint debugging of VICAP, KPU, VO (video output), and AERoi. It can appropriately adjust the face exposure brightness through the face detection interface.
 
 #### 2.15.2 Compilation
 
-1. First refer to the README.md in the release SDK package and compile the image using Docker.
-1. After the compilation is complete, the sample (sample_face_ae.elf) is stored in this path by default`k230_sdk/src/big/mpp/userapps/sample/elf`
-1. Since KPU linkage requires the use of the detection model test.kmodel, the path is stored after compilation`k230_sdk/src/big/mpp/userapps/sample/elf`
+1. First, refer to the README.md in the release SDK package and use Docker to compile the image.
+1. After compilation, the sample (sample_face_ae.elf) will be stored by default in the path `k230_sdk/src/big/mpp/userapps/sample/elf`.
+1. Since the KPU linkage requires the use of the detection model `test.kmodel`, the compiled path is `k230_sdk/src/big/mpp/userapps/sample/elf`.
 
 #### 2.15.3 Execution
 
-Start the development board, enter the little core/mnt, add the intercore communication module, start the intercore communication, create a shared file system, and share the shared file system`sample_face_ae.elf` `test.kmodel`with the little core to the big core for execution. The way to put files into the little core file system can be transferred by mounting, TFTP, etc. The current default file is already stored in the little core ~ directory.
+After starting the development board, enter the small core `/mnt` directory, add the inter-core communication module, start inter-core communication, and create a shared file system. Share `sample_face_ae.elf` and `test.kmodel` with the large core through the small core shared file system. You can transfer files to the small core file system through methods such as mounting or TFTP. Currently, the default files are already stored in the small core `~` directory.
 
 ```shell
 cd /mnt
@@ -1035,270 +1037,266 @@ cp test.kmodel /sharefs/
 ./sharefs &
 ```
 
-After the little core starts sharefs, the big core shared file system gets sample and kmodel
+After the small core starts `sharefs`, the large core shared file system will obtain the sample and kmodel.
 
 ```shell
 cd /sharefs
-./sample_face_ae.elf test.kmodel 1 # arg1: Model name， arg2： enable face ae
-
-Wait for the initialization to complete and prompt any letter + enter,
-for example:Type a, press Enter, and run face ae demo
-After successful execution, the physical address of each frame of image will be printed.
+./sample_face_ae.elf test.kmodel 1 # arg1: model name, arg2: enable face ae
+Wait for initialization to complete and prompt any letter + enter.
+Type 'a', press enter, and run the face ae demo.
+After successful execution, the physical address of each frame of the image will be printed.
 ```
 
 ### 2.16 DPU_Vicap_demo
 
-#### 2.16.1 Introduction to demo
+#### 2.16.1 Demo Introduction
 
 The demo process is as follows:
 
-1. Start vicap;
-1. dump a frame of speckle in user mode;
-1. Send the speckle map obtained from VICAP to DMA for 90-degree rotation;
-1. Acquire the image after DMA rotation in user mode;
-1. Send the DMA rotated image to the DPU for deep processing;
-1. Depth map after DPU processing acquired in user mode;
-1. Save as a file to the big and little core shared directory`/sharefs`, which can be shared `mnt`to the server and view the depth map using tools.
+1. Start VICAP.
+1. Dump a frame of speckle image in user space.
+1. Send the speckle image obtained from VICAP to DMA for 90-degree rotation processing.
+1. Get the rotated image from DMA in user space.
+1. Send the rotated image from DMA to DPU for depth processing.
+1. Get the depth image processed by DPU in user space.
+1. Save it as a file in the large and small core shared directory `/sharefs`. You can share this file to the server through `mnt` and use tools to view the depth image.
 
-#### 2.16.2 Feature description
+#### 2.16.2 Feature Description
 
-ISP captures images, DMA rotates images, and DPUs do depth processing.
+ISP captures images, DMA performs image rotation, and DPU performs depth processing.
 
-#### 2.16.3 Dependent Resources
+#### 2.16.3 Dependency Resources
 
-Calibration files, including configuration files and reference drawing files, are required. Configuration files and reference diagram files need to be paired with the sensor. The path of`k230_sdk/test_resource/dpu` the configuration file and reference image file is in the directory, and the configuration file and reference image file correspond only to sensor1.
+Calibration files are needed, including configuration files and reference image files. The configuration files and reference image files need to match the sensor. The configuration files and reference image files are located in the path `k230_sdk/test_resource/dpu`, and these files only correspond to sensor1.
 
-#### 2.16.4 Instructions for Use
+#### 2.16.4 Usage Instructions
 
 ##### 2.16.4.1 Compilation
 
-1. Place the configuration file and reference image file in the`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu` directory, as shown in the following figure:
+1. Place the configuration files and reference image files in the directory `k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`, as shown below:
     ![conf_file](../../../../zh/01_software/board/examples/images/demo_dpu_conf_ref_file_02140401.png)
 
-1. Execute the `k230_sdk`compile command under the directory`make`
+1. Execute the compilation command `make` in the `k230_sdk` directory.
 
-1. After the compilation is completed, there`k230_sdk/src/big/mpp/userapps/sample/elf` will be a demo file in the directory`sample_dpu_vicap.elf`. There `k230_sdk/output/k230_evb_defconfig/images`will be system image files in the directory`sysimage-sdcard.img`.
+1. After compilation, the demo file `sample_dpu_vicap.elf` will be in the directory `k230_sdk/src/big/mpp/userapps/sample/elf`. The system image file `sysimage-sdcard.img` will be in the directory `k230_sdk/output/k230_evb_defconfig/images`.
 
-  For a more detailed compilation process, refer to the README.md in the release SDK package.
+For more detailed compilation process, refer to the README.md in the release SDK package.
 
 ##### 2.16.4.2 Execution
 
-1. To mount nfs, use the following command:
+1. Mount NFS using the following commands:
 
     ```shell
     ifconfig eth0 up
     udhcpc
-    # Replace the following IP address and path with your own server’s IP address and path.
-    mount -t nfs 10.10.1.94:/home/user/nfs  /sharefs -o nolock
+    # Replace the IP address and path below with your server's IP and path
+    mount -t nfs 10.10.1.94:/home/user/nfs /sharefs -o nolock
     ```
 
-    After successful mounting`/sharefs`, the directories can be seen in both large and little cores, and the compiled demo `sample_dpu_vicap.elf`is copied to the server's nfs directory (here it is`/home/user/nfs`), and the corresponding elf file can also be seen under`/sharefs` the big core rtt
+    After mounting successfully, the `/sharefs` directory can be seen on both the large and small cores. Copy the compiled demo `sample_dpu_vicap.elf` to the server's NFS directory (here it is `/home/user/nfs`). At this point, the corresponding elf file can also be seen in the large core RTT's `/sharefs`.
 
-1. Use the command `./sample_dpu_vicap.elf -dev 0 -sensor 2 -chn 0  -preview 1 -rotation 1`to start demo, and the output printout information is as follows:
+1. Use the command `./sample_dpu_vicap.elf -dev 0 -sensor 2 -chn 0 -preview 1 -rotation 1` to start the demo. The output print information is as follows:
 
     ![run](../../../../zh/01_software/board/examples/images/dpu_demo_run_02140401.png)
 
-1. Input`d`, output print information as follows:
+1. Input `d`, the output print information is as follows:
 
     ![save](../../../../zh/01_software/board/examples/images/dpu_demo_save_02140401.png)
 
-1. Enter`q`, exit the program.
+1. Input `q` to exit the program.
 
-1. At this time, `/sharefs`there is a file in the directory, `depth_out.bin`which is the depth map file output by the DPU, which can be opened and viewed with the corresponding software.
+1. At this point, the `depth_out.bin` file is in the `/sharefs` directory. This file is the depth image file output by DPU, which can be opened and viewed using appropriate software.
 
-##### 2.16.4.3 The effect is as follows
+##### 2.16.4.3 Results
 
-1. The actual scenario is as follows:
+1. The actual scene is as follows:
 
-    ![real../../../../zh/01_software/board/examples/images/dpu_demo_real_02140401.jpg)
+    ![real](../../../../zh/01_software/board/examples/images/dpu_demo_real_02140401.jpg)
 
-1. The speckle map taken by the sensor is as follows:
+1. The speckle image captured by the sensor is as follows:
 
-    ![Vicap../../../../zh/01_software/board/examples/images/dpu_demp_vicap_02140401.jpg)
+    ![vicap](../../../../zh/01_software/board/examples/images/dpu_demp_vicap_02140401.jpg)
 
-1. The speckle chart after 90 degrees clockwise rotation of DMA is as follows:
+1. The speckle image rotated 90 degrees clockwise by DMA is as follows:
 
-    ![dma../../../../zh/01_software/board/examples/images/dpu_demo_dma_02140401.jpg)
+    ![dma](../../../../zh/01_software/board/examples/images/dpu_demo_dma_02140401.jpg)
 
-1. The depth map output by the DPU is as follows:
+1. The depth image result output by DPU is as follows:
 
-    ![dpu../../../../zh/01_software/board/examples/images/dpu_demo_dpu_02140401.jpg)
+    ![dpu](../../../../zh/01_software/board/examples/images/dpu_demo_dpu_02140401.jpg)
 
 ### 2.17 VICAP_DMA_DPU_demo
 
-#### 2.17.1 Introduction to demo
+#### 2.17.1 Demo Introduction
 
 The demo process is as follows:
 
-1. Bind VICAP to DMA and DMA to DPU;
-1. Start dpu, dma, vicap;
-1. ISP sends the speckle map to DMA, DMA rotates 90 degrees to the DPU, and the DPU prints the depth map address on the screen after depth processing;
+1. Bind VICAP to DMA, and DMA to DPU.
+1. Start DPU, DMA, and VICAP.
+1. ISP sends the speckle image to DMA, DMA rotates it 90 degrees and sends it to DPU, DPU performs depth processing and prints the depth image address on the screen.
 
-#### 2.17.2 Feature description
+#### 2.17.2 Feature Description
 
-ISP captures images, DMA rotates images, and DPUs do depth processing.
+ISP captures images, DMA performs image rotation, and DPU performs depth processing.
 
-#### 2.17.3 Resource dependency
+#### 2.17.3 Dependency Resources
 
-Calibration files, including configuration files and reference drawing files, are required. Configuration files and reference diagram files need to be paired with the sensor. The path of`k230_sdk/test_resource/dpu` the configuration file and reference image file is in the directory, and the configuration file and reference image file correspond only to sensor1.
+Calibration files are needed, including configuration files and reference image files. The configuration files and reference image files need to match the sensor. The configuration files and reference image files are located in the path `k230_sdk/test_resource/dpu`, and these files only correspond to sensor1.
 
-#### 2.17.4 Instructions for Use
+#### 2.17.4 Usage Instructions
 
 ##### 2.17.4.1 Compilation
 
-1. Place the configuration file and reference image file in`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu` the directory, as shown in the following figure:
+1. Place the configuration files and reference image files in the directory `k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`, as shown below:
+    ![conf_file](../../../../zh/01_software/board/examples/images/demo_dpu_conf_ref_file_02140401.png)
+1. Execute the compilation command `make` in the `k230_sdk` directory.
+1. After compilation, the demo file `sample_vdd_r.elf` will be in the directory `k230_sdk/src/big/mpp/userapps/sample/elf`. The system image file `sysimage-sdcard.img` will be in the directory `k230_sdk/output/k230_evb_defconfig/images`.
 
-    ![conf_file../../../../zh/01_software/board/examples/images/demo_dpu_conf_ref_file_02140401.png)
-
-1. Execute the `k230_sdk`compile command under the directory`make`
-
-1. After the compilation is completed, there`k230_sdk/src/big/mpp/userapps/sample/elf` will be a demo file in the directory`sample_vdd_r.elf`. There `k230_sdk/output/k230_evb_defconfig/images`will be system image files in the directory`sysimage-sdcard.img`.
-
-> For a more detailed compilation process, refer to the README.md in the release SDK package.
+For more detailed compilation process, refer to the README.md in the release SDK package.
 
 ##### 2.17.4.2 Execution
 
-1. To mount nfs, use the following command:
+1. Mount NFS using the following commands:
 
     ```shell
     ifconfig eth0 up
     udhcpc
-    # Replace the following IP address and path with your own server’s IP address and path.
-    mount -t nfs 10.10.1.94:/home/user/nfs  /sharefs -o nolock
+    # Replace the IP address and path below with your server's IP and path
+    mount -t nfs 10.10.1.94:/home/user/nfs /sharefs -o nolock
     ```
 
-    After successful mounting`/sharefs`, the directories can be seen in both large and little cores, and the compiled demo `sample_vdd_r.elf`is copied to the server's nfs directory (here it is`/home/user/nfs`), and the corresponding elf file can also be seen under`/sharefs` the big core rtt
+    After mounting successfully, the `/sharefs` directory can be seen on both the large and small cores. Copy the compiled demo `sample_vdd_r.elf` to the server's NFS directory (here it is `/home/user/nfs`). At this point, the corresponding elf file can also be seen in the large core RTT's `/sharefs`.
 
-1. Use the command`./sample_vdd_r.elf` to start demo;
+1. Use the command `./sample_vdd_r.elf` to start the demo.
 
-1. Enter `q`Stop the demo from running and save the depth map as a file`/sharefs` below with the name`depthout.bin`
+1. Input `q` to stop the demo and save the depth image as a file in `/sharefs`, named `depthout.bin`.
 
-1. The depth map can be viewed using the appropriate software.
+1. You can use appropriate software to view the depth image.
 
-1. The effect is as follows:
+1. The results are as follows:
 
-    ![depth../../../../zh/01_software/board/examples/images/dpu_demo_bind_depth_02150402.png)
+    ![depth](../../../../zh/01_software/board/examples/images/dpu_demo_bind_depth_02150402.png)
 
 ### 2.18 Voice Intercom Demo
 
-#### 2.18.1 Introduction to Demo
+#### 2.18.1 Demo Introduction
 
-This demo is used to demonstrate the two-way transmission and processing of audio data (the current version implements some functions of voice intercom)
+This demo is used to demonstrate the bidirectional transmission and processing of audio data (the current version implements part of the voice intercom functionality).
 
-#### 2.18.2 Feature description
+#### 2.18.2 Feature Description
 
-Voice intercom involves both ends, both ends can collect and encode in real time to send audio data to the peer, and can also receive audio data from the peer for decoding and output.
-The current implementation refers to ONVIF and extends the backchannel on the basis of the rtsp protocol to support sending audio data from client to server; the following uses server and client to refer to both ends of voice intercom.
+Voice intercom involves two ends, both of which can collect, encode, and send audio data to the other end in real-time, and can also receive and decode the audio data from the other end for output. The current implementation refers to ONVIF and extends the backchannel on the RTSP protocol to support sending audio data from the client to the server. In the following text, server and client refer to the two ends of the voice intercom.
 
-The following features are currently implemented:
+The currently implemented functions are as follows:
 
-1. The audio stream format is G711 mu-Law;
-1. The sever side realizes real-time audio acquisition, encoding and transmission, and receives audio data from the client through the backchannel for decoding and output; The receiving side does not implement a jitter buffer;
-1. The client side realizes the reception, decoding and playback of the audio code stream, as well as real-time audio collection, G711 mu-Law encoding, and sends it to the server side through the backchannel; The receiving side does not implement the jitter buffer;
-1. Only one-on-one intercom support (only support one-way backchannel);
-1. Does not support echo cancellation and other processing (the device side needs audio output to the headphones, and cannot use an external speaker);
+1. The audio stream format is G711 mu-Law.
+1. The server end implements real-time audio collection, encoding, and sending, as well as receiving audio data from the client through the backchannel for decoding and output. The receiving end has not implemented a jitter buffer.
+1. The client end implements receiving, decoding, and playing audio streams, as well as real-time audio collection, G711 mu-Law encoding, and sending to the server end through the backchannel. The receiving end has not implemented a jitter buffer.
+1. Only one-to-one intercom is supported (only one backchannel is supported).
+1. Echo cancellation is not supported (the device side needs to output audio to headphones, and cannot use external speakers).
 
-#### 2.18.3 Dependent Resources
+#### 2.18.3 Dependency Resources
 
-Two K230 devices are required, and the development board is connected to the same LAN through the USB-to-ETH network port converter
+Two K230 devices are needed. Connect the development boards to the same local area network through a USB-to-Ethernet adapter.
 
-#### 2.18.4 Instructions for Use
+#### 2.18.4 Usage Instructions
 
 ##### 2.18.4.1 Compilation
 
-Refer to the introduction in the release SDK package`README.md`, compile cdk-user in the docker environment, and`k230_sdk/src/common/cdk/user/out/little` generate the executable program rtsp_server under after compilation, backchannel_client
+Refer to the README.md in the release SDK package for instructions. In the Docker environment, compile `cdk-user`, and the executable programs `rtsp_server` and `backchannel_client` will be generated in `k230_sdk/src/common/cdk/user/out/little`.
 
-##### 2.18.4.2 Description of rtsp_server parameters
+##### 2.18.4.2 rtsp_server Parameter Description
 
-| The parameter name | description |Parameter range | Default value |
+| Parameter Name | Description | Parameter Range | Default Value |
 |:--|:--|:--|:--|
-| h | Print command-line parameter information | - | - |
+| h | Print command line parameter information | - | - |
 | v | Whether to create a video session | - | - |
-| t | Encoding type | h264、h265 | h265 |
-| in | Video encoding width | `[640, 1920]` | 1280 |
-| h | Video encoding height | `[480, 1080]` |720 |
+| t | Encoding type | h264, h265 | h265 |
+| w | Video encoding width | `[640, 1920]` | 1280 |
+| h | Video encoding height | `[480, 1080]` | 720 |
 | b | Video encoding bitrate | - | 2000 |
-| a | Voice change settings | `[-12, 12]`| 0 |
-| s | Sensor type| Check out the camera sensor documentation | 7 |
+| a | Voice change setting | `[-12, 12]` | 0 |
+| s | Sensor type | See camera sensor documentation | 7 |
 
-The sensor type looks at the `k230_docs/en/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md`description of the k_vicap_sensor_type in the documentation
+The sensor type can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document under the description of `k_vicap_sensor_type`.
 
 ##### 2.18.4.3 Execution
 
-For convenience, the board running the server is named board A, and the running client is named board B:
+For ease of description, the board running the server is named board A, and the board running the client is named board B:
 
-1. First board A runs rtsp_server, microphone input, headphone output;
-1. Then board B runs backchannel_client, microphone input, headphone output;
+1. First, run `rtsp_server` on board A, with microphone input and headphone output.
+1. Then, run `backchannel_client` on board B, with microphone input and headphone output.
 
 Specific execution steps on board A:
 
-1. After starting the board, enter the little core/mnt directory:
-1. Execute on the little core:`insmod k_ipcm.ko`
-1. Execute on big cores:`cd /bin; ./sample_sys_init.elf`
-1. Execute on the little core: `./rtsp_server`(after running the rtsp_server, the URL address of the form : will be printed`rtsp://<server_ip>:8554/BackChannelTest`).
+1. After starting the development board, enter the `/mnt` directory on the small core:
+1. Execute on the small core: `insmod k_ipcm.ko`
+1. Execute on the large core: `cd /bin; ./sample_sys_init.elf`
+1. Execute on the small core: `./rtsp_server` (after running `rtsp_server`, a URL address like `rtsp://<server_ip>:8554/BackChannelTest` will be printed)
 
-Specific execution steps on plate B:
+Specific execution steps on board B:
 
-1. After starting the board, enter the little core/mnt directory:
-1. Execute on the little core:`insmod k_ipcm.ko`
-1. Execute on big cores:`cd /bin; ./sample_sys_init.elf`
-1. Execute on small nuclei :`./backclient_test rtsp：<server_ip>：8554/BackChannelTest`)
+1. After starting the development board, enter the `/mnt` directory on the small core:
+1. Execute on the small core: `insmod k_ipcm.ko`
+1. Execute on the large core: `cd /bin; ./sample_sys_init.elf`
+1. Execute on the small core: `./backclient_test rtsp://<server_ip>:8554/BackChannelTest`
 
-backclient_test execute the command description: `./backclient_test <rtsp_url> <out_type>`where rtsp_url is the RTSP address and out_type is the VO output connect type, see the `k230_docs/en/01_software/board/mpp/K230_video_output_API_reference.md`description of the k_connector_type in , out_type the default setting is 0
+The `backclient_test` execution command is `./backclient_test <rtsp_url> <out_type>`, where `rtsp_url` is the RTSP address, and `out_type` is the VO output connect type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md` document for the description of `k_connector_type`. The `out_type` is set to 0 by default.
 
-### 2.19 Depth map display demo
+### 2.19 Depth Map Display Demo
 
-#### 2.19.1 Introduction to Demo
+#### 2.19.1 Demo Introduction
 
-This demo is used to display a depth map of DPU processing on the screen.
+This demo is used to display the depth map processed by DPU on the screen.
 
-#### 2.19.2 Feature description
+#### 2.19.2 Feature Description
 
-1. Bind VICAP to DMA and DMA to DPU;
-1. Start dpu, dma, vicap, vo;
-1. ISP sends the speckle map to DMA, DMA rotates 90 degrees to the DPU, and the DPU is deeply processed;
-1. Get depth results in user mode;
+1. Bind VICAP to DMA, and DMA to DPU.
+1. Start DPU, DMA, VICAP, and VO.
+1. ISP sends the speckle image to DMA, DMA rotates it 90 degrees and sends it to DPU, DPU performs depth processing.
+1. Get the depth result in user space.
 1. Send the depth map to VO for display.
 
-#### 2.19.3 Dependent Resources
+#### 2.19.3 Dependency Resources
 
-Calibration files, including configuration files and reference drawing files, are required. Configuration files and reference diagram files need to be paired with the sensor. The path of`k230_sdk/test_resource/dpu` the configuration file and reference image file is in the directory, and the configuration file and reference image file correspond only to sensor1.
+Calibration files are needed, including configuration files and reference image files. The configuration files and reference image files need to match the sensor. The configuration files and reference image files are located in the path `k230_sdk/test_resource/dpu`, and these files only correspond to sensor1.
 
-#### 2.19.4 Instructions for Use
+#### 2.19.4 Usage Instructions
 
 ##### 2.19.4.1 Compilation
 
-1. Place the configuration file and reference diagram file in the`k230_sdk/src/big/rt-smart/userapps/root/bin/dpu` directory.
-1. Execute the `k230_sdk`compile command under the directory`make`
-1. After the compilation is completed, there`k230_sdk/src/big/mpp/userapps/sample/elf` will be a demo file in the directory`sample_dpu_vo.elf`. There `k230_sdk/output/k230_evb_defconfig/images`will be system image files in the directory`sysimage-sdcard.img`.
+1. Place the configuration files and reference image files in the directory `k230_sdk/src/big/rt-smart/userapps/root/bin/dpu`.
+1. Execute the compilation command `make` in the `k230_sdk` directory.
+1. After compilation, the demo file `sample_dpu_vo.elf` will be in the directory `k230_sdk/src/big/mpp/userapps/sample/elf`.
+In the `k230_sdk/output/k230_evb_defconfig/images` directory, there will be a system image file named `sysimage-sdcard.img`.
 
-> For a more detailed compilation process, refer to the README.md in the release SDK package.
+> For more detailed compilation instructions, please refer to the README.md in the release SDK package.
 
 ##### 2.19.4.2 Execution
 
-1. Mount NFS, after successful mounting, you can see the directory on both large and little cores`/sharefs`, copy the compiled demo `sample_dpu_vo.elf`to the NFS directory of the server, and the `/sharefs`corresponding ELF file can also be seen under the big core rtt
-1. Use the command `./sample_dpu_vo.elf`to start demo, and the depth map after DPU processing is displayed on the screen.
+1. Mount NFS. After successful mounting, the `/sharefs` directory will be visible on both the large and small cores. Copy the compiled demo `sample_dpu_vo.elf` to the NFS directory on the server. At this point, the corresponding ELF file can also be seen in the `/sharefs` directory on the large core RTT.
+1. Use the command `./sample_dpu_vo.elf` to start the demo. The depth map processed by DPU will be displayed on the screen.
 1. Press 'q' to exit the demo.
 
 ### 2.20 OTA Remote Upgrade Demo
 
-#### 2.20.1 Introduction to Demo
+#### 2.20.1 Demo Introduction
 
-OTA is over the air technology (Over The Air), which is different from on-site flashing, and the device firmware is updated through the network.
+OTA stands for Over The Air, which is a technology for downloading updates remotely, as opposed to on-site flashing. It allows updating the device firmware over the network.
 
-#### 2.20.2 Feature description
+#### 2.20.2 Feature Description
 
-1. The flashing method and updated firmware are stored on the remote server for easy modification.
-1. Supports package verification and encryption to ensure data integrity and security.
-1. Disaster recovery scenarios are not supported. Common OTA disaster recovery mechanisms include A/B backup or recovery. K230 applications may use Norflash with a small capacity or eMMC with a large capacity. Specific usage scenarios can be developed based on this demo.
+1. The flashing method and firmware updates are stored on a remote server, making it easy to modify.
+1. Supports signed and encrypted upgrade packages to ensure data integrity and security.
+1. Disaster recovery plans are not supported. Common OTA disaster recovery mechanisms include A/B backup schemes or Recovery schemes. K230's application scenarios may use small-capacity Norflash or large-capacity eMMC. Specific usage scenarios can be developed based on this demo.
 
-#### 2.20.3 Dependent Resources
+#### 2.20.3 Dependency Resources
 
-Set up an HTTP server, such as using an HFS web file server.
+Set up an HTTP server, such as using the HFS (HTTP File Server).
 
-#### 2.20.4 Instructions for Use
+#### 2.20.4 Usage Instructions
 
-##### 2.20.4.1 Make an upgrade package
+##### 2.20.4.1 Creating an Upgrade Package
 
 ```shell
 xxx@develop:~/k230/k230_sdk/tools/ota$ tree
@@ -1315,35 +1313,35 @@ xxx@develop:~/k230/k230_sdk/tools/ota$ tree
 └── README
 ```
 
-1. How to make the upgrade package: Enter the k230_sdk/tools/ota directory, and execute ./package_kpk.sh ota_package to generate ota_package.kpk as the upgrade package. ota_package directory is created by itself and contains the partition firmware (such as rtt_system.bin) that needs to be upgraded, as well as the files for the file system of the small-core Linux. It is worth noting that the mechanism of upgrading is to download the upgrade package to memory and then decompress it for burning, limited by the memory capacity limitation, ota_package The file size of the included partition cannot be too large, no more than 20MB. It can be burned multiple times.
-1. The partition firmware of different media refers to k230_sdk/tools/gen_image_cfg/xxx.cfg files, even if some partitions are not visible on small-core Linux systems, you can erase and write the entire disk space through the offset address.
-1. ota_upgrade.sh is the upgrade script executed on the device side, if the partition is modified, you need to make corresponding modifications to this script.
-1. ota_private the private key of the .pem upgrade package signature, the public key needs to be compiled or copied to the /etc/ directory of the device. REFER TO README
+1. To create an upgrade package: Enter the `k230_sdk/tools/ota` directory and execute `./package_kpk.sh`. This will generate the `ota_package.kpk` upgrade package. The `ota_package` directory should be created by the user and should contain the firmware for the partitions to be upgraded (e.g., `rtt_system.bin`), as well as the file system of the small core Linux. Note that the upgrade mechanism involves downloading the upgrade package to memory and then decompressing it for flashing. Due to memory capacity limitations, the size of the partition files included in the `ota_package` should not exceed 20MB. Multiple flashes can be performed if necessary.
+1. For partition firmware of different media, refer to the `k230_sdk/tools/gen_image_cfg/xxx.cfg` file. Even if some partitions are not visible in the small core Linux system, the entire disk space can be erased and upgraded through offset addresses.
+1. `ota_upgrade.sh` is the upgrade script executed on the device. If partitions are modified, this script needs to be correspondingly modified.
+1. `ota_private.pem` is the private key for signing the upgrade package. The public key needs to be compiled or copied to the `/etc/` directory on the device. Refer to the README for more details.
 
-##### 2.20.4.2 Compile device-side programs
+##### 2.20.4.2 Compiling Device-side Programs
 
-1. The OTA program on the device side is located in buildroot-ext/package/ota, and compiling buildroot will install the ota program to the /usr/bin directory of the file system, and the ota .cfg installed in the /etc/ directory. OTAs .cfg configurable download links for server-side upgrade packages and paths to public keys.
+1. The device-side OTA program is located in `buildroot-ext/package/ota`. Compiling buildroot will install the OTA program to the `/usr/bin` directory of the file system, and `ota.cfg` to the `/etc/` directory. The `ota.cfg` file can be configured with the server-side upgrade package download link and the path to the public key.
 
 ##### 2.20.4.3 Execution
 
-1. Open the hfs .exe Add folder from disk to add a directory to which to copy the upgrade package.
-1. First make sure that the development board network and the server can communicate normally. Execute OTA on the development board to complete the download of the upgrade package and upgrade the operation.
+1. Open `hfs.exe` and add a folder from the disk, then copy the upgrade package to this directory.
+1. Ensure that the development board can communicate with the server over the network. Execute `ota` on the development board to complete the download and upgrade operation.
 
 ### 2.21 FFT Demo
 
-#### 2.21.1 Introduction to Demo
+#### 2.21.1 Demo Introduction
 
-This demo is used to verify the use of FFT APIs and test FFT functions, see src/big/mpp/userapps/sample/sample_fft/
+This demo is used to verify the usage of FFT API and test FFT functionality. The code can be found in `src/big/mpp/userapps/sample/sample_fft/`.
 
-#### 2.21.2 Feature description
+#### 2.21.2 Feature Description
 
-First, the FFT calculation is performed, and the IFT calculation is performed
+First, perform FFT calculation, then perform IFFT calculation.
 
-#### 2.21.3 Dependent Resources
+#### 2.21.3 Dependency Resources
 
-not
+None
 
-#### 2.21.4 Instructions for Use
+#### 2.21.4 Usage Instructions
 
 ##### 2.21.4.1 Compilation
 
@@ -1351,13 +1349,13 @@ not
 
 ##### 2.21.4.2 Execution
 
-1. After the large and little core systems are up, execute the following command on the big core command line:
+1. After both the large and small core systems are up, execute the following command on the large core:
 
    ```bash
-   cd /sharefs/app;./sample_fft.elf
+   cd /sharefs/app; ./sample_fft.elf
    ```
 
-   The output content of the big core serial port is as follows:
+   The large core serial output will be as follows:
 
    ```text
    msh /sharefs/app>./sample_fft.elf 1 0

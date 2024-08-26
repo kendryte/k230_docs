@@ -1,113 +1,112 @@
-# K230 Inter Processer Communication Sharefs Usage
+# Introduction to K230 Big-Little Core Communication with Sharefs
 
 ![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Canaan Creative (Beijing) Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative (Beijing) Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Canaan Creative (Beijing) Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Canaan Creative (Beijing) Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
 
 <div style="page-break-after:always"></div>
 
-## overview
+## Overview
 
-ShareFs provides large cores with access to the small kernel file system through access to the respective /sharefs directories of large and small cores. In actual use, the executable programs of the big core are usually stored in the /sharefs directory, and the big core executes these programs through the sharefs function to facilitate the development and debugging of applications on the big core.
+ShareFs provides the functionality for the big core to access the file system of the little core by accessing the respective /sharefs directories of the big and little cores. In practical use, executable programs for the big core are usually stored in the /sharefs directory, and the big core executes these programs using the sharefs functionality, facilitating the development and debugging of applications on the big core.
 
-## Environment preparation
+## Environment Preparation
 
-### Hardware environment
+### Hardware Environment
 
-- K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
+- K230-USIP-LP3-EVB-V1.0 / K230-UNSIP-LP3-EVB-V1.1
 
-### Software environment
+### Software Environment
 
 k230_SDK
 
-## use
+## Usage
 
-### Sharefs runs
+### Running sharefs
 
-The underlying layer of sharefs depends on the driver components of inter-core communication and the upper layer of IPCMSG library, and the sharefs function will be enabled by default after the SDK image is flashed, and the last partition of the sd card will be mounted to the /sharefs directory
+Sharefs relies on the inter-core communication driver component and the upper-layer IPCMSG library. After burning the SDK image, the sharefs functionality will be enabled by default, and the last partition of the SD card will be mounted to the /sharefs directory.
 
-``` shell
+```shell
 /dev/mmcblk1p4 on /sharefs type vfat (rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro)
 ```
 
-If there is not enough space, you can unmount it first, then delete the last partition of the SD card, redivide it into a larger partition, and finally restart the development board, and the SDK will automatically perform the mount.
+If there is not enough space, you can unmount it first, then delete the last partition of the SD card, repartition it to a larger size, and finally restart the development board. The SDK will automatically execute the mounting.
 
-### File creation, write, view
+### Creating, Writing, and Viewing Files
 
-Under the msh command line of RT-Smart, you can create a file in /sharefs via echo.
+In the rt-smart command line of the big core, you can create a file in /sharefs using the echo command.
 
-``` shell
-msh /sharefs>echo "hello wrold" hello.txt
+```shell
+msh /sharefs>echo "hello world" hello.txt
 ```
 
-In the shell terminal of small-core Linux, the contents of this file can be viewed in /sharefs
+In the shell terminal of the little core running Linux, you can view the content of this file in /sharefs.
 
-``` shell
-[root@canaan ~ ]#cd /sharefs/
-[root@canaan /sharefs ]#cat hello.txt
-hello wrold[root@canaan /sharefs ]#
+```shell
+[root@canaan ~]#cd /sharefs/
+[root@canaan /sharefs]#cat hello.txt
+hello world[root@canaan /sharefs]#
 ```
 
-### Folder creation
+### Creating Folders
 
-Under the msh command line of the big core rt-smart, create a directory through mkdir
+In the rt-smart command line of the big core, create a directory using mkdir.
 
-``` shell
+```shell
 msh /sharefs>mkdir test
 ```
 
-In the Linux shell of the little core, use ls to view the newly added directories
+In the shell of the little core running Linux, use ls to view the newly created directory.
 
-``` shell
-[root@canaan /sharefs ]#ls
-System Volume Information  hello.txt    test
+```shell
+[root@canaan /sharefs]#ls
+System Volume Information  hello.txt  test
 ```
 
-### File read
+### Reading Files
 
-In the shell of small-core Linux, create a file via echo
+In the shell of the little core running Linux, create a file using echo.
 
-``` shell
-[root@canaan /sharefs ]#echo "hello world this is linux" >> linux.txt
+```shell
+[root@canaan /sharefs]#echo "hello world this is linux" >> linux.txt
 ```
 
-Under the msh command line of the large-core RT-SMART, use CAT to view the file contents
+In the rt-smart command line of the big core, use cat to view the file content.
 
-``` shell
+```shell
 msh /sharefs>cat linux.txt
 hello world this is linux
 ```
 
-### File loading
+### Loading Files
 
-Copy the compiled rt-smart user-mode executable elf file to the /sharefs directory of the little core, and then execute it through the msh command line of the large kernel rt-smart
+Copy the compiled rt-smart user-mode executable ELF file to the /sharefs directory of the little core, and then execute it through the rt-smart command line of the big core.
 
-``` shell
+```shell
 msh /sharefs>./hello.elf
 Hello world
 ```
 
-### File deletion
+### Deleting Files
 
-Under the msh command line of the big core rt-smart, use rm to delete the file
+In the rt-smart command line of the big core, delete files using rm.
 
-``` shell
-
+```shell
 msh /sharefs>ls
 Directory /sharefs:
 .                   <DIR>
@@ -125,16 +124,16 @@ System Volume Information<DIR>
 msh /sharefs>
 ```
 
-In the shell of the small kernel Linux, use ls to see the removal results
+In the shell of the little core running Linux, use ls to check the deletion result.
 
-``` shell
-[root@canaan /sharefs ]#ls
+```shell
+[root@canaan /sharefs]#ls
 System Volume Information
 ```
 
-### other
+### Others
 
-ShareFS supports most POSIX file interface operations on RT-Smart, including:
+Sharefs supports most POSIX file interface operations on rt-smart, including:
 
 - open
 - close
@@ -143,18 +142,18 @@ ShareFS supports most POSIX file interface operations on RT-Smart, including:
 - write
 - flush
 - lseek
-- state
+- stat
 - statfs
-- OpenDir
+- opendir
 - rewinddir
 - mkdir
 - rmdir
 - rename
 
-Interested readers can write their own file IO read and write related test code experience
+Interested readers can write their own file I/O related test code to experience.
 
 ### Notes
 
-- ShareFS is not suitable for scenarios where high-frequency real-time reads and writes, such as encoding and saving
-- Files created by large cores under sharefs, read and write executable permissions on linux are present
-- sharefs is not suitable for multi-process use, that is, avoid starting multiple processes on the big core to read and write files in the /sharefs directory at the same time
+- Sharefs is not suitable for high-frequency real-time read-write scenarios, such as encoding and saving.
+- Files created by the big core in sharefs have read-write and executable permissions in Linux.
+- Sharefs is not suitable for multi-process use, i.e., avoid starting multiple processes on the big core to read and write files in the /sharefs directory simultaneously.

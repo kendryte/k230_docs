@@ -2,108 +2,107 @@
 
 ![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as such) and its affiliates. Some or all of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference and guidance purposes only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the contents of this document, or spread it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document mainly introduces the functions and usage of the system control module in the media subsystem, and the functions and usage of other modules will be discussed in their own special documents.
+This document mainly introduces the functions and usage of the system control module in the media subsystem. The functions and usage of other modules will be discussed in separate documents.
 
-### Reader object
+### Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | illustrate                                |
-|------|-------------------------------------|
-| mpp  | Media Process Platform 媒体处理平台 |
-| .vb   | Video buffer video buffer pool             |
+| Abbreviation | Description                        |
+|--------------|------------------------------------|
+| mpp          | Media Process Platform             |
+| vb           | Video Buffer                       |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author | date     |
-|------------|----------|--------|----------|
-| V1.0       | Initial edition     | Haibo Hao | 2023/3/4 |
+| Document Version | Description | Author  | Date       |
+|------------------|-------------|---------|------------|
+| V1.0             | Initial Version | Haibo Hao | 2023/3/4   |
 
 ## 1. Overview
 
 ### 1.1 Overview
 
-According to the characteristics of the k230 chip, the system control completes the reset and basic initialization of each component of the hardware, and is responsible for completing the initialization and deinitialization of MPP (Media Process Platform media processing platform) system memory management, log management, binding management and other modules.
+System control, based on the characteristics of the K230 chip, completes the reset and basic initialization of various hardware components. It is also responsible for initializing and de-initializing modules such as MPP (Media Process Platform) system memory management, log management, and binding management.
 
 ### 1.2 Function Description
 
-#### 1.2.1 VB Pool
+#### 1.2.1 Video Buffer Pool
 
-A video buffer pool is a set of buffers (rather than one) that are primarily used by multimedia hardware devices and flow between multimedia hardware devices. The vb pool is divided into public vb pool and private vb pool, the public vb pool is mainly for VI, before using to determine the size of the vb block according to the image parameters of the VI, and then apply for a certain number of vb blocks to form a vb pool. In general, for the original picture input by the VI, the size of one frame corresponds to the size of a vb block, and multiple vb blocks are equivalent to providing the VI with a mechanism for multi-frame buffering. These public vb blocks can also be used by VO or VENC. Private vb pools often represent that the data stored in memory is closely related to the multimedia device itself, for example, the encoded stream data is still very different from the actual image pixel composition of the video stream, these streams are only available codecs, and VB provides a dedicated buffer pool for these devices. The following figure shows the process of virtual VI and virtual VO using VB for vb block circulation.
+The video buffer pool is a group of buffers (not just one), mainly provided for use by multimedia hardware devices and circulated between these devices. The buffer pool is divided into public and private buffer pools. The public buffer pool is mainly for VI, and the size of the buffer blocks must be determined according to the image parameters of VI before using it, and then a certain number of buffer blocks are applied for to form a buffer pool. Generally, for the original image input by VI, the size of one frame corresponds to the size of one buffer block, and multiple buffer blocks provide a multi-frame buffering mechanism for VI. These public buffer blocks can also be used by VO or VENC. Private buffer pools often represent data stored in memory that is closely related to the multimedia device itself. For example, the encoded bitstream data is quite different from the actual image pixel composition of the video stream. These bitstreams are only available to the codec, and VB provides dedicated buffer pools for these devices. The following diagram shows the process of virtual VI and virtual VO using VB to circulate buffer blocks.
 
-![The Illustrative description has been automatically generated](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
+![Diagram](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
 
-#### 1.2.2 System binding
+#### 1.2.2 System Binding
 
-System binding, that is, establishing an association between the data receiver by binding the data source (only the data receiver is allowed to bind the data source). Once bound, the data generated by the data source is automatically sent to the recipient. K230 large voice and video processing is mainly divided into several large modules as follows:
+System binding establishes an association between the data receiver and the data source (only allowing the data receiver to bind the data source). After binding, the data generated by the data source will be automatically sent to the receiver. The major voice and video processing of K230 is divided into several major modules as follows:
 
-Voice: Audio Input (AI), Audio Encoder (AENC), Audio recognition (AREC), Audio Decoder (ADEC), Audio Output (AO)
+Voice: Audio Input (AI), Audio Encoder (AENC), Audio Recognize (AREC), Audio Decoder (ADEC), Audio Output (AO)
 
-Image: Video Input (VI), Video Encoder (VENC), Image Rotation (done by GSDMA, DMA), Depth Process Unit (DPU), Video Decoder (VDEC), Video Output (VO), Virtual Video Input (Virtual). Video Input (VVI), Virtual Video Output (VVO)
+Image: Video Input (VI), Video Encoder (VENC), Image Rotation (handled by GSDMA), Depth Process Unit (DPU), Video Decoder (VDEC), Video Output (VO), Virtual Video Input (VVI), Virtual Video Output (VVO)
 
-The binding relationships supported by the K230 are as follows
+The binding relationships supported by K230 are as follows:
 
 Table 11
 
-| **Data source**        | **Data recipients** | **Description**                                                 |
-|-------------------|----------------|----------------------------------------------------------|
-| VI (Video Input)      | GSDMA          | VI data can be sent to GSDMA for rotation processing                        |
-|                   | IN             | The data of the VI can be sent directly to VO for display                           |
-|                   | DPU            | The VI's data can be sent directly to the DPU for processing                          |
-|                   | EXPIRES           | VI data can be sent directly to VINC for processing                         |
-| GSDMA (Image Rotation) | IN             | The data processed by GSDMA can be sent directly to the VO display                   |
-|                   | DPU            | The data processed by GSDMA can be sent directly to the DPU for processing               |
-|                   | EXPIRES           | The data processed by VPOC can be sent directly to VENC for encoding              |
-| VDEC (Video Decoding)    | GSDMA          | VDEC's data will eventually be played locally and may need to be rotated before playback           |
-|                   | IN             | VDEC's data is eventually played locally                                 |
-| DPU (Advanced Processing Unit) | not             | The DPU is the endpoint of the video data and does not support binding relationships                      |
-| VENC (Video Coding)    | not             | Binding relationships are not supported                                           |
-| VO (Video Display)      | not             | VO is the endpoint of video data and does not support binding relationships                       |
-| AI (Audio Input)      | AREC           | The data processed by AI can be sent directly to the speech recognition module for recognition         |
-|                   | AENC           | The data processed by AI can be sent directly to the speech coding module for encoding         |
-|                   | TO             | The data processed by AI can be played back directly                         |
-| ADEC (Voice Decoding)    | TO             | The data processed by ADEC can be played back directly                       |
-| AREC (Speech Recognition)    | TO             | The data processed by AREC can be directly played, such as local offline voice translation |
-| AENC (Voice Coding)    | not             | Binding relationships are not supported                                           |
-| AO (Audio Output)      | not             | AO is the endpoint of audio data and does not support binding                       |
+| **Data Source**   | **Data Receiver** | **Description**                                     |
+|-------------------|-------------------|-----------------------------------------------------|
+| VI (Video Input)  | GSDMA             | VI data can be sent to GSDMA for rotation processing|
+|                   | VO                | VI data can be directly sent to VO for display      |
+|                   | DPU               | VI data can be directly sent to DPU for processing  |
+|                   | VENC              | VI data can be directly sent to VENC for processing |
+| GSDMA (Image Rotation) | VO           | GSDMA processed data can be directly sent to VO for display |
+|                   | DPU               | GSDMA processed data can be directly sent to DPU for processing |
+|                   | VENC              | VPROC processed data can be directly sent to VENC for encoding |
+| VDEC (Video Decoder) | GSDMA          | VDEC data will eventually be played locally, may need rotation before playback |
+|                   | VO                | VDEC data will eventually be played locally         |
+| DPU (Depth Processing Unit) | None    | DPU is the endpoint of video data, does not support binding relationships |
+| VENC (Video Encoder) | None           | Does not support binding relationships               |
+| VO (Video Output)  | None             | VO is the endpoint of video data, does not support binding relationships |
+| AI (Audio Input)   | AREC             | AI processed data can be directly sent to the audio recognition module for recognition |
+|                   | AENC              | AI processed data can be directly sent to the audio encoding module for encoding |
+|                   | AO                | AI processed data can be directly played            |
+| ADEC (Audio Decoder) | AO             | ADEC processed data can be directly played          |
+| AENC (Audio Encoder) | None           | Does not support binding relationships               |
+| AO (Audio Output)  | None             | AO is the endpoint of audio data, does not support binding relationships |
 
 ## 2. API Reference
 
-### 2.1 Multimedia memory management
+### 2.1 Multimedia Memory Management
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd\_mpi\_sys\_mmz\_alloc](#211-kd_mpi_sys_mmz_alloc)
 - [kd\_mpi\_sys\_mmz\_alloc\_cached](#212-kd_mpi_sys_mmz_alloc_cached)
@@ -135,1396 +134,1446 @@ This function module provides the following APIs:
 
 #### 2.1.1 kd_mpi_sys_mmz_alloc
 
-【Description】
+**Description**:
 
-Apply MMZ memory in user space
+Allocate MMZ memory in user space.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_mmz_alloc(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* mmb, const k_char\* zone, k_u32 len);
+```c
+k_s32 kd_mpi_sys_mmz_alloc(k_u64* phy_addr, void** virt_addr, const k_char* mmb, const k_char* zone, k_u32 len);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**                          | Input/output |
-|-----------|------------------------------|-----------|
-| phy_addr  | Physical address pointer.               | output      |
-| virt_addr | A pointer to a pointer to the virtual address.     | output      |
-| mmb       | A string pointer to the mb name.       | input      |
-| zone      | A string pointer to the MMZ zone name.  | input      |
-| only       | Memory block size.                 | input      |
+| **Parameter Name** | **Description**                | Input/Output |
+|--------------------|--------------------------------|--------------|
+| phy_addr           | Pointer to the physical address. | Output       |
+| virt_addr          | Pointer to the virtual address pointer. | Output       |
+| mmb                | String pointer to the MMB name. | Input        |
+| zone               | String pointer to the MMZ zone name. | Input        |
+| len                | Size of the memory block.      | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                           |
-|--------|-----------------------------------------------|
-| 0      | succeed                                          |
-| Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
+| Return Value | **Description**                                |
+|--------------|------------------------------------------------|
+| 0            | Success                                        |
+| Non-0        | Failure, see [Error Codes](#412-multimedia-memory-zone-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none.
+None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-MMZ consists of multiple zones, each with multiple MMBs. You can call this MPI and allocate a memory block of size len \*mmb in the \*zone of the MMZ. In this case, pointers to the physical address and the user-mode virtual address are returned. If there is an anonymous area in MMZ, set \*zone to null. If \*mmb is set to null, the created MMB is named null. 【Example】
+MMZ consists of multiple zones, each zone has multiple MMBs. You can call this MPI to allocate a memory block of size len in the \*zone of MMZ. In this case, pointers to the physical address and user-mode virtual address are returned. If there is an anonymous zone in MMZ, set \*zone to null. If \*mmb is set to null, the created MMB is named null.
 
-none
+**Example**:
 
-【See Also】
+None.
 
-none
+**Related Topics**:
+
+None.
 
 #### 2.1.2 kd_mpi_sys_mmz_alloc_cached
 
-【Description】
+**Description**:
 
-Request MMZ memory with cache in user space
+Allocate cached MMZ memory in user space.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* mmb, const k_char\* zone, k_u32 len);
+```c
+k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64* phy_addr, void** virt_addr, const k_char* mmb, const k_char* zone, k_u32 len);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**                          | Input/output |
-|-----------|------------------------------|-----------|
-| phy_addr  | Physical address pointer.               | output      |
-| virt_addr | A pointer to a pointer to the virtual address.     | output      |
-| mmb       | A string pointer to the mb name.       | input      |
-| zone      | A string pointer to the MMZ zone name.  | input      |
-| only       | Memory block size.                 | input      |
+| **Parameter Name** | **Description**                | Input/Output |
+|--------------------|--------------------------------|--------------|
+| phy_addr           | Pointer to the physical address. | Output       |
+| virt_addr          | Pointer to the virtual address pointer. | Output       |
+| mmb                | String pointer to the MMB name. | Input        |
+| zone               | String pointer to the MMZ zone name. | Input        |
+| len                | Size of the memory block.      | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                           |
-|--------|-----------------------------------------------|
-| 0      | succeed                                          |
-| Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
+| Return Value | **Description**                                |
+|--------------|------------------------------------------------|
+| 0            | Success                                        |
+| Non-0        | Failure, see [Error Codes](#412-multimedia-memory-zone-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None.
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- [The difference between kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached) and kd_mpi_sys_mmz_alloc[: caching is supported by calling](#211-kd_mpi_sys_mmz_alloc) the memory allocated by the kd_mpi_sys_mmz_alloc_cached, and [it is recommended](#212-kd_mpi_sys_mmz_alloc_cached) if the memory to be allocated will be used frequently [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached).This improves the read/write efficiency and system performance of the CPU.
-- When the CPU accesses the memory allocated by this interface, it places the data in memory in the cache. Hardware devices can only access physical memory, not cache. In this case[kd_mpi_sys_mmz_flush_cache](#216-kd_mpi_sys_mmz_flush_cache) needs to be called to synchronize the data.
+- The difference between [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached) and [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc): Memory allocated by calling [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached) supports caching. If the memory to be allocated will be frequently used, it is recommended to use [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached). This can improve CPU read/write efficiency and system performance.
+- When the CPU accesses the memory allocated by this interface, the data in the memory will be placed in the cache. Hardware devices can only access physical memory, not the cache. In this case, [kd_mpi_sys_mmz_flush_cache](#216-kd_mpi_sys_mmz_flush_cache) needs to be called to synchronize the data.
 
-【Example】
+**Example**:
 
-none
+None.
 
-【See Also】
+**Related Topics**:
 
-none
+None.
 
 #### 2.1.3 kd_mpi_sys_mmap
 
-【Description】
+**Description**:
+**Description**:
 
-Memory storage mapping interface.
+Memory mapping interface.
 
-【Syntax】
+**Syntax**:
 
-void \*kd_mpi_sys_mmap(k_u64 phy_addr, k_u32 size);
+```c
+void *kd_mpi_sys_mmap(k_u64 phy_addr, k_u32 size);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                      | Input/output |
-|----------|--------------------------|-----------|
-| phy_addr | The memory cell start address to be mapped | input      |
-| size     | The number of bytes mapped             | input      |
+| **Parameter Name** | **Description**                      | Input/Output |
+|--------------------|--------------------------------------|--------------|
+| phy_addr           | Starting address of the memory unit to be mapped | Input       |
+| size               | Number of bytes to map               | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**      |
-|--------|----------|
-| 0      | Invalid address |
-| Non-0    | A valid address |
+| Return Value | **Description**      |
+|--------------|----------------------|
+| 0            | Invalid address      |
+| Non-0        | Valid address        |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- Only physical addresses obtained through MMZ applications can be mapped using this API
-- If the address range belongs to a VB, the size of the map needs to be smaller than the size of the VB pool
+- Only the physical addresses obtained through MMZ allocation can be mapped using this API.
+- If the address range belongs to a VB, the size of the mapping must be smaller than the size of the VB pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_sys_munmap()](#215-kd_mpi_sys_munmap)
 
 #### 2.1.4 kd_mpi_sys_mmap_cached
 
-【Description】
+**Description**:
 
-Memory stores interfaces with caches.
+Memory mapping interface with cache.
 
-【Syntax】
+**Syntax**:
 
-void \*kd_mpi_sys_mmap_cached(k_u64 phy_addr, k_u32 size);
+```c
+void *kd_mpi_sys_mmap_cached(k_u64 phy_addr, k_u32 size);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                      | Input/output |
-|----------|--------------------------|-----------|
-| phy_addr | The memory cell start address to be mapped | input      |
-| size     | The number of bytes mapped             | input      |
+| **Parameter Name** | **Description**                      | Input/Output |
+|--------------------|--------------------------------------|--------------|
+| phy_addr           | Starting address of the memory unit to be mapped | Input       |
+| size               | Number of bytes to map               | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**      |
-|--------|----------|
-| 0      | Invalid address |
-| Non-0    | A valid address |
+| Return Value | **Description**      |
+|--------------|----------------------|
+| 0            | Invalid address      |
+| Non-0        | Valid address        |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- Only physical addresses obtained through MMZ applications can be mapped using this API
-- If the address range belongs to a VB, the size of the map needs to be smaller than the size of the VB pool
+- Only the physical addresses obtained through MMZ allocation can be mapped using this API.
+- If the address range belongs to a VB, the size of the mapping must be smaller than the size of the VB pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+None
 
 #### 2.1.5 kd_mpi_sys_munmap
 
-【Description】
+**Description**:
 
-Memory storage mapping dismissal interface.
+Memory unmapping interface.
 
-【Syntax】
+**Syntax**:
 
-void \*kd_mpi_sys_mmap(void \*virt_addr, k_u32 size);
+```c
+void *kd_mpi_sys_munmap(void *virt_addr, k_u32 size);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**                | Input/output |
-|-----------|--------------------|-----------|
-| virt_addr | The virtual address returned by mmap | input      |
-| size      | The number of bytes mapped       | input      |
+| **Parameter Name** | **Description**                | Input/Output |
+|--------------------|--------------------------------|--------------|
+| virt_addr          | Virtual address returned by mmap | Input        |
+| size               | Number of bytes to unmap       | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**  |
-|--------|------|
-| 0      | succeed |
-| Non-0    | fail |
+| Return Value | **Description**  |
+|--------------|------------------|
+| 0            | Success          |
+| Non-0        | Failure          |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 - [kd_mpi_sys_mmap](#213-kd_mpi_sys_mmap)
 - [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
 
 #### 2.1.6 kd_mpi_sys_mmz_flush_cache
 
-【Description】
+**Description**:
 
-Flushes the contents of the cache to memory and invalidates the contents of the cache.
+Flush the contents of the cache to memory and invalidate the cache contents.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
+```c
+k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void* virt_addr, k_u32 size);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**                                       | Input/output |
-|-----------|-------------------------------------------|-----------|
-| phy_addr  | The starting physical address of the data to be manipulated.                | input      |
-| virt_addr | The starting virtual address pointer for the data to be manipulated. NULL cannot be passed | input      |
-| size      | The size of the data to be manipulated                          | input      |
+| **Parameter Name** | **Description**                                       | Input/Output |
+|--------------------|-------------------------------------------------------|--------------|
+| phy_addr           | Starting physical address of the data to operate on   | Input        |
+| virt_addr          | Starting virtual address pointer of the data to operate on. Cannot be NULL | Input        |
+| size               | Size of the data to operate on                        | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                           |
-|--------|-----------------------------------------------|
-| 0      | succeed                                          |
-| Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#412-multimedia-memory-zone-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- If the data in the cache is up-to-date, you need to call this MPI to synchronize the data to memory. This ensures that hardware that does not have direct access to the cache can obtain the correct data.
-- This MPI must be invoked before [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached) used
-- Setting phy_addr to 0 means that the entire cache range is operated. (Not supported at this time)
-- You need to make sure that the transmitted parameters are valid
-- Ensure that the kd_mpi_sys_mmz_free is not invoked to free the memory being flushed when performing a refresh operation[](#217-kd_mpi_sys_mmz_free). Otherwise, unpredictable exceptions can occur.
+- If the cache contains the latest data, you need to call this MPI to synchronize the data to memory. This ensures that hardware that cannot directly access the cache can obtain the correct data.
+- You must call [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached) before using this MPI.
+- If phy_addr is set to 0, it means to operate on the entire cache area. (Not supported currently)
+- You need to ensure that the parameters passed are valid.
+- Ensure that [kd_mpi_sys_mmz_free](#217-kd_mpi_sys_mmz_free) is not called to free the memory being flushed; otherwise, unpredictable exceptions may occur.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
 - [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
 
 #### 2.1.7 kd_mpi_sys_mmz_free
 
-【Description】
+**Description**:
 
-Frees MMZ memory in user mode.
+Free MMZ memory in user space.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void\* virt_addr);
+```c
+k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void* virt_addr);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**            | Input/output |
-|-----------|----------------|-----------|
-| phy_addr  | Physical address.     | input      |
-| virt_addr | Virtual address pointer. | input      |
+| **Parameter Name** | **Description**            | Input/Output |
+|--------------------|----------------------------|--------------|
+| phy_addr           | Physical address           | Input        |
+| virt_addr          | Virtual address pointer    | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                           |
-|--------|-----------------------------------------------|
-| 0      | succeed                                          |
-| Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#412-multimedia-memory-zone-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- The address entered must be a valid physical address, and the virtual address pointer can be set to NULL.
-- Memory that is in progress cannot be freed or an unpredictable exception will be thrown.
+- The input address must be a valid physical address, and the virtual address pointer can be set to NULL.
+- Do not free memory that is undergoing a flush operation, as it may cause unpredictable exceptions.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 - [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
 
 #### 2.1.8 kd_mpi_sys_get_virmem_info
 
-【Description】
+**Description**:
 
-Obtain the corresponding memory information based on the virtual address, including the physical address and cached attribute
+Get the memory information corresponding to the virtual address, including the physical address and cached attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem_info);
+```c
+k_s32 kd_mpi_sys_get_virmem_info(const void* virt_addr, k_sys_virmem_info* mem_info);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**                                                     | Input/output |
-|-----------|---------------------------------------------------------|-----------|
-| virt_addr | Virtual address pointer.                                          | input      |
-| mem_info  | The memory information corresponding to the virtual address, including the physical address and cached attribute. | output      |
+| **Parameter Name** | **Description**                                                     | Input/Output |
+|--------------------|---------------------------------------------------------------------|--------------|
+| virt_addr          | Virtual address pointer                                             | Input        |
+| mem_info           | Memory information corresponding to the virtual address, including physical address, cached attributes, etc. | Output       |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                           |
-|--------|-----------------------------------------------|
-| 0      | succeed                                          |
-| Non-0    | Failed, the value of which is described in [error code](#412-multimedia-memory-zone-error-codes) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#412-multimedia-memory-zone-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_mmz_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- The input must be a user-mode virtual address.
+- The input must be a user-space virtual address.
 - Cross-process use is not supported.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 - [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
 
 #### 2.1.9 kd_mpi_vb_set_config
 
-【Description】
+**Description**:
 
-Set the MPP VB Pool property.
+Set MPP video buffer pool attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
+```c
+k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) *config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                  | Input/output |
-|----------|----------------------|-----------|
-| config   | Video buffer pool property pointer. | input      |
+| **Parameter Name** | **Description**                  | Input/Output |
+|--------------------|----------------------------------|--------------|
+| config             | Pointer to the video buffer pool attributes | Input       |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- You can set the vb pool property only when the system is in an uninitialized state, otherwise failure will be returned.
-- The size of each vb block in the public vb pool should vary depending on the current image pixel format and whether the image is compressed
+- The buffer pool attributes can only be set when the system is uninitialized; otherwise, the function will return failure.
+- The size of each buffer block in the common buffer pool should vary according to the current image pixel format and whether the image is compressed. For specific allocation sizes, refer to the description in the [k_vb_config](#323-k_vb_config) structure.
 
-   is different. For specific allocation sizes, see [](#323-k_vb_config) the description in k_vb_config Struct.
+**Example**:
 
-【Example】
+None
 
-none
-
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_get_config](#2110-kd_mpi_vb_get_config)
 
 #### 2.1.10 kd_mpi_vb_get_config
 
-【Description】
+**Description**:
 
-Gets the MPP video buffer pool properties.
+Get MPP video buffer pool attributes.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
+```c
+k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) *config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                  | Input/output |
-|----------|----------------------|-----------|
-| config   | Video buffer pool property pointer. | output      |
+| **Parameter Name** | **Description**                  | Input/Output |
+|--------------------|----------------------------------|--------------|
+| config             | Pointer to the video buffer pool attributes | Output      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-You must call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool properties before you get the properties.
+You must first call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool attributes before getting the attributes.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
 
 #### 2.1.11 kd_mpi_vb_init
 
-【Description】
+**Description**:
 
 Initialize the MPP video buffer pool.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_init(void);
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- You must call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool properties before initializing the vb pool, or it will be lost
-    Fail.
-- It can be initialized repeatedly without returning failures.
+- You must first call [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) to set the MPP video buffer pool attributes before initializing the buffer pool; otherwise, it will fail.
+- Initialization can be repeated without returning failure.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_exit](#2112-kd_mpi_vb_exit)
 
 #### 2.1.12 kd_mpi_vb_exit
 
-【Description】
+**Description**:
 
-Go and initialize the MPP video buffer pool.
+Deinitialize the MPP video buffer pool.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_exit(void);
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- Deinitialization does not clear previous configurations of the vb pool.
-- It can be repeatedly deinitialized and does not return failure.
-- Before exiting the VB pool, make sure that any VB in the VB pool is not in use, otherwise you cannot exit.
+- Deinitialization does not clear previous buffer pool configurations.
+- Deinitialization can be repeated without returning failure.
+- Before exiting the VB pool, ensure that no VB in the VB pool is occupied; otherwise, it cannot be exited.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_init](#2111-kd_mpi_vb_init)
 
 #### 2.1.13 kd_mpi_vb_create_pool
 
-【Description】
+**Description**:
 
-Create a video buffer pool
+Create a video buffer pool.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) \*config);
+```c
+k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) *config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                    | Input/output |
-|----------|------------------------|-----------|
-| config   | VB poolconfiguration property parameter pointer | input      |
+| **Parameter Name** | **Description**                    | Input/Output |
+|--------------------|------------------------------------|--------------|
+| config             | Pointer to the buffer pool configuration attributes | Input       |
 
-【Return value】
+**Return Values**:
 
-| Return value               | **Description**                                              |
-|----------------------|--------------------------------------------------|
-| Non-VB_INVALID_POOLID | A valid vb pool ID number                               |
-| VB_INVALID_POOLID    | The creation of the vb pool failed, either because the parameters are illegal or there is not enough reserved memory. |
+| Return Value               | **Description**                                              |
+|----------------------------|--------------------------------------------------------------|
+| Non VB_INVALID_POOLID      | Valid buffer pool ID                                         |
+| VB_INVALID_POOLID          | Failed to create buffer pool, possibly due to illegal parameters or insufficient reserved memory |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_destory_pool](#2114-kd_mpi_vb_destory_pool)
 
 #### 2.1.14 kd_mpi_vb_destory_pool
 
-【Description】
+**Description**:
 
 Destroy a video buffer pool.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                                          | Input/output |
-|----------|----------------------------------------------|-----------|
-| pool_id  | VB poolID number. Value range: [0, VB_MAX_POOLS]. | input      |
+| **Parameter Name** | **Description**                                          | Input/Output |
+|--------------------|----------------------------------------------------------|--------------|
+| pool_id            | Buffer pool ID. Value range: [0, VB_MAX_POOLS)          | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                         |
-|--------|---------------------------------------------|
-| 0      | Succeed.                                      |
-| Non-0   | Failed, see [Error Code](#411-video-buffer-pool-error-code) for value. |
+| Return Value | **Description**                                           |
+|--------------|-----------------------------------------------------------|
+| 0            | Success                                                   |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- Destroying a non-existent vb pool returns a [K_ERR_VB_UNEXIST](#411-video-buffer-pool-error-code)
-- Only buffer pools created by [k_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool) can be destroyed
+- Destroying a non-existent buffer pool will return [K_ERR_VB_UNEXIST](#411-video-buffer-pool-error-codes).
+- Only buffer pools created by [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool) can be destroyed.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
 
 #### 2.1.15 kd_mpi_vb_get_block
 
-【Description】
+**Description**:
 
-User mode gets a vb block
+Acquire a buffer block in user mode.
 
-【Syntax】
+**Syntax**:
 
-k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char \*mmz_name);
+```c
+k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char *mmz_name);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                                                     | Input/output |
-|----------|---------------------------------------------------------|-----------|
-| pool_id  | VB poolID number. Value range: [0, VB_MAX_POOLS].            | input      |
-| blk_size | VB block size. Value range: The full range of data types, measured in bytes. | input      |
-| mmz_name | The name of the DDR where the vb pool resides.                                 | input      |
+| **Parameter Name** | **Description**                                        | Input/Output |
+|--------------------|--------------------------------------------------------|--------------|
+| pool_id            | Buffer pool ID. Range: [0, VB_MAX_POOLS)               | Input        |
+| blk_size           | Buffer block size in bytes. Range: full data type range | Input        |
+| mmz_name           | Name of the DDR where the buffer pool is located       | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value               | **Description**              |
-|----------------------|------------------|
-| Non-VB_INVALID_HANDLE | A valid vb block handle |
-| VB_INVALID_HANDLE    | Failed to get vb block   |
+| Return Value           | **Description**          |
+|------------------------|--------------------------|
+| Non VB_INVALID_HANDLE  | Valid buffer block handle |
+| VB_INVALID_HANDLE      | Failed to get buffer block |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- After creating a vb pool, the user can call this API to obtain a vb block from the vb pool; that is, the first parameter P is set to the ID of the created vb pool; when obtaining the vb block from the specified vb pool, the parameter mmz_name invalid \*
-- If the user needs to obtain a block of cache of the specified size from any of the public vb pools, they can set the first parameter Pool to an invalid ID number (VB_INVALID_POOLID), set the second parameter blk_size to the desired vb block size, and specify the public vb pool on which DDR to obtain the vb block from. If there is no public vb pool on the specified DDR, the vb block will not be fetched. If mmz_name equals NULL, it means that the public vb pool on the anonymous DDR fetches the vb block.
+- Users can call this interface to get a buffer block from a created buffer pool by setting the first parameter `pool_id` to the created buffer pool ID. When getting a buffer block from a specified buffer pool, the `mmz_name` parameter is invalid.
+- If users need to get a buffer block of a specified size from any common buffer pool, they can set the first parameter `pool_id` to an invalid ID (VB_INVALID_POOLID), set the second parameter `blk_size` to the required buffer block size, and specify which DDR's common buffer pool to get the buffer block from. If there is no common buffer pool on the specified DDR, no buffer block will be obtained. If `mmz_name` is NULL, it means to get the buffer block from the anonymous DDR's common buffer pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_vb_release_block](#2116-kd_mpi_vb_release_block)
+**Description**:ase_block](#2116-kd_mpi_vb_release_block)
 
 #### 2.1.16 kd_mpi_vb_release_block
 
-【Description】
+**Description**:
 
-User mode frees a vb block
+Release a buffer block in user mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_release_block(k_vb_blk_handle block);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**       | Input/output |
-|----------|-----------|-----------|
-| block    | vb ?? | input      |
+| **Parameter Name** | **Description** | Input/Output |
+|--------------------|-----------------|--------------|
+| block              | Buffer block handle | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                         |
-|--------|---------------------------------------------|
-| 0      | Succeed.                                      |
-| Non-0   | Failed, see [Error Code](#411-video-buffer-pool-error-code) for value. |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-After the obtained vb block is exhausted, this interface should be called to free the vb block.
+The acquired buffer block should be released using this interface after use.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_vb_get_block](#2115-kd_mpi_vb_get_block)
+**Description**:block](#2115-kd_mpi_vb_get_block)
 
 #### 2.1.17 kd_mpi_vb_phyaddr_to_handle
 
-【Description】
+**Description**:
 
-The user mode obtains its handle through the physical address of the vb block.
+Get the handle of a buffer block through its physical address in user mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_vb_blk_handle kd_mpi_vb_phyaddr_to_handle(k_u64 phys_addr);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**  | **Description**       | Input/output |
-|-----------|-----------|-----------|
-| phys_addr | vb ?? | input      |
+| **Parameter Name** | **Description** | Input/Output |
+|--------------------|-----------------|--------------|
+| phys_addr          | Physical address | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value               | **Description**                |
-|----------------------|--------------------|
-| Non-VB_INVALID_HANDLE | A valid vb block handle   |
-| VB_INVALID_HANDLE    | Failed to get cache fast handle |
+| Return Value           | **Description**          |
+|------------------------|--------------------------|
+| Non VB_INVALID_HANDLE  | Valid buffer block handle |
+| VB_INVALID_HANDLE      | Failed to get buffer block handle |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-The physical address should be the address of a valid vb block obtained from the MPP video buffer pool.
+The physical address should be the address of a valid buffer block obtained from the MPP video buffer pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.1.18 kd_mpi_vb_handle_to_phyaddr
 
-【Description】
+**Description**:
 
-User mode gets the physical address of a vb block
+Get the physical address of a buffer block in user mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_u64 kd_mpi_vb_handle_to_phyaddr(k_vb_blk_handle block);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**       | Input/output |
-|----------|-----------|-----------|
-| block    | vb ?? | input      |
+| **Parameter Name** | **Description** | Input/Output |
+|--------------------|-----------------|--------------|
+| block              | Buffer block handle | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                          |
-|--------|------------------------------|
-| 0      | Invalid return value, vb block handle is illegal. |
-| Non-0   | A valid physical address.               |
+| Return Value | **Description**                  |
+|--------------|----------------------------------|
+| 0            | Invalid return value, illegal buffer block handle |
+| Non-0        | Valid physical address           |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-The specified vb block should be a valid vb block obtained from the MPP video buffer pool.
+The specified buffer block should be a valid buffer block obtained from the MPP video buffer pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.1.19 kd_mpi_vb_handle_to_pool_id
 
-【Description】
+**Description**:
 
-User mode gets the ID of the vb pool in which a framebuffer block resides.
+Get the ID of the buffer pool where a frame buffer block is located in user mode.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_handle_to_pool_id(k_vb_blk_handle block);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**       | Input/output |
-|----------|-----------|-----------|
-| block    | vb ?? | input      |
+| **Parameter Name** | **Description** | Input/Output |
+|--------------------|-----------------|--------------|
+| block              | Buffer block handle | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value               | **Description**                |
-|----------------------|--------------------|
-| Non-VB_INVALID_POOLID | A valid vb pool ID number |
-| VB_INVALID_POOLID    | Failed to get vb pool ID. |
+| Return Value           | **Description**          |
+|------------------------|--------------------------|
+| Non VB_INVALID_POOLID  | Valid buffer pool ID     |
+| VB_INVALID_POOLID      | Failed to get buffer pool ID |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-The specified vb block should be a valid vb block obtained from the MPP video buffer pool.
+The specified buffer block should be a valid buffer block obtained from the MPP video buffer pool.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.1.20 kd_mpi_vb_inquire_user_cnt
 
-【Description】
+**Description**:
 
-Query vb block usage count information.
+Query the usage count information of a buffer block.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**       | Input/output |
-|----------|-----------|-----------|
-| block    | vb ?? | input      |
+| **Parameter Name** | **Description** | Input/Output |
+|--------------------|-----------------|--------------|
+| block              | Buffer block handle | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value   | **Description**                |
-|----------|--------------------|
-| K_FAILED | The query failed           |
-| Other values   | The vb block uses the count value. |
+| Return Value | **Description**      |
+|--------------|----------------------|
+| K_FAILED     | Query failed         |
+| Other values | Buffer block usage count |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-none.
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.1.21 kd_mpi_vb_get_supplement_attr
 
-【Description】
+**Description**:
 
-Gets auxiliary information for VB Block memory.
+Get the supplementary information of VB Block memory.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#333-k_video_supplement) \*supplement);【参数】
+```c
+k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, k_video_supplement *supplement);
+```
 
-| **Parameter name**   | **Description**                                             | Input/output |
-|------------|-------------------------------------------------|-----------|
-| block      | vb ??                                       | input      |
-| supplement | Auxiliary information for VB Block memory. Such as ISP information, DCF information, etc | output      |
+**Parameters**:
 
-【Return value】
+| **Parameter Name** | **Description**                                 | Input/Output |
+|--------------------|-------------------------------------------------|--------------|
+| block              | Buffer block handle                             | Input        |
+| supplement         | Supplementary information of VB block memory, such as ISP information, DCF information, etc. | Output       |
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+**Return Values**:
 
-【Differences】
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-none
+**Chip Differences**:
 
-【Requirement】
+None
+
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-The virtual address information stored by Supplement DCF and ISP is a kernel-state virtual address
+The virtual address information of the DCF and ISP stored in Supplement is the kernel-mode virtual address.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.1.22 kd_mpi_vb_set_supplement_config
 
-【Description】
+**Description**:
 
-Sets additional information for VB memory.
+Set the supplementary information of VB memory.
 
-![Open book outline](../../../../zh/01_software/board/mpp/images/458c9a7b50ccf347bf7ed5e8c4c5b7a8.png) description
+**Syntax**:
 
-Some information needs to be appended to the VB memory. For example, DCF information, ISP statistics, some real-time parameters of ISP
+```c
+k_s32 kd_mpi_vb_set_supplement_config(const k_vb_supplement_config *supplement_config);
+```
 
-etc., this additional information can be passed through the various modules of MPP with VB memory. User mode can also get VB memory
+**Parameters**:
 
-Get this information.
+| **Parameter Name**    | **Description**                                  | Input/Output |
+|-----------------------|--------------------------------------------------|--------------|
+| supplement_config     | VB memory supplementary information control structure for supplementary information memory allocation | Input        |
 
-【Syntax】
+**Return Values**:
 
-k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Parameters】
+**Chip Differences**:
 
-| **Parameter name**          | **Description**                                                | Input/output |
-|-------------------|----------------------------------------------------|-----------|
-| supplement_config | VB memory additional information control structure. Used to allocate memory for additional information. | input      |
+None
 
-【Return value】
-
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
-
-【Differences】
-
-none
-
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- Currently, 2 VB memory additions are supported, namely:
-- DCF information, corresponding to the structure [k_jpeg_dcf](#335-k_jpeg_dcf). The corresponding MASK is VB_SUPPLEMENT_JPEG_MASK.
-- ISP information, corresponding to the results [k_isp_frame_info](#334-k_isp_frame_info). The corresponding MASK is VB_SUPPLEMENT_ISPINFO_MASK.
-- This interface needs to  be called before [kd_mpi_vb_init](#2111-kd_mpi_vb_init) for the auxiliary information to take effect.
+- Currently, two types of VB memory supplementary information are supported:
+  - DCF information, corresponding to the structure [k_jpeg_dcf](#335-k_jpeg_dcf). The corresponding MASK is VB_SUPPLEMENT_JPEG_MASK.
+  - ISP information, corresponding to the structure [k_isp_frame_info](#334-k_isp_frame_info). The corresponding MASK is VB_SUPPLEMENT_ISPINFO_MASK.
+- This interface needs to be called before [kd_mpi_vb_init](#2111-kd_mpi_vb_init) for the supplementary information to take effect.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
+**Description**:supplement_config](#2123-kd_mpi_vb_get_supplement_config)
 
 #### 2.1.23 kd_mpi_vb_get_supplement_config
 
-【Description】
+**Description**:
 
-Gets additional information about VB memory.
+Get the supplementary information of VB memory.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
+```c
+k_s32 kd_mpi_vb_get_supplement_config(const k_vb_supplement_config *supplement_config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**          | **Description**                                                | Input/output |
-|-------------------|----------------------------------------------------|-----------|
-| supplement_config | VB memory additional information control structure. Used to allocate memory for additional information. | output      |
+| **Parameter Name**    | **Description**                                  | Input/Output |
+|-----------------------|--------------------------------------------------|--------------|
+| supplement_config     | VB memory supplementary information control structure for supplementary information memory allocation | Output       |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-kd_mpi_vb_set_supplement_config
+**Description**:supplement_config](#2122-kd_mpi_vb_set_supplement_config)
 
 #### 2.1.24 kd_mpi_vb_set_mod_pool_config
 
-【Description】
+**Description**:
 
-Set the module public video buffer pool properties.
+Set the attributes of the module's common video buffer pool.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_vb_config) \*config);
+```c
+k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const k_vb_config *config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                               | Input/output |
-|----------|-----------------------------------|-----------|
-| vb_uid   | Use the module ID of the module's common video buffer pool. | input      |
-| config   | Video buffer pool property pointer.              | input      |
+| **Parameter Name** | **Description**                        | Input/Output |
+|--------------------|----------------------------------------|--------------|
+| vb_uid             | Module ID using the common video buffer pool | Input        |
+| config             | Pointer to video buffer pool attributes | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- The configuration of the module's common video buffer is configured according to actual needs, otherwise memory will be generated
-- If module VB has already been created, configure again to return error code KD_ERR_VB_BUSY
+- The configuration of the module's common video buffer pool should be based on actual needs, otherwise it may cause memory waste.
+- If the module VB has already been created, reconfiguration will return the error code KD_ERR_VB_BUSY.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_vb_get_mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
+**Description**:mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
 
 #### 2.1.25 kd_mpi_vb_get_mod_pool_config
 
-【Description】
+**Description**:
 
-Gets the module public video buffer pool property.
+Get the attributes of the module's common video buffer pool.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_config) \*config);
+```c
+k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, k_vb_config *config);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                               | Input/output |
-|----------|-----------------------------------|-----------|
-| vb_uid   | Use the module ID of the module's common video buffer pool. | input      |
-| config   | Video buffer pool property pointer.              | output      |
+| **Parameter Name** | **Description**                        | Input/Output |
+|--------------------|----------------------------------------|--------------|
+| vb_uid             | Module ID using the common video buffer pool | Input        |
+| config             | Pointer to video buffer pool attributes | Output       |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-You must call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config) to set the module's public video buffer pool property before you get the genus
+You must call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config) to set the attributes of the module's common video buffer pool before getting the attributes.
 
-Sex.
+**Example**:
 
-【Example】
+None
 
-none
+**Related Topics**:
 
-【See Also】
-
-[kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
+**Description**:mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
 
 #### 2.1.26 kd_mpi_vb_init_mod_common_pool
 
-【Description】
+**Description**:
 
-Initialize the module public video buffer pool.
+Initialize the module's common video buffer pool.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
+```c
+k_s32 kd_mpi_vb_init_mod_common_pool(k_vb_uid vb_uid);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                               | Input/output |
-|----------|-----------------------------------|-----------|
-| vb_uid   | Use the module ID of the module's common video buffer pool. | input      |
+| **Parameter Name** | **Description**                        | Input/Output |
+|--------------------|----------------------------------------|--------------|
+| vb_uid             | Module ID using the common video buffer pool | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- Public video buffer pool initialization must first be called [kd_mpi_vb_init](#2111-kd_mpi_vb_init).
-- You must call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)f to configure the vb pool property before initializing the vb pool or it will fail.
-- It can be initialized repeatedly without returning failures.
+- You must first call [kd_mpi_vb_init](#2111-kd_mpi_vb_init) to initialize the common video buffer pool.
+- You must first call [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config) to configure the buffer pool attributes before initializing the buffer pool, otherwise it will fail.
+- It can be initialized repeatedly without returning failure.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_vb_exit_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
+**Description**:_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
 
 #### 2.1.27 kd_mpi_vb_exit_mod_common_pool
 
-【Description】
+**Description**:
 
-Exit the module public video buffer pool.
+Exit the module's common video buffer pool.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
+```c
+k_s32 kd_mpi_vb_exit_mod_common_pool(k_vb_uid vb_uid);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                               | Input/output |
-|----------|-----------------------------------|-----------|
-| vb_uid   | Use the module ID of the module's common video buffer pool. | input      |
+| **Parameter Name** | **Description**                               | Input/Output |
+|--------------------|-----------------------------------------------|--------------|
+| vb_uid             | Module ID using the common video buffer pool. | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                       |
-|--------|-------------------------------------------|
-| 0      | succeed                                      |
-| Non-0    | Failed, the value of which is described in [error code](#411-video-buffer-pool-error-code) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#411-video-buffer-pool-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_vb_api.h k_vb_comm.h
 - Library file: libvb.a
 
-【Note】
+**Notes**:
 
-- The interface must[](#2112-kd_mpi_vb_exit) be called before calling kd_mpi_vb_exit or failure is returned.
-- Exiting clears the previous configuration of the module's public video buffer pool.
-- You can exit repeatedly without returning failures.
-- Before exiting the VB pool, make sure that any VB in the VB pool is not in use, otherwise you cannot exit.
+- You must call this interface before calling [kd_mpi_vb_exit](#2112-kd_mpi_vb_exit), otherwise it will return failure.
+- Exiting will clear the previous configuration of the module's common video buffer pool.
+- It can be exited repeatedly without returning failure.
+- Ensure that no VB in the VB pool is occupied before exiting the VB pool, otherwise it cannot be exited.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_vb_init_mod_common_pool](#2126-kd_mpi_vb_init_mod_common_pool)
 
 ### 2.2 System Binding
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
-- [kd_mpi_sys_get_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
+**Description**:et_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
 
 #### 2.2.1 kd_mpi_sys_bind
 
-【Description】
+**Description**:
 
-Data source-to-data receiver binding interface
+Interface for binding data source to data receiver.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
+```c
+k_s32 kd_mpi_sys_bind(k_mpp_chn *src_chn, k_mpp_chn *dest_chn);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**            | Input/output |
-|----------|----------------|-----------|
-| src_chn  | Source channel pointer.   | input      |
-| dest_chn | The destination channel pointer. | input      |
+| **Parameter Name** | **Description**            | Input/Output |
+|--------------------|----------------------------|--------------|
+| src_chn            | Pointer to source channel. | Input        |
+| dest_chn           | Pointer to destination channel. | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#42-system-binding-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-- For more information about the binding relationships supported by the system, see [Table 1-1](#411-video-buffer-pool-error-code).
-- Only one data source can be bound to the same data recipient.
-- Binding refers to the association between a data source and a data recipient. Once bound, the data generated by the data source is automatic
-    Send to the recipient
+- For the currently supported binding relationships, please refer to [Table 1-1](#411-video-buffer-pool-error-codes).
+- A single data receiver can only bind to one data source.
+- Binding refers to establishing an association between the data source and the data receiver. After binding, the data generated by the data source will be automatically sent to the receiver.
 
-【Example】
+**Example**:
 
-None/xx.
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
+**Description**:ind](#222-kd_mpi_sys_unbind)
 
 #### 2.2.2 kd_mpi_sys_unbind
 
-【Description】
+**Description**:
 
-The data source to the data receiver is unbound interface.
+Interface for unbinding data source from data receiver.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_unbind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
+```c
+k_s32 kd_mpi_sys_unbind(k_mpp_chn *src_chn, k_mpp_chn *dest_chn);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**            | Input/output |
-|----------|----------------|-----------|
-| src_chn  | Source channel pointer.   | input      |
-| dest_chn | The destination channel pointer. | input      |
+| **Parameter Name** | **Description**            | Input/Output |
+|--------------------|----------------------------|--------------|
+| src_chn            | Pointer to source channel. | Input        |
+| dest_chn           | Pointer to destination channel. | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#42-system-binding-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-pstDestChn returns success directly if the bound source channel cannot be found. If the source channel of the binding is found,
-However, if the source channel of the binding and the pstSrcChn do not match, the return fails.
+If the destination channel cannot find the bound source channel, it will return success directly. If it finds the bound source channel but it does not match the provided source channel, it will return failure.
 
-【Example】
+**Example**:
 
-None/xx.
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
+**Description**:d](#221-kd_mpi_sys_bind)
 
 #### 2.2.3 kd_mpi_sys_get_bind_by_dest
 
-【Description】
+**Description**:
 
-Gets the information of the source channel bound on this channel.
+Get information about the source channel bound to this destination channel.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp_chn](#312-k_mpp_chn) \*src_chn);
+```c
+k_s32 kd_mpi_sys_get_bind_by_dest(k_mpp_chn *dest_chn, k_mpp_chn *src_chn);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**            | Input/output |
-|----------|----------------|-----------|
-| src_chn  | Source channel pointer.   | output      |
-| dest_chn | The destination channel pointer. | input      |
+| **Parameter Name** | **Description**            | Input/Output |
+|--------------------|----------------------------|--------------|
+| src_chn            | Pointer to source channel. | Output       |
+| dest_chn           | Pointer to destination channel. | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#42-system-binding-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#42-system-binding-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-None/xx.
+None
 
-【See Also】
+**Related Topics**:
 
 - [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
 
 ### 2.3 Log Management
 
-This function module provides the following APIs:
+This functional module provides the following APIs:
 
 - [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
 - [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
@@ -1532,396 +1581,408 @@ This function module provides the following APIs:
 - [kd_mpi_log_read](#234-kd_mpi_log_read)
 - [kd_mpi_log_close](#235-kd_mpi_log_close)
 - [kd_mpi_log_set_console](#236-kd_mpi_log_set_console)
-- [kd_mpi_log_get_console](#237-kd_mpi_log_get_console)
+**Description**:et_console](#237-kd_mpi_log_get_console)
 
 #### 2.3.1 kd_mpi_log_set_level_conf
 
-【Description】
+**Description**:
 
 Set the log level.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) \*conf);
+```c
+k_s32 kd_mpi_log_set_level_conf(const k_log_level_conf *conf);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                   | Input/output |
-|----------|-----------------------|-----------|
-| Conf     | Log level information structure.  | input      |
+| **Parameter Name** | **Description**                   | Input/Output |
+|--------------------|-----------------------------------|--------------|
+| conf               | Log level information structure. | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#43-log-management-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-When the member mod_name in conf is set to the string "all", the log level of all modules is set. not
-Then, only the log level of the module specified by the mod_id is set
+When the `mod_name` member in `conf` is set to the string "all", it will set the log level for all modules. Otherwise, it will only set the log level for the module specified by `mod_id`.
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
+**Description**:_level_conf](#232-kd_mpi_log_get_level_conf)
 
 #### 2.3.2 kd_mpi_log_get_level_conf
 
-【Description】
+**Description**:
 
-Set the log level.
+Get the log level.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf);
+```c
+k_s32 kd_mpi_log_get_level_conf(k_log_level_conf *conf);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**        | **Description**                         | Input/output |
-|-----------------|-----------------------------|-----------|
-| conf-\>mod_id   | You need to get the module ID of the log level. | input      |
-| conf-\>level    | The log level obtained            | output      |
-| conf-\>mod_name | The name of the module                  | output      |
+| **Parameter Name**        | **Description**                         | Input/Output |
+|---------------------------|-----------------------------------------|--------------|
+| conf->mod_id              | Module ID for which to get the log level. | Input      |
+| conf->level               | Retrieved log level                     | Output       |
+| conf->mod_name            | Module name                             | Output       |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#43-log-management-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
+**Description**:_level_conf](#231-kd_mpi_log_set_level_conf)
 
 #### 2.3.3 kd_mpi_log_set_wait_flag
 
-【Description】
+**Description**:
 
 Set the wait flag when reading logs.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_log_set_wait_flag(k_bool is_wait);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                         | Input/output |
-|----------|-----------------------------|-----------|
-| is_wait  | Flag for whether to wait when reading logs.  | input      |
+| **Parameter Name** | **Description**                         | Input/Output |
+|--------------------|-----------------------------------------|--------------|
+| is_wait            | Wait flag when reading logs.            | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#43-log-management-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.3.4 kd_mpi_log_read
 
-【Description】
+**Description**:
 
-Read the logs.
+Read logs.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_log_read(k_char \*buf, k_u32 size);
+```c
+k_s32 kd_mpi_log_read(k_char *buf, k_u32 size);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name** | **Description**                       | Input/output |
-|----------|---------------------------|-----------|
-| buf      | A memory pointer to hold logs.  | output      |
-| size     | The size of the read log.          | input      |
+| **Parameter Name** | **Description**                       | Input/Output |
+|--------------------|---------------------------------------|--------------|
+| buf                | Memory pointer to store the logs.     | Output       |
+| size               | Size of the logs to read.             | Input        |
 
-【Return value】
+**Return Values**:
 
-| Return value     | **Description**                    |
-|------------|------------------------|
-| Greater than or equal to 0 | The size of the log that was successfully read. |
+| Return Value     | **Description**                    |
+|------------------|------------------------------------|
+| Greater than or equal to 0 | Size of the successfully read logs. |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.3.5 kd_mpi_log_close
 
-【Description】
+**Description**:
 
 Close the log file.
 
-【Syntax】
+**Syntax**:
 
+```c
 void kd_mpi_log_close(void);
+```
 
-【Parameters】
+**Parameters**:
 
-none
+None
 
-【Return value】
+**Return Values**:
 
-none
+None
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-none
+**Description**:
 
 #### 2.3.6 kd_mpi_log_set_console
 
-【Description】
+**Description**:
 
-Configure whether to print logs directly from the console.
+Configure whether the logs are printed directly through the console.
 
-【Syntax】
+**Syntax**:
 
+```c
 k_s32 kd_mpi_log_set_console(k_bool is_console);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**   | **Description**                | Input/output |
-|------------|--------------------|-----------|
-| is_console | Whether to print through the console | input      |
+| **Parameter Name**   | **Description**                | Input/Output |
+|----------------------|--------------------------------|--------------|
+| is_console           | Whether to print through the console | Input      |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#43-log-management-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
-[kd_mpi_log_get_console](#237-kd_mpi_log_get_console)
+**Description**:_console](#237-kd_mpi_log_get_console)
 
 #### 2.3.7 kd_mpi_log_get_console
 
-【Description】
+**Description**:
 
-Gets whether the log is printed directly from the console.
+Get whether the logs are printed directly through the console.
 
-【Syntax】
+**Syntax**:
 
-k_s32 kd_mpi_log_set_console(k_bool is_console);
+```c
+k_s32 kd_mpi_log_get_console(k_bool is_console);
+```
 
-【Parameters】
+**Parameters**:
 
-| **Parameter name**   | **Description**                | Input/output |
-|------------|--------------------|-----------|
-| is_console | Whether to print through the console | output      |
+| **Parameter Name**   | **Description**                | Input/Output |
+|----------------------|--------------------------------|--------------|
+| is_console           | Whether to print through the console | Output     |
 
-【Return value】
+**Return Values**:
 
-| Return value | **Description**                                     |
-|--------|-----------------------------------------|
-| 0      | succeed                                    |
-| Non-0    | Failed, the value of which is described in [error code](#43-log-management-error-codes) |
+| Return Value | **Description**                                     |
+|--------------|-----------------------------------------------------|
+| 0            | Success                                             |
+| Non-0        | Failure, see [Error Codes](#43-log-management-error-codes) for details |
 
-【Differences】
+**Chip Differences**:
 
-none
+None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_sys_api.h k_module.h k_log_comm.h
 - Library file: libsys.a
 
-【Note】
+**Notes**:
 
-none
+None
 
-【Example】
+**Example**:
 
-none
+None
 
-【See Also】
+**Related Topics**:
 
 [kd_mpi_log_set_console](#236-kd_mpi_log_set_console)
 
-## 3. Data Type
+## 3. Data Types
 
 ### 3.1 Common Data Types
 
-The module has the following data types
+This module has the following data types:
 
 - [k_mod_id](#311-k_mod_id)
-- [k_mpp_chn](#312-k_mpp_chn)
+**Description**:312-k_mpp_chn)
 
 #### 3.1.1 k_mod_id
 
-【Description】
+**Description**:
 
 Defines the module ID enumeration type.
-
-【Definition】
+**Definition**:
 
 ```C
 typedef enum {
 
-K_ID_CMPI = 0, /*< common module platform interface */
+K_ID_CMPI = 0, /*< Common module platform interface */
 
-K_ID_LOG = 1, /*< mpi device log */
+K_ID_LOG = 1, /*< MPI device log */
 
-K_ID_MMZ = 2, /*< media memory zone */
+K_ID_MMZ = 2, /*< Media memory zone */
 
-K_ID_MMZ_USER_DEV = 3, /*< media memory zone user used */
+K_ID_MMZ_USER_DEV = 3, /*< Media memory zone user used */
 
-K_ID_VB = 4, /*< video buffer device */
+K_ID_VB = 4, /*< Video buffer device */
 
-K_ID_SYS = 5, /*< system contrl device */
+K_ID_SYS = 5, /*< System control device */
 
-K_ID_VI = 6, /*< video in device */
+K_ID_VI = 6, /*< Video input device */
 
-K_ID_VPROC = 7, /*< video proc device */
+K_ID_VPROC = 7, /*< Video processing device */
 
-K_ID_VREC = 8, /*< video recognize device */
+K_ID_VREC = 8, /*< Video recognition device */
 
-K_ID_VENC = 9, /*< video encoding device */
+K_ID_VENC = 9, /*< Video encoding device */
 
-K_ID_VDEC = 10, /*< video decoding device */
+K_ID_VDEC = 10, /*< Video decoding device */
 
-K_ID_VO = 11, /*< video output device */
+K_ID_VO = 11, /*< Video output device */
 
-K_ID_AI = 12, /*< audio input device */
+K_ID_AI = 12, /*< Audio input device */
 
-K_ID_AREC = 13, /*< audio recognize device */
+K_ID_AREC = 13, /*< Audio recognition device */
 
-K_ID_AENC = 14, /*< audio encoding device */
+K_ID_AENC = 14, /*< Audio encoding device */
 
-K_ID_ADEC = 15, /*< audio decoding device */
+K_ID_ADEC = 15, /*< Audio decoding device */
 
-K_ID_AO = 16, /*< audio output device */
+K_ID_AO = 16, /*< Audio output device */
 
-K_ID_DPU = 17, /*< depth Process Unit */
+K_ID_DPU = 17, /*< Depth Processing Unit */
 
-K_ID_V_VI, /*< virtual video input device */
+K_ID_V_VI, /*< Virtual video input device */
 
-K_ID_V_VO, /*< virtual video output device */
+K_ID_V_VO, /*< Virtual video output device */
 
-K_ID_DMA, /*< dma device */
+K_ID_DMA, /*< DMA device */
 
 K_ID_BUTT, /*< Invalid */
 
 } k_mod_id;
 ```
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.1.2 k_mpp_chn
 
-【Description】
+**Description**:
 
 Defines the module ID enumeration type.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct {
@@ -1935,62 +1996,62 @@ k_s32 chn_id; /*< Channel ID */
 } k_mpp_chn;
 ```
 
-【Members】
+**Members**:
 
-| **Member Name** | **Description**    |
-|----------|--------|
-| mod_id   | Module number |
-| dev_id   | Device number |
-| chn_id   | Channel number |
+| **Member Name** | **Description** |
+|-----------------|-----------------|
+| mod_id          | Module ID       |
+| dev_id          | Device ID       |
+| chn_id          | Channel ID      |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 - [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
 - [kd_mpi_sys_get_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
 
-### 3.2 Multimedia memory management
+### 3.2 Multimedia Memory Management
 
-The module has the following data types
+This module has the following data types:
 
 - [VB_MAX_POOLS](#321-vb_max_pools)
 - [k_vb_uid](#322-k_vb_uid)
 - [k_vb_config](#323-k_vb_config)
 - [k_vb_pool_config](#324-k_vb_pool_config)
 - [k_vb_remap_mode](#325-k_vb_remap_mode)
-- [k_vb_supplement_config](#326-k_vb_supplement_config)
+**Description**:ent_config](#326-k_vb_supplement_config)
 
 #### 3.2.1 VB_MAX_POOLS
 
-【Description】
+**Description**:
 
-Maximum number of video buffer pools
+Maximum number of video buffer pools.
 
-【Definition】
+**Definition**:
 
 ```C
 #define VB_SINGLE_MAX_BLKS 256
 ```
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.2.2 k_vb_uid
 
-【Description】
+**Description**:
 
 Defines the module ID enumeration type.
 
-【Definition】
+**Definition**:
 
 ``` C
 typedef enum {
@@ -2027,24 +2088,24 @@ VB_UID_DMA = 14,
 
 VB_UID_BUTT = 15,
 
-}k_vb_uid;
+} k_vb_uid;
 ```
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.2.3 k_vb_config
 
-【Description】
+**Description**:
 
-Defines the video buffer pool property structure.
+Defines the video buffer pool attribute structure.
 
-【Definition】
+**Definition**:
 
 ``` C
 typedef struct {
@@ -2056,29 +2117,29 @@ k_vb_pool_config comm_pool[VB_MAX_COMM_POOLS];
 } k_vb_config;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**     | **Description**                                                        |
-|--------------|------------------------------------------------------------|
-| max_pool_cnt | The number of vb pools that can be accommodated in the entire system. Value range: (0, VB_MAX_POOLS] |
-| comm_pool    | Public vb pool property structure. Static properties                            |
+| **Member Name** | **Description**                                                |
+|-----------------|----------------------------------------------------------------|
+| max_pool_cnt    | Number of buffer pools that can be accommodated in the system. |
+| comm_pool       | Public buffer pool attribute structure.                        |
 
-【Note】
+**Notes**:
 
-- blk_size equal to 0 or blk_cnt equal to 0, the corresponding vb pool will not be created.
-- It is recommended that the entire struct be memset to 0 before assigning values as needed.
+- If `blk_size` is 0 or `blk_cnt` is 0, the corresponding buffer pool will not be created.
+- It is recommended to memset the entire structure to 0 before assigning values as needed.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-- kd_mpi_vb_get_config
+**Description**:_config
 
 #### 3.2.4 k_vb_pool_config
 
-【Description】
+**Description**:
 
-Defines the video buffer pool property structure.
+Defines the video buffer pool attribute structure.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct
@@ -2093,103 +2154,103 @@ k_vb_remap_mode mode; /*< Mapping mode of the kernel mode virtual addresses of t
 
 char mmz_name[MAX_MMZ_NAME_LEN];/*< Name of the MMZ that allocates the memory for the current VB pool*/
 
-}k_vb_pool_config;
+} k_vb_pool_config;
 ```
 
-【Members】
+**Members**:
 
-| **Member Name** | **Description**                                             |
-|----------|-------------------------------------------------|
-| blk_size | The vb block size, in Byte bits.                    |
-| blk_cnt  | The number of vb blocks per vb pool. 0 \~ VB_SINGLE_MAX_BLKS |
-| mode     | Kernel-state virtual address mapping mode for VB                     |
-| mmz_name | The MMZ region from which the current vb pool allocates memory.             |
+| **Member Name** | **Description**                                   |
+|-----------------|---------------------------------------------------|
+| blk_size        | Size of each buffer block in bytes.               |
+| blk_cnt         | Number of buffer blocks in each buffer pool.      |
+| mode            | Kernel mode virtual address mapping mode of the VB|
+| mmz_name        | Name of the MMZ from which the current buffer pool allocates memory.|
 
-【Note】
+**Notes**:
 
-- The size of each vb block u64BlkSize should be calculated based on the current image width, pixel format, data bit width, whether it is compressed, and so on.
-- The vb pool is allocated from free MMZ memory, and a vb pool contains several vb blocks of the same size. If the size of the vb pool exceeds the free space in reserved memory, the creation of the vb pool fails.
-- The user needs to ensure that the DDR name already exists, if the DDR name does not exist, the memory will not be divided. If the array mmz_name is memset to 0, a vb pool is created in an unnamed DDR.
+- The size of each buffer block `blk_size` should be calculated based on the current image width, pixel format, data bit width, whether it is compressed, etc.
+- The buffer pool is allocated from the free MMZ memory, and a buffer pool contains several buffer blocks of the same size. If the size of the buffer pool exceeds the free space in the reserved memory, the creation of the buffer pool will fail.
+- The user must ensure that the input DDR name already exists. If the input DDR name does not exist, memory allocation will fail. If the `mmz_name` array is memset to 0, it means that the buffer pool is created in unnamed DDR.
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 - [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
-- [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
+**Description**:eate_pool](#2113-kd_mpi_vb_create_pool)
 
 #### 3.2.5 k_vb_remap_mode
 
-【Description】
+**Description**:
 
-Defines the VB kernel-state virtual address mapping pattern.
+Defines the VB kernel mode virtual address mapping mode.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef enum {
 
-VB_REMAP_MODE_NONE = 0, /*< no remap */
+VB_REMAP_MODE_NONE = 0, /*< No remap */
 
-VB_REMAP_MODE_NOCACHE = 1, /*< no cache remap */
+VB_REMAP_MODE_NOCACHE = 1, /*< No cache remap */
 
-VB_REMAP_MODE_CACHED = 2, /*< cache remap, if you use this mode, you should flush cache by yourself */
+VB_REMAP_MODE_CACHED = 2, /*< Cache remap, if you use this mode, you should flush cache by yourself */
 
 VB_REMAP_MODE_BUTT
 
 } k_vb_remap_mode;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**              | **Description**           |
-|-----------------------|---------------|
-| VB_REMAP_MODE_NONE    | Do not map.      |
-| VB_REMAP_MODE_NOCACHE | Map to nocache |
-| VB_REMAP_MODE_CACHED  | Map to cache   |
+| **Member Name**       | **Description**       |
+|-----------------------|-----------------------|
+| VB_REMAP_MODE_NONE    | No remap.             |
+| VB_REMAP_MODE_NOCACHE | No cache remap.       |
+| VB_REMAP_MODE_CACHED  | Cache remap.          |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.2.6 k_vb_supplement_config
 
-【Description】
+**Description**:
 
-Define a VB additional information structure.
+Defines the VB supplementary information structure.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct
 
 {
 
-k_u32 supplement_config; /*<Control of the auxiliary information*/
+k_u32 supplement_config; /*< Control of the auxiliary information*/
 
-}k_vb_supplement_config;
+} k_vb_supplement_config;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**          | **Description**          |
-|-------------------|--------------|
-| supplement_config | Additional Information Control |
+| **Member Name**      | **Description**       |
+|----------------------|-----------------------|
+| supplement_config    | Auxiliary information control |
 
-【Note】
+**Notes**:
 
-Currently, two additional information are supported, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
+Currently supports two types of supplementary information. For details, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 - [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config)
 - [kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
 
-### 3.3 Video Common Data Types
+### 3.3 Common Video Data Types
 
-This module has the following data types
+This module has the following data types:
 
 - [k_video_frame_info](#331-k_video_frame_info)
 - [k_video_frame](#332-k_video_frame)
@@ -2203,16 +2264,17 @@ This module has the following data types
 - [k_color_gamut](#3310-k_color_gamut)
 - [k_dynamic_range](#3311-k_dynamic_range)
 - [k_video_format](#3312-k_video_format)
-- [k_video_filed](#3313-k_video_filed)
-- [k_pixel_format](#3314-k_pixel_format)
+- [k_video_field](#3313-k_video_field)
+
+**Description**:at](#3314-k_pixel_format)
 
 #### 3.3.1 k_video_frame_info
 
-【Description】
+**Description**:
 
-Defines the frame information structure of a video image
+Defines the video frame information structure.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct {
@@ -2226,29 +2288,29 @@ k_mod_id mod_id; /*< Logical unit for generating video frames */
 } k_video_frame_info;
 ```
 
-【Members】
+**Members**:
 
-| **Member Name** | **Description**                                      |
-|----------|------------------------------------------|
-| v_frame  | Video image frame.                             |
-| pool_id  | Video buffer pool ID.                          |
-| mod_id   | Which hardware logic module writes the current frame data from. |
+| **Member Name** | **Description**                                   |
+|-----------------|---------------------------------------------------|
+| v_frame         | Video picture frame.                              |
+| pool_id         | Video buffer pool ID.                             |
+| mod_id          | Logical unit that generated the current frame data.|
 
-【Note】
+**Notes**:
 
-Currently, two additional information are supported, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
+Currently supports two types of supplementary information. For details, please refer to the description of the interface [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config).
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-[k_video_frame](#332-k_video_frame)
+**Description**:(#332-k_video_frame)
 
 #### 3.3.2 k_video_frame
 
-【Description】
+**Description**:
 
-Defines the frame information structure of a video image
+Defines the video frame information structure.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct {
@@ -2257,7 +2319,7 @@ k_u32 width; /*< Picture width */
 
 k_u32 height; /*< Picture height */
 
-k_video_field field; /*< video frame filed*/
+k_video_field field; /*< Video frame field*/
 
 k_pixel_format pixel_format; /*< Pixel format of a picture */
 
@@ -2269,25 +2331,25 @@ k_compress_mode compress_mode;
 
 k_color_gamut color_gamut;
 
-k_u32 header_stride**[**3**]**;
+k_u32 header_stride[3];
 
-k_u32 stride**[**3**]**;
+k_u32 stride[3];
 
-k_u64 header_phys_addr**[**3**]**;
+k_u64 header_phys_addr[3];
 
-k_u64 header_virt_addr**[**3**]**;
+k_u64 header_virt_addr[3];
 
-k_u64 phys_addr**[**3**]**;
+k_u64 phys_addr[3];
 
-k_u64 virt_addr**[**3**]**;
+k_u64 virt_addr[3];
 
-k_s16 offset_top; /* top offset of show area */
+k_s16 offset_top; /* Top offset of show area */
 
-k_s16 offset_bottom; /* bottom offset of show area */
+k_s16 offset_bottom; /* Bottom offset of show area */
 
-k_s16 offset_left; /* left offset of show area */
+k_s16 offset_left; /* Left offset of show area */
 
-k_s16 offset_right; /* right offset of show area */
+k_s16 offset_right; /* Right offset of show area */
 
 k_u32 time_ref;
 
@@ -2300,48 +2362,48 @@ k_video_supplement supplement; /*< Supplementary information about images */
 } k_video_frame;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**         | **Description**                                |
-|------------------|------------------------------------|
-| width            | Image width                           |
-| height           | Image height                           |
-| filed            | Frame field mode.                         |
-| pixel_format     | Video image pixel format.                 |
-| video_format     | Video image format.                     |
-| dynamic_range    | Dynamic range.                         |
-| compress_mode    | Video compression mode.                     |
-| color_gamut      | Color gamut range.                         |
-| header_stride    | Image compression head span.                   |
-| stride           | Image data span.                     |
-| header_phys_addr | Compress the header physical address                     |
-| header_virt_addr | Compression header virtual address (kernel-state virtual address)   |
-| phys_addr        | The physical address of the image data                   |
-| virt_addr        | Image data virtual address (kernel-state virtual address) |
-| offset_top       | The top crop width of the image.                 |
-| offset_bottom    | The bottom crop width of the image.                 |
-| offset_left      | The cropped width on the left side of the image                   |
-| offset_right     | The cropped width on the right side of the image                   |
-| time_ref         | Image frame sequence number                       |
-| pts              | Image timestamp                         |
-| priv_data        | Private data                           |
-| supplement       | Supplemental information for the image                     |
+| **Member Name**     | **Description**                             |
+|---------------------|---------------------------------------------|
+| width               | Picture width                               |
+| height              | Picture height                              |
+| field               | Frame field mode                            |
+| pixel_format        | Pixel format of the video picture           |
+| video_format        | Video format of the picture                 |
+| dynamic_range       | Dynamic range                               |
+| compress_mode       | Video compression mode                      |
+| color_gamut         | Color gamut range                           |
+| header_stride       | Stride of the compressed header             |
+| stride              | Stride of the image data                    |
+| header_phys_addr    | Physical address of the compressed header   |
+| header_virt_addr    | Virtual address of the compressed header (kernel mode virtual address) |
+| phys_addr           | Physical address of the image data          |
+| virt_addr           | Virtual address of the image data (kernel mode virtual address) |
+| offset_top          | Top cropping width of the image             |
+| offset_bottom       | Bottom cropping width of the image          |
+| offset_left         | Left cropping width of the image            |
+| offset_right        | Right cropping width of the image           |
+| time_ref            | Frame sequence number                       |
+| pts                 | Image timestamp                             |
+| priv_data           | Private data                                |
+| supplement          | Supplementary information about the image   |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.3.3 k_video_supplement
 
-【Description】
+**Description**:
 
-Define video image frame supplemental information.
+Defines the supplementary information for video frames.
 
-【Definition】
+**Definition**:
 
 ```C
 typedef struct {
@@ -2357,37 +2419,36 @@ void isp_info_kvirt_addr; /*< isp_frame_info, used in ISP debug, when get raw an
 } k_video_supplement;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**            | **Description**                                        |
-|---------------------|--------------------------------------------|
-| jpeg_dcf_phy_addr   | The physical address of the JPEG DCF information.                  |
-| isp_info_phy_addr   | The physical address of the ISP secondary information.                   |
-| jpeg_dcf_kvirt_addr | Virtual address of JPEG DCF information (kernel-state virtual address)  |
-| isp_info_kvirt_addr | The virtual address of the ISP secondary information. (kernel-state virtual address) |
+| **Member Name**       | **Description**                              |
+|-----------------------|----------------------------------------------|
+| jpeg_dcf_phy_addr     | Physical address of JPEG DCF information.    |
+| isp_info_phy_addr     | Physical address of ISP auxiliary information.|
+| jpeg_dcf_kvirt_addr   | Virtual address of JPEG DCF information (kernel mode virtual address) |
+| isp_info_kvirt_addr   | Virtual address of ISP auxiliary information (kernel mode virtual address) |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-[k_video_frame](#332-k_video_frame)
+**Description**:(#332-k_video_frame)
 
 #### 3.3.4 k_isp_frame_info
 
-【Description】
+**Description**:
 
-Real-time information about the ISP.
-
-【Definition】
+Real-time information of the ISP.
+**Definition**:
 
 ```C
 typedef struct {
 
 k_u32 iso; /*< ISP internal ISO : again\*dgain\*is_pgain */
 
-k_u32 exposure_time; /*< exposure time (reciprocal of shutter speed),unit is us */
+k_u32 exposure_time; /*< exposure time (reciprocal of shutter speed), unit is us */
 
 k_u32 isp_dgain;
 
@@ -2395,7 +2456,7 @@ k_u32 again;
 
 k_u32 dgain;
 
-k_u32 ratio**[**3**]**;
+k_u32 ratio[3];
 
 k_u32 isp_nr_strength;
 
@@ -2405,149 +2466,145 @@ k_u32 sensor_id; /*< which sensor is used */
 
 k_u32 sensor_mode;
 
-k_u32 hmax_times; /*< sensor hmax_times,unit is ns */
+k_u32 hmax_times; /*< sensor hmax_times, unit is ns */
 
-k_u32 vmax; /*< sensor vmax,unit is line */
+k_u32 vmax; /*< sensor vmax, unit is line */
 
-k_u32 vc_num; /*< when dump wdr frame, which is long or short exposure frame. */
+k_u32 vc_num; /*< when dumping WDR frame, which is long or short exposure frame. */
 
 } k_isp_frame_info;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**        | **Description**                                                        |
-|-----------------|------------------------------------------------------------|
-| iso             | Current sensor analog gain\*sensor digital gain\*ISP digital gain\*100. |
-| exposure_time   | Exposure time, in microseconds (us).                               |
-| isp_dgain       | ISP digital gain.                                              |
-| again           | Analog gain of the sensor.                                         |
-| dgain           | Digital gain of the sensor.                                         |
-| ratio           | Multi-frame composite WDR adjacently 2 frames default exposure ratio.                             |
-| isp_nr_strength | The NR strength of the ISP. Currently not supported, the default value is 0.                       |
-| f_number        | The F-number of the lens currently in use.                                      |
-| sensor_id       | The sensorID currently in use.                                       |
-| sensor_mode     | The currently used seneor sequence pattern.                                 |
-| hmax_times      | The sensor currently in use corresponds to the time it takes to read out a line in nanoseconds (ns).       |
-| vmax            | The number of lines in a frame                                                 |
-| vc_num          | The sequence number of the current rookie's frame.                                     |
+| **Member Name**     | **Description**                                                        |
+|---------------------|------------------------------------------------------------------------|
+| iso                 | Current sensor analog gain \* sensor digital gain \* ISP digital gain \* 100. |
+| exposure_time       | Exposure time, unit is microseconds (us).                               |
+| isp_dgain           | ISP digital gain.                                                      |
+| again               | Sensor analog gain.                                                    |
+| dgain               | Sensor digital gain.                                                   |
+| ratio               | Default exposure ratio of adjacent frames in multi-frame WDR synthesis. |
+| isp_nr_strength     | ISP NR strength. Currently not supported, default value is 0.          |
+| f_number            | F-number of the current lens used.                                     |
+| sensor_id           | Sensor ID currently in use.                                            |
+| sensor_mode         | Sequence mode of the current sensor.                                   |
+| hmax_times          | Time to read out one line from the current sensor, unit is nanoseconds (ns). |
+| vmax                | Number of lines per frame.                                             |
+| vc_num              | Sequence number of the current frame.                                  |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.3.5 k_jpeg_dcf
 
-【Description】
+**Description**:
 
-DCF information used by JPEG pictures.
+DCF information used in JPEG images.
 
-【Definition】
+**Definition**:
 
-``` C
+```C
 typedef struct {
 
-k_u8 capture_time**[**DCF_CAPTURE_TIME_LENGTH**]**; /*< the date and time when the picture data was generated*/
+k_u8 capture_time[DCF_CAPTURE_TIME_LENGTH]; /*< the date and time when the picture data was generated */
 
-k_u32 flash; /*< whether the picture is captured when a flash lamp is on*/
+k_u32 flash; /*< whether the picture is captured when a flash lamp is on */
 
-k_u32 digital_zoom_ratio; /*< indicates the digital zoom ratio when the image was shot.*
-
-*if the numerator of the recorded value is 0, this indicates that digital zoom was not used.*/
+k_u32 digital_zoom_ratio; /*< indicates the digital zoom ratio when the image was shot. If the numerator of the recorded value is 0, this indicates that digital zoom was not used. */
 
 k_isp_dcf_info isp_dcf_info;
 
 } k_jpeg_dcf;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**           | **Description**                              |
-|--------------------|----------------------------------|
-| capture_time       | The time when the JPEG picture was taken               |
-| flash              | Whether the JPEG photo was taken with a flash or not   |
-| digital_zoom_ratio | The digital zoom factor at the time the JPEG photo was taken |
-| isp_dcf_info       | DCF Additional Information                      |
+| **Member Name**       | **Description**                              |
+|-----------------------|----------------------------------------------|
+| capture_time          | Time the JPEG image was captured.            |
+| flash                 | Whether a flash was used when capturing the JPEG image. |
+| digital_zoom_ratio    | Digital zoom ratio when capturing the JPEG image. |
+| isp_dcf_info          | Other DCF information.                       |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+None
 
 #### 3.3.6 k_isp_dcf_info
 
-The current version does not update the details of this data type
+Detailed information for this data type is not updated in the current version.
 
 #### 3.3.7 k_isp_dcf_update_info
 
-The current version does not update the details of this data type
+Detailed information for this data type is not updated in the current version.
 
 #### 3.3.8 k_isp_dcf_const_info
 
-The current version does not update the details of this data type
+**Description**:ation for this data type is not updated in the current version.
 
 #### 3.3.9 k_compress_mode
 
-【Description】
+**Description**:
 
-Defines the video compressed data format structure
+Defines the structure for video compression data format.
 
-【Definition】
+**Definition**:
 
-``` C
-typedef enum
-
-{
+```C
+typedef enum {
 
 COMPRESS_MODE_NONE = 0, /* no compress */
 
-COMPRESS_MODE_SEG, /* compress unit is 256x1 bytes as a segment.*/
+COMPRESS_MODE_SEG, /* compress unit is 256x1 bytes as a segment. */
 
-COMPRESS_MODE_TILE, /* compress unit is a tile.*/
+COMPRESS_MODE_TILE, /* compress unit is a tile. */
 
 COMPRESS_MODE_LINE, /* compress unit is the whole line. raw for VI */
 
-COMPRESS_MODE_FRAME, /* compress unit is the whole frame. YUV for VI), RGB for VO(read) */
+COMPRESS_MODE_FRAME, /* compress unit is the whole frame. YUV for VI, RGB for VO (read) */
 
 COMPRESS_MODE_BUTT
 
 } k_compress_mode;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**            | **Description**                                             |
-|---------------------|-------------------------------------------------|
-| COMPRESS_MODE_NONE  | Uncompressed video format.                              |
-| COMPRESS_MODE_SEG   | Segment compressed video format                                |
-| COMPRESS_MODE_TILE  | Tile compressed video format, compressed according to Tile into a segment. |
-| COMPRESS_MODE_LINE  | Line compressed video format, compressed in one line as one segment.      |
-| COMPRESS_MODE_FRAME | A frame-compressed video format, compressed in units of one frame.        |
+| **Member Name**       | **Description**                                             |
+|-----------------------|-------------------------------------------------------------|
+| COMPRESS_MODE_NONE    | Uncompressed video format.                                  |
+| COMPRESS_MODE_SEG     | Segment compressed video format.                            |
+| COMPRESS_MODE_TILE    | Tile compressed video format, compressed by tile segments.  |
+| COMPRESS_MODE_LINE    | Line compressed video format, compressed by lines.          |
+| COMPRESS_MODE_FRAME   | Frame compressed video format, compressed by frames.        |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.3.10 k_color_gamut
 
-【Description】
+**Description**:
 
-Defines a gamut range enumeration.
+Defines the color gamut range enumeration.
 
-【Definition】
+**Definition**:
 
-``` C
+```C
 typedef enum {
 
 COLOR_GAMUT_BT601 = 0,
@@ -2563,38 +2620,39 @@ COLOR_GAMUT_BUTT
 } k_color_gamut;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**           | **Description**                        |
-|--------------------|----------------------------|
-| COLOR_GAMUT_BT601  | BT601 color gamut range              |
-| COLOR_GAMUT_BT709  | BT709 color gamut range              |
-| COLOR_GAMUT_BT2020 | BT2020 color gamut range             |
-| COLOR_GAMUT_USER   | User-defined color gamut, non-standard color gamut |
+| **Member Name**       | **Description**                        |
+|-----------------------|----------------------------------------|
+| COLOR_GAMUT_BT601     | BT601 color gamut range.               |
+| COLOR_GAMUT_BT709     | BT709 color gamut range.               |
+| COLOR_GAMUT_BT2020    | BT2020 color gamut range.              |
+| COLOR_GAMUT_USER      | User-defined color gamut, non-standard.|
 
-【Note】
+**Notes**:
 
-The blue, green, macro, and white point coordinates for each color gamut range are as follows
+The coordinates of the blue, green, red, and white points for each color gamut range are as follows:
 
-| ColorGamut  | Primary          |                  |                 |                  |
+| Color Gamut | Primary          |                  |                 |                  |
 |-------------|------------------|------------------|-----------------|------------------|
-|             | Green            | Blue             | Reg             | White            |
-| BT601       | （0.29, 0.60）   | (0.15, 0.06)     | (0.64, 0.33)    | (0.3127, 0.3290) |
-| BT709       | (0.300, 0.600）  | (0.150, 0.060）  | (0.640, 0.330)  | (0.3127, 0.3290) |
+|             | Green            | Blue             | Red             | White            |
+| BT601       | (0.29, 0.60)     | (0.15, 0.06)     | (0.64, 0.33)    | (0.3127, 0.3290) |
+| BT709       | (0.300, 0.600)   | (0.150, 0.060)   | (0.640, 0.330)  | (0.3127, 0.3290) |
 | BT2020      | (0.170, 0.797)   | (0.131, 0.046)   | (0.708, 0.292)  | (0.3127, 0.3290) |
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.3.11 k_dynamic_range
 
-【Description】
+**Description**:
 
-Defines dynamic range enumeration.
+Defines the dynamic range enumeration.
 
-【Definition】
+**Definition**:
 
+```C
 typedef enum {
 
 DYNAMIC_RANGE_SDR8 = 0,
@@ -2612,46 +2670,45 @@ DYNAMIC_RANGE_XDR,
 DYNAMIC_RANGE_BUTT
 
 } k_dynamic_range;
+```
 
-【Members】
+**Members**:
 
-| **Member name**            | **Description**                        |
-|---------------------|----------------------------|
-| DYNAMIC_RANGE_SDR8  | Standard dynamic range for 8-bit data.  |
-| DYNAMIC_RANGE_SDR10 | Standard dynamic range for 10-bit data. |
-| DYNAMIC_RANGE_HDR10 | High dynamic range of 10-bit data.   |
-| DYNAMIC_RANGE_HLG   | High dynamic range of 10-bit data.   |
-| DYNAMIC_RANGE_SLF   | void                       |
-| DYNAMIC_RANGE_XDR   | void                       |
+| **Member Name**        | **Description**                        |
+|------------------------|----------------------------------------|
+| DYNAMIC_RANGE_SDR8     | Standard dynamic range for 8-bit data. |
+| DYNAMIC_RANGE_SDR10    | Standard dynamic range for 10-bit data.|
+| DYNAMIC_RANGE_HDR10    | High dynamic range for 10-bit data.    |
+| DYNAMIC_RANGE_HLG      | High dynamic range for 10-bit data.    |
+| DYNAMIC_RANGE_SLF      | Invalid                                |
+| DYNAMIC_RANGE_XDR      | Invalid                                |
 
-【Note】
+**Notes**:
 
-The curves corresponding to each dynamic range are as follows:
+The transfer characteristics for each dynamic range are as follows:
 
 | Dynamic Range  | Transfer Characteristic                                                                                                                                                                                                                                                                                                                                                                                                 |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SDR8/ SDR10    | V = α \* Lc0.45 - (α - 1) is 1 \>= Lc \>= β V = 4,500 \* Lcfor β \> Lc \>= 0                                                                                                                                                                                                                                                                                                                                           |
-| HDR10          | V = ( ( c1 + c2 \* Lc n ) ÷ ( 1 + c3 \* Lc n ) )m for all values of Lc c1 = c3 - c2 + 1 = 3424 ÷ 4096 = 0.8359375 c2 = 32 \* 2413 ÷ 4096 = 18.8515625 c3 = 32 \* 2392 ÷ 4096 = 18.6875 m = 128 \* 2523 ÷ 4096 = 78.84375 n = 0.25 \* 2610 ÷ 4096 = 0.1593017578125 for which Lc equal to 1 for peak white is ordinarily intended to correspond to a reference output luminance level of 10000 candelas per square metre |
-| HLG            | V = a \* Ln( 12 \* Lc - b ) + c for 1 \>= Lc \> 1 ÷ 12 V = Sqrt( 3 ) \* Lc0.5 for 1 ÷ 12 \>= Lc \>= 0 a = 0.17883277, b = 0.28466892, c = 0.55991073                                                                                                                                                                                                                                                                    |
+| SDR8/ SDR10    | V = α \* Lc^0.45 - (α - 1) for 1 \>= Lc \>= β V = 4.500 \* Lc for β \> Lc \>= 0                                                                                                                                                                                                                                                                                                                                         |
+| HDR10          | V = ((c1 + c2 \* Lc^n) ÷ (1 + c3 \* Lc^n))^m for all values of Lc c1 = c3 - c2 + 1 = 3424 ÷ 4096 = 0.8359375 c2 = 32 \* 2413 ÷ 4096 = 18.8515625 c3 = 32 \* 2392 ÷ 4096 = 18.6875 m = 128 \* 2523 ÷ 4096 = 78.84375 n = 0.25 \* 2610 ÷ 4096 = 0.1593017578125 for which Lc equal to 1 for peak white is ordinarily intended to correspond to a reference output luminance level of 10000 candelas per square metre |
+| HLG            | V = a \* Ln(12 \* Lc - b) + c for 1 \>= Lc \> 1 ÷ 12 V = Sqrt(3) \* Lc^0.5 for 1 ÷ 12 \>= Lc \>= 0 a = 0.17883277, b = 0.28466892, c = 0.55991073                                                                                                                                                                                                                                                                    |
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
 #### 3.3.12 k_video_format
 
-【Description】
+**Description**:
 
 Defines the video format structure.
 
-【Definition】
+**Definition**:
 
 ```C
-typedef enum
+typedef enum {
 
-{
-
-VIDEO_FORMAT_LINEAR = 0, /* nature video line */
+VIDEO_FORMAT_LINEAR = 0, /* natural video line */
 
 VIDEO_FORMAT_TILE_64x16, /* tile cell: 64pixel x 16line */
 
@@ -2664,35 +2721,33 @@ VIDEO_FORMAT_BUTT
 } k_video_format;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**                     | **Description**                                                                                      |
-|------------------------------|------------------------------------------------------------------------------------------|
-| VIDEO_FORMAT_LINEAR          | Video format stored linearly.                                                                     |
-| VIDEO_FORMAT_TILE_64x16      | The TILE format stores a video format where the block size of the tile is 64 pixels wide and 16 rows of pixels high.                   |
-| VIDEO_FORMAT_TILE_16x8       | The TILE format stores a video format where the block size of the tile is 16 pixels wide and 8 rows pixels high, also known as the small TILE format. |
-| VIDEO_FORMAT_LINEAR_DISCRETE | Linear discrete natural row storage data format, data bit width is byte-aligned, low bit is valid, high bit is invalid.                 |
+| **Member Name**                | **Description**                                                                                    |
+|--------------------------------|----------------------------------------------------------------------------------------------------|
+| VIDEO_FORMAT_LINEAR            | Linear storage video format.                                                                       |
+| VIDEO_FORMAT_TILE_64x16        | Tile format video storage, where the tile block size is 64 pixels wide and 16 lines high.          |
+| VIDEO_FORMAT_TILE_16x8         | Tile format video storage, where the tile block size is 16 pixels wide and 8 lines high, also known as small tile format. |
+| VIDEO_FORMAT_LINEAR_DISCRETE   | Linear discrete natural line storage data format, data bit width aligned in bytes, low bits valid, high bits invalid. |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-none
+**Description**:
 
-#### 3.3.13 k_video_filed
+#### 3.3.13 k_video_field
 
-【Description】
+**Description**:
 
 Defines the video image frame field type.
 
-【Definition】
+**Definition**:
 
-``` C
-typedef enum
-
-{
+```C
+typedef enum {
 
 VIDEO_FIELD_TOP = 0x1, /* even field */
 
@@ -2707,32 +2762,32 @@ VIDEO_FIELD_BUTT
 } k_video_field;
 ```
 
-【Members】
+**Members**:
 
-| **Member name**               | **Description**          |
-|------------------------|--------------|
-| VIDEO_FIELD_TOP        | Top farm type     |
-| VIDEO_FIELD_BOTTOM     | Bottom field type     |
-| VIDEO_FIELD_INTERLACED | Two interpolation types |
-| VIDEO_FIELD_FRAME      | Frame type       |
+| **Member Name**          | **Description**      |
+|--------------------------|----------------------|
+| VIDEO_FIELD_TOP          | Top field type       |
+| VIDEO_FIELD_BOTTOM       | Bottom field type    |
+| VIDEO_FIELD_INTERLACED   | Interlaced field type|
+| VIDEO_FIELD_FRAME        | Frame type           |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-[k_video_frame](#332-k_video_frame)
+**Description**:(#332-k_video_frame)
 
 #### 3.3.14 k_pixel_format
 
-【Description】
+**Description**:
 
-Defines the pixel format type.
+Defines the pixel format types.
 
-【Definition】
+**Definition**:
 
-``` C
+```C
 typedef enum {
 
 PIXEL_FORMAT_RGB_444 = 0,
@@ -2860,31 +2915,30 @@ PIXEL_FORMAT_BUTT
 } k_pixel_format;
 ```
 
-【Members】
+**Members**:
 
-none
+None
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
-outline
+Omitted
 
 ### 3.4 Multimedia Log Management
 
-This module has the following data structures
+This module has the following data structures:
 
-- [k_log_level_conf](#341-k_log_level_conf)
+**Description**:conf](#341-k_log_level_conf)
 
 #### 3.4.1 k_log_level_conf
 
-【Description】
+**Description**:
 
-Define the log level information structure.
-
-【Definition】
+Defines the log level information structure.
+**Definition**:
 
 ```C
 typedef struct {
@@ -2898,107 +2952,107 @@ k_char mod_name[16];
 } k_log_level_conf;
 ```
 
-【Members】
+**Members**:
 
 | **Member Name** | **Description**        |
-|----------|------------|
-| mod_id   | The ID of the module   |
-| level    | Log level   |
-| mod_name | The name of the module |
+|-----------------|------------------------|
+| mod_id          | ID of the module       |
+| level           | Log level              |
+| mod_name        | Name of the module     |
 
-【Note】
+**Notes**:
 
-none
+None
 
-【See Also】
+**Related Data Types and Interfaces**:
 
 - [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
 - [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
 
-## 4. Error codes
+## 4. Error Codes
 
-### 4.1 Multimedia memory management error codes
+### 4.1 Multimedia Memory Management Error Codes
 
-#### 4.1.1 Video buffer pool error code
+#### 4.1.1 Video Buffer Pool Error Codes
 
 Table 41
 
-| **Error code**   | **Macro definitions**                 | **Description**              |
-|------------|------------------------|------------------|
-| 0xa0048006 | K_ERR_VB_NULL_PTR      | Parameter null pointer error   |
-| 0xa004800c | K_ERR_VB_NOMEM         | Failed to allocate memory     |
-| 0xa004800d | K_ERR_VB_NOBUF         | Failed to allocate cache     |
-| 0xa0048005 | K_ERR_VB_UNEXIST       | The video buffer does not exist   |
-| 0xa0048003 | K_ERR_VB_ILLEGAL_PARAM | The parameter setting is invalid     |
-| 0xa0048010 | K_ERR_VB_NOTREADY      | The vb pool is not ready   |
-| 0xa0048012 | K_ERR_VB_BUSY          | The system is busy           |
-| 0xa0048009 | K_ERR_VB_NOT_PERM      | Operation is not allowed       |
-| 0xa0048040 | K_ERR_VB_2MPOOLS       | Too many vb pools have been created |
+| **Error Code** | **Macro Definition**        | **Description**            |
+|----------------|-----------------------------|----------------------------|
+| 0xa0048006     | K_ERR_VB_NULL_PTR           | Null pointer error         |
+| 0xa004800c     | K_ERR_VB_NOMEM              | Memory allocation failure  |
+| 0xa004800d     | K_ERR_VB_NOBUF              | Buffer allocation failure  |
+| 0xa0048005     | K_ERR_VB_UNEXIST            | Video buffer does not exist|
+| 0xa0048003     | K_ERR_VB_ILLEGAL_PARAM      | Invalid parameter setting  |
+| 0xa0048010     | K_ERR_VB_NOTREADY           | Buffer pool not ready      |
+| 0xa0048012     | K_ERR_VB_BUSY               | System busy                |
+| 0xa0048009     | K_ERR_VB_NOT_PERM           | Operation not permitted    |
+| 0xa0048040     | K_ERR_VB_2MPOOLS            | Too many buffer pools created|
 
-#### 4.1.2 Multimedia memory zone error codes
+#### 4.1.2 Multimedia Memory Zone Error Codes
 
 Table 42
 
-| **Error code**   | **Macro definitions**                          | **Description**            |
-|------------|---------------------------------|----------------|
-| 0xa0038003 | K_ERR_MMZ_USERDEV_ILLEGAL_PARAM | The parameter settings are minimal   |
-| 0xa0038006 | K_ERR_MMZ_USERDEV_NULL_PTR      | Parameter null pointer error |
-| 0xa0038008 | K_ERR_MMZ_USERDEV_NOT_SUPPORT   | Unsupported operations   |
-| 0xa0038009 | K_ERR_MMZ_USERDEV_NOT_PERM      | Operation is not allowed     |
-| 0xa003800c | K_ERR_MMZ_USERDEV_NOMEM         | Failed to allocate memory   |
-| 0xa0038010 | K_ERR_MMZ_USERDEV_NOTREADY      | The system is not ready     |
-| 0xa0038011 | K_ERR_MMZ_USERDEV_BADADDR       | Wrong address     |
-| 0xa0038012 | K_ERR_MMZ_USERDEV_BUSY          | The system is busy         |
+| **Error Code** | **Macro Definition**               | **Description**            |
+|----------------|------------------------------------|----------------------------|
+| 0xa0038003     | K_ERR_MMZ_USERDEV_ILLEGAL_PARAM    | Minor parameter setting    |
+| 0xa0038006     | K_ERR_MMZ_USERDEV_NULL_PTR         | Null pointer error         |
+| 0xa0038008     | K_ERR_MMZ_USERDEV_NOT_SUPPORT      | Unsupported operation      |
+| 0xa0038009     | K_ERR_MMZ_USERDEV_NOT_PERM         | Operation not permitted    |
+| 0xa003800c     | K_ERR_MMZ_USERDEV_NOMEM            | Memory allocation failure  |
+| 0xa0038010     | K_ERR_MMZ_USERDEV_NOTREADY         | System not ready           |
+| 0xa0038011     | K_ERR_MMZ_USERDEV_BADADDR          | Invalid address            |
+| 0xa0038012     | K_ERR_MMZ_USERDEV_BUSY             | System busy                |
 
-### 4.2 System binding error codes
+### 4.2 System Binding Error Codes
 
 Table 43
 
-| **Error code**   | **Macro definitions**                  | **Description**                          |
-|------------|-------------------------|------------------------------|
-| 0xa0058003 | K_ERR_SYS_ILLEGAL_PARAM | Parameter error                     |
-| 0xa0058006 | K_ERR_SYS_NULL_PTR      | Null pointer error                   |
-| 0xa0058008 | K_ERR_SYS_NOT_SUPPORT   | Unsupported features                 |
-| 0xa0058009 | K_ERR_SYS_NOT_PERM      | Operation is not allowed                   |
-| 0xa0058010 | K_ERR_SYS_NOTREADY      | System control properties are not configured           |
-| 0xa0058011 | K_ERR_SYS_BADADDR       | The system is busy                       |
-| 0xa005800c | K_ERR_SYS_NOMEM         | Failed to allocate memory, such as low system memory |
+| **Error Code** | **Macro Definition**        | **Description**                          |
+|----------------|-----------------------------|------------------------------------------|
+| 0xa0058003     | K_ERR_SYS_ILLEGAL_PARAM     | Invalid parameter                        |
+| 0xa0058006     | K_ERR_SYS_NULL_PTR          | Null pointer error                       |
+| 0xa0058008     | K_ERR_SYS_NOT_SUPPORT       | Unsupported feature                      |
+| 0xa0058009     | K_ERR_SYS_NOT_PERM          | Operation not permitted                  |
+| 0xa0058010     | K_ERR_SYS_NOTREADY          | System control attributes not configured |
+| 0xa0058011     | K_ERR_SYS_BADADDR           | System bad address                           |
+| 0xa005800c     | K_ERR_SYS_NOMEM             | Memory allocation failure, e.g., insufficient system memory|
 
-### 4.3 Log management error codes
+### 4.3 Log Management Error Codes
 
 Table 44
 
-| **Error code**   | **Macro definitions**                  | **Description**                          |
-|------------|-------------------------|------------------------------|
-| 0xa0018003 | K_ERR_LOG_ILLEGAL_PARAM | Parameter error                     |
-| 0xa0018006 | K_ERR_LOG_NULL_PTR      | Null pointer error                   |
-| 0xa0018009 | K_ERR_LOG_NOT_PERM      | Operation is not allowed                   |
-| 0xa0018010 | K_ERR_LOG_NOTREADY      | The log device is not ready               |
-| 0xa001800c | K_ERR_LOG_NOMEM         | Failed to allocate memory, such as low system memory |
+| **Error Code** | **Macro Definition**        | **Description**                          |
+|----------------|-----------------------------|------------------------------------------|
+| 0xa0018003     | K_ERR_LOG_ILLEGAL_PARAM     | Invalid parameter                        |
+| 0xa0018006     | K_ERR_LOG_NULL_PTR          | Null pointer error                       |
+| 0xa0018009     | K_ERR_LOG_NOT_PERM          | Operation not permitted                  |
+| 0xa0018010     | K_ERR_LOG_NOTREADY          | Log device not ready                     |
+| 0xa001800c     | K_ERR_LOG_NOMEM             | Memory allocation failure, e.g., insufficient system memory|
 
-## 5. Debugging information
+## 5. Debug Information
 
 ### 5.1 Overview
 
-The debug information uses the PROC file system, which can reflect the current operating status of the system in real time, and the recorded information can be used for problem location and analysis
+The debug information uses the proc file system, reflecting the current system running status in real-time. The recorded information can be used for problem location and analysis.
 
-【File Directory】
+**File Directory**:
 
 /proc/
 
-【Document List】
+**File List**:
 
-| **File name**      | **Description**                                 |
-|---------------|--------------------------------------|
-| umap/sysbind  | Records the current system binding              |
-| umap/vb       | Record the current buffer usage of the VB module. |
-| mem-media     | Records the current usage of multimedia memory         |
+| **File Name** | **Description**                             |
+|---------------|---------------------------------------------|
+| umap/sysbind  | Records the current system binding status   |
+| umap/vb       | Records the current buffer usage of the VB module |
+| mem-media     | Records the current multimedia memory usage |
 
-### 5.2 Multimedia memory management
+### 5.2 Multimedia Memory Management
 
-#### 5.2.1 VB Pool Debugging Information
+#### 5.2.1 Video Buffer Pool Debug Information
 
-【Debugging Information】
+**Debug Information**:
 
 ```text
 -----VB PUB CONFIG--------------------------------------------------------------
@@ -3018,7 +3072,7 @@ PoolConfId        BlkSize           Count   RemapMode
 1                 8192              3       NONE
 
 -------------------------------------------------------------------------------------
-PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
+ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
 0       0x18001000          0xc00d1000          1       -1     8294400   5       2       2
 BLK   VI    VENC  VDEC  VO    USER  AI    AREC  AENC  ADEC  AO    V_VI  V_VO  DMA   DPU
 0     0     0     0     0     1     0     0     0     0     0     0     0     0     0
@@ -3027,58 +3081,58 @@ BLK   VI    VENC  VDEC  VO    USER  AI    AREC  AENC  ADEC  AO    V_VI  V_VO  DM
 Sum   0     0     0     0     3     0     0     0     0     0     0     0     0     0
 
 -------------------------------------------------------------------------------------
-PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
+ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
 1       0x1a78f000          0x0                 1       -1     8192      3       3       3
 
 -------------------------------------------------------------------------------------
-PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
+ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
 2       0x1a796000          0xc2860000          1       -1     4096      5       5       5
 
 -------------------------------------------------------------------------------------
-PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
+ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
 3       0x1a79c000          0xc2866000          1       2      4096      5       5       5
 
 -------------------------------------------------------------------------------------
-PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
+ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt  Free    MinFree
 4       0x1a7a2000          0x0                 1       2      8192      3       3       3
 ```
 
-【Debugging Information Analysis】
+**Debug Information Analysis**:
 
-Record the block usage of the current VB module
+Records the current block usage of the VB module.
 
-【Parameter description】
+**Parameter Description**:
 
-| **Parameters**                                                         | **Description**                                                               |                                                                                                        |
-|--------------------------------------------------------------|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| VB PUB CONFIG                                                | MaxPoolCnt                                                             | The maximum number of vb pools.                                                                                   |
-| VB SUPPLEMENT ATTR                                           | Config                                                                 | Video frame supplemental information configuration.                                                                                   |
-|                                                              | Size                                                                   | Video frame supplemental information takes up memory space.                                                                           |
-|                                                              | VbCnt                                                                  | The total number of VB blocks contained by all VB pools (shared, private).                                                            |
-| COMMON POOL CONFIG                                           | Spools                                                                 | A handle to the public vb pool.                                                                                     |
-|                                                              | Size                                                                   | The size of the block within the vb pool.                                                                                     |
-|                                                              | Count                                                                  | The number of blocks in the vb pool.                                                                                     |
-| MODULE COMMON POOL CONFIG of VB_UID (模块分配的 公共 VB)   | Spools                                                                 | A handle to the public vb pool.                                                                                     |
-|                                                              | Size                                                                   | The size of the block within the vb pool.                                                                                     |
-|                                                              | Count                                                                  | The number of blocks in the vb pool.                                                                                     |
-| NULL (table space, i.e. anonymous DDR)                                      | Spools                                                                 | A handle to the public/private vb pool.                                                                                |
-|                                                              | PhysAddr                                                               | The starting physical address of the public/private vb pool.                                                                        |
-|                                                              | VirtAddr                                                               | The start virtual address of the public/private vb pool.                                                                        |
-|                                                              | IsComm                                                                 | Whether the vb pool is public. Value: {0, 1}.                                                                        |
-|                                                              | Owner                                                                  | The owner of the vb pool. -2: Private pool. -1: Public pool. ≥0: Module VB.                                               |
-|                                                              | BlkSz                                                                  | The size of the vb block within the vb pool.                                                                                 |
-|                                                              | BlkCnt                                                                 | The number of vb blocks in the vb pool.                                                                                 |
-|                                                              | Free                                                                   | The number of vb pool free vb blocks.                                                                               |
-|                                                              | MinFree                                                                | The minimum number of free vb blocks remaining since the MinFree program was run. A count of 0 indicates that there may be frame drops due to insufficient vb blocks. |
-|                                                              | BLK                                                                    | A handle to the vb block within the vb pool.                                                                                 |
-|                                                              | VI/VPROC/VREC/VENC /VDEC/VO/USER/AI/AREC /AENC/ADEC/AO/V_VI/ V_VO/DMA  | Module Name The number under indicates how many places the current module occupies that vb block in the vb pool.  0: Not occupied.  Non-0: Number of occupancy    |
+| **Parameter**| **Description**|   |
+|-----------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------|
+| VB PUB CONFIG| MaxPoolCnt| Maximum number of buffer pools.|
+| VB SUPPLEMENT ATTR | Config | Configuration of supplementary information for video frames.                                                       |
+|                                                                 | Size                                                                                                               | Memory space occupied by supplementary information for video frames.                                               |
+|                                                                 | VbCnt                                                                                                              | Total number of VB blocks in all VB pools (common, private).                                                       |
+| COMMON POOL CONFIG                                              | PoolId                                                                                                             | Handle of the common buffer pool.                                                                                  |
+|                                                                 | Size                                                                                                               | Size of blocks in the buffer pool.                                                                                 |
+|                                                                 | Count                                                                                                              | Number of blocks in the buffer pool.                                                                               |
+| MODULE COMMON POOL CONFIG of VB_UID (Common VB allocated by module)| PoolId                                                                                                             | Handle of the common buffer pool.                                                                                  |
+|                                                                 | Size                                                                                                               | Size of blocks in the buffer pool.                                                                                 |
+|                                                                 | Count                                                                                                              | Number of blocks in the buffer pool.                                                                               |
+| NULL (empty table, i.e., anonymous DDR)                         | PoolId                                                                                                             | Handle of the common/private buffer pool.                                                                          |
+|                                                                 | PhysAddr                                                                                                           | Starting physical address of the common/private buffer pool.                                                       |
+|                                                                 | VirtAddr                                                                                                           | Starting virtual address of the common/private buffer pool.                                                        |
+|                                                                 | IsComm                                                                                                             | Whether it is a common buffer pool. Values: {0, 1}.                                                                |
+|                                                                 | Owner                                                                                                              | Owner of the buffer pool. -2: Private pool. -1: Common pool. ≥0: Module VB.                                         |
+|                                                                 | BlkSz                                                                                                              | Size of blocks in the buffer pool.                                                                                 |
+|                                                                 | BlkCnt                                                                                                             | Number of blocks in the buffer pool.                                                                               |
+|                                                                 | Free                                                                                                               | Number of free blocks in the buffer pool.                                                                          |
+|                                                                 | MinFree                                                                                                            | Minimum number of free blocks remaining since the program started. If this count is 0, it may indicate frame drops due to insufficient blocks. |
+|                                                                 | BLK                                                                                                                | Handle of the blocks in the buffer pool.                                                                           |
+|                                                                 | VI/VPROC/VREC/VENC/VDEC/VO/USER/AI/AREC/AENC/ADEC/AO/V_VI/V_VO/DMA/DPU                                              | Module name. The number below indicates how many places in the current module occupy the block in the buffer pool. 0: Not occupied. Non-0: Number of times occupied.|
 
-### 5.2.2 Multimedia memory zone debugging information
+### 5.2.2 Multimedia Memory Zone Debug Information
 
-【Debugging Information】
+**Debug Information**:
 
 ```text
-msh /bin\>cat /proc/media-mem
+msh /bin>cat /proc/media-mem
 
 +---ZONE: PHYS(0x18000000, 0x1FEFFFFF), GFP=0, nBYTES=130048KB,    NAME="anonymous"
    |-MMB: phys(0x18000000, 0x18000FFF), kvirt=0xC00D0000, flags=0x00000001, length=4KB,    name="sup_nc"
@@ -3094,51 +3148,50 @@ msh /bin\>cat /proc/media-mem
 
 ---MMZ_USE_INFO:
  total size=130048KB(127MB),used=40608KB(39MB + 672KB),remain=89440KB(87MB + 352KB),zone_number=1,block_number=10
-
 ```
 
-【Debugging Information Analysis】
+**Debug Information Analysis**:
 
-Records the current usage of multimedia memory
+Records the current usage of multimedia memory.
 
-【Parameter description】
+**Parameter Description**:
 
-none
+None
 
 ### 5.3 System Binding
 
-#### 5.3.1 System binding debugging information
+#### 5.3.1 System Binding Debug Information
 
-【Debugging Information】
+**Debug Information**:
 
 ```text
-msh /bin\>cat /proc/umap/sysbind
+msh /bin>cat /proc/umap/sysbind
 
-\-----BIND RELATION TABLE--------------------------------------------------------
+-----BIND RELATION TABLE--------------------------------------------------------
 
-FirMod FirDev FirChn SecMod SecDev SecChn TirMod TirDev TirChn SendCnt rstCnt
+FirMod FirDev FirChn SecMod SecDev SecChn ThrMod ThrDev ThrChn SendCnt rstCnt
 
 vvi 0 0 vvo 0 0 null 0 0 42 0
 
 vvi 0 0 vvo 1 1 null 0 0 42 0
 ```
 
-【Debugging Information Analysis】
+**Debug Information Analysis**:
 
-Records the current system binding
+Records the current system binding status.
 
-【Parameter description】
+**Parameter Description**:
 
-| **Parameters**    | **Description**                                 |
-|---------|------------------------------------------|
-| FirMod  | The module number of the data source                           |
-| FirDev  | The device number of the data source                           |
-| FirChn  | The channel number of the data source                           |
-| SecMod  | Module number of the second module (bound to the data source)       |
-| SecDev  | The device number of the second module (bound to the data source)     |
-| SecChn  | The channel number of the second module (bound to the data source)     |
-| ThrMod  | Module number of the third module (bound to the second module)   |
-| ThrDev  | Device number of the third module (bound to the second module) |
-| ThrChn  | Channel number of the third module (bound to the second module) |
-| Sendcnt | The number of times the data was sent                           |
-| Rstcnt  | The number of resets                               |
+| **Parameter** | **Description**                             |
+|---------------|---------------------------------------------|
+| FirMod        | Module number of the data source            |
+| FirDev        | Device number of the data source            |
+| FirChn        | Channel number of the data source           |
+| SecMod        | Module number of the second module (bound to the data source) |
+| SecDev        | Device number of the second module (bound to the data source) |
+| SecChn        | Channel number of the second module (bound to the data source) |
+| ThrMod        | Module number of the third module (bound to the second module) |
+| ThrDev        | Device number of the third module (bound to the second module) |
+| ThrChn        | Channel number of the third module (bound to the second module) |
+| SendCnt       | Number of times data is sent                |
+| RstCnt        | Number of resets                            |

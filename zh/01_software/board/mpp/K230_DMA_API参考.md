@@ -1084,22 +1084,22 @@ typedef struct
 
 | 错误代码    | 宏定义                  | 描述                         |
 |-------------|-------------------------|------------------------------|
-| 0xa00148001 | K_ERR_DMA_INVALID_DEVID | 无效的设备号                 |
-| 0xa00148002 | K_ERR_DMA_INVALID_CHNID | 无效的通道号                 |
-| 0xa00148003 | K_ERR_DMA_ILLEGAL_PARAM | 参数错误                     |
-| 0xa00148004 | K_ERR_DMA_EXIST         | DMA 设备已经存在             |
-| 0xa00148005 | K_ERR_DMA_UNEXIST       | DMA 设备不存在               |
-| 0xa00148006 | K_ERR_DMA_NULL_PTR      | 空指针错误                   |
-| 0xa00148007 | K_ERR_DMA_NOT_CONFIG    | 尚未配置 DMA                 |
-| 0xa00148008 | K_ERR_DMA_NOT_SUPPORT   | 不支持的功能                 |
-| 0xa00148009 | K_ERR_DMA_NOT_PERM      | 操作不允许                   |
-| 0xa0014800c | K_ERR_DMA_NOMEM         | 分配内存失败，如系统内存不足 |
-| 0xa0014800d | K_ERR_DMA_NOBUF         | BUFF 不足                    |
-| 0xa0014800e | K_ERR_DMA_BUF_EMPTY     | BUFF 为空                    |
-| 0xa0014800f | K_ERR_DMA_BUF_FULL      | BUFF 已满                    |
-| 0xa00148010 | K_ERR_DMA_NOTREADY      | 设备未就绪                   |
-| 0xa00148011 | K_ERR_DMA_BADADDR       | 错误的地址                   |
-| 0xa00148012 | K_ERR_DMA_BUSY          | DMA 处与忙状态               |
+| 0xa0148001 | K_ERR_DMA_INVALID_DEVID | 无效的设备号                 |
+| 0xa0148002 | K_ERR_DMA_INVALID_CHNID | 无效的通道号                 |
+| 0xa0148003 | K_ERR_DMA_ILLEGAL_PARAM | 参数错误                     |
+| 0xa0148004 | K_ERR_DMA_EXIST         | DMA 设备已经存在             |
+| 0xa0148005 | K_ERR_DMA_UNEXIST       | DMA 设备不存在               |
+| 0xa0148006 | K_ERR_DMA_NULL_PTR      | 空指针错误                   |
+| 0xa0148007 | K_ERR_DMA_NOT_CONFIG    | 尚未配置 DMA                 |
+| 0xa0148008 | K_ERR_DMA_NOT_SUPPORT   | 不支持的功能                 |
+| 0xa0148009 | K_ERR_DMA_NOT_PERM      | 操作不允许                   |
+| 0xa014800c | K_ERR_DMA_NOMEM         | 分配内存失败，如系统内存不足 |
+| 0xa014800d | K_ERR_DMA_NOBUF         | BUFF 不足                    |
+| 0xa014800e | K_ERR_DMA_BUF_EMPTY     | BUFF 为空                    |
+| 0xa014800f | K_ERR_DMA_BUF_FULL      | BUFF 已满                    |
+| 0xa0148010 | K_ERR_DMA_NOTREADY      | 设备未就绪                   |
+| 0xa0148011 | K_ERR_DMA_BADADDR       | 错误的地址                   |
+| 0xa0148012 | K_ERR_DMA_BUSY          | DMA 处与忙状态               |
 
 ## 5. 调试信息
 

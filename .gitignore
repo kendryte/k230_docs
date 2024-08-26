@@ -7,4 +7,6 @@ __pycache__
 /_templates/layout.html
 /_templates/versions.html
 /_static/topbar.css
+/_templates/layout.html
+/_templates/*
 

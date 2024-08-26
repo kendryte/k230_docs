@@ -2,26 +2,26 @@
 
 ![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+©2023 Canaan Creative Co., Ltd. All Rights Reserved
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not fall within the scope of your purchase or usage. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective holders.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**© 2023 Canaan Creative Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual is allowed to excerpt, copy part or all of the content of this document, nor disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
@@ -29,96 +29,98 @@ Without the written permission of the company, no unit or individual may extract
 
 ### Overview
 
-This document mainly introduces the use of K230 SHA256 software, including the use of SHA256 API and test procedures.
+This document mainly introduces the usage of the K230 SHA256 software, including the usage of the SHA256 API and an introduction to the test program.
 
-### Reader Object
+### Intended Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of Acronyms
+### Abbreviation Definitions
 
-| abbreviation    | illustrate |
-| ----    | ---- |
-| SHA256  | Secure Hash Algorithm   |
+| Abbreviation | Description |
+| ------------ | ----------- |
+| SHA256       | Secure Hash Algorithm |
 
 ### Revision History
 
-| Document version number | Modify the description | Author     | date       |
-| ---------- | -------- | ---------- | ---------- |
-| V1.0       | Initial edition     | Yang Fan          | 2023-05-30 |
+| Document Version | Description | Author | Date       |
+| ---------------- | ----------- | ------ | ---------- |
+| V1.0             | Initial Version | Yang Fan | 2023-05-30 |
 
 ## 1. Function Introduction
 
-SHA256 is mainly used to calculate the hash value of data, and the SHA256 algorithm is implemented in the big core rt-smart to calculate the hash value of data, and the code logic is shown in the following figure:
+SHA256 is mainly used to calculate the hash value of data. The SHA256 algorithm is implemented in the rt-smart of the main core to calculate the hash value of data. The code logic is shown in the following figure:
 
 ![sha256](../../../../zh/01_software/board/mpp/images/sha256.png)
 
 ## 2. API Reference
 
-The SHA256 module mainly provides the following APIs:
+The SHA256 module mainly provides the following API:
 
 - [kd_mpi_cipher_sha256](#21-kd_mpi_cipher_sha256)
 
 ### 2.1 kd_mpi_cipher_sha256
 
-【Description】
+**Description**:
 
-Calculates the hash value of the message based on the incoming message.
+Calculates the hash value of the message based on the input message.
 
-【Syntax】
+**Syntax**:
 
-kd_mpi_cipher_sha256(const void \*data, k_u32 len, k_u8 \*hash);
+```c
+kd_mpi_cipher_sha256(const void *data, k_u32 len, k_u8 *hash);
+```
 
-【Parameters】
+**Parameters**:
 
-| Parameter name        | description                          | Input/output |
-|-----------------|-------------------------------|-----------|
-| data            | Incoming messages                      | input      |
-| only            | The length of the incoming message                    | input      |
-| hash            | The calculated hash value               | output      |
+| Parameter Name | Description            | Input/Output |
+| -------------- | ---------------------- | ------------ |
+| data           | Input message          | Input        |
+| len            | Length of the input message | Input        |
+| hash           | Calculated hash value  | Output       |
 
-【Return value】
+**Return Value**:
 
-| Return value  | description                            |
-|---------|---------------------------------|
-| 0       | Succeed.                          |
-| Non-0    | Failed, refer to Error Code Definition |
+| Return Value | Description              |
+| ------------ | ------------------------ |
+| 0            | Success                  |
+| Non-zero     | Failure, refer to error code definitions |
 
-【Differences】
+**Chip Differences**:
 
 None
 
-【Requirement】
+**Requirements**:
 
 - Header file: mpi_cipher_api.h
 - Library file: libcipher.a
 
-【Note】
+**Notes**:
 
 None
 
-【Example】
+**Example**:
 
 None
 
-【See Also】
+**Related Topics**:
 
 None
 
-## 3. Debugging and Printing Information
+## 3. Debugging and Print Information
 
-Write a user-mode application *sample_cipher.c* to test SHA256 functionality.
+Write a user-mode application *sample_cipher.c* to test the SHA256 functionality.
 
-The test code has been written, located in the *mpp/userapps/sample/sample_cipher* directory, the specific debugging method is as follows:
+The test code is already written and located in the *mpp/userapps/sample/sample_cipher* directory. The specific debugging method is as follows:
 
-1. After the big core starts, go to the *bin* directory;
+1. After the main core starts, enter the *bin* directory;
 1. Run the *sample_cipher.elf* program;
-1. Print the information.
+1. Print information.
 
-The specific printing information is as follows:
+The specific print information is as follows:
 
 ```shell
 msh />cd bin/

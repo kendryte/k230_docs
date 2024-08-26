@@ -27,13 +27,26 @@
 
 ## 1 AI Cube使用问题
 
-问题1：AI Cube打开后遇到license提示。
+**Notes**：
+1、在使用AI Cube前一定要将本月授权License放置在AI Cube安装目录。
+
+2、AI Cube所在的运行环境中必须安装dotnet 7.x SDK，并配置相应环境变量。
+
+3、出现问题后可在AI Cube安装目录中查阅AI_Matrix.log日志信息，可以将该日志信息发送给嘉楠科技技术人员进行问题排查。
+
+问题1：AI Cube在开启页面卡死。
+
+![start_error](images/start_cube.png)
+
+答：需要将本月授权license置于AI Cube安装目录。
+
+问题2：AI Cube打开后遇到license提示。
 
 ![license_error](images/license_error.jpg)
 
-答：AI Cube内部采用license校验机制，进入AI Cube需要当月的授权license。用户可以向<Developersupport@canaan-creative.com>发送邮件申请当月授权license，我们的专业团队会为您提供license支持。
+答：AI Cube内部采用license校验机制，进入AI Cube需要当月的授权license。用户可以向[Developersupport@canaan-creative.com](mailto:Developersupport@canaan-creative.com)发送邮件申请当月授权license，我们的专业团队会为您提供license支持。
 
-问题： 运行AI Cube时发生闪退，无响应。
+问题3： 运行AI Cube时发生闪退，无响应。
 
 答：遇到闪退问题时首先要按照[AI Cube用户指南](https://kendryte-download.canaan-creative.com/developer/common/AI_Cube_V1.2%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97.pdf)排查是否正确安装Nvidia显卡驱动及dotnet。
 

@@ -61,7 +61,7 @@
 
 #### 1.2.1 视频缓存池
 
-视频缓存池是一组缓冲区（而不是一个），主要提供给多媒体硬件设备使用，并在多媒体硬件设备之间流转。缓存池分为公共缓存池和私有缓存池，公共缓存池主要是针对VI的，使用前要根据VI的图像参数确定缓存块的大小，然后向 申请一定数量的缓存块组成一个缓存池。总体来说，对于VI输入的原始画面，一帧的大小对应一个缓存块的大小，多个缓存块相当于给VI提供了多帧缓存的机制。同时这些公共缓存块也可以给VO或VENC使用。私有的缓存池往往代表存储在内存中的数据是与多媒体设备本身紧密相关的，例如编码的码流数据与实际的图像像素组成的视频流差别还是很大的，这些码流只有编解码器可用，而VB为这些设备提供专用的缓冲池。下图展示了虚拟VI和虚拟VO使用VB进行缓存块流转的流程。
+视频缓存池是一组缓冲区（而不是一个），主要提供给多媒体硬件设备使用，并在多媒体硬件设备之间流转。缓存池分为公共缓存池和私有缓存池，公共缓存池主要是针对VI的，使用前要根据VI的图像参数确定缓存块的大小，然后申请一定数量的缓存块组成一个缓存池。总体来说，对于VI输入的原始画面，一帧的大小对应一个缓存块的大小，多个缓存块相当于给VI提供了多帧缓存的机制。同时这些公共缓存块也可以给VO或VENC使用。私有的缓存池往往代表存储在内存中的数据是与多媒体设备本身紧密相关的，例如编码的码流数据与实际的图像像素组成的视频流差别还是很大的，这些码流只有编解码器可用，而VB为这些设备提供专用的缓冲池。下图展示了虚拟VI和虚拟VO使用VB进行缓存块流转的流程。
 
 ![图示 描述已自动生成](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
 
@@ -69,7 +69,7 @@
 
 系统绑定，即通过数据接收者绑定数据源来建立两者之间的关联关系（只允许数据接收者绑定数据源）。绑定后，数据源生成的数据将自动发送给接收者。K230大的语音和视频处理主要分为几个大的模块如下：
 
-语音：语音输入（Audio Input,简称AI）， 语音编码（Audio Encoder，简称AENC），语音识别（Audio recognize，简称AREC），语音解码（Audio Decoder，简称ADEC），语音输出（Audio Output，简称AO）
+语音：语音输入（Audio Input,简称AI）， 语音编码（Audio Encoder，简称AENC），语音解码（Audio Decoder，简称ADEC），语音输出（Audio Output，简称AO）
 
 图像：视频输入（Video Input，简称VI），视频编码（Video Encoder，简称VENC），图像旋转（由GSDMA完成，简称DMA），深度处理单元(Depth Process Unit, 简称DPU)，图像解码（Video Decoder，简称VDEC），视频输出（Video Output，简称VO），虚拟视频输入（Virtual Video Input，简称VVI），虚拟视频输出（Virtual Video Output，简称VVO）
 
@@ -85,7 +85,7 @@ K230支持的绑定关系如下
 |                   | VENC           | VI的数据可以直接送到VENC进行处理                         |
 | GSDMA（图像旋转） | VO             | GSDMA 处理后的数据，可以直接送给VO显示                   |
 |                   | DPU            | GSDMA处理后的数据，可以直接送给DPU进行处理               |
-|                   | VENC           | VPROC处理后的数据，可以直接送给VENC进行编码              |
+|                   | VENC           | GSDMA处理后的数据，可以直接送给VENC进行编码              |
 | VDEC(视频解码)    | GSDMA          | VDEC的数据最终会本地播放，播放前可能需要做旋转           |
 |                   | VO             | VDEC的数据最终会本地播放                                 |
 | DPU(深度处理单元) | 无             | DPU是视频数据的终点，不支持绑定关系                      |
@@ -95,7 +95,6 @@ K230支持的绑定关系如下
 |                   | AENC           | AI处理后的数据，可以直接送给语音编码模块进行编码         |
 |                   | AO             | AI处理后的数据，可以直接进行播放                         |
 | ADEC(语音解码)    | AO             | ADEC处理后的数据，可以直接进行播放                       |
-| AREC(语音识别)    | AO             | AREC处理后的数据，可以直接进行播放，例如本地离线语音翻译 |
 | AENC(语音编码)    | 无             | 不支持绑定关系                                           |
 | AO(音频输出)      | 无             | AO是音频数据的终点，不支持绑定关系                       |
 
@@ -171,7 +170,9 @@ k_s32 kd_mpi_sys_mmz_alloc(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* 
 
 【注意】
 
-MMZ由多个zone组成，每个zone有多个MMB。你可以调用这个MPI，在MMZ的\*zone分配一个大小为len的内存块\*mmb。在这种情况下，指向物理地址和用户模式虚拟地址的指针被返回。如果在MMZ中存在匿名区，将\*zone设置为null。如果\*mmb被设置为null，创建的MMB就被命名为null。【举例】
+MMZ由多个zone组成，每个zone有多个MMB。你可以调用这个MPI，在\*zone的MMZ分配一个大小为len的内存块\*mmb。在这种情况下，指向物理地址和用户模式虚拟地址的指针被返回。如果在MMZ中存在匿名区，将\*zone设置为null。如果\*mmb被设置为null，创建的MMB就被命名为null。
+
+【举例】
 
 无
 
@@ -218,7 +219,7 @@ k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_
 【注意】
 
 - [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)与[kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)之间的区别：通过调用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)分配的内存支持缓存，如果要分配的内存将被频繁使用，推荐使用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)。这样可以提高CPU的读/写效率和系统性能。
-- 当 cpu 访问此接口分配的内存时，会将内存中的数据放在 cache 中。硬件设备只能访问物理内存而不是缓存。在这种情况下[kd_mpi_sys_mmz_flush_cache](#216-kd_mpi_sys_mmz_flush_cache)需要被调用来同步数据。
+- 当 cpu 访问此接口分配的内存时，会将内存中的数据放在 cache 中。若硬件设备只能访问物理内存而不是缓存，在这种情况下[kd_mpi_sys_mmz_flush_cache](#216-kd_mpi_sys_mmz_flush_cache)需要被调用来同步数据。
 
 【举例】
 
@@ -328,7 +329,7 @@ memory 存储映射解除接口。
 
 【语法】
 
-void \*kd_mpi_sys_mmap(void \*virt_addr, k_u32 size);
+void \*kd_mpi_sys_munmap(void \*virt_addr, k_u32 size);
 
 【参数】
 
@@ -406,7 +407,7 @@ k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 - 必须先调用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)然后再使用这个MPI
 - 若将 phy_addr 设为 0，则表示操作整个 cache 区域。(暂不支持)
 - 你需要确保传输的参数是有效的
-- 确保在执行刷新操作时不调用[kd_mpi_sys_mmz_free](#217-kd_mpi_sys_mmz_free)来释放被刷新的内存。否则，不可预知的异常可能会 发生。
+- 确保在执行刷新操作时不调用[kd_mpi_sys_mmz_free](#217-kd_mpi_sys_mmz_free)来释放被刷新的内存。否则，可能会发生不可预知的异常。
 
 【举例】
 
@@ -546,9 +547,7 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 【注意】
 
 - 只能在系统处于未初始化的状态下，才可以设置缓存池属性，否则会返回失败。
-- 公共缓存池中每个缓存块的大小应根据当前图像像素格式以及图像是否压缩而有
-
-    所不同。具体分配大小请参考 [k_vb_config](#323-k_vb_config) 结构体中的描述。
+- 公共缓存池中每个缓存块的大小应根据当前图像像素格式以及图像是否压缩而有所不同。具体分配大小请参考 [k_vb_config](#323-k_vb_config) 结构体中的描述。
 
 【举例】
 
@@ -634,8 +633,7 @@ k_s32 kd_mpi_vb_init(void);
 
 【注意】
 
-- 必须先调用 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再初始化缓存池，否则会失
-    败。
+- 必须先调用 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再初始化缓存池，否则会失败。
 - 可反复初始化，不返回失败。
 
 【举例】
@@ -650,7 +648,7 @@ k_s32 kd_mpi_vb_init(void);
 
 【描述】
 
-去初始化 MPP 视频缓存池。。
+去初始化 MPP 视频缓存池。
 
 【语法】
 
@@ -815,7 +813,7 @@ k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char 
 
 【注意】
 
-- 用户可以在创建一个缓存池之后，调用本接口从该缓存池中获取一个缓存块；即将第 1 个参数 P设置为创建的缓存池 ID；从指定缓存池获取缓存块时，参数mmz_name 无效 \*
+- 用户可以在创建一个缓存池之后，调用本接口从该缓存池中获取一个缓存块；即将第1个参数 Pool 设置为创建的缓存池ID；从指定缓存池获取缓存块时，参数mmz_name无效
 - 如果用户需要从任意一个公共缓存池中获取一块指定大小的缓存块，则可以将第 1个参数 Pool 设置为无效 ID 号（VB_INVALID_POOLID），将第 2 个参数blk_size 设置为需要的缓存块大小，并指定要从哪个 DDR 上的公共缓存池获取缓存块。如果指定的 DDR 上并没有公共缓存池，那么将获取不到缓存块。如果mmz_name 等于 NULL，则表示在匿名DDR 上的公共缓存池获取缓存块。
 
 【举例】
@@ -884,7 +882,7 @@ k_vb_blk_handle kd_mpi_vb_phyaddr_to_handle(k_u64 phys_addr);
 
 | **参数名称**  | **描述**       | 输入/输出 |
 |-----------|-----------|-----------|
-| phys_addr | vb 块句柄 | 输入      |
+| phys_addr | 物理地址 | 输入      |
 
 【返回值】
 
@@ -1054,7 +1052,9 @@ k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
 
 【语法】
 
-k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#333-k_video_supplement) \*supplement);【参数】
+k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#333-k_video_supplement) \*supplement);
+
+【参数】
 
 | **参数名称**   | **描述**                                             | 输入/输出 |
 |------------|-------------------------------------------------|-----------|
@@ -1097,11 +1097,7 @@ Supplement保存的DCF和ISP的虚拟地址信息为内核态虚拟地址
 
 ![打开的书 轮廓](images/458c9a7b50ccf347bf7ed5e8c4c5b7a8.png)说明
 
-有些信息需要附加在 VB 内存的后面。例如 DCF 信息、ISP 的统计信息、ISP 的一些实时参数
-
-等，这些附加的信息可以跟着 VB 内存在 MPP 各个模块传递。用户态获取 VB 内存，也可以获
-
-取到这些信息。
+有些信息需要附加在 VB 内存的后面。例如 DCF 信息、ISP 的统计信息、ISP 的一些实时参数等，这些附加的信息可以跟着 VB 内存在 MPP 各个模块传递。用户态获取 VB 内存，也可以获取到这些信息。
 
 【语法】
 
@@ -1223,7 +1219,7 @@ k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_
 
 【注意】
 
-- 模块公共视频缓冲区的配置根据实际需要配置，否则会造成内存浪
+- 模块公共视频缓冲区的配置根据实际需要配置，否则会造成内存浪费
 - 如果模块 VB 已创建，再次配置返回错误码 KD_ERR_VB_BUSY
 
 【举例】
@@ -1248,7 +1244,7 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 
 | **参数名称** | **描述**                               | 输入/输出 |
 |----------|-----------------------------------|-----------|
-| vb_uid   | 使用模块公共视频缓冲池的模块 ID。 | 输入      |
+| vb_uid   | 使用模块公共视频缓冲池的模块 ID | 输入      |
 | config   | 视频缓存池属性指针。              | 输出      |
 
 【返回值】
@@ -1538,7 +1534,7 @@ k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp
 
 【描述】
 
-设置日志等级。。
+设置日志等级。
 
 【语法】
 
@@ -1583,7 +1579,7 @@ k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) 
 
 【描述】
 
-设置日志等级。。
+设置日志等级。
 
 【语法】
 
@@ -1717,7 +1713,7 @@ k_s32 kd_mpi_log_read(k_char \*buf, k_u32 size);
 
 【描述】
 
-关闭日志文件。。
+关闭日志文件。
 
 【语法】
 
@@ -2203,7 +2199,7 @@ k_u32 supplement_config; /*<Control of the auxiliary information*/
 - [k_color_gamut](#3310-k_color_gamut)
 - [k_dynamic_range](#3311-k_dynamic_range)
 - [k_video_format](#3312-k_video_format)
-- [k_video_filed](#3313-k_video_filed)
+- [k_video_field](#3313-k_video_field)
 - [k_pixel_format](#3314-k_pixel_format)
 
 #### 3.3.1 k_video_frame_info
@@ -2269,17 +2265,17 @@ k_compress_mode compress_mode;
 
 k_color_gamut color_gamut;
 
-k_u32 header_stride**[**3**]**;
+k_u32 header_stride;
 
-k_u32 stride**[**3**]**;
+k_u32 stride;
 
-k_u64 header_phys_addr**[**3**]**;
+k_u64 header_phys_addr;
 
-k_u64 header_virt_addr**[**3**]**;
+k_u64 header_virt_addr;
 
-k_u64 phys_addr**[**3**]**;
+k_u64 phys_addr;
 
-k_u64 virt_addr**[**3**]**;
+k_u64 virt_addr;
 
 k_s16 offset_top; /* top offset of show area */
 
@@ -2395,7 +2391,7 @@ k_u32 again;
 
 k_u32 dgain;
 
-k_u32 ratio**[**3**]**;
+k_u32 ratio;
 
 k_u32 isp_nr_strength;
 
@@ -2430,7 +2426,7 @@ k_u32 vc_num; /*< when dump wdr frame, which is long or short exposure frame. */
 | sensor_mode     | 当前使用的seneor序列模式。                                 |
 | hmax_times      | 当前使用的sensor对应读出一行的时间，单位是纳秒(ns)。       |
 | vmax            | 一帧的行数                                                 |
-| vc_num          | 当前菜鸡的帧的序列号。                                     |
+| vc_num          | 当前采集的帧的序列号。                                     |
 
 【注意事项】
 
@@ -2451,7 +2447,7 @@ JPEG 图片使用的 DCF 信息。
 ``` C
 typedef struct {
 
-k_u8 capture_time**[**DCF_CAPTURE_TIME_LENGTH**]**; /*< the date and time when the picture data was generated*/
+k_u8 capture_time [DCF_CAPTURE_TIME_LENGTH]; /*< the date and time when the picture data was generated*/
 
 k_u32 flash; /*< whether the picture is captured when a flash lamp is on*/
 
@@ -2574,11 +2570,11 @@ COLOR_GAMUT_BUTT
 
 【注意事项】
 
-各个色域范围的蓝、绿、宏、白点坐标如下
+各个色域范围的蓝、绿、红、白点坐标如下
 
 | ColorGamut  | Primary          |                  |                 |                  |
 |-------------|------------------|------------------|-----------------|------------------|
-|             | Green            | Blue             | Reg             | White            |
+|             | Green            | Blue             | Red             | White            |
 | BT601       | （0.29, 0.60）   | (0.15, 0.06)     | (0.64, 0.33)    | (0.3127, 0.3290) |
 | BT709       | (0.300, 0.600）  | (0.150, 0.060）  | (0.640, 0.330)  | (0.3127, 0.3290) |
 | BT2020      | (0.170, 0.797)   | (0.131, 0.046)   | (0.708, 0.292)  | (0.3127, 0.3290) |
@@ -2681,7 +2677,7 @@ VIDEO_FORMAT_BUTT
 
 无
 
-#### 3.3.13 k_video_filed
+#### 3.3.13 k_video_field
 
 【说明】
 
@@ -2961,7 +2957,7 @@ k_char mod_name[16];
 | 0xa0058008 | K_ERR_SYS_NOT_SUPPORT   | 不支持的功能                 |
 | 0xa0058009 | K_ERR_SYS_NOT_PERM      | 操作不允许                   |
 | 0xa0058010 | K_ERR_SYS_NOTREADY      | 系统控制属性未配置           |
-| 0xa0058011 | K_ERR_SYS_BADADDR       | 系统忙                       |
+| 0xa0058011 | K_ERR_SYS_BADADDR       | 错误的地址                       |
 | 0xa005800c | K_ERR_SYS_NOMEM         | 分配内存失败，如系统内存不足 |
 
 ### 4.3 日志管理错误码

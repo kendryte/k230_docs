@@ -1,91 +1,91 @@
-# K230 GPU in action - VGLite paints cool graphics
+# K230 GPU Application Practice - Drawing Cool Graphics with VGLite
 
-![cover](../../../zh/images/canaan-cover.png)
+![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or guarantees regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../zh/02_applications/tutorials/images/canaan-lable.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+No unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form without the written permission of the Company.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document focuses on drawing vector graphics with the K230 GPU.
+This document mainly introduces how to use the K230 GPU to draw vector graphics.
 
-### Reader object
+### Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical Support Engineers
+- Software Development Engineers
 
-### Definition of acronyms
+### Acronym Definitions
 
-| abbreviation | Full name                  |
-|------|-----------------------|
-| GPU  | Graphics Process Unit |
-| SVG | Scalable Vector Graphics |
-| DRM | Direct Rendering Manager |
+| Abbreviation | Full Name                  |
+|--------------|----------------------------|
+| GPU          | Graphics Processing Unit   |
+| SVG          | Scalable Vector Graphics   |
+| DRM          | Direct Rendering Manager   |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description | Author     | date       |
-| ---------- | -------- | ---------- | ---------- |
-| V1.0       | Initial | Huang Ziyi | 2023-06-20 |
+| Document Version | Modification Description | Modifier | Date       |
+|------------------|--------------------------|----------|------------|
+| V1.0             | Initial version          | Huang Ziyi | 2023-06-20 |
 
-## Concept introduction
+## Concept Introduction
 
-### Vector graphics basics
+### Basics of Vector Graphics
 
-Vector graphics are images represented by mathematical equation-based geometric elements such as points, lines, or polygons, and unlike bitmaps that use pixels to represent images, vector graphics can be infinitely enlarged without distortion. SVG is a typical vector graphics format, itself is an XML text file, describing the location of various elements, open through the browser to see the rendered effect, if you don't understand the VGLite API used by the K230 GPU, you can see it as a weakened version of SVG.
+Vector graphics are images represented by geometric primitives such as points, lines, or polygons based on mathematical equations. Unlike bitmaps that use pixels to represent images, vector graphics can be infinitely enlarged without distortion. SVG is a typical vector graphic format, which is an XML text file describing the positions of various primitives. You can view the rendered effect by opening it with a browser. If you are completely unfamiliar with the VGLite API used by the K230 GPU, you can think of it as a simplified version of SVG.
 
-The K230 GPU supports a wide range of 2D elements
+The K230 GPU supports various 2D primitives:
 
-- straight line
-- Quadratic Bezier curve
-- Cubic Bezier curve
-- Circular curve (of course, it can also be fitted with cubic Bézier curve)
+- Lines
+- Quadratic Bézier curves
+- Cubic Bézier curves
+- Circular arcs (which can also be approximated using cubic Bézier curves)
 
-Note: **These graphics are lines, and the GPU cannot draw lines directly, only closed shapes enclosed by these lines.**
+Note: **These graphics are all lines. The GPU cannot directly draw lines; it can only draw closed shapes formed by these lines.**
 
-### GPU foundation
+### GPU Basics
 
-On the K230 SDK's small-core Linux, the GPU is mainly interacted with by calling the VGLite API. VGLite internally maintains a command queue for the GPU, which is submitted to the GPU hardware for rendering when it needs to complete the draw, or when the queue is full. The length of the command queue defaults to 65536, and you can call the `vg_lite_set_command_buffer_size` function to modify it.
+On the K230 SDK's small-core Linux, interaction with the GPU is mainly done by calling the VGLite API. VGLite internally maintains a command queue for the GPU. When rendering needs to be completed, or when the queue is full, it will be submitted to the GPU hardware for rendering. The default length of the command queue is 65536, which can be modified by calling the `vg_lite_set_command_buffer_size` function.
 
-Note: The VGLite API **does not support use in a multithreaded context, if your application uses multithreading, make sure that only one thread will use the VGLite API**.
+Note: **The VGLite API does not support use in a multi-threaded context. If your application uses multiple threads, ensure that only one thread will use the VGLite API.**
 
-The K230 GPU is a memory-to-memory device that does not have its own display output capabilities, and can be used with DRM if a display is required.
+The K230 GPU is a memory-to-memory device and does not have display output capabilities. If display output is needed, it can be used in conjunction with DRM.
 
-## Use the VGLite API
+## Using the VGLite API
 
-### Development environment preparation
+### Preparing the Development Environment
 
-The VGLite API mainly consists of two parts, header files and library files, where the location of header files is in
+The VGLite API mainly consists of two parts: header files and library files. The location of the header files is:
 
 ```text
 <K230 SDK>/src/little/buildroot-ext/package/vg_lite/inc/vg_lite.h
 ```
 
-After the K230 SDK is fully compiled, the library files are placed in
+After compiling the K230 SDK completely, the library files will be placed at:
 
 ```text
 <K230 SDK>/output/k230_evb_defconfig/little/buildroot-ext/target/usr/lib/libvg_lite.so
@@ -93,7 +93,7 @@ After the K230 SDK is fully compiled, the library files are placed in
 
 #### make
 
-Put the source file of the code into `src` the directory, create a Makefile and  paste the following content into it, set`K230SDK` the environment variable to the path where the K230 SDK is stored (or change the first line to the path to store the K230 SDK`/path/to/k230_sdk`), you can use the command to build, `make`after the build is completed, the executable file will be generated in the same directory of the Makefile and copied to the little core Run it on linux, or you can use `make install` copy it to the K230 SDK,  build the image in the K230 SDK directory, and then flash it to an SD card or eMMC to boot.
+Place the source files of your code in the `src` directory, create a Makefile, and paste the following content into it. Set the `K230SDK` environment variable to the path where the K230 SDK is stored (or change `/path/to/k230_sdk` in the first line to the path where the K230 SDK is stored). You can then use the `make` command to build. After building, an executable file will be generated in the same directory as the Makefile. Copy it to the small-core Linux for execution, or use `make install` to copy it to the K230 SDK, then build the image in the K230 SDK directory, and burn it to the SD card or eMMC to start.
 
 ```Makefile
 K230SDK ?= /path/to/k230_sdk
@@ -143,12 +143,11 @@ uninstall:
 	rm "$(K230SDK)/output/k230_evb_defconfig/little/buildroot-ext/target/usr/bin/$(BIN)"
 
 .PHONY: all clean install
-
 ```
 
 #### CMake
 
-Put the source file of the code into `src` the directory,  create a `CMakeLists.txt` file and paste the following content into it, modify the third line`/path/to/k230_sdk` to the directory where the K230 SDK is stored, you can use cmake to build.
+Place the source files of your code in the `src` directory, create a `CMakeLists.txt` file, and paste the following content into it. Modify `/path/to/k230_sdk` on the third line to the directory where the K230 SDK is stored. You can then use cmake to build.
 
 ```CMakeLists.txt
 cmake_minimum_required(VERSION 3.0)
@@ -173,30 +172,29 @@ file(GLOB SOURCES "src/*.c" "src/*.cpp")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION "${K230SDK}/output/k230_evb_defconfig/little/buildroot-ext/target/usr/bin")
-
 ```
 
-### display
+### Display
 
-The K230 EVB has a 1080x1920 display, which can be displayed with DRM on small-core Linux, and allowing the GPU driver to load DRM dumb buffer can reduce memory copies and achieve efficient rendering. The relevant code of GPU+DRM can refer `vglite_drm` to  this demo, and readers can add `drm.c` it to their own programs.
+The K230 EVB has a 1080x1920 display. On the small-core Linux, DRM can be used for display. Letting the GPU driver load the DRM dumb buffer can reduce memory copying and achieve efficient rendering. The GPU+DRM related code can be referred to in the `vglite_drm` demo. Readers can add `drm.c` to their programs.
 
-It should be noted that as of K230 SDK v0.8, the DRM driver on linux still**cannot**work independently, and it needs to rely on the configuration of the SoC video output module, which can be completed by executing on the big core `sample_vo.elf 3` .
+Note that as of K230 SDK v0.8, the DRM driver on Linux **cannot** work independently and relies on the configuration of the SoC video output module by the large core. This can be done by executing `sample_vo.elf 3` on the large core.
 
-Secondly, the color format enumeration  of DRM `vg_lite_buffer_format_t` is not exactly consistent with , for example, represents red in the `VGLITE_BGRA8888` lower 8 bits and alpha in the upper 8 bits of 32-bit color, corresponding to the DRM `DRM_FORMAT_ARGB8888` in .
+Additionally, the color format enumeration of DRM does not completely match `vg_lite_buffer_format_t`. For example, `VGLITE_BGRA8888` represents a 32-bit color with red in the lowest 8 bits and alpha in the highest 8 bits, corresponding to `DRM_FORMAT_ARGB8888` in DRM.
 
-![vglite_drm demo run results](../../../zh/02_applications/tutorials/images/gpu-1.jpg)
+![vglite_drm demo result](../../../zh/02_applications/tutorials/images/gpu-1.jpg)
 
-As shown in the figure vglite_drm The correct color displayed on the screen after running: R(255)G(128)B(16)
+The image above shows the correct color displayed on the screen after running the vglite_drm demo: R(255)G(128)B(16).
 
-Generally speaking, in order to achieve synchronous display, two buffers will be needed for ping-pong alternating display, but in order to simplify the demo code, only one is used here, and readers can achieve vertical synchronization of double buffers for continuous rendering.
+Generally, to achieve synchronized display, two buffers are needed for ping-pong alternating display. However, to simplify the demonstration code, only one buffer is used here. Readers can implement double buffering with vertical synchronization for continuous rendering.
 
-## drawing
+## Drawing
 
-### Some preparation
+### Some Preparations
 
-First of all, you need to initialize VGLite, call `vg_lite_init` to complete, it  has two parameters `tessellation_width` and  , for rendering the size of the window, the `tessellation_height`larger the more efficient, if it is 0 means that the vector drawing function is not used, only BLIT, usually set to the size of the maximum buffer.
+First, VGLite needs to be initialized by calling `vg_lite_init`. It has two parameters `tessellation_width` and `tessellation_height`, which are used for the size of the rendering window. The larger the size, the higher the efficiency. If set to 0, it means that the vector drawing function is not used, and only BLIT can be performed. Usually, it is set to the size of the largest buffer.
 
-Rendering requires buffers, which can be imported from DRM dumb, like the following
+Rendering requires a buffer, which can be imported from DRM dumb as follows:
 
 ```c
 vg_lite_buffer_t buffer;
@@ -212,13 +210,14 @@ buffer.width = width;
 buffer.height = height;
 buffer.format = VG_LITE_ARGB8888;
 buffer.stride = buffer.width * 4;
-if (vg_lite_from_dma_buf(buf_fd, &buffer.address)) {
+buffer.memory = drm_get_map(0);
+if (vg_lite_map(&buffer, VG_LITE_MAP_DMABUF, buf_fd)) {
     perror("import dma-buf");
     return -1;
 }
 ```
 
-Off-screen buffers can also be allocated from the GPU driver, as shown below
+It can also be allocated from the GPU driver as an off-screen buffer, as follows:
 
 ```c
 vg_lite_buffer_t buffer;
@@ -231,131 +230,132 @@ if (vg_lite_allocate(&buffer)) {
 }
 ```
 
-Obviously, it is simpler to allocate off-screen buffers, only need to configure the resolution and pixel format, and importing from DRM dumb also needs to calculate the stride (the number of bytes in a row), of course, the advantage of importing from DRM dumb is that it can be directly used for display, of course, the buffer allocated from the driver can also be imported into DRM for display.
+Obviously, allocating an off-screen buffer is simpler, as it only requires configuring the resolution and pixel format. However, importing from DRM dumb requires calculating the stride (the number of bytes per line of pixels). The advantage of importing from DRM dumb is that it can be directly used for display.
 
-### polygon
+### Polygon
 
-With buffer, you can start drawing. A polygon consists of multiple straight lines, in the case of a triangle, you first need to determine the coordinates of the three vertices of the triangle, for example, the`(0,0) (0,1) (1,0)` whole process is as follows
+With a buffer, you can start drawing. A polygon is composed of multiple lines. Taking a triangle as an example, first determine the coordinates of the three vertices of the triangle, such as `(0,0) (0,1) (1,0)`. The entire process is as follows:
 
-1. Move the brush to`(0,0)`
-1. Draw a line to`(0,1)`
-1. Draw a line to`(1,0)`
-1. Draw a line to`(0,0)`
-1. Close the graph
+1. Move the pen to `(0,0)`
+1. Draw a line to `(0,1)`
+1. Draw a line to `(1,0)`
+1. Draw a line to `(0,0)`
+1. Close the shape
 
-Consulting the K230 GPU API reference can see that the mobile opcode is 2, the straight opcode is 4, and the closed path opcode is 0, using the first data format, the array can be constructed `path_data` as follows
+Refer to the K230 GPU API reference to see that the opcode for moving is 2, the opcode for drawing a line is 4, and the opcode for closing the path is 0. Using the first data format, you can construct the `path_data` array as follows:
 
 ```c
 uint8_t path_data[] = {
-    2, 0, 0, // 移动到 (0,0)
-    4, 0, 1, // 直线到 (0,1)
-    4, 1, 0, // 直线到 (1,0)
-    4, 0, 0, // 直线到 (0,0)
-0};
+    2, 0, 0, // Move to (0,0)
+    4, 0, 1, // Line to (0,1)
+    4, 1, 0, // Line to (1,0)
+    4, 0, 0, // Line to (0,0)
+    0
+};
 ```
 
-Only path_data is not enough, the parameters required for rendering are path, and the path contains information such as data formats in addition to path_data, and the format of the data can be specified as the following:
+Only `path_data` is not enough. Rendering requires a path, which includes not only `path_data` but also information such as data format. The data format can be specified as one of the following:
 
 1. 8-bit signed integer
 1. 16-bit signed integer
 1. 32-bit signed integer
 1. 32-bit floating-point number
 
-Performance decreases from top to bottom, but even 8-bit signed integers do not mean that only the pixel range of -128 to 127 can be covered, because a matrix transformation is also required to calculate the final coordinates.
-
-Now construct the path and draw to the buffer
+From top to bottom, performance decreases sequentially. However, even an 8-bit signed integer does not mean that it can only cover the pixel range from -128 to 127, because matrix transformations are also needed to calculate the final coordinates.
+Now construct the path and draw it to the buffer:
 
 ```c
 vg_lite_path_t path = {
-    .bounding_box = {0., 1., 1., 0.}, // 图形的包围盒
-    .quality = VG_LITE_HIGH, // 渲染质量
-    .format = VG_LITE_S8, // 考虑到坐标很简单，所以 8bit 足够
-    .uploaded = 0, // 路径没有被上传过 GPU，所以用0
-    .path_length = sizeof(path_data), // 路径数据长度，以字节为单位
-    .path = path_data, // 路径数据就放在这了
-    .path_changed = 1, // 用来表示路径被更新过
-    .pdata_internal = 0 // 表示路径数据不是由驱动分配的
+    .bounding_box = {0., 1., 1., 0.}, // Bounding box of the shape
+    .quality = VG_LITE_HIGH, // Rendering quality
+    .format = VG_LITE_S8, // Considering the coordinates are simple, 8-bit is sufficient
+    .uploaded = 0, // The path hasn't been uploaded to the GPU, so use 0
+    .path_length = sizeof(path_data), // Length of the path data in bytes
+    .path = path_data, // The path data is placed here
+    .path_changed = 1, // Indicates the path has been updated
+    .pdata_internal = 0 // Indicates the path data is not allocated by the driver
 };
 ```
 
-With the above variables, you can perform rendering, following the steps
+With the above variables, you can perform rendering with the following steps:
 
-1. Emptying the buffer, i.e. filling it with a monochrome color, can be done using `vg_lite_clear`
-1. A transformation matrix, about the matrix can refer to affine transformation related content, here directly use a scaling matrix, the image is enlarged 100 times, so that the final length of 1 straight line will use 100 pixels in the image
-1. Call `vg_lite_draw` to "render" path to buffer
-1. Finally, use Submit `vg_lite_finish` Rendering
+1. Clear the buffer, i.e., fill it with a single color, which can be done using `vg_lite_clear`.
+1. Create a transformation matrix. For information on matrices, refer to affine transformations. Here, we directly use a scaling matrix to enlarge the image by 100 times, so a line of length 1 will use 100 pixels in the image.
+1. Call `vg_lite_draw` to "render" the path to the buffer.
+1. Finally, use `vg_lite_finish` to submit the rendering.
 
-To facilitate error handling, use `CHECK_ERROR` macros to wrap the function that returns `vg_lite_error_t`
+To facilitate error handling, use the `CHECK_ERROR` macro to wrap functions that return `vg_lite_error_t`.
 
 ```c
 vg_lite_matrix_t matrix;
-CHECK_ERROR(vg_lite_clear(&buffer, NULL, 0xffff0000)); // 使用蓝色填充整个 buffer
-vg_lite_identity(&matrix); // 初始化为单位矩阵
-vg_lite_translate(buffer.width / 2., buffer.height / 2., &matrix); // 移动到 buffer 中间位置
-vg_lite_scale(100., 100., &matrix); // x y 方向都放d大100倍
+CHECK_ERROR(vg_lite_clear(&buffer, NULL, 0xffff0000)); // Fill the entire buffer with blue
+vg_lite_identity(&matrix); // Initialize to the identity matrix
+vg_lite_translate(buffer.width / 2., buffer.height / 2., &matrix); // Move to the center of the buffer
+vg_lite_scale(100., 100., &matrix); // Scale by 100 times in both x and y directions
 CHECK_ERROR(vg_lite_draw(
     &buffer, &path,
-    VG_LITE_FILL_NON_ZERO, //  填充规则，像素只要被覆盖就会被绘制
+    VG_LITE_FILL_NON_ZERO, // Fill rule, pixels are drawn as long as they are covered
     &matrix,
-    VG_LITE_BLEND_NONE, // 颜色混合规则，None 表示忽略透明度直接覆盖
-    0xff0000ff // RGBA 颜色，这个值表示不透明的红色
+    VG_LITE_BLEND_NONE, // Color blending rule, None means ignore transparency and directly overwrite
+    0xff0000ff // RGBA color, this value represents opaque red
 ));
-CHECK_ERROR(vg_lite_finish()); // 提交到 GPU
+CHECK_ERROR(vg_lite_finish()); // Submit to the GPU
 ```
 
-The complete reference code can be viewed in vglite_drm, and below is the plotted effect.
+The complete reference code can be found in `vglite_drm`, and the result of the drawing is shown below.
 
-![A simple triangle to draw](../../../zh/02_applications/tutorials/images/gpu-2.jpg)
+![Simple drawn triangle](../../../zh/02_applications/tutorials/images/gpu-2.jpg)
 
-It is easy to see that the coordinate system is right in the positive x direction and the following is the positive direction of y, which is also the coordinate system used by SVG.
+It is easy to see that the coordinate system has the positive x direction to the right and the positive y direction downward, which is also the coordinate system used by SVG.
 
-It should be noted that I just said that `vg_lite_draw` "rendering" is in quotation marks, because there is  no real rendering, just write rendering instructions`vg_lite_finish`, and the final rendering needs to be called, which is good for performance, and can be called many times in actual use`vg_lite_draw`, and then executed before the final actual display`vg_lite_finish`, because is a system call, there is a certain overhead, and `vg_lite_finish` `vg_lite_draw` No, it can be executed quickly.
+It should be noted that when I mentioned "rendering" with `vg_lite_draw`, it was in quotes because it doesn't actually render; it just writes the rendering commands. The final rendering requires calling `vg_lite_finish`, which is beneficial for performance. In practical use, you can call `vg_lite_draw` multiple times and then execute `vg_lite_finish` just before the actual display, since `vg_lite_finish` is a system call with some overhead, while `vg_lite_draw` is not and can be executed very quickly.
 
-When the rendering is completed, the result can be displayed to the screen or saved as a picture, you need to pay attention to the CPU to read the data when saving the picture, so you need to make sure that `vg_lite_buffer_t::memory` it  is readable, if the reader uses the above DRM code to create `vg_lite_buffer_t` , then it cannot be read without mapping DRM dumb.
+After rendering is complete, you can display the result on the screen or save it as an image. Note that when saving an image, the CPU reads the data, so you need to ensure that `vg_lite_buffer_t::memory` is readable. If you use the DRM code above to create `vg_lite_buffer_t`, you won't be able to read it if the DRM dumb is not mapped.
 
-### curve
+### Curves
 
-The K230 GPU supports three curves, which are:
+The K230 GPU supports three types of curves:
 
-1. Quadratic Bezier curve
-1. Cubic Bezier curve
-1. Elliptic curve
+1. Quadratic Bézier curves
+1. Cubic Bézier curves
+1. Elliptical arcs
 
-Of course, elliptic curves can be fitted with cubic Bezier curves, which can essentially be regarded as the same curve type, as in the case of drawing polygons, only need to modify the opcode and data.
+Of course, elliptical arcs can be approximated using cubic Bézier curves, essentially making them the same type of curve. Similar to drawing polygons, you only need to modify the opcodes and data.
 
-Below we try to change the base edge of the triangle just drawn to a quadratic Bezier curve, and place the midpoint `(1,1)`at the place, draw a pattern with approximately rounded corners, and change the above `path_data` to
+Let's try changing the bottom edge of the previously drawn triangle to a quadratic Bézier curve, with the midpoint at `(1,1)`, to draw a shape resembling a rounded corner. Modify the `path_data` as follows:
 
 ```c
 uint8_t path_data[] = {
     2, 0, 0,
     4, 0, 1,
-    6, 1, 1, 1, 0, // 二次贝塞尔曲线，控制点(1,1)，画到(1,0)
+    6, 1, 1, 1, 0, // Quadratic Bézier curve, control point (1,1), draw to (1,0)
     4, 0, 0,
-0};
+    0
+};
 ```
 
-Of course, to get a better view of the curve, we turned the zoom factor larger, say 500x, and made the displacement smaller so that the pattern is approximately in the center of the screen
+To better observe this curve, increase the scaling factor, say to 500 times, and adjust the translation to approximately center the shape on the screen.
 
 ```c
 vg_lite_translate(buffer.width / 2., buffer.height / 2., &matrix);
 vg_lite_scale(500., 500., &matrix);
 ```
 
-The final pattern is drawn like this
+The final drawn shape looks like this:
 
-![A sector with approximately rounded corners](../../../zh/02_applications/tutorials/images/gpu-3.jpg)
+![Approximate rounded sector](../../../zh/02_applications/tutorials/images/gpu-3.jpg)
 
-### Bitmap fill
+### Bitmap Fill
 
-When not satisfied with monochrome filling, you can use bitmap to fill, bitmap files will be rendered to the target location, of course, bitmaps must also be `vg_lite_buffer_t` ,  if you need to load from local JPEG/PNG files, then it is recommended to use off-screen buffer to store pixel content, with `vg_lite_blit` or  to `vg_lite_draw_pattern` render.
+When you are not satisfied with single-color filling, you can use a bitmap to fill. The bitmap will be rendered to the target position, but the bitmap also needs to be a `vg_lite_buffer_t`. If you need to load from local JPEG/PNG files, it is recommended to use an off-screen buffer to store the pixel content and use `vg_lite_blit` or `vg_lite_draw_pattern` for rendering.
 
 ### Gradient
 
-For the implementation of VGLite, the gradient itself is a special bitmap filling, `linear_grad` the related function will allocate a 1x256 buffer for BLIT, of course, the user can not care about the above details, take it to use, refer to `linearGrad` the  demo, the specific process can be divided into the following calls
+For VGLite, gradients are a special type of bitmap fill. The `linear_grad` related functions allocate a 1x256 buffer for BLIT. Users can ignore these details and just use them. Refer to the `linearGrad` demo. The specific process can be divided into the following calls:
 
-1. `vg_lite_init_grad` Initialize a gradient
-1. `vg_lite_set_grad` Set color and stop center, up to 16 stop center is supported
-1. `vg_lite_update_grad` Update the gradient
-1. `vg_lite_get_grad_matrix` Gets the transformation matrix pointer for the gradient
-1. Adjustments to the transformation matrix, such as rotation and scaling, have a default length of 256 pixels from left to right, which is required for gradients in other directions
-1. `vg_lite_draw_gradient` Draw a gradient
+1. `vg_lite_init_grad` initializes a gradient.
+1. `vg_lite_set_grad` sets the colors and stops, supporting up to 16 stops.
+1. `vg_lite_update_grad` updates the gradient.
+1. `vg_lite_get_grad_matrix` gets the pointer to the gradient's transformation matrix.
+1. Adjust the transformation matrix, such as rotating and scaling. The default length is 256 pixels from left to right. If you need a gradient in another direction, use this matrix to operate.
+1. `vg_lite_draw_gradient` draws the gradient.

@@ -4,7 +4,7 @@
 [![Gitee repository](https://img.shields.io/badge/gitee-repository-blue?logo=gitee&style=plastic)](https://gitee.com/kendryte/k230_docs)
 [![GitHub release](https://img.shields.io/github/v/release/kendryte/k230_docs?color=brightgreen&display_name=tag&logo=github&style=plastic)](https://github.com/kendryte/k230_docs/releases)
 
-[中文文档](README.md) | [English Docs](README_en.md)
+[中文文档](https://developer.canaan-creative.com/k230/zh/dev/index.html) | [English Docs](https://developer.canaan-creative.com/k230/en/dev/index.html)
 
 [TOC]
 
@@ -28,7 +28,7 @@
 | --- | --- |
 | [K230_DEMO_BOARD_Resource_Usage_Instructions.md](en/00_hardware/K230_DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board Hardware Resource Usage Documentation |
 | [K230_Hardware_Design_Guide.md](en/00_hardware/K230_Hardware_Design_Guide.md) | K230 Hardware Design Guide document |
-| [K230_PINOUT_V1.0_20230524](zh/00_hardware/K230_PINOUT_V1.0_20230524.xlsx) | K230 chip pin definition |
+| [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx) | K230 chip pin definition |
 | [K230_datasheet.md](en/00_hardware/K230_datasheet.md) | K230 Datasheet |
 
 ### K230 LP3 engineering design file
@@ -65,6 +65,7 @@
 | [K230-SIP-EVB-V1_0-A_1_20230316-BOM](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1_20230316-BOM.xlsx) | The BOM of the device used in the K230D Demo Board |
 | [K230-SIP-EVB-V1_0-A_1-20230316.DSN](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1-20230316.DSN) | K230D Demo Board Cadence CIS Capture File |
 | [K230-SIP-EVB-V1.0-A.1-20230317.pdf](zh/00_hardware/K230D/K230-SIP-EVB-V1.0-A.1-20230317.pdf) | K230D Demo Board schematic pdf file |
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230D%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230D-Zero_V1.0_2024-07-09.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件 |
 
 ### CanMV-K230 engineering design file
 
@@ -72,6 +73,7 @@
 | --- | --- |
 | [CanMV-K230-V1.0_2023-09-15.pdf](zh/00_hardware/CanMV_K230/CanMV-K230-V1.0_2023-09-15.pdf) | CanMV-K230 Demo Board schematic pdf file|
 | [CanMV-K230_2023-10-11.html](zh/00_hardware/CanMV_K230/CanMV-K230_2023-10-11.html) | CanMV-K230 Demo Board bitmap file|
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/CanMV-K230%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230-LP4-V3.0-20240509.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件|
 
 ## K230 SDK software documentation
 
@@ -79,7 +81,7 @@
 
 | Document name | Summary of the documentation |
 | --- | --- |
-| [K230_SDK_Instructions.md](en/01_software/board/K230_SDK_Instructions.md) | K230 SDK instructions|
+| [K230_SDK_User_Manual.md](en/01_software/board/K230_SDK_User_Manual.md) | K230 SDK instructions|
 
 #### K230 SDK nncase docs
 
@@ -157,7 +159,7 @@
 | [K230_Practical_Basics_hello_world.md](en/02_applications/tutorials/K230_Practical_Basics_hello_world.md) | K230 Practical Basics - hello world|
 | [K230_Inter_Processer_Communication_sharefs_Usage.md](en/02_applications/tutorials/K230_Inter_Processer_Communication_sharefs_Usage.md) | K230 Inter Processer Communication Sharefs Usage|
 | [K230_GPU_Practice.md](en/02_applications/tutorials/K230_GPU_Practice.md) | K230 GPU in action - VGLite paints cool graphics|
-| [KK230_GUI_Practice_Porting_Tutorial.md](en/02_applications/tutorials/K230_GUI_Practice_Porting_Tutorial.md) | K230 GUI in Action - LVGL Porting Tutorial|
+| [K230_GUI_Practice_LVGL_Porting_Tutorial.md](en/02_applications/tutorials/K230_GUI_Practice_LVGL_Porting_Tutorial.md) | K230 GUI in Action - LVGL Porting Tutorial|
 | [K230_RVV_In_Action.md](en/02_applications/tutorials/K230_RVV_In_Action.md) | K230 RVV in action|
 | [K230_RVV_optimization_performance_description.md](en/02_applications/tutorials/K230_RVV_optimization_performance_description.md) | K230 RVV optimization performance description|
 | [K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md](en/02_applications/tutorials/K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md) | K230 USB Application Practice - UVC Transmission YUV and Encoding Stream|
@@ -166,7 +168,7 @@
 | [K230_Audio_Capture_Playback_Codec_In_Action.md](en/02_applications/tutorials/K230_Audio_Capture_Playback_Codec_In_Action.md) | K230 Audio in Action - Audio capture, playback, codec|
 | [K230_Coding_In_Action_rtsp_server_build_and_push_stream.md](en/02_applications/tutorials/K230_Coding_In_Action_rtsp_server_build_and_push_stream.md) | K230 Coding in Action - rtsp sever build and stream|
 | [K230_AI_in_Action_HHB_Neural_Network_Model_Deployment_Tool.md](en/02_applications/tutorials/K230_AI_in_Action_HHB_Neural_Network_Model_Deployment_Tool.md) | K230 AI in Action - HHB Neural Network Model Deployment Tool|
-| [K230_Memory_Analysis_Guide.md](en/02_applications/tutorials/K230_Memory_Analysis_Guide.md) | K230 Memory Analysis Guide|
+| [K230_Memory_Usage_Analysis_Guide.md](en/02_applications/tutorials/K230_Memory_Usage_Analysis_Guide.md) | K230 Memory Analysis Guide|
 | [K230_Memory_Optimization_Guide.md](en/02_applications/tutorials/K230_Memory_Optimization_Guide.md) | K230 Memory Optimization Guide|
 | [K230_Boot_Optimization_Guide.md](en/02_applications/tutorials/K230_Boot_Optimization_Guide.md) | K230 Boot Optimization Guide|
 
@@ -191,6 +193,9 @@
 | --- | --- |
 | [K230_FAQ.md](en/03_other/K230_FAQ.md) | K230 SDK FAQ|
 | [K230_SDK_Release_Notes.md](en/03_other/K230_SDK_Release_Notes.md) | K230 SDK Release Notes|
+| [K230_AI_demo_FAQ_C++.md](en/03_other/K230_AI_demo_FAQ_C++.md) | K230_AI_demo_FAQ |
+| [K230_nncase_FAQ.md](en/03_other/K230_nncase_FAQ.md) | K230_nncase_FAQ |
+| [K230_AI_Cube_FAQ.md](en/03_other/K230_AI_Cube_FAQ.md) | K230_AI_Cube_FAQ |
 
 ## Contribution guidelines
 

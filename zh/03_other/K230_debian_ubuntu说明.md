@@ -73,9 +73,9 @@
 >
 > 说明3：网口不稳定如果找不到网口，重启下板子,
 
-## 2.k230 debian根文件系统制作及验证
+## 2 k230 debian根文件系统制作及验证
 
-### 2.1环境
+### 2.1 环境
 
 我是在ubuntu21.04系统下制作的debian根文件系统（其他系统应该也可以），制作时需要root权限；
 
@@ -88,7 +88,7 @@ wangjianxin@v:~/t$ lsb_release  -a
  Codename:       hirsute
 ```
 
-### 2.2debian rootfs制作
+### 2.2 debian rootfs制作
 
 参考下面命令构建debian 根文件系统；
 
@@ -114,7 +114,7 @@ tar -czvf debian13.ext4.tar.gz debian13.ext4
 #debian13.ext4.tar.gz 是debian的ext4格式根文件系统压缩包
 ```
 
-### 2.3镜像制作
+### 2.3 镜像制作
 
 1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#4-sdk-编译)
 
@@ -157,7 +157,7 @@ make build-image
 
 备注：网口不稳定，如果找不到网口，请重启设备试下。
 
-### 2.3gcc验证
+### 2.3 gcc验证
 
 备注：网口不稳定，如果没有找到网口请重启试下。
 
@@ -175,9 +175,9 @@ gcc a.c
 ./a.out 
 ```
 
-## 3. k230 ubuntu23系统制作及验证
+## 3 k230 ubuntu23系统制作及验证
 
-### 3.1环境
+### 3.1 环境
 
 制作k230 ubuntu23需要ubuntu23的操作系统，我是使用如下dockerfile建的ubuntu系统，
 
@@ -203,7 +203,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ```
 
-### 3.2k230 ubuntu根文件系统制作
+### 3.2 k230 ubuntu根文件系统制作
 
 使用下面脚本制作k230 ubuntu23 root文件系统。
 
@@ -239,7 +239,7 @@ mkfs.ext4  -d ubuntu23_rootfs  -r 1 -N 0 -m 1 -L "rootfs" -O ^64bit ubuntu23_roo
 tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
 ```
 
-### 3.3镜像制作及验证
+### 3.3 镜像制作及验证
 
 1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#43-编译-sdk)
 
@@ -298,11 +298,11 @@ gcc a.c
 ./a.out 
 ```
 
-## 4.添加Qt及lxqt支持
+## 4 添加Qt及lxqt支持
 
-### 4.1安装Qt, lxqt
+### 4.1 安装Qt, lxqt
 
-参考[debian根文件系统制作](#22debian-rootfs制作)或[ubuntu根文件系统制作](#32k230-ubuntu根文件系统制作)步骤
+参考[debian根文件系统制作](#22-debian-rootfs制作)或[ubuntu根文件系统制作](#32-k230-ubuntu根文件系统制作)步骤
 
 ```sh
 chroot /path/to/rootfs
@@ -341,11 +341,11 @@ source env.sh
 /usr/lib/riscv64-linux-gnu/qt5/examples/gui/analogclock/analogclock
 ```
 
-### 4.3运行lxqt
+### 4.3 运行lxqt
 
 目前lxqt只能通过X11Forwarding在pc或其他平台显示，通过ssh -X连接到板子，然后执行`startlxqt`
 
-## 5.参考资料
+## 5 参考资料
 
 <https://wiki.debian.org/RISC-V>
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>

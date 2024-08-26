@@ -14,6 +14,7 @@ sys.path.append(os.path.abspath('exts'))
 project = 'K230'
 copyright = f'{datetime.datetime.now().year} Canaan Inc'
 author = 'Canaan'
+smv_default_version = 'dev'
 # release = '0.1'
 
 # -- General configuration ---------------------------------------------------
@@ -26,7 +27,7 @@ extensions = [
     'sphinxcontrib.mermaid'
 ]
 html_js_files = [
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.8/mermaid.min.js',
+    'mermaid.min.js',
     'init_mermaid.js',
 ]
 source_suffix = {
@@ -41,15 +42,11 @@ exclude_patterns = ['venv', 'exts', 'en', 'zh/template']
 language = os.getenv('SPHINX_LANGUAGE', 'en')
 
 # Set the title based on the language
-if language == 'en':
-    html_title = 'K230 Docs'
-else:
-    html_title = 'K230 文档'
-
+html_title = 'K230 Linux+RT-Smart SDK'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-myst_heading_anchors = 7
+myst_heading_anchors = 6
 suppress_warnings = ["myst.header"]
 
 html_copy_source = True
@@ -66,12 +63,15 @@ default_dark_mode = True
 
 locale_dirs = ['locale']
 
-html_css_files = ['topbar.css', 'custom-theme.css']
+html_css_files = ['topbar.css', 'custom-theme.css', 'auto-num.css']
 
 html_theme_options = {
     'collapse_navigation': True,
     "repository_url": "https://github.com/kendryte/k230_docs",
     'navigation_depth': 7,
     "primary_sidebar_end": ["versionsFlex.html"],
-    "use_repository_button": True
+    "use_repository_button": True,
+    "footer_start": ["Fleft.html"],
+	"footer_center": ["Footer.html"],
+	"footer_end" : ["Fright.html"]
 }

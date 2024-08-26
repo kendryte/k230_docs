@@ -49,13 +49,13 @@
 有以下两种方式可供确认版本信息是否匹配：
 
 - 通过[版本对应关系表](./K230_SDK_nncase版本对应关系.md#k230-sdk-nncase版本对应关系)查询。
-- 通过镜像名字确定两者的版本，例如 `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`，其中 `v1.4` 表示 SDK 版本，`v2.8.0` 表示 nncase 版本，即SDK-v1.4可以推理nncase-v2.8.0编译生成的 `kmodel`。
+- 通过镜像名字确定两者的版本，例如 `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`，其中 `v1.4` 表示SDK版本，`v2.8.0`表示 nncase 版本，即SDK-v1.4可以推理nncase-v2.8.0编译生成的 `kmodel`。
   镜像可通过[嘉楠开发者社区](https://developer.canaan-creative.com/resource)获取。
 
 ### 3. 版本不兼容解决办法
 
 1. 与SDK版本对齐
-   在确定好需要的nncase版本后，使用 `pip`进行安装，具体参考[nncase install](https://github.com/kendryte/nncase?tab=readme-ov-file#install)。
+   在确定好需要的nncase版本后，使用 `pip`进行安装，具体参考[nncase install](https://github.com/kendryte/nncase?tab=readme-ov-file#install)，之后重新编译`kmodel`。
 1. 与nncase版本对齐
    在[nncase release界面](https://github.com/kendryte/nncase/releases)下载与编译 `kmodel`时nncase版本一致的运行时库，例如，"nncase_k230_v2.8.0_runtime.tgz"即为nncase-2.8.0的运行时库。之后按照以下步骤进行SDK中nncase运行时库版本更新：
 

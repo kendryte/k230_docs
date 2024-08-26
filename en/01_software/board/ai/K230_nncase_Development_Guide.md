@@ -1,98 +1,99 @@
 # K230 nncase Development Guide
 
-![cover](../../../images/canaan-cover.png)
+![cover](../../../../zh/01_software/board/ai/images/canaan-cover.png)
 
-Copyright 2023 Canaan Inc. ©
+Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
 
 <div style="page-break-after:always"></div>
 
 ## Disclaimer
 
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
+The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company" hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only.
 
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
+Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
 
-## Trademark Notice
+## Trademark Statement
 
-![The logo](../../../images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
+![logo](../../../../zh/01_software/board/ai/images/logo.png), "Canaan," and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
 
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
+**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
+Without the written permission of the Company, no unit or individual may excerpt, copy part or all of the content of this document, or disseminate it in any form.
 
 <div style="page-break-after:always"></div>
 
-## Directory
+## Table of Contents
 
 [TOC]
 
-## preface
+## Preface
 
 ### Overview
 
-This document is the K230 nncase user description document, providing users with how to install nncase, how to call compiler APIs to compile neural network models and runtime APIs to write AI inference programs.
+This document is the user guide for K230 nncase, providing users with instructions on how to install nncase, how to call compiler APIs to compile neural network models, and how to write AI inference programs using runtime APIs.
 
-### Reader object
+### Target Audience
 
-This document (this guide) is intended primarily for:
+This document (this guide) is mainly intended for the following personnel:
 
-- Technical Support Engineer
-- Software Development Engineer
+- Technical support engineers
+- Software development engineers
 
-### Definition of acronyms
+### Abbreviation Definitions
 
-| abbreviation | description                        |
-| ---- | -------------------------------------- |
-| PTQ  | Post-training quantization |
-| MSE  | mean-square error            |
+| Abbreviation | Description                               |
+| ------------ | ----------------------------------------- |
+| PTQ          | Post-training quantization                |
+| MSE          | Mean-square error                         |
 
-### Revision history
+### Revision History
 
-| Document version number | Modify the description                                            | Author             | date     |
-| ---------- | --------------------------------------------------- | ------------------ | -------- |
-| V1.0       | First version of the document                                            | Yang Zhang/Chenghai Huo | 2023/4/7 |
-| V1.1       | Uniformly change to word format, improve AI2D                         | Yang Zhang/Chenghai Huo | 2023/5/5 |
-| V1.2       | New architecture for nncase v2                                     | Yang Zhang/Qihang Zheng/Chenghai Huo | 2023/6/2 |
-| V1.3       | nncase_k230_v2.1.0, ai2d/runtime_tensor supports physical addresses | Yang Zhang      | 2023/7/3 |
+| Document Version | Modification Description                            | Modifier          | Date       |
+| ---------------- | --------------------------------------------------- | ----------------- | ---------- |
+| V1.0             | Initial version                                     | Zhang Yang/Huo Chenghai | 2023/4/7  |
+| V1.1             | Unified to Word format, improved ai2d               | Zhang Yang/Huo Chenghai | 2023/5/5  |
+| V1.2             | New architecture for nncase v2                      | Zhang Yang/Zheng Qihang/Huo Chenghai | 2023/6/2  |
+| V1.3             | nncase_k230_v2.1.0, ai2d/runtime_tensor supports physical address | Zhang Yang | 2023/7/3  |
+| V1.4             | Document description updated                        | Yang Haoqi        | 2024/5/15  |
 
 ## 1. Overview
 
 ### 1.1 What is nncase
 
-nncase is a neural network compiler designed for AI accelerators, and currently supports targets such as CPU/K210/K510/K230.
+nncase is a neural network compiler designed for AI accelerators. Currently supported targets include CPU/K210/K510/K230, etc.
 
-Features provided by nncase
+Features provided by nncase:
 
-- Support multiple-input multiple-output network, support multi-branch structure
+- Supports multi-input multi-output networks and multi-branch structures
 - Static memory allocation, no heap memory required
-- Operator merging and optimization
+- Operator fusion and optimization
 - Supports float and uint8/int8 quantized inference
-- Supports post-training quantization, using floating-point models and quantization calibration sets
-- Flat model with zero-copy loading
+- Supports post-training quantization using floating-point models and quantization calibration sets
+- Flat model, supports zero-copy loading
 
-Neural network model formats supported by nncase
+Supported neural network model formats by nncase:
 
-- tflite
-- onnx
+- TFLite
+- ONNX
 
-### 1.2 nncase architecture
+### 1.2 nncase Architecture
 
 ![nncase architecture](../../../../zh/01_software/board/ai/images/185762ac17039d6c4961faa2fba0d66e.png)
 
-The nncase software stack consists of two parts: compiler and runtime.
+The nncase software stack includes two parts: compiler and runtime.
 
-Compiler: Used to compile a neural network model on a PC and finally generate a kmodel file. It mainly includes importer, IR, Evaluator, Quantize, Transform optimization, Tiling, Partition, Schedule, Codegen and other modules.
+Compiler: Used to compile neural network models on a PC, ultimately generating kmodel files. It mainly includes modules such as importer, IR, Evaluator, Quantize, Transform optimization, Tiling, Partition, Schedule, and Codegen.
 
-- Importer: Import models from other neural network frameworks into nncase
-- IR: Intermediate representation, divided into Neutral IR imported by importer (device-independent) and Target IR (device-dependent) generated by Neutral IR through lower conversion
-- Evaluator: Evaluator provides IR interpretation execution capabilities and is often used in scenarios such as Constant Folding/PTQ Calibration
-- Transform: Used for IR conversion and graph traversal optimization, etc
-- Quantize: Quantize after training, add quantization tags to the tensor to be quantized, call Evaluator to interpret and execute according to the input correction set, collect the data range of tensor, insert quantization/dequantization nodes, and finally optimize to eliminate unnecessary quantization/dequantization nodes
-- Tiling: Limited by the low memory capacity of NPU, large chunks of computation need to be split. In addition, selecting the Tiling parameter when there is a large amount of data multiplexing will affect the delay and bandwidth
-- Partition: Divide the graph according to ModuleType, each subgraph after splitting will correspond to the RuntimeModule, and different types of RuntimeModule will correspond to different Devices (cpu/K230)
-- Schedule: Generates a calculation order and allocates Buffers based on data dependencies in the optimized graph
-- Codegen: Call the codegen corresponding to ModuleType for each subgraph to generate a RuntimeModule
+- Importer: Imports models from other neural network frameworks into nncase
+- IR: Intermediate Representation, divided into Neutral IR (device-independent) imported by the importer and Target IR (device-specific) generated by lowering the Neutral IR
+- Evaluator: Provides interpretation execution capabilities for IR, often used in scenarios such as Constant Folding/PTQ Calibration
+- Transform: Used for IR transformation and graph traversal optimization
+- Quantize: Post-training quantization, adds quantization tags to the tensors to be quantized, collects tensor data ranges by calling the Evaluator for interpretation execution based on the input calibration set, inserts quantization/dequantization nodes, and finally optimizes to eliminate unnecessary quantization/dequantization nodes
+- Tiling: Due to the limited memory capacity of NPU, large computations need to be split. Additionally, choosing Tiling parameters when there is a large amount of data reuse in computations can impact latency and bandwidth
+- Partition: Splits the graph according to ModuleType, each subgraph corresponds to a RuntimeModule, and different types of RuntimeModules correspond to different Devices (CPU/K230)
+- Schedule: Generates the computation order and allocates buffers based on the data dependency relationships in the optimized graph
+- Codegen: Calls the codegen corresponding to each subgraph's ModuleType to generate RuntimeModules
 
-Runtime: Integrated in the user app, it provides functions such as loading kmodel/setting input data/KPU execution/obtaining output data.
+Runtime: Integrated into the user's App, providing functions such as loading kmodel, setting input data, executing KPU, and retrieving output data.
 
 ### 1.3 Development Environment
 
@@ -102,28 +103,28 @@ Supported operating systems include Ubuntu 18.04/Ubuntu 20.04
 
 #### 1.3.2 Software Environment
 
-| serial number | Software            | Version number               |
-| ---- | --------------- | -------------------- |
-| 1    | python          | 3.6/3.7/3.8/3.9/3.10 |
-| 2    | pip             | \>=20.3              |
-| 3    | numpy           | 1.19.5               |
-| 4    | onnx            | 1.9.0                |
-| 5    | onnx-simplifier | 0.3.6                |
-| 6    | Onnxoptimizer   | 0.2.6                |
-| 7    | Onnxruntime     | 1.8.0                |
-| 8    | dotnet-runtime  | 7.0                  |
+| No. | Software         | Version              |
+| --- | ---------------- | -------------------- |
+| 1   | python           | 3.6/3.7/3.8/3.9/3.10 |
+| 2   | pip              | \>=20.3              |
+| 3   | numpy            | 1.19.5               |
+| 4   | onnx             | 1.9.0                |
+| 5   | onnx-simplifier  | 0.3.6                |
+| 6   | Onnxoptimizer    | 0.2.6                |
+| 7   | Onnxruntime      | 1.8.0                |
+| 8   | dotnet-runtime   | 7.0                  |
 
 #### 1.3.3 Hardware Environment
 
 K230 evb
 
-## 2. Compiling Model APIs (Python)
+## 2. Model Compilation APIs (Python)
 
 nncase provides Python APIs for compiling neural network models on a PC
 
-### 2.1 Supported operators
+### 2.1 Supported Operators
 
-#### 2.1.1 tflite arithmetic
+#### 2.1.1 TFLite Operators
 
 | Operator                | Is Supported |
 | ----------------------- | ------------ |
@@ -206,7 +207,7 @@ nncase provides Python APIs for compiling neural network models on a PC
 | SPLIT                   | Yes          |
 | HARD_SWISH              | Yes          |
 
-#### 2.1.2 ONNX arithmetic
+#### 2.1.2 ONNX Operators
 
 | Operator              | Is Supported |
 | --------------------- | ------------ |
@@ -330,128 +331,169 @@ nncase provides Python APIs for compiling neural network models on a PC
 
 ### 2.2 APIs
 
-Currently, the compiled model APIs support deep learning models in TFLITE/ONNX/Caffe and other formats.
+Currently, the model compilation APIs support deep learning models in TFLite/ONNX formats.
 
 #### 2.2.1 CompileOptions
 
-【Description】
+**Description**:
 
-The CompileOptions class, which configures nncase compilation options
+The `CompileOptions` class is used to configure nncase compilation options. The descriptions of each attribute are as follows:
 
-【Definition】
+| Attribute Name              |        Type         | Required | Description                                                                                                           |
+| --------------------------- | :-----------------: | :------: | --------------------------------------------------------------------------------------------------------------------- |
+| target                      |       string        |    Yes   | Specifies the compilation target, such as 'cpu' or 'k230'                                                             |
+| dump_ir                     |        bool         |    No    | Specifies whether to dump IR, defaults to False                                                                       |
+| dump_asm                    |        bool         |    No    | Specifies whether to dump asm assembly files, defaults to False                                                       |
+| dump_dir                    |       string        |    No    | Specifies the directory to dump files when dump_ir or other dump options are enabled, defaults to ""                  |
+| input_file                  |       string        |    No    | Specifies the parameter file path when the ONNX model exceeds 2GB, defaults to ""                                     |
+|                             |                     |          |                                                                                                                       |
+| preprocess                  |        bool         |    No    | Specifies whether to enable preprocessing, defaults to False. The following parameters are effective only when `preprocess=True` |
+| input_type                  |       string        |    No    | Specifies the input data type when preprocessing is enabled, defaults to "float". When `preprocess` is `True`, must be "uint8" or "float32" |
+| input_shape                 |      list[int]      |    No    | Specifies the shape of the input data when preprocessing is enabled, defaults to []. When `preprocess` is `True`, must be specified |
+| input_range                 |     list[float]     |    No    | Specifies the floating-point range of the input data after dequantization when preprocessing is enabled, defaults to []. When `preprocess` is `True` and `input_type` is `uint8`, must be specified |
+| input_layout                |       string        |    No    | Specifies the layout of the input data, defaults to ""                                                                |
+| swapRB                      |        bool         |    No    | Specifies whether to reverse the data in the `channel` dimension, defaults to False                                   |
+| mean                        |     list[float]     |    No    | Mean value for preprocessing normalization, defaults to [0,0,0]                                                       |
+| std                         |     list[float]     |    No    | Standard deviation for preprocessing normalization, defaults to [1,1,1]                                               |
+| letterbox_value             |       float         |    No    | Specifies the fill value for letterbox preprocessing, defaults to 0                                                   |
+| output_layout               |       string        |    No    | Specifies the layout of the output data, defaults to ""                                                               |
+|                             |                     |          |                                                                                                                       |
+| shape_bucket_enable         |        bool         |    Yes   | Specifies whether to enable ShapeBucket functionality, defaults to False. Effective when `dump_ir=True`               |
+| shape_bucket_range_info     | Dict[str, [int, int]] |    Yes   | Specifies the range of variables in each dimension of the input shape, minimum value must be greater than or equal to 1 |
+| shape_bucket_segments_count |         int         |    Yes   | Specifies the number of segments to divide the input variable's range                                                 |
+| shape_bucket_fix_var_map    |   Dict[str, int]    |    No    | Specifies fixed values for variables in the shape dimension information                                               |
+
+##### 2.2.1.1 Preprocessing Workflow
+
+Currently, custom preprocessing order is not supported. You can configure the required preprocessing parameters based on the following workflow diagram.
+
+<div class="mermaid">
+graph TD;
+    NewInput("NewInput<br>(shape = input_shape<br>dtype = input_type)") -->a(input_layout != ' ')-.Y.->Transpose1["transpose"] -.->b("SwapRB == True")-.Y.->SwapRB["SwapRB"]-.->c("input_type != float32")-.Y.->Dequantize["Dequantize"]-.->d("input_HW != model_HW")-.Y.->LetterBox["LetterBox"] -.->e("std not empty<br>mean not empty")-.Y.->Normalization["Normalization"]-.->OldInput-->Model_body-->OldOutput-->f("output_layout != ' '")-.Y.->Transpose2["Transpose"]-.-> NewOutput;
+    a--N-->b--N-->c--N-->d--N-->e--N-->OldInput; f--N-->NewOutput;
+    subgraph origin_model
+        OldInput; Model_body ; OldOutput;
+    end
+</div>
+
+Parameter explanations:
+
+1. `input_range` specifies the floating-point range after dequantization when the input data type is fixed-point.
+
+   a. If the input data type is uint8 and the range is [0,255], setting `input_range` to [0,255] means dequantization only converts the data type from uint8 to float32. The `mean` and `std` parameters should still be specified based on data in the range [0,255].
+
+   b. If the input data type is uint8 and the range is [0,255], setting `input_range` to [0,1] means dequantization will convert fixed-point data to floating-point data in the range [0,1]. The `mean` and `std` parameters should be specified based on data in the range [0,1].
+
+   <div class="mermaid">
+    graph TD;
+        NewInput_uint8("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,255 -->dequantize_0["Dequantize"]--float range:0,255--> OldInput_float32
+        NewInput_uint81("NewInput_uint8 <br>[input_type:uint8]") --input_range:0,1 -->dequantize_1["Dequantize"]--float range:0,1--> OldInput_float32
+   </div>
+
+1. `input_shape` specifies the shape of the input data, and `input_layout` specifies its layout. It currently supports both string (e.g., `"NHWC"`, `"NCHW"`) and index formats. Non-4D data processing is also supported. When configured as a string, `input_layout` specifies the layout of the input data. When configured as an index, `input_layout` specifies the permutation parameter for a `Transpose` operation.
+
+<div class="mermaid">
+graph TD;
+    subgraph B
+        NewInput1("NewInput: 1,4,10") --"input_layout:"0,2,1""-->Transpose2("Transpose perm: 0,2,1") --> OldInput2("OldInput: 1,10,4");
+    end
+    subgraph A
+        NewInput --"input_layout:"NHWC""--> Transpose0("Transpose: NHWC2NCHW") --> OldInput;
+        NewInput("NewInput: 1,224,224,3 (NHWC)") --"input_layout:"0,3,1,2""--> Transpose1("Transpose perm: 0,3,1,2") --> OldInput("OldInput: 1,3,224,224 (NCHW)");
+    end
+</div>
+
+Similarly, `output_layout` can be configured as shown below.
+
+<div class="mermaid">
+graph TD;
+subgraph B
+    OldOutput1("OldOutput: 1,10,4,5,2") --"output_layout: "0,2,3,1,4""--> Transpose5("Transpose perm: 0,2,3,1,4") --> NewOutput1("NewOutput: 1,4,5,10,2");
+    end
+subgraph A
+    OldOutput --"output_layout: "NHWC""--> Transpose3("Transpose: NCHW2NHWC") --> NewOutput("NewOutput<br>NHWC");
+    OldOutput("OldOutput: (NCHW)") --"output_layout: "0,2,3,1""--> Transpose4("Transpose perm: 0,2,3,1") --> NewOutput("NewOutput<br>NHWC");
+    end
+</div>
+
+##### 2.2.1.2 Dynamic Shape Parameters
+
+ShapeBucket is a solution for dynamic shapes that optimizes based on the range of input lengths and the specified number of segments. This feature is disabled by default and needs to be enabled through the corresponding option. Apart from specifying the relevant field information, the rest of the compilation process is the same as compiling a static model.
+
+- ONNX
+
+In the shape information of a model, some dimensions may be variable names. For example, consider an ONNX model with the following inputs:
+
+> tokens: int64[batch_size, tgt_seq_len]  
+> step: float32[seq_len, batch_size]
+
+The shape information contains three variables: `seq_len`, `tgt_seq_len`, and `batch_size`. Although `batch_size` is a variable, it is fixed to 3 in actual use. Therefore, add `batch_size = 3` to **fix_var_map** to fix this dimension to 3 during runtime. The variables `seq_len` and `tgt_seq_len` are dynamic and need to be configured with their actual ranges in **range_info**. **segments_count** specifies the number of segments to divide the range into, which will proportionally increase the compilation time.
+
+Here is an example of the corresponding compilation parameters:
 
 ```python
-class CompileOptions:
-    benchmark_only: bool
-    dump_asm: bool
-    dump_dir: str
-    dump_ir: bool
-    swapRB: bool
-    input_range: List[float]
-    input_shape: List[int]
-    input_type: str
-    is_fpga: bool
-    mean: List[float]
-    std: List[float]
-    output_type: str
-    preprocess: bool
-    quant_type: str
-    target: str
-    w_quant_type: str
-    use_mse_quant_w: bool
-    input_layout: str
-    output_layout: str
-    letterbox_value: float
-    tcu_num: int
-
-    def __init__(self) -> None:
-        self.benchmark_only = False
-        self.dump_asm = True
-        self.dump_dir = "tmp"
-        self.dump_ir = False
-        self.is_fpga = False
-        self.quant_type = "uint8"
-        self.target = "cpu"
-        self.w_quant_type = "uint8"
-        self.use_mse_quant_w = True
-        self.tcu_num = 0
-
-        self.preprocess = False
-        self.swapRB = False
-        self.input_range = []
-        self.input_shape = []
-        self.input_type = "float32"
-        self.mean = [0, 0, 0]
-        self.std = [1, 1, 1]
-        self.input_layout = ""
-        self.output_layout = ""
-        self.letterbox_value = 0
+compile_options = nncase.CompileOptions()
+compile_options.shape_bucket_enable = True
+compile_options.shape_bucket_range_info = {"seq_len": [1, 100], "tgt_seq_len": [1, 100]}
+compile_options.shape_bucket_segments_count = 2
+compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-【Attributes】
+- TFLite
 
-| name            | type   | description                                                         |
-| --------------- | ------ | ------------------------------------------------------------ |
-| dump_asm        | bool   | Specifies whether to dump the asm assembly file, which defaults to True                         |
-| dump_dir        | bool   | After specifying the dump_ir and other switches earlier, specify the dump directory here, which defaults to "tmp"     |
-| dump_ir         | bool   | Specifies whether to dump IR, which defaults to False                                 |
-| swapRB          | bool   | Whether to exchange RGB input data red and blue channels (RGB--\>BGR or BGR--\>RGB), the default is False |
-| input_range     | list   | After the input data is dequantized, the range corresponding to the floating-point number is defaulted`[0，1]`             |
-| input_shape     | list   | Specify the shape of the input data, the layout of the input_shape needs to be consistent with the input layout, and the letterbox operation (resize/pad, etc.) will be performed when the input_shape of the input data is inconsistent with the input shape of the model. |
-| input_type      | string | Specifies the type of input data, defaulting to 'float32'                          |
-| mean            | list   | Pre-processing normalized parameter mean, defaulted`[0, 0, 0]`                      |
-| Std             | list   | Pre-process normalized parameter variance, defaulted to`[1, 1, 1]`                      |
-| output_type     | string | Specify the type of output data, e.g. 'float32', 'uint8' (only for specifying quantization) |
-| preprocess      | bool   | If pre-processing is enabled, the default value is False                                  |
-| target          | string | Specify the compilation target, such as 'k210', 'k510', 'k230'                       |
-| letterbox_value | float  | Specifies the padding value of the pre-processing letterbox                                  |
-| input_layout    | string | Specify the layout of the input data, such as 'NCHW', 'NHWC'. If the layout of the input data is different from the layout of the model itself, nncase will insert transpose for conversion |
-| output_layout   | string | Specify the layout of the output data, such as 'NCHW', 'NHWC'. If the layout of the output data is different from the layout of the model itself, nncase will insert transpose for conversion. |
-
-【Note】
-
-1. input range is the range of floating-point numbers, that is, if the input data type is uint8, input range is the range after dequantization to floating-point (can not be 0\~1), which can be freely specified.
-1. input_shape needs to be specified according to the input_layout. Take `[1，224，224，3]` for example. If the input_layout is NCHW, the input_shape needs to be specified `[1,3,224,224]`. If input_layout is NHWC, the input_shape needs to be specified as`[1,224,224,3]`
-1. mean and std are parameters for normalize floating-point numbers, which users can freely specify.
-1. When using the letterbox function, you need to limit the input size to 1.5MB, and the size of a single channel to 0.75MB.
-
-For example:
-
-1. The input data type is uint8, input_range set to `[0,255]`, then the function of dequantization is only to perform type conversion, convert the data of uint8 to float32, and the mean and std parameters can still be specified according to the data of 0\~255
-1. If the input data type is uint8 and input_range is `[0,1]`, the `[0,1]` fixed-point number will be dequantized to a floating-point number of `[0,1]`, mean and std need to be specified according to the new floating-point range.
-
-The pre-processing process is as follows (all green nodes in the figure are optional):
-
-![Pre-processing process](../../../../zh/01_software/board/ai/images/540e27e83677e9457077ad1d45bc1980.png)
-
-【Example】
-
-Instantiate CompileOptions to configure the values of each property
+Unlike ONNX models, TFLite models do not currently label dimension names in the shape. Currently, only one dimension in the input can be dynamic, and it is uniformly named as -1. The configuration is as follows:
 
 ```python
-# compile_options
 compile_options = nncase.CompileOptions()
-compile_options.target = args.target
-compile_options.preprocess = True
-compile_options.swapRB = False
-compile_options.input_shape = input_shape
-compile_options.input_type = 'uint8'
-compile_options.input_range = [0, 255]
-compile_options.mean = [127.5, 127.5, 127.5]
-compile_options.std = [127.5, 127.5, 127.5]
-compile_options.input_layout = 'NCHW'
-compile_options.dump_ir = True
+compile_options.shape_bucket_enable = True
+compile_options.shape_bucket_range_info = {"-1":[1, 100]}
+compile_options.shape_bucket_segments_count = 2
+compile_options.shape_bucket_fix_var_map = {"batch_size" : 3}
+```
+
+After configuring these options, the entire compilation process is the same as for a static shape model.
+
+##### 2.2.1.3 Parameter Configuration Example
+
+Instantiate `CompileOptions` and configure the attribute values.
+
+```python
+compile_options = nncase.CompileOptions()
+
+compile_options.target = "cpu"  # "k230"
+compile_options.dump_ir = True  # if False, will not dump the compile-time result.
 compile_options.dump_asm = True
-compile_options.dump_dir = dump_dir
+compile_options.dump_dir = "dump_path"
+compile_options.input_file = ""
+
+# preprocess args
+compile_options.preprocess = False
+if compile_options.preprocess:
+    compile_options.input_type = "uint8"  # "uint8" "float32"
+    compile_options.input_shape = [1,224,320,3]
+    compile_options.input_range = [0,1]
+    compile_options.input_layout = "NHWC"  # "NHWC" "NCHW"
+    compile_options.swapRB = False
+    compile_options.mean = [0,0,0]
+    compile_options.std = [1,1,1]
+    compile_options.letterbox_value = 0
+    compile_options.output_layout = "NHWC"  # "NHWC" "NCHW"
+
+# Dynamic shape args
+compile_options.shape_bucket_enable = False
+if compile_options.shape_bucket_enable:
+    compile_options.shape_bucket_range_info = {"seq_len": [1, 100], "tgt_seq_len": [1, 100]}
+    compile_options.shape_bucket_segments_count = 2
+    compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
 #### 2.2.2 ImportOptions
 
-【Description】
+**Description**:
 
-The ImportOptions class, which configures nncase import options
+The `ImportOptions` class is used to configure nncase import options.
 
-【Definition】
+**Definition**:
 
 ```python
 class ImportOptions:
@@ -459,9 +501,9 @@ class ImportOptions:
         pass
 ```
 
-【Example】
+**Example**:
 
-Instantiate ImportOptions to configure the values of each property
+Instantiate `ImportOptions` and configure attribute values.
 
 ```python
 #import_options
@@ -470,96 +512,70 @@ import_options = nncase.ImportOptions()
 
 #### 2.2.3 PTQTensorOptions
 
-【Description】
+**Description**:
 
-The PTQTensorOptions class, which is used to configure nncase PTQ options
+The `PTQTensorOptions` class is used to configure nncase PTQ options.
 
-【Definition】
+| Name                            | Type   | Required | Description |
+| ------------------------------- | ------ | -------- | ----------- |
+| samples_count                   | int    |    No    | Specifies the number of samples used for the quantization calibration set |
+| calibrate_method                | string |    No    | Specifies the quantization method, options are 'NoClip' and 'Kld', default is 'Kld' |
+| finetune_weights_method         | string |    No    | Specifies whether to fine-tune weights, options are 'NoFineTuneWeights' and 'UseSquant', default is 'NoFineTuneWeights' |
+| quant_type                      | string |    No    | Specifies the data quantization type, options are 'uint8', 'int8', 'int16' |
+| w_quant_type                    | string |    No    | Specifies the weight quantization type, options are 'uint8', 'int8', 'int16' |
+|                                 |        |    No    | The above two types cannot both be 'int16' |
+| quant_scheme                    | string |    No    | Path to the quantization parameter configuration file |
+| quant_scheme_strict_mode        | bool   |    No    | Whether to strictly follow quant_scheme for quantization |
+| export_quant_scheme             | bool   |    No    | Whether to export the quantization parameter configuration file |
+| export_weight_range_by_channel  | bool   |    No    | Whether to export weights quantization parameters in `bychannel` form, it is recommended to set this parameter to `True` |
 
-```python
-class PTQTensorOptions:
-    calibrate_method: str
-    input_mean: float
-    input_std: float
-    samples_count: int
-    quant_type: str
-    w_quant_type: str
-    finetune_weights_method: str
-    use_mix_quant: bool
-    quant_scheme: str
-    export_quant_scheme: bool
-    export_weight_range_by_channel: bool
-    cali_data: List[RuntimeTensor]
+For detailed usage of mixed quantization, see [MixQuant Guide](https://github.com/kendryte/nncase/blob/release/2.0/docs/MixQuant.md)
 
-    def __init__(self) -> None:
-        self.calibrate_method: str = "Kld"
-        self.input_mean: float = 0.5
-        self.input_std: float = 0.5
-        self.samples_count: int = 5
-        self.quant_type: str = "uint8"
-        self.w_quant_type: str = "uint8"
-        self.finetune_weights_method: str = "NoFineTuneWeights"
-        self.use_mix_quant: bool = False
-        self.quant_scheme: str = ""
-        self.export_quant_scheme: bool = False
-        self.export_weight_range_by_channel: bool = False
-        self.cali_data: List[RuntimeTensor] = []
-
-    def set_tensor_data(self, data: List[List[np.ndarray]]) -> None:
-        reshape_data = list(map(list, zip(*data)))
-        self.cali_data = [RuntimeTensor.from_numpy(
-            d) for d in itertools.chain.from_iterable(reshape_data)]
-```
-
-【Attributes】
-
-| name                    | type   | description                                                         |
-| ----------------------- | ------ | ------------------------------------------------------------ |
-| calibrate_method        | string | Calibration method , supports 'NoClip', 'Kld', default value is 'Kld'               |
-| input_mean              | float  | The user specifies the mean of the input, default value of 0.5                              |
-| input_std               | float  | The user specifies the variance of the input, default value of 0.5                              |
-| samples_count           | Int    | Number of samples                                                     |
-| quant_type              | string | Specify the data quantization type, such as 'uint8', 'int8', the default value is 'uint8'        |
-| w_quant_type            | string | Specify the weight quantization type, such as 'uint8', 'int8', the default value is 'uint8'         |
-| finetune_weights_method | string | Adjust the weight methods, there are 'NoFineTuneWeights', 'UseSquant', the default value is 'NoFineTuneWeights' |
-| use_mix_quant           | bool   | Whether to use hybrid quantization, the default value is False                              |
-
-【Example】
+**Example**:
 
 ```python
 # ptq_options
 ptq_options = nncase.PTQTensorOptions()
 ptq_options.samples_count = 6
+ptq_options.finetune_weights_method = "NoFineTuneWeights"
+ptq_options.quant_type = "uint8"
+ptq_options.w_quant_type = "uint8"
 ptq_options.set_tensor_data(generate_data(input_shape, ptq_options.samples_count, args.dataset))
+
+ptq_options.quant_scheme = ""
+ptq_options.quant_scheme_strict_mode = False
+ptq_options.export_quant_scheme = True
+ptq_options.export_weight_range_by_channel = True
+
 compiler.use_ptq(ptq_options)
 ```
 
 #### 2.2.4 set_tensor_data
 
-【Description】
+**Description**:
 
-Set the tensor data
+Sets tensor data.
 
-【Definition】
+**Definition**:
 
 ```python
-    def set_tensor_data(self, data: List[List[np.ndarray]]) -> None:
-        reshape_data = list(map(list, zip(*data)))
-        self.cali_data = [RuntimeTensor.from_numpy(
-            d) for d in itertools.chain.from_iterable(reshape_data)]
+def set_tensor_data(self, data: List[List[np.ndarray]]) -> None:
+    reshape_data = list(map(list, zip(*data)))
+    self.cali_data = [RuntimeTensor.from_numpy(
+        d) for d in itertools.chain.from_iterable(reshape_data)]
 ```
 
-【Parameters】
+**[Parameters]**
 
-| name       | type   | description           |
-| ---------- | ------ | -------------- |
-| data | List[List[np.ndarray] |calibration data |
+| Name | Type                  | Description      |
+| ---- | --------------------- | ---------------- |
+| data | List[List[np.ndarray]] | Calibration data |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 ```shell
 # ptq_options
@@ -571,11 +587,11 @@ compiler.use_ptq(ptq_options)
 
 #### 2.2.5 Compiler
 
-【Description】
+**Description**:
 
-Compiler class is used to compile neural network models
+The `Compiler` class is used to compile neural network models.
 
-【Definition】
+**Definition**:
 
 ```python
 class Compiler:
@@ -589,11 +605,11 @@ class Compiler:
 
 #### 2.2.6 import_tflite
 
-【Description】
+**Description**:
 
-Import the tflite model
+Imports a TFLite model.
 
-【Definition】
+**Definition**:
 
 ```python
 def import_tflite(self, model_content: bytes, options: ImportOptions) -> None:
@@ -601,18 +617,18 @@ def import_tflite(self, model_content: bytes, options: ImportOptions) -> None:
     self._import_module(model_content)
 ```
 
-【Parameters】
+**[Parameters]**
 
-| name           | type          | description           |
-| -------------- | ------------- | -------------- |
-| model_content  | byte\[\]        | Read the model content |
-| import_options | ImportOptions | Import options       |
+| Name           | Type          | Description                |
+| -------------- | ------------- | -------------------------- |
+| model_content  | byte[]        | The content of the model   |
+| import_options | ImportOptions | Import options             |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 ```python
 model_content = read_model_file(model)
@@ -621,11 +637,11 @@ compiler.import_tflite(model_content, import_options)
 
 #### 2.2.7 import_onnx
 
-【Description】
+**Description**:
 
-Import the ONNX model
+Imports an ONNX model.
 
-【Definition】
+**Definition**:
 
 ```python
 def import_onnx(self, model_content: bytes, options: ImportOptions) -> None:
@@ -633,18 +649,18 @@ def import_onnx(self, model_content: bytes, options: ImportOptions) -> None:
     self._import_module(model_content)
 ```
 
-【Parameters】
+**[Parameters]**
 
-| name           | type          | description           |
-| -------------- | ------------- | -------------- |
-| model_content  | byte\[\]        | Read the model content |
-| import_options | ImportOptions | Import options       |
+| Name           | Type          | Description                |
+| -------------- | ------------- | -------------------------- |
+| model_content  | byte[]        | The content of the model   |
+| import_options | ImportOptions | Import options             |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 ```python
 model_content = read_model_file(model)
@@ -653,70 +669,71 @@ compiler.import_onnx(model_content, import_options)
 
 #### 2.2.8 use_ptq
 
-【Description】
+**Description**:
 
-Set PTQ configuration options.
+Sets PTQ configuration options.
 
-- The K230 must use quantization by default.
+- Quantization is mandatory for K230 by default.
 
-【Definition】
+**Definition**:
 
 `use_ptq(ptq_options)`
 
-【Parameters】
+**[Parameters]**
 
-| name        | type             | description        |
-| ----------- | ---------------- | ----------- |
+| Name        | Type             | Description          |
+| ----------- | ---------------- | -------------------- |
 | ptq_options | PTQTensorOptions | PTQ configuration options |
 
-【Return value】
+**[Return Value]**
+
 None
 
-【Example】
+**Example**:
 
 `compiler.use_ptq(ptq_options)`
 
 #### 2.2.9 compile
 
-【Description】
+**Description**:
 
-Compile the neural network model
+Compiles the neural network model.
 
-【Definition】
+**Definition**:
 
 `compile()`
 
-【Parameters】
+**[Parameters]**
 
 None
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `compiler.compile()`
 
 #### 2.2.10 gencode_tobytes
 
-【Description】
+**Description**:
 
-Generate a kmodel byte stream
+Generates kmodel byte stream.
 
-【Definition】
+**Definition**:
 
 `gencode_tobytes()`
 
-【Parameters】
+**[Parameters]**
 
 None
 
-【Return value】
+**[Return Value]**
 
 `bytes[]`
 
-【Example】
+**Example**:
 
 ```python
 kmodel = compiler.gencode_tobytes()
@@ -726,14 +743,14 @@ with open(os.path.join(infer_dir, 'test.kmodel'), 'wb') as f:
 
 ### 2.3 Examples
 
-The model and python compilation script used in the following example
+The following examples use models and Python compilation scripts.
 
-- The original model files are located in the /path/to/k230_sdk/src/big/nncase/examples/models directory
-- Python compilation scripts are located in the /path/to/k230_sdk/src/big/nncase/examples/scripts directory
+- The original model files are located in `/path/to/k230_sdk/src/big/nncase/examples/models`
+- The Python compilation scripts are located in `/path/to/k230_sdk/src/big/nncase/examples/scripts`
 
-#### 2.3.1 Compiling the tflite model
+#### 2.3.1 Compiling a TFLite Model
 
-mbv2_tflite.py is following
+The `mbv2_tflite.py` script is as follows:
 
 ```python
 import os
@@ -810,18 +827,18 @@ if __name__ == '__main__':
     main()
 ```
 
-Run the following command to compile the tflite model of mobilenetv2, and the target is k230
+Run the following command to compile the mobilenetv2 TFLite model with the target set to k230:
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/mbv2_tflite.py --target k230 --model models/mbv2.tflite --dataset calibration_dataset
 ```
 
-#### 2.3.2 Compiling the ONNX model
+#### 2.3.2 Compiling an ONNX Model
 
-For onnx models, it is recommended to use [ONNX Simplifier](https://github.com/daquexian/onnx-simplifier) for simplification before compiling with nncase
+For ONNX models, it is recommended to use the [ONNX Simplifier](https://github.com/daquexian/onnx-simplifier) to simplify the model before using nncase to compile it.
 
-yolov5s_onnx.py is following
+The `yolov5s_onnx.py` script is as follows:
 
 ```python
 import os
@@ -952,26 +969,26 @@ if __name__ == '__main__':
     main()
 ```
 
-Run the following command to compile the ONNX model with a target of K230
+Run the following command to compile the ONNX model with the target set to k230:
 
 ```sh
 root@c285a41a7243:/mnt/# cd src/big/nncase/examples
-root@c285a41a7243: /mnt/src/big/nncase/examples # python3 ./scripts/yolov5s_onnx.py --target k230 --model models/yolov5s.onnx --dataset calibration_dataset
+root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/yolov5s_onnx.py --target k230 --model models/yolov5s.onnx --dataset calibration_dataset
 ```
 
 ## 3. Simulator APIs (Python)
 
-In addition to compiling model APIs, nncase also provides APIs for inference models, kmodels generated by inference compilation models on PC, and is used to verify whether nncase inference results are consistent with the runtime results of the corresponding deep learning framework.
+In addition to model compilation APIs, nncase also provides inference APIs that allow you to run compiled kmodel on a PC to verify if the nncase inference results are consistent with the runtime results of the corresponding deep learning framework.
 
 ### 3.1 APIs
 
 #### 3.1.1 MemoryRange
 
-【Description】
+**Description**:
 
-The MemoryRange class, which represents a range of memory
+The `MemoryRange` class is used to represent a memory range.
 
-【Definition】
+**Definition**:
 
 ```python
 py::class_<memory_range>(m, "MemoryRange")
@@ -983,26 +1000,26 @@ py::class_<memory_range>(m, "MemoryRange")
     .def_readwrite("size", &memory_range::size);
 ```
 
-【Attributes】
+**[Attributes]**
 
-| name     | type           | description                                                                       |
+| Name     | Type           | Description                                                                |
 | -------- | -------------- | -------------------------------------------------------------------------- |
-| location | Int            | Memory location, 0 means input, 1 means output, 2 means rdata, 3 represents data, and 4 represents shared_data |
-| dtype    | Python data types | data type                                                                   |
-| start    | Int            | Memory start address                                                               |
-| Size     | Int            | Memory size                                                                   |
+| location | int            | Memory location: 0 for input, 1 for output, 2 for rdata, 3 for data, 4 for shared_data |
+| dtype    | Python data type | Data type                                                                 |
+| start    | int            | Memory start address                                                       |
+| size     | int            | Memory size                                                                 |
 
-【Example】
+**Example**:
 
 `mr = nncase.MemoryRange()`
 
-#### 3.1.2 RuntimeTensor
+### 3.1.2 RuntimeTensor
 
-【Description】
+**Description**:
 
-The RuntimeTensor class, which is used to represent runtime tensor
+The `RuntimeTensor` class is used to represent a runtime tensor.
 
-【Definition】
+**Definition**:
 
 ```python
 py::class_<runtime_tensor>(m, "RuntimeTensor")
@@ -1040,90 +1057,90 @@ py::class_<runtime_tensor>(m, "RuntimeTensor")
     });
 ```
 
-【Attributes】
+**[Attributes]**
 
-| name  | type           | description             |
-| ----- | -------------- | ---------------- |
-| dtype | Python data types | The data type of Tensor |
-| shape | list           | The shape of tensor     |
+| Name  | Type             | Description          |
+| ----- | ---------------- | -------------------- |
+| dtype | Python data type | Data type of the tensor |
+| shape | list             | Shape of the tensor  |
 
 #### 3.1.3 from_numpy
 
-【Description】
+**Description**:
 
-Construct a RuntimeTensor object from numpy.ndarray
+Constructs a `RuntimeTensor` object from a `numpy.ndarray`.
 
-【Definition】
+**Definition**:
 
 `from_numpy(py::array arr)`
 
-【Parameters】
+**[Parameters]**
 
-| name | type          | description              |
-| ---- | ------------- | ----------------- |
-| Arr  | numpy.ndarray | numpy.ndarray object |
+| Name | Type          | Description            |
+| ---- | ------------- | ---------------------- |
+| arr  | numpy.ndarray | `numpy.ndarray` object |
 
-【Return value】
+**[Return Value]**
 
-RuntimeTensor
+`RuntimeTensor`
 
-【Example】
+**Example**:
 
 `tensor = nncase.RuntimeTensor.from_numpy(self.inputs[i]['data'])`
 
 #### 3.1.4 copy_to
 
-【Description】
+**Description**:
 
-拷贝RuntimeTensor
+Copies a `RuntimeTensor`.
 
-【Definition】
+**Definition**:
 
 `copy_to(RuntimeTensor to)`
 
-【Parameters】
+**[Parameters]**
 
-| name | type          | description              |
-| ---- | ------------- | ----------------- |
-| to   | RuntimeTensor | RuntimeTensor对象 |
+| Name | Type          | Description            |
+| ---- | ------------- | ---------------------- |
+| to   | RuntimeTensor | `RuntimeTensor` object |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `sim.get_output_tensor(i).copy_to(to)`
 
 #### 3.1.5 to_numpy
 
-【Description】
+**Description**:
 
-Convert the RuntimeTensor to a numpy.ndarray object
+Converts a `RuntimeTensor` to a `numpy.ndarray` object.
 
-【Definition】
+**Definition**:
 
 `to_numpy()`
 
-【Parameters】
+**[Parameters]**
 
 None
 
-【Return value】
+**[Return Value]**
 
-numpy.ndarray object
+`numpy.ndarray` object
 
-【Example】
+**Example**:
 
 `arr = sim.get_output_tensor(i).to_numpy()`
 
 #### 3.1.6 Simulator
 
-【Description】
+**Description**:
 
-Simulator class is used to simulate kmodels on a PC
+The `Simulator` class is used to run kmodel inference on a PC.
 
-【Definition】
+**Definition**:
 
 ```python
 py::class_<interpreter>(m, "Simulator")
@@ -1140,214 +1157,214 @@ py::class_<interpreter>(m, "Simulator")
     .def("run", [](interpreter &interp) { interp.run().unwrap_or_throw(); });
 ```
 
-【Attributes】
+**[Attributes]**
 
-| name         | type | description     |
-| ------------ | ---- | -------- |
-| inputs_size  | Int  | Number of inputs |
-| outputs_size | Int  | Number of outputs |
+| Name         | Type | Description     |
+| ------------ | ---- | --------------- |
+| inputs_size  | int  | Number of inputs |
+| outputs_size | int  | Number of outputs |
 
-【Example】
+**Example**:
 
 `sim = nncase.Simulator()`
 
 #### 3.1.7 load_model
 
-【Description】
+**Description**:
 
-Load kmodel
+Loads a kmodel.
 
-【Definition】
+**Definition**:
 
 `load_model(model_content)`
 
-【Parameters】
+**[Parameters]**
 
-| name          | type   | description         |
-| ------------- | ------ | ------------ |
-| model_content | byte\[\] | kmodel byte stream |
+| Name          | Type     | Description         |
+| ------------- | -------- | ------------------- |
+| model_content | byte\[\] | kmodel byte stream  |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `sim.load_model(kmodel)`
 
 #### 3.1.8 get_input_desc
 
-【Description】
+**Description**:
 
-Gets the description of the input for the specified index
+Gets the description of the input at the specified index.
 
-【Definition】
+**Definition**:
 
 `get_input_desc(index)`
 
-【Parameters】
+**[Parameters]**
 
-| name  | type | description       |
-| ----- | ---- | ---------- |
-| index | Int  | The index of the input |
+| Name  | Type | Description       |
+| ----- | ---- | ----------------- |
+| index | int  | Index of the input |
 
-【Return value】
+**[Return Value]**
 
-MemoryRange
+`MemoryRange`
 
-【Example】
+**Example**:
 
 `input_desc_0 = sim.get_input_desc(0)`
 
 #### 3.1.9 get_output_desc
 
-【Description】
+**Description**:
 
-Gets the description of the output of the specified index
+Gets the description of the output at the specified index.
 
-【Definition】
+**Definition**:
 
 `get_output_desc(index)`
 
-【Parameters】
+**[Parameters]**
 
-| name  | type | description       |
-| ----- | ---- | ---------- |
-| index | Int  | The index of the output |
+| Name  | Type | Description       |
+| ----- | ---- | ----------------- |
+| index | int  | Index of the output |
 
-【Return value】
+**[Return Value]**
 
-MemoryRange
+`MemoryRange`
 
-【Example】
+**Example**:
 
 `output_desc_0 = sim.get_output_desc(0)`
 
 #### 3.1.10 get_input_tensor
 
-【Description】
+**Description**:
 
-Gets the RuntimeTensor of the input for the specified index
+Gets the `RuntimeTensor` of the input at the specified index.
 
-【Definition】
+**Definition**:
 
 `get_input_tensor(index)`
 
-【Parameters】
+**[Parameters]**
 
-| name  | type | description             |
-| ----- | ---- | ---------------- |
-| index | Int  |The index of input tensor |
+| Name  | Type | Description            |
+| ----- | ---- | ---------------------- |
+| index | int  | Index of the input tensor |
 
-【Return value】
+**[Return Value]**
 
-RuntimeTensor
+`RuntimeTensor`
 
-【Example】
+**Example**:
 
 `input_tensor_0 = sim.get_input_tensor(0)`
 
 #### 3.1.11 set_input_tensor
 
-【Description】
+**Description**:
 
-Sets the RuntimeTensor for the input of the specified index
+Sets the `RuntimeTensor` of the input at the specified index.
 
-【Definition】
+**Definition**:
 
 `set_input_tensor(index, tensor)`
 
-【Parameters】
+**[Parameters]**
 
-| name   | type          | description             |
-| ------ | ------------- | ---------------- |
-| index  | Int           | Index of input tensor |
-| tensor | RuntimeTensor | Input tensor       |
+| Name   | Type          | Description            |
+| ------ | ------------- | ---------------------- |
+| index  | int           | Index of the input tensor |
+| tensor | RuntimeTensor | Input tensor           |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `sim.set_input_tensor(0, nncase.RuntimeTensor.from_numpy(self.inputs[0]['data']))`
 
 #### 3.1.12 get_output_tensor
 
-【Description】
+**Description**:
 
-Gets the RuntimeTensor of the output of the specified index
+Gets the `RuntimeTensor` of the output at the specified index.
 
-【Definition】
+**Definition**:
 
 `get_output_tensor(index)`
 
-【Parameters】
+**[Parameters]**
 
-| name  | type | description             |
-| ----- | ---- | ---------------- |
-| index | Int  | The index of the output tensor |
+| Name  | Type | Description            |
+| ----- | ---- | ---------------------- |
+| index | int  | Index of the output tensor |
 
-【Return value】
+**[Return Value]**
 
-RuntimeTensor
+`RuntimeTensor`
 
-【Example】
+**Example**:
 
 `output_arr_0 = sim.get_output_tensor(0).to_numpy()`
 
 #### 3.1.13 set_output_tensor
 
-【Description】
+**Description**:
 
-Sets the RuntimeTensor of the output of the specified index
+Sets the `RuntimeTensor` of the output at the specified index.
 
-【Definition】
+**Definition**:
 
 `set_output_tensor(index, tensor)`
 
-【Parameters】
+**[Parameters]**
 
-| name   | type          | description             |
-| ------ | ------------- | ---------------- |
-| index  | Int           | The index of the output tensor |
-| tensor | RuntimeTensor | Output tensor       |
+| Name   | Type          | Description            |
+| ------ | ------------- | ---------------------- |
+| index  | int           | Index of the output tensor |
+| tensor | RuntimeTensor | Output tensor           |
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `sim.set_output_tensor(0, tensor)`
 
 #### 3.1.14 run
 
-【Description】
+**Description**:
 
-Run kmodel inference
+Runs kmodel inference.
 
-【Definition】
+**Definition**:
 
 `run()`
 
-【Parameters】
+**[Parameters]**
 
 None
 
-【Return value】
+**[Return Value]**
 
 None
 
-【Example】
+**Example**:
 
 `sim.run()`
 
 ### 3.2 Examples
 
-**Preconditions**: yolov5s_onnx.py script has compiled the yolov5s.onnx model
+**Precondition**: The `yolov5s_onnx.py` script has already compiled the `yolov5s.onnx` model.
 
-yolov5s_onnx_simu.py is located in the /path/to/k230_sdk/src/big/nncase/examples/scripts subdirectory, which is following.
+The `yolov5s_onnx_simu.py` script is located in the `/path/to/k230_sdk/src/big/nncase/examples/scripts` subdirectory and contains the following content:
 
 ```python
 import os
@@ -1421,7 +1438,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Execute inference scripts
+Run the inference script:
 
 ```shell
 root@5f718e19f8a7:/mnt/# cd src/big/nncase/examples
@@ -1429,7 +1446,7 @@ root@5f718e19f8a7:/mnt/src/big/nncase/examples # export PATH=$PATH:/usr/local/li
 root@5f718e19f8a7:/mnt/src/big/nncase/examples # python3 scripts/yolov5s_onnx_simu.py --model models/yolov5s.onnx --model_input object_detect/data/input_fp32.bin --kmodel tmp/yolov5s_onnx/test.kmodel --kmodel_input object_detect/data/input_uint8.bin
 ```
 
-The comparison of NNcase Simulator and CPU inference results is following.
+Comparison of `nncase` simulator and CPU inference results:
 
 ```sh
 output 0 cosine similarity : 0.9997244477272034
@@ -1437,32 +1454,32 @@ output 1 cosine similarity : 0.999757707118988
 output 2 cosine similarity : 0.9997308850288391
 ```
 
-## 4. KPU runtime APIs (C++)
+## 4. KPU Runtime APIs (C++)
 
 ### 4.1 Introduction
 
-KPU runtime APIs are used to load kmodels, set input data, perform kpu/cpu calculations, and obtain output data on AI devices.
+KPU Runtime APIs are used to load kmodel on AI devices, set input data, execute KPU/CPU computation, and get output data, etc.
 
-Currently only C++ APIs are available, and the relevant header files and static libraries are located in the /path/to/k230_sdk/src/big/nncase/riscv64 directory.
+Currently, only C++ APIs are provided. The relevant header files and static libraries are located in the `/path/to/k230_sdk/src/big/nncase/riscv64` directory.
 
 ```shell
 $ tree -L 3 riscv64/
 riscv64/
 ├── gsl
-│   └── gsl-lite.hpp
+│   └── gsl-lite.hpp
 ├── nncase
-│   ├── include
-│   │   └── nncase
-│   └── lib
-│       ├── cmake
-│       ├── libfunctional_k230.a
-│       ├── libnncase.rt_modules.k230.a
-│       └── libNncase.Runtime.Native.a
+│   ├── include
+│   │   └── nncase
+│   └── lib
+│       ├── cmake
+│       ├── libfunctional_k230.a
+│       ├── libnncase.rt_modules.k230.a
+│       └── libNncase.Runtime.Native.a
 └── rvvlib
     ├── include
-    │   ├── k230_math.h
-    │   ├── nms.h
-    │   └── rvv_math.h
+    │   ├── k230_math.h
+    │   ├── nms.h
+    │   └── rvv_math.h
     └── librvv.a
 
 8 directories, 8 files
@@ -1472,35 +1489,35 @@ riscv64/
 
 #### 4.2.1 hrt::create
 
-【Description】
+**Description**:
 
-Create a runtime_tensor
+Creates a `runtime_tensor`.
 
-【Definition】
+**Definition**:
 
 ```cpp
 (1) NNCASE_API result<runtime_tensor> create(typecode_t datatype, dims_t shape, memory_pool_t pool = pool_shared_first) noexcept;
 (2) NNCASE_API result<runtime_tensor> create(typecode_t datatype, dims_t shape, gsl::span<gsl::byte> data, bool copy,
        memory_pool_t pool = pool_shared_first) noexcept;
-(3)NNCASE_API result<runtime_tensor>create(typecode_t datatype, dims_t shape, strides_t strides, gsl::span<gsl::byte> data, bool copy, memory_pool_t pool = pool_shared_first, uintptr_t physical_address = 0) noexcept;
+(3) NNCASE_API result<runtime_tensor> create(typecode_t datatype, dims_t shape, strides_t strides, gsl::span<gsl::byte> data, bool copy, memory_pool_t pool = pool_shared_first, uintptr_t physical_address = 0) noexcept;
 ```
 
-【Parameters】
+**[Parameters]**
 
-| name             | type                   | description                                  |
-| ---------------- | ---------------------- | ------------------------------------- |
-| datatype         | typecode_t             | Data types, such as dt_float32, dt_uint8, etc    |
-| shape            | dims_t                 | The shape of tensor                          |
-| data             | gsl::span\<gsl::byte\> | User-mode data buffer                      |
-| copy             | bool                   | Copy or not                              |
-| pool             | memory_pool_t          | Memory pool type, default value is pool_shared_first |
-| physical_address | uintptr_t              | The user specifies the physical address of the buffer              |
+| Name             | Type                   | Description                            |
+| ---------------- | ---------------------- | -------------------------------------- |
+| datatype         | typecode_t             | Data type, e.g., dt_float32, dt_uint8  |
+| shape            | dims_t                 | Shape of the tensor                    |
+| data             | gsl::span\<gsl::byte\> | User data buffer                       |
+| copy             | bool                   | Whether to copy                        |
+| pool             | memory_pool_t          | Memory pool type, default is pool_shared_first |
+| physical_address | uintptr_t              | Physical address specified by the user |
 
-【Return value】
+**[Return Value]**
 
 `result<runtime_tensor>`
 
-【Example】
+**Example**:
 
 ```cpp
 // create input tensor
@@ -1511,30 +1528,30 @@ auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape
 
 #### 4.2.2 hrt::sync
 
-【Description】
+**Description**:
 
-Synchronize the cache of tensor.
+Synchronizes the cache of the tensor.
 
-- For the user's input data, you need to call the sync_write_back of this interface to ensure that the data has been flashed to the DDR.
-- For the output data after gnne/ai2d calculation, the default gnne/ai2d runtime has been sync_invalidate processed.
+- For user input data, this interface's `sync_write_back` should be called to ensure the data is flushed to DDR.
+- For GNNE/AI2D computation output data, the GNNE/AI2D runtime has already performed `sync_invalidate` by default.
 
-【Definition】
+**Definition**:
 
 `NNCASE_API result<void> sync(runtime_tensor &tensor, sync_op_t op, bool force = false) noexcept;`
 
-【Parameters】
+**Parameters**:
 
-| name   | type           | description                                                         |
-| ------ | -------------- | ------------------------------------------------------------ |
-| tensor | runtime_tensor | The tensor to be manipulated                                               |
-| on     | sync_op_t      | sync_invalidate (invalidate Tensor's cache) or sync_write_back (write Tensor's cache to DDR) |
-| force  | bool           | Whether it is enforced                                                 |
+| Name   | Type           | Description                                                                                 |
+| ------ | -------------- | ------------------------------------------------------------------------------------------- |
+| tensor | runtime_tensor | The tensor to operate on                                                                    |
+| op     | sync_op_t      | `sync_invalidate` (invalidate the tensor cache) or `sync_write_back` (write the tensor cache to DDR) |
+| force  | bool           | Whether to force execution                                                                  |
 
-【Return value】
+**Return Value**:
 
 `result<void>`
 
-【Example】
+**Example**:
 
 ```cpp
 hrt::sync(input_tensor, sync_op_t::sync_write_back, true).expect("sync write_back failed");
@@ -1542,25 +1559,25 @@ hrt::sync(input_tensor, sync_op_t::sync_write_back, true).expect("sync write_bac
 
 #### 4.2.3 interpreter::load_model
 
-【Description】
+**Description**：
 
-Load the kmodel model
+Loads a kmodel.
 
-【Definition】
+**Definition**：
 
 `NNCASE_NODISCARD result<void> load_model(gsl::span<const gsl::byte> buffer) noexcept;`
 
-【Parameters】
+**Parameters**:
 
-| name   | type                          | description          |
-| ------ | ----------------------------- | ------------- |
-| buffer | gsl::span \<const gsl::byte\> | kmodel buffer |
+| Name   | Type                          | Description        |
+| ------ | ----------------------------- | ------------------ |
+| buffer | gsl::span \<const gsl::byte\>    | kmodel buffer      |
 
-【Return value】
+**Return Value**:
 
 `result<void>`
 
-【Example】
+**Example**:
 
 ```cpp
 interpreter interp;
@@ -1570,190 +1587,190 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 #### 4.2.4 interpreter::inputs_size
 
-【Description】
+**Description**:
 
-Gets the number of model inputs
+Gets the number of model inputs.
 
-【Definition】
+**Definition**:
 
 `size_t inputs_size() const noexcept;`
 
-【Parameters】
+**Parameters**:
 
 None
 
-【Return value】
+**Return Value**：
 
 `size_t`
 
-【Example】
+**Example**:
 
 `auto inputs_size = interp.inputs_size();`
 
 #### 4.2.5 interpreter::outputs_size
 
-【Description】
+**Description**:
 
-Gets the number of model outputs
+Gets the number of model outputs.
 
-【Definition】
+**Definition**:
 
 `size_t outputs_size() const noexcept;`
 
-【Parameters】
+**Parameters**:
 
 None
 
-【Return value】
+**Return Value**：
 
 `size_t`
 
-【Example】
+**Example**：
 
 `auto outputs_size = interp.outputs_size();`
 
-#### 4.2.6 interpreter:: input_shape
+#### 4.2.6 interpreter::input_shape
 
-【Description】
+**Description**：
 
-Gets the shape of the specified input to the model
+Gets the shape of the specified input.
 
-【Definition】
+**Definition**：
 
 `const runtime_shape_t &input_shape(size_t index) const noexcept;`
 
-【Parameters】
+**Parameters**：
 
-| name  | type   | description       |
-| ----- | ------ | ---------- |
-| index | size_t | The index of the input |
+| Name  | Type   | Description     |
+| ----- | ------ | --------------- |
+| index | size_t | Index of the input |
 
-【Return value】
+**Return Value**:
 
 `runtime_shape_t`
 
-【Example】
+**Example**:
 
 `auto shape = interp.input_shape(0);`
 
-#### 4.2.7 interpreter:: output_shape
+#### 4.2.7 interpreter::output_shape
 
-【Description】
+**Description**:
 
-Gets the shape of the specified output of the model
+Gets the shape of the specified output.
 
-【Definition】
+**Definition**:
 
 `const runtime_shape_t &output_shape(size_t index) const noexcept;`
 
-【Parameters】
+**Parameters**:
 
-| name  | type   | description       |
-| ----- | ------ | ---------- |
-| index | size_t | The index of the output |
+| Name  | Type   | Description     |
+| ----- | ------ | --------------- |
+| index | size_t | Index of the output |
 
-【Return value】
+**Return Value**：
 
 `runtime_shape_t`
 
-【Example】
+**Example**：
 
 `auto shape = interp.output_shape(0);`
 
-#### 4.2.8 interpreter:: input_tensor
+#### 4.2.8 interpreter::input_tensor
 
-【Description】
+**Description**:
 
-Gets/sets the input tensor for the specified index
+Gets/Sets the input tensor at the specified index.
 
-【Definition】
+**Definition**：
 
 ```cpp
 (1) result<runtime_tensor> input_tensor(size_t index) noexcept;
 (2) result<void> input_tensor(size_t index, runtime_tensor tensor) noexcept;
 ```
 
-【Parameters】
+**Parameters**：
 
-| name   | type           | description                     |
-| ------ | -------------- | ------------------------ |
-| index  | size_t         | The index of the input               |
-| tensor | runtime_tensor | The runtime tensor of the input|
+| Name   | Type           | Description                   |
+| ------ | -------------- | ----------------------------- |
+| index  | size_t         | Index of the input            |
+| tensor | runtime_tensor | The runtime tensor for input  |
 
-【Return value】
+**Return Value**:
 
 ```cpp
 (1) result<runtime_tensor>
 (2) result<void>
-​```cpp
+```
 
-【示例】
+**Example**:
 
-​```cpp
+```cpp
 // set input
 interp.input_tensor(0, input_tensor).expect("cannot set input tensor");
 ```
 
-#### 4.2.9 interpreter:: output_tensor
+#### 4.2.9 interpreter::output_tensor
 
-【Description】
+**Description**:
 
-Gets/sets the output tensor of the specified index
+Gets/Sets the output tensor at the specified index.
 
-【Definition】
+**Definition**:
 
 ```cpp
 (1) result<runtime_tensor> output_tensor(size_t index) noexcept;
 (2) result<void> output_tensor(size_t index, runtime_tensor tensor) noexcept;
 ```
 
-【Parameters】
+**Parameters**:
 
-| name   | type           | description                     |
-| ------ | -------------- | ------------------------ |
-| index  | size_t         | The index of the output               |
-| tensor | runtime_tensor | The runtime tensor of the output|
+| Name   | Type           | Description                   |
+| ------ | -------------- | ----------------------------- |
+| index  | size_t         | Index of the output           |
+| tensor | runtime_tensor | The runtime tensor for output |
 
-【Return value】
+**Return Value**:
 
 ```cpp
 (1) result<runtime_tensor>
 (2) result<void>
 ```
 
-【Example】
+**Example**:
 
 ```cpp
 // get output
 auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 ```
 
-#### 4.2.10 interpreter:: run
+#### 4.2.10 interpreter::run
 
-【Description】
+**Description**:
 
-Perform kpu calculations
+Executes KPU computation.
 
-【Definition】
+**Definition**:
 
 `result<void> run() noexcept;`
 
-【Parameters】
+**Parameters**:
 
 None
 
-【Return value】
+**Return Value**:
 
-返回result \<void\>
+`result<void>`
 
-【Example】
+**Example**:
 
 ```cpp
 // run
 interp.run().expect("error occurred in running model");
 ```
 
-### 4.3 Examples
+### 4.3 Example
 
 ```cpp
 #include <chrono>
@@ -1775,9 +1792,9 @@ using namespace nncase;
 using namespace nncase::runtime;
 using namespace nncase::runtime::detail;
 
-#define INTPUT_HEIGHT 224
-#define INTPUT_WIDTH 224
-#define INTPUT_CHANNELS 3
+#define INPUT_HEIGHT 224
+#define INPUT_WIDTH 224
+#define INPUT_CHANNELS 3
 
 template <class T>
 std::vector<T> read_binary_file(const std::string &file_name)
@@ -1856,8 +1873,14 @@ static int inference(const char *kmodel_file, const char *image_file, const char
 {
     // load kmodel
     interpreter interp;
+    
+    // Load kmodel from memory
     auto kmodel = read_binary_file<unsigned char>(kmodel_file);
-    interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load model.");
+    interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load kmodel.");
+    // Load kmodel from file stream
+    std::ifstream ifs(kmodel_file, std::ios::binary);
+    interp.load_model(ifs).expect("cannot load kmodel");
+    
 
     // create input tensor
     auto input_desc = interp.input_desc(0);
@@ -1875,7 +1898,7 @@ static int inference(const char *kmodel_file, const char *image_file, const char
     auto dst = input_tensor.impl()->to_host().unwrap()->buffer().as_host().unwrap().map(map_access_::map_write).unwrap().buffer();
 #if USE_OPENCV
     cv::Mat img = cv::imread(image_file);
-    cv::resize(img, img, cv::Size(INTPUT_WIDTH, INTPUT_HEIGHT), cv::INTER_NEAREST);
+    cv::resize(img, img, cv::Size(INPUT_WIDTH, INPUT_HEIGHT), cv::INTER_NEAREST);
     auto input_vec = hwc2chw(img);
     memcpy(reinterpret_cast<char *>(dst.data()), input_vec.data(), input_vec.size());
 #else
@@ -1901,7 +1924,7 @@ static int inference(const char *kmodel_file, const char *image_file, const char
     auto out_shape = interp.output_shape(0);
     auto size = compute_size(out_shape);
 
-    // postprogress softmax by cpu
+    // postprocess softmax by cpu
     std::vector<float> softmax_vec(size, 0);
     auto buf = softmax_vec.data();
     softmax(output_data, buf, size);
@@ -1935,42 +1958,42 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 5. AI2D runtime APIs (C++)
+## 5. AI2D Runtime APIs (C++)
 
 ### 5.1 Introduction
 
-AI2D runtime APIs are used to configure AI2D parameters on AI devices, generate related register configurations, and perform AI2D calculations.
+AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate related register configurations, execute AI2D computations, etc. Please read the last section [Precautions](./K230_nncase_Development_Guide.md#54-Precautions) before use.
 
-#### 5.1.1 Supported format conversions
+#### 5.1.1 Supported Format Conversions
 
-| Input format         | Output format               | remark                  |
-| ---------------- | ---------------------- | --------------------- |
-| YUV420_NV12      | RGB_planar/YUV420_NV12 |                       |
-| YUV420_NV21      | RGB_planar/YUV420_NV21 |                       |
-| YUV420_I420      | RGB_planar/YUV420_I420 |                       |
-| YUV400           | YUV400                 |                       |
-| NCHW(RGB_planar) | NCHW(RGB_planar)       |                       |
-| RGB_packed       | RGB_planar/RGB_packed  |                       |
-| RAW16            | RAW16/8                | Depth map, perform shift operation |
+| Input Format       | Output Format           | Remarks               |
+| ------------------ | ----------------------- | --------------------- |
+| YUV420_NV12        | RGB_planar/YUV420_NV12  |                       |
+| YUV420_NV21        | RGB_planar/YUV420_NV21  |                       |
+| YUV420_I420        | RGB_planar/YUV420_I420  |                       |
+| YUV400             | YUV400                  |                       |
+| NCHW(RGB_planar)   | NCHW(RGB_planar)        |                       |
+| RGB_packed         | RGB_planar/RGB_packed   |                       |
+| RAW16              | RAW16/8                 | Depth map, performs shift operation |
 
-#### 5.1.2 Function Description
+#### 5.1.2 Function Descriptions
 
-| function                | description                                                                                                            | remark              |
-| ------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------- |
-| affine transformation            | Support input formats YUV420, YUV400, RGB (planar/packed) Support depth map RAW16 format Support output format YUV400, RGB, depth map          |                   |
-| Crop/Resize/Padding | Support input YUV420, YUV400, RGB Support depth map RAW16 format Resize supports intermediate NCHW arrangement format Support output formats YUV420, YUV400, RGB | Only the padding constant is supported |
-| Shift               | Support input format Raw16 Support output format Raw8                                                                             |                   |
-| Symbol bits              | Both signed and unsigned input are supported                                                                                          |                   |
+| Function              | Description                                                                                     | Remarks           |
+| --------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
+| Affine Transformation | Supports input formats YUV420, YUV400, RGB (planar/packed); supports depth map RAW16 format; supports output formats YUV400, RGB, depth map |                   |
+| Crop/Resize/Padding   | Supports input YUV420, YUV400, RGB; supports depth map RAW16 format; Resize supports intermediate NCHW arrangement format; supports output formats YUV420, YUV400, RGB | Only supports constant padding |
+| Shift                 | Supports input format Raw16; supports output format Raw8                                        |                   |
+| Sign Bit              | Supports signed and unsigned input                                                              |                   |
 
 ### 5.2 APIs
 
 #### 5.2.1 ai2d_format
 
-【Description】
+**Description**:
 
-ai2d_format is used to configure input and output data format, which is optional.
+`ai2d_format` is used to configure the optional data formats for input and output.
 
-【Definition】
+**Definition**:
 
 ```cpp
 enum class ai2d_format
@@ -1981,34 +2004,34 @@ enum class ai2d_format
     NCHW_FMT = 3,
     RGB_packed = 4,
     RAW16 = 5,
-}
+};
 ```
 
 #### 5.2.2 ai2d_interp_method
 
-【Description】
+**Description**:
 
-ai2d_interp_method is used to configure optional interpolation.
+`ai2d_interp_method` is used to configure the optional interpolation methods.
 
-【Definition】
+**Definition**:
 
 ```cpp
- enum class ai2d_interp_method
+enum class ai2d_interp_method
 {
     tf_nearest = 0,
     tf_bilinear = 1,
     cv2_nearest = 2,
     cv2_bilinear = 3,
-}
+};
 ```
 
 #### 5.2.3 ai2d_interp_mode
 
-【Description】
+**Description**:
 
-ai2d_interp_mode is used to configure optional interpolation modes.
+`ai2d_interp_mode` is used to configure the optional interpolation modes.
 
-【Definition】
+**Definition**:
 
 ```cpp
 enum class ai2d_interp_mode
@@ -2016,16 +2039,16 @@ enum class ai2d_interp_mode
     none = 0,
     align_corner = 1,
     half_pixel = 2,
-}
+};
 ```
 
 #### 5.2.4 ai2d_pad_mode
 
-【Description】
+**Description**:
 
-ai2d_pad_mode is used to configure padding modes, which is optional. Currently only constant padding is supported.
+`ai2d_pad_mode` is used to configure the optional padding modes. Currently, only constant padding is supported.
 
-【Definition】
+**Definition**:
 
 ```cpp
 enum class ai2d_pad_mode
@@ -2033,16 +2056,16 @@ enum class ai2d_pad_mode
     constant = 0,
     copy = 1,
     mirror = 2,
-}
+};
 ```
 
 #### 5.2.5 ai2d_datatype_t
 
-【Description】
+**Description**:
 
-ai2d_datatype_t is used to set the data type in the AI2D calculation process.
+`ai2d_datatype_t` is used to set the data types during the AI2D computation process.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_datatype_t
@@ -2056,18 +2079,18 @@ struct ai2d_datatype_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name       | type          | description                  |
-| ---------- | ------------- | --------------------- |
-| src_format | ai2d_format   | Input data format          |
-| dst_format | ai2d_format   | Output data format          |
+| Name       | Type          | Description              |
+| ---------- | ------------- | ------------------------ |
+| src_format | ai2d_format   | Input data format        |
+| dst_format | ai2d_format   | Output data format       |
 | src_type   | datatype_t    | Input data type          |
-| dst_type   | datatype_t    | Output data type          |
-| src_loc    | ai2d_data_loc | Enter the data location, default DDR |
-| dst_loc    | ai2d_data_loc | Output data location, default DDR |
+| dst_type   | datatype_t    | Output data type         |
+| src_loc    | ai2d_data_loc | Input data location, default is DDR |
+| dst_loc    | ai2d_data_loc | Output data location, default is DDR |
 
-【Example】
+**Example**:
 
 ```cpp
 ai2d_datatype_t ai2d_dtype { ai2d_format::RAW16, ai2d_format::NCHW_FMT, datatype_t::dt_uint16, datatype_t::dt_uint8 };
@@ -2075,11 +2098,11 @@ ai2d_datatype_t ai2d_dtype { ai2d_format::RAW16, ai2d_format::NCHW_FMT, datatype
 
 #### 5.2.6 ai2d_crop_param_t
 
-【Description】
+**Description**:
 
-ai2d_crop_param_t is used to configure crop-related parameters.
+`ai2d_crop_param_t` is used to configure parameters related to cropping.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_crop_param_t
@@ -2092,17 +2115,17 @@ struct ai2d_crop_param_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name      | type | description               |
-| --------- | ---- | ------------------ |
-| crop_flag | bool | Whether to enable the crop function   |
-| start_x   | Int  | The starting pixel in the width direction |
-| start_y   | Int  | The starting pixel in the height direction |
-| width     | Int  | The length of the crop in the width direction |
-| height    | Int  | The length of the crop in the height direction |
+| Name      | Type | Description           |
+| --------- | ---- | --------------------- |
+| crop_flag | bool | Whether to enable cropping |
+| start_x   | int  | Starting pixel in the width direction |
+| start_y   | int  | Starting pixel in the height direction |
+| width     | int  | Crop length in the width direction |
+| height    | int  | Crop length in the height direction |
 
-【Example】
+**Example**:
 
 ```cpp
 ai2d_crop_param_t crop_param { true, 40, 30, 400, 600 };
@@ -2110,11 +2133,11 @@ ai2d_crop_param_t crop_param { true, 40, 30, 400, 600 };
 
 #### 5.2.7 ai2d_shift_param_t
 
-【Description】
+**Description**:
 
-ai2d_shift_param_t is used to configure shift-related parameters.
+`ai2d_shift_param_t` is used to configure parameters related to shifting.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_shift_param_t
@@ -2124,24 +2147,24 @@ struct ai2d_shift_param_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name       | type | description              |
-| ---------- | ---- | ----------------- |
-| shift_flag | bool | Whether to enable the shift function |
-| shift_val  | Int  | The number of bits shifted right      |
+| Name       | Type | Description             |
+| ---------- | ---- | ----------------------- |
+| shift_flag | bool | Whether to enable shifting |
+| shift_val  | int  | Number of bits to shift right |
 
-【Example】
+**Example**:
 
 `ai2d_shift_param_t shift_param { true, 2 };`
 
 #### 5.2.8 ai2d_pad_param_t
 
-【Description】
+**Description**:
 
-ai2d_pad_param_t is used to configure pad-related parameters.
+`ai2d_pad_param_t` is used to configure parameters related to padding.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_pad_param_t
@@ -2153,16 +2176,16 @@ struct ai2d_pad_param_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name     | type                   | description                                                                                                  |
-| -------- | ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| pad_flag | bool                   | Whether to enable the pad function                                                                                       |
-| paddings | runtime_paddings_t     | The padding, shape=, of each dimension, `[4, 2]`represents the number of paddings before and after dim0 to dim4, respectively, where dim0/dim1 fixed configuration {0, 0} |
-| pad_mode | ai2d_pad_mode          | padding模式，只支持constant padding                                                                   |
-| pad_val  | std::vector\<int32_t\> | The padding value of each channel                                                                            |
+| Name     | Type                   | Description                                                                                                  |
+| -------- | ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| pad_flag | bool                   | Whether to enable padding                                                                                    |
+| paddings | runtime_paddings_t     | Padding for each dimension, shape=`[4, 2]`, representing the padding count for the front and back of dim0 to dim4, with dim0/dim1 fixed at {0, 0} |
+| pad_mode | ai2d_pad_mode          | Padding mode, only constant padding is supported                                                             |
+| pad_val  | std::vector\<int32_t\> | Padding value for each channel                                                                               |
 
-【Example】
+**Example**:
 
 ```cpp
 ai2d_pad_param_t pad_param { false, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 60, 60 } }, ai2d_pad_mode::constant, { 255 } };
@@ -2170,11 +2193,11 @@ ai2d_pad_param_t pad_param { false, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 60, 60 } }
 
 #### 5.2.9 ai2d_resize_param_t
 
-【Description】
+**Description**:
 
-ai2d_resize_param_t is used to configure resize-related parameters.
+`ai2d_resize_param_t` is used to configure parameters related to resizing.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_resize_param_t
@@ -2185,15 +2208,15 @@ struct ai2d_resize_param_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name          | type               | description               |
-| ------------- | ------------------ | ------------------ |
-| resize_flag   | bool               | Whether to enable the resize function |
-| interp_method | ai2d_interp_method | The resize interpolation method     |
-| interp_mode   | ai2d_interp_mode   | Resize mode         |
+| Name          | Type               | Description           |
+| ------------- | ------------------ | --------------------- |
+| resize_flag   | bool               | Whether to enable resizing |
+| interp_method | ai2d_interp_method | Interpolation method for resizing |
+| interp_mode   | ai2d_interp_mode   | Resize mode            |
 
-【Example】
+**Example**:
 
 ```cpp
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
@@ -2201,11 +2224,11 @@ ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_i
 
 #### 5.2.10 ai2d_affine_param_t
 
-【Description】
+**Description**:
 
-ai2d_affine_param_t is used to configure affine-related parameters.
+`ai2d_affine_param_t` is used to configure parameters related to affine transformations.
 
-【Definition】
+**Definition**:
 
 ```cpp
 struct ai2d_affine_param_t
@@ -2220,125 +2243,125 @@ struct ai2d_affine_param_t
 }
 ```
 
-【Parameters】
+**Parameters**:
 
-| name          | type                 | description                                                                                                                         |
-| ------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| affine_flag   | bool                 | Whether to enable the affine function                                                                                                           |
-| interp_method | ai2d_interp_method   | The interpolation method employed by Affine                                                                                                         |
-| cord_round    | uint32_t             | Integer bounding 0 or 1                                                                                                               |
-| bound_ind     | uint32_t             | Boundary pixel mode 0 or 1                                                                                                           |
-| bound_val     | uint32_t             | Boundary-fill values                                                                                                                   |
-| bound_smooth  | uint32_t             | The boundary is smoothed by 0 or 1                                                                                                               |
-| M             | std::vector\<float\> | The vector corresponding to the affine transformation matrix is $Y=\[a_0, a_1; a_2, a_3\] \cdot X + \[b_0, b_1\] $, then $ M=\{a_0,a_1,b_0,a_2,a_3,b_1\} $ |
+| Name          | Type                 | Description                                                                                                                         |
+| ------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| affine_flag   | bool                 | Whether to enable affine transformations                                                                                           |
+| interp_method | ai2d_interp_method   | Interpolation method used for affine transformations                                                                                |
+| cord_round    | uint32_t             | Integer boundary, 0 or 1                                                                                                            |
+| bound_ind     | uint32_t             | Boundary pixel mode, 0 or 1                                                                                                         |
+| bound_val     | uint32_t             | Boundary fill value                                                                                                                 |
+| bound_smooth  | uint32_t             | Boundary smoothing, 0 or 1                                                                                                          |
+| M             | std::vector\<float\> | Vector corresponding to the affine transformation matrix. For affine transformation $Y=\[a_0, a_1; a_2, a_3\] \cdot X + \[b_0, b_1\]$, $M=\{a_0,a_1,b_0,a_2,a_3,b_1\}$ |
 
-【Example】
+**Example**:
 
 ```cpp
 ai2d_affine_param_t affine_param { true, ai2d_interp_method::cv2_bilinear, 0, 0, 127, 1, { 0.5, 0.1, 0.0, 0.1, 0.5, 0.0 } };
 ```
 
-#### 5.2.11 ai2d_builder:: ai2d_builder
+#### 5.2.11 ai2d_builder::ai2d_builder
 
-【Description】
+**Description**:
 
-ai2d_builder constructor.
+Constructor for `ai2d_builder`.
 
-【Definition】
+**Definition**:
 
 ```cpp
 ai2d_builder(dims_t &input_shape, dims_t &output_shape, ai2d_datatype_t ai2d_dtype, ai2d_crop_param_t crop_param, ai2d_shift_param_t shift_param, ai2d_pad_param_t pad_param, ai2d_resize_param_t resize_param, ai2d_affine_param_t affine_param);
 ```
 
-【Parameters】
+**Parameters**:
 
-| name         | type                | description           |
-| ------------ | ------------------- | -------------- |
-| input_shape  | dims_t              | Enter a shape       |
-| output_shape | dims_t              | Output shapes       |
-| ai2d_dtype   | ai2d_datatype_t     | AI2D data type   |
-| crop_param   | ai2d_crop_param_t   | Crop-related parameters   |
-| shift_param  | ai2d_shift_param_t  | shift-related parameters  |
-| pad_param    | ai2d_pad_param_t    | Pad-related parameters    |
-| resize_param | ai2d_resize_param_t | resize related parameters |
-| affine_param | ai2d_affine_param_t | Affine related parameters |
+| Name         | Type                | Description       |
+| ------------ | ------------------- | ----------------- |
+| input_shape  | dims_t              | Input shape       |
+| output_shape | dims_t              | Output shape      |
+| ai2d_dtype   | ai2d_datatype_t     | AI2D data type    |
+| crop_param   | ai2d_crop_param_t   | Crop parameters   |
+| shift_param  | ai2d_shift_param_t  | Shift parameters  |
+| pad_param    | ai2d_pad_param_t    | Pad parameters    |
+| resize_param | ai2d_resize_param_t | Resize parameters |
+| affine_param | ai2d_affine_param_t | Affine parameters |
 
-【Return value】
+**Return Value**：
 
 None
 
-【Example】
+**Example**：
 
 ```cpp
-dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };
-auto out_span = ai2d_out_tensor_.shape();
-dims_t out_shape { out_span.begin(), out_span.end() };
+dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };          
+auto out_span = ai2d_out_tensor_.shape();                                    
+dims_t out_shape { out_span.begin(), out_span.end() };                       
 ai2d_datatype_t ai2d_dtype { ai2d_format::NCHW_FMT, ai2d_format::NCHW_FMT, typecode_t::dt_uint8, typecode_t::dt_uint8 };
-ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };
-ai2d_shift_param_t shift_param { false, 0 };
+ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };                          
+ai2d_shift_param_t shift_param { false, 0 };                                 
 ai2d_pad_param_t pad_param { true, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 70, 70 } }, ai2d_pad_mode::constant, { 0, 0, 0 } };
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
-ai2d_affine_param_t affine_param { false };
+ai2d_affine_param_t affine_param { false };                                  
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
-#### 5.2.12 ai2d_builder:: build_schedule
+#### 5.2.12 ai2d_builder::build_schedule
 
-【Description】
+**Description**：
 
-Generate the parameters required for AI2D calculation.
+Generates the parameters required for AI2D computation.
 
-【Definition】
+**Definition**：
 
 ```c++
 result<void> build_schedule();
 ```
 
-【Parameters】
+**Parameters**：
 
 None
 
-【Return value】
+**Return Value**：
 
 `result<void>`
 
-【Example】
+**Example**：
 
 ```c++
 ai2d_builder_->build_schedule();
 ```
 
-#### 5.2.13 ai2d_builder:: invoke
+#### 5.2.13 ai2d_builder::invoke
 
-【Description】
+**Description**：
 
-Configure the registers and start the calculation of AI2D.
+Configures the registers and starts the AI2D computation.
 
-【Definition】
+**Definition**：
 
 ```c++
 result<void> invoke(runtime_tensor &input, runtime_tensor &output);
 ```
 
-【Parameters】
+**Parameters**：
 
-| name   | type           | description       |
-| ------ | -------------- | ---------- |
-| input  | runtime_tensor | Input tensor |
-| output | runtime_tensor | Output tensor |
+| Name   | Type           | Description       |
+| ------ | -------------- | ----------------- |
+| input  | runtime_tensor | Input tensor      |
+| output | runtime_tensor | Output tensor     |
 
-【Return value】
+**Return Value**：
 
-result\<void\>
+`result<void>`
 
-【Example】
+**Example**：
 
 ```c++
-// run ai2d
+// run ai2d                                                                  
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 
-### 5.3 Examples
+### 5.3 Example
 
 ```cpp
 static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
@@ -2389,65 +2412,10 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
 }
 ```
 
-### 5.4 Precautions
+### 5.4 Notes
 
-1. Affine and Resize are mutually exclusive and cannot be turned on at the same time
-1. The input format of the Shift function can only be Raw16
-1. Pad value is configured per channel, and the number of corresponding list elements should be equal to the number of channels
-1. In the current version, when only one function of AI2D is required, other parameters also need to be configured, flag can be set to false, and other fields do not need to be configured.
-1. When multiple functions are configured, the execution order is Crop->Shift->Resize/Affine->Pad, and be careful to match the parameters when configuring them.
-
-## 6. FAQ
-
-### 6.1 `xxx.whl is not a supported wheel on this platform.` Error is reported when installing wheel package
-
-Q: ERROR: nncase-1.0.0.20210830-cp37-cp37m-manylinux_2_24_x86_64.whl is not a supported wheel on this platform.
-
-A: Upgrade pip \>= 20.3
-
-```shell
-sudo pip install --upgrade pip
-```
-
-### 6.2 `python: symbol lookup error` error is reported when compiling the model
-
-Q: `python: symbol lookup error: /usr/local/lib/python3.8/dist-packages/libnncase.modules.k230.so: undefined symbol: \_ZN6nncase2ir5graph14split_subgraphESt4spanIKPNS0_4nodeELm18446744073709551615EEb` error is reported when compiling a model
-
-A: Check whether the nncase and nncase-k230 wheel package versions match
-
-```shell
-root@a829814d14b7:/mnt/examples# pip list
-Package      Version
------------- --------------
-gmssl        3.2.1
-nncase       1.8.0.20220929
-nncase-k230  1.9.0.20230403
-numpy        1.24.2
-Pillow       9.4.0
-pip          23.0
-pycryptodome 3.17
-setuptools   45.2.0
-wheel        0.34.2
-```
-
-### 6.3 `std::bad_alloc` error is reported when running the inference app on the board
-
-Q: Run the inference program on the board and throw `std::bad_alloc` exception
-
-```shell
-$ ./cpp.sh
-case ./yolov3_bfloat16 build at Sep 16 2021 18:12:03
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-```
-
-A: std::bad_alloc exception is usually caused by memory allocation failure, you can do the following troubleshooting.
-
-- Check if the generated kmodel exceeds the current system available memory
-- Check whether the app has memory leaks
-
-### 6.4 `data.size_bytes() == size = false (bool)` error is reported when running the App inference program on the board
-
-Q: Run the inference program and throw`[..t_runtime_tensor.cpp:310 (create)] data.size_bytes() == size = false (bool)` an exception
-
-A: Check the input tensor information of the settings, focusing on whether the input shape and the number of bytes occupied by each element (fp32/uint8) are consistent with the model
+1. Affine and Resize functions are mutually exclusive and cannot be enabled simultaneously.
+1. The input format for the Shift function can only be Raw16.
+1. The pad value is configured per channel, and the number of elements in the list should be equal to the number of channels.
+1. In the current version, when only one AI2D function is needed, other parameters also need to be configured, with the flag set to false, and other fields do not need to be configured.
+1. When configuring multiple functions, the execution order is Crop->Shift->Resize/Affine->Pad. Ensure the parameters match accordingly.

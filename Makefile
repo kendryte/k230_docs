@@ -10,8 +10,10 @@ SOURCEDIR_EN  = en
 SOURCEDIR_ZH  = zh
 SOURCEDIR = .
 CONFDIR       = .
+CONFDIRRTT    = rtt-config
 BUILDDIR      = _build
 WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~zhengshanshan/web-docs-builder
+TEMPLATE = _static/init_mermaid.js _static/mermaid.min.js _templates/versionsFlex.html _templates/Fleft.html _templates/Footer.html _templates/Fright.html  _templates/layout.html _static/topbar.css _static/custom-theme.css
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -19,45 +21,61 @@ help:
 
 .PHONY: help Makefile
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-# %: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
-# 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+html: html-en html-zh html-zh-rtt html-en-rtt
 
-# mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
-# 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-
-html: html-en html-zh
-
-html-en: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
+html-en: Makefile $(TEMPLATE)
 	SPHINX_LANGUAGE=en $(SPHINXBUILD) -b html "$(SOURCEDIR_EN)" "$(BUILDDIR)/html/en" -c "$(CONFDIR)"
 
-html-zh: Makefile _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
+html-zh: Makefile $(TEMPLATE)
 	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_ZH)" "$(BUILDDIR)/html/zh" -c "$(CONFDIR)"
 
-mhtml: mhtml_cn mhtml_en
+html-zh-rtt: Makefile $(TEMPLATE)
+	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_ZH)" "$(BUILDDIR)/html/zh/rtt" -c "$(CONFDIRRTT)"
 
-# mhtml: _static/init_mermaid.js _templates/versionsFlex.html _static/topbar.css _static/custom-theme.css
-# 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+html-en-rtt: Makefile $(TEMPLATE)
+	SPHINX_LANGUAGE=zh_CN $(SPHINXBUILD) -b html "$(SOURCEDIR_EN)" "$(BUILDDIR)/html/en/rtt" -c "$(CONFDIRRTT)"
 
-mhtml_cn: _static/init_mermaid.js  _static/topbar.css _static/custom-theme.css  _templates/versionsFlex.html
+mhtml: mhtml_cn mhtml_en mhtml_cn_rtt mhtml_en_rtt
+
+mhtml_cn: $(TEMPLATE)
 	SPHINX_LANGUAGE=zh_CN $(SPHINXMULTIVERSION) "$(SOURCEDIR_ZH)" "$(BUILDDIR)/zh" $(SPHINXOPTS) -c "$(CONFDIR)"
 
+mhtml_cn_rtt: $(TEMPLATE)
+	SPHINX_LANGUAGE=zh_CN $(SPHINXMULTIVERSION) "$(SOURCEDIR_ZH)" "$(BUILDDIR)/zh/rtt" $(SPHINXOPTS) -c "$(CONFDIRRTT)"
+
 # 英文
-mhtml_en: _static/init_mermaid.js  _static/topbar.css _static/custom-theme.css  _templates/versionsFlex.html
+mhtml_en: $(TEMPLATE)
 	SPHINX_LANGUAGE=en $(SPHINXMULTIVERSION) "$(SOURCEDIR_EN)" "$(BUILDDIR)/en" $(SPHINXOPTS) -c "$(CONFDIR)"
+
+mhtml_en_rtt: $(TEMPLATE)
+	SPHINX_LANGUAGE=zh_CN $(SPHINXMULTIVERSION) "$(SOURCEDIR_EN)" "$(BUILDDIR)/en/rtt" $(SPHINXOPTS) -c "$(CONFDIRRTT)"
 
 _templates:
 	mkdir $@
 
-_static/init_mermaid.js: _templates
+_templates/versionsFlex.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
-_templates/versionsFlex.html: _templates
+_templates/layout.html: _templates
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_templates/Fleft.html: _templates
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_templates/Footer.html: _templates
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_templates/Fright.html: _templates
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/topbar.css:
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
 
 _static/custom-theme.css:
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_static/init_mermaid.js: 
+	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
+
+_static/mermaid.min.js: 
 	wget $(WEB_DOCS_BUILDER_URL)/$@ -O $@
