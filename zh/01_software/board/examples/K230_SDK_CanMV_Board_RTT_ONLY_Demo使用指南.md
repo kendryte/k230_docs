@@ -164,8 +164,10 @@ Nonai_2d通过读取yuv(I420格式）文件，进行图像叠加运算。
 举例：
 
 ```shell
-./sample_nonai_2d.elf -i /sharefs/foreman_128x64_3frames.yuv -w 128 -h 64 -o /sharefs/out_2d.yuv
+./sample_nonai_2d.elf -i foreman_128x64_3frames.yuv -w 128 -h 64 -o out_2d.yuv
 ```
+
+如果测试程序跑在sd上，不挂载nfs，2d使用nfs，测试报错。
 
 ##### 2.3.4.2 查看结果
 
@@ -461,15 +463,15 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 ##### 2.7.4.2 执行
 
-1. 非绑定模式 demo 运行
+非绑定模式 demo 运行：
 
-`/sharefs/app/sample_dma.elf`
+`./sample_dma.elf`
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
-1. 绑定模式 demo 运行
+绑定模式 demo 运行：
 
-`/sharefs/app/sample_dma_bind.elf`
+`./sample_dma_bind.elf`
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
