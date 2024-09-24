@@ -200,8 +200,8 @@ Table 3-2 shows the boot modes of K230 under different configurations.
 | ----- | ----- | ---------- | ---------- |
 | 0     | 0     | NOR FLASH  | NOR FLASH  |
 | 1     | 0     | NAND FLASH | NAND FLASH |
-| 0     | 1     | MMC0       | MMC1       |
-| 1     | 1     | MMC1       | MMC0       |
+| 0     | 1     | MMC0       | MMC0       |
+| 1     | 1     | MMC1       | MMC1       |
 
 Table 3-2 Boot Mode Description
 
