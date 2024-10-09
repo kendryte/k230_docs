@@ -103,7 +103,7 @@ Options:
  -crop:         crop enable[0: disable, 1: enable]
  -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
  -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
- -rotation:     display rotation[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupported rotation]
+ -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion, 17: gdma-degree 90, 18: gdma-degree 180, 19: gdma-degree 270]
  -help:         print this help
 ```
 
@@ -123,7 +123,7 @@ Parameter descriptions are as follows:
 | -crop              | 0: disable cropping; 1: enable cropping | When the output image size is smaller than the input image size, it defaults to scaling output. If this flag is specified, it outputs as cropped. |
 | -ofmt              | 0: yuv format output; 1: rgb format output; 2: raw format output | Specifies the output image format, defaulting to yuv output. |
 | -preview           | 0: disable preview; 1: enable preview | Specifies the output image preview display function. The default is enabled. Currently, up to two output images can be previewed simultaneously. |
-| -rotation          | 0: rotate 0 degrees; 1: rotate 90 degrees; 2: rotate 180 degrees; 3: rotate 270 degrees; 4: unsupported rotation | Specifies the rotation angle of the preview display window. By default, only the first output image window supports rotation. |
+| -rotation | 0: rotate 0 degrees, 1: rotate 90 degrees, 2: rotate 180 degrees, 3: rotate 270 degrees, 4: unsupported rotation, 17 use gdma rotate 90 degrees, 18 use gdma rotate 180 degrees, 19 use gdma rotate 270 degrees | Specify the rotation angle of the preview display window. only the first output image window supports the vo rotation function, all output image window supports gdma rotation function. |
 
 Example:
 
