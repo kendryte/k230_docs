@@ -17,6 +17,7 @@ K230 SDK 实用教程
   02_applications/business_poc/K230_场景实战_猫眼.md
   02_applications/business_poc/K230_场景实战_词典笔.md
   02_applications/business_poc/K230_场景实战_dpu深度相机.md
+  02_applications/business_poc/k230_场景实战_ahd_sensor移植.md
   02_applications/ai_demos/K230_AI_Demo介绍.md
   02_applications/fancy_poc/K230_Fancy_Poc介绍.md
   01_software/board/examples/K230_SDK_CanMV_Board_Demo使用指南.md
