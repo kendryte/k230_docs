@@ -58,6 +58,7 @@ This document (this guide) is mainly intended for the following personnel:
 | V1.3             | 1) Added built-in Audio Codec API interfaces                     | Sun Xiaopeng | 2023/5/10  |
 | v1.4             | 1) i2s supports single and dual channel input and output, modified [k_audio_i2s_attr](#3110-k_audio_i2s_attr) attributes, added snd_mode attribute. 2) Added built-in Audio Codec API interfaces: including volume acquisition and reset related interfaces: [k_acodec_get_gain_micl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)/[k_acodec_reset](#2510-k_acodec_reset) | Sun Xiaopeng | 2023/6/15 |
 | V1.5             | 1) Added control for selecting single channel for audio input and output | Sun Xiaopeng | 2024/6/5   |
+| V1.6             | 1) Optimized audio 3A interface                                          | Sun Xiaopeng | 2024/11/4  |
 
 ## 1. Overview
 
@@ -147,6 +148,7 @@ This functional module provides the following APIs:
 - [kd_mpi_ai_release_frame](#218-kd_mpi_ai_release_frame)
 - [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)
 - [kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr)
+- [kd_mpi_ai_send_far_echo_frame](#2111-kd_mpi_ai_send_far_echo_frame)
 
 #### 2.1.1 kd_mpi_ai_set_pub_attr
 
@@ -450,25 +452,25 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn]
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.9 kd_mpi_ai_set_vqe_attr
+#### 2.1.9 kd_mpi_ai_set_vqe_attr
 
 **Description**:
 
-Set AI sound quality enhancement attributes.
+Set AI voice quality enhancement attributes.
 
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const k_bool *vqe_enable);
+k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
 ```
 
 **Parameters**:
 
-| Parameter  | Description                              | Input/Output |
-|------------|------------------------------------------|--------------|
-| ai_dev     | Audio device number.                     | Input        |
-| ai_chn     | Audio channel number.                    | Input        |
-| vqe_enable | Sound quality enhancement enable flag. K_TRUE: enable. K_FALSE: disable. | Input        |
+| Parameter Name | Description                                      | Input/Output |
+|----------------|--------------------------------------------------|--------------|
+| ai_dev         | Audio device number.                             | Input        |
+| ai_chn         | Audio channel number.                            | Input        |
+| vqe_enable     | Voice quality enhancement enable flag.           | Input        |
 
 **Return Value**:
 
@@ -484,27 +486,60 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 **Notes**:
 
-Currently supported sampling precision is 16bit, and supported sampling rates are 8k and 16k.
+Audio 3A supports 16-bit sampling precision, and AGC only supports 8k/16k/32k/48k.
 
-### 2.1.10 kd_mpi_ai_get_vqe_attr
+#### 2.1.10 kd_mpi_ai_get_vqe_attr
 
 **Description**:
 
-Get AI sound quality enhancement attributes.
+Get AI voice quality enhancement attributes.
 
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, k_bool *vqe_enable);
+k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
 ```
 
 **Parameters**:
 
-| Parameter  | Description                              | Input/Output |
-|------------|------------------------------------------|--------------|
-| ai_dev     | Audio device number.                     | Input        |
-| ai_chn     | Audio channel number.                    | Input        |
-| vqe_enable | Pointer to sound quality enhancement enable flag. K_TRUE: enable. K_FALSE: disable. | Output       |
+| Parameter Name | Description                                      | Input/Output |
+|----------------|--------------------------------------------------|--------------|
+| ai_dev         | Audio device number.                             | Input        |
+| ai_chn         | Audio channel number.                            | Input        |
+| vqe_enable     | Pointer to voice quality enhancement enable flag.| Output       |
+
+**Return Value**:
+
+| Return Value | Description                 |
+|--------------|-----------------------------|
+| 0            | Success                     |
+| Non-zero     | Failure, see error code     |
+
+**Requirements**:
+
+- Header file: mpi_ai_api.h
+- Library file: libai.a
+
+#### 2.1.11 kd_mpi_ai_send_far_echo_frame
+
+**Description**:
+
+Send far-end voice signal. This signal is collected by the far-end microphone (speaker's voice) and is also equal to the voice played by the near-end speaker, also known as the reference voice.
+
+**Syntax**:
+
+```c
+k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+```
+
+**Parameters**:
+
+| Parameter Name | Description                                                                                      | Input/Output |
+|----------------|--------------------------------------------------------------------------------------------------|--------------|
+| ai_dev         | Audio device number.                                                                             | Input        |
+| ai_chn         | Audio channel number.                                                                            | Input        |
+| frame          | Reference voice data.                                                                            | Input        |
+| milli_sec      | Timeout for sending data. -1 means blocking mode, waiting indefinitely if no data; 0 means non-blocking mode, returning an error if no data; >0 means blocking for milli_sec milliseconds, returning an error if timeout. | Input        |
 
 **Return Value**:
 
@@ -2639,9 +2674,7 @@ The data types and structures related to audio input/output are defined as follo
 - [k_audio_i2s_attr](#3110-k_audio_i2s_attr): Defines I2S audio input attributes.
 - [k_aio_i2s_type](#3113-k_aio_i2s_type): Defines I2S interfacing device types.
 - [k_audio_frame](#3114-k_audio_frame): Defines audio frame structures.
-- [k_audio_anr_cfg](#3115-k_audio_anr_cfg): Defines the configuration structure for audio noise reduction.
-- [k_audio_agc_cfg](#3116-k_audio_agc_cfg): Defines the configuration structure for audio automatic gain control.
-- [k_ai_vqe_cfg](#3117-k_ai_vqe_cfg): Defines the configuration structure for audio input voice quality enhancement.
+- [k_ai_vqe_enable](#3115-k_ai_vqe_enable): Defines the configuration structure for audio input voice quality enhancement.
 
 #### 3.1.1 k_audio_type
 
@@ -2950,28 +2983,6 @@ The built-in audio codec uses I2S channel 0, while I2S channel 1 is used for ext
 
 None
 
-#### 3.1.14 k_audio_frame
-
-- **Description**:
-
-Defines audio frame structures.
-
-- **Definition**:
-
-```c
-typedef struct {
-    // Definition of audio frame structure
-} k_audio_frame;
-```
-
-- **Notes**:
-
-None
-
-- **Related Data Types and Interfaces**:
-
-None
-
 ### 3.1.14 k_audio_frame
 
 - **Description**:
@@ -3014,93 +3025,42 @@ None
 
 None
 
-#### 3.1.15 k_audio_anr_cfg
+#### 3.1.15 k_ai_vqe_enable
 
-- **Description**:
-
-Defines the configuration structure for audio noise reduction function.
-
-- **Definition**:
-
-```c
-typedef struct {
-    k_bool anr_switch;
-} k_audio_anr_cfg;
-```
-
-- **Members**:
-
-| Member Name | Description                  |
-|-------------|------------------------------|
-| anr_switch  | Audio noise reduction enable.|
-
-- **Notes**:
-
-None
-
-- **Related Data Types and Interfaces**:
-
-None
-
-#### 3.1.16 k_audio_agc_cfg
-
-- **Description**:
-
-Defines the configuration structure for audio automatic gain control function.
-
-- **Definition**:
-
-```c
-typedef struct {
-    k_bool agc_switch;
-} k_audio_agc_cfg;
-```
-
-- **Members**:
-
-| Member Name | Description                  |
-|-------------|------------------------------|
-| agc_switch  | Audio automatic gain control enable.|
-
-- **Notes**:
-
-None
-
-- **Related Data Types and Interfaces**:
-
-None
-
-#### 3.1.17 k_ai_vqe_cfg
-
-- **Description**:
+**Description**:
 
 Defines the configuration structure for audio input voice quality enhancement.
 
-- **Definition**:
+**Definition**:
 
 ```c
-typedef struct {
-    k_audio_anr_cfg anr_cfg;
-    k_audio_agc_cfg agc_cfg;
-} k_ai_vqe_cfg;
+typedef struct
+{
+    k_bool aec_enable;
+    k_u32  aec_echo_delay_ms; // Time difference from speaker output to mic input (100-500ms)
+    k_bool agc_enable;
+    k_bool ans_enable;
+} k_ai_vqe_enable;
 ```
 
-- **Members**:
+**Members**:
 
-| Member Name | Description                      |
-|-------------|----------------------------------|
-| anr_cfg     | Audio noise reduction configuration parameters.|
-| agc_cfg     | Audio automatic gain control configuration parameters.|
+| Member Name         | Description                                                                 |
+|---------------------|-----------------------------------------------------------------------------|
+| aec_enable          | Echo cancellation enable.                                                   |
+| aec_echo_delay_ms   | Echo cancellation filter length, recommended to be 100-500ms. This is the time difference from speaker output to mic input. The specific value needs fine-tuning, as improper adjustment can directly affect the echo cancellation effect. |
+| agc_enable          | Automatic gain control enable.                                              |
+| ans_enable          | Audio noise suppression enable.                                              |
 
-- **Notes**:
-
-None
-
-- **Related Data Types and Interfaces**:
+**Notes**:
 
 None
 
-#### 3.1.18 k_i2s_in_mono_channel
+**Related Data Types and Interfaces**:
+
+None
+
+#### 3.1.16 k_i2s_in_mono_channel
 
 - **Description**:
 
