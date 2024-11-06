@@ -171,33 +171,33 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   487MB   268MB   fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#umount /sharefs/
 [root@canaan ~ ]#parted  -a minimal  /dev/mmcblk1  resizepart 4  31.3GB
 Information: You may need to update /etc/fstab.
- 
+
 [root@canaan ~ ]#parted   -l /dev/mmcblk1
 Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  fat16        fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mkfs.ext2 /dev/mmcblk1p4
 Filesystem label=
 OS type: Linux
@@ -217,15 +217,15 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
- 
+Disk Flags:
+
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
  2      31.5MB  83.9MB  52.4MB               linux
  3      134MB   218MB   83.9MB  ext4         rootfs
  4      218MB   31.3GB  31.1GB  ext2         fat32appfs
- 
- 
+
+
 [root@canaan ~ ]#mount /dev/mmcblk1p4 /sharefs/
 [  332.688642] EXT4-fs (mmcblk1p4): mounted filesystem without journal. Opts: (null)
 [root@canaan ~ ]#df -h
@@ -237,7 +237,7 @@ tmpfs                    51.8M     56.0K     51.7M   0% /tmp
 tmpfs                    51.8M     36.0K     51.7M   0% /run
 /dev/mmcblk1p4           28.5G     20.0K     27.0G   0% /sharefs
 [root@canaan ~ ]#
- 
+
 ```
 
 ## 10如何修改bootargs
@@ -259,7 +259,7 @@ setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 
 答：方法1：linux下 输入cat /proc/cmdline  查看
 
 ```bash
-[root@canaan ~ ]#cat /proc/cmdline 
+[root@canaan ~ ]#cat /proc/cmdline
 root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
 [root@canaan ~ ]#
 
@@ -270,7 +270,7 @@ root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,1152
 ```bash
 [root@canaan ~ ]#dmesg | grep  command
 [    0.000000] Kernel command line: root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
-[root@canaan 
+[root@canaan
 ```
 
 ## 12小核默认串口修改
@@ -287,7 +287,7 @@ aliases {
     chosen {
         stdout-path = "uart2:115200n8";
     };
-    
+
     serial2: serial@91402000 {
     compatible = "snps,dw-apb-uart";
     reg = <0x0 0x91402000 0x0 0x400>;
@@ -308,7 +308,7 @@ aliases {
 chosen {
         stdout-path = "serial2";
     };
-    
+
 &uart2 {
     status = "okay";
 };
@@ -346,6 +346,14 @@ ov5647
 
 sc201
 
+gc2053
+
+gc2093
+
+os08a20
+
+sc132gs
+
 ## 15canmmv板子是否可以使用平头哥的cklink进行jtag调试
 
 答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
@@ -363,12 +371,12 @@ sc201
 答：参考如下命令快速重编buildroot下面的某一个软件包
 
 ``` bash
-    #重编lvgl软件包命令参考,   
+    #重编lvgl软件包命令参考,
     cd output/k230_canmv_defconfig/little/buildroot-ext/; #以k230_canmv_defconfig 为例
     make  lvgl-dirclean;
     make  lvgl && make;
     cd -  #切换到sdk主目录；
-    make build-image #重新生成下镜像    
+    make build-image #重新生成下镜像
 ```
 
 更多信息请百度搜索buildroot how to rebuild packages。
@@ -437,11 +445,11 @@ cd /sdcard/app/onboard
 
 修改2 添加等待共享文件系统动作（适应于sdk 1.5及以后版本）
 
-```c  
+```c
 //src/big/rt-smart/kernel/bsp/maix3/applications/main.c 文件 34行附近 修改为如下：
-        
+
     struct stat stat_buf;
-    while(stat("/sharefs/onboard",&stat_buf));// 请根据实际情况修改为正确的文件 
+    while(stat("/sharefs/onboard",&stat_buf));// 请根据实际情况修改为正确的文件
     msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
 ```
 
@@ -454,7 +462,7 @@ cd /sdcard/app/onboard
             // shell_thread_first_run = 0;
             // msh_exec("/bin/init.sh", 13);
             if(0 == stat("/sharefs/onboard",&stat_buf)){ // 请根据实际情况修改为正确的文件
-                shell_thread_first_run = 0;               
+                shell_thread_first_run = 0;
                 msh_exec("/bin/init.sh", 13); // 需要自启动的脚本,请根据实际情况修改为正确的文件
             }
             continue;
@@ -470,7 +478,7 @@ cd /sdcard/app/onboard
 ```bash
 #使用libxml2方法(以k230_canmv_defconfig为例),在sdk主目录执行下面命令
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ menuconfig
-#Target packages -->Libraries--->JSON/XML--> libxml2 
+#Target packages -->Libraries--->JSON/XML--> libxml2
 #使能libxml2 库，并保存配置；
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ savedefconfig  #保存配置
 make -C output/k230_canmv_defconfig/little/buildroot-ext/  #编译buildroot
@@ -534,7 +542,7 @@ int main(void)
     return (0);
 }
 
-//编译方法 
+//编译方法
 /* 假设sdk主目录是SDK=/home/wangjianxin/k230_sdk
 SDK=/home/wangjianxin/k230_sdk
 BD=${SDK}/output/k230_canmv_defconfig/little/buildroot-ext
