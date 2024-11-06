@@ -277,121 +277,430 @@ demo中通过播放wav来测试音频输出功能,可上传不同音频格式的
 
 ##### 2.5.3.2 执行
 
-进入rt-smart系统后，进入/sharefs/app目录下，`sample_audio.elf`为测试demo。
+启动rt-smart系统后，进入/sharefs/app目录下，`sample_audio.elf`为测试demo。
 
 - 可输入`./sample_audio.elf -help`查看demo使用方法。
-- `-type`选项来测试不同模块功能；
-- `-samplerate`选项来配置音频输入和输出不同采样率（8k-192k）,默认为44.1k；
-- `-enablecodec`使用内置codec或者片外的音频子板；
-- `-loglevel`打印内核日志等级；
-- `-bitwidth`设置音频采样精度(16/24/32);
-- `-filename`加载或存储wav/g711文件名称。
 
-![文本 描述已自动生成](images/e73b403fe42ae077746ee4e5928a1d86.png)
+| 参数名 | 说明                                       | 默认值 |
+|--------|--------------------------------------------|--------|
+| type      | 测试不同模块功能[0,12] | -    |
+| samplerate | 配置音频输入和输出不同采样率（8k-192k) | 44100 |
+| enablecodec | 是否启用内置codec[0,1]。 1:使用内置codec | 0 |
+| bitwidth | 设置音频采样精度[16,24,32]。| 16 |
+| filename | 加载或存储wav/g711文件名称。| - |
+| channels | 设置音频声道数，单声道或双声道[1,2]。| 2 |
+| monochannel | 如何设置为单声道，设置单声道类型[0,1]。0:板载mic，1：耳机输入| 0 |
+| audio3a | 是否启用audio3a:enable_ans:0x01,enable_agc:0x02,enable_aec:0x04,可叠加多个使能项| 0 |
+
+```shell
+msh /sharefs/app>./sample_audio.elf
+Please input:
+-type: test audio function[0-12]
+  type 0:sample ai i2s module
+  type 1:sample ai pdm module
+  type 2:sample ao i2s module
+  type 3:sample ai(i2s) to ao (api) module
+  type 4:sample ai(i2s) to ao (sysbind) module
+  type 5:sample ai(pdm) to ao (api) module
+  type 6:sample ai(pdm) bind ao (sysbind) module
+  type 7:sample aenc(ai->aenc->file) (sysbind) module
+  type 8:sample adec(file->adec->ao) (sysbind) module
+  type 9:sample aenc(ai->aenc->file) (api) module
+  type 10:sample adec(file->adec->ao) (api) module
+  type 11:sample overall test (ai->aenc->file file->adec->ao) module
+  type 12:sample overall test (ai->aenc  adec->ao loopback ) module
+-samplerate: set audio sample(8000 ~ 192000)
+-enablecodec: enable audio codec(0,1)
+-loglevel: show kernel log level[0,7]
+-bitwidth: set audio bit width(16,24,32)
+-channels: channel count
+-monochannel:0:mic input 1:headphone input
+-filename: load or save file name
+-audio3a: enable audio3a:enable_ans:0x01,enable_agc:0x02,enable_aec:0x04
+```
 
 ###### 2.5.3.2.1 I2S音频输入测试
 
-- 输入`./sample_audio.elf -type 0`来采集15s中的pcm音频数据，
-- `-samplerate`选项来选择采集不同采样率的音频,
-- `-bitwidth` 来来设置不同的采样精度，
-- `-enablecodec`设置是否使用内置codec，
-- `-filename` 保存数据到文件。采集15s数据后，demo自动退出。
+输入`./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1`来采集15s中的pcm音频数据,并保存为wav格式文件，
 
-demo实现思路:该测试通过循环调用api函数:`kd_mpi_ai_get_frame`和`kd_mpi_ai_release_frame`来采集数据。注意i2s对应的ai dev号为0。
-
-![i2s input](images/100ece476c397937609fc134d00b06f4.png)
+```shell
+./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1
+audio type:0,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+sample ai i2s module
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio_save_init get vb block size:2646044
+======kd_mpi_sys_mmap total size:2646044
+[0s] timestamp 0 us,curpts:1505976917
+[1s] timestamp 1000000 us,curpts:1506976917
+[2s] timestamp 2000000 us,curpts:1507976917
+[3s] timestamp 3000000 us,curpts:1508976917
+[4s] timestamp 4000000 us,curpts:1509976917
+[5s] timestamp 5000000 us,curpts:1510976917
+[6s] timestamp 6000000 us,curpts:1511976917
+[7s] timestamp 7000000 us,curpts:1512976917
+[8s] timestamp 8000000 us,curpts:1513976917
+[9s] timestamp 9000000 us,curpts:1514976917
+[10s] timestamp 10000000 us,curpts:1515976917
+[11s] timestamp 11000000 us,curpts:1516976917
+[12s] timestamp 12000000 us,curpts:1517976917
+[13s] timestamp 13000000 us,curpts:1518976917
+dump binary memory test1.wav 0x10225000 0x104ab01c
+[14s] timestamp 14000000 us,curpts:1519976917
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.2 I2S音频输出测试
 
 支持播放wav文件，需将wav文件拷贝到sharefs路径下。该demo会循环播放wav文件（其他任意wav文件也可），用户可以按任意键来退出该功能测试。
+输入`./sample_audio.elf -type 2 -filename test.wav -enablecodec 1`播放wav音频。
 
-demo实现思路:该测试通过循环调用api函数：`kd_mpi_ao_send_frame`来实时输出声音。
-
-![文本 描述已自动生成](images/09cbde8d64c0df2f2cb4f7c96e00ec99.png)
+```shell
+./sample_audio.elf -type 2 -filename test.wav -enablecodec 1
+audio type:2,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample ao i2s module
+========read_wav_header:headerlen:44,channel:2,samplerate:44100,bitpersample:16
+open file:test.wav ok,file size:2646044,data size:2646000,wav header size:44
+=======_get_audio_frame virt_addr:0x1002aa000
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+q
+diable ao audio
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.3 I2S音频输入输出api接口测试
 
-输入`./sample_audio.elf -type 3 -bitwidth 16`，通过api接口实时测试音频输入输出功能。
+输入`./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1`，通过api接口实时测试音频输入输出功能。
 
-通过调用api接口：`kd_mpi_ai_get_frame`获取音频数据并调用`kd_mpi_ao_send_frame`输出音频数据来测试音频输入和输出整体功能。用户可以按任意键来退出该功能测试。测试过程中会实时输出ai采集到的时间戳信息。
-
-![图片描述](images/d8f4d2a4c90f58fe67a7343a836f1b18.png)
+```shell
+./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1
+audio type:3,sample rate:8000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:1.35 MB
+vb_set_config ok
+enter q key to exit
+sample ai(i2s) to ao module
+audio i2s set clk freq is 512000(512000),ret:1
+audio codec adc clk freq is 2048000(2048000)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio i2s set clk freq is 512000(512000),ret:1
+audio init codec dac clk freq is 2048000
+audio set codec dac clk freq is 2048000(2048000)
+[0s] timestamp 0 us,curpts:2017301433
+[1s] timestamp 1000000 us,curpts:2018301433
+[2s] timestamp 2000000 us,curpts:2019301433
+[3s] timestamp 3000000 us,curpts:2020301433
+[4s] timestamp 4000000 us,curpts:2021301433
+[5s] timestamp 5000000 us,curpts:2022301433
+[6s] timestamp 6000000 us,curpts:2023301433
+[7s] timestamp 7000000 us,curpts:2024301433
+[8s] timestamp 8000000 us,curpts:2025301433
+[9s] timestamp 9000000 us,curpts:2026301433
+[10s] timestamp 10000000 us,curpts:2027301433
+[11s] timestamp 11000000 us,curpts:2028301433
+[12s] timestamp 12000000 us,curpts:2029301433
+[13s] timestamp 13000000 us,curpts:2030301433
+[14s] timestamp 14000000 us,curpts:2031301433
+[15s] timestamp 15000000 us,curpts:2032301433
+q
+[16s] timestamp 16000000 us,curpts:2033301433
+diable ao module
+diable ai module
+release vb block
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.4 I2S音频输入和输出模块的系统绑定测试
 
-输入`./sample_audio.elf -type 4`，通过ai和ao模块绑定实时测试音频输入输出功能。
+输入`./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1`，通过ai和ao模块绑定实时测试音频输入输出功能。
 
 通过调用系统绑定api接口：`kd_mpi_sys_bind`将ai和ao模块绑定，来测试音频输入和输出整体功能。用户可以按任意键来退出该功能测试。
 
-![文本 描述已自动生成](images/2bd93e4768f76c6af98aa69137156f09.png)
+```shell
+./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1
+audio type:4,sample rate:8000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:1.35 MB
+vb_set_config ok
+enter q key to exit
+sample ai(i2s) bind ao module
+audio i2s set clk freq is 512000(512000),ret:1
+audio codec adc clk freq is 2048000(2048000)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio i2s set clk freq is 512000(512000),ret:1
+audio init codec dac clk freq is 2048000
+audio set codec dac clk freq is 2048000(2048000)
+q
+diable ao module
+diable ai module
+release vb block
+destroy vb block
+sample done
+
+```
 
 ###### 2.5.3.2.5 编码测试
 
-获取ai数据并编码保存到文件。编解码只支持g711a/u，16bit。
+获取ai数据并编码保存到文件。编解码只支持g711a/u/lpcm，16bit。
 
-系统绑定方式:`./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+系统绑定方式:`./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1`
 
-![audio enc bind log](images/d100e8aff87b92e3903227ace2822675.png)
+```shell
+./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:7,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample aenc module (sysbind)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+q
+destroy vb block
+sample done
+```
 
-api接口方式:`./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+api接口方式:`./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1`
 
-![audio enc log](images/8c32c668277867b2ab314e47c2d96d03.png)
+```shell
+./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:9,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample aenc module (api)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+q
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.6 解码测试
 
-读取文件数据并解码播放。编解码只支持g711a/u，16bit。
+读取文件数据并解码播放。编解码只支持g711a/u/lpcm，16bit。
 
-系统绑定方式:`./sample_audio.elf -type 8 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+系统绑定方式:`./sample_audio.elf -type 8 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16`
 
-![audio dec bind](images/764192b171dc3580719e4e2f6bfecaef.png)
+```shell
+./sample_audio.elf -type 8 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16
+audio type:8,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample adec module (sysbind)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+adec_bind_call_back dev_id:0 chn_id:0
+read file again
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
-api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+api接口方式:`./sample_audio.elf -type 10 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16`
 
-![audio dec](images/48a50a418c0daae2a69d6bb70306b0b8.png)
+```shell
+./sample_audio.elf -type 10 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16
+audio type:10,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample adec module (api)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+read file again
+q
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.7 音频全流程测试
 
 1)录制模块ai-\>aenc-\>file 和播放模块 file-\>adec-\>ao 两条链路同时运行，模拟语音对讲的场景。使用内置codec，16bit精度来模拟。`-filename`来选择待播放的文件，为g711a格式，`-samplerate`选择采样精度。录制文件名称:为播放文件名称后+`_rec`:如-filename为`/sharefs/test.g711a`,则录制文件名为:`/sharefs/test.g711a_rec`.
 
-![图片描述](images/96d5c266517e45cfc95d9bcb65bcebaa.png)
+```shell
+./sample_audio.elf -type 11 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:11,sample rate:44100,bit width:16,channels:2,enablecodec:0,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample ai->aenc->file file->adec->ao module
+Force the sampling accuracy to be set to 16,use inner cocdec
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+adec_bind_call_back dev_id:0 chn_id:0
+=====start play thread
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+=====start record thread,record file:/sharefs/i2s_codec.g711a_rec
+read file again
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
 2)ai-\>aenc ，adec-\>ao两条链路绑定回环测试。使用内置codec，16bit精度来模拟。
 
 同时测试g711编码后的stream 时间戳。
 
-![图片描述](images/4ecbd28b50bd69bd41b768f4f2755970.png)
+```shell
+./sample_audio.elf -type 12 -samplerate 48000 -enablecodec 1 -audio3a 1 &
+audio type:12,sample rate:48000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:8.12 MB
+vb_set_config ok
+enter q key to exit
+sample ai->aenc  adec->ao module (loopback)
+Force the sampling accuracy to be set to 16,use inner cocdec
+audio i2s set clk freq is 3072000(3072000),ret:1
+audio codec adc clk freq is 12288000(12288000)
+audio i2s set clk freq is 3072000(3072000),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 12288000(12288000)
+adec_bind_call_back dev_id:0 chn_id:0
+[0s] g711 stream timestamp 0 us,curpts:341326051
+[1s] g711 stream timestamp 1000000 us,curpts:342326051
+[2s] g711 stream timestamp 2000000 us,curpts:343326051
+[3s] g711 stream timestamp 3000000 us,curpts:344326051
+[4s] g711 stream timestamp 4000000 us,curpts:345326051
+[5s] g711 stream timestamp 5000000 us,curpts:346326051
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
 输入`cat /proc/umap/sysbind` 可查看模块间系统绑定。
 
-![图片描述](images/23f111756ad924f5538cce7c691da0df.png)
+```shell
+-----BIND RELATION TABLE--------------------------------------------------------
+  FirMod  FirDev  FirChn  SecMod  SecDev  SecChn  TirMod  TirDev  TirChn    SendCnt     rstCnt
+      ai       0       0    aenc       0       0    null       0       0        310          0
+    adec       0       0      ao       0       0    null       0       0        310          0
+```
 
 ###### 2.5.3.2.8 mapi音频测试
 
-确保大核已启动核间通信进程：先确认小核加载k_ipcm.ko模块，再确认大核启动:`/sharefs/app/sample_sys_init.elf &`
+系统启动后，现在大核输入命令:`/sharefs/app/sample_sys_init.elf &`
 
-- 可输入`/mnt/sample_audio -help`查看demo使用方法。
-- `-type`选项来测试不同模块功能。
-- `-samplerate`选项来配置音频输入和输出不同采样率（8k-192k）,默认为44.1k。
-- `-enablecodec`使用内置codec或者片外的音频子板，默认使用内置codec。
-- `-filename`加载或存储g711文件名称。
-- `-channels`:指定声道数。8
+- 在小核端可输入`/mnt/sample_audio -help`查看demo使用方法。
 
-![image-20230530101801685](images/image-20230530101801685.png)
+| 参数名 | 说明                                       | 默认值 |
+|--------|--------------------------------------------|--------|
+| type      | 测试不同模块功能[0,4] | -    |
+| samplerate      | 音频输入和输出不同采样率（8k-192k) | 44100    |
+| enablecodec | 是否启用内置codec[0,1]。 1:使用内置codec | 0 |
+| filename | 加载或存储wav/g711文件名称。| - |
+| channels | 设置音频声道数，单声道或双声道[1,2],使用单声道时，固定采集板载mic声音.| 2 |
+
+```shell
+./sample_audio
+Please input:
+-type: test mapi audio function[0-2]
+  type 0:sample ai->aenc module
+  type 1:sample adec->ao module
+  type 2:sample ai->aenc adec->ao loopback module
+  type 3:play wav
+  type 4:sample ai->aenc module(lpcm)
+-samplerate: set audio sample(8000 ~ 192000)
+-filename: load or save file name
+-enablecodec: enable audio codec(0,1)
+-channels: audio channels(1,2)
+```
+
+注:默认启用软件音频降噪（ans）。
 
 - ai->aenc测试
 
 小核上执行命令:`/mnt/sample_audio -type 0 -filename test.g711a`,按q键可退出测试。demo能够实时采集音频数据并编码成g711a格式并保存到文件中。
-![image-20230530102014642](images/image-20230530102014642.png)
+
+```shell
+/mnt/sample_audio -type 0 -filename test.g711a
+audio type:0,sample rate:44100,channels:2,enablecodec:1,filename:test.g711a
+mmz blk total size:2.07 MB
+@@@@enable vqe ans
+[AENC_S] [Func]:_init_datafifo [Line]:174 [Info]:_aenc_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+enter 'q' key to exit
+_aenc_dataproc chn_num:0,stream data:0x10015000,data len:3528,seq:0,timestamp:79247530
+_aenc_dataproc chn_num:0,stream data:0x1001f800,data len:3528,seq:1,timestamp:79287530
+_aenc_dataproc chn_num:0,stream data:0x1002a000,data len:3528,seq:2,timestamp:79327530
+_aenc_dataproc chn_num:0,stream data:0x10034800,data len:3528,seq:3,timestamp:79367530
+_aenc_dataproc chn_num:0,stream data:0x1003f000,data len:3528,seq:4,timestamp:79407530
+_aenc_dataproc chn_num:0,stream data:0x10049800,data len:3528,seq:5,timestamp:79447530
+_aenc_dataproc chn_num:0,stream data:0x10054000,data len:3528,seq:6,timestamp:79487530
+_aenc_dataproc chn_num:0,stream data:0x1005e800,data len:3528,seq:7,timestamp:79527530
+_aenc_dataproc chn_num:0,stream data:0x10069000,data len:3528,seq:8,timestamp:79567530
+_aenc_dataproc chn_num:0,stream data:0x10073800,data len:3528,seq:9,timestamp:79607530
+_aenc_dataproc chn_num:0,stream data:0x1007e000,data len:3528,seq:10,timestamp:79647530
+_aenc_dataproc chn_num:0,stream data:0x10088800,data len:3528,seq:11,timestamp:79687530
+_aenc_dataproc chn_num:0,stream data:0x10093000,data len:3528,seq:12,timestamp:79727530
+_aenc_dataproc chn_num:0,stream data:0x1009d800,data len:3528,seq:13,timestamp:79767530
+_aenc_dataproc chn_num:0,stream data:0x100a8000,data len:3528,seq:14,timestamp:79807530
+_aenc_dataproc chn_num:0,stream data:0x100b2800,data len:3528,seq:15,timestamp:79847530
+_aenc_dataproc chn_num:0,stream data:0x100bd000,data len:3528,seq:16,timestamp:79887530
+_aenc_dataproc chn_num:0,stream data:0x100c7800,data len:3528,seq:17,timestamp:79927530
+_aenc_dataproc chn_num:0,stream data:0x100d2000,data len:3528,seq:18,timestamp:79967530
+_aenc_dataproc chn_num:0,stream data:0x100dc800,data len:3528,seq:19,timestamp:80007530
+_aenc_dataproc chn_num:0,stream data:0x100e7000,data len:3528,seq:20,timestamp:80047530
+_aenc_dataproc chn_num:0,stream data:0x100f1800,data len:3528,seq:21,timestamp:80087530
+_aenc_dataproc chn_num:0,stream data:0x100fc000,data len:3528,seq:22,timestamp:80127530
+_aenc_dataproc chn_num:0,stream data:0x10106800,data len:3528,seq:23,timestamp:80167530
+_aenc_dataproc chn_num:0,stream data:0x10111000,data len:3528,seq:24,timestamp:80207530
+_aenc_dataproc chn_num:0,stream data:0x10118000,data len:3528,seq:25,timestamp:80247530
+```
 
 - adec->ao测试
 
-小核上执行命令:`/mnt/sample_audio -type 1 -filename tes.g711a`,按q键可退出测试。demo能够循环解码播放本地g711a格式的文件。
-![image-20230530102747862](images/image-20230530102747862.png)
+小核上执行命令:`/mnt/sample_audio -type 1 -filename test.g711a`,按q键可退出测试。demo能够循环解码播放本地g711a格式的文件。
+
+```shell
+/mnt/sample_audio -type 1 -filename test.g711a
+audio type:1,sample rate:44100,channels:2,enablecodec:1,filename:test.g711a
+mmz blk total size:2.07 MB
+[ADEC_S] [Func]:_init_datafifo [Line]:189 [Info]:_adec_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+enter 'q' key to exit
+[ADEC_S] [Func]:_datafifo_release_func [Line]:157 [Info]:_datafifo_release_func,adec_hdl:0
+read file again
+```
 
 - ai->aenc adec->ao loopback测试
 
 小核上执行命令:/mnt/sample_audio -type 2 ,按q键可退出测试。demo能够实时采集音频数据并编码成g711a格式，再解码g711a格式数据后播放输出。
-![image-20230530102916366](images/image-20230530102916366.png)
+
+```shell
+/mnt/sample_audio -type 2
+audio type:2,sample rate:44100,channels:2,enablecodec:1,filename:
+mmz blk total size:2.07 MB
+[AENC_S] [Func]:_init_datafifo [Line]:174 [Info]:_aenc_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+[ADEC_S] [Func]:_init_datafifo [Line]:189 [Info]:_adec_datafifo_init_slave ok,datafifo_phyaddr:0x1021c000,data_hdl:0x1021c000
+@@@@enable vqe ans
+enter 'q' key to exit
+[ADEC_S] [Func]:_datafifo_release_func [Line]:157 [Info]:_datafifo_release_func,adec_hdl:0
+q
+sample done
+```
 
 ### 2.6 Vicap_demo
 
@@ -442,7 +751,7 @@ Options:
  -crop:         crop enable[0: disable, 1: enable]
  -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
  -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
- -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion]
+ -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion, 17: gdma-degree 90, 18: gdma-degree 180, 19: gdma-degree 270]
  -help:         print this help
 ```
 
@@ -462,7 +771,7 @@ Options:
 | -crop        | 0：禁用裁剪功能 1：使能裁剪功能                                         | 当输出图像尺寸小于输入图像尺寸时，默认未缩放输出，如果指定了该标志，则为裁剪输出  |
 | -ofmt        | 0：yuv格式输出 1：rgb格式输出 2：raw格式输出                            | 指定输出图像格式，默认为yuv输出。  |
 | -preview     | 0：禁用预览显示 1：使能预览显示                                         | 指定输出图像预览显示功能。默认为使能。当前最多支持2路输出图像同时预览。 |
-| -rotation    | 0：旋转0度 1：旋转90度 2：旋转180度 3：旋转270度 4：不支持旋转          | 指定预览显示窗口旋转角度。默认仅第一路输出图像窗口支持旋转功能。 |
+| -rotation    | 0：旋转0度 1：旋转90度 2：旋转180度 3：旋转270度 4：不支持旋转 17：使用GDMA旋转90度 18：使用GDMA旋转180度 19：使用GDMA旋转270度 | 指定预览显示窗口旋转角度。仅第一路输出图像窗口支持VO旋转功能，所有输出图像窗口均支持GDMA旋转。 |
 
 示例1：
 

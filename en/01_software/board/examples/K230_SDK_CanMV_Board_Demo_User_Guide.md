@@ -277,123 +277,431 @@ Built-in g711a/u 16bit audio codec, users can register other external codecs.
 
 ##### 2.5.3.2 Execution
 
-After entering the rt-smart system, go to the /sharefs/app directory, `sample_audio.elf` is the test demo.
+After starting the rt-smart system, navigate to the `/sharefs/app` directory, where `sample_audio.elf` is the test demo.
 
-- You can input `./sample_audio.elf -help` to see the usage of the demo.
-- Use the `-type` option to test different module functions;
-- Use the `-samplerate` option to configure different sampling rates for audio input and output (8k-192k), the default is 44.1k;
-- Use the `-enablecodec` option to use the built-in codec or external audio sub-board;
-- Use the `-loglevel` option to print the kernel log level;
-- Use the `-bitwidth` option to set the audio sampling precision (16/24/32);
-- Use the `-filename` option to load or store wav/g711 file names.
+- You can enter `./sample_audio.elf -help` to view the demo usage instructions.
 
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/e73b403fe42ae077746ee4e5928a1d86.png)
+| Parameter    | Description                                                                 | Default |
+|--------------|-----------------------------------------------------------------------------|---------|
+| type         | Test different module functions [0,12]                                      | -       |
+| samplerate   | Configure different sampling rates for audio input and output (8k-192k)      | 44100   |
+| enablecodec  | Whether to enable the built-in codec [0,1]. 1: Use built-in codec            | 0       |
+| bitwidth     | Set audio sampling precision [16,24,32].                                     | 16      |
+| filename     | Name of the wav/g711 file to load or save.                                   | -       |
+| channels     | Set the number of audio channels, mono or stereo [1,2].                      | 2       |
+| monochannel  | How to set mono, set mono type [0,1]. 0: Onboard mic, 1: Headphone input      | 0       |
+| audio3a      | Whether to enable audio3a: enable_ans:0x01, enable_agc:0x02, enable_aec:0x04, multiple options can be combined | 0       |
+
+```shell
+msh /sharefs/app>./sample_audio.elf
+Please input:
+-type: test audio function[0-12]
+    type 0:sample ai i2s module
+    type 1:sample ai pdm module
+    type 2:sample ao i2s module
+    type 3:sample ai(i2s) to ao (api) module
+    type 4:sample ai(i2s) to ao (sysbind) module
+    type 5:sample ai(pdm) to ao (api) module
+    type 6:sample ai(pdm) bind ao (sysbind) module
+    type 7:sample aenc(ai->aenc->file) (sysbind) module
+    type 8:sample adec(file->adec->ao) (sysbind) module
+    type 9:sample aenc(ai->aenc->file) (api) module
+    type 10:sample adec(file->adec->ao) (api) module
+    type 11:sample overall test (ai->aenc->file file->adec->ao) module
+    type 12:sample overall test (ai->aenc  adec->ao loopback ) module
+-samplerate: set audio sample(8000 ~ 192000)
+-enablecodec: enable audio codec(0,1)
+-loglevel: show kernel log level[0,7]
+-bitwidth: set audio bit width(16,24,32)
+-channels: channel count
+-monochannel:0:mic input 1:headphone input
+-filename: load or save file name
+-audio3a: enable audio3a:enable_ans:0x01,enable_agc:0x02,enable_aec:0x04
+```
 
 ###### 2.5.3.2.1 I2S Audio Input Test
 
-- Input `./sample_audio.elf -type 0` to capture 15 seconds of pcm audio data,
-- Use the `-samplerate` option to select different sampling rates for capturing audio,
-- Use the `-bitwidth` option to set different sampling precision,
-- Use the `-enablecodec` option to set whether to use the built-in codec,
-- Use the `-filename` option to save data to a file. After capturing 15 seconds of data, the demo will automatically exit.
+Enter `./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1` to collect PCM audio data for 15 seconds and save it as a wav format file.
 
-Demo implementation idea: This test captures data by calling the API functions `kd_mpi_ai_get_frame` and `kd_mpi_ai_release_frame` in a loop. Note that the ai dev number corresponding to i2s is 0.
-
-![i2s input](../../../../zh/01_software/board/examples/images/100ece476c397937609fc134d00b06f4.png)
+```shell
+./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1
+audio type:0,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+sample ai i2s module
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio_save_init get vb block size:2646044
+=======kd_mpi_sys_mmap total size:2646044
+[0s] timestamp 0 us,curpts:1505976917
+[1s] timestamp 1000000 us,curpts:1506976917
+[2s] timestamp 2000000 us,curpts:1507976917
+[3s] timestamp 3000000 us,curpts:1508976917
+[4s] timestamp 4000000 us,curpts:1509976917
+[5s] timestamp 5000000 us,curpts:1510976917
+[6s] timestamp 6000000 us,curpts:1511976917
+[7s] timestamp 7000000 us,curpts:1512976917
+[8s] timestamp 8000000 us,curpts:1513976917
+[9s] timestamp 9000000 us,curpts:1514976917
+[10s] timestamp 10000000 us,curpts:1515976917
+[11s] timestamp 11000000 us,curpts:1516976917
+[12s] timestamp 12000000 us,curpts:1517976917
+[13s] timestamp 13000000 us,curpts:1518976917
+dump binary memory test1.wav 0x10225000 0x104ab01c
+[14s] timestamp 14000000 us,curpts:1519976917
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.2 I2S Audio Output Test
 
-Supports playing wav files, the wav file needs to be copied to the sharefs path. This demo will loop playback the wav file (other arbitrary wav files can also be used), and users can press any key to exit this function test.
+Supports playing wav files. You need to copy the wav file to the sharefs path. This demo will loop playing the wav file (any other wav files can also be used). Users can press any key to exit the function test.
 
-Demo implementation idea: This test outputs sound in real-time by calling the API function `kd_mpi_ao_send_frame` in a loop.
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/09cbde8d64c0df2f2cb4f7c96e00ec99.png)
+Enter `./sample_audio.elf -type 2 -filename test.wav -enablecodec 1` to play wav audio.
+
+```shell
+./sample_audio.elf -type 2 -filename test.wav -enablecodec 1
+audio type:2,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample ao i2s module
+========read_wav_header:headerlen:44,channel:2,samplerate:44100,bitpersample:16
+open file:test.wav ok,file size:2646044,data size:2646000,wav header size:44
+=========_get_audio_frame virt_addr:0x1002aa000
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+q
+disable ao audio
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.3 I2S Audio Input and Output API Interface Test
 
-Input `./sample_audio.elf -type 3 -bitwidth 16` to test the real-time audio input and output functions through the API interface.
+Enter `./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1` to test audio input and output functions in real-time via the API interface.
 
-By calling the API interface: `kd_mpi_ai_get_frame` to obtain audio data and `kd_mpi_ao_send_frame` to output audio data, the overall functionality of audio input and output can be tested. The user can press any key to exit this function test. During the test, the timestamp information collected by the AI will be output in real-time.
+```shell
+./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1
+audio type:3,sample rate:8000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:1.35 MB
+vb_set_config ok
+enter q key to exit
+sample ai(i2s) to ao module
+audio i2s set clk freq is 512000(512000),ret:1
+audio codec adc clk freq is 2048000(2048000)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio i2s set clk freq is 512000(512000),ret:1
+audio init codec dac clk freq is 2048000
+audio set codec dac clk freq is 2048000(2048000)
+[0s] timestamp 0 us,curpts:2017301433
+[1s] timestamp 1000000 us,curpts:2018301433
+[2s] timestamp 2000000 us,curpts:2019301433
+[3s] timestamp 3000000 us,curpts:2020301433
+[4s] timestamp 4000000 us,curpts:2021301433
+[5s] timestamp 5000000 us,curpts:2022301433
+[6s] timestamp 6000000 us,curpts:2023301433
+[7s] timestamp 7000000 us,curpts:2024301433
+[8s] timestamp 8000000 us,curpts:2025301433
+[9s] timestamp 9000000 us,curpts:2026301433
+[10s] timestamp 10000000 us,curpts:2027301433
+[11s] timestamp 11000000 us,curpts:2028301433
+[12s] timestamp 12000000 us,curpts:2029301433
+[13s] timestamp 13000000 us,curpts:2030301433
+[14s] timestamp 14000000 us,curpts:2031301433
+[15s] timestamp 15000000 us,curpts:2032301433
+q
+[16s] timestamp 16000000 us,curpts:2033301433
+disable ao module
+disable ai module
+release vb block
+destroy vb block
+sample done
+```
 
-![Image Description](../../../../zh/01_software/board/examples/images/d8f4d2a4c90f58fe67a7343a836f1b18.png)
+###### 2.5.3.2.4 System Bind Test for I2S Audio Input and Output Modules
 
-###### 2.5.3.2.4 System Binding Test of I2S Audio Input and Output Modules
+Enter `./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1` to test audio input and output functions in real-time by binding the ai and ao modules.
 
-Input `./sample_audio.elf -type 4` to test the real-time audio input and output functions by binding the AI and AO modules.
+By calling the system binding API interface: `kd_mpi_sys_bind` to bind the ai and ao modules, test the overall audio input and output functionality. Users can press any key to exit the function test.
 
-By calling the system binding API interface: `kd_mpi_sys_bind` to bind the AI and AO modules, the overall functionality of audio input and output can be tested. The user can press any key to exit this function test.
-
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/2bd93e4768f76c6af98aa69137156f09.png)
+```shell
+./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1
+audio type:4,sample rate:8000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:1.35 MB
+vb_set_config ok
+enter q key to exit
+sample ai(i2s) bind ao module
+audio i2s set clk freq is 512000(512000),ret:1
+audio codec adc clk freq is 2048000(2048000)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+audio i2s set clk freq is 512000(512000),ret:1
+audio init codec dac clk freq is 2048000
+audio set codec dac clk freq is 2048000(2048000)
+q
+disable ao module
+disable ai module
+release vb block
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.5 Encoding Test
 
-Obtain AI data and encode it to save to a file. Encoding and decoding only support g711a/u, 16bit.
+Acquire ai data, encode and save to a file. Encoding and decoding only support g711a/u/lpcm, 16bit.
 
-System binding method: `./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+System binding method: `./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1`
 
-![Audio Enc Bind Log](../../../../zh/01_software/board/examples/images/d100e8aff87b92e3903227ace2822675.png)
+```shell
+./sample_audio.elf -type 7 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:7,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample aenc module (sysbind)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+q
+destroy vb block
+sample done
+```
 
-API interface method: `./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a`
+API interface method: `./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1`
 
-![Audio Enc Log](../../../../zh/01_software/board/examples/images/8c32c668277867b2ab314e47c2d96d03.png)
+```shell
+./sample_audio.elf -type 9 -bitwidth 16 -enablecodec 1 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:9,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample aenc module (api)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+q
+destroy vb block
+sample done
+```
 
 ###### 2.5.3.2.6 Decoding Test
 
-Read file data and decode it for playback. Encoding and decoding only support g711a/u, 16bit.
+Read file data and decode for playback. Encoding and decoding only support g711a/u/lpcm, 16bit.
 
-System binding method: `./sample_audio.elf -type 8 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+System binding method: `./sample_audio.elf -type 8 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16`
 
-![Audio Dec Bind](../../../../zh/01_software/board/examples/images/764192b171dc3580719e4e2f6bfecaef.png)
+```shell
+./sample_audio.elf -type 8 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16
+audio type:8,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample adec module (sysbind)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+adec_bind_call_back dev_id:0 chn_id:0
+read file again
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
-API interface method: `./sample_audio.elf -type 10 -filename /sharefs/gyz.g711a -enablecodec 1 -bitwidth 16`
+API interface method: `./sample_audio.elf -type 10 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16`
 
-![Audio Dec](../../../../zh/01_software/board/examples/images/48a50a418c0daae2a69d6bb70306b0b8.png)
+```shell
+./sample_audio.elf -type 10 -filename /sharefs/i2s_codec.g711a -enablecodec 1 -bitwidth 16
+audio type:10,sample rate:44100,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample adec module (api)
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+read file again
+q
+destroy vb block
+sample done
+```
 
-###### 2.5.3.2.7 Full Audio Process Test
+###### 2.5.3.2.7 Audio Full Process Test
 
-1) Record module ai->aenc->file and playback module file->adec->ao run simultaneously to simulate a voice intercom scenario. Use the built-in codec with 16bit precision for simulation. Use `-filename` to select the file to be played, which should be in g711a format, and `-samplerate` to select the sampling precision. The recorded file name will be the playback file name followed by `_rec`: for instance, if `-filename` is `/sharefs/test.g711a`, the recorded file name will be `/sharefs/test.g711a_rec`.
+1)The recording module ai->aenc->file and playback module file->adec->ao run simultaneously to simulate a voice intercom scenario. Using built-in codec, 16bit precision for simulation. Use `-filename` to select the file to play, in g711a format, and `-samplerate` to select the sampling rate. The recording file name is the playback file name appended with `_rec`: for example, if `-filename` is `/sharefs/test.g711a`, then the recording file name is `/sharefs/test.g711a_rec`.
 
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/96d5c266517e45cfc95d9bcb65bcebaa.png)
+```shell
+./sample_audio.elf -type 11 -filename /sharefs/i2s_codec.g711a -audio3a 1
+audio type:11,sample rate:44100,bit width:16,channels:2,enablecodec:0,monochannel:0
+mmz blk total size:7.46 MB
+vb_set_config ok
+enter q key to exit
+sample ai->aenc->file file->adec->ao module
+Force the sampling accuracy to be set to 16,use inner codec
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 11289600(11289600)
+adec_bind_call_back dev_id:0 chn_id:0
+========start play thread
+audio i2s set clk freq is 2822400(2822400),ret:1
+audio codec adc clk freq is 11289600(11289600)
+ans_enable
+========ans_enable:1,agc_enable:0,aec_enable:0
+========start record thread,record file:/sharefs/i2s_codec.g711a_rec
+read file again
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
-1) ai->aenc, adec->ao two-way binding loopback test. Use the built-in codec with 16bit precision for simulation.
+2)ai->aenc and adec->ao link loopback test by binding. Using built-in codec, 16bit precision for simulation.
 
-Simultaneously test the timestamp of the stream after g711 encoding.
+Also test the timestamp of the stream after g711 encoding.
 
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/4ecbd28b50bd69bd41b768f4f2755970.png)
+```shell
+./sample_audio.elf -type 12 -samplerate 48000 -enablecodec 1 -audio3a 1 &
+audio type:12,sample rate:48000,bit width:16,channels:2,enablecodec:1,monochannel:0
+mmz blk total size:8.12 MB
+vb_set_config ok
+enter q key to exit
+sample ai->aenc  adec->ao module (loopback)
+Force the sampling accuracy to be set to 16,use inner codec
+audio i2s set clk freq is 3072000(3072000),ret:1
+audio codec adc clk freq is 12288000(12288000)
+audio i2s set clk freq is 3072000(3072000),ret:1
+audio init codec dac clk freq is 11289600
+audio set codec dac clk freq is 12288000(12288000)
+adec_bind_call_back dev_id:0 chn_id:0
+[0s] g711 stream timestamp 0 us,curpts:341326051
+[1s] g711 stream timestamp 1000000 us,curpts:342326051
+[2s] g711 stream timestamp 2000000 us,curpts:343326051
+[3s] g711 stream timestamp 3000000 us,curpts:344326051
+[4s] g711 stream timestamp 4000000 us,curpts:345326051
+[5s] g711 stream timestamp 5000000 us,curpts:346326051
+q
+adec_bind_call_back dev_id:0 chn_id:0
+destroy vb block
+sample done
+```
 
-Input `cat /proc/umap/sysbind` to view the system binding between modules.
+Enter `cat /proc/umap/sysbind` to view the system bindings between modules.
 
-![Text Description Automatically Generated](../../../../zh/01_software/board/examples/images/23f111756ad924f5538cce7c691da0df.png)
+```shell
+-----BIND RELATION TABLE--------------------------------------------------------
+    FirMod  FirDev  FirChn  SecMod  SecDev  SecChn  TirMod  TirDev  TirChn    SendCnt     rstCnt
+    ai       0       0    aenc       0       0    null       0       0        310          0
+    adec     0       0      ao       0       0    null       0       0        310          0
+```
 
-###### 2.5.3.2.8 MAPI Audio Test
+###### 2.5.3.2.8 mapi Audio Test
 
-Ensure that the large core has started the inter-core communication process: first confirm that the small core has loaded the k_ipcm.ko module, then confirm that the large core has started: `/sharefs/app/sample_sys_init.elf &`
+After the system starts, enter the command on the big core: `/sharefs/app/sample_sys_init.elf &`
 
-- You can input `/mnt/sample_audio -help` to view the demo usage.
-- Use the `-type` option to test different module functions.
-- Use the `-samplerate` option to configure different sampling rates for audio input and output (8k-192k), default is 44.1k.
-- Use the `-enablecodec` option to use the built-in codec or an external audio sub-board, default is the built-in codec.
-- Use the `-filename` to load or store g711 files.
-- Use `-channels` to specify the number of channels.
+- On the small core, you can enter `/mnt/sample_audio -help` to view the demo usage instructions.
 
-![image-20230530101801685](../../../../zh/01_software/board/examples/images/image-20230530101801685.png)
+| Parameter    | Description                                                  | Default |
+|--------------|--------------------------------------------------------------|---------|
+| type         | Test different module functions [0,4]                        | -       |
+| samplerate   | Different sampling rates for audio input and output (8k-192k) | 44100   |
+| enablecodec  | Whether to enable the built-in codec [0,1]. 1: Use built-in codec | 0    |
+| filename     | Name of the wav/g711 file to load or save.                    | -       |
+| channels     | Set the number of audio channels, mono or stereo [1,2]. When using mono, the onboard mic sound is fixed. | 2 |
+
+```shell
+./sample_audio
+Please input:
+-type: test mapi audio function[0-2]
+    type 0:sample ai->aenc module
+    type 1:sample adec->ao module
+    type 2:sample ai->aenc adec->ao loopback module
+    type 3:play wav
+    type 4:sample ai->aenc module(lpcm)
+-samplerate: set audio sample(8000 ~ 192000)
+-filename: load or save file name
+-enablecodec: enable audio codec(0,1)
+-channels: audio channels(1,2)
+```
+
+Note: Software audio noise reduction (ans) is enabled by default.
 
 - ai->aenc Test
 
-Execute the command on the small core: `/mnt/sample_audio -type 0 -filename test.g711a`, press the q key to exit the test. The demo can collect audio data in real-time and encode it into g711a format, saving it to a file.
+On the small core, execute the command: `/mnt/sample_audio -type 0 -filename test.g711a`, press q to exit the test. The demo can collect audio data in real-time, encode it into g711a format, and save it to a file.
 
-![image-20230530102014642](../../../../zh/01_software/board/examples/images/image-20230530102014642.png)
+```shell
+/mnt/sample_audio -type 0 -filename test.g711a
+audio type:0,sample rate:44100,channels:2,enablecodec:1,filename:test.g711a
+mmz blk total size:2.07 MB
+@@@@enable vqe ans
+[AENC_S] [Func]:_init_datafifo [Line]:174 [Info]:_aenc_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+enter 'q' key to exit
+_aenc_dataproc chn_num:0,stream data:0x10015000,data len:3528,seq:0,timestamp:79247530
+_aenc_dataproc chn_num:0,stream data:0x1001f800,data len:3528,seq:1,timestamp:79287530
+_aenc_dataproc chn_num:0,stream data:0x1002a000,data len:3528,seq:2,timestamp:79327530
+_aenc_dataproc chn_num:0,stream data:0x10034800,data len:3528,seq:3,timestamp:79367530
+_aenc_dataproc chn_num:0,stream data:0x1003f000,data len:3528,seq:4,timestamp:79407530
+_aenc_dataproc chn_num:0,stream data:0x10049800,data len:3528,seq:5,timestamp:79447530
+_aenc_dataproc chn_num:0,stream data:0x10054000,data len:3528,seq:6,timestamp:79487530
+_aenc_dataproc chn_num:0,stream data:0x1005e800,data len:3528,seq:7,timestamp:79527530
+_aenc_dataproc chn_num:0,stream data:0x10069000,data len:3528,seq:8,timestamp:79567530
+_aenc_dataproc chn_num:0,stream data:0x10073800,data len:3528,seq:9,timestamp:79607530
+_aenc_dataproc chn_num:0,stream data:0x1007e000,data len:3528,seq:10,timestamp:79647530
+_aenc_dataproc chn_num:0,stream data:0x10088800,data len:3528,seq:11,timestamp:79687530
+_aenc_dataproc chn_num:0,stream data:0x10093000,data len:3528,seq:12,timestamp:79727530
+_aenc_dataproc chn_num:0,stream data:0x1009d800,data len:3528,seq:13,timestamp:79767530
+_aenc_dataproc chn_num:0,stream data:0x100a8000,data len:3528,seq:14,timestamp:79807530
+_aenc_dataproc chn_num:0,stream data:0x100b2800,data len:3528,seq:15,timestamp:79847530
+_aenc_dataproc chn_num:0,stream data:0x100bd000,data len:3528,seq:16,timestamp:79887530
+_aenc_dataproc chn_num:0,stream data:0x100c7800,data len:3528,seq:17,timestamp:79927530
+_aenc_dataproc chn_num:0,stream data:0x100d2000,data len:3528,seq:18,timestamp:79967530
+_aenc_dataproc chn_num:0,stream data:0x100dc800,data len:3528,seq:19,timestamp:80007530
+_aenc_dataproc chn_num:0,stream data:0x100e7000,data len:3528,seq:20,timestamp:80047530
+_aenc_dataproc chn_num:0,stream data:0x100f1800,data len:3528,seq:21,timestamp:80087530
+_aenc_dataproc chn_num:0,stream data:0x100fc000,data len:3528,seq:22,timestamp:80127530
+_aenc_dataproc chn_num:0,stream data:0x10106800,data len:3528,seq:23,timestamp:80167530
+_aenc_dataproc chn_num:0,stream data:0x10111000,data len:3528,seq:24,timestamp:80207530
+_aenc_dataproc chn_num:0,stream data:0x10118000,data len:3528,seq:25,timestamp:80247530
+```
 
 - adec->ao Test
 
-Execute the command on the small core: `/mnt/sample_audio -type 1 -filename tes.g711a`, press the q key to exit the test. The demo can loop decode and play local g711a format files.
+On the small core, execute the command: `/mnt/sample_audio -type 1 -filename test.g711a`, press q to exit the test. The demo can loop decode and play the locally stored g711a format file.
 
-![image-20230530102747862](../../../../zh/01_software/board/examples/images/image-20230530102747862.png)
+```shell
+/mnt/sample_audio -type 1 -filename test.g711a
+audio type:1,sample rate:44100,channels:2,enablecodec:1,filename:test.g711a
+mmz blk total size:2.07 MB
+[ADEC_S] [Func]:_init_datafifo [Line]:189 [Info]:_adec_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+enter 'q' key to exit
+[ADEC_S] [Func]:_datafifo_release_func [Line]:157 [Info]:_datafifo_release_func,adec_hdl:0
+read file again
+```
 
 - ai->aenc adec->ao Loopback Test
 
-Execute the command on the small core: `/mnt/sample_audio -type 2`, press the q key to exit the test. The demo can collect audio data in real-time, encode it into g711a format, then decode the g711a format data and play it back.
+On the small core, execute the command: `/mnt/sample_audio -type 2`, press q to exit the test. The demo can collect audio data in real-time, encode it into g711a format, then decode the g711a formatted data and play it back.
 
-![image-20230530102916366](../../../../zh/01_software/board/examples/images/image-20230530102916366.png)
+```shell
+/mnt/sample_audio -type 2
+audio type:2,sample rate:44100,channels:2,enablecodec:1,filename:
+mmz blk total size:2.07 MB
+[AENC_S] [Func]:_init_datafifo [Line]:174 [Info]:_aenc_datafifo_init_slave ok,datafifo_phyaddr:0x1021b000,data_hdl:0x1021b000
+[ADEC_S] [Func]:_init_datafifo [Line]:189 [Info]:_adec_datafifo_init_slave ok,datafifo_phyaddr:0x1021c000,data_hdl:0x1021c000
+@@@@enable vqe ans
+enter 'q' key to exit
+[ADEC_S] [Func]:_datafifo_release_func [Line]:157 [Info]:_datafifo_release_func,adec_hdl:0
+read file again
+q
+sample done
+```
 
 ### 2.6 Vicap_demo
 
@@ -444,7 +752,7 @@ Options:
  -crop:         crop enable[0: disable, 1: enable]
  -ofmt:         the output pixel format[0: yuv, 1: rgb888, 2: rgb888p, 3: raw], only channel 0 support raw data, default yuv
  -preview:      the output preview enable[0: disable, 1: enable], only support 2 output channel preview
- -rotation:     display rotation[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupported rotation]
+ -rotation:     display rotaion[0: degree 0, 1: degree 90, 2: degree 270, 3: degree 180, 4: unsupport rotaion, 17: gdma-degree 90, 18: gdma-degree 180, 19: gdma-degree 270]
  -help:         print this help
 ```
 
@@ -464,7 +772,7 @@ Parameter descriptions are as follows:
 | -crop              | 0: disable cropping function, 1: enable cropping function | When the output image size is smaller than the input image size, it defaults to scaled output. If this flag is specified, it will crop the output. |
 | -ofmt              | 0: yuv format output, 1: rgb format output, 2: raw format output | Specify the output image format, default is yuv output. |
 | -preview           | 0: disable preview display, 1: enable preview display | Specify the output image preview display function. Default is enabled. Currently, up to 2 output images can be previewed simultaneously. |
-| -rotation          | 0: rotate 0 degrees, 1: rotate 90 degrees, 2: rotate 180 degrees, 3: rotate 270 degrees, 4: unsupported rotation | Specify the rotation angle of the preview display window. By default, only the first output image window supports the rotation function. |
+| -rotation | 0: rotate 0 degrees, 1: rotate 90 degrees, 2: rotate 180 degrees, 3: rotate 270 degrees, 4: unsupported rotation, 17 use gdma rotate 90 degrees, 18 use gdma rotate 180 degrees, 19 use gdma rotate 270 degrees | Specify the rotation angle of the preview display window. only the first output image window supports the vo rotation function, all output image window supports gdma rotation function. |
 
 Example 1:
 

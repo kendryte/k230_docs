@@ -58,6 +58,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 | V1.3       | 1)增加内置Audio Codec API接口                                | 孙小朋      | 2023/5/10 |
 | v1.4       | 1)i2s支持单双声道输入和输出，修改[k_audio_i2s_attr](#3110-k_audio_i2s_attr)属性，增加snd_mode属性。 2)增加内置Audio Codec API接口:包括音量获取和复位相关接口:[k_acodec_get_gain_micl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)/[k_acodec_reset](#2510-k_acodec_reset) | 孙小朋      | 2023/6/15 |
 | V1.5       | 1)增加音频输入输出单声道选择控制                                | 孙小朋      | 2024/6/5 |
+| V1.6       | 1)优化音频3a接口                                | 孙小朋      | 2024/11/4 |
 
 ## 1. 概述
 
@@ -147,6 +148,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 - [kd_mpi_ai_release_frame](#218-kd_mpi_ai_release_frame)
 - [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)
 - [kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr)
+- [kd_mpi_ai_send_far_echo_frame](#2111-kd_mpi_ai_send_far_echo_frame)
 
 #### 2.1.1 kd_mpi_ai_set_pub_attr
 
@@ -448,7 +450,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](
 
 【语法】
 
-k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const k_bool \*vqe_enable);
+k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
 
 【参数】
 
@@ -456,7 +458,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 |------------|-----------------------------------------------------------|-----------|
 | ai_dev     | 音频设备号。                                              | 输入      |
 | ai_chn     | 音频通道号。                                              | 输入      |
-| vqe_enable | 声音质量增强使能标志位。 K_TRUE：使能。 K_FALSE：不使能。 | 输入      |
+| vqe_enable | 声音质量增强使能标志位。                                   | 输入      |
 
 【返回值】
 
@@ -473,7 +475,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 【注意】
 
-目前支持的采样精度为16bit，支持的采样率为8k和16k。
+audio 3a支持的采样精度为16bit，且agc只支持8k/16k/32k/48k。
 
 #### 2.1.10 kd_mpi_ai_get_vqe_attr
 
@@ -483,7 +485,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 【语法】
 
-k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, k_bool \*vqe_enable);
+k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
 
 【参数】
 
@@ -491,7 +493,38 @@ k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 |------------|---------------------------------------------------------------|-----------|
 | ai_dev     | 音频设备号。                                                  | 输入      |
 | ai_chn     | 音频通道号。                                                  | 输入      |
-| vqe_enable | 声音质量增强使能标志位指针。 K_TRUE：使能。 K_FALSE：不使能。 | 输出      |
+| vqe_enable | 声音质量增强使能标志位指针。                                    | 输出      |
+
+【返回值】
+
+| 返回值 | 描述                 |
+|--------|----------------------|
+| 0      | 成功                 |
+| 非0    | 失败，其值参见错误码 |
+
+【需求】
+
+- 头文件：mpi_ai_api.h
+- 库文件：libai.a
+
+#### 2.1.11 kd_mpi_ai_send_far_echo_frame
+
+【描述】
+
+发送远端语音信号。该信号为被远端麦克风采集的信号（说话人语音），也等于近端扬声器播放的语音，也称为参考语音。
+
+【语法】
+
+k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+
+【参数】
+
+| 参数名称   | 描述                                                          | 输入/输出 |
+|------------|---------------------------------------------------------------|-----------|
+| ai_dev     | 音频设备号。                                                  | 输入      |
+| ai_chn     | 音频通道号。                                                  | 输入      |
+| frame | 参考语音数据。                                    | 输入     |
+| milli_sec | 发送数据的超时时间。 -1表示阻塞模式，无数据时一直等待；  0表示非阻塞模式，无数据时则报错返回；  >0表示阻塞milli_sec毫秒，超时则报错返回。                                     | 输入      |
 
 【返回值】
 
@@ -2499,9 +2532,7 @@ k_s32 kd_mapi_adec_send_stream([k_handle](#331-k_handle) ai_hdl,const [k_audio_s
 - [k_audio_i2s_attr](#3110-k_audio_i2s_attr):定义i2s音频输入属性。
 - [k_aio_i2s_type](#3113-k_aio_i2s_type):定义i2s对接设备类型。
 - [k_audio_frame](#3114-k_audio_frame):定义音频帧结构体。
-- [k_audio_anr_cfg](#3115-k_audio_anr_cfg)：定义音频语音降噪功能配置信息结构体。
-- [k_audio_agc_cfg](#3116-k_audio_agc_cfg)：定义音频自动增益功能配置信息结构体。
-- [k_ai_vqe_cfg](#3117-k_ai_vqe_cfg)：定义音频输入声音质量增强配置信息结构体。
+- [k_ai_vqe_enable](#3115-k_ai_vqe_enable)：定义音频输入声音质量增强配置信息结构体。
 
 #### 3.1.1 k_audio_type
 
@@ -2855,66 +2886,7 @@ k_u32 pool_id;
 
 无
 
-#### 3.1.15 k_audio_anr_cfg
-
-【说明】
-
-定义音频语音降噪功能配置信息结构体。
-
-【定义】
-
-```c
-typedef struct
-
-{
-k_bool anr_switch;
-} k_audio_anr_cfg;
-```
-
-【成员】
-
-| 成员名称   | 描述                   |
-|------------|------------------------|
-| anr_switch | 音频语音降噪功能使能。 |
-
-【注意事项】
-
-无
-
-【相关数据类型及接口】
-
-无
-
-#### 3.1.16 k_audio_agc_cfg
-
-【说明】
-
-定义音频自动增益功能配置信息结构体。
-
-【定义】
-
-```c
-typedef struct
-{
-k_bool agc_switch;
-} k_audio_agc_cfg;
-```
-
-【成员】
-
-| 成员名称   | 描述                   |
-|------------|------------------------|
-| agc_switch | 音频自动增益功能使能。 |
-
-【注意事项】
-
-无
-
-【相关数据类型及接口】
-
-无
-
-#### 3.1.17 k_ai_vqe_cfg
+#### 3.1.15 k_ai_vqe_enable
 
 【说明】
 
@@ -2924,16 +2896,20 @@ k_bool agc_switch;
 
 typedef struct
 {
-k_audio_anr_cfg anr_cfg;
-k_audio_agc_cfg agc_cfg;
-} k_ai_vqe_cfg;
+    k_bool aec_enable;
+    k_u32  aec_echo_delay_ms;//speaker播出时间到mic录到的时间差(100-500ms)
+    k_bool agc_enable;
+    k_bool ans_enable;
+}k_ai_vqe_enable;
 
 【成员】
 
 | 成员名称 | 描述                       |
 |----------|----------------------------|
-| anr_cfg  | 音频语音降噪功能配置参数。 |
-| agc_cfg  | 音频自动增益控制配置参数。 |
+| aec_enable  | 回声抑制使能。 |
+| aec_echo_delay_ms  | 回声消除滤波器的长度，推荐为100-500ms。也就是speaker播出时间到mic录到的时间差，本参数具体大小需细调，调整不好直接影响回音消除效果。|
+| agc_enable  | 自动增益使能。 |
+| ans_enable  | 音频降噪使能。 |
 
 【注意事项】
 
@@ -2943,7 +2919,7 @@ k_audio_agc_cfg agc_cfg;
 
 无
 
-#### 3.1.18 k_i2s_in_mono_channel
+#### 3.1.16 k_i2s_in_mono_channel
 
 【说明】
 

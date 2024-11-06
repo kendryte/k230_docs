@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to K230's documentation!
+欢迎来到 K230 Linux+RT-Smart SDK 文档!
 ================================
 
 .. toctree::

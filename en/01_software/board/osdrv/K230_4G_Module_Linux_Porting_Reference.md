@@ -87,7 +87,7 @@ Bus 002 Device 001: ID 1d6b:0002
 
 ```bash
 [root@canaan ~ ]#mount -t debugfs none /sys/kernel/debug/
-[root@canaan ~ ]#cat /sys/kernel/debug/usb/devices 
+[root@canaan ~ ]#cat /sys/kernel/debug/usb/devices
 
 T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
 D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
@@ -127,11 +127,11 @@ E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
 After loading the USB-to-serial option driver for the module, device files such as ttyUSB0, ttyUSB1, and ttyUSB2 are created in the /dev directory. This section describes the modifications needed for the USB-to-serial option driver.
 
-#### 2.1.1 Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](https://gitee.com/kendryte/k230_docs/blob/main/zh/03_other/K230_SDK%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94_C.md#18-linux%E4%B8%8B%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E9%AA%8C%E8%AF%81%E4%B8%8B%E4%B8%B2%E5%8F%A3%E6%94%B6%E5%8F%91%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8)
+#### 2.1.1 Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration)
 
 ```bash
 CONFIG_USB_SERIAL
-CONFIG_USB_SERIAL_OPTION 
+CONFIG_USB_SERIAL_OPTION
 CONFIG_PPP=y
 CONFIG_PPP_BSDCOMP=y
 CONFIG_PPP_DEFLATE=y
@@ -152,13 +152,13 @@ CONFIG_PPP_SYNC_TTY=y
 
 ### 2.2 RNDIS/ECM Driver Modification
 
-Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](https://gitee.com/kendryte/k230_docs/blob/main/zh/03_other/K230_SDK%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94_C.md#18-linux%E4%B8%8B%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E9%AA%8C%E8%AF%81%E4%B8%8B%E4%B8%B2%E5%8F%A3%E6%94%B6%E5%8F%91%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8):
+Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration):
 
 ```shell
-CONFIG_USB_NET_DRIVERS 
-CONFIG_USB_USBNET 
+CONFIG_USB_NET_DRIVERS
+CONFIG_USB_USBNET
 CONFIG_USB_NET_RNDIS_HOST
-CONFIG_USB_NET_CDCETHER 
+CONFIG_USB_NET_CDCETHER
 CONFIG_USB_NET_CDC_NCM
 ```
 
@@ -280,25 +280,25 @@ QL_APN=3gnet
 QL_USER=user
 QL_PASSWORD=passwd
 if [ $# -ge 1 ]; then
-    QL_DEVNAME=$1    
+    QL_DEVNAME=$1
     echo "devname   $QL_DEVNAME    # (from command line)"
 else
     echo "devname   $QL_DEVNAME    # (default)"
 fi
 if [ $# -ge 2 ]; then
-    QL_APN=$2    
+    QL_APN=$2
     echo "apn       $QL_APN    # (from command line)"
 else
     echo "apn       $QL_APN    # (default)"
 fi
 if [ $# -ge 3 ]; then
-    QL_USER=$3    
+    QL_USER=$3
     echo "user      $QL_USER   # (from command line)"
 else
     echo "user      $QL_USER   # (default)"
 fi
 if [ $# -ge 4 ]; then
-    QL_PASSWORD=$4    
+    QL_PASSWORD=$4
     echo "password  $QL_PASSWORD   # (from command line)"
 else
     echo "password  $QL_PASSWORD   # (default)"
@@ -331,21 +331,21 @@ do
     sleep 1
     killall -0 pppd
 done
-    
+
 if [ $? -ne 0 ]
 then
     killall -9 pppd
-fi    
+fi
 ```
 
 Increase executable permissions:
 
 ```shell
-chmod a+x board/common/post_copy_rootfs/etc/ppp/ip-up  
-chmod a+x board/common/post_copy_rootfs/etc/ppp/peers/quectel-pppd 
-chmod a+x board/common/post_copy_rootfs/etc/ppp/peers/quectel-chat-disconnect  
-chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-pppd.sh  
-chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-ppp-kill 
+chmod a+x board/common/post_copy_rootfs/etc/ppp/ip-up
+chmod a+x board/common/post_copy_rootfs/etc/ppp/peers/quectel-pppd
+chmod a+x board/common/post_copy_rootfs/etc/ppp/peers/quectel-chat-disconnect
+chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-pppd.sh
+chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-ppp-kill
 ```
 
 ## 3. Testing
@@ -356,7 +356,7 @@ Execute `cat /sys/kernel/debug/usb/devices` and `dmesg` commands to check if the
 
 ```shell
 [root@canaan ~ ]#mount -t debugfs none /sys/kernel/debug/
-[root@canaan ~ ]#cat /sys/kernel/debug/usb/devices 
+[root@canaan ~ ]#cat /sys/kernel/debug/usb/devices
 
 T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
 D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
@@ -503,7 +503,7 @@ ifconfig eth0 down
 #### 3.4.2 Testing
 
 ```shell
-ifconfig 
+ifconfig
 ping www.163.com
 ```
 

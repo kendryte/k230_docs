@@ -60,6 +60,7 @@
 |----------|--------|----------|
 | K230 SDK | V1.6.0 | 2024-6-14|
 | K230 SDK | V1.7.0 | 2024-8-26|
+| K230 SDK | V1.8.0 | 2024-11-06|
 
 ## 2. 支持的硬件
 
@@ -121,6 +122,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 35 | K230 SDK V1.3 | 深度相机poc | 增加深度相机poc功能，猫眼poc改为sd卡启动 | |
 | 36 | K230 SDK V1.4 | nonai_2d API | 增加nonai_2d CSC功能mpi和mapi | |
 | 37 | K230 SDK V1.4 | YUV Sensor Demo | 增加yuv sensor demo，3路yuv sensor输入，3路推流和屏显 | |
+| 38 | K230 SDK V1.8 | 优化audio 3a | 优化audio 3a aec 效果 | |
 
 ### 4.2 图像-
 
@@ -157,6 +159,8 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 29 | K230 SDK V1.4 | linear mode 支持adaptive      | linear mode 支持adaptive                                                                                               |      |
 | 30 | K230 SDK V1.5 | gc2053      | 添加gc2053的驱动                                                                                                                         |      |
 | 31 | K230 SDK V1.7 | gc2093      | 添加gc2093的驱动,包括带晶振和24M晶振的驱动                                                                                                 |      |
+| 32 | K230 SDK V1.8 | sc132gs      | 添加sc132gs的驱动                                                                                                 |      |
+| 32 | K230 SDK V1.8 | 支持4K      | 支持4K sensor os08a20                                                                                                 |      |
 
 ### 4.3 平台
 
@@ -211,6 +215,7 @@ K230平台支持K230 USIP LP3 EVB 、CanMV-K230等主板，具体硬件信息参
 | 46 | K230 SDK V1.6 | 支持rtt only系统 | 支持rtt only单系统                                                                                    |  |
 | 47 | K230 SDK V1.7 | 大核RTT I2C | RTT 支持I2C slave模式                                                                                    |  |
 | 48 | K230 SDK V1.7 | 新增板子 | 增加BPI-CanMV-K230D-Zero板子的支持(RTT-only)                                                                  |  |
+| 49 | K230 SDK V1.8 | 驱动优化 | 优化了I2C及SPI驱动                                                                  |  |
 
 ### 4.4 架构
 
