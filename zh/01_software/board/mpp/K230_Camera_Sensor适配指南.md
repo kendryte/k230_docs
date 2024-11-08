@@ -502,3 +502,137 @@ OV5647_CAM_PIN和OV5647_IIC 定义在mpp/include/comm/k_board_config_comm.h。�
 ```
 
 VICAP_CSI0和VICAP_SOURCE_CSI0修改为VICAP_CSI1和VICAP_SOURCE_CSI1。
+按照上边的方式已经将一个sensor的driver驱动写完了，下边是一些sensor测试方式和注意事项。
+注意事项如下：
+
+- 如果使用的是k230 芯片提供的clk、需要注意配置参数是正确的，sensor 的clk 配置如下 对应的不同的分频和不同的参数
+- 配置下边几处的参数要一致才行，主要是bounds_width ，width 和 sensor_info_list 中的 width，还有对用的xml 中配置，否则就会报错
+
+![camera sensor clk](images/sensor_mclk.png)
+
+ ```c
+ {
+        .index = 2,
+        .sensor_type = IMX335_MIPI_4LANE_RAW12_2592X1944_30FPS_LINEAR,
+        .size = {
+            .bounds_width = 2592,
+            .bounds_height = 1944,
+            .top = 0,
+            .left = 0,
+            .width = 2592,
+            .height = 1944,
+        },
+        .fps = 30000,
+        .hdr_mode = SENSOR_MODE_LINEAR,
+        .bit_width = 12,
+        .bayer_pattern = BAYER_PAT_RGGB,
+        .mipi_info = {
+            .csi_id = 0,
+            .mipi_lanes = 4,
+            .data_type = 0x2C,
+        },
+        .reg_list = imx335_mipi_4lane_raw12_2592x1944_30fps_mclk_24m_regs,
+    },
+```
+
+```c
+    static const k_vicap_sensor_info sensor_info_list[] = {
+        {
+            "ov5647",
+            1920,
+            1080,
+            VICAP_CSI0,
+            VICAP_MIPI_2LANE,
+            VICAP_SOURCE_CSI0,
+            K_TRUE,
+            VICAP_MIPI_PHY_800M,
+            VICAP_CSI_DATA_TYPE_RAW10,
+            VICAP_LINERA_MODE,
+            VICAP_FLASH_DISABLE,
+            VICAP_VI_FIRST_FRAME_FS_TR0,
+            0,
+            OV_OV5647_MIPI_CSI0_1920X1080_30FPS_10BIT_LINEAR_V2,
+        },
+    }
+```
+
+```c
+这个是xml 中的文件
+<name index="1" type="char" size="[1 9]">
+    1920x1080
+</name>
+<id index="1" type="char" size="[1 10]">
+    0x00000001
+</id>
+<width index="1" type="double" size="[1 1]">
+    [ 1920]
+</width>
+<height index="1" type="double" size="[1 1]">
+    [ 1080]
+</height>
+```
+
+- 再就是 所有的 sensor_func 必须都得写、可以参考代码中的自己去写，也就是下边func 实现
+
+```c
+struct sensor_driver_dev sc035hgs_sensor_drv = {
+    .i2c_info = {
+        .i2c_bus = NULL,
+        .i2c_name = "i2c3",
+        .slave_addr = 0x30,
+        .reg_addr_size = SENSOR_REG_VALUE_16BIT,
+        .reg_val_size = SENSOR_REG_VALUE_8BIT,
+    },
+    .sensor_name = SC035HGS_NAME,
+    .sensor_func = {
+        .sensor_power = sc035hgs_sensor_power_on,
+        .sensor_init = sc035hgs_sensor_init,
+        .sensor_get_chip_id = sc035hgs_sensor_get_chip_id,
+        .sensor_get_mode = sc035hgs_sensor_get_mode,
+        .sensor_set_mode = sc035hgs_sensor_set_mode,
+        .sensor_enum_mode = sc035hgs_sensor_enum_mode,
+        .sensor_get_caps = sc035hgs_sensor_get_caps,
+        .sensor_conn_check = sc035hgs_sensor_conn_check,
+        .sensor_set_stream = sc035hgs_sensor_set_stream,
+        .sensor_get_again = sc035hgs_sensor_get_again,
+        .sensor_set_again = sc035hgs_sensor_set_again,
+        .sensor_get_dgain = sc035hgs_sensor_get_dgain,
+        .sensor_set_dgain = sc035hgs_sensor_set_dgain,
+        .sensor_get_intg_time = sc035hgs_sensor_get_intg_time,
+        .sensor_set_intg_time = sc035hgs_sensor_set_intg_time,
+        .sensor_get_exp_parm = sc035hgs_sensor_get_exp_parm,
+        .sensor_set_exp_parm = sc035hgs_sensor_set_exp_parm,
+        .sensor_get_fps = sc035hgs_sensor_get_fps,
+        .sensor_set_fps = sc035hgs_sensor_set_fps,
+        .sensor_get_isp_status = sc035hgs_sensor_get_isp_status,
+        .sensor_set_blc = sc035hgs_sensor_set_blc,
+        .sensor_set_wb = sc035hgs_sensor_set_wb,
+        .sensor_get_tpg = sc035hgs_sensor_get_tpg,
+        .sensor_set_tpg = sc035hgs_sensor_set_tpg,
+        .sensor_get_expand_curve = sc035hgs_sensor_get_expand_curve,
+        .sensor_get_otp_data = sc035hgs_sensor_get_otp_data,
+        .sensor_mirror_set = sc035hgs_sensor_mirror_set,
+    },
+};
+```
+
+注意事项就是这些，下边将一下调试方法，出了问题可以先按照下边的方式查找
+
+- 首先就是你运行发现报错了，你就需要看一下上边的注意事项是不是都是满足的，这个一般是报connecot err 什么的
+- 第一种错误 iic read chip id err 这种错误基本就是snesor iic 配置出问题了、需要查一下，可以用示波器量取iic 信号、看看是否iic 正常通信，如果你的sensor pwdn、reset 的状态不对、iic 是可能不应答的。
+
+ 如果什么错都没有报，程序正常运行、可以按照下边的流程和方法看一下是哪块的错误
+
+- 首先cat /proc/umap/vicap 看一下是不是所有的参数都是0 、是的话就是没有数据进来、就是前级的问题、否则就得看一下你配置的sensor 的输入size 和 给isp 配置的size 一致
+
+- 然后去用示波器量一下mipi 波形、看看是否有波形、可以看一下有效的行数是不是你配置sensor 输出的行数，如果行数不对，就是sensor 的配置不对了。量一下mipi 的clk 是多少、这个需要配置VICAP_MIPI_PHY_800M 这个与你量到的相近的最好。
+
+- 读取 芯片测寄存器，查看是否有err，csi0 是0x9000980c, csi1 是 0x9000a00c ，csi2 是 0x9000a80c ，如果都是0 就证明csi 是没有错误的。错误码如下
+
+![camera sensor err](images/ipi_err.png)
+这两个就是错误码、常见的如下
+
+- bit0 是phy 的err 、证明 sensor 发的数据是错误的
+- ipi ecc 和 crc 的err 一般都是 配置raw 格式不对、当然可能是sensor 发送的数据不对。
+
+剩下的就是需要和厂商沟通或者和自己看sensor 寄存器自己调试了。
