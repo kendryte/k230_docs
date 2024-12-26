@@ -1,4 +1,4 @@
-# K230 lpddr3/lpddr4驱动适配指导
+# K230 lpddr3/lpddr4驱动适配指南
 
 ## 1.概述
 
