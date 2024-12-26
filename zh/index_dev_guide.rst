@@ -15,6 +15,7 @@ K230 SDK 开发指南
    01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md
    01_software/board/mpp/K230_LCD适配指南.md
    01_software/board/osdrv/K230_PMU_使用指南.md
+   01_software/board/osdrv/K230_lpddr4_lpddr3驱动适配指南.md
    01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_使用指南.md
    01_software/board/osdrv/K230_SDK_IoT_WiFi_AiW4211LV10_驱动开发指南.md
    01_software/board/ai/K230_nncase_开发指南.md
