@@ -73,5 +73,11 @@ html_theme_options = {
     "use_repository_button": True,
     "footer_start": ["Fleft.html"],
 	"footer_center": ["Footer.html"],
-	"footer_end" : ["Fright.html"]
+	"footer_end" : ["Fright.html"],
+    "article_footer_items": ["content.html"]
 }
+if language == 'en':
+    html_theme_options["footer_start"] = ["FleftEn.html"]
+    html_theme_options["footer_center"] = ["FooterEn.html"]
+    html_theme_options["footer_end"] = ["FrightEn.html"]
+    html_theme_options["article_footer_items"] = ["contentEn.html"]
