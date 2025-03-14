@@ -69,9 +69,9 @@ K230 GPU 支持多种二维图元
 
 ### GPU 基础
 
-在 K230 SDK 的小核 Linux 上，主要通过调用 VGLite API 来与 GPU 交互。VGLite 内部会维护一个 GPU 的命令队列，当需要完成绘制，或者队列满时会提交到 GPU 硬件进行渲染。命令队列的长度默认为65536，可以调用 `vg_lite_set_command_buffer_size` 函数进行修改。
+通过调用 VGLite API 来与 GPU 交互。VGLite 内部会维护一个 GPU 的命令队列，当需要完成绘制，或者队列满时会提交到 GPU 硬件进行渲染。命令队列的长度默认为65536，可以调用 `vg_lite_set_command_buffer_size` 函数进行修改。
 
-注意：**VGLite API 不支持在多线程上下文中使用，如果你的应用程序使用了多线程，请确保只有一个线程会使用VGLite API**。
+注意：**VGLite API 不支持在多线程上下文中使用，如果你的应用程序使用了多线程，请确保只有一个线程会使用VGLite API，这一点对于双核的情况一致，虽然大核和小核都可以使用GPU，但不能同时使用**
 
 K230 GPU 是一个 memory-to-memory 设备，本身不具备显示输出能力，如果需要显示可以与 DRM 配合使用。
 
@@ -82,13 +82,19 @@ K230 GPU 是一个 memory-to-memory 设备，本身不具备显示输出能力�
 VGLite API 主要包含两个部分，头文件和库文件，其中头文件的位置在
 
 ```text
+# linux
 <K230 SDK>/src/little/buildroot-ext/package/vg_lite/inc/vg_lite.h
+# rtt
+<K230 SDK>/src/big/mpp/userapps/api/vg_lite.h
 ```
 
 将 K230 SDK 完整编译后，库文件会放在
 
 ```text
+# linux
 <K230 SDK>/output/k230_evb_defconfig/little/buildroot-ext/target/usr/lib/libvg_lite.so
+# rtt
+<K230 SDK>/src/big/mpp/userapps/lib/libvg_lite.a
 ```
 
 #### make
@@ -178,11 +184,9 @@ install(TARGETS ${PROJECT_NAME} DESTINATION "${K230SDK}/output/k230_evb_defconfi
 
 ### 显示
 
-K230 EVB 有一个1080x1920的显示屏，在小核linux上可以用 DRM 进行显示，让 GPU 驱动加载 DRM dumb buffer 可以减少内存拷贝，实现高效渲染。GPU+DRM 的相关代码可以参考 `vglite_drm` 这个 demo，读者可以将 `drm.c` 添加到自己的程序中。
+K230 支持 DSI 显示输出，在 linux 上可以用 DRM 进行显示，让 GPU 驱动加载 DRM dumb buffer 可以减少内存拷贝，实现高效渲染，在 rtt 上可以使用 vo 驱动进行显示。GPU+DRM 的相关代码可以参考 `vglite_drm` 这个 demo，读者可以将 `drm.c` 添加到自己的程序中。
 
-需要注意截至 K230 SDK v0.8，linux 上的 DRM 驱动仍然**不能**独立工作，需要依赖大核对 SoC 视频输出模块的配置，可以通过在大核上执行 `sample_vo.elf 3` 来完成。
-
-其次 DRM 的颜色格式枚举与 `vg_lite_buffer_format_t` 并不完全一致，例如 `VGLITE_BGRA8888` 表示的是红色在低8位，alpha在高8位的32位颜色，对应 DRM 中的 `DRM_FORMAT_ARGB8888`。
+DRM 的颜色格式枚举与 `vg_lite_buffer_format_t` 并不完全一致，例如 `VGLITE_BGRA8888` 表示的是红色在低8位，alpha在高8位的32位颜色，对应 DRM 中的 `DRM_FORMAT_ARGB8888`。
 
 ![vglite_drm demo 运行结果](images/gpu-1.jpg)
 

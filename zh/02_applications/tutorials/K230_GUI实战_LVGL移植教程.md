@@ -52,20 +52,17 @@
 
 LVGL是流行的免费开源嵌入式图形库，可以用于嵌入式系统的图形用户界面(GUI)开发。
 
-### 硬件环境
-
-- K230-USIP-LP3-EVB-V1.1
-- 配套的LCD模组
-
 ### 概述
 
-k230使用DRM作为显示驱动，DRM(Direct Rendering Manager) 是 Linux 内核中的一个子系统，相比过时的Framebuffer 可以支持复杂的 GPU 操作，如硬件加速的图形渲染。lvgl可以基于libdrm提供的接口进行GUI的绘制。
+k230 linux 使用DRM作为显示驱动，DRM(Direct Rendering Manager) 是 Linux 内核中的一个子系统，相比过时的Framebuffer 可以支持复杂的 GPU 操作，如硬件加速的图形渲染。lvgl可以基于libdrm提供的接口进行GUI的绘制。
 
-SDK中已经移植好lvgl组件，且默认编译了一个可以运行的demo，位于`/usr/bin/lvgl_demo_widgets`。开机后在小核linux终端输入命令`lvgl_demo_widgets`回车即可体验。
+SDK中已经移植好lvgl组件，且默认编译了一个可以运行的demo，linux 位于`/usr/bin/lvgl_demo_widgets`，rtt 位于 `/sharefs/app/sample-lvgl.elf`。开机后在小核linux终端输入命令`lvgl_demo_widgets`回车，或者在大核rtt终端输入 `/sharefs/app/sample-lvgl.elf` 即可体验。
 
 ### lvgl源码位置
 
-SDK中已经包含移植好的lvgl，路径位于`src/little/buildroot-ext/package/lvgl`。在SDK的buildroot编译过程中会将源码放置于目录`output/k230_evb_defconfig/little/buildroot-ext/build/lvgl-v8.3.7`下，该目录包含了从github拉取的lvgl源码包以及前面所说的src路径下的移植文件。目录结构如下：
+SDK中已经包含移植好的lvgl，路径位于`src/little/buildroot-ext/package/lvgl` 和 `src/big/mpp/userapps/sample/sample_lvgl` 。
+
+在buildroot编译过程中会将源码放置于目录`output/k230_evb_defconfig/little/buildroot-ext/build/lvgl-v8.3.7`下，该目录包含了从github拉取的lvgl源码包以及前面所说的src路径下的移植文件。目录结构如下：
 
 ```sh
 .
@@ -90,6 +87,8 @@ SDK中已经包含移植好的lvgl，路径位于`src/little/buildroot-ext/packa
 ├── Makefile
 └── mouse_cursor_icon.c
 ```
+
+在 mpp sample 编译过程中，则是使用 `src/big/mpp/userapps/src/lvgl` 目录下的 lvgl 源码。
 
 ### lvgl的DRM驱动
 
@@ -131,11 +130,11 @@ void drm_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color
 
 ### lvgl的使用
 
-lvgl的主程序文件位于`src/little/buildroot-ext/package/lvgl/port_src/main.c`
+lvgl的主程序文件，linux 位于`src/little/buildroot-ext/package/lvgl/port_src/main.c`，rtt 位于 `src/big/mpp/userapps/sample/sample_lvgl/main.c`
 
 #### lvgl配置相关
 
-lvgl配置文件位于：`src/little/buildroot-ext/package/lvgl/port_src/lv_conf.h`
+lvgl配置文件，linux 位于 `src/little/buildroot-ext/package/lvgl/port_src/lv_conf.h`，rtt 位于 `src/big/mpp/userapps/sample/sample_lvgl/lv_conf.h`
 
 以下是几个常用的配置项:
 

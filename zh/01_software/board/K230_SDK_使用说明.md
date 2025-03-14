@@ -419,9 +419,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ### 8.1 调试前准备
 
-1.从 T-Head公司的OCC平台 `https://occ.t-head.cn/community/download` 下载`T-Head-DebugServer`软件和《DebugServer User Guide v5.6》，并参考《DebugServer User Guide v5.6》在pc电脑上安装`T-Head-DebugServer`软件；
-
-![图形用户界面, 文本, 应用程序 描述已自动生成](images/830f7333997768ba1fa01e69aedeeb88.png)
+1.从 T-Head官网 `https://www.xrvm.cn/community/download` 下载`XuanTie DebugServer`软件和《Debugger Server User Guide(ZH-CN).pdf》，并参考《Debugger Server User Guide(ZH-CN).pdf》在pc电脑上安装`XuanTie DebugServer`软件；
 
 ![图形用户界面, 文本, 应用程序, 电子邮件 描述已自动生成](images/a3ee5b66a56b295c092465fec74ed086.png)
 
@@ -435,7 +433,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ![电子仪器被放在电脑旁边 中度可信度描述已自动生成](images/cc18bccbf8054dde022db7f9c07df307.png)
 
-2.电脑上打开第1步安装的T-HeadDebugServer软件，看到类似如下图打印说明连接成功，如果连接失败请参考《DebugServer User Guide v5.6》排查失败原因。
+2.电脑上打开第1步安装的T-HeadDebugServer软件，看到类似如下图打印说明连接成功，如果连接失败请参考《DebugServer User Guide 》排查失败原因。
 
 ![文本 描述已自动生成](images/33d48fa7906e4bf8a0aed4aad7c28178.png)
 

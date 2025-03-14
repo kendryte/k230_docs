@@ -744,9 +744,9 @@ Options:
 
 示例1：
 
-`./sample_vicap -conn 1 -dev 0 -sensor 23 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V1.0/1.1板`
+`./sample_vicap -conn 1 -dev 0 -sensor 24 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V1.0/1.1板`
 
-`./sample_vicap -conn 1 -dev 0 -sensor 33 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V2.0板`
+`./sample_vicap -conn 1 -dev 0 -sensor 34 -chn 0 -chn 1 -ow 640 -oh 480 -preview 0  // Canmv-K230-V2.0板`
 
 说明：将ov5647@1920x1080 RGB输出 绑定到vicap设备0,并使能vicap设备输出通道0和通道1，其中通道0输出大小默认为输入图像大小（1920x1080），通道1输出图像大小为640x480
 
@@ -760,9 +760,9 @@ Options:
 
 如果不方便更换LDO可以等待后续的V1.2版本的板子。
 
-`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 23 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 26 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 27 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V1.0/1.1板`
+`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 24 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 27 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 28 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V1.0/1.1板`
 
-`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 31 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 32 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 33 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V2.0板`
+`./sample_vicap.elf -conn 1 -mode 1 -dev 0 -sensor 37 -chn 0 -ow 320 -oh 240 -dev 1 -sensor 38 -chn 0 -ow 320 -oh 240 -dev 2 -sensor 39 -chn 0 -ow 320 -oh 240 -ofmt 1  // Canmv-K230-V2.0板`
 
 ![三摄结果](images/Tri_camera_result.png)
 

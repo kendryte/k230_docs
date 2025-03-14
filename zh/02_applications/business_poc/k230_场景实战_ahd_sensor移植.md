@@ -35,10 +35,10 @@
 
 本次demo 使用的模块如下：
 
-- vicap ：这个是将接受到的 mipi 输出存储到ddr 当中，mipi 输出的格式是yuv444的。
-- 2d ： 这个是格式转换模块，可以将yuv444的图像转换成yuv420、rgb888 plane。
-- dw：这个模块是做任意比例缩放。
-- gdma ： 这个模块可以进行图像旋转和mirror。
+- vicap ：vicap是将接受到的sensor的输出数据存储到ddr。在vicap配置AHD sensor中，sensor 的输入只支持YUV422_8 , vicap输出的格式是yuv444。
+- nonai-2d ： nonai-2d是格式转换模块，可以将yuv444的图像转换成yuv420、rgb888 plane等。
+- dw：dw模块是做任意比例缩放，但是stride 必须是4的倍数。
+- gdma ： gdma模块可以进行图像旋转和mirror。
 
 ### 读者对象
 
@@ -55,15 +55,52 @@
 
 ## 1. ahd sensor介绍
 
-ahd 即Analog High Definition，意思为模拟高清。AHD摄像头即模拟高清摄像头，传输信号为高清模拟信号，本次用的是xs9950 芯片将ahd 转换成mipi。
+AHD（Analog High Definition）即模拟高清技术，是一种基于模拟同轴电缆传输逐行扫描的高清视频技术，具有高清、传输距离远的特点。本次用的AHD 转 mipi 的芯片是XS9950 芯片，这款芯片是国产的支持将高清制式AHD 信号转换成mipi 信号的芯片。
 
-### 1.1 硬件连接介绍
+## 2.硬件介绍
 
-需要将三路ahd 的sensor 接到xs9950芯片上、每一路的xs9950 分别接到 k230 的三路 mipi 上，需要注意的是iic的引脚电压、xs9950 的复位信号和 pwd 信号是否需要接入到k230中。
+k230 芯片支持3路mipi 输出，也就可以同时支持3路AHD sensor 输入， 下边是AHD sensor 接入k230 芯片的示意图，第一张是k230 芯片的mipi 引脚图、第二张是 AHD sensor 的接线图。
 
-### 1.2 rtt kernel 修改介绍
+![door_lock_signup_show](images/ahd1.png)
+![door_lock_signup_show](images/ahd2.png)
 
-目前在k230 sdk 当中已经有了三路xs9950 的驱动drive，里边的默认配置都是使用720p 25fps 的 ahd sensor 输入，具体的代码在k230_sdk/src/big/mpp/kernel/sensor/src 中，具体的文件如下：
+本次的测试用板是以k230 canmv 开发板为基础开发、共接入了三路AHD sensor，需要注意的事项如下
+
+- 三路AHD sensor 必须接到三个不同的mipi接口上、需要确认mipi的线序不要接错。
+- 三路AHD sesnor 需要确认每路的IIC电压必须与芯片的io 电压相匹配、否则电压不匹配可能导致芯片烧毁或者通信失败
+- 三路AHD sesnor 需要确认复位，pwdn 是否接入到k230 芯片，接入需要注意电压是否匹配、没有接入需要保证满足AHD sensor 启动时序。
+
+本次的测试是已经在k230 canmv 开发板基础上做的适配、所以每个ahd 的配置已经在sdk当中配置完成、如果需要设计对应自己的开发板，具体的硬件设置请参考硬件设置指南 [K230_硬件设计指南](../../00_hardware/K230_%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97.md)
+
+## 3.软件介绍
+
+k230 软件部分采用的是RTT 操作系统，这个操作系统分为两部分，一部分是RTT 内核态、另一部分是RTT 用户态 ，配置AHD sensor 也需要修改这两部分。
+
+RTT 内核态 主要是修改跟硬件相关的修改、包含AHD sensor 的复位、iic、pwdn，具体的修改参考下一章节 rtt kernel 修改。
+
+RTT 用户态 部分主要是用户态程序、本次的用例是以3路720p 25fps 的输入、最终在屏幕上显示三路ahd sensor 采集到的图像。具体的pipe 流程如下：
+
+第一路 ：
+
+- vicap（dev0 chn0）-> 2d(dev0 chn0) -> dw (dev0 chn0) -> gdma(dev0 chn0) -> vo(dev0, chn1)
+
+第二路 ：
+
+- vicap（dev1 chn0）-> 2d(dev0 chn1) -> dw (dev1 chn0) -> gdma(dev0 chn1) -> vo(dev0, chn2)
+
+第三路 ：
+
+- vicap（dev2 chn0）-> 2d(dev0 chn2) -> dw (dev2 chn0) -> gdma(dev0 chn2) -> vo(dev0, chn3)
+
+三路AHD输出720p 25fps图像到vicap，vicap采集720P yuv444的图像发送给nonai-2d，nonai-2d 将720P yuv444的图像转化成720p yuv420发送给dw，dw 将720p图像缩放到640x360 的大小在送给gdma，gdma将640x360旋转90度变成360x640在推送给屏幕显示，本次的屏幕是采用的720x1280 的屏幕，采用的是竖屏当作横屏用，所以需要旋转。后续章节会按照每个pipe 的模块做详细介绍
+
+补充：pipe 中的 dev 和 chn 是模块的通道、每个模块支持的不同、有的可能支持多个dev、多个chn。以pipe 0 vicap （dev0 chn0）为例子dev0 ：vicap 的dev 0 设置，chn0 ：vicap 的 0 通道。
+
+### 3.1 RTT 内核态修改介绍
+
+本次本次的测试是已经在k230 canmv 开发板基础上做的适配，所以AHD sesnor 的drver 已经是是配好的、如果需要设配新的AHD sensor 或者以XS9950为基础设置新的开发板请参考sensor配置指南[K230_Camera_Sensor](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md)
+
+目前在k230 sdk 当中已经有了三路xs9950 的驱动driver，里边的默认配置都是使用720p 25fps的AHD sensor 输入，具体的代码在k230_sdk/src/big/mpp/kernel/sensor/src 中，具体的文件如下：
 
 - xs9950_csi0_drv.c
 - xs9950_csi1_drv.c
@@ -71,9 +108,11 @@ ahd 即Analog High Definition，意思为模拟高清。AHD摄像头即模拟高
 
 每个driver 对应的是接到mipi 的csi0 和 csi1 和 csi2 三个接口上。driver 的部分修改只需要关注下边几部分，本次以 xs9950_csi0_drv.c 为例：
 
-reset 的 gpio 控制需要改成你接到 k230 的gpio。
+reset 的 gpio 控制需要改成你接到 k230 的gpio，这是以k230 canmv 卡发板为基础，reset 的gpio 是0。
 
 ```sh
+k230_sdk/src/big/mpp/kernel/sensor/src/xs9950_csi0_drv.c:
+
 static int xs9950_power_rest(k_s32 on)
 {
     #define VICAP_XS9950_RST_GPIO     (0)  //24// 
@@ -95,9 +134,11 @@ static int xs9950_power_rest(k_s32 on)
 }
 ```
 
-iic 的选择需要你连接到k230上对应的iic name。
+iic 的选择需要你连接到k230上对应的iic name。这是以k230 canmv 卡发板为基础，iic是i2c3.
 
 ```sh
+k230_sdk/src/big/mpp/kernel/sensor/src/xs9950_csi0_drv.c:
+
 struct sensor_driver_dev xs9950_csi0_sensor_drv = {
     .i2c_info = {
         .i2c_bus = NULL,
@@ -111,26 +152,15 @@ struct sensor_driver_dev xs9950_csi0_sensor_drv = {
 }
 ```
 
-### 1.3 rtt 用户态代码介绍
+### 3.2 RTT 用户态 修改介绍
 
-本次的介绍是三路ahd输入三路显示，具体的pipe 流程如下：
-第一路 ：
-
-- vicap（dev0 chn0）-> 2d(dev0 chn0) -> dw (dev0 chn0) -> gdma(dev0 chn0) -> vo(dev0, chn1)
-
-第二路 ：
-
-- vicap（dev1 chn0）-> 2d(dev0 chn1) -> dw (dev1 chn0) -> gdma(dev0 chn1) -> vo(dev0, chn2)
-
-第三路 ：
-
-- vicap（dev2 chn0）-> 2d(dev0 chn2) -> dw (dev2 chn0) -> gdma(dev0 chn2) -> vo(dev0, chn3)
-
-这个的代码比较多、我会按照每个模块的方式做不同的初始化，本次代码流程是三路ahd的720p输入, 通过vicap采集yuv444的图像发送给2d，2d 将yuv444的图像转化成yuv420发送给dw，dw 将图像缩放到640x360 的大小在送给gdma，gdma 旋转90度在推送给屏幕显示，本次的屏幕是采用的720x1280 的屏幕。
+上边已经介绍了用户态代码的流程、下边就按照这个流程做逐个模块介绍。
 
 所有的宏定义如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 #define ISP_CHN0_WIDTH              (1280)
 #define ISP_CHN0_HEIGHT             (720)
 #define VICAP_OUTPUT_BUF_NUM        10
@@ -165,11 +195,13 @@ struct sensor_driver_dev xs9950_csi0_sensor_drv = {
 
 上边主要是定义了一些输出和输入的size和每个模块对应vb大小的定义。
 
-#### 1.3.1 vb
+#### 3.2.1 vb
 
-vb 的代码如下：
+vb（Video Buff）是用来在各个模块存储数据和数据中转的内存空间，每个模块接受数据和发送数据都是以VB 的形式做传输的、所以每个模块都需要分配一些vb 用来存储和发送数据，初始化整个pipe 的时候先把所有模块的vb先配置好。下边是vb 初始化用例：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static int sample_vb_init(void)
 {
     k_s32 ret;
@@ -271,6 +303,8 @@ static int sample_vb_init(void)
 ```
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 #define GDMA_BUF_NUM 6
 #define DW200_CHN1_VB_NUM 4
 #define DW200_CHN0_VB_NUM 4
@@ -279,13 +313,15 @@ static int sample_vb_init(void)
 #define VICAP_OUTPUT_BUF_NUM        10
 ```
 
-上边是所有模块的vb 定义，gdma 分配了6个、三路dw 每路分配了4个、三路vicap 每路分配了10个，这个可以根据内存做自己的裁剪、饿哦的这个是1g 的ddr 、所以分配的比较多。如果你裁剪了某个模块，对应的内存可以去掉。
+上边是所有模块的vb 定义，gdma 分配了6个、三路dw 每路分配了4个、三路vicap 每路分配了10个，这个可以根据内存做自己的裁剪。如果你裁剪了某个模块，对应的内存可以去掉。
 
-#### 1.3.2 vicap
+#### 3.2.2 vicap
 
-vicap 代码初始化如下：
+vicap 主要是用来接受sensor 的输出，然后经过处理存储到内存中的模块，在这里主要接收AHD sensor 的yuv422_8 的数据转换成yuv444 的数据存储到ddr 当中，如果想具体了解vicap，可以参考[K230_VICAP_API](../../01_software/board/mpp/K230_VICAP_API%E5%8F%82%E8%80%83.md) 参考指南。下边是vicap 相关的代码：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static int sample_vicap_init(k_vicap_dev dev_chn, k_vicap_sensor_type type)
 {
     k_vicap_dev vicap_dev;
@@ -379,6 +415,8 @@ static int sample_vicap_init(k_vicap_dev dev_chn, k_vicap_sensor_type type)
 参考示例如下，下边的是三路的初始化，你也可以用其中的一路或者两路：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 ret = sample_vicap_init(VICAP_DEV_ID_0, XS9950_MIPI_CSI0_1280X720_30FPS_YUV422);
 if(ret < 0)
 {
@@ -404,6 +442,8 @@ if(ret < 0)
 开始或者停止vicap的代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static k_s32 sample_vicap_stream(k_vicap_dev vicap_dev, k_bool en)
 {
     k_s32 ret = 0;
@@ -439,16 +479,24 @@ static k_s32 sample_vicap_stream(k_vicap_dev vicap_dev, k_bool en)
 使用方法如下，这个是开启三路代码
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 sample_vicap_stream(VICAP_DEV_ID_0, K_TRUE);
 sample_vicap_stream(VICAP_DEV_ID_1, K_TRUE);
 sample_vicap_stream(VICAP_DEV_ID_2, K_TRUE);
 ```
 
-#### 1.3.3 2d
+本次的AHD sensor 的demo 是以k230 canmv 开发板为基础做的开发、所以目前已经支持了三路AHD sesnor 的 支持了，用户只需要配置XS9950_MIPI_CSI0_1280X720_30FPS_YUV422， XS9950_MIPI_CSI1_1280X720_30FPS_YUV422， XS9950_MIPI_CSI2_1280X720_30FPS_YUV422 这三个sensor type 到对应的dev就可以了，不需要自己做修改，如果需要配置其他的开发板可以参考[K230_Camera_Sensor](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md) 配置指南这个文档。
 
-2d 的初始化代码如下，这个是初始化了6路2d、三路用于和bind做显示测的处理，另外三路是用于将yuv444转换成rgb888 plane 去做ai 使用：
+#### 3.2.3 nonai-2d
+
+nonai-2d 主要是做格式转换的模块、可以将输入的yuv444格式转换成yuv420、rgb888 plane 等格式，具体的功能可以参考[K230_nonai_2D](../../01_software/board/mpp/K230_nonai_2D_API%E5%8F%82%E8%80%83.md) nonai-2d配置指南这个文档。
+
+本次配置的是输入的格式是yuv444、输出的格式分别是yuv422用来显示，输出格式rgb888 plane 用来做ai，具体的初始化代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static k_s32 nonai_2d_init()
 {
     int i;
@@ -483,6 +531,8 @@ static k_s32 nonai_2d_init()
 2d的代码的退出代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static k_s32 nonai_2d_exit()
 {
     int ret = 0;
@@ -501,122 +551,14 @@ static k_s32 nonai_2d_exit()
 }
 ```
 
-### 1.3.4 gdma
+#### 3.2.4 dw
 
-gdma 的初始化代码如下：
-
-```sh
-static k_s32 dma_dev_attr_init(void)
-{
-    k_dma_dev_attr_t dev_attr;
-
-    dev_attr.burst_len = 0;
-    dev_attr.ckg_bypass = 0xff;
-    dev_attr.outstanding = 7;
-
-    int ret = kd_mpi_dma_set_dev_attr(&dev_attr);
-    if (ret != K_SUCCESS)
-    {
-        printf("set dma dev attr error\r\n");
-        return ret;
-    }
-
-    ret = kd_mpi_dma_start_dev();
-    if (ret != K_SUCCESS)
-    {
-        printf("start dev error\r\n");
-        return ret;
-    }
-
-    return ret;
-}
-
-static void gdma_init(k_u8 chn, k_u8 rot, k_pixel_format pix, k_u32 width, k_u32 height)
-{
-    k_u8 gdma_rotation = rot;
-    k_pixel_format pix_format = pix;//PIXEL_FORMAT_YVU_SEMIPLANAR_420;
-    k_dma_chn_attr_u gdma_attr;
-    k_u8 ret = 0;
-
-    memset(&gdma_attr, 0, sizeof(gdma_attr));
-    gdma_attr.gdma_attr.buffer_num = 3;//GDMA_BUF_NUM;
-    gdma_attr.gdma_attr.rotation = gdma_rotation;
-    gdma_attr.gdma_attr.x_mirror = K_FALSE;
-    gdma_attr.gdma_attr.y_mirror = K_FALSE;
-    gdma_attr.gdma_attr.width = width;
-    gdma_attr.gdma_attr.height = height;
-    gdma_attr.gdma_attr.work_mode = DMA_BIND;
-    gdma_attr.gdma_attr.src_stride[0] = width;
-    if (gdma_rotation == DEGREE_180) {
-        gdma_attr.gdma_attr.dst_stride[0] = width;
-    } else {
-        gdma_attr.gdma_attr.dst_stride[0] = height;
-    }
-    if (pix_format == PIXEL_FORMAT_RGB_888) {
-        gdma_attr.gdma_attr.pixel_format = DMA_PIXEL_FORMAT_RGB_888;
-        gdma_attr.gdma_attr.src_stride[0] *= 3;
-        gdma_attr.gdma_attr.dst_stride[0] *= 3;
-    } else {
-        gdma_attr.gdma_attr.pixel_format = DMA_PIXEL_FORMAT_YUV_SEMIPLANAR_420_8BIT;
-        gdma_attr.gdma_attr.src_stride[1] = gdma_attr.gdma_attr.src_stride[0];
-        gdma_attr.gdma_attr.dst_stride[1] = gdma_attr.gdma_attr.dst_stride[0];
-    }
-
-    ret = kd_mpi_dma_set_chn_attr(chn, &gdma_attr);
-    if (ret != K_SUCCESS) {
-        printf("set chn attr error\r\n");
-    }
-    ret = kd_mpi_dma_start_chn(chn);
-    if (ret != K_SUCCESS) {
-        printf("start chn error\r\n");
-    }
-}
-```
-
-参数解释如下：
-
-- chn 通道： 0，1，2，3
-- rot ：旋转的格式，0，90，180，360.
-- width，输入的宽度， height 输入的高度， pix 输入的数据格式
-
-使用方法如下：
+dw 主要是做图像缩放使用、根据不同的需求做不同尺寸的缩放，代码如下：
 
 ```sh
-dma_dev_attr_init();
-gdma_init(0, DEGREE_90, PIXEL_FORMAT_YVU_SEMIPLANAR_420, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
-gdma_init(1, DEGREE_90, PIXEL_FORMAT_YVU_SEMIPLANAR_420, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
-gdma_init(2, DEGREE_90, PIXEL_FORMAT_RGB_888, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
-```
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
 
-首先初始化gdma 的dev、然后在初始化chn，这块需要注意的是第二个参数的格式不要选错了，还有就是你的这个尺寸必须是和你上一级的bind 的尺寸一致，否则就会出问题
-
-退出代码：
-
-```sh
-static void gdma_exit(k_u8 gdma_chn)
-{
-    k_u8 ret = 0 ;
-    ret = kd_mpi_dma_stop_chn(gdma_chn);
-    if (ret != K_SUCCESS) {
-        printf("stop chn error\r\n");
-    }
-
-}
-```
-
-使用方法如下，下边是三路退出的代码：
-
-```sh
-gdma_exit(0);
-gdma_exit(1);
-gdma_exit(2);
-```
-
-### 1.3.5 dw
-
-dw 的初始化代码如下：
-
-```sh
+static k_s32 sample_dw200_init(void)
 {
     k_s32 ret = 0;
     struct k_dw_settings dw0_settings;
@@ -749,9 +691,13 @@ dw 的初始化代码如下：
 - 输出要关注output[0].width 和 output[0].height 、output[0].format 。
 - 这个的初始化必须是在vicap 初始化之后、否则会出问题。
 
+本次输入的参数input.width：1280，input.height：720， 输出参数output[0].width：640， output[0].height：360 ，output[0].format 为yuv420，主要是将nonai-2d 输入的720p 图像缩放成 640x360 的图像做显示使用。
+
 下边的是退出的程序
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static void dw_exit(void)
 {
     kd_mpi_dw_exit(DEWARP_DEV_ID);
@@ -760,11 +706,134 @@ static void dw_exit(void)
 }
 ```
 
-### 1.3.6 display
+#### 3.2.5 gdma
 
-display 的初始化主要也是包括两部分、时序的初始化和图层的初始化，具体代码如下
+gdma 主要是用来做mirror、 rotation 功能，具体的可以参考[K230_DMA_API](../../01_software/board/mpp/K230_DMA_API%E5%8F%82%E8%80%83.md) dma 配置指南这个文档。
+
+本次采用gdma 主要是需要将图像旋转90°，将图像640x360 的图像旋转成360x640 的图像，送给display 做显示。具体的代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
+static k_s32 dma_dev_attr_init(void)
+{
+    k_dma_dev_attr_t dev_attr;
+
+    dev_attr.burst_len = 0;
+    dev_attr.ckg_bypass = 0xff;
+    dev_attr.outstanding = 7;
+
+    int ret = kd_mpi_dma_set_dev_attr(&dev_attr);
+    if (ret != K_SUCCESS)
+    {
+        printf("set dma dev attr error\r\n");
+        return ret;
+    }
+
+    ret = kd_mpi_dma_start_dev();
+    if (ret != K_SUCCESS)
+    {
+        printf("start dev error\r\n");
+        return ret;
+    }
+
+    return ret;
+}
+
+static void gdma_init(k_u8 chn, k_u8 rot, k_pixel_format pix, k_u32 width, k_u32 height)
+{
+    k_u8 gdma_rotation = rot;
+    k_pixel_format pix_format = pix;//PIXEL_FORMAT_YVU_SEMIPLANAR_420;
+    k_dma_chn_attr_u gdma_attr;
+    k_u8 ret = 0;
+
+    memset(&gdma_attr, 0, sizeof(gdma_attr));
+    gdma_attr.gdma_attr.buffer_num = 3;//GDMA_BUF_NUM;
+    gdma_attr.gdma_attr.rotation = gdma_rotation;
+    gdma_attr.gdma_attr.x_mirror = K_FALSE;
+    gdma_attr.gdma_attr.y_mirror = K_FALSE;
+    gdma_attr.gdma_attr.width = width;
+    gdma_attr.gdma_attr.height = height;
+    gdma_attr.gdma_attr.work_mode = DMA_BIND;
+    gdma_attr.gdma_attr.src_stride[0] = width;
+    if (gdma_rotation == DEGREE_180) {
+        gdma_attr.gdma_attr.dst_stride[0] = width;
+    } else {
+        gdma_attr.gdma_attr.dst_stride[0] = height;
+    }
+    if (pix_format == PIXEL_FORMAT_RGB_888) {
+        gdma_attr.gdma_attr.pixel_format = DMA_PIXEL_FORMAT_RGB_888;
+        gdma_attr.gdma_attr.src_stride[0] *= 3;
+        gdma_attr.gdma_attr.dst_stride[0] *= 3;
+    } else {
+        gdma_attr.gdma_attr.pixel_format = DMA_PIXEL_FORMAT_YUV_SEMIPLANAR_420_8BIT;
+        gdma_attr.gdma_attr.src_stride[1] = gdma_attr.gdma_attr.src_stride[0];
+        gdma_attr.gdma_attr.dst_stride[1] = gdma_attr.gdma_attr.dst_stride[0];
+    }
+
+    ret = kd_mpi_dma_set_chn_attr(chn, &gdma_attr);
+    if (ret != K_SUCCESS) {
+        printf("set chn attr error\r\n");
+    }
+    ret = kd_mpi_dma_start_chn(chn);
+    if (ret != K_SUCCESS) {
+        printf("start chn error\r\n");
+    }
+}
+```
+
+参数解释如下：
+
+- chn 通道： 0，1，2，3
+- rot ：旋转的格式，0，90，180，360.
+- width，输入的宽度， height 输入的高度， pix 输入的数据格式
+
+使用方法如下：
+
+```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
+dma_dev_attr_init();
+gdma_init(0, DEGREE_90, PIXEL_FORMAT_YVU_SEMIPLANAR_420, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
+gdma_init(1, DEGREE_90, PIXEL_FORMAT_YVU_SEMIPLANAR_420, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
+gdma_init(2, DEGREE_90, PIXEL_FORMAT_RGB_888, DW200_CHN0_OUTPUT_WIDTH, DW200_CHN0_OUTPUT_HEIGHT);
+```
+
+首先初始化gdma 的dev、然后在初始化chn，这块需要注意的是第二个参数的格式不要选错了，还有就是你的这个尺寸必须是和你上一级的bind 的尺寸一致，否则就会出问题，本次配置的宽是640， 高是360，旋转是90°。
+
+退出代码：
+
+```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
+static void gdma_exit(k_u8 gdma_chn)
+{
+    k_u8 ret = 0 ;
+    ret = kd_mpi_dma_stop_chn(gdma_chn);
+    if (ret != K_SUCCESS) {
+        printf("stop chn error\r\n");
+    }
+
+}
+```
+
+使用方法如下，下边是三路退出的代码：
+
+```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
+gdma_exit(0);
+gdma_exit(1);
+gdma_exit(2);
+```
+
+#### 3.2.6 display
+
+display 主要是用来做显示用的、具体的可以参考[K230_VO_API](../../01_software/board/mpp/K230_%E8%A7%86%E9%A2%91%E8%BE%93%E5%87%BA_API%E5%8F%82%E8%80%83.md) display 配置指南。本次主要是用来显示采集三路AHD sensor 的图像。
+
+```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static k_s32 sample_connector_init(k_connector_type type)
 {
     k_u32 ret = 0;
@@ -858,11 +927,11 @@ static void sample_vo_init(k_connector_type type)
 }
 ```
 
-这块主要是配置显示相关的代码，type 这个参数是已经支持的屏幕或者hdmi 的connector 的type，具体的看k_connector_comm.h 中已经支持的参数，剩下的就是配置图层了、目前显示部分大核支持两个layer（显示yuv）、4个osd（显示rgb），所以三个sensor 的显示采用了配置两个layer 和 一个osd， 最后的那个osd 是用来给ai 画字使用的，不用在这个pipe 中关系。在这里边主要是配置plane的尺寸和位置信息还有格式。
+这块主要是配置显示相关的代码，type 这个参数是已经支持的屏幕或者hdmi 的connector 的type，具体的看k_connector_comm.h 中已经支持的参数，剩下的就是配置图层了、目前显示部分大核支持两个layer（显示yuv）、4个osd（显示rgb），所以三个sensor 的显示采用了配置两个layer 和 一个osd， 最后的那个osd 是用来给ai 画字使用的，不用在这个pipe 中关系。在这里边主要是配置plane的尺寸和位置信息还有格式，每个图层显示的尺寸都是360x640的。
 
-### 1.3.7 bind
+#### 3.2.7 bind
 
-这块是大核mpp 最需要关注的一部分，这个的bind 是 保证每个模块走向下一个模块的连接链路，连接的不对整个数据流就全错了。我先介绍一下我目前的三路输出ahd sensor到显示屏幕的流程。
+bind 这个是mpp的一种数据传输方式、将上级模块和下级模块绑定，通过绑定的方式将数据从上级传入到下一级，这样可以保证数据正确传输。下边就是本demo 的整个绑定方式、分为三路，具体流程如下：
 
 第一路 ：
 
@@ -879,6 +948,8 @@ static void sample_vo_init(k_connector_type type)
 具体的代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static void sample_bind()
 {
     k_s32 ret;
@@ -977,9 +1048,11 @@ static void sample_bind()
 }
 ```
 
-这个带啊吗写的很清楚每一极的流程，谁和谁做的bind，每个设备都有自己的dev 和 chn 。解bind 流程和bind 的流程一样
+上边很清楚的写出了bind关系，每个设备都有自己的dev和chn，下边以pipe 0 为例：vicap dev：0 chn：0 和 nonai-2d 的dev： 0 ，chn：0 绑定。nonai-2d 的dev： 0 ，chn：0 和 dw的dev： 0 ，chn：0 绑定。 dw的dev： 0 ，chn：0 和 gdma的dev： 0 ，chn：0 绑定。gdma的dev： 0 ，chn：0 和 vo的dev： 0 ，chn：1  绑定。这个就是绑定关系、也是数据流动的关系。
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 static void sample_unbind()
 {
     k_s32 ret;
@@ -1081,11 +1154,13 @@ static void sample_unbind()
 
 需要注意先关掉每个模块之后在去做解绑。在这块不用哪个模块只需要将哪个模块在bind 当中去掉即可，比如去掉dw ，就可以2d 和 下一级的gdma 做bind ，但是就需要修改gdma 的 size 和数据格式了。
 
-### 1.3.8 main
+#### 3.2.8 main
 
-上边已经讲完了所有的模块和每个模块的初始化，下边就是main的讲解了，代码如下
+main 函数主要是将上边的所有模块串接起来，分别建立三个 Pipeline, 将 3个 AHD Sensor的内容送到 Display 做显示，具体的代码如下：
 
 ```sh
+k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
+
 int main(int argc, char *argv[])
 {
     int ret;
@@ -1232,11 +1307,48 @@ vb_init_error:
 
 while 之前是所有模块的初始话和start、这个需要注意将所有的模块都配置完成之后才可以调用vicap start。在while中的代码完全是为了做ai 使用的，dump 一帧vcaip 的数据、通过2d 转换成rgb888 plane 格式、给ai 做识别、然后再将2d 和vicap 给release 掉即可，最后边就是退出了，整体的代码详见 k230_sdk/src/big/mpp/userapps/sample/ahd_sensor/ 目录。
 
-## 1.4 测试
+## 4 编译
 
-上边已经讲解完成了所有代码相关的函数，运行只需要将编译好的文件直接执行就行
+这份文档撰写时是以 SDK V1.7 以基础，需要下载SDK V1.7 的源码。
 
-## 1.5 注意事项
+### 4.1 sdk编译
+
+首先需要编译sdk 、编译AHD sensor demo 需要依赖sdk 相关的代码，编译命令如下：
+
+```sh
+make CONF=k230_canmv_defconfig
+```
+
+如果你用的不同的板子可以根据[K230 SDK 使用说明](../../01_software/board/K230_SDK_%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md) 来修改。
+
+### 4.2 ahd sensor 编译
+
+ahd 编译需要先编译完成sdk 才可以编译，编译命令如下：
+
+```sh
+vim /home/zhaoshuai/sdk/k230/4k/k230_sdk/src/big/mpp/userapps/sample/Makefile
+
+在all里边增加：
+@cd sample_ahd_sensor; make || exit 1
+
+在clean 中增加：
+@cd sample_ahd_sensor; make clean
+
+增加完成之后运行下边命令：
+make mpp-apps
+会在/home/zhaoshuai/sdk/k230/4k/k230_sdk/src/big/mpp/userapps/sample/elf/  中生成 sample_ahd_sensor.elf  可执行文件
+
+```
+
+## 5 运行
+
+将 生成的 sample_ahd_sensor.elf 拷贝到开发板上，在大核命令行执行：
+
+```sh
+./sample_ahd_sensor.elf
+```
+
+## 6 注意事项
 
 - 第一个就是注意上一级传过来的图像尺寸和数据格式和当前模块对应的尺寸和数据格式是否一致、因为这块做个很多尺寸的变换、比如gdma 的旋转，dw 的缩放都是做了尺寸的改变，2d 的yuv444转换成yuv420，dw 将yuv420 转换成 rgb888 ，如果配置的格式不对和尺寸不对、后边的整个显示都是错误的
 - 第二个就是vb 大小和数量，每个模块用的尺寸可能不一样、可以根据不同的尺寸和数据格式计算出大小来申请vb，如果系统的内存不够、就得注意这个问题、根据实验找到一个可以运行的最小子集
@@ -1244,3 +1356,55 @@ while 之前是所有模块的初始话和start、这个需要注意将所有的
 - 用户态的线程优先级设置不可以配置比内核的优先级大、因为rtt 的 线程优先级和内核的优先级采用的是一套系统，最好用户的优先级设置25以上（用户态的线程优先级默认是25）
 - 目前的显示模式是将三路ahd 都缩放显示到vo 中，这个也可以做原图和缩放图切换的功能，这个的做法是先断掉 2d 和 后边的bind ，deinit 后边的模块， 从新配置后边的模块、然后在bind 。
 - vo 更换屏幕只需要更换connector 支持的type 就可以，但是需要注意你配置的图层的尺寸和位置不要超过屏幕的最大尺寸，否则显示会有问题
+- 运行接口默认是必须从mcm raw0（VICAP_SOURCE_CSI0）、raw1（VICAP_SOURCE_CSI1）、raw2（VICAP_SOURCE_CSI2） 的顺序进去才行。
+
+最后一点举个例子，k230 canmv 默认使用一路采用的是csi0 接入进去的，接入isp 采用的是VICAP_SOURCE_CSI0 是没有问题，但是如果你只能接csi1 进入isp、你就休要修改默认的配置，修改如下：
+
+```sh
+k230_sdk/src/big/mpp/userapps/src/sensor/mpi_sensor.c：
+
+{
+        "xs9950_csi0",
+        "xs9950-1280x720",
+        1920,
+        1080,
+        VICAP_CSI0,
+        VICAP_MIPI_2LANE,   //VICAP_MIPI_4LANE
+        VICAP_SOURCE_CSI0,
+        K_FALSE,
+        VICAP_MIPI_PHY_1200M,   //VICAP_MIPI_PHY_1200M
+        VICAP_CSI_DATA_TYPE_YUV422_8,
+        VICAP_LINERA_MODE,//VICAP_VCID_HDR_3FRAME,  VICAP_LINERA_MODE
+        VICAP_FLASH_DISABLE,
+        VICAP_VI_FIRST_FRAME_FS_TR0,
+        0,
+        30,
+        XS9950_MIPI_CSI0_1920X1080_30FPS_YUV422,
+    },
+这个是k230 canmv 默认的csi0 接入的 配置参数，选择isp 的接入源是VICAP_SOURCE_CSI0 ，直接单独跑这一路是没有问题的
+
+{
+        "xs9950_csi1",
+        "xs9950-1280x720",
+        1280,
+        720,
+        VICAP_CSI1,
+        VICAP_MIPI_2LANE,   //VICAP_MIPI_4LANE
+        VICAP_SOURCE_CSI1,
+        K_FALSE,
+        VICAP_MIPI_PHY_1200M,   //VICAP_MIPI_PHY_1200M
+        VICAP_CSI_DATA_TYPE_YUV422_8,
+        VICAP_LINERA_MODE,//VICAP_VCID_HDR_3FRAME,  VICAP_LINERA_MODE
+        VICAP_FLASH_DISABLE,
+        VICAP_VI_FIRST_FRAME_FS_TR0,
+        0,
+        30,
+        XS9950_MIPI_CSI1_1280X720_30FPS_YUV422,
+    },
+这个是k230 canmv 默认的csi1 接入的 配置参数，选择isp 的接入源是VICAP_SOURCE_CSI1 ，如果单独跑这个是没有办法运行的，需要将修改VICAP_SOURCE_CSI1为VICAP_SOURCE_CSI0 才可以正常跑，这个是一个限制。跑一路必须是VICAP_SOURCE_CSI0，跑两路 VICAP_SOURCE_CSI0，VICAP_SOURCE_CSI1，跑三路 VICAP_SOURCE_CSI0 VICAP_SOURCE_CSI1 VICAP_SOURCE_CSI2. 这个就是一个限制、按照这个规则运行就可以。修改办法按照上边修改即可。
+
+```
+
+## 7 后续
+
+这个只是在已经有的ahd 的sensor drver 基础上做的开发，如果你要移植新的ahd sensor 可一参考文档中的[K230_Camera_Sensor适配指南](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md) 。该文档详细的写了怎么移植一个新的sensor，ahd sensor 移植过程和别的sensor 没有任何区别.

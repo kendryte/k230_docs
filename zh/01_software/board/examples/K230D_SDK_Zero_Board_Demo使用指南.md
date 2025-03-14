@@ -127,7 +127,7 @@ Options:
 
 示例：
 
-`./sample_vicap.elf  -conn 3 -dev 0 -sensor 19 -chn 0  -ow 800 -oh 480 -rotation 1`
+`./sample_vicap.elf  -conn 3 -dev 0 -sensor 28 -chn 0  -ow 800 -oh 480 -rotation 1`
 
 说明：将ov5647@1920x1080 绑定到vicap设备0,并使能vicap设备输出通道0，其中通道0输出800x480，通过屏显示。
 
