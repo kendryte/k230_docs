@@ -63,7 +63,7 @@ The source code path is located at `k230_sdk/src/reference/fancy_poc`, with the 
 #### b. Direct Download of Official Board Image
 
 1. Ensure that you have built the docker container according to the [K230 SDK official instructions](https://github.com/kendryte/k230_sdk).
-1. Download the image from the [official resource library](https://developer.canaan-creative.com/resource).
+1. Download the image from the [official resource library](https://www.kendryte.com/resource).
 1. Prepare the environment:
 
 ```bash

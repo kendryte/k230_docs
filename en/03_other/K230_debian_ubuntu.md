@@ -53,7 +53,7 @@ This document (this guide) is mainly applicable to the following personnel:
 
 ## 1. Image Description
 
-Please download the images from the [Canaan Developer Community](https://developer.canaan-creative.com/resource). You can find Debian and Ubuntu related files under k230/images on the Canaan Developer Community website.
+Please download the images from the [Kendryte Developer Community](https://www.kendryte.com/resource). You can find Debian and Ubuntu related files under k230/images on the Kendryte Developer Community website.
 
 1.1) Files like xxxx_debian_sdcard_x.x.img.gz are compressed Debian images for the K230:
 

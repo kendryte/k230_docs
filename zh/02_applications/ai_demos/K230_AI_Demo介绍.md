@@ -333,7 +333,7 @@ cd /sharefs/k230_bin/face_detection
 
 （1）确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器
 
-（2）从[官网资源库](https://developer.canaan-creative.com/resource)下载镜像
+（2）从[官网资源库](https://www.kendryte.com/resource)下载镜像
 
 （3）环境准备
 
