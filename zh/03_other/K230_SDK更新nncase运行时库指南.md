@@ -50,7 +50,7 @@
 
 - 通过[版本对应关系表](./K230_SDK_nncase版本对应关系.md#k230-sdk-nncase版本对应关系)查询。
 - 通过镜像名字确定两者的版本，例如 `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`，其中 `v1.4` 表示SDK版本，`v2.8.0`表示 nncase 版本，即SDK-v1.4可以推理nncase-v2.8.0编译生成的 `kmodel`。
-  镜像可通过[嘉楠开发者社区](https://developer.canaan-creative.com/resource)获取。
+  镜像可通过[勘智开发者社区](https://www.kendryte.com/resource)获取。
 
 ### 3. 版本不兼容解决办法
 

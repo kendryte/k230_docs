@@ -333,7 +333,7 @@ cd /sharefs/k230_bin/face_detection
 
 (1) Ensure that you have constructed the Docker container according to the [official K230 SDK instructions](https://github.com/kendryte/k230_sdk).
 
-(2) Download the image from the [official resource library](https://developer.canaan-creative.com/resource).
+(2) Download the image from the [official resource library](https://www.kendryte.com/resource).
 
 (3) Environment Preparation
 

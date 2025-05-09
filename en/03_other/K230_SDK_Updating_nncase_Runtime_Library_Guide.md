@@ -49,7 +49,7 @@ Due to potential incompatibilities between different versions of nncase, the ver
 Here are two ways to confirm if the version information matches:
 
 - Check the [version correspondence table](./K230_SDK_nncase_version_correspondence.md#k230-sdk-nncase-version-correspondence).
-- Determine the versions by the image name, for example, `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`, where `v1.4` indicates the SDK version, and `v2.8.0` indicates the nncase version. This means SDK-v1.4 can infer `kmodel` compiled by nncase-v2.8.0. The image can be obtained from the [Canaan Developer Community](https://developer.canaan-creative.com/resource).
+- Determine the versions by the image name, for example, `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`, where `v1.4` indicates the SDK version, and `v2.8.0` indicates the nncase version. This means SDK-v1.4 can infer `kmodel` compiled by nncase-v2.8.0. The image can be obtained from the [Kendryte Developer Community](https://www.kendryte.com/resource).
 
 ### 3. Solutions for Version Incompatibility Issues
 

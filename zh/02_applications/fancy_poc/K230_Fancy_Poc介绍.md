@@ -64,7 +64,7 @@ K230 Fancy Poc集合包括multimodal_chat_robot(多模态聊天机器人)、meta
 
 （1）确保已根据[k230 sdk官方说明](https://github.com/kendryte/k230_sdk)构建docker容器
 
-（2）从[官网资源库](https://developer.canaan-creative.com/resource)下载镜像
+（2）从[官网资源库](https://www.kendryte.com/resource)下载镜像
 
 （3）环境准备
 

@@ -53,7 +53,7 @@
 
 ## 1.镜像说明
 
-镜像请从[嘉楠开发者社区](https://developer.canaan-creative.com/resource) 下载，在嘉楠开发者社区网站的k230/images下面可以找到debian和ubuntu相关文件。
+镜像请从[勘智开发者社区](https://www.kendryte.com/resource) 下载，在勘智开发者社区网站的k230/images下面可以找到debian和ubuntu相关文件。
 
 1.1). 类似xxxx_debian_sdcard_x.x.img.gz文件是k230 的debian镜像压缩包：
 
