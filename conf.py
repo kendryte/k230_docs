@@ -73,6 +73,9 @@ html_theme_options = {
     "use_repository_button": True,
     "footer_start": ["Fleft.html"],
 	"footer_center": ["Footer.html"],
+    "navbar_start" : ['logo.html'],
+    "navbar_center" : ['nav.html'],
+    "navbar_end" : ['login.html', 'lang.html'],
 	"footer_end" : ["Fright.html"],
     "article_footer_items": ["content.html"]
 }
@@ -81,3 +84,5 @@ if language == 'en':
     html_theme_options["footer_center"] = ["FooterEn.html"]
     html_theme_options["footer_end"] = ["FrightEn.html"]
     html_theme_options["article_footer_items"] = ["contentEn.html"]
+    html_theme_options["navbar_center"] = ["navEn.html"]
+    html_theme_options["navbar_end"] =  ['lang.html']
