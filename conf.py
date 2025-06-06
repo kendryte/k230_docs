@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath('exts'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'K230'
-copyright = f'{datetime.datetime.now().year} Canaan Inc'
+copyright = str(datetime.datetime.now().year) + ' 嘉楠 | ' + '京ICP备2025124317号 | 京公网安备11010802045870号'
 # author = 'Canaan'
 smv_default_version = 'dev'
 # release = '0.1'
@@ -86,3 +86,4 @@ if language == 'en':
     html_theme_options["article_footer_items"] = ["contentEn.html"]
     html_theme_options["navbar_center"] = ["navEn.html"]
     html_theme_options["navbar_end"] =  ['lang.html']
+    copyright = str(datetime.datetime.now().year) + ' Canaan | ' + 'Beijing ICP No. 2025124317 | Beijing Public Security Network No. 11010802045870'
