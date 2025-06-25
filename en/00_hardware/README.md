@@ -60,7 +60,7 @@ IF YOU ARE INTERESTED IN THIS PROJECT, WOULD LIKE TO GIVE FEEDBACK OR SUBMIT DOC
 ## Contact us
 
 Canaan Inc.Website:
-[canaan-creative.com](https://www.canaan-creative.com/)Business inquiries:
+[canaan-creative.com](https://www.kendryte.com/)Business inquiries:
 [salesAI@canaan-creative.com](mailto:salesAI@canaan-creative.com)
 
 **Translation Disclaimer**

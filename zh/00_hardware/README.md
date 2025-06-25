@@ -60,7 +60,7 @@
 ## 联系我们
 
 北京嘉楠捷思信息技术有限公司
-网址：[canaan-creative.com](https://www.canaan-creative.com/)
+网址：[canaan-creative.com](https://www.kendryte.com/)
 商务垂询：[salesAI@canaan-creative.com](mailto:salesAI@canaan-creative.com)
 
 **翻译免责声明**
