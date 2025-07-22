@@ -26,9 +26,9 @@
 本文将讲解如何通过视频解码在k230 evb开发板上实现开机视频和开机logo。
 视频解码模块支持H.264/H.265/MJPEG解码，屏幕显示最大分辨率为1920x1080，可旋转。
 
-## 1. 环境准备
+## 环境准备
 
-### 1.1 硬件环境
+### 硬件环境
 
 - K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Typec USB线，用于供电。
@@ -36,7 +36,7 @@
 - 屏幕及连线
 - 摄像头子板（IMX335）
 
-### 1.2 软件环境
+### 软件环境
 
 k230_sdk中提供了工具链，分别在如下路径。
 
@@ -59,7 +59,7 @@ wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
-## 2. 源码位置
+## 源码位置
 
 SDK中包含一个用户态解码demo，路径位于`k230_sdk/src/big/mpp/userapps/sample/sample_vdec`。编译生成的可执行文件在`k230_sdk/src/big/mpp/userapps/sample/elf/sample_vdec.elf`，默认没有加载到大核镜像中，需要按照执行方式章节修改Makefile才能在大核启动后的`/mnt`目录中生成可执行文件。
 
@@ -73,7 +73,7 @@ SDK中包含一个用户态解码demo，路径位于`k230_sdk/src/big/mpp/userap
 1. `input_thread`：从文件中读取数据，并调用`kd_mpi_vdec_send_stream`将数据送给VPU。
 1. `output_thread`：从VPU获取解码数据。
 
-## 3. 程序执行
+## 程序执行
 
 1. 修改`k230_sdk/Makefile`中`mpp-apps`的编译脚本。
    将

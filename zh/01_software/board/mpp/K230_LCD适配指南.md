@@ -53,7 +53,7 @@
 |            |          |        |            |
 |            |          |        |            |
 
-## 1. 概述
+## 概述
 
 本文档主要描述K230平台LCD基本框架以及如何新增支持一款新的LCD。
 
@@ -63,7 +63,7 @@ K230平台支持MIPI-DSI接口的LCD。LCD与主控平台的硬件连接示意�
 
 主控通过MIPI-DSI接口下发配置信息给LCD，同时传输图像数据给LCD。
 
-## 2. LCD适配准备工作
+## LCD适配准备工作
 
 用户在适配新的LCD之前需要做以下准备工作：
 
@@ -71,7 +71,7 @@ K230平台支持MIPI-DSI接口的LCD。LCD与主控平台的硬件连接示意�
 1. 仔细分析LCD Datasheet获得LCD的输出时序，具体包括：pixelclock、vtotal、vactive、vfp、vbp、vsa、htotal、hactive、hfp、hbp、hsa等等
 1. 参考《K230_视频输出_API参考》计算TxDPHY时钟参数
 
-## 3. LCD适配实例
+## LCD适配实例
 
 这里以hx8399驱动作为实例进行说明，对应的驱动文件源码路径如下：
 
@@ -81,7 +81,7 @@ src/big/mpp/kernel/connector/src/hx8399.c
 
 ```
 
-### 3.1 定义支持的LCD类型
+### 定义支持的LCD类型
 
 在src/big/mpp/include/comm/k_connector_comm.h文件中定义如下枚举变量：
 
@@ -107,11 +107,11 @@ typedef enum {
 
 用户需要增加新的LCD支持类型时，首先需要在这里增加对应类型的定义，**该类型是应用程序获取LCD配置的唯一标志**
 
-### 3.2 LCD驱动适配
+### LCD驱动适配
 
 LCD驱动适配在整个环节中最重要的环节，用户可以通过拷贝现有的LCD驱动文件来修改
 
-#### 3.2.1 添加LCD初始化代码
+#### 添加LCD初始化代码
 
 ```c
 
@@ -133,7 +133,7 @@ k_s32 hx8399_init(void *ctx, k_connector_info *info)
 1. hx8399_dsi_resolution_init初始化MIPI-DSI控制器，包括LCD的初始化固件数据
 1. hx8399_dsi_resolution_init初始化显示控制器
 
-#### 3.2.2 实现LCD操作接口
+#### 实现LCD操作接口
 
 LCD的操作接口由数据类型k_connector_function定义，用户根据实际情况实现相关的操作接口，不是所有接口都必须实现。
 
@@ -159,7 +159,7 @@ typedef struct {
     },
 ```
 
-#### 3.2.3 定义LCD驱动结构体
+#### 定义LCD驱动结构体
 
 LCD驱动结构体由struct connector_driver_dev定义，主要包括LCD驱动名称、GPIO复位信号和LCD操作集合
 
@@ -194,7 +194,7 @@ struct connector_driver_dev hx8399_connector_drv = {
 };
 ```
 
-#### 3.2.4 更新LCD驱动列表
+#### 更新LCD驱动列表
 
 将上一节定义的LCD驱动结构体添加到connector_drv_list数组中。
 当前系统支持的LCD列表如下：
@@ -211,7 +211,7 @@ struct connector_driver_dev *connector_drv_list[CONNECTOR_NUM_MAX] = {
 
 ```
 
-### 3.3 更新LCD配置信息列表
+### 更新LCD配置信息列表
 
 LCD配置信息有结构体k_connector_info定义：
 

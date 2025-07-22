@@ -46,14 +46,14 @@
 | V1.0       | 初版                              | 荣 坚 | 2024-01-24 |
 | V1.1       | 更新部分参数描述                   | 荣 坚 | 2024-04-28 |
 
-## 1. K230 ISP初始化配置概述
+## K230 ISP初始化配置概述
 
 在图像调优后，所形成的ISP配置参数，需要写入相应sensor的初始化配置文件中。开机时，ISP会自动调用这些配置文件中的设置完成初始化。当模块自适应功能使能时，ISP将按该模块自适应功能的设置进行运行。
 ISP初始化配置有三个文件：xml、manaual.json和auto.json，若sensor可选不同分辨率，则不同分辨率下都需有这三个配置文件。这些配置文件都存放于\k230_sdk\src\big\mpp\userapps\src\sensor\config目录下。
 
-## 2. xml文件
+## xml文件
 
-### 2.1 概述
+### 概述
 
 可使用K230 ISP Calibration Tool(K230ISPCalibrationTool.exe)生成xml文件，工具中所有模块的校准都需要完成，以得到完整的校准数据。
 
@@ -77,7 +77,7 @@ xml文件中包含的数据有两个来源：
 | Noise Calibration             | Calibration Tool | sensor/lens/sample/Calibration Tool/Noise/ |
 | Photo Response Linearity      | degamma_para.txt | sensor/lens/sample/Calibration Tool/PhotoResponseLinearity/ |
 
-### 2.2 为校准参数创建校准文件文件夹
+### 为校准参数创建校准文件文件夹
 
 请按照以下步骤为每个分辨率创建文件夹：
 
@@ -100,7 +100,7 @@ xml文件中包含的数据有两个来源：
         - BLS parameters.txt
       - ...
 
-### 2.3 使用K230 ISP Calibration Tool生成xml文件
+### 使用K230 ISP Calibration Tool生成xml文件
 
 将所有校准参数文件复制到相应文件夹后, 打开K230 ISP Calibration Tool，用其生成xml文件。
 
@@ -120,7 +120,7 @@ xml文件中包含的数据有两个来源：
 
 将生成的xml文件，按K230 SDK代码中输入的xml名称改名后(如ov9732-1280x720.xml)，放入config目录下,即可被K230 SDK正确调用。
 
-### 2.4 AWB参数K_Factor
+### AWB参数K_Factor
 
 在xml文件中awb子段中有一个K_Factor参数需要另行标定和手动填入。该参数反馈了摄像模组的感光灵敏度。
 
@@ -128,17 +128,17 @@ xml文件中包含的数据有两个来源：
 
 比如以2000 lux为outdoor与transition的环境照度分割点，获取对应该照度的曝光值(ET \* gain)， 则可计算：K_Factor = 0.12 / (ET\*gain)。
 
-## 3. manual.json文件
+## manual.json文件
 
 manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件创建所需sensor分辨率的manual.json文件。
 
-### 3.1 CHdrv2
+### CHdrv2
 
-#### 3.1.1 功能描述
+#### 功能描述
 
 该模块为未包含在其它ISP模块下的HDR mode参数的设置。
 
-#### 3.1.2 主要参数
+#### 主要参数
 
 | 参数        | 类型及取值范围      | 描述                       |
 | ----------- | ------------------- | -------------------------- |
@@ -166,17 +166,17 @@ manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件�
 
 请注意，K230 HDR模式下，K230 CSI（Camera serial interface）模块不支持Hsync在Vsync之前的sensor数据模式，且各帧（L/S/VS）Vsync拉高(有效数据输出)时不能有交叠。
 
-### 3.2 CGreenEqu
+### CGreenEqu
 
 请参考《K230 ISP图像调优指南》第3.7章节。
 
-### 3.3 CRgbIR
+### CRgbIR
 
-#### 3.3.1 功能描述
+#### 功能描述
 
 该模块为针对RGBIR sensor的输入处理设置.
 
-#### 3.3.2 主要参数
+#### 主要参数
 
 | 参数        | 类型及取值范围      | 描述                       |
 | --------- | -------------- | --------------- |
@@ -191,94 +191,94 @@ manual.json文件需手动创建。请参考imx335-2592x1944_manual.json文件�
 | l_threshold | int     | IR低值阈值 <br/> 如果IR值低于该值，IR色彩影响因子为1. |
 | out_rgb_pattern | int | 输出RGB数据排列类型 <br/> 3: BGGR <br/> 无需更改。|
 
-### 3.4 CManualWb
+### CManualWb
 
 请参考《K230 ISP图像调优指南》第3.12章节。
 
-### 3.5 CCcm
+### CCcm
 
 请参考《K230 ISP图像调优指南》第3.13章节。
 
-### 3.6 CDgain
+### CDgain
 
 请参考《K230 ISP图像调优指南》第3.3章节。
 
-### 3.7 CCpdv1
+### CCpdv1
 
 请参考《K230 ISP图像调优指南》第3.19章节。
 
-### 3.8 Bls
+### Bls
 
-#### 3.8.1 功能描述
+#### 功能描述
 
 该模块为设置black level。默认bls功能为打开。
 
-#### 3.8.2 主要参数
+#### 主要参数
 
 | 参数        | 类型及取值范围      | 描述    |
 | --------- | -------------- | --------------- |
 | bls        | int[4] | Black level <br/>[bls_r,bls_gr,bls_gb,bls_b]。<br/>目前驱动仅支持各通道配置相同的黑电平，设置值基于ISP 12bits |
 
-### 3.9 CGamma64
+### CGamma64
 
 请参考《K230 ISP图像调优指南》第3.14章节。
 
-### 3.10 CDpcc
+### CDpcc
 
 请参考《K230 ISP图像调优指南》第3.8章节。
 
-### 3.11 CDpf
+### CDpf
 
 请参考《K230 ISP图像调优指南》第3.9章节。
 
-### 3.12 CLscv2
+### CLscv2
 
 请参考《K230 ISP图像调优指南》第3.2章节。
 
-### 3.13 CWdrv4
+### CWdrv4
 
 请参考《K230 ISP图像调优指南》第3.6章节。
 
-### 3.14 C3dnrv3_1
+### C3dnrv3_1
 
 请参考《K230 ISP图像调优指南》第3.10章节。
 
-### 3.15 CCproc
+### CCproc
 
 请参考《K230 ISP图像调优指南》第3.18章节。
 
-### 3.16 CEEv1
+### CEEv1
 
-#### 3.16.1 功能描述
+#### 功能描述
 
 该模块包含了CA、DCI和EE三个子块。
 
-#### 3.16.2 主要参数
+#### 主要参数
 
 请参考《K230 ISP图像调优指南》第3.15（EE）、3.16（CA）和3.17（DCI）章节。
 
-### 3.17 CDmscv2
+### CDmscv2
 
-#### 3.17.1 功能描述
+#### 功能描述
 
 该模块包含了CAC和DMSC两个子块。
 
-#### 3.17.2 主要参数
+#### 主要参数
 
 CAC参数设置请参考《K230 ISP图像调优指南》第3.20章节。
 DMSC参数设置请参考《K230 ISP图像调优指南》第3.11章节。
 
-## 4. auto.json文件
+## auto.json文件
 
 auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建所需sensor分辨率的auto.json文件。
 
-### 4.1 AdaptiveAe
+### AdaptiveAe
 
-#### 4.1.1 功能描述
+#### 功能描述
 
 该模块为AE控制和AE自适应功能的参数设置。
 
-#### 4.1.2 主要参数
+#### 主要参数
 
 | 参数            | 类型及取值范围 | 描述                                                   |
 | --------------- | -------------- | ------------------------------------------------------ |
@@ -310,13 +310,13 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | roiWindow  | float (fx,fy,fw,fh,weight) | 当前ROI窗口的起始点坐标(x,y)、宽高和亮度计算权重 |
 | expV2WindowWeight | float[32x32] 0~255  | 各子块曝光权重 |
 
-### 4.2 Awbv2
+### Awbv2
 
-### 4.2.1 功能描述
+### 功能描述
 
 该模块为awb自适应功能的参数设置。
 
-### 4.2.2 主要参数
+### 主要参数
 
 | 参数        | 类型及取值范围      | 描述                       |
 | --------- | -------------- | --------------- |
@@ -328,13 +328,13 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | roiNumber   | int   |  当前ROI窗口序号   |
 | roiWindow   | float (fx,fy,fw,fh,weight) | 当前ROI窗口的起始点坐标(x,y)、宽高和AWB计算权重 |
 
-### 4.3 Af
+### Af
 
-#### 4.3.1 功能描述
+#### 功能描述
 
 该模块为AF功能的参数设置。该模块暂未生效。
 
-#### 4.3.2 主要参数
+#### 主要参数
 
 | 参数        | 类型及取值范围      | 描述                       |
 | --------- | -------------- | --------------- |
@@ -357,13 +357,13 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | PdStablecountMax | uint8 1~10 | 未使用 |
 | PdROIIndex | uint8 0~48 | 未使用 |
 
-### 4.4 ALscv2
+### ALscv2
 
-#### 4.4.1 功能描述
+#### 功能描述
 
 该模块为LSC自适应功能的参数设置。
 
-#### 4.4.2 主要参数
+#### 主要参数
 
 | 参数        | 类型及取值范围      | 描述     |
 | --------- | -------------- | --------------- |
@@ -374,13 +374,13 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | gain | float[20] | 各阶对应的增益值 |
 | strength | float[20] 0~1.0 | 各阶增益值对应的保留LSC的强度 |
 
-### 4.5 其它
+### 其它
 
 本章节对其它自适应功能模块进行统一介绍。
 
 这些自适应功能模块的设置参数，通常用“tables”标记引导的中括号“[]”分为两部分，在该中括号外的都为bool类型的使能参数，在该中括号内的则为参与自适应功能调节的参数。
 
-#### 4.5.1 tables外的参数说明
+#### tables外的参数说明
 
 这些功能模块中，在tables外通常有以下三个参数：
 | 参数        | 类型      | 描述                       |
@@ -396,7 +396,7 @@ auto.json文件需手动创建。请参考imx335-2592x1944_auto.json文件创建
 | nlm_en | bool | 非局部均值降噪使能开关，建议设置为true|
 | tnr_en | bool | 时域降噪使能开关，建议设置为true|
 
-#### 4.5.2 tables内的参数说明
+#### tables内的参数说明
 
 在功能模块中，都有以下两个参数：
 

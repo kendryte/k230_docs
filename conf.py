@@ -63,7 +63,15 @@ default_dark_mode = True
 
 locale_dirs = ['locale']
 
-html_css_files = ['topbar.css', 'custom-theme.css', 'auto-num.css']
+html_css_files = ['topbar.css', 'custom-theme.css']
+
+def setup(app):
+    # 获取当前构建版本（分支/标签）
+    current_version = getattr(app.config, "smv_current_version", "dev")  # 默认main分支
+    # 打印当前版本
+    print(f"当前构建版本: {current_version}")
+    if current_version == "dev":
+        html_css_files.append('auto-nums.css')
 
 html_theme_options = {
     'collapse_navigation': True,

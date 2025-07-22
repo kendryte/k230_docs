@@ -54,19 +54,19 @@
 | V1.2       | 更换了图像地址的数据结构； 增加了帧号透传功能。           | 刘孙涛 | 2023/4/26 |
 | V1.3       | 增加了 buffer 可配置的功能                             | 刘孙涛 | 2023/5/31 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 GSDMA：DMA 全称 Direct Memory Access，即直接存储器访问，将数据从一个地址空间复制到另一个地址空间，提供在存储器和存储器之间的高速数据传输。GDMA 全称 Graphic Direct Memory Access，负责将内存中的图像复制到另一块内存中，同时可以完成图像的旋转和镜像等功能。SDMA 全称 System Direct Memory Access，负责将内存中的数据复制到另一块内存中，即传统意义上的 DMA。
 
 软件代码将 GSDMA 硬件的各个功能以 API 的方式提供给使用者使用，帮助用户快速实现图像传输、旋转、镜像、2D 功能及数据传输功能。同时实现了模块状态信息统计等功能。
 
-### 1.2 功能描述
+### 功能描述
 
 将 dma 硬件抽象为一个设备，八个通道，其中，通道 0\~3 是 gdma 通道，通道 4\~7 是 sdma 通道。
 
-#### 1.2.1 gdma
+#### gdma
 
 用户通过 gdma 来实现图像的旋转镜像工作，主要调用流程如下：
 
@@ -78,7 +78,7 @@ GSDMA：DMA 全称 Direct Memory Access，即直接存储器访问，将数据�
 1. 驱动会将源地址中的数据传输到步骤二中申请的目的地址数据缓冲区中；
 1. 用户调用 kd_mpi_dma_get_frame 获取目的地址中的数据地址。
 
-#### 1.2.2 sdma
+#### sdma
 
 用户通过 sdma 来实现数据搬移工作，主要调用流程如下：
 
@@ -90,25 +90,25 @@ GSDMA：DMA 全称 Direct Memory Access，即直接存储器访问，将数据�
 1. 驱动会将源地址中的数据传输到步骤二中申请的目的地址数据缓冲区中；
 1. 用户调用 kd_mpi_dma_get_frame 获取目的地址中的数据地址。
 
-## 2. API 参考
+## API 参考
 
-### 2.1 DMA 使用
+### DMA 使用
 
 该功能模块提供以下API：
 
-- [kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
-- [kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
-- [kd_mpi_dma_start_dev](#213-kd_mpi_dma_start_dev)
-- [kd_mpi_dma_stop_dev](#214-kd_mpi_dma_stop_dev)
-- [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-- [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
-- [kd_mpi_dma_start_chn](#217-kd_mpi_dma_start_chn)
-- [kd_mpi_dma_stop_chn](#218-kd_mpi_dma_stop_chn)
-- [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-- [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
-- [kd_mpi_dma_release_frame](#2111-kd_mpi_dma_release_frame)
+- [kd_mpi_dma_set_dev_attr](#kd_mpi_dma_set_dev_attr)
+- [kd_mpi_dma_get_dev_attr](#kd_mpi_dma_get_dev_attr)
+- [kd_mpi_dma_start_dev](#kd_mpi_dma_start_dev)
+- [kd_mpi_dma_stop_dev](#kd_mpi_dma_stop_dev)
+- [kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+- [kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
+- [kd_mpi_dma_start_chn](#kd_mpi_dma_start_chn)
+- [kd_mpi_dma_stop_chn](#kd_mpi_dma_stop_chn)
+- [kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+- [kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
+- [kd_mpi_dma_release_frame](#kd_mpi_dma_release_frame)
 
-#### 2.1.1 kd_mpi_dma_set_dev_attr
+#### kd_mpi_dma_set_dev_attr
 
 【描述】
 
@@ -150,9 +150,9 @@ k_s32 kd_mpi_dma_set_dev_attr(k_dma_dev_attr_t \*attr);
 
 【相关主题】
 
-[k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
+[k_dma_dev_attr_t](#k_dma_dev_attr_t)
 
-#### 2.1.2 kd_mpi_dma_get_dev_attr
+#### kd_mpi_dma_get_dev_attr
 
 【描述】
 
@@ -194,9 +194,9 @@ k_s32 kd_mpi_dma_get_dev_attr(k_dma_dev_attr_t \*attr);
 
 【相关主题】
 
-[k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
+[k_dma_dev_attr_t](#k_dma_dev_attr_t)
 
-#### 2.1.3 kd_mpi_dma_start_dev
+#### kd_mpi_dma_start_dev
 
 【描述】
 
@@ -240,7 +240,7 @@ k_s32 kd_mpi_dma_start_dev();
 
 无
 
-#### 2.1.4 kd_mpi_dma_stop_dev
+#### kd_mpi_dma_stop_dev
 
 【描述】
 
@@ -284,7 +284,7 @@ kd_mpi_dma_stop_dev();
 
 无
 
-#### 2.1.5 kd_mpi_dma_set_chn_attr
+#### kd_mpi_dma_set_chn_attr
 
 【描述】
 
@@ -327,9 +327,9 @@ k_s32 kd_mpi_dma_set_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 
 【相关主题】
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-#### 2.1.6 kd_mpi_dma_get_chn_attr
+#### kd_mpi_dma_get_chn_attr
 
 【描述】
 
@@ -372,9 +372,9 @@ k_s32 kd_mpi_dma_get_chn_attr(k_u8 chn_num, k_dma_chn_attr_u \*attr);
 
 【相关主题】
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-#### 2.1.7 kd_mpi_dma_start_chn
+#### kd_mpi_dma_start_chn
 
 【描述】
 
@@ -418,7 +418,7 @@ k_s32 kd_mpi_dma_start_chn(k_u8 chn_num);
 
 无
 
-#### 2.1.8 kd_mpi_dma_stop_chn
+#### kd_mpi_dma_stop_chn
 
 【描述】
 
@@ -462,7 +462,7 @@ k_s32 kd_mpi_dma_stop_chn(k_u8 chn_num);
 
 无
 
-#### 2.1.9 kd_mpi_dma_send_frame
+#### kd_mpi_dma_send_frame
 
 【描述】
 
@@ -506,9 +506,9 @@ k_s32 kd_mpi_dma_send_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 mi
 
 【相关主题】
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-#### 2.1.10 kd_mpi_dma_get_frame
+#### kd_mpi_dma_get_frame
 
 【描述】
 
@@ -552,9 +552,9 @@ k_s32 kd_mpi_dma_get_frame(k_u8 chn_num, k_video_frame_info \*df_info, k_s32 mil
 
 【相关主题】
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-#### 2.1.11 kd_mpi_dma_release_frame
+#### kd_mpi_dma_release_frame
 
 【描述】
 
@@ -597,13 +597,13 @@ k_s32 kd_mpi_dma_release_frame(k_u8 chn_num, k_video_frame_info \*df_info);
 
 【相关主题】
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-## 3 数据类型
+## 数据类型
 
-### 3.1 公共数据类型
+### 公共数据类型
 
-#### 3.1.1 DMA_MAX_DEV_NUMS
+#### DMA_MAX_DEV_NUMS
 
 【说明】
 
@@ -623,7 +623,7 @@ DMA 最大设备数
 
 无
 
-#### 3.1.2 DMA_MAX_CHN_NUMS
+#### DMA_MAX_CHN_NUMS
 
 【说明】
 
@@ -641,7 +641,7 @@ DMA 最大通道数
 
 无
 
-#### 3.1.3 k_dma_mode_e
+#### k_dma_mode_e
 
 【说明】
 
@@ -670,10 +670,10 @@ typedef enum
 
 【相关数据类型及接口】
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-#### 3.1.4 k_dma_dev_attr_t
+#### k_dma_dev_attr_t
 
 【说明】
 
@@ -704,10 +704,10 @@ typedef struct
 
 【相关数据类型及接口】
 
-[kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
-[kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
+[kd_mpi_dma_set_dev_attr](#kd_mpi_dma_set_dev_attr)
+[kd_mpi_dma_get_dev_attr](#kd_mpi_dma_get_dev_attr)
 
-#### 3.1.5 k_dma_chn_attr_u
+#### k_dma_chn_attr_u
 
 【说明】
 
@@ -737,12 +737,12 @@ typedef union
 
 【相关数据类型及接口】
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
-[kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-[kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
+[kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+[kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
 
-#### 3.1.6 k_video_frame_info
+#### k_video_frame_info
 
 【说明】
 
@@ -773,11 +773,11 @@ typedef struct
 
 【相关数据类型及接口】
 
-[kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-[kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
-[kd_mpi_dma_release_frame](#2111-kd_mpi_dma_release_frame)
+[kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+[kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
+[kd_mpi_dma_release_frame](#kd_mpi_dma_release_frame)
 
-#### 3.1.7 k_video_frame
+#### k_video_frame
 
 【说明】
 
@@ -810,19 +810,19 @@ typedef struct
 
 【相关数据类型及接口】
 
-[kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-[kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
+[kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+[kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
 
-### 3.2 gdma 通道数据类型
+### gdma 通道数据类型
 
 该模块有如下数据类型
 
-- [GDMA_MAX_CHN_NUMS](#321-gdma_max_chn_nums)
-- [k_gdma_rotation_e](#322-k_gdma_rotation_e)
-- [k_pixel_format_dma_e](#323-k_pixel_format_dma_e)
-- [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
+- [GDMA_MAX_CHN_NUMS](#gdma_max_chn_nums)
+- [k_gdma_rotation_e](#k_gdma_rotation_e)
+- [k_pixel_format_dma_e](#k_pixel_format_dma_e)
+- [k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
 
-#### 3.2.1 GDMA_MAX_CHN_NUMS
+#### GDMA_MAX_CHN_NUMS
 
 【说明】
 
@@ -842,7 +842,7 @@ define GDMA_MAX_CHN_NUMS (4)
 
 无
 
-#### 3.2.2 k_gdma_rotation_e
+#### k_gdma_rotation_e
 
 【说明】
 
@@ -866,9 +866,9 @@ typedef enum
 
 【相关数据类型及接口】
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
 
-#### 3.2.3 k_pixel_format_dma_e
+#### k_pixel_format_dma_e
 
 【说明】
 
@@ -930,7 +930,7 @@ typedef enum
 } k_pixel_format_dma_e;
 ```
 
-#### 3.2.4 k_gdma_chn_attr_t
+#### k_gdma_chn_attr_t
 
 【说明】
 
@@ -975,18 +975,18 @@ typedef struct
 
 【相关数据类型及接口】
 
-- [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-- [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
+- [kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+- [kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
 
-### 3.3 sdma 通道数据类型
+### sdma 通道数据类型
 
 本模块有如下数据类型
 
-- [SDMA_MAX_CHN_NUMS](#331-sdma_max_chn_nums)
-- [k_sdma_data_mode_e](#332-k_sdma_data_mode_e)
-- [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+- [SDMA_MAX_CHN_NUMS](#sdma_max_chn_nums)
+- [k_sdma_data_mode_e](#k_sdma_data_mode_e)
+- [k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-#### 3.3.1 SDMA_MAX_CHN_NUMS
+#### SDMA_MAX_CHN_NUMS
 
 【说明】
 
@@ -1006,7 +1006,7 @@ SDMA 最大通道数
 
 无
 
-#### 3.3.2 k_sdma_data_mode_e
+#### k_sdma_data_mode_e
 
 【说明】
 
@@ -1035,9 +1035,9 @@ typedef enum
 
 【相关数据类型及接口】
 
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-#### 3.3.3 k_sdma_chn_attr_t
+#### k_sdma_chn_attr_t
 
 【说明】
 
@@ -1074,11 +1074,11 @@ typedef struct
 
 【相关数据类型及接口】
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-## 4. 错误码
+## 错误码
 
-### 4.1 dma 错误码
+### dma 错误码
 
 表 41
 
@@ -1101,9 +1101,9 @@ typedef struct
 | 0xa0148011 | K_ERR_DMA_BADADDR       | 错误的地址                   |
 | 0xa0148012 | K_ERR_DMA_BUSY          | DMA 处与忙状态               |
 
-## 5. 调试信息
+## 调试信息
 
-### 5.1 概述
+### 概述
 
 调试信息采用了 proc 文件系统，可实时反映当前系统的运行状态，所记录的信息可供问题定位及分析时使用
 
@@ -1117,9 +1117,9 @@ typedef struct
 |-----------|-----------------------------|
 | umap/dma  | 记录当前 dma 模块的使用情况 |
 
-### 5.2 系统绑定
+### 系统绑定
 
-#### 5.2.1 系统绑定调试信息
+#### 系统绑定调试信息
 
 【调试信息】
 
@@ -1179,9 +1179,9 @@ ChnId line_size line_num line_space data_mode work_mode
 | data_mode  | sdma 传输数据的模式，包括 1d 模式和 2d 模式                                |
 | work_mode  | 工作模式，可以选择绑定模式或者非绑定模式。                                 |
 
-## 6. demo 描述
+## demo 描述
 
-### 6.1 非绑定模式 demo
+### 非绑定模式 demo
 
 非绑定模式 demo 位于 /bin/sample_dma.elf，执行 /bin/sample_dma.elf 后开始循环运行，按 e + 回车结束运行。
 
@@ -1193,7 +1193,7 @@ demo 主要实现了以下功能：
 - 使用通道 4 搬运数据，sdma 使用 1d 模式搬运；
 - 使用通道 5 搬运数据，sdma 使用 2d 模式搬运。
 
-### 6.2 绑定模式 demo
+### 绑定模式 demo
 
 绑定模式 demo 位于 /bin/sample_dma_bind.elf，执行 /bin/sample_dma_bind.elf 后开始循环运行，按 e + 回车结束运行。
 

@@ -46,17 +46,17 @@
 | ---------- | -------- | ------ | ---------- |
 | V1.0       | 初版     | 杨浩琪 | 2023/08/04 |
 
-## 1. 概述
+## 概述
 
 近些年AI领域的快速发展，衍生出各种各样的神经网络模型，不断出现新的算子。但是AI芯片的迭代周期相比AI模型会长很多，这些新出现的算子多数不能直接使用AI芯片进行推理加速，同时旧的算子中也有一部分不适合使用AI芯片进行推理加速。因此CPU成为这部分算子的执行载体，这也意味着CPU的性能会成为模型部署时影响最终性能的一个因素，而RVV扩展就是RISC-V CPU提升性能的一个重要手段。K230 中采用的玄铁C908双核处理器中大核具备RVV1.0扩展的特性，能够大幅度提升CPU算子推理时的表现。
 
 K230进行模型推理时需要使用 `.kmodel`格式的模型，`.kmodel`是由[nncase](https://github.com/kendryte/nncase) 对 `ONNX`和 `TFLite`模型进行编译后的模型格式，适用于本公司及相关合作企业生产的开发板。nncase支持目前常见的神经网络算子，但是部分算子无法通过K230进行推理加速，这部分算子只能使用CPU进行推理。
 
-## 2. RVV应用场景
+## RVV应用场景
 
 目前研究应用最广泛的神经网络 `Transformer`中，模型结构与 `CNN`存在较大差异，很多基于 `CNN`设计的AI芯片无法完全对 `Transformer`进行加速。以下为 `Transformer`中 `Decoder`模型在开启RVV优化和不开启RVV优化的算子执行情况。
 
-### 2.1 未开启RVV优化
+### 未开启RVV优化
 
 | stackvm tensor op | count | time consumption(ms) | percentage(%) |
 | ----------------- | ----- | -------------------- | ------------- |
@@ -79,7 +79,7 @@ K230进行模型推理时需要使用 `.kmodel`格式的模型，`.kmodel`是由
 | LDTUPLE           | 1     | 0.003                | 0.000152018   |
 | total             | 941   | 1973.45              | 100           |
 
-### 2.2 开启RVV优化
+### 开启RVV优化
 
 | stackvm tensor op | count | time consumption(ms) | percentage(%) |
 | ----------------- | ----- | -------------------- | ------------- |
@@ -102,7 +102,7 @@ K230进行模型推理时需要使用 `.kmodel`格式的模型，`.kmodel`是由
 | LDTUPLE           | 1     | 0.003                | 0.00648677    |
 | total             | 941   | 46.248               | 100           |
 
-### 2.3 性能分析及说明
+### 性能分析及说明
 
 上述模型推理中，K230的KPU单元不支持对 `softmax`、`layer_norm`、`where`、`gather`，`reduce_arg`，`reshape` 进行硬件推理加速，因此需要使用C908实现推理，目前已经完成了对 `softmax`、`layer_norm`、`where`的RVV优化，性能提升明显。
 
@@ -158,9 +158,9 @@ pie
 
 从以上的对比结果可以看出，在开启RVV优化后能够极大的提升CPU算子的推理性能，缩短整个模型的推理时间(1973--> 46)ms，RVV优化后占据大部分时间的 `softmax`算子时间减少到25ms，`layer_norm`算子时间减少到0.97ms，`where`算子时间减少到0.91ms，整个模型的推理时间缩短了97.6%，在实际模型部署时具有很高的应用价值。
 
-### 2.4 RVV优化示例
+### RVV优化示例
 
-#### 2.4.1 RVV代码
+#### RVV代码
 
 具体实现请参考 `nncase`中的[layer_norm](https://github.com/kendryte/nncase/blob/master/src/Native/src/kernels/stackvm/optimized/riscv64/layer_norm.cpp)，需要具备一定RV指令和V扩展指令知识。
 
@@ -178,7 +178,7 @@ y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
 
 由于乘法相比除法耗时更短，第3步的计算中进行了公式变换，使用 `rsqrt`代替 `sqrt`，再用乘法替代除法。
 
-#### 2.4.2 核心代码说明
+#### 核心代码说明
 
 以下为 `get_mean`中核心代码的说明，这段代码实现了对a1处数组的循环加载求和,求和结果存储在v0,最后求平均值保存在ret中。它利用RVV的向量加载,向量累加指令来实现求和,从而提高计算性能。
 
@@ -195,7 +195,7 @@ y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
 "fdiv.s %[ret], f0, f1;" // ret = f0/f1,即求平均值
 ```
 
-#### 2.4.3 添加RVV算子流程
+#### 添加RVV算子流程
 
 以下流程中路径均以[nncase](https://github.com/kendryte/nncase)作为根目录
 
@@ -209,6 +209,6 @@ y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
    - 通用优化：15行增加源文件名
    - 特定平台优化：44行增加源文件名
 
-### 2.5 tips
+### tips
 
 如果遇到尚未支持RVV优化的算子，且需要进行支持的，欢迎在nncase提[issue](https://github.com/kendryte/nncase/issues)和PR。

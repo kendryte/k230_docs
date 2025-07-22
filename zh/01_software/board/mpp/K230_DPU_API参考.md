@@ -50,49 +50,49 @@
 | 文档版本号 | 修改说明                                                                                                                                | 修改者 | 日期      |
 |------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------|-----------|
 | v1.0       | 初版                                                                                                                                    | 刘孙涛 | 2023/3/30 |
-| v1.1       | 增加了配置离线处理后的参考图的接口函数 [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image)； 增加了模块调试信息。 | 刘孙涛 | 2023/4/20 |
+| v1.1       | 增加了配置离线处理后的参考图的接口函数 [kd_mpi_dpu_set_processed_ref_image](#kd_mpi_dpu_set_processed_ref_image)； 增加了模块调试信息。 | 刘孙涛 | 2023/4/20 |
 | V1.2       | 增加了 buffer 可配置的功能                             | 刘孙涛 | 2023/5/31 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 DPU 主要负责 3D 结构光的深度计算，为 3D 人脸识别提供深度信息。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 绑定模式调用流程
+#### 绑定模式调用流程
 
 ![图示, 示意图 描述已自动生成](images/b85b814d3911bf8b3802ba97751ff941.png)
 
-#### 1.2.2 非绑定模式调用流程
+#### 非绑定模式调用流程
 
 ![图示 描述已自动生成](images/dca3cfa887a526c493abced31b59afd2.png)
 
-## 2. API 参考
+## API 参考
 
-### 2.1 DPU 使用
+### DPU 使用
 
 该功能模块提供以下API：
 
-- [kd_mpi_dpu_init](#211-kd_mpi_dpu_init)
-- [kd_mpi_dpu_delete](#212-kd_mpi_dpu_delete)
-- [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
-- [kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
-- [kd_mpi_dpu_get_dev_attr](#215-kd_mpi_dpu_get_dev_attr)
-- [kd_mpi_dpu_set_ref_image](#216-kd_mpi_dpu_set_ref_image)
-- [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image)
-- [kd_mpi_dpu_set_template_image](#218-kd_mpi_dpu_set_template_image)
-- [kd_mpi_dpu_start_dev](#219-kd_mpi_dpu_start_dev)
-- [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
-- [kd_mpi_dpu_get_chn_attr](#2111-kd_mpi_dpu_get_chn_attr)
-- [kd_mpi_dpu_start_chn](#2112-kd_mpi_dpu_start_chn)
-- [kd_mpi_dpu_stop_chn](#2113-kd_mpi_dpu_stop_chn)
-- [kd_mpi_dpu_send_frame](#2114-kd_mpi_dpu_send_frame)
-- [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
-- [kd_mpi_dpu_release_frame](#2116-kd_mpi_dpu_release_frame)
+- [kd_mpi_dpu_init](#kd_mpi_dpu_init)
+- [kd_mpi_dpu_delete](#kd_mpi_dpu_delete)
+- [kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
+- [kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
+- [kd_mpi_dpu_get_dev_attr](#kd_mpi_dpu_get_dev_attr)
+- [kd_mpi_dpu_set_ref_image](#kd_mpi_dpu_set_ref_image)
+- [kd_mpi_dpu_set_processed_ref_image](#kd_mpi_dpu_set_processed_ref_image)
+- [kd_mpi_dpu_set_template_image](#kd_mpi_dpu_set_template_image)
+- [kd_mpi_dpu_start_dev](#kd_mpi_dpu_start_dev)
+- [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
+- [kd_mpi_dpu_get_chn_attr](#kd_mpi_dpu_get_chn_attr)
+- [kd_mpi_dpu_start_chn](#kd_mpi_dpu_start_chn)
+- [kd_mpi_dpu_stop_chn](#kd_mpi_dpu_stop_chn)
+- [kd_mpi_dpu_send_frame](#kd_mpi_dpu_send_frame)
+- [kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
+- [kd_mpi_dpu_release_frame](#kd_mpi_dpu_release_frame)
 
-#### 2.1.1 kd_mpi_dpu_init
+#### kd_mpi_dpu_init
 
 【描述】
 
@@ -134,9 +134,9 @@ k_s32 kd_mpi_dpu_init(k_dpu_init_t \*init);
 
 【相关主题】
 
-[k_dpu_init_t](#311-k_dpu_init_t)
+[k_dpu_init_t](#k_dpu_init_t)
 
-#### 2.1.2 kd_mpi_dpu_delete
+#### kd_mpi_dpu_delete
 
 【描述】
 
@@ -180,7 +180,7 @@ k_s32 kd_mpi_dpu_delete();
 
 无
 
-#### 2.1.3 kd_mpi_dpu_parse_file
+#### kd_mpi_dpu_parse_file
 
 【描述】
 
@@ -228,9 +228,9 @@ k_s32 kd_mpi_dpu_parse_file(const k_char \*param_path, k_dpu_dev_param_t \*param
 
 【相关主题】
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
 
-#### 2.1.4 kd_mpi_dpu_set_dev_attr
+#### kd_mpi_dpu_set_dev_attr
 
 【描述】
 
@@ -273,9 +273,9 @@ k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 
 【相关主题】
 
-[k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
+[k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
 
-#### 2.1.5 kd_mpi_dpu_get_dev_attr
+#### kd_mpi_dpu_get_dev_attr
 
 【描述】
 
@@ -317,9 +317,9 @@ k_s32 kd_mpi_dpu_set_dev_attr(k_dpu_dev_attr_t \*attr);
 
 【相关主题】
 
-[k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
+[k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
 
-#### 2.1.6 kd_mpi_dpu_set_ref_image
+#### kd_mpi_dpu_set_ref_image
 
 【描述】
 
@@ -363,7 +363,7 @@ k_s32 kd_mpi_dpu_set_ref_image(const k_char \*ref_path);
 
 无
 
-#### 2.1.7 kd_mpi_dpu_set_processed_ref_image
+#### kd_mpi_dpu_set_processed_ref_image
 
 【描述】
 
@@ -397,7 +397,7 @@ k_s32 kd_mpi_dpu_set_processed_ref_image(const k_char \*ref_path);
 
 【注意】
 
-- 需要在配置 dpu 设备属性以后再调用此函数配置参考图，配置的参考图需要离线处理好，调用此函数可以比 [kd_mpi_dpu_set_ref_image](#216-kd_mpi_dpu_set_ref_image) 节省约 70ms 时间。
+- 需要在配置 dpu 设备属性以后再调用此函数配置参考图，配置的参考图需要离线处理好，调用此函数可以比 [kd_mpi_dpu_set_ref_image](#kd_mpi_dpu_set_ref_image) 节省约 70ms 时间。
 
 【举例】
 
@@ -407,7 +407,7 @@ k_s32 kd_mpi_dpu_set_processed_ref_image(const k_char \*ref_path);
 
 无
 
-#### 2.1.8 kd_mpi_dpu_set_template_image
+#### kd_mpi_dpu_set_template_image
 
 【描述】
 
@@ -442,7 +442,7 @@ k_s32 kd_mpi_dpu_set_template_image(k_dpu_user_space_t \*temp_space);
 【注意】
 
 - 需要在配置 dpu 设备属性以后再调用此函数配置参考图。
-- temp_space 需要在 [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file) 时作为参数传入，以从配置文件中获取模板图信息。
+- temp_space 需要在 [kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file) 时作为参数传入，以从配置文件中获取模板图信息。
 
 【举例】
 
@@ -450,10 +450,10 @@ k_s32 kd_mpi_dpu_set_template_image(k_dpu_user_space_t \*temp_space);
 
 【相关主题】
 
-[k_dpu_user_space_t](#315-k_dpu_user_space_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[k_dpu_user_space_t](#k_dpu_user_space_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 2.1.9 kd_mpi_dpu_start_dev
+#### kd_mpi_dpu_start_dev
 
 【描述】
 
@@ -497,7 +497,7 @@ k_s32 kd_mpi_dpu_start_dev();
 
 无
 
-#### 2.1.10 kd_mpi_dpu_set_chn_attr
+#### kd_mpi_dpu_set_chn_attr
 
 【描述】
 
@@ -533,7 +533,7 @@ k_s32 kd_mpi_dpu_set_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr
 【注意】
 
 - 当前 dpu 设备一共有两个通道：0 和 1。通过配置 lcn_attr-\>chn_num 和 ir_attr-\>chn_num（如果开启了红外图通道） 来指明散斑图和红外图各自的输入输出通道。
-- 在首次启动 dpu 设备 [kd_mpi_dpu_start_dev](#219-kd_mpi_dpu_start_dev) 以后，应该调用此函数来配置通道属性，其中散斑图通道必须配置，红外图通道如果没有开启可以不配置（配置为 NULL）。
+- 在首次启动 dpu 设备 [kd_mpi_dpu_start_dev](#kd_mpi_dpu_start_dev) 以后，应该调用此函数来配置通道属性，其中散斑图通道必须配置，红外图通道如果没有开启可以不配置（配置为 NULL）。
 - 在运行过程中如果只需要更改某个通道的属性，可以只传入该通道的结构体参数，另一个通道的参数可以为 NULL。也可以同时传入两个通道的参数。如果两个通道的参数都为 NULL，则该次配置是不会生效的。
 
 【举例】
@@ -542,10 +542,10 @@ k_s32 kd_mpi_dpu_set_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr
 
 【相关主题】
 
-[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
+[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
 
-#### 2.1.11 kd_mpi_dpu_get_chn_attr
+#### kd_mpi_dpu_get_chn_attr
 
 【描述】
 
@@ -588,10 +588,10 @@ k_s32 kd_mpi_dpu_get_chn_attr(k_dpu_chn_lcn_attr_t \*lcn_attr, k_dpu_chn_ir_attr
 
 【相关主题】
 
-[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
+[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
 
-#### 2.1.12 kd_mpi_dpu_start_chn
+#### kd_mpi_dpu_start_chn
 
 【描述】
 
@@ -635,7 +635,7 @@ k_s32 kd_mpi_dpu_start_chn(k_u32 chn_num);
 
 无
 
-#### 2.1.13 kd_mpi_dpu_stop_chn
+#### kd_mpi_dpu_stop_chn
 
 【描述】
 
@@ -679,7 +679,7 @@ k_s32 kd_mpi_dpu_stop_chn(k_u32 chn_num);
 
 无
 
-#### 2.1.14 kd_mpi_dpu_send_frame
+#### kd_mpi_dpu_send_frame
 
 【描述】
 
@@ -695,7 +695,7 @@ k_s32 kd_mpi_dpu_send_frame(k_u32 chn_num, k_u64 addr, k_s32 s32_millisec);
 |--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | chn_num      | 通道号                                                                                                                                                                                      | 输入      |
 | addr         | 发送数据的物理地址                                                                                                                                                                          | 输入      |
-| s32_millisec | 等待时间。 当此参数设置为 -1 时，阻塞模式，直到发送成功才会返回； 当此参数设置为 0 时，非阻塞模式，发送成功立即返回零，发送失败立即返回其他值，具体失败信息参考 [dpu 错误码](#41-dpu-错误码)； | 输入      |
+| s32_millisec | 等待时间。 当此参数设置为 -1 时，阻塞模式，直到发送成功才会返回； 当此参数设置为 0 时，非阻塞模式，发送成功立即返回零，发送失败立即返回其他值，具体失败信息参考 [dpu 错误码](#dpu-错误码)； | 输入      |
 
 【返回值】
 
@@ -725,7 +725,7 @@ k_s32 kd_mpi_dpu_send_frame(k_u32 chn_num, k_u64 addr, k_s32 s32_millisec);
 
 无
 
-#### 2.1.15 kd_mpi_dpu_get_frame
+#### kd_mpi_dpu_get_frame
 
 【描述】
 
@@ -740,8 +740,8 @@ k_s32 kd_mpi_dpu_get_frame(k_u32 chn_num, k_dpu_chn_result_u \*result, k_s32 s32
 | 参数名称     | 描述                                                                                                                                                                                                     | 输入/输出 |
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | chn_num      | 通道号                                                                                                                                                                                                   | 输入      |
-| result       | dpu 输出结果联合体，其成员变量分别是 k_dpu_chn_lcn_result_t 和 k_dpu_chn_ir_result_t 。选择哪个成员作为该通道的输出结果由用户根据 [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr) 的配置来自行决定。 | 输出      |
-| s32_millisec | 等待时间。 当此参数设置为 -1 时，阻塞模式，直到获取成功才会返回； 当此参数设置为 0 时，非阻塞模式，获取成功立即返回零，获取失败立即返回其他值，具体失败信息参考 [dpu 错误码](#41-dpu-错误码)；              | 输入      |
+| result       | dpu 输出结果联合体，其成员变量分别是 k_dpu_chn_lcn_result_t 和 k_dpu_chn_ir_result_t 。选择哪个成员作为该通道的输出结果由用户根据 [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr) 的配置来自行决定。 | 输出      |
+| s32_millisec | 等待时间。 当此参数设置为 -1 时，阻塞模式，直到获取成功才会返回； 当此参数设置为 0 时，非阻塞模式，获取成功立即返回零，获取失败立即返回其他值，具体失败信息参考 [dpu 错误码](#dpu-错误码)；              | 输入      |
 
 【返回值】
 
@@ -769,15 +769,15 @@ k_s32 kd_mpi_dpu_get_frame(k_u32 chn_num, k_dpu_chn_result_u \*result, k_s32 s32
 
 【相关主题】
 
-[k_dpu_chn_result_u](#319-k_dpu_chn_result_u)
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-[k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-[k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-[k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
+[k_dpu_chn_result_u](#k_dpu_chn_result_u)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[k_dpu_disp_out_t](#k_dpu_disp_out_t)
+[k_dpu_depth_out_t](#k_dpu_depth_out_t)
+[k_dpu_ir_out_t](#k_dpu_ir_out_t)
+[k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
 
-#### 2.1.16 kd_mpi_dpu_release_frame
+#### kd_mpi_dpu_release_frame
 
 【描述】
 
@@ -809,7 +809,7 @@ k_s32 kd_mpi_dpu_release_frame();
 
 【注意】
 
-- 此函数会依次释放 buffer 中的数据，先生成的结果先释放。目前 dpu buffer 为 3，使用完 [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame) 获取的结果以后请尽快释放。
+- 此函数会依次释放 buffer 中的数据，先生成的结果先释放。目前 dpu buffer 为 3，使用完 [kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame) 获取的结果以后请尽快释放。
 
 【举例】
 
@@ -819,29 +819,29 @@ k_s32 kd_mpi_dpu_release_frame();
 
 无
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 公共数据类型
+### 公共数据类型
 
 本模块有如下数据类型：
 
-- [k_dpu_init_t](#311-k_dpu_init_t)
-- [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-- [k_dpu_lcn_param_t](#313-k_dpu_lcn_param_t)
-- [k_dpu_ir_param_t](#314-k_dpu_ir_param_t)
-- [k_dpu_user_space_t](#315-k_dpu_user_space_t)
-- [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
-- [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-- [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
-- [k_dpu_chn_result_u](#319-k_dpu_chn_result_u)
-- [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-- [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-- [k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-- [k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-- [k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-- [k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
+- [k_dpu_init_t](#k_dpu_init_t)
+- [k_dpu_dev_param_t](#k_dpu_dev_param_t)
+- [k_dpu_lcn_param_t](#k_dpu_lcn_param_t)
+- [k_dpu_ir_param_t](#k_dpu_ir_param_t)
+- [k_dpu_user_space_t](#k_dpu_user_space_t)
+- [k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
+- [k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+- [k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
+- [k_dpu_chn_result_u](#k_dpu_chn_result_u)
+- [k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+- [k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+- [k_dpu_disp_out_t](#k_dpu_disp_out_t)
+- [k_dpu_depth_out_t](#k_dpu_depth_out_t)
+- [k_dpu_ir_out_t](#k_dpu_ir_out_t)
+- [k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
 
-#### 3.1.1 k_dpu_init_t
+#### k_dpu_init_t
 
 【说明】
 
@@ -869,9 +869,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_init](#211-kd_mpi_dpu_init)
+[kd_mpi_dpu_init](#kd_mpi_dpu_init)
 
-#### 3.1.2 k_dpu_dev_param_t
+#### k_dpu_dev_param_t
 
 【说明】
 
@@ -900,10 +900,10 @@ typedef struct
 
 【相关数据类型及接口】
 
-[k_dpu_long_parameter_t](#321-k_dpu_long_parameter_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[k_dpu_long_parameter_t](#k_dpu_long_parameter_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.3 k_dpu_lcn_param_t
+#### k_dpu_lcn_param_t
 
 【说明】
 
@@ -939,9 +939,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.4 k_dpu_ir_param_t
+#### k_dpu_ir_param_t
 
 【说明】
 
@@ -970,9 +970,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.5 k_dpu_user_space_t
+#### k_dpu_user_space_t
 
 【说明】
 
@@ -1004,9 +1004,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.6 k_dpu_dev_attr_t
+#### k_dpu_dev_attr_t
 
 【说明】
 
@@ -1042,10 +1042,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
 
-#### 3.1.7 k_dpu_chn_lcn_attr_t
+#### k_dpu_chn_lcn_attr_t
 
 【说明】
 
@@ -1075,9 +1075,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
+[kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
 
-#### 3.1.8 k_dpu_chn_ir_attr_t
+#### k_dpu_chn_ir_attr_t
 
 【说明】
 
@@ -1107,9 +1107,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
+[kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
 
-#### 3.1.9 k_dpu_chn_result_u
+#### k_dpu_chn_result_u
 
 【说明】
 
@@ -1128,20 +1128,20 @@ typedef union {
 
 | 成员名称   | 描述                                                                        |
 |------------|-----------------------------------------------------------------------------|
-| lcn_result | 散斑图通道输出结果结构体。[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t) |
-| ir_result  | 红外图通道输出结果结构体。[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)   |
+| lcn_result | 散斑图通道输出结果结构体。[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t) |
+| ir_result  | 红外图通道输出结果结构体。[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)   |
 
 【注意事项】
 
-- 用户选择哪个成员作为输出结果需要根据用户自己的配置来选择。在 [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr) 中用户配置了通道号和通道类型的对应关系。
+- 用户选择哪个成员作为输出结果需要根据用户自己的配置来选择。在 [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr) 中用户配置了通道号和通道类型的对应关系。
 
 【相关数据类型及接口】
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.10 k_dpu_chn_lcn_result_t
+#### k_dpu_chn_lcn_result_t
 
 【说明】
 
@@ -1168,7 +1168,7 @@ typedef struct {
 | disp_out  | 视差图输出结果结构体。                                                                                                                                                                                                 |
 | depth_out | 深度图输出结果结构体。                                                                                                                                                                                                 |
 | qlt_out   | 质量检测输出结果结构体。包括质量检测结果、粗细_列视差（初始分辨率）结果、初始行列式差结果。                                                                                                                            |
-| flag      | 此结构体用来标记用户配置的参数在哪一帧生效了。结构体中包含了 [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t) 中的 param_valid 变量。 |
+| flag      | 此结构体用来标记用户配置的参数在哪一帧生效了。结构体中包含了 [k_dpu_dev_attr_t](#k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t) 中的 param_valid 变量。 |
 
 【注意事项】
 
@@ -1176,12 +1176,12 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-[k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-[k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_disp_out_t](#k_dpu_disp_out_t)
+[k_dpu_depth_out_t](#k_dpu_depth_out_t)
+[k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.11 k_dpu_chn_ir_result_t
+#### k_dpu_chn_ir_result_t
 
 【说明】
 
@@ -1204,7 +1204,7 @@ typedef struct {
 |----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | pts      | 时间戳，绑定模式下有效。                                                                                                                                                                                               |
 | ir_out   | 红外图输出结果结构体。                                                                                                                                                                                                 |
-| flag     | 此结构体用来标记用户配置的参数在哪一帧生效了。结构体中包含了 [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t) 中的 param_valid 变量。 |
+| flag     | 此结构体用来标记用户配置的参数在哪一帧生效了。结构体中包含了 [k_dpu_dev_attr_t](#k_dpu_dev_attr_t)、[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)、[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t) 中的 param_valid 变量。 |
 
 【注意事项】
 
@@ -1212,10 +1212,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_ir_out_t](#k_dpu_ir_out_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.12 k_dpu_disp_out_t
+#### k_dpu_disp_out_t
 
 【说明】
 
@@ -1247,10 +1247,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.13 k_dpu_depth_out_t
+#### k_dpu_depth_out_t
 
 【说明】
 
@@ -1282,10 +1282,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.14 k_dpu_ir_out_t
+#### k_dpu_ir_out_t
 
 【说明】
 
@@ -1317,10 +1317,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.15 k_dpu_qlt_out_t
+#### k_dpu_qlt_out_t
 
 【说明】
 
@@ -1364,17 +1364,17 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-### 3.2 长短周期参数类型
+### 长短周期参数类型
 
 本模块有如下数据类型：
 
-- [k_dpu_long_parameter_t](#321-k_dpu_long_parameter_t)
-- [k_dpu_short_parameter_t](#322-k_dpu_short_parameter_t)
+- [k_dpu_long_parameter_t](#k_dpu_long_parameter_t)
+- [k_dpu_short_parameter_t](#k_dpu_short_parameter_t)
 
-#### 3.2.1 k_dpu_long_parameter_t
+#### k_dpu_long_parameter_t
 
 【说明】
 
@@ -1390,11 +1390,11 @@ dpu 长周期参数结构体
 
 【相关数据类型及接口】
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
 
-#### 3.2.2 k_dpu_short_parameter_t
+#### k_dpu_short_parameter_t
 
 【说明】
 
@@ -1410,13 +1410,13 @@ dpu 短周期参数结构体
 
 【相关数据类型及接口】
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
-[kd_mpi_dpu_get_dev_attr](#215-kd_mpi_dpu_get_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
+[kd_mpi_dpu_get_dev_attr](#kd_mpi_dpu_get_dev_attr)
 
-## 4. 错误码
+## 错误码
 
-### 4.1 dpu 错误码
+### dpu 错误码
 
 表 41
 
@@ -1439,9 +1439,9 @@ dpu 短周期参数结构体
 | 0xa0118011 | K_ERR_DPU_BADADDR       | 错误的地址                   |
 | 0xa0118012 | K_ERR_DPU_BUSY          | DPU 处与忙状态               |
 
-## 5. 调试信息
+## 调试信息
 
-### 5.1 概述
+### 概述
 
 调试信息采用了 proc 文件系统，可实时反映当前系统的运行状态，所记录的信息可供问题定位及分析时使用
 
@@ -1455,7 +1455,7 @@ dpu 短周期参数结构体
 |-----------|-----------------------------|
 | umap/dpu  | 记录当前 dpu 模块的一些信息 |
 
-### 5.2 调试信息
+### 调试信息
 
 【调试信息】
 
@@ -1522,24 +1522,24 @@ from open to close, dpu has send 0 frames
 
 调测信息需要在 dpu 运行过程中查看，dpu 结束运行以后，当前所有信息会重置为零。
 
-## 6. demo 描述
+## demo 描述
 
-### 6.1 dpu demo 简介
+### dpu demo 简介
 
 dpu demo 实现了绑定和非绑定两种模式。在 msh 中输入 /bin/sample_dpu.elf 执行非绑定模式，运行十帧后结束；在 msh 中输入 /bin/sample_dpu.elf BOUND 执行绑定模式，以 vvi 作为模拟上级不停的输入数据给 dpu，dpu 计算完成后显示信息。
 
-### 6.2 Feature 说明
+### Feature 说明
 
 demo 中包含了初始化和删除 dpu，从配置文件解析参数，配置设备属性，配置通道属性，启动和暂停设备，启动和暂停通道，输入输出数据，pipeline 绑定等功能。
 
-#### 6.2.1 非绑定模式
+#### 非绑定模式
 
 通过调用 API 完成 dpu 设备的初始化，从配置文件中解析参数，根据解析参数配置设备属性，调用 API 设置参考图和模板图，启动 dpu 设备，配置散斑图和红外图通道属性，启动通道，循环输入十帧并比对结果后停止，停止通道，停止设备，删除设备。
 
-#### 6.2.2 绑定模式
+#### 绑定模式
 
 通过调用 API 完成 dpu 设备的初始化，从配置文件中解析参数，绑定 vvi 和 dpu 通道，根据解析参数配置设备属性，调用 API 设置参考图和模板图，启动 dpu 设备，配置散斑图和红外图通道属性，启动 dpu 通道，启动 vvi 通道，vvi 作为模拟上级数据不停的输入数据给 dpu。用户输入 e 以后停止通道和设备。
 
-#### 6.2.3 编译和执行
+#### 编译和执行
 
 编译和执行可以参考文档《K230 SDK Demo使用指南》。

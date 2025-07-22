@@ -52,17 +52,17 @@ This document (this guide) is primarily intended for the following personnel:
 | V1.1             | Modified VICAP overview 2, added API and data type navigation                                                                      | Zhongxiang Zhao| 2023/4/6   |
 | V1.2             | Removed ISP related interfaces, added API and data type descriptions, separated sensor interface from libvicap library to libsensor library, added ov9286 infrared/scatter type, updated VICAP description, updated document format | Shidong Guo, Chenggen Wang | 2023/4/26 |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 The VICAP subsystem is responsible for video image input capture and processing in the K230 SOC. It processes signals output by the sensor in real-time to obtain restored and enhanced digital images that are closer to what the human eye sees in reality. It mainly includes MIPI RxDphy, MIPI CSI, ISP, and DW. MIPI is used to receive high-speed differential signals from the sensor and convert them to the DVP interface for ISP processing; ISP is used for image information processing; DW is used for fisheye correction and multi-channel resize output.
 
 This document mainly describes the application programming interface of the VICAP module, which provides application developers with operational interfaces and configuration parameters for capturing video image data through the VICAP module.
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 VICAP
+#### VICAP
 
 The VICAP module is an abstract description of the entire image acquisition and processing unit.
 
@@ -82,7 +82,7 @@ The VICAP software architecture is shown in Figure 1-2, from top to bottom: Appl
 
 ![GUI, Text, Application automatically generated](../../../../zh/01_software/board/mpp/images/250b6c36cbd4447bd8c734548fc3b890.png)
 
-#### 1.2.2 Sensor
+#### Sensor
 
 The Sensor module is one of the data sources for VICAP image capture, responsible for configuring the operating parameters and working modes of the image sensor unit.
 
@@ -108,31 +108,31 @@ From top to bottom: Media Interface Layer, Hardware Driver Layer, and Hardware L
   - sensor_drv: Specific sensor hardware driver, encapsulating operations on the sensor into a unified interface.
 - Hardware Layer: Sensor module hardware, supporting up to three hardware sensors simultaneously in the current system.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 VICAP
+### VICAP
 
 This functional module provides the following APIs:
 
-- [kd_mpi_vicap_get_sensor_info](#211-kd_mpi_vicap_get_sensor_info)
-- [kd_mpi_vicap_set_dev_attr](#212-kd_mpi_vicap_set_dev_attr)
-- [kd_mpi_vicap_get_dev_attr](#213-kd_mpi_vicap_get_dev_attr)
-- [kd_mpi_vicap_set_chn_attr](#214-kd_mpi_vicap_set_chn_attr)
-- [kd_mpi_vicap_get_chn_attr](#215-kd_mpi_vicap_get_chn_attr)
-- [kd_mpi_vicap_init](#216-kd_mpi_vicap_init)
-- [kd_mpi_vicap_deinit](#217-kd_mpi_vicap_deinit)
-- [kd_mpi_vicap_start_stream](#218-kd_mpi_vicap_start_stream)
-- [kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream)
-- [kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame)
-- [kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release)
-- [kd_mpi_vicap_set_vi_drop_frame](#2112-kd_mpi_vicap_set_vi_drop_frame)
-- [kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk)
-- [kd_mpi_vicap_set_dump_reserved](#2114-kd_mpi_vicap_set_dump_reserved)
-- [kd_mpi_vicap_set_slave_enable](#2115-kd_mpi_vicap_set_slave_enable)
-- [kd_mpi_vicap_set_slave_attr](#2116-kd_mpi_vicap_set_slave_attr)
-- [kd_mpi_vicap_3d_mode_crtl](#2117-kd_mpi_vicap_3d_mode_crtl)
+- [kd_mpi_vicap_get_sensor_info](#kd_mpi_vicap_get_sensor_info)
+- [kd_mpi_vicap_set_dev_attr](#kd_mpi_vicap_set_dev_attr)
+- [kd_mpi_vicap_get_dev_attr](#kd_mpi_vicap_get_dev_attr)
+- [kd_mpi_vicap_set_chn_attr](#kd_mpi_vicap_set_chn_attr)
+- [kd_mpi_vicap_get_chn_attr](#kd_mpi_vicap_get_chn_attr)
+- [kd_mpi_vicap_init](#kd_mpi_vicap_init)
+- [kd_mpi_vicap_deinit](#kd_mpi_vicap_deinit)
+- [kd_mpi_vicap_start_stream](#kd_mpi_vicap_start_stream)
+- [kd_mpi_vicap_stop_stream](#kd_mpi_vicap_stop_stream)
+- [kd_mpi_vicap_dump_frame](#kd_mpi_vicap_dump_frame)
+- [kd_mpi_vicap_dump_release](#kd_mpi_vicap_dump_release)
+- [kd_mpi_vicap_set_vi_drop_frame](#kd_mpi_vicap_set_vi_drop_frame)
+- [kd_mpi_vicap_set_mclk](#kd_mpi_vicap_set_mclk)
+- [kd_mpi_vicap_set_dump_reserved](#kd_mpi_vicap_set_dump_reserved)
+- [kd_mpi_vicap_set_slave_enable](#kd_mpi_vicap_set_slave_enable)
+- [kd_mpi_vicap_set_slave_attr](#kd_mpi_vicap_set_slave_attr)
+- [kd_mpi_vicap_3d_mode_crtl](#kd_mpi_vicap_3d_mode_crtl)
 
-#### 2.1.1 kd_mpi_vicap_get_sensor_info
+#### kd_mpi_vicap_get_sensor_info
 
 [Description]
 
@@ -175,7 +175,7 @@ None.
 
 [Related Topics]
 
-#### 2.1.2 kd_mpi_vicap_set_dev_attr
+#### kd_mpi_vicap_set_dev_attr
 
 [Description]
 
@@ -218,7 +218,7 @@ None.
 
 [Related Topics]
 
-#### 2.1.3 kd_mpi_vicap_get_dev_attr
+#### kd_mpi_vicap_get_dev_attr
 
 [Description]
 
@@ -261,7 +261,7 @@ None.
 
 [Related Topics]
 
-#### 2.1.4 kd_mpi_vicap_set_chn_attr
+#### kd_mpi_vicap_set_chn_attr
 
 [Description]
 
@@ -305,7 +305,7 @@ None.
 
 [Related Topics]
 
-#### 2.1.5 kd_mpi_vicap_get_chn_attr
+#### kd_mpi_vicap_get_chn_attr
 
 [Description]
 
@@ -349,7 +349,7 @@ None.
 
 [Related Topics]
 
-#### 2.1.6 kd_mpi_vicap_init
+#### kd_mpi_vicap_init
 
 [Description]
 
@@ -391,7 +391,7 @@ None
 
 **Related Topics**:
 
-#### 2.1.7 kd_mpi_vicap_deinit
+#### kd_mpi_vicap_deinit
 
 **Description**:
 
@@ -435,7 +435,7 @@ None.
 
 **Related Topics**:
 
-#### 2.1.8 kd_mpi_vicap_start_stream
+#### kd_mpi_vicap_start_stream
 
 **Description**:
 
@@ -479,7 +479,7 @@ None.
 
 **Related Topics**:
 
-#### 2.1.9 kd_mpi_vicap_stop_stream
+#### kd_mpi_vicap_stop_stream
 
 **Description**:
 
@@ -523,7 +523,7 @@ None.
 
 **Related Topics**:
 
-#### 2.1.10 kd_mpi_vicap_dump_frame
+#### kd_mpi_vicap_dump_frame
 
 **Description**:
 
@@ -572,7 +572,7 @@ None.
 
 **Related Topics**:
 
-#### 2.1.11 kd_mpi_vicap_dump_release
+#### kd_mpi_vicap_dump_release
 
 **Description**:
 
@@ -618,7 +618,7 @@ None.
 
 **Related Topics**:
 
-#### 2.1.12 kd_mpi_vicap_set_vi_drop_frame
+#### kd_mpi_vicap_set_vi_drop_frame
 
 **Description**:
 
@@ -657,7 +657,7 @@ None.
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
 
-#### 2.1.13 kd_mpi_vicap_set_mclk
+#### kd_mpi_vicap_set_mclk
 
 **Description**:
 
@@ -694,7 +694,7 @@ None.
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
 
-#### 2.1.14 kd_mpi_vicap_set_dump_reserved
+#### kd_mpi_vicap_set_dump_reserved
 
 **Description**:
 
@@ -725,7 +725,7 @@ void kd_mpi_vicap_set_dump_reserved(k_vicap_dev dev_num, k_vicap_chn chn_num, k_
 
 None.
 
-#### 2.1.15 kd_mpi_vicap_set_slave_enable
+#### kd_mpi_vicap_set_slave_enable
 
 **Description**:
 
@@ -755,7 +755,7 @@ k_s32 kd_mpi_vicap_set_slave_enable(k_vicap_slave_id id, k_vicap_slave_enable *e
 
 None.
 
-#### 2.1.16 kd_mpi_vicap_set_slave_attr
+#### kd_mpi_vicap_set_slave_attr
 
 **Description**:
 
@@ -785,7 +785,7 @@ k_s32 kd_mpi_vicap_set_slave_attr(k_vicap_slave_id id, k_vicap_slave_info *info)
 
 None.
 
-#### 2.1.17 kd_mpi_vicap_3d_mode_crtl
+#### kd_mpi_vicap_3d_mode_crtl
 
 **Description**:
 
@@ -819,30 +819,30 @@ None.
 - Header file: mpi_vicap_api.h
 - Library file: libvicap.a
 
-### 2.2 Sensor
+### Sensor
 
 This functional module provides the following APIs:
 
-- [kd_mpi_sensor_open](#221-kd_mpi_sensor_open)
-- [kd_mpi_sensor_close](#222-kd_mpi_sensor_close)
-- [kd_mpi_sensor_power_set](#223-kd_mpi_sensor_power_set)
-- [kd_mpi_sensor_id_get](#224-kd_mpi_sensor_id_get)
-- [kd_mpi_sensor_init](#225-kd_mpi_sensor_init)
-- [kd_mpi_sensor_reg_read](#226-kd_mpi_sensor_reg_read)
-- [kd_mpi_sensor_reg_write](#227-kd_mpi_sensor_reg_write)
-- [kd_mpi_sensor_mode_get](#228-kd_mpi_sensor_mode_get)
-- [kd_mpi_sensor_mode_set](#229-kd_mpi_sensor_mode_set)
-- [kd_mpi_sensor_stream_enable](#2210-kd_mpi_sensor_stream_enable)
-- [kd_mpi_sensor_again_set](#2211-kd_mpi_sensor_again_set)
-- [kd_mpi_sensor_again_get](#2212-kd_mpi_sensor_again_get)
-- [kd_mpi_sensor_dgain_set](#2213-kd_mpi_sensor_dgain_set)
-- [kd_mpi_sensor_dgain_get](#2214-kd_mpi_sensor_dgain_get)
-- [kd_mpi_sensor_intg_time_set](#2215-kd_mpi_sensor_intg_time_set)
-- [kd_mpi_sensor_intg_time_get](#2216-kd_mpi_sensor_intg_time_get)
-- [kd_mpi_sensor_otpdata_get](#2217-kd_mpi_sensor_otpdata_get)
-- [kd_mpi_sensor_otpdata_set](#2218-kd_mpi_sensor_otpdata_set)
+- [kd_mpi_sensor_open](#kd_mpi_sensor_open)
+- [kd_mpi_sensor_close](#kd_mpi_sensor_close)
+- [kd_mpi_sensor_power_set](#kd_mpi_sensor_power_set)
+- [kd_mpi_sensor_id_get](#kd_mpi_sensor_id_get)
+- [kd_mpi_sensor_init](#kd_mpi_sensor_init)
+- [kd_mpi_sensor_reg_read](#kd_mpi_sensor_reg_read)
+- [kd_mpi_sensor_reg_write](#kd_mpi_sensor_reg_write)
+- [kd_mpi_sensor_mode_get](#kd_mpi_sensor_mode_get)
+- [kd_mpi_sensor_mode_set](#kd_mpi_sensor_mode_set)
+- [kd_mpi_sensor_stream_enable](#kd_mpi_sensor_stream_enable)
+- [kd_mpi_sensor_again_set](#kd_mpi_sensor_again_set)
+- [kd_mpi_sensor_again_get](#kd_mpi_sensor_again_get)
+- [kd_mpi_sensor_dgain_set](#kd_mpi_sensor_dgain_set)
+- [kd_mpi_sensor_dgain_get](#kd_mpi_sensor_dgain_get)
+- [kd_mpi_sensor_intg_time_set](#kd_mpi_sensor_intg_time_set)
+- [kd_mpi_sensor_intg_time_get](#kd_mpi_sensor_intg_time_get)
+- [kd_mpi_sensor_otpdata_get](#kd_mpi_sensor_otpdata_get)
+- [kd_mpi_sensor_otpdata_set](#kd_mpi_sensor_otpdata_set)
 
-#### 2.2.1 kd_mpi_sensor_open
+#### kd_mpi_sensor_open
 
 **Description**:
 
@@ -886,7 +886,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.2 kd_mpi_sensor_close
+#### kd_mpi_sensor_close
 
 **Description**:
 
@@ -930,7 +930,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.3 kd_mpi_sensor_power_set
+#### kd_mpi_sensor_power_set
 
 **Description**:
 
@@ -975,7 +975,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.4 kd_mpi_sensor_id_get
+#### kd_mpi_sensor_id_get
 
 **Description**:
 
@@ -1020,7 +1020,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.5 kd_mpi_sensor_init
+#### kd_mpi_sensor_init
 
 **Description**:
 
@@ -1065,7 +1065,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.6 kd_mpi_sensor_reg_read
+#### kd_mpi_sensor_reg_read
 
 **Description**:
 
@@ -1111,7 +1111,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.7 kd_mpi_sensor_reg_write
+#### kd_mpi_sensor_reg_write
 
 **Description**:
 
@@ -1157,7 +1157,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.8 kd_mpi_sensor_mode_get
+#### kd_mpi_sensor_mode_get
 
 **Description**:
 
@@ -1202,7 +1202,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.9 kd_mpi_sensor_mode_set
+#### kd_mpi_sensor_mode_set
 
 **Description**:
 
@@ -1247,7 +1247,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.10 kd_mpi_sensor_stream_enable
+#### kd_mpi_sensor_stream_enable
 
 **Description**:
 
@@ -1292,7 +1292,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.11 kd_mpi_sensor_again_set
+#### kd_mpi_sensor_again_set
 
 **Description**:
 
@@ -1337,7 +1337,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.12 kd_mpi_sensor_again_get
+#### kd_mpi_sensor_again_get
 
 **Description**:
 
@@ -1382,7 +1382,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.13 kd_mpi_sensor_dgain_set
+#### kd_mpi_sensor_dgain_set
 
 **Description**:
 
@@ -1427,7 +1427,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.14 kd_mpi_sensor_dgain_get
+#### kd_mpi_sensor_dgain_get
 
 **Description**:
 
@@ -1472,7 +1472,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.15 kd_mpi_sensor_intg_time_set
+#### kd_mpi_sensor_intg_time_set
 
 **Description**:
 
@@ -1517,7 +1517,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.16 kd_mpi_sensor_intg_time_get
+#### kd_mpi_sensor_intg_time_get
 
 **Description**:
 
@@ -1562,7 +1562,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.17 kd_mpi_sensor_otpdata_get
+#### kd_mpi_sensor_otpdata_get
 
 **Description**:
 
@@ -1607,7 +1607,7 @@ None.
 
 **Related Topics**:
 
-#### 2.2.18 kd_mpi_sensor_otpdata_set
+#### kd_mpi_sensor_otpdata_set
 
 **Description**:
 
@@ -1652,29 +1652,29 @@ None.
 
 **Related Topics**:
 
-## 3. Data Types
+## Data Types
 
-### 3.1 VICAP
+### VICAP
 
 The related data types for this functional module are defined as follows:
 
-- [k_vicap_sensor_type](#311-k_vicap_sensor_type)
-- [k_vicap_dev](#312-k_vicap_dev)
-- [k_vicap_chn](#313-k_vicap_chn)
-- [k_vicap_csi_num](#314-k_vicap_csi_num)
-- [k_vicap_mipi_lanes](#315-k_vicap_mipi_lanes)
-- [k_vicap_csi_data_type](#316-k_vicap_csi_data_type)
-- [k_vicap_data_source](#317-k_vicap_data_source)
-- [k_vicap_vi_dvp_port](#318-k_vicap_vi_dvp_port)
-- [k_vicap_vi_flash_mode](#319-k_vicap_vi_flash_mode)
-- [k_vicap_img_window](#3110-k_vicap_img_window)
-- [k_vicap_work_mode](#3111-k_vicap_work_mode)
-- [k_vicap_sensor_info](#3112-k_vicap_sensor_info)
-- [k_vicap_dump_format](#3113-k_vicap_dump_format)
-- [k_vicap_dev_attr](#3114-k_vicap_dev_attr)
-- [k_vicap_chn_attr](#3115-k_vicap_chn_attr)
+- [k_vicap_sensor_type](#k_vicap_sensor_type)
+- [k_vicap_dev](#k_vicap_dev)
+- [k_vicap_chn](#k_vicap_chn)
+- [k_vicap_csi_num](#k_vicap_csi_num)
+- [k_vicap_mipi_lanes](#k_vicap_mipi_lanes)
+- [k_vicap_csi_data_type](#k_vicap_csi_data_type)
+- [k_vicap_data_source](#k_vicap_data_source)
+- [k_vicap_vi_dvp_port](#k_vicap_vi_dvp_port)
+- [k_vicap_vi_flash_mode](#k_vicap_vi_flash_mode)
+- [k_vicap_img_window](#k_vicap_img_window)
+- [k_vicap_work_mode](#k_vicap_work_mode)
+- [k_vicap_sensor_info](#k_vicap_sensor_info)
+- [k_vicap_dump_format](#k_vicap_dump_format)
+- [k_vicap_dev_attr](#k_vicap_dev_attr)
+- [k_vicap_chn_attr](#k_vicap_chn_attr)
 
-### 3.1.1 k_vicap_sensor_type
+### k_vicap_sensor_type
 
 **Description**: Definition of sensor types supported by the current system.
 
@@ -1772,7 +1772,7 @@ typedef enum {
 
 1. This list needs to be maintained by sensor driver developers. Application developers use the sensor types defined here to open specific types of sensor devices.
 
-### 3.1.2 k_vicap_dev
+### k_vicap_dev
 
 **Description**: Definition of VICAP device IDs.
 
@@ -1795,7 +1795,7 @@ typedef enum {
 | VICAP_DEV_ID_1    | VICAP Device 1    |
 | VICAP_DEV_ID_2    | VICAP Device 2    |
 
-### 3.1.3 k_vicap_chn
+### k_vicap_chn
 
 **Description**: Definition of VICAP output channel numbers.
 
@@ -1818,7 +1818,7 @@ typedef enum {
 | VICAP_CHN_ID_1    | VICAP output channel 1 |
 | VICAP_CHN_ID_2    | VICAP output channel 2 |
 
-### 3.1.4 k_vicap_csi_num
+### k_vicap_csi_num
 
 **Description**: Definition of VICAP CSI numbers.
 
@@ -1844,7 +1844,7 @@ typedef enum {
 
 The CSI number to which the sensor is connected is determined by the hardware physical connection.
 
-### 3.1.5 k_vicap_mipi_lanes
+### k_vicap_mipi_lanes
 
 **Description**: Definition of VICAP MIPI lane numbers.
 
@@ -1870,7 +1870,7 @@ typedef enum {
 
 The number of MIPI lanes used by the sensor is determined by the hardware physical connection. When using 4 lanes, a maximum of two sensors can be connected.
 
-### 3.1.6 k_vicap_csi_data_type
+### k_vicap_csi_data_type
 
 **Description**: Definition of VICAP MIPI data types.
 
@@ -1898,7 +1898,7 @@ typedef enum {
 
 None
 
-### 3.1.7 k_vicap_data_source
+### k_vicap_data_source
 
 **Description**: Definition of VICAP data sources.
 
@@ -1928,7 +1928,7 @@ typedef enum {
 
 None
 
-### 3.1.8 k_vicap_vi_dvp_port
+### k_vicap_vi_dvp_port
 
 **Description**: Definition of VICAP VI DVP port numbers.
 
@@ -1957,7 +1957,7 @@ typedef enum {
 1. Only port 0 supports HDR sensors. When using HDR mode, it must be bound to DVP port 0.
 1. To change the port mapping relationship, binding operations are required.
 
-### 3.1.9 k_vicap_vi_flash_mode
+### k_vicap_vi_flash_mode
 
 **Description**: Definition of VICAP flash light control modes.
 
@@ -1985,7 +1985,7 @@ typedef enum {
 
 None
 
-### 3.1.10 k_vicap_img_window
+### k_vicap_img_window
 
 **Description**: Definition of VICAP image window.
 
@@ -2009,7 +2009,7 @@ typedef struct {
 | width           | Image width         |
 | height          | Image height        |
 
-### 3.1.11 k_vicap_work_mode
+### k_vicap_work_mode
 
 **Description**: Definition of VICAP work modes.
 
@@ -2035,7 +2035,7 @@ typedef enum {
 
 When supporting multiple camera inputs, it must be specified as offline mode. When configuring VICAP_WORK_ONLY_MCM_MODE, the dumped image can only use the YUV444 format.
 
-### 3.1.12 k_vicap_sensor_info
+### k_vicap_sensor_info
 
 **Description**: VICAP sensor configuration information.
 
@@ -2071,7 +2071,7 @@ typedef struct {
 | flash_mode      | Flash light configuration mode              |
 | sensor_type     | Sensor configuration type                   |
 
-### 3.1.13 k_vicap_dump_format
+### k_vicap_dump_format
 
 **Description**: VICAP dump data frame format.
 
@@ -2095,7 +2095,7 @@ typedef enum {
 | VICAP_DUMP_RAW    | Dump RAW data      |
 | VICAP_DUMP_YUV444 | Dump YUV444 data   |
 
-### 3.1.14 k_vicap_dev_attr
+### k_vicap_dev_attr
 
 **Description**: VICAP device attributes.
 
@@ -2133,7 +2133,7 @@ typedef struct {
 
 For low-memory application scenarios, it is recommended to disable the 3DNR module to reduce memory usage. To disable, set `pipe_ctrl.bits.dnr3_enable` to 0 when setting device attributes.
 
-### 3.1.15 k_vicap_chn_attr
+### k_vicap_chn_attr
 
 **Description**: VICAP channel attributes.
 
@@ -2169,7 +2169,7 @@ typedef struct {
 | buffer_size     | Buffer size                     |
 | alignment       | Buffer alignment method         |
 
-### 3.1.16 k_vicap_mirror
+### k_vicap_mirror
 
 **Description**: VICAP sensor mirror function.
 
@@ -2197,21 +2197,21 @@ typedef enum {
 
 None
 
-### 3.2 Sensor
+### Sensor
 
 The related data type definitions of this functional module are as follows:
 
-- [k_sensor_bayer_pattern](#321-k_sensor_bayer_pattern)
-- [k_sensor_exp_frame_type](#322-k_sensor_exp_frame_type)
-- [k_sensor_exposure_param](#323-k_sensor_exposure_param)
-- [k_sensor_intg_time](#324-k_sensor_intg_time)
-- [k_sensor_gain](#325-k_sensor_gain)
-- [k_sensor_size](#326-k_sensor_size)
-- [k_sensor_ae_info](#327-k_sensor_ae_info)
-- [k_sensor_mode](#328-k_sensor_mode)
-- [k_sensor_otp_date](#329-k_sensor_otp_date)
+- [k_sensor_bayer_pattern](#k_sensor_bayer_pattern)
+- [k_sensor_exp_frame_type](#k_sensor_exp_frame_type)
+- [k_sensor_exposure_param](#k_sensor_exposure_param)
+- [k_sensor_intg_time](#k_sensor_intg_time)
+- [k_sensor_gain](#k_sensor_gain)
+- [k_sensor_size](#k_sensor_size)
+- [k_sensor_ae_info](#k_sensor_ae_info)
+- [k_sensor_mode](#k_sensor_mode)
+- [k_sensor_otp_date](#k_sensor_otp_date)
 
-### 3.2.1 k_sensor_bayer_pattern
+### k_sensor_bayer_pattern
 
 **Definition**: Definition of Bayer pattern output by the sensor.
 
@@ -2234,7 +2234,7 @@ typedef enum {
 | BAYER_GBRG      | GBRG pattern    |
 | BAYER_BGGR      | BGGR pattern    |
 
-### 3.2.2 k_sensor_exp_frame_type
+### k_sensor_exp_frame_type
 
 **Description**:
 
@@ -2259,7 +2259,7 @@ typedef enum {
 | SENSOR_EXPO_FRAME_TYPE_3FRAMES | 3-frame HDR exposure mode  |
 | SENSOR_EXPO_FRAME_TYPE_4FRAMES | 4-frame HDR exposure mode  |
 
-### 3.2.3 k_sensor_exposure_param
+### k_sensor_exposure_param
 
 **Description**: Definition of sensor exposure parameters.
 
@@ -2281,7 +2281,7 @@ typedef struct {
 | gain            | Exposure gain   |
 | exp_time        | Exposure time   |
 
-### 3.2.4 k_sensor_intg_time
+### k_sensor_intg_time
 
 **Description**: Definition of sensor exposure time.
 
@@ -2301,7 +2301,7 @@ typedef struct {
 | exp_frame_type  | Exposure type         |
 | intg_time       | Integration time      |
 
-### 3.2.5 k_sensor_gain
+### k_sensor_gain
 
 **Description**: Definition of exposure gain.
 
@@ -2321,7 +2321,7 @@ typedef struct {
 | exp_frame_type  | Exposure type   |
 | gain            | Exposure gain   |
 
-### 3.2.6 k_sensor_size
+### k_sensor_size
 
 **Description**: Definition of sensor-supported image sizes.
 
@@ -2349,7 +2349,7 @@ typedef struct {
 | width           | Width           |
 | height          | Height          |
 
-### 3.2.7 k_sensor_ae_info
+### k_sensor_ae_info
 
 **Description**: AE parameter configuration.
 
@@ -2456,7 +2456,7 @@ typedef struct {
 | cur_fps                       | Current frame rate                  |
 | hdr_ratio                     | HDR ratio                           |
 
-### 3.2.8 k_sensor_mode
+### k_sensor_mode
 
 **Description**: Sensor mode parameters.
 
@@ -2496,7 +2496,7 @@ typedef struct {
 | otp_type        | OTP type: sensor-specific and user-specific |
 | otp_date        | OTP data                        |
 
-### 3.2.9 k_sensor_otp_date
+### k_sensor_otp_date
 
 **Description**: Sensor OTP parameters.
 
@@ -2516,7 +2516,7 @@ typedef struct {
 | otp_type        | OTP type: sensor-specific and user-specific |
 | otp_date        | OTP data                        |
 
-## 4. MAPI
+## MAPI
 
 This functional module provides the following APIs:
 
@@ -2535,9 +2535,9 @@ This functional module provides the following APIs:
 - [kd_mapi_isp_ae_set_roi]
 - [kd_mapi_sensor_otpdata_get]
 
-### 4.1 API
+### API
 
-#### 4.1.1 kd_mapi_vicap_get_sensor_fd
+#### kd_mapi_vicap_get_sensor_fd
 
 **Description**:
 
@@ -2571,11 +2571,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.2 kd_mapi_vicap_get_sensor_info
+#### kd_mapi_vicap_get_sensor_info
 
 **Description**:
 
-Get sensor configuration information based on the specified sensor configuration type. Refer to [kd_mpi_vicap_get_sensor_info](#211-kd_mpi_vicap_get_sensor_info). Put `sensor_type` into `sensor_info.sensor_type`, usage is the same.
+Get sensor configuration information based on the specified sensor configuration type. Refer to [kd_mpi_vicap_get_sensor_info](#kd_mpi_vicap_get_sensor_info). Put `sensor_type` into `sensor_info.sensor_type`, usage is the same.
 
 **Syntax**:
 
@@ -2599,11 +2599,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.3 kd_mapi_vicap_set_dev_attr
+#### kd_mapi_vicap_set_dev_attr
 
 **Description**:
 
-Set VICAP device attributes. Refer to [kd_mpi_vicap_set_dev_attr](#212-kd_mpi_vicap_set_dev_attr). Put `dev_num` into `dev_info.vicap_dev`, usage is the same.
+Set VICAP device attributes. Refer to [kd_mpi_vicap_set_dev_attr](#kd_mpi_vicap_set_dev_attr). Put `dev_num` into `dev_info.vicap_dev`, usage is the same.
 
 **Syntax**:
 
@@ -2627,11 +2627,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.4 kd_mapi_vicap_set_chn_attr
+#### kd_mapi_vicap_set_chn_attr
 
 **Description**:
 
-Set VICAP channel attributes. Refer to [kd_mpi_vicap_set_chn_attr](#214-kd_mpi_vicap_set_chn_attr). Put `dev_num` into `chn_info.vicap_dev`, and `chn_num` into `chn_info.vicap_chn`, usage is the same.
+Set VICAP channel attributes. Refer to [kd_mpi_vicap_set_chn_attr](#kd_mpi_vicap_set_chn_attr). Put `dev_num` into `chn_info.vicap_dev`, and `chn_num` into `chn_info.vicap_chn`, usage is the same.
 
 **Syntax**:
 
@@ -2655,11 +2655,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.5 kd_mapi_vicap_start
+#### kd_mapi_vicap_start
 
 **Description**:
 
-[kd_mpi_vicap_init](#216-kd_mpi_vicap_init) + [kd_mpi_vicap_start_stream](#218-kd_mpi_vicap_start_stream)
+[kd_mpi_vicap_init](#kd_mpi_vicap_init) + [kd_mpi_vicap_start_stream](#kd_mpi_vicap_start_stream)
 
 **Syntax**:
 
@@ -2683,11 +2683,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.6 kd_mapi_vicap_stop
+#### kd_mapi_vicap_stop
 
 **Description**:
 
-[kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream) + [kd_mpi_vicap_deinit](#217-kd_mpi_vicap_deinit)
+[kd_mpi_vicap_stop_stream](#kd_mpi_vicap_stop_stream) + [kd_mpi_vicap_deinit](#kd_mpi_vicap_deinit)
 
 **Syntax**:
 
@@ -2711,11 +2711,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.7 kd_mapi_vicap_dump_frame
+#### kd_mapi_vicap_dump_frame
 
 **Description**:
 
-Dump VICAP data based on the specified device and output channel. Refer to [kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame).
+Dump VICAP data based on the specified device and output channel. Refer to [kd_mpi_vicap_dump_frame](#kd_mpi_vicap_dump_frame).
 
 **Syntax**:
 
@@ -2749,11 +2749,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.8 kd_mapi_vicap_release_frame
+#### kd_mapi_vicap_release_frame
 
 **Description**:
 
-Release the dumped data frame. Refer to [kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release).
+Release the dumped data frame. Refer to [kd_mpi_vicap_dump_release](#kd_mpi_vicap_dump_release).
 
 **Syntax**:
 
@@ -2785,11 +2785,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.9 kd_mapi_vicap_set_vi_drop_frame
+#### kd_mapi_vicap_set_vi_drop_frame
 
 **Description**:
 
-Set hardware frame dropping. Refer to [kd_mpi_vicap_set_vi_drop_frame](#419-kd_mapi_vicap_set_vi_drop_frame).
+Set hardware frame dropping. Refer to [kd_mpi_vicap_set_vi_drop_frame](#kd_mapi_vicap_set_vi_drop_frame).
 
 **Syntax**:
 
@@ -2824,11 +2824,11 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.10 kd_mapi_vicap_set_mclk
+#### kd_mapi_vicap_set_mclk
 
 **Description**:
 
-Set the MCLK frequency. Refer to [kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk).
+Set the MCLK frequency. Refer to [kd_mpi_vicap_set_mclk](#kd_mpi_vicap_set_mclk).
 
 **Syntax**:
 
@@ -2861,7 +2861,7 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.11 kd_mapi_vicap_tuning
+#### kd_mapi_vicap_tuning
 
 **Description**:
 
@@ -2889,7 +2889,7 @@ None
 - Header file: mapi_vicap_api.h
 - Library file: libmapi.a
 
-#### 4.1.12 kd_mapi_isp_ae_get_roi
+#### kd_mapi_isp_ae_get_roi
 
 **Description**:
 
@@ -2917,7 +2917,7 @@ None
 - Header file: mapi_isp_api.h
 - Library file: libmapi.a
 
-#### 4.1.13 kd_mapi_isp_ae_set_roi
+#### kd_mapi_isp_ae_set_roi
 
 **Description**:
 
@@ -2945,7 +2945,7 @@ None
 - Header file: mapi_isp_api.h
 - Library file: libmapi.a
 
-#### 4.1.14 kd_mapi_sensor_otpdata_get
+#### kd_mapi_sensor_otpdata_get
 
 **Description**:
 
@@ -2973,7 +2973,7 @@ None
 - Header file: mapi_isp_api.h
 - Library file: libmapi.a
 
-## 5. Error Codes
+## Error Codes
 
 Table 41 VICAP API Error Codes
 
@@ -2996,6 +2996,6 @@ Table 41 VICAP API Error Codes
 | 0xA0158011  | K_ERR_VICAP_BADADDR          | Address out of valid range                  |
 | 0xA0158012  | K_ERR_VICAP_BUSY             | VICAP system busy                           |
 
-## 6. Debug Information
+## Debug Information
 
 For VICAP memory management and system binding debug information, refer to the "K230 System Control API Reference".

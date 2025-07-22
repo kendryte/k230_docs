@@ -58,9 +58,9 @@
 | v1.7 | 增加启动介质分区章节,镜像烧录章节调整 | 王建新 | 2023-07-05 |
 | v1.8 | 增加CanMV-K230主板信息 | 陈海斌 | 2023-10-11 |
 
-## 1. 概述
+## 概述
 
-### 1.1 SDK软件架构概述
+### SDK软件架构概述
 
 K230 SDK 是面向K230 开发板的软件开发包，包含了基于Linux&RT-smart 双核异构系统及RT-smart单系统开发需要用到的源代码，工具链和其他相关资源。
 
@@ -74,9 +74,9 @@ K230 SDK RT-smart 单系统软件架构层次如图 1-2 所示：
 
 ![logo1](images/rtt-only_program.png)
 
-## 2. 开发环境搭建
+## 开发环境搭建
 
-### 2.1 支持的硬件
+### 支持的硬件
 
 K230平台支持的硬件信息文档可以参考目录:[00_hardware](../../00_hardware) , 其中不同主板的硬件信息文档目录如下:
 
@@ -84,9 +84,9 @@ K230平台支持的硬件信息文档可以参考目录:[00_hardware](../../00_h
 | --- | --- |
 | CanMV-K230 | 具体硬件信息参考: [00_hardware](../../00_hardware/CanMV_K230)|
 
-### 2.2 开发环境搭建
+### 开发环境搭建
 
-#### 2.2.1 编译环境
+#### 编译环境
 
 | 主机环境                    | 描述                                                 |
 |-----------------------------|------------------------------------------------------|
@@ -99,15 +99,15 @@ SDK使用的Docker 镜像以ubuntu 20.04 为基础，如果不使用docker编译
 
 K230 SDK没有在其他Linux版本的主机环境下验证过，不保证SDK可以在其他环境下编译通过。
 
-#### 2.2.2 SDK开发包
+#### SDK开发包
 
 K230 SDK以压缩包的形式发布，或者自己使用`git clone https://github.com/kendryte/k230_sdk`命令下载。
 
-### 2.3 单板准备
+### 单板准备
 
 本章节以CanMV-K230 主板使用为例
 
-#### 2.3.1 CanMV-K230
+#### CanMV-K230
 
 请准备如下硬件：
 
@@ -122,7 +122,7 @@ K230 SDK以压缩包的形式发布，或者自己使用`git clone https://githu
 
 ![图形用户界面, 文本, 应用程序 描述已自动生成](images/canmv_power_001.png)
 
-#### 2.3.3 串口
+#### 串口
 
 K230 主板通过USB提供两路调试串口，windows下使用调试串口，需要安装USB转串口驱动程序，驱动下载链接如下：
 
@@ -138,13 +138,13 @@ K230 主板通过USB提供两路调试串口，windows下使用调试串口，�
 
 串口波特率设置： `115200 8N1`
 
-## 3. SDK 安装准备工作
+## SDK 安装准备工作
 
-### 3.1 安装SDK
+### 安装SDK
 
 K230 SDK开发包采用压缩包的方式发布，在linux环境下使用。
 
-### 3.2 SDK 目录结构
+### SDK 目录结构
 
 K230 SDK目录结构如下图所示：
 
@@ -208,25 +208,25 @@ k230_sdk
 - `tools`：存放各种工具，脚本等。例如`kconfig`，`doxygen`，`dockerfile`等
 - `board`：环境变量、镜像配置文件、文件系统等
 
-## 4. SDK 编译
+## SDK 编译
 
-### 4.1 SDK 编译介绍
+### SDK 编译介绍
 
 K230 SDK支持一键编译大小核操作系统和公共组件，生成可以烧写的镜像文件，用于部署到开发板启动运行。设备上linux系统的用户名是root无密码；
 
-### 4.2 SDK 配置
+### SDK 配置
 
 K230 SDK采用Kconfig作为SDK配置接口，默认支持的板级配置放在configs目录下。
 
-#### 4.2.1 部分配置文件说明
+#### 部分配置文件说明
 
 `k230_canmv_defconfig` ：基于CanMV-K230 V1.0/V1.1 的Linux+RTT双系统配置文件，为默认配置文件
 
 `k230_canmv_only_rtt_defconfig` ：基于Canmv-K230 V1.0/V1.1 板RT-smart单系统配置文件
 
-### 4.3 编译 SDK
+### 编译 SDK
 
-#### 4.3.1 编译步骤
+#### 编译步骤
 
 说明：本章节命令仅供参考，文件名请根据实际情况进行替换。
 Setp 1：下载代码
@@ -263,7 +263,7 @@ make CONF=k230_canmv_only_rtt_defconfig  #编译CanMV-K230 1.0/1.1 板子RTT-onl
 > 备注：
 sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
-#### 4.3.2 编译输出产物
+#### 编译输出产物
 
 编译完成后，在`output/xx_defconfig/images`目录下可以看到编译输出产物。ls
 
@@ -287,7 +287,7 @@ sdk不支持多进程编译，不要增加类似-j32多进程编译参数。
 
 小核系统的编译产物放在`images/little-core`目录下。
 
-#### 4.3.3 非快起镜像
+#### 非快起镜像
 
 sdk默认编译的是快起镜像(uboot直接启动系统，不会进入uboot命令行)，如果需要进入uboot命令行，请参考下面取消`CONFIG_QUICK_BOOT`配置：
 
@@ -295,26 +295,26 @@ sdk默认编译的是快起镜像(uboot直接启动系统，不会进入uboot命
 
 非快起系统变快起系统方法：进入uboot命行执行`setenv quick_boot true;saveenv;`
 
-#### 4.3.4 安全镜像
+#### 安全镜像
 
 sdk默认不产生安全镜像，如果需要安全镜像，请参考下面增加CONFIG_GEN_SECURITY_IMG配置：
 
 在sdk主目录 执行`make menuconfig` ，选择`board configuration`，配上`create security image` 选项。
 
-#### 4.3.5 debug镜像
+#### debug镜像
 
 sdk默认产生release镜像，如果需要调试镜像，请参考下面增加CONFIG_BUILD_DEBUG_VER配置：
 
 在sdk主目录 执行`make menuconfig` ，选择`build debug/release version`，配上`debug` 选项。
 
-## 5. SDK 镜像烧写
+## SDK 镜像烧写
 
 根据不同主板的硬件特性和软件需求，请选择支持的镜像烧写方式。
 > CanMV-K230主板仅支持sd卡镜像启动。
 
-### 5.1 sd卡镜像烧录
+### sd卡镜像烧录
 
-#### 5.1.1 ubuntu下烧录
+#### ubuntu下烧录
 
 在sd卡插到宿主机之前，输入：
 
@@ -334,7 +334,7 @@ sdk默认产生release镜像，如果需要调试镜像，请参考下面增加C
 
 说明：`sysimage-sdcard.img`可以是`images`目录下的`sysimage-sdcard.img`文件，或者`sysimage-sdcard_aes.img.gz`、`sysimage-sdcard.img.gz`、`sysimage-sdcard_sm.img.gz`文件解压缩后的文件。
 
-#### 5.1.2 Windows下烧录
+#### Windows下烧录
 
 Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `http://rufus.ie/downloads/`）。
 
@@ -349,9 +349,9 @@ Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `ht
 ![rufus-warning](../../images/rufus_warning.png)
 ![rufus-finish](../../images/rufus_finish.png)
 
-### 5.2 Emmc镜像烧写参考
+### Emmc镜像烧写参考
 
-#### 5.2.1 Linux下烧写emm参考
+#### Linux下烧写emm参考
 
 1)把镜像的压缩包下载到sd卡
 
@@ -371,7 +371,7 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 
 > RTT-only无法使用此方法
 
-#### 5.2.1 Uboot下烧写emmc参考
+#### Uboot下烧写emmc参考
 
 1）把ssysimage-sdcard.img.gz镜像下载到内存。
 
@@ -388,7 +388,7 @@ gzwrite mmc  0   0x${fileaddr}  0x${filesize};
 
 3）重启板子
 
-## 6. SDK内存配置
+## SDK内存配置
 
 在k230_sdk下运行`make menuconfig->Memory configuration`可以配置各个区域使用的内存空间，也可以直接编译configs/k230_canmv_defconfig修改，各区域说明如下
 
@@ -413,11 +413,11 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 >
 > RTT-only系统没有Linux内存的配置
 
-## 8. SDK单板调试
+## SDK单板调试
 
 > CanMV-K230主板由于的调试口默认是串口功能，如果需要调试请参考[sdk常见问题解答](../../03_other/K230_SDK常见问题解答_C.md)。
 
-### 8.1 调试前准备
+### 调试前准备
 
 1.从 T-Head官网 `https://www.xrvm.cn/community/download` 下载`XuanTie DebugServer`软件和《Debugger Server User Guide(ZH-CN).pdf》，并参考《Debugger Server User Guide(ZH-CN).pdf》在pc电脑上安装`XuanTie DebugServer`软件；
 
@@ -427,7 +427,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ![图片包含 游戏机, 电缆, 电路 描述已自动生成](images/8e91f1cc85daee080e3de5f875542bc8.png)
 
-### 8.2 调试
+### 调试
 
 1.参考下图把cklink 、k230 evb板子、pc电脑 连接起来，随后给evb上电。
 
@@ -441,14 +441,14 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  #隔离区         不支持配�
 
 ![文本 描述已自动生成](images/2fed09a9dbe48eeeb639b6f977861c77.png)
 
-## 9. SDK启动
+## SDK启动
 
 当前版本默认编译生成的镜像，烧录到板子上后，大核会自动运行一个人脸检测程序,显示屏上会显示摄像头采集的图片;启动后可以在大核的控制台端输入'q'退出该程序。
 
 > 1. EVB系列主板如果没有连接IMX335摄像头,则自启动程序报错，程序自动退出,按回车即可回到控制台。
 > 1. 若需要取消大核的自启动功能，需将 `k230_sdk/src/big/rt-smart/init.sh` 中的内容注释掉。
 
-## 10.k230 debian和ubuntu 镜像说明
+## k230 debian和ubuntu 镜像说明
 
 镜像及构建方法详见[K230_debian_ubuntu说明.md](../../../zh/03_other/K230_debian_ubuntu说明.md)
 

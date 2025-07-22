@@ -21,9 +21,9 @@
 
 <div style="page-break-after:always"></div>
 
-## 1. 环境准备
+## 环境准备
 
-### 1.1 硬件环境
+### 硬件环境
 
 - K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
@@ -41,18 +41,18 @@
 
 注意：音频对讲需要两套设备。
 
-### 1.2 软件环境
+### 软件环境
 
 - K230 SDK
 - VLC播放器
 
-### 1.3 运行准备
+### 运行准备
 
 在EVB上执行rtsp程序需要启动网络服务，并保证PC和EVB板在同一个网段。
 
-## 2. 源码介绍
+## 源码介绍
 
-### 2.1 源码位置
+### 源码位置
 
 在SDK中包含的rtsp相关demo位于`k230_sdk/src/common/cdk/user/samples`目录下，其中
 
@@ -60,7 +60,7 @@
 - `rtsp_server`：语音对讲服务器端程序
 - `backchannel_client`：语音对讲客户端程序
 
-### 2.2 源码介绍
+### 源码介绍
 
 K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务。大核运行RTT系统，实现对音视频硬件的控制。小核在启动过程中负责引导大核。大小核通过核间通信进行消息通信和内存共享。
 
@@ -68,9 +68,9 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
 音频使用G711编码。
 音视频推流中，视频默认最大分辨率与配置的sensor_type相关，默认最大分辨率为1920x1080。
 
-#### 2.2.1 程序主要步骤
+#### 程序主要步骤
 
-##### 2.2.1.1 音视频推流程序
+##### 音视频推流程序
 
 1. `new StreamingPlayer`
    - 初始化核间通信。
@@ -86,7 +86,7 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
    - 开启视频编码通道，并将视频输入绑定到视频编码。
    - 开始音视频推流。
 
-##### 2.2.1.2 语音对讲程序
+##### 语音对讲程序
 
 1. `Init`：
    - 创建server session。
@@ -99,11 +99,11 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
    - 开始推音频流。
    - 开启视频编码通道，并将视频输入绑定到视频编码。
 
-## 3.程序执行
+## 程序执行
 
-### 3.1 rtsp推音视频流
+### rtsp推音视频流
 
-#### 3.1.1 参数说明
+#### 参数说明
 
 | 参数名 | 描述 |参数范围 | 默认值 |
 |:--|:--|:--|:--|
@@ -116,13 +116,13 @@ K230 SDK采用双核架构，小核运行linux系统，实现网络控制服务�
 
 sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
 
-#### 3.1.2 编译程序
+#### 编译程序
 
 在`k230_sdk`目录下执行`make cdk-user`，在`k230_sdk/src/common/cdk/user/out/little/`目录下生成`rtsp_demo`
 
 程序源码目录`k230_sdk/src/common/cdk/user/samples/rtsp_demo`
 
-#### 3.1.3 运行程序
+#### 运行程序
 
 支持音视频码流同时推流到rtsp server上，其中通过`mapi venc&aenc`接口实现对音视频的编码；推流之后通过url进行拉取，目前支持两路url推拉流。
 
@@ -132,7 +132,7 @@ sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
    vlc拉流方式：媒体->打开网络串流->在打开的窗口中输入对应的url。
    ![vlc](images/vlc.png)
 
-### 3.2 语音对讲
+### 语音对讲
 
 用于实现音频数据的双向传输和处理。
 语音对讲涉及到两端，两端均能实时采集编码发送音频数据到对端，同时也能接收对端来的音频数据进行解码和输出。
@@ -144,7 +144,7 @@ sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 1. 仅支持一对一的对讲（仅支持一路backchannel）；
 1. 不支持回声消除等处理（设备侧需要音频输出到耳机，不能使用外放speaker）；
 
-#### 3.2.1 编译程序
+#### 编译程序
 
 在`k230_sdk`目录下执行`make cdk-user`，在`k230_sdk/src/common/cdk/user/out/little/`目录下生成`rtsp_server`和`backclient_test`
 
@@ -152,7 +152,7 @@ sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 `k230_sdk/src/common/cdk/user/samples/rtsp_demo/rtsp_server`
 `k230_sdk/src/common/cdk/user/samples/rtsp_demo/backchannel_client`
 
-#### 3.2.2 rtsp_server参数说明
+#### rtsp_server参数说明
 
 | 参数名 | 描述 |参数范围 | 默认值 |
 |:--|:--|:--|:--|
@@ -167,7 +167,7 @@ sensor类型取值查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 
 sensor类型查看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md`文档中关于k_vicap_sensor_type的描述
 
-#### 3.2.3 运行程序
+#### 运行程序
 
 两块EVB连到同一个网段，一个作为server，一个作为client。大小核完全启动后。
 
@@ -183,7 +183,7 @@ client端运行如下命令：
 
 backclient_test执行命令说明：`./backclient_test <rtsp_url> <out_type>`, 其中rtsp_url为rtsp地址，out_type为vo输出connect type，参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，out_type默认设置为0
 
-## 4. 运行sharefs
+## 运行sharefs
 
 大核的`sample_sys_init.elf`默认没有装载到大核。可以通过下面两中方式将其在大核运行。
 

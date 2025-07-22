@@ -46,13 +46,13 @@ This document (this guide) is mainly applicable to the following personnel:
 | V1.0             | Initial version             | Rong Jian | 2024-01-24 |
 | V1.1             | Updated some parameter descriptions | Rong Jian | 2024-04-28 |
 
-## 1. Overview of K230 ISP Initialization Configuration
+## Overview of K230 ISP Initialization Configuration
 
 After image tuning, the formed ISP configuration parameters need to be written into the corresponding sensor's initialization configuration file. During startup, the ISP will automatically call the settings in these configuration files to complete the initialization. When the module's adaptive function is enabled, the ISP will operate according to the settings of the module's adaptive function. The ISP initialization configuration includes three files: xml, manual.json, and auto.json. If the sensor supports different resolutions, these three configuration files are required for each resolution. These configuration files are stored in the \k230_sdk\src\big\mpp\userapps\src\sensor\config directory.
 
-## 2. xml File
+## xml File
 
-### 2.1 Overview
+### Overview
 
 The xml file can be generated using the K230 ISP Calibration Tool (K230ISPCalibrationTool.exe). All module calibrations in the tool need to be completed to obtain complete calibration data.
 
@@ -76,7 +76,7 @@ The storage location of calibration data and calibration parameter files is show
 | Noise Calibration                 | Calibration Tool                    | sensor/lens/sample/Calibration Tool/Noise/ |
 | Photo Response Linearity          | degamma_para.txt                    | sensor/lens/sample/Calibration Tool/PhotoResponseLinearity/ |
 
-### 2.2 Creating Folders for Calibration Parameter Files
+### Creating Folders for Calibration Parameter Files
 
 Please follow the steps below to create folders for each resolution:
 
@@ -98,7 +98,7 @@ For each resolution, an example is as follows:
         - BLS parameters.txt
       - ...
 
-### 2.3 Generating the xml File Using the K230 ISP Calibration Tool
+### Generating the xml File Using the K230 ISP Calibration Tool
 
 After copying all calibration parameter files into the corresponding folders, open the K230 ISP Calibration Tool and use it to generate the xml file.
 
@@ -118,7 +118,7 @@ Enter the correct Width and Height of the image in the "Resolution" field, selec
 
 Rename the generated xml file according to the xml name input in the K230 SDK code (e.g., ov9732-1280x720.xml), and place it in the config directory to be correctly called by the K230 SDK.
 
-### 2.4 AWB Parameter K_Factor
+### AWB Parameter K_Factor
 
 In the xml file, the awb segment contains a K_Factor parameter that needs to be calibrated and manually filled in. This parameter reflects the sensitivity of the camera module.
 
@@ -126,17 +126,17 @@ In the AWB algorithm, the environment is judged as outdoor if Exp*K_Factor <=0.1
 
 For example, using 2000 lux as the illumination point between outdoor and transition environments, obtain the exposure value corresponding to this illumination (ET *gain), then calculate: K_Factor = 0.12 / (ET*gain).
 
-## 3. manual.json File
+## manual.json File
 
 The manual.json file needs to be created manually. Please refer to the imx335-2592x1944_manual.json file to create the manual.json file for the required sensor resolution.
 
-### 3.1 CHdrv2
+### CHdrv2
 
-#### 3.1.1 Function Description
+#### Function Description
 
 This module sets the HDR mode parameters not included in other ISP modules.
 
-#### 3.1.2 Main Parameters
+#### Main Parameters
 
 | Parameter      | Type and Range       | Description                       |
 |----------------|----------------------|-----------------------------------|
@@ -164,17 +164,17 @@ In the above table:
 
 Please note that in K230 HDR mode, the K230 CSI (Camera Serial Interface) module does not support sensor data mode where Hsync precedes Vsync, and each frame (L/S/VS) Vsync high (valid data output) cannot overlap.
 
-### 3.2 CGreenEqu
+### CGreenEqu
 
 Please refer to section 3.7 of the "K230 ISP Image Tuning Guide."
 
-### 3.3 CRgbIR
+### CRgbIR
 
-#### 3.3.1 Function Description
+#### Function Description
 
 This module sets the input processing for RGBIR sensors.
 
-#### 3.3.2 Main Parameters
+#### Main Parameters
 
 | Parameter       | Type and Range  | Description                       |
 |-----------------|-----------------|-----------------------------------|
@@ -189,93 +189,93 @@ This module sets the input processing for RGBIR sensors.
 | l_threshold     | int             | IR low value threshold <br/> If IR value is lower than this value, IR color influence factor is 1. |
 | out_rgb_pattern | int             | Output RGB data arrangement type <br/> 3: BGGR <br/> No need to change. |
 
-### 3.4 CManualWb
+### CManualWb
 
 Please refer to section 3.12 of the "K230 ISP Image Tuning Guide."
 
-### 3.5 CCcm
+### CCcm
 
 Please refer to section 3.13 of the "K230 ISP Image Tuning Guide."
 
-### 3.6 CDgain
+### CDgain
 
 Please refer to section 3.3 of the "K230 ISP Image Tuning Guide."
 
-### 3.7 CCpdv1
+### CCpdv1
 
 Please refer to section 3.19 of the "K230 ISP Image Tuning Guide."
 
-### 3.8 Bls
+### Bls
 
-#### 3.8.1 Function Description
+#### Function Description
 
 This module sets the black level. The default bls function is turned on.
 
-#### 3.8.2 Main Parameters
+#### Main Parameters
 
 | Parameter | Type and Range | Description                       |
 |-----------|----------------|-----------------------------------|
 | bls       | int[4]         | Black level <br/>[bls_r,bls_gr,bls_gb,bls_b]. <br/>Currently, the driver only supports the same black level configuration for each channel, setting value based on ISP 12bits |
 
-### 3.9 CGamma64
+### CGamma64
 
 Please refer to section 3.14 of the "K230 ISP Image Tuning Guide."
 
-### 3.10 CDpcc
+### CDpcc
 
 Please refer to section 3.8 of the "K230 ISP Image Tuning Guide."
 
-### 3.11 CDpf
+### CDpf
 
 Please refer to section 3.9 of the "K230 ISP Image Tuning Guide."
 
-### 3.12 CLscv2
+### CLscv2
 
 Please refer to section 3.2 of the "K230 ISP Image Tuning Guide."
 
-### 3.13 CWdrv4
+### CWdrv4
 
 Please refer to section 3.6 of the "K230 ISP Image Tuning Guide."
 
-### 3.14 C3dnrv3_1
+### C3dnrv3_1
 
 Please refer to section 3.10 of the "K230 ISP Image Tuning Guide."
 
-### 3.15 CCproc
+### CCproc
 
 Please refer to section 3.18 of the "K230 ISP Image Tuning Guide."
 
-### 3.16 CEEv1
+### CEEv1
 
-#### 3.16.1 Function Description
+#### Function Description
 
 This module includes three sub-blocks: CA, DCI, and EE.
 
-#### 3.16.2 Main Parameters
+#### Main Parameters
 
 Please refer to sections 3.15 (EE), 3.16 (CA), and 3.17 (DCI) of the "K230 ISP Image Tuning Guide."
 
-### 3.17 CDmscv2
+### CDmscv2
 
-#### 3.17.1 Function Description
+#### Function Description
 
 This module includes two sub-blocks: CAC and DMSC.
 
-#### 3.17.2 Main Parameters
+#### Main Parameters
 
 For CAC parameter settings, please refer to section 3.20 of the "K230 ISP Image Tuning Guide." For DMSC parameter settings, please refer to section 3.11 of the "K230 ISP Image Tuning Guide."
 
-## 4. auto.json File
+## auto.json File
 
 The auto.json file needs to be created manually. Please refer to the imx335-2592x1944_auto.json file to create the auto.json file for the required sensor resolution.
 
-### 4.1 AdaptiveAe
+### AdaptiveAe
 
-#### 4.1.1 Function Description
+#### Function Description
 
 This module sets the parameters for AE control and AE adaptive functionality.
 
-#### 4.1.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range  | Description                                                   |
 | ---------------- | --------------- | ------------------------------------------------------------- |
@@ -307,13 +307,13 @@ This module sets the parameters for AE control and AE adaptive functionality.
 | roiWindow              | float (fx,fy,fw,fh,weight) | Start coordinates (x,y), width, height, and brightness calculation weight of the current ROI window |
 | expV2WindowWeight      | float[32x32] 0~255 | Exposure weight of each sub-block |
 
-### 4.2 Awbv2
+### Awbv2
 
-#### 4.2.1 Function Description
+#### Function Description
 
 This module sets the parameters for the AWB adaptive functionality.
 
-#### 4.2.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description                       |
 | ---------------- | ------------------- | --------------------------------- |
@@ -325,13 +325,13 @@ This module sets the parameters for the AWB adaptive functionality.
 | roiNumber        | int                 | Current ROI window index   |
 | roiWindow        | float (fx,fy,fw,fh,weight) | Start coordinates (x,y), width, height, and AWB calculation weight of the current ROI window |
 
-### 4.3 Af
+### Af
 
-#### 4.3.1 Function Description
+#### Function Description
 
 This module sets the parameters for the AF functionality. This module is not yet effective.
 
-#### 4.3.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description                       |
 | ---------------- | ------------------- | --------------------------------- |
@@ -354,13 +354,13 @@ This module sets the parameters for the AF functionality. This module is not yet
 | PdStablecountMax | uint8 1~10          | Not used |
 | PdROIIndex       | uint8 0~48          | Not used |
 
-### 4.4 ALscv2
+### ALscv2
 
-#### 4.4.1 Function Description
+#### Function Description
 
 This module sets the parameters for the LSC adaptive functionality.
 
-#### 4.4.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description                       |
 | ---------------- | ------------------- | --------------------------------- |
@@ -371,13 +371,13 @@ This module sets the parameters for the LSC adaptive functionality.
 | gain             | float[20]           | Gain values for each step |
 | strength         | float[20] 0~1.0     | LSC retention strength corresponding to each gain value |
 
-### 4.5 Others
+### Others
 
 This section provides a unified introduction to other adaptive functionality modules.
 
 The setting parameters of these adaptive functionality modules are usually divided into two parts, guided by the "tables" marker and enclosed in square brackets "[]". Parameters outside these brackets are boolean type enable parameters, while those inside are parameters involved in adaptive functionality adjustment.
 
-#### 4.5.1 Description of Parameters Outside the Tables
+#### Description of Parameters Outside the Tables
 
 In these functionality modules, there are usually three parameters outside the tables:
 
@@ -394,7 +394,7 @@ In the A3dnrv3 module, there are also two parameters outside the tables:
 | nlm_en           | bool      | Non-local means denoising enable switch, recommended to be set to true |
 | tnr_en           | bool      | Temporal denoising enable switch. Since K230 ISP tnr is actually controlled by external command parameters, it can be fixed to false |
 
-#### 4.5.2 Description of Parameters Inside the Tables
+#### Description of Parameters Inside the Tables
 
 In the functionality modules, there are two parameters:
 

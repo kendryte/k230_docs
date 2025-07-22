@@ -52,11 +52,11 @@
 | --- | --- | --- | --- |
 | V1.0 | 初版 | 王权 | 2023/06/29 |
 
-## 1. DRM简介
+## DRM简介
 
 DRM是linux内核中负责与显卡交互的管理架构，用户程序可以很方便的利用DRM提供的API，实现显示控制、3D渲染、视频编解码、GPU计算等工作
 
-### 1.1 DRM架构特点
+### DRM架构特点
 
 DRM是当前Linux内核中主流的图形显示框架，相比于传统的FB架构，具有如下特点：
 
@@ -64,7 +64,7 @@ DRM是当前Linux内核中主流的图形显示框架，相比于传统的FB架�
 1. DRM架构原生支持VSYNC、DMA_BUF、Fence机制
 1. DRM架构统一管理渲染和显示驱动，让软件开发和维护更简单
 
-### 1.2 DRM架构组成
+### DRM架构组成
 
 从整体架构来说，DRM主要分成三个部分：
 
@@ -80,11 +80,11 @@ DRM是当前Linux内核中主流的图形显示框架，相比于传统的FB架�
 
     显存管理，负责显存分配和释放
 
-## 2. modetest使用说明
+## modetest使用说明
 
 modetest是由libdrm提供的测试程序，可以查询DRM设备的详细信息，同时还可以进行基本的显示测试
 
-### 2.1 查询K230 DRM详细信息
+### 查询K230 DRM详细信息
 
 具体指令如下所示：
 
@@ -211,7 +211,7 @@ RG24表示RGB888
 
 RG16表示RGB565
 
-### 2.2 video图层输出smpte彩条，颜色空间为NV12
+### video图层输出smpte彩条，颜色空间为NV12
 
 具体指令如下所示：
 
@@ -223,7 +223,7 @@ modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30 -P 31@36:1080x1920@NV12 -v 
 
 ![显示内容](images/modetest_video_nv12_smpte.png)
 
-### 2.3 OSD图层输出tiles彩条，颜色空间为AR24，即ARGB8888
+### OSD图层输出tiles彩条，颜色空间为AR24，即ARGB8888
 
 具体指令如下
 
@@ -235,7 +235,7 @@ modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30 -P 32@36:1080x1920@AR24 -v 
 
 ![显示内容](images/modetest_osd_ar24_tiles.png)
 
-### 2.4 OSD图层输出tiles彩条，颜色空间为RG16，即RGB565
+### OSD图层输出tiles彩条，颜色空间为RG16，即RGB565
 
 具体指令如下所示：
 
@@ -247,9 +247,9 @@ modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30 -P 32@36:1080x1920@RG16 -v 
 
 ![显示内容](images/modetest_osd_rg16_tiles.png)
 
-## 3. DRM API介绍
+## DRM API介绍
 
-### 3.1 打开DRM设备
+### 打开DRM设备
 
 ```c
     fd = open("/dev/dri/card0", O_RDWR | O_CLOEXEC);
@@ -260,7 +260,7 @@ modetest -M canaan-drm -D 0 -a -s 38@36:1080x1920-30 -P 32@36:1080x1920@RG16 -v 
 
 ```
 
-### 3.2 检索DRM资源
+### 检索DRM资源
 
 ```c
 drmModeResPtr drmModeGetResources(int fd);
@@ -298,7 +298,7 @@ typedef struct _drmModeRes {
 
 ```
 
-### 3.3 使能或者禁止DRM相关特性
+### 使能或者禁止DRM相关特性
 
 ```c
 int drmSetClientCap(int fd, uint64_t capability, uint64_t value);
@@ -320,7 +320,7 @@ int drmSetClientCap(int fd, uint64_t capability, uint64_t value);
     }
 ```
 
-### 3.4 检索图层资源
+### 检索图层资源
 
 ```c
 drmModePlaneResPtr drmModeGetPlaneResources(int fd);
@@ -350,7 +350,7 @@ plane_res->planes[0] 表示Video层
 
 plane_res->planes[1] ~ plane_res->planes[4] 表示OSD层
 
-### 3.5 获得Connector
+### 获得Connector
 
 ```c
 drmModeConnectorPtr drmModeGetConnector(int fd, uint32_t connector_id);
@@ -388,7 +388,7 @@ typedef struct _drmModeConnector {
 
 ```
 
-### 3.6 申请DRM DUMB缓冲区
+### 申请DRM DUMB缓冲区
 
 代码调用实例如下：
 
@@ -406,7 +406,7 @@ typedef struct _drmModeConnector {
 
 ```
 
-### 3.7 提交DRM请求
+### 提交DRM请求
 
 代码调用实例如下：
 
@@ -418,7 +418,7 @@ int drmModeAtomicCommit(int fd,
 
 ```
 
-## 4. 注意事项
+## 注意事项
 
 1. K230 DRM开发测试依赖LCD屏幕
 

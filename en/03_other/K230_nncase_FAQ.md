@@ -25,25 +25,25 @@ Without the company's written permission, no unit or individual may excerpt, cop
 
 [toc]
 
-## 1. Error Installing whl Package
+## Error Installing whl Package
 
-### 1.1 `xxx.whl is not a supported wheel on this platform.`
+### `xxx.whl is not a supported wheel on this platform.`
 
 - A：Upgrade pip `pip install --upgrade pip`
 
 ---
 
-## 2.Error Compiling Model
+## Error Compiling Model
 
-### 2.1 `System.NotSupportedException: Not Supported *** op: XXX`
+### `System.NotSupportedException: Not Supported *** op: XXX`
 
 - A: This exception indicates that the `XXX` operator is not yet supported. You can submit a feature request in the [nncase Github Issue](https://github.com/kendryte/nncase/issues). For a list of supported operators, please refer to the `***_ops.md` document in the [nncase repository](https://github.com/kendryte/nncase/tree/release/2.0/docs). If `XXX` belongs to FAKE_QUANT, `DEQUANTIZE`, `QUANTIZE`, etc., it indicates that the current model is a quantized model, which `nncase` currently does not support. Please use a floating-point model to compile the `kmodel`.
 
-### 2.2 `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached, or the per-process limit on the number of open file descriptors has been reached`
+### `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached, or the per-process limit on the number of open file descriptors has been reached`
 
 - A: Modify the value of 128 to a larger value using `sudo gedit /proc/sys/fs/inotify/max_user_instances`.
 
-### 2.3 `RuntimeError: Failed to initialize hostfxr.` or `RuntimeError: Failed to get hostfxr path.`
+### `RuntimeError: Failed to initialize hostfxr.` or `RuntimeError: Failed to get hostfxr path.`
 
 - A: You need to install dotnet-sdk-7.0. Do not install it in the `anaconda` virtual environment.
   - Linux:
@@ -61,7 +61,7 @@ Without the company's written permission, no unit or individual may excerpt, cop
 
   - Windows: Please refer to the official Microsoft documentation.
 
-### 2.4 `The given key 'K230' was not present in the dictionary`
+### `The given key 'K230' was not present in the dictionary`
 
 - A：You need to install nncase-kpu
 
@@ -79,9 +79,9 @@ Without the company's written permission, no unit or individual may excerpt, cop
 
 ---
 
-## 3. Errors During Inference
+## Errors During Inference
 
-### 3.1 `nncase.simulator.k230.sc: not found`
+### `nncase.simulator.k230.sc: not found`
 
 Or the following cases:
 
@@ -98,19 +98,19 @@ Or the following cases:
 
 ---
 
-## 4. Errors During Inference on K230 Development Board
+## Errors During Inference on K230 Development Board
 
-### 4.1 `data.size_bytes() == size = false (bool)`
+### `data.size_bytes() == size = false (bool)`
 
 - A: The input data is incorrect during inference and does not match the shape and type of the model input nodes. When configuring preprocessing parameters during model compilation, the shape and type information of the model input nodes will be updated accordingly. Please generate the input data according to the `input_shape` and `input_type` configured during model compilation.
 
-### 4.2 `std::bad_alloc`
+### `std::bad_alloc`
 
 - A: This is usually due to memory allocation failure. The following checks can be made:
 - Check if the generated kmodel exceeds the available memory of the current system.
 - Check if the App has memory leaks.
 
-### 4.3 `terminate:Invalid kmodel`
+### `terminate:Invalid kmodel`
 
 When loading the `kmodel` with the following code, this custom exception is thrown.
 

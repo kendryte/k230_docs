@@ -51,7 +51,7 @@
 |------------|----------|--------|------------|
 | V1.0       | 初版     | 徐百坤 | 2023/04/24 |
 
-## 1. 功能介绍
+## 功能介绍
 
 AiW4211LV10是一款低功耗IoT WiFi芯片，我司采用该芯片平台设计了一款AiW4211LV10开发板，该开发板可通过TF卡插槽接入K230 EVB板。K230 EVB加载AiW4211LV10驱动之后，可以生成wlan0无线网卡，实现网络数据通信。
 
@@ -77,16 +77,16 @@ WiFi主要功能简介：
 - IO唤醒：处理button或PIR唤醒信号，恢复软硬件环境，给Host上电
 - 网络唤醒：处理来自保活链路的唤醒数据包，恢复软硬件环境，给Host上电
 
-## 2. 模块依赖
+## 模块依赖
 
 硬件上依赖AiW4211LV10开发板，依赖K230 EVB开发板。软件上依赖于K230 SDK。
 
-### 2.1 软件环境
+### 软件环境
 
 K230 SDK V0.5.1及后续版本。
 AiW4211LV10 SDK。
 
-### 2.2 硬件环境
+### 硬件环境
 
 K230 EVB开发板设置emmc启动，空出TF卡插槽用于AiW4211LV10开发板接入。
 开发板硬件版本及跳线见表2-1：
@@ -139,9 +139,9 @@ K230 EVB开发板飞线到AiW4211LV10开发板排针，连接关系见表2-2：
 |                       | PIN3         | PIR_WAKE_WiFi     | PIR信号，接PIR棕色线 | 3.3V       | \\                             | \\                          |
 |                       | PIN4         | VDD_3V3           | PIR供电，接PIR红色线 | POWER      | \\                             | \\                          |
 
-## 3. 模块配置
+## 模块配置
 
-### 3.1 SDK目录结构
+### SDK目录结构
 
 WiFi SDK的目录结构如下：
 
@@ -159,7 +159,7 @@ WiFi SDK的目录结构如下：
 
 编译驱动的工具链因与平台相关，故未放入SDK之中，如有需要请联系我们。
 
-### 3.2 定制化修改
+### 定制化修改
 
 在WiFi SDK之中，为了便于固件的定制化，与硬件设计关联比较紧密的代码，需要公布且可由用户定制的SoftAP相关参数，以及自定义的被多个文件使用的全局变量等，被放置在canaan_private.h及canaan_private.c文件之中。重点项目说明见表3-1：
 
@@ -177,14 +177,14 @@ WiFi SDK的目录结构如下：
 | kd_gpios_hoststanby           | WiFi给Host下电接口，可根据平台特性实现，因K230自下电，此接口未操作任何IO                                                                |
 | kd_gpios_wakehost             | WiFi给Host上电接口，可根据平台特性实现，针对K230平台，WiFi给K230 PMU发送了一个IO信号                                                    |
 
-## 4. 固件编译
+## 固件编译
 
-### 4.1 编译环境
+### 编译环境
 
 固件编译环境搭建请参考文档《AiW4211V10／AiW4211LV10 SDK开发环境搭建 用户指南.pdf》，该文档存储于WiFi SDK的support目录。
 使用者也可以联系 成都爱旗科技有限公司(<http://www.aichtech.com/>) 索取相关资料。
 
-### 4.2 编译方法
+### 编译方法
 
 进入WiFi SDK源码目录执行指令make all和make install，编译得到WiFi固件、驱动、配置工具及通信接口共享库文件存储在顶层的out目录下：
 
@@ -221,9 +221,9 @@ make tools：编译配置工具和通信接口共享库，iotwifi_link、iotwifi
 
 备注：K230 SDK已经集成了WiFi驱动、配置工具和通信接口库，因此这些可以不编译
 
-## 5. 模块启动
+## 模块启动
 
-### 5.1 固件烧写
+### 固件烧写
 
 使用WiFi SDK support目录 下的烧写工具BurnTool.exe，通过串口将固件aiw4211l_demo_allinone.bin烧写到AiW4211LV10开发板。
 
@@ -243,7 +243,7 @@ step 3: 选择WiFi固件
 step 4: 点击“Connect”控件向WiFi开发板发起连接，WiFi开发板上电，工具log窗口可以看到ready to load ...，表示连接已经建立，可以开始烧写了
 step 5: 点击“Send file”控件开始烧写
 
-### 5.2 驱动加载
+### 驱动加载
 
 参考2.2节内容配置硬件环境，长按K230 EVB板上K1按键上电启动，加载驱动：
 
@@ -257,13 +257,13 @@ modprobe aiw4211lv10 或者 modprobe aiw4211lv10 mmc=1 gpio=34
 
 图 5-2 驱动加载及iotwifi_link启动
 
-### 5.3 参数配置
+### 参数配置
 
 AiW4211LV10的接入AP、休眠等级、休眠周期、唤醒IO、tcp keepalive的目标server、保活参数等直接影响WiFi运行，且需要根据实际场景进行动态调整的参数，可以通过5.3.1和5.3.2节提供的方式方法进行传参配置。
 
 除非用户想要改变配置，否则每次启动之后无需重配。
 
-#### 5.3.1 通过网络配置AP接入
+#### 通过网络配置AP接入
 
 AiW4211LV10开发板支持通过网络配置目标AP的名称、密码和加密方式这三个参数。配置AP接入的步骤如下：
 
@@ -289,11 +289,11 @@ step 5: server解析配置数据后连接到指定AP，退出SoftAP模式
 
 图 5-3 NetAssist配置运行
 
-#### 5.3.2 通过消息配置AP接入
+#### 通过消息配置AP接入
 
 AiW4211LV10开发板支持通过消息通道配置目标AP参数（与5.3.1功能相同），除此之外还可以通过消息通道配置WiFi休眠参数和tcp keepalive参数。消息通道是K230与AiW4211LV10之间通过SDIO总线建立起来的软件通道。
 
-##### 5.3.2.1 通过配置工具配置
+##### 通过配置工具配置
 
 配置步骤如下：
 
@@ -304,7 +304,7 @@ step 4: K230端根据热点信息和NetAssist启动的server信息编辑配置�
 step 5: 运行配置工具client端，解析配置文件，发送配置消息：iotwifi_cli --config /etc/wifi.conf
 step 6: AiW4211LV10接收到配置参数之后，首先存储休眠参数，然后接入指定AP，最后建立tcp socket client连入NetAssist建立的 tcp socket server
 
-/etc/wifi.conf是WiFi工作参数配置文件，以json格式编写，基本上是对[wifi_config_t](#6121-wifi_config_t)结构体的映射，具体可参考6.1.2章节。文件内容如下：
+/etc/wifi.conf是WiFi工作参数配置文件，以json格式编写，基本上是对[wifi_config_t](#wifi_config_t)结构体的映射，具体可参考6.1.2章节。文件内容如下：
 
 ```c
 {
@@ -338,15 +338,15 @@ step 6: AiW4211LV10接收到配置参数之后，首先存储休眠参数，然�
 
 图 5-4 （A）WiFi接入路由器并被分配IP （B）tcp keepalive server
 
-##### 5.3.2.2 通过调用API配置
+##### 通过调用API配置
 
-在实际的业务程序中，可以通过调用通信接口共享库libhal_iotwifi.so提供的API接口[kd_wifi_config](#6121-wifi_config_t)进行参数配置，API说明请参考6.1.1章节，配置步骤与5.3.2.1相同。
+在实际的业务程序中，可以通过调用通信接口共享库libhal_iotwifi.so提供的API接口[kd_wifi_config](#wifi_config_t)进行参数配置，API说明请参考6.1.1章节，配置步骤与5.3.2.1相同。
 
 5.3.2.1节当中介绍的工具iotwifi_cli也是通过调用该接口实现WiFi参数配置的。
 
-### 5.4 系统休眠
+### 系统休眠
 
-#### 5.4.1 通过工具配置休眠
+#### 通过工具配置休眠
 
 运行配置工具client端发送休眠指令触发WiFi休眠：iotwifi_cli --dirsleep
 
@@ -354,13 +354,13 @@ step 6: AiW4211LV10接收到配置参数之后，首先存储休眠参数，然�
 
 图 5-5 WiFi进入休眠log
 
-#### 5.4.2 通过调用API休眠
+#### 通过调用API休眠
 
-在实际的业务程序中，可以通过调用通信接口共享库libhal_iotwifi.so提供的API接口[kd_wifi_sleep](#62-sleep接口)触发WiFi休眠，具体请参考6.2章节。
+在实际的业务程序中，可以通过调用通信接口共享库libhal_iotwifi.so提供的API接口[kd_wifi_sleep](#sleep接口)触发WiFi休眠，具体请参考6.2章节。
 
 工具iotwifi_cli也是通过调用该接口触发WiFi休眠的。
 
-#### 5.4.3 通过监控电平休眠
+#### 通过监控电平休眠
 
 K230 EVB可以实现自下电，下电之后K230 EVB开发板J1 PIN14（PW_EN）引脚的电平将会被拉低，WiFi也可以通过监控该引脚的电平触发休眠。该功能使用的前提是K230功耗管理功能正常，并在编译WiFi固件时使能宏 CONFIG_WIFI_MONITOR_HOSTLEVEL（默认不使能），使能该宏之后WiFi将忽略K230发送的sleep指令，仅依据引脚电平状态进行休眠。
 
@@ -368,9 +368,9 @@ K230 EVB可以实现自下电，下电之后K230 EVB开发板J1 PIN14（PW_EN）
 
 ./k230_pwrdown
 
-### 5.5 系统唤醒
+### 系统唤醒
 
-#### 5.5.1 按键唤醒
+#### 按键唤醒
 
 如果WiFi已进入休眠状态，短按AiW4211LV10开发板上的K4按键可唤醒WiFi，WiFi将给K230 EVB的PMU发送唤醒信号，如果此时K230 EVB处于5.4.3节配置的下电状态（非冷启动），其将被上电。
 
@@ -378,7 +378,7 @@ K230 EVB可以实现自下电，下电之后K230 EVB开发板J1 PIN14（PW_EN）
 
 图5-6 按键唤醒log
 
-#### 5.5.2 网络唤醒
+#### 网络唤醒
 
 如果WiFi已进入休眠状态，NetAssist发送wakeup可唤醒WiFi，WiFi将给K230 EVB的PMU发送唤醒信号，如果此时K230 EVB处于5.4.3节配置的下电状态（非冷启动），其将被上电。
 
@@ -386,25 +386,25 @@ K230 EVB可以实现自下电，下电之后K230 EVB开发板J1 PIN14（PW_EN）
 
 图5-7 网络唤醒log
 
-## 6. API参考
+## API参考
 
 AiW4211LV10驱动加载后生成的无线网卡与一般WiFi网卡无异，因此网络通信功能无特殊API需要说明。
 除基本的网络通信外，K230与WiFi还存在两个消息通信接口，需要重点说明。
 
-### 6.1 config接口
+### config接口
 
-#### 6.1.1 API
+#### API
 
-int kd_wifi_config([wifi_config_t](#6121-wifi_config_t) \*config)
+int kd_wifi_config([wifi_config_t](#wifi_config_t) \*config)
 配置WiFi工作参数：
 
 - 配置目标AP的名称、密码、认证及加密方式
 - 配置WiFi休眠等级，苏醒周期以及可唤醒的gpio
 - 配置tcp keepalive时间参数等
 
-#### 6.1.2 数据结构
+#### 数据结构
 
-##### 6.1.2.1 wifi_config_t
+##### wifi_config_t
 
 ```c
 typedef struct {
@@ -422,11 +422,11 @@ wifi_keepalive_t keepalive;
 
 | config_mask                    | 配置目标项掩码，使能或屏蔽目标项，例如全部配置则：config_mask = CFG_MASK_SLEEP\|CFG_MASK_CONNECT\|CFG_MASK_KEEPALIVE CFG_MASK_SLEEP：配置休眠参数 CFG_MASK_CONNECT：配置AP连接参数 CFG_MASK_KEEPALIVE：配置tcp keepalive参数 |
 |--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [sleep](#6122-wifi_sleep_t)         | 休眠参数                                                                                                                                                                                                                     |
-| [conn](#6123-wifi_connect_t)        | AP连接参数                                                                                                                                                                                                                   |
-| [keepalive](#6124-wifi_keepalive_t) | tcp keepalive参数                                                                                                                                                                                                            |
+| [sleep](#wifi_sleep_t)         | 休眠参数                                                                                                                                                                                                                     |
+| [conn](#wifi_connect_t)        | AP连接参数                                                                                                                                                                                                                   |
+| [keepalive](#wifi_keepalive_t) | tcp keepalive参数                                                                                                                                                                                                            |
 
-##### 6.1.2.2 wifi_sleep_t
+##### wifi_sleep_t
 
 ```c
 typedef struct
@@ -470,7 +470,7 @@ unsigned int wake_gpios;
 | period     | 苏醒周期，有效数值33\~\~4000ms。WiFi周期性从休眠态醒来，检测AP是否有发给自己的数据缓存                                             |
 | wake_gpios | enable或disable可唤醒WiFi的gpio（WiFi侧gpio）                                                                                      |
 
-##### 6.1.2.3 wifi_connect_t
+##### wifi_connect_t
 
 ```c
 typedef struct
@@ -492,7 +492,7 @@ ext_wifi_pairwise pairwise;
 | bssid    | AP bssid，一般为AP mac地址                                                                                                                                                                                                                                                     |
 | pairwise | 加密类型 EXT_WIFI_PARIWISE_UNKNOWN EXT_WIFI_PAIRWISE_AES EXT_WIFI_PAIRWISE_TKIP EXT_WIFI_PAIRWISE_TKIP_AES_MIX                                                                                                                                                                 |
 
-##### 6.1.2.4 wifi_keepalive_t
+##### wifi_keepalive_t
 
 ```c
 typedef struct
@@ -518,12 +518,12 @@ unsigned short heartbeat_probes;
 | heartbeat_intvl      | 应用层心跳包发送周期，秒                                                |
 | heartbeat_probes     | 应用层心跳包无回应计数超过该阈值之后，判断socket连接异常，断开重连      |
 
-### 6.2 sleep接口
+### sleep接口
 
 int kd_wifi_sleep(void)
 控制WiFi进入休眠，休眠相关参数在config API当中设置。
 
-## 7.wifi功能限制
+## wifi功能限制
 
   AiW4211LV10芯片为单频wifi芯片,不支持ap和sta同时共存，当ap启动时固定在某一信道，再起sta的话sta会在不同的信道上扫描，此时ap就会断连。
   当通过sdio传入conf为错误配置时，AiW4211LV10会显示sta连接ap失败 串口打印 please reset conf，此时可通过iotwifi_cli传入新的正确的conf。

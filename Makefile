@@ -16,7 +16,8 @@ STATIC_FILES := \
     _static/init_mermaid.js \
     _static/mermaid.min.js \
     _static/topbar.css \
-    _static/custom-theme.css
+    _static/custom-theme.css \
+    _static/auto-nums.css
 
 TEMPLATE_FILES := \
     _templates/versionsFlex.html \

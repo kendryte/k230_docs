@@ -50,11 +50,11 @@ This document (guide) is mainly intended for the following personnel:
 | ---------------- | ----------- | --------------- | ---------- |
 | V1.0             | Initial Version | Liu Jia'an, Huang Ziyi | 2023-06-08 |
 
-## 1. Introduction to Dewarp Calibration
+## Introduction to Dewarp Calibration
 
 The Dewarp calibration process generates a YAML file containing the camera matrix and distortion coefficients. During the build process, the K230 SDK uses this YAML file to generate a remap file, which is then placed in the `/bin` directory of the main core root file system. When configuring VICAP, set the `dw_enable` field of the `k_vicap_dev_attr` structure to 1 to enable Dewarp. VICAP will look for the `<sensor_name>-<width>x<height>.bin` file (e.g., for IMX335 full resolution, it would be `imx335-2592x1944.bin`) in the current path as the Dewarp configuration file for distortion correction.
 
-### 1.1 Capturing Images
+### Capturing Images
 
 1. Rotate the chessboard on the same plane and capture at least 20 images.
 1. Select at least 10 photos covering all angles and save them to a fixed directory. It is recommended to choose images with significant differences.
@@ -67,7 +67,7 @@ You can use the `sample_vicap.elf` program to capture images. Convert the saved 
 ffmpeg -f rawvideo -pixel_format nv12 -video_size 2592x1944 -i dev_00_chn_00_2592x1944_0000.yuv420sp 0.png
 ```
 
-### 1.3 Dewarp Modes Introduction
+### Dewarp Modes Introduction
 
 Dewarp has multiple modes. Here, two modes are introduced: lens correction and split screen.
 
@@ -85,7 +85,7 @@ Each sector image in the figure below is corrected to a small rectangular split 
 
 ![Split Screen](../../../../zh/01_software/pc/dewarp/images/splitscreen.png)
 
-### 1.2 Executing the Calibration Program
+### Executing the Calibration Program
 
 Create an XML file containing the image paths, such as `imx335-2592x1944-0.xml`, and fill in the saved image paths from the previous step, in the form of:
 
@@ -101,7 +101,7 @@ images/imx335-2592x1944-0/0.png
 
 Edit `run.bat`, change the last parameter to the path of the XML file just created, and change the -o parameter to the path to save the output YAML file, then execute `run.bat`.
 
-## 2. Using Dewarp with the VICAP Module
+## Using Dewarp with the VICAP Module
 
 VICAP controls distortion correction by loading the Dewarp configuration file. The Dewarp configuration file generated after compiling the K230 SDK is placed in `<K230 SDK> src/big/mpp/userapps/src/sensor/config`, and files with the .bin suffix are all dewarp configuration files. The first 8 bytes of their content are split screen parameters, and the rest are all mapping tables. VICAP loads the current sensor based on the file name.
 

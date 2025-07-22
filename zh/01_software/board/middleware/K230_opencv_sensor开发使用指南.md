@@ -50,7 +50,7 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 赵忠祥 | 2024-03-22 |
 
-## 1.环境搭建
+## 环境搭建
 
 在 k230_sdk/src/big/mpp/userapps/src 下
 
@@ -78,7 +78,7 @@ git am ./patch/*.patch
 
 不用理会警告。
 
-## 2. 编译opencv
+## 编译opencv
 
 首先在 build.sh 路径确认工具链路径，打完patch build.sh即是正确的。
 
@@ -92,7 +92,7 @@ make install
 
 在编译过程中，若终端未出现告警信息，则说明编译成功，编译完成的产物在 build/install 中，此文件即为 rt-smart 平台的 opencv 库文件。
 
-## 3. 编译例程
+## 编译例程
 
 修改 k230_sdk/src/big/mpp/userapps/sample/Makefile
 

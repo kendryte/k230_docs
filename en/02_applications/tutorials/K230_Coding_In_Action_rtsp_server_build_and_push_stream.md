@@ -21,9 +21,9 @@ Without the written permission of the company, no unit or individual may extract
 
 <div style="page-break-after:always"></div>
 
-## 1. Environmental preparation
+## Environmental preparation
 
-### 1.1 Hardware Environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
@@ -41,18 +41,18 @@ Without the written permission of the company, no unit or individual may extract
 
 Note: Audio intercom requires two sets of equipment.
 
-### 1.2 Software Environment
+### Software Environment
 
 - K230 SDK
 - VLC player
 
-### 1.3 Run Preparation
+### Run Preparation
 
 Executing rtsp programs on EVBs requires starting network services and ensuring that the PC and EVB board are on the same network segment.
 
-## 2. Introduction to the source code
+## Introduction to the source code
 
-### 2.1 Source code location
+### Source code location
 
 The rtsp-related demos included in the SDK are located in the`k230_sdk/src/common/cdk/user/samples` directory, where
 
@@ -60,7 +60,7 @@ The rtsp-related demos included in the SDK are located in the`k230_sdk/src/commo
 - `rtsp_server`: A server-side program for voice intercom
 - `backchannel_client`: Voice intercom client program
 
-### 2.2 Source code introduction
+### Source code introduction
 
 The K230 SDK adopts a dual-core architecture, and the little core runs the Linux system to implement network control services. The big core runs the RTT system to control the audio and video hardware. The little core is responsible for guiding the big core during the start-up process. Big and little cores communicate messages and memory sharing through inter-core communication.
 
@@ -68,9 +68,9 @@ The K230 SDK adopts a dual-core architecture, and the little core runs the Linux
 Audio is encoded using G711.
 In audio and video streaming, the default maximum resolution of a video is related to the configured sensor_type, and the default maximum resolution is 1920x1080.
 
-#### 2.2.1 Main steps of the procedure
+#### Main steps of the procedure
 
-##### 2.2.1.1 Audio and video streaming process
+##### Audio and video streaming process
 
 1. `new StreamingPlayer`
    - Initialize intercore communication.
@@ -86,7 +86,7 @@ In audio and video streaming, the default maximum resolution of a video is relat
    - Turn on the video encoding channel and bind the video input to the video encoding.
    - Start streaming audio and video.
 
-##### 2.2.1.2 Voice intercom program
+##### Voice intercom program
 
 1. `Init`：
    - Create a server session.
@@ -99,11 +99,11 @@ In audio and video streaming, the default maximum resolution of a video is relat
    - Start pushing the audio stream.
    - Turn on the video encoding channel and bind the video input to the video encoding.
 
-## 3. Program execution
+## Program execution
 
-### 3.1 RTSP push audio and video streaming
+### RTSP push audio and video streaming
 
-#### 3.1.1 Parameter description
+#### Parameter description
 
 | The parameter name | description |Parameter range | Default value |
 |:--|:--|:--|:--|
@@ -116,13 +116,13 @@ In audio and video streaming, the default maximum resolution of a video is relat
 
 The sensor type value is described in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaption_Guide.md` document about k_vicap_sensor_type
 
-#### 3.1.2 Compiling the Program
+#### Compiling the Program
 
 Execute `make cdk-user` in the `k230_sdk` directory, and generate `rtsp_demo` in the `k230_sdk/src/common/cdk/user/out/little/` directory.
 
 Program source directory`k230_sdk/src/common/cdk/user/samples/rtsp_demo`
 
-#### 3.1.3 Run the program
+#### Run the program
 
 Supports simultaneous push of audio and video streams to RTSP Server, where audio and video are encoded through `mapi venc&aenc` interfaces, pull the stream through the url after the push, currently supports two url push and pull streams.
 
@@ -132,7 +132,7 @@ Supports simultaneous push of audio and video streams to RTSP Server, where audi
    VLC streaming mode: Media-> Open Network Streaming-> Enter the corresponding URL in the window that opens.
    ![vlc](../../images/vlc.png)
 
-### 3.2 Voice intercom
+### Voice intercom
 
 Used to realize the two-way transmission and processing of audio data.
 Voice intercom involves both ends, both ends can collect and encode in real time to send audio data to the peer, and can also receive audio data from the peer for decoding and output.
@@ -144,14 +144,14 @@ The current implementation refers to ONVIF and extends the backchannel on the ba
 1. Only one-on-one intercom is supported (only one backchannel is supported);
 1. Does not support echo cancellation and other processing (the device side needs audio output to the headphones, and cannot use an external speaker);
 
-#### 3.2.1 Compiling the Program
+#### Compiling the Program
 
 Execute `make cdk-user` in the `k230_sdk` directory to generate `rtsp_server` and `backclient_test` in the `k230_sdk/src/common/cdk/user/out/little/` directory.
 
 Program source directory:`k230_sdk/src/common/cdk/user/samples/rtsp_demo/rtsp_server`
 `k230_sdk/src/common/cdk/user/samples/rtsp_demo/backchannel_client`
 
-#### 3.2.2 Description of rtsp_server parameters
+#### Description of rtsp_server parameters
 
 | The parameter name | description |Parameter range | Default value |
 |:--|:--|:--|:--|
@@ -166,7 +166,7 @@ Program source directory:`k230_sdk/src/common/cdk/user/samples/rtsp_demo/rtsp_se
 
 The sensor type value is described in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaption_Guide.md` document about k_vicap_sensor_type
 
-#### 3.2.3 Run the program
+#### Run the program
 
 Two EVBs are connected to the same network segment, one as server and one as client. After the big and little cores are fully booted.
 
@@ -182,7 +182,7 @@ Run the following command on the client side:
 
 backclient_test execute the command description: `./backclient_test <rtsp_url> <out_type>`, where rtsp_url is the RTSP address and out_type is the VO output connect type, see the description of k_connector_type in `k230_docs/zh/01_software/board/mpp/K230_Video_Output_API_Reference.md`, out_type is set to 0 by default.
 
-## 4. Run sharefs
+## Run sharefs
 
 The `sample_sys_init.elf`are not loaded to big core by default. It can be run in big core in the following two ways.
 

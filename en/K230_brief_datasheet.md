@@ -80,7 +80,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - Support quantitative tool chain and profiling tools
 - Loss of quantization accuracy <1%
 
-### 2D Engine
+### D Engine
 
 - 2D(GDMA) Engine:
   - OSD/CSC/X-Mirror/Y-Mirror/Rotation（90/180/270）
@@ -149,7 +149,7 @@ LPDDR3 with 32bit
   - Maximum decoding performance:
     - 8MP@40fps
 
-### 2.5D GPU
+### D GPU
 
 - Highly optimized Tessellation Engine, cooperates with the VGlite driver to provide vector graphics drawing functions
 

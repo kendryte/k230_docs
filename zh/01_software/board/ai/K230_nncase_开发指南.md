@@ -55,9 +55,9 @@
 | V1.3       | nncase_k230_v2.1.0, ai2d/runtime_tensor支持物理地址 | 张扬               | 2023/7/3  |
 | V1.4       | 文档描述更新                                        | 杨浩琪             | 2024/5/15 |
 
-## 1. 概述
+## 概述
 
-### 1.1 什么是nncase
+### 什么是nncase
 
 nncase是一个为 AI 加速器设计的神经网络编译器, 目前支持的 target有CPU/K210/K510/K230等。
 
@@ -75,7 +75,7 @@ nncase支持的神经网络模型格式：
 - TFLite
 - ONNX
 
-### 1.2 nncase架构
+### nncase架构
 
 ![nncase架构](images/185762ac17039d6c4961faa2fba0d66e.png)
 
@@ -95,13 +95,13 @@ Compiler: 用于在PC上编译神经网络模型，最终生成kmodel文件。�
 
 Runtime: 集成于用户App， 提供加载kmodel/设置输入数据/KPU执行/获取输出数据等功能。
 
-### 1.3 开发环境
+### 开发环境
 
-#### 1.3.1 操作系统
+#### 操作系统
 
 支持的操作系统包括Ubuntu 18.04/Ubuntu 20.04。
 
-#### 1.3.2 软件环境
+#### 软件环境
 
 | 序号 | 软件            | 版本号               |
 | ---- | --------------- | -------------------- |
@@ -114,17 +114,17 @@ Runtime: 集成于用户App， 提供加载kmodel/设置输入数据/KPU执行/�
 | 7    | Onnxruntime     | 1.8.0                |
 | 8    | dotnet-runtime  | 7.0                  |
 
-#### 1.3.3 硬件环境
+#### 硬件环境
 
 K230 evb
 
-## 2. 编译模型APIs(Python)
+## 编译模型APIs(Python)
 
 nncase提供了Python APIs, 用于在PC上编译神经网络模型。
 
-### 2.1 支持的算子
+### 支持的算子
 
-#### 2.1.1 TFLite算子
+#### TFLite算子
 
 | Operator                | Is Supported |
 | ----------------------- | ------------ |
@@ -207,7 +207,7 @@ nncase提供了Python APIs, 用于在PC上编译神经网络模型。
 | SPLIT                   | Yes          |
 | HARD_SWISH              | Yes          |
 
-#### 2.1.2 ONNX算子
+#### ONNX算子
 
 | Operator              | Is Supported |
 | --------------------- | ------------ |
@@ -329,11 +329,11 @@ nncase提供了Python APIs, 用于在PC上编译神经网络模型。
 | Unsqueeze             | Yes          |
 | Where                 | Yes          |
 
-### 2.2 APIs
+### APIs
 
 目前编译模型APIs支持TFLite/ONNX等格式的深度学习模型。
 
-#### 2.2.1 CompileOptions
+#### CompileOptions
 
 【描述】
 
@@ -363,7 +363,7 @@ CompileOptions类, 用于配置nncase编译选项，各属性说明如下：
 | shape_bucket_segments_count |          int          |    是    | 输入变量的范围划分为几段                                                                                               |
 | shape_bucket_fix_var_map    |    Dict[str, int]     |    否    | 固定shape维度信息中的变量为特定的值                                                                                    |
 
-##### 2.2.1.1 前处理流程说明
+##### 前处理流程说明
 
 目前暂不支持自定义前处理顺序，可以根据以下流程示意图，选择所需要的前处理参数进行配置。
 
@@ -417,7 +417,7 @@ subgraph A
     end
 </div>
 
-##### 2.2.1.2 动态shape参数说明
+##### 动态shape参数说明
 
 ShapeBucket是针对动态shape的一种解决方案，会根据输入长度的范围以及指定的段的数量来对动态shape进行优化。该功能默认为false，需要打开对应的option才能生效，除了指定对应的字段信息，其他流程与编译静态模型没有区别。
 
@@ -456,7 +456,7 @@ compile_options.shape_bucket_fix_var_map = {"batch_size" : 3}
 
 配置完这些选项后整个编译的流程和静态shape一致。
 
-##### 2.2.1.3 参数配置示例
+##### 参数配置示例
 
 实例化CompileOptions，配置各属性的值。
 
@@ -490,7 +490,7 @@ if compile_options.shape_bucket_enable:
     compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-#### 2.2.2 ImportOptions
+#### ImportOptions
 
 【描述】
 
@@ -513,7 +513,7 @@ class ImportOptions:
 import_options = nncase.ImportOptions()
 ```
 
-#### 2.2.3 PTQTensorOptions
+#### PTQTensorOptions
 
 【描述】
 
@@ -553,7 +553,7 @@ ptq_options.export_weight_range_by_channel = True
 compiler.use_ptq(ptq_options)
 ```
 
-#### 2.2.4 set_tensor_data
+#### set_tensor_data
 
 【描述】
 
@@ -588,7 +588,7 @@ ptq_options.set_tensor_data(generate_data(input_shape, ptq_options.samples_count
 compiler.use_ptq(ptq_options)
 ```
 
-#### 2.2.5 Compiler
+#### Compiler
 
 【描述】
 
@@ -606,7 +606,7 @@ class Compiler:
     _module: IRModule
 ```
 
-#### 2.2.6 import_tflite
+#### import_tflite
 
 【描述】
 
@@ -638,7 +638,7 @@ model_content = read_model_file(model)
 compiler.import_tflite(model_content, import_options)
 ```
 
-#### 2.2.7 import_onnx
+#### import_onnx
 
 【描述】
 
@@ -670,7 +670,7 @@ model_content = read_model_file(model)
 compiler.import_onnx(model_content, import_options)
 ```
 
-#### 2.2.8 use_ptq
+#### use_ptq
 
 【描述】
 
@@ -696,7 +696,7 @@ compiler.import_onnx(model_content, import_options)
 
 `compiler.use_ptq(ptq_options)`
 
-#### 2.2.9 compile
+#### compile
 
 【描述】
 
@@ -718,7 +718,7 @@ compiler.import_onnx(model_content, import_options)
 
 `compiler.compile()`
 
-#### 2.2.10 gencode_tobytes
+#### gencode_tobytes
 
 【描述】
 
@@ -744,14 +744,14 @@ with open(os.path.join(infer_dir, 'test.kmodel'), 'wb') as f:
     f.write(kmodel)
 ```
 
-### 2.3 示例
+### 示例
 
 下面示例中使用到的模型和python编译脚本：
 
 - 原始模型文件位于/path/to/k230_sdk/src/big/nncase/examples/models目录
 - python编译脚本位于/path/to/k230_sdk/src/big/nncase/examples/scripts目录
 
-#### 2.3.1 编译TFLite模型
+#### 编译TFLite模型
 
 mbv2_tflite.py脚本如下：
 
@@ -837,7 +837,7 @@ root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/mbv2_tflite.py --target k230 --model models/mbv2.tflite --dataset calibration_dataset
 ```
 
-#### 2.3.2 编译ONNX模型
+#### 编译ONNX模型
 
 针对ONNX模型, 建议先使用[ONNX Simplifier](https://github.com/daquexian/onnx-simplifier)进行简化, 然后再使用nncase编译。
 
@@ -979,13 +979,13 @@ root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243: /mnt/src/big/nncase/examples # python3 ./scripts/yolov5s_onnx.py --target k230 --model models/yolov5s.onnx --dataset calibration_dataset
 ```
 
-## 3. 模拟器APIs(Python)
+## 模拟器APIs(Python)
 
 除了编译模型APIs，nncase还提供了推理模型的APIs，在PC上可推理编译模型生成的kmodel，用来验证nncase推理结果和相应深度学习框架的runtime的结果是否一致等。
 
-### 3.1 APIs
+### APIs
 
-#### 3.1.1 MemoryRange
+#### MemoryRange
 
 【描述】
 
@@ -1016,7 +1016,7 @@ py::class_<memory_range>(m, "MemoryRange")
 
 `mr = nncase.MemoryRange()`
 
-#### 3.1.2 RuntimeTensor
+#### RuntimeTensor
 
 【描述】
 
@@ -1067,7 +1067,7 @@ py::class_<runtime_tensor>(m, "RuntimeTensor")
 | dtype | python数据类型 | Tensor的数据类型 |
 | shape | list           | tensor的形状     |
 
-#### 3.1.3 from_numpy
+#### from_numpy
 
 【描述】
 
@@ -1091,7 +1091,7 @@ RuntimeTensor对象。
 
 `tensor = nncase.RuntimeTensor.from_numpy(self.inputs[i]['data'])`
 
-#### 3.1.4 copy_to
+#### copy_to
 
 【描述】
 
@@ -1115,7 +1115,7 @@ RuntimeTensor对象。
 
 `sim.get_output_tensor(i).copy_to(to)`
 
-#### 3.1.5 to_numpy
+#### to_numpy
 
 【描述】
 
@@ -1137,7 +1137,7 @@ numpy.ndarray对象。
 
 `arr = sim.get_output_tensor(i).to_numpy()`
 
-#### 3.1.6 Simulator
+#### Simulator
 
 【描述】
 
@@ -1171,7 +1171,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim = nncase.Simulator()`
 
-#### 3.1.7 load_model
+#### load_model
 
 【描述】
 
@@ -1195,7 +1195,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim.load_model(kmodel)`
 
-#### 3.1.8 get_input_desc
+#### get_input_desc
 
 【描述】
 
@@ -1219,7 +1219,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `input_desc_0 = sim.get_input_desc(0)`
 
-#### 3.1.9 get_output_desc
+#### get_output_desc
 
 【描述】
 
@@ -1243,7 +1243,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `output_desc_0 = sim.get_output_desc(0)`
 
-#### 3.1.10 get_input_tensor
+#### get_input_tensor
 
 【描述】
 
@@ -1267,7 +1267,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `input_tensor_0 = sim.get_input_tensor(0)`
 
-#### 3.1.11 set_input_tensor
+#### set_input_tensor
 
 【描述】
 
@@ -1292,7 +1292,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim.set_input_tensor(0, nncase.RuntimeTensor.from_numpy(self.inputs[0]['data']))`
 
-#### 3.1.12 get_output_tensor
+#### get_output_tensor
 
 【描述】
 
@@ -1316,7 +1316,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `output_arr_0 = sim.get_output_tensor(0).to_numpy()`
 
-#### 3.1.13 set_output_tensor
+#### set_output_tensor
 
 【描述】
 
@@ -1341,7 +1341,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim.set_output_tensor(0, tensor)`
 
-#### 3.1.14 run
+#### run
 
 【描述】
 
@@ -1363,7 +1363,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim.run()`
 
-### 3.2 示例
+### 示例
 
 **前置条件**: yolov5s_onnx.py脚本已编译过yolov5s.onnx模型。
 
@@ -1457,9 +1457,9 @@ output 1 cosine similarity : 0.999757707118988
 output 2 cosine similarity : 0.9997308850288391
 ```
 
-## 4. KPU运行时APIs(C++)
+## KPU运行时APIs(C++)
 
-### 4.1 简介
+### 简介
 
 KPU运行时APIs用于在AI设备加载kmodel，设置输入数据，执行KPU/CPU计算，获取输出数据等。
 
@@ -1488,9 +1488,9 @@ riscv64/
 8 directories, 8 files
 ```
 
-### 4.2 APIs
+### APIs
 
-#### 4.2.1 hrt::create
+#### hrt::create
 
 【描述】
 
@@ -1529,7 +1529,7 @@ auto input_shape = interp.input_shape(0);
 auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape, hrt::pool_shared).expect("cannot create input tensor");
 ```
 
-#### 4.2.2 hrt::sync
+#### hrt::sync
 
 【描述】
 
@@ -1560,7 +1560,7 @@ auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape
 hrt::sync(input_tensor, sync_op_t::sync_write_back, true).expect("sync write_back failed");
 ```
 
-#### 4.2.3 interpreter::load_model
+#### interpreter::load_model
 
 【描述】
 
@@ -1588,7 +1588,7 @@ auto model = read_binary_file<unsigned char>(kmodel);
 interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("cannot load model.");
 ```
 
-#### 4.2.4 interpreter::inputs_size
+#### interpreter::inputs_size
 
 【描述】
 
@@ -1610,7 +1610,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 `auto inputs_size = interp.inputs_size();`
 
-#### 4.2.5 interpreter::outputs_size
+#### interpreter::outputs_size
 
 【描述】
 
@@ -1632,7 +1632,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 `auto outputs_size = interp.outputs_size();`
 
-#### 4.2.6 interpreter:: input_shape
+#### interpreter:: input_shape
 
 【描述】
 
@@ -1656,7 +1656,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 `auto shape = interp.input_shape(0);`
 
-#### 4.2.7 interpreter:: output_shape
+#### interpreter:: output_shape
 
 【描述】
 
@@ -1680,7 +1680,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 
 `auto shape = interp.output_shape(0);`
 
-#### 4.2.8 interpreter:: input_tensor
+#### interpreter:: input_tensor
 
 【描述】
 
@@ -1714,7 +1714,7 @@ interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("canno
 interp.input_tensor(0, input_tensor).expect("cannot set input tensor");
 ```
 
-#### 4.2.9 interpreter:: output_tensor
+#### interpreter:: output_tensor
 
 【描述】
 
@@ -1748,7 +1748,7 @@ interp.input_tensor(0, input_tensor).expect("cannot set input tensor");
 auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 ```
 
-#### 4.2.10 interpreter:: run
+#### interpreter:: run
 
 【描述】
 
@@ -1773,7 +1773,7 @@ auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 interp.run().expect("error occurred in running model");
 ```
 
-### 4.3 示例
+### 示例
 
 ```cpp
 #include <chrono>
@@ -1961,13 +1961,13 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 5. AI2D 运行时APIs(C++)
+## AI2D 运行时APIs(C++)
 
-### 5.1 简介
+### 简介
 
 AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配置，执行AI2D计算等。请在使用前阅读最后一部分[注意事项](./K230_nncase_开发指南.md#54-注意事项)。
 
-#### 5.1.1   支持的格式转换
+#### 支持的格式转换
 
 | 输入格式         | 输出格式               | 备注                  |
 | ---------------- | ---------------------- | --------------------- |
@@ -1979,7 +1979,7 @@ AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配
 | RGB_packed       | RGB_planar/RGB_packed  |                       |
 | RAW16            | RAW16/8                | 深度图，执行shift操作 |
 
-#### 5.1.2   功能描述
+#### 功能描述
 
 | 功能                | 描述                                                                                                            | 备注              |
 | ------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------- |
@@ -1988,9 +1988,9 @@ AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配
 | Shift               | 支持输入格式Raw16  支持输出格式Raw8                                                                             |                   |
 | 符号位              | 支持有符号和无符号输入                                                                                          |                   |
 
-### 5.2 APIs
+### APIs
 
-#### 5.2.1 ai2d_format
+#### ai2d_format
 
 【描述】
 
@@ -2010,7 +2010,7 @@ enum class ai2d_format
 }
 ```
 
-#### 5.2.2 ai2d_interp_method
+#### ai2d_interp_method
 
 【描述】
 
@@ -2028,7 +2028,7 @@ ai2d_interp_method用于配置可选的插值方式。
 }
 ```
 
-#### 5.2.3 ai2d_interp_mode
+#### ai2d_interp_mode
 
 【描述】
 
@@ -2045,7 +2045,7 @@ enum class ai2d_interp_mode
 }
 ```
 
-#### 5.2.4 ai2d_pad_mode
+#### ai2d_pad_mode
 
 【描述】
 
@@ -2062,7 +2062,7 @@ enum class ai2d_pad_mode
 }
 ```
 
-#### 5.2.5 ai2d_datatype_t
+#### ai2d_datatype_t
 
 【描述】
 
@@ -2099,7 +2099,7 @@ struct ai2d_datatype_t
 ai2d_datatype_t ai2d_dtype { ai2d_format::RAW16, ai2d_format::NCHW_FMT, datatype_t::dt_uint16, datatype_t::dt_uint8 };
 ```
 
-#### 5.2.6 ai2d_crop_param_t
+#### ai2d_crop_param_t
 
 【描述】
 
@@ -2134,7 +2134,7 @@ struct ai2d_crop_param_t
 ai2d_crop_param_t crop_param { true, 40, 30, 400, 600 };
 ```
 
-#### 5.2.7 ai2d_shift_param_t
+#### ai2d_shift_param_t
 
 【描述】
 
@@ -2161,7 +2161,7 @@ struct ai2d_shift_param_t
 
 `ai2d_shift_param_t shift_param { true, 2 };`
 
-#### 5.2.8 ai2d_pad_param_t
+#### ai2d_pad_param_t
 
 【描述】
 
@@ -2194,7 +2194,7 @@ struct ai2d_pad_param_t
 ai2d_pad_param_t pad_param { false, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 60, 60 } }, ai2d_pad_mode::constant, { 255 } };
 ```
 
-#### 5.2.9 ai2d_resize_param_t
+#### ai2d_resize_param_t
 
 【描述】
 
@@ -2225,7 +2225,7 @@ struct ai2d_resize_param_t
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
 ```
 
-#### 5.2.10 ai2d_affine_param_t
+#### ai2d_affine_param_t
 
 【描述】
 
@@ -2264,7 +2264,7 @@ struct ai2d_affine_param_t
 ai2d_affine_param_t affine_param { true, ai2d_interp_method::cv2_bilinear, 0, 0, 127, 1, { 0.5, 0.1, 0.0, 0.1, 0.5, 0.0 } };
 ```
 
-#### 5.2.11 ai2d_builder:: ai2d_builder
+#### ai2d_builder:: ai2d_builder
 
 【描述】
 
@@ -2308,7 +2308,7 @@ ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
-#### 5.2.12 ai2d_builder:: build_schedule
+#### ai2d_builder:: build_schedule
 
 【描述】
 
@@ -2334,7 +2334,7 @@ result<void> build_schedule();
 ai2d_builder_->build_schedule();
 ```
 
-#### 5.2.13 ai2d_builder:: invoke
+#### ai2d_builder:: invoke
 
 【描述】
 
@@ -2364,7 +2364,7 @@ result\<void\>。
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 
-### 5.3 示例
+### 示例
 
 ```cpp
 static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
@@ -2415,7 +2415,7 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
 }
 ```
 
-### 5.4 注意事项
+### 注意事项
 
 1. Affine和Resize功能是互斥的，不能同时开启；
 1. Shift功能的输入格式只能是Raw16；

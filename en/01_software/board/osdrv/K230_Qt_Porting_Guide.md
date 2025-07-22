@@ -44,21 +44,21 @@ This document (this guide) is primarily intended for the following personnel:
 | --- | --- | --- | --- |
 | V1.0 | Initial version | Wang Quan | 2023/11/29 |
 
-## 1. Introduction to Qt
+## Introduction to Qt
 
 Qt is a cross-platform C++ graphical user interface application development framework. It can be used to develop both GUI programs and non-GUI programs, such as console tools and servers. Qt is an object-oriented framework and is easily extensible, allowing for true component programming.
 
-### 1.1 Features of Qt GUI
+### Features of Qt GUI
 
 1. Excellent cross-platform characteristics, supporting Windows, Linux, FreeBSD.
 1. Uses object-oriented mechanisms.
 1. Rich component support, Qt includes over 250 C++ classes.
 
-## 2. Qt Porting Instructions
+## Qt Porting Instructions
 
 This document mainly describes how to add support for Qt 5.15 through buildroot.
 
-### 2.1 Enter the buildroot Configuration Interface
+### Enter the buildroot Configuration Interface
 
 In the main directory of k230_sdk, run the following command:
 
@@ -66,7 +66,7 @@ In the main directory of k230_sdk, run the following command:
 make buildroot-menuconfig
 ```
 
-### 2.2 Add Font Support
+### Add Font Support
 
 Click on Target packages --> Fonts, cursors, icons, sounds and themes.
 
@@ -76,7 +76,7 @@ The following figure shows the font configuration interface:
 
 Try to choose free fonts to reduce subsequent copyright disputes.
 
-### 2.3 Add Qt 5 Components
+### Add Qt 5 Components
 
 Click on Target packages --> Graphic libraries and applications (graphic/text) --> Qt 5, and select the following configuration options:
 
@@ -87,7 +87,7 @@ The following figures show the Qt configuration interface:
 ![Display Content](../../../../zh/01_software/board/osdrv/images/qt_config_3.png)
 ![Display Content](../../../../zh/01_software/board/osdrv/images/qt_config_4.png)
 
-### 2.4 Save buildroot Configuration Information
+### Save buildroot Configuration Information
 
 In the main directory of k230_sdk, run the following command:
 
@@ -95,7 +95,7 @@ In the main directory of k230_sdk, run the following command:
 make buildroot-savedefconfig
 ```
 
-### 2.5 View buildroot Configuration Options
+### View buildroot Configuration Options
 
 After successfully adding fonts and Qt, the buildroot configuration file is as follows:
 
@@ -114,9 +114,9 @@ BR2_PACKAGE_QT5SERIALBUS=y
 BR2_PACKAGE_QJSON=y
 ```
 
-## 3. Add Environment Variables and JSON Configuration File
+## Add Environment Variables and JSON Configuration File
 
-### 3.1 Add Qt Environment Variables
+### Add Qt Environment Variables
 
 ```c
 export QT_QPA_FB_DRM=1
@@ -144,7 +144,7 @@ The following figure shows the explanation of the relevant environment variables
 1. QT_DEBUG_PLUGINS=1: Indicates that Qt outputs debugging information when loading plugins, making it easy to know which plugins Qt has loaded, which plugins have loaded successfully, which plugins have failed to load, and the reasons for plugin loading failures, among other debugging information.
 1. QT_LOGGING_RULES="qt.qpa.*=true": Enables logging of the Qt graphics and input subsystem.
 
-### 3.2 Add JSON Configuration File
+### Add JSON Configuration File
 
 ```c
 {

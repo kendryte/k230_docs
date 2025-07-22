@@ -51,7 +51,7 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 王建新       | 2023-08-08 |
 
-## 1. k230 fft介绍
+## k230 fft介绍
 
 K230 的FFT模块主要用于硬件加速FFT、IFFT的计算，其特性如下：
 
@@ -64,17 +64,17 @@ K230 的FFT模块主要用于硬件加速FFT、IFFT的计算，其特性如下�
 4096点fft/ifft的计算时长控制在1ms以内，包括数据搬移、计算、中断交互的总开销。
 支持中断mask、原始中断查询。
 
-## 2. API 参考
+## API 参考
 
 k230 FFT模块主要提供了以下 API：
 
-- [kd_mpi_fft_or_ifft](#21-kd_mpi_fft_or_ifft)
-- [kd_mpi_fft_args_init](#22-kd_mpi_fft_args_init)
-- [kd_mpi_fft_args_2_array](#23-kd_mpi_fft_args_2_array)
-- [kd_mpi_fft](#24-kd_mpi_fft)
-- [kd_mpi_ifft](#25-kd_mpi_ifft)
+- [kd_mpi_fft_or_ifft](#kd_mpi_fft_or_ifft)
+- [kd_mpi_fft_args_init](#kd_mpi_fft_args_init)
+- [kd_mpi_fft_args_2_array](#kd_mpi_fft_args_2_array)
+- [kd_mpi_fft](#kd_mpi_fft)
+- [kd_mpi_ifft](#kd_mpi_ifft)
 
-### 2.1 kd_mpi_fft_or_ifft
+### kd_mpi_fft_or_ifft
 
 【描述】
 
@@ -90,7 +90,7 @@ int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 
 | 参数名称 | 描述                                         | 输入/输出 |
 | -------- | -------------------------------------------- | --------- |
-| fft_args | fft参数  [k_fft_args_st](#31-k_fft_args_st) | 输入/输出 |
+| fft_args | fft参数  [k_fft_args_st](#k_fft_args_st) | 输入/输出 |
 
 【返回值】
 
@@ -133,7 +133,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 
 无
 
-### 2.2 kd_mpi_fft_args_init
+### kd_mpi_fft_args_init
 
 【描述】
 
@@ -152,14 +152,14 @@ int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im,
 | 参数名称 | 描述                                                    | 输入/输出 |
 | -------- | ------------------------------------------------------- | --------- |
 | point    | 点数，有效值为64、128、256、512、1024、2048、4096       | 输入      |
-| mode     | [k_fft_mode_e](#32-k_fft_mode_e)  FFT_MODE  IFFT_MODE  | 输入      |
-| im       | [k_fft_input_mode_e](#33-k_fft_input_mode_e)  输入模式 | 输入      |
-| om       | [k_fft_out_mode_e](#34-k_fft_out_mode_e) 输出模式      | 输入      |
+| mode     | [k_fft_mode_e](#k_fft_mode_e)  FFT_MODE  IFFT_MODE  | 输入      |
+| im       | [k_fft_input_mode_e](#k_fft_input_mode_e)  输入模式 | 输入      |
+| om       | [k_fft_out_mode_e](#k_fft_out_mode_e) 输出模式      | 输入      |
 | time_out | 超时时间                                                | 输入      |
 | shift    | 偏移                                                    | 输入      |
 | rx_input | 输入实数数据                                            | 输入      |
 | iy_input | 输入虚数数据                                            | 输入      |
-| fft_args | [k_fft_args_st](#31-k_fft_args_st) 要填充的变量        | 输出      |
+| fft_args | [k_fft_args_st](#k_fft_args_st) 要填充的变量        | 输出      |
 
 【返回值】
 
@@ -202,7 +202,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 
 无
 
-### 2.3 kd_mpi_fft_args_2_array
+### kd_mpi_fft_args_2_array
 
 【描述】
 
@@ -218,7 +218,7 @@ int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 
 | 参数名称 | 描述                                       | 输入/输出 |
 | -------- | ------------------------------------------ | --------- |
-| fft_args | [k_fft_args_st](#31-k_fft_args_st) 结构体 | 输入      |
+| fft_args | [k_fft_args_st](#k_fft_args_st) 结构体 | 输入      |
 | rx_out   | 实数数据                                   | 输出      |
 | iy_out   | 虚数数据                                   | 输出      |
 
@@ -263,7 +263,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
 
 无
 
-### 2.4 kd_mpi_fft
+### kd_mpi_fft
 
 【描述】
 
@@ -284,8 +284,8 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 | 参数名称        | 描述                          | 输入/输出 |
 |-----------------|-------------------------------|-----------|
 | point_num   | 点数，有效值为64、128、256、512、1024、2048、4096 | 输入      |
-| im          | [fft_input_mode_e](#33-k_fft_input_mode_e)  输入模式 | 输入    |
-| om | [fft_out_mode_e](#34-k_fft_out_mode_e) 输出模式 | 输入 |
+| im          | [fft_input_mode_e](#k_fft_input_mode_e)  输入模式 | 输入    |
+| om | [fft_out_mode_e](#k_fft_out_mode_e) 输出模式 | 输入 |
 | time_out | 超时时间 | 输入 |
 | shift | 偏移 | 输入 |
 | rx_input | 输入实数数据 | 输入 |
@@ -337,7 +337,7 @@ static int fft_test(int point)
 
 无
 
-### 2.5 kd_mpi_ifft
+### kd_mpi_ifft
 
 【描述】
 
@@ -358,8 +358,8 @@ int kd_mpi_ifft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 | 参数名称  | 描述                                                | 输入/输出 |
 | --------- | --------------------------------------------------- | --------- |
 | point_num | 点数，有效值为64、128、256、512、1024、2048、4096   | 输入      |
-| im        | [fft_input_mode_e](#33-k_fft_input_mode_e)  输入模式 | 输入      |
-| om        | [fft_out_mode_e](#34-k_fft_out_mode_e) 输出模式      | 输入      |
+| im        | [fft_input_mode_e](#k_fft_input_mode_e)  输入模式 | 输入      |
+| om        | [fft_out_mode_e](#k_fft_out_mode_e) 输出模式      | 输入      |
 | time_out  | 超时时间                                            | 输入      |
 | shift     | 偏移                                                | 输入      |
 | dma_ch    | dma通道  0-3有效；其他值非法                        | 输入      |
@@ -412,16 +412,16 @@ static int fft_test(int point)
 
 无
 
-## 3.数据结构
+## 数据结构
 
 该功能模块的相关数据类型定义如下：
 
-- [k_fft_args_st](#31-k_fft_args_st)
-- [k_fft_mode_e](#32-k_fft_mode_e)
-- [k_fft_input_mode_e](#33-k_fft_input_mode_e)
-- [k_fft_out_mode_e](#34-k_fft_out_mode_e)
+- [k_fft_args_st](#k_fft_args_st)
+- [k_fft_mode_e](#k_fft_mode_e)
+- [k_fft_input_mode_e](#k_fft_input_mode_e)
+- [k_fft_out_mode_e](#k_fft_out_mode_e)
 
-### 3.1 k_fft_args_st
+### k_fft_args_st
 
 【说明】fft ioctl 参数
 
@@ -463,7 +463,7 @@ typedef struct {
 
 无
 
-### 3.2 k_fft_mode_e
+### k_fft_mode_e
 
 【说明】fft ioctl 参数
 
@@ -487,7 +487,7 @@ typedef enum  {
 
 无
 
-### 3.3 k_fft_input_mode_e
+### k_fft_input_mode_e
 
 【说明】fft ioctl 参数
 
@@ -513,7 +513,7 @@ typedef enum {
 
 无
 
-### 3.4 k_fft_out_mode_e
+### k_fft_out_mode_e
 
 【说明】fft ioctl 参数
 

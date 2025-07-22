@@ -52,15 +52,15 @@ This document (this guide) is mainly for the following personnel:
 | V1.0       | Initial version | Longyiluo | 2024.02.02  |
 | V1.1       | Add functional description and error correction | Longyiluo | 2024.07.01  |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 Nonai 2D hardware can implement OSD, border and CSC functions. This article only describes the CSC function, OSD and border APIs have not been implemented of this article yet. If there is a need in the future, they can be added.
 
 The VENC module implements overlay OSD and border on encoded images by the nonai 2D hardware, which cannot be used alone and only be used with encoded images. Please refer to sections 1.2.1.4 and 2.1.14 to 2.1.29 of the K230_video_codec_API Reference.
 
-### 1.2 Function Description
+### Function Description
 
 Implement the conversion between RGB and YUV as a module of MPP. It can participate in system binding function, and also can perform single frame processing without binding.
 
@@ -101,17 +101,17 @@ kd_mpi_nonai_2d_stop_chn(ch);
 kd_mpi_nonai_2d_destroy_chn(ch);
 ```
 
-## 2. API Reference
+## API Reference
 
-- [kd_mpi_nonai_2d_create_chn](#21-kd_mpi_nonai_2d_create_chn)
-- [kd_mpi_nonai_2d_destroy_chn](#22-kd_mpi_nonai_2d_destory_chn)
-- [kd_mpi_nonai_2d_start_chn](#23-kd_mpi_nonai_2d_start_chn)
-- [kd_mpi_nonai_2d_stop_chn](#24-kd_mpi_nonai_2d_stop_chn)
-- [kd_mpi_nonai_2d_get_frame](#25-kd_mpi_nonai_2d_get_frame)
-- [kd_mpi_nonai_2d_release_frame](#26-kd_mpi_nonai_2d_release_frame)
-- [kd_mpi_nonai_2d_send_frame](#27-kd_mpi_nonai_2d_send_frame)
+- [kd_mpi_nonai_2d_create_chn](#kd_mpi_nonai_2d_create_chn)
+- [kd_mpi_nonai_2d_destroy_chn](#kd_mpi_nonai_2d_destory_chn)
+- [kd_mpi_nonai_2d_start_chn](#kd_mpi_nonai_2d_start_chn)
+- [kd_mpi_nonai_2d_stop_chn](#kd_mpi_nonai_2d_stop_chn)
+- [kd_mpi_nonai_2d_get_frame](#kd_mpi_nonai_2d_get_frame)
+- [kd_mpi_nonai_2d_release_frame](#kd_mpi_nonai_2d_release_frame)
+- [kd_mpi_nonai_2d_send_frame](#kd_mpi_nonai_2d_send_frame)
 
-### 2.1 kd_mpi_nonai_2d_create_chn
+### kd_mpi_nonai_2d_create_chn
 
 【Description】
 
@@ -158,7 +158,7 @@ None.
 
 None.
 
-### 2.2 kd_mpi_nonai_2d_destory_chn
+### kd_mpi_nonai_2d_destory_chn
 
 【Description】
 
@@ -204,7 +204,7 @@ None.
 
 None.
 
-### 2.3 kd_mpi_nonai_2d_start_chn
+### kd_mpi_nonai_2d_start_chn
 
 【Description】
 
@@ -252,7 +252,7 @@ None.
 
 None.
 
-### 2.4 kd_mpi_nonai_2d_stop_chn
+### kd_mpi_nonai_2d_stop_chn
 
 【Description】
 
@@ -301,7 +301,7 @@ None.
 
 None.
 
-### 2.5 kd_mpi_nonai_2d_get_frame
+### kd_mpi_nonai_2d_get_frame
 
 【Description】
 
@@ -351,7 +351,7 @@ None.
 
 None.
 
-### 2.6 kd_mpi_nonai_2d_release_frame
+### kd_mpi_nonai_2d_release_frame
 
 【Description】
 
@@ -399,7 +399,7 @@ None.
 
 None.
 
-### 2.7 kd_mpi_nonai_2d_send_frame
+### kd_mpi_nonai_2d_send_frame
 
 【Description】
 
@@ -449,11 +449,11 @@ None.
 
 None.
 
-## 3. Data Types
+## Data Types
 
 The related data type definitions for this module are as follows:
 
-### 3.1 K_NONAI_2D_MAX_CHN_NUMS
+### K_NONAI_2D_MAX_CHN_NUMS
 
 【Description】
 
@@ -473,7 +473,7 @@ None.
 
 None.
 
-### 3.2 k_nonai_2d_calc_mode
+### k_nonai_2d_calc_mode
 
 【Description】
 
@@ -506,7 +506,7 @@ At present, only CSC mode is supported, and other modes have not been implemente
 
 None.
 
-### 3.3 k_nonai_2d_chn_attr
+### k_nonai_2d_chn_attr
 
 【Description】
 
@@ -535,7 +535,7 @@ typedef struct
 
 None.
 
-### 3.4 k_nonai_2d_color_gamut
+### k_nonai_2d_color_gamut
 
 【Description】
 
@@ -561,18 +561,18 @@ None.
 
 None.
 
-## 4. MAPI
+## MAPI
 
-### 4.1 Overview
+### Overview
 
 MAPI is called on the small core to create nonai_2d channels.
 
-- [kd_mpi_nonai_2d_init](#42-kd_mapi_nonai_2d_init)
-- [kd_mpi_nonai_2d_deinit](#43-kd_mapi_nonai_2d_deinit)
-- [kd_mpi_nonai_2d_start](#44-kd_mapi_nonai_2d_start)
-- [kd_mpi_nonai_2d_stop](#45-kd_mapi_nonai_2d_stop)
+- [kd_mpi_nonai_2d_init](#kd_mapi_nonai_2d_init)
+- [kd_mpi_nonai_2d_deinit](#kd_mapi_nonai_2d_deinit)
+- [kd_mpi_nonai_2d_start](#kd_mapi_nonai_2d_start)
+- [kd_mpi_nonai_2d_stop](#kd_mapi_nonai_2d_stop)
 
-### 4.2 kd_mapi_nonai_2d_init
+### kd_mapi_nonai_2d_init
 
 【Description】
 
@@ -620,7 +620,7 @@ None.
 
 None.
 
-### 4.3 kd_mapi_nonai_2d_deinit
+### kd_mapi_nonai_2d_deinit
 
 【Description】
 
@@ -666,7 +666,7 @@ None.
 
 None.
 
-### 4.4 kd_mapi_nonai_2d_start
+### kd_mapi_nonai_2d_start
 
 【Description】
 
@@ -710,7 +710,7 @@ None.
 
 【Related Topics】
 
-### 4.5 kd_mapi_nonai_2d_stop
+### kd_mapi_nonai_2d_stop
 
 【Description】
 
@@ -754,7 +754,7 @@ None.
 
 【Related Topics】
 
-## 5. Error Codes
+## Error Codes
 
 Table 41 Encoding API Error Codes
 | Error Code | Macro Definition             | Description                                         |
@@ -776,6 +776,6 @@ Table 41 Encoding API Error Codes
 | 0xa0188011 | K_ERR_NONAI_2D_BADADDR       | Address out of valid range                     |
 | 0xa0188012 | K_ERR_NONAI_2D_BUSY          | NONAI_2D system busy                               |
 
-## 6. Debug Information
+## Debug Information
 
 For multimedia memory management and system binding debug information, please refer to the "K230 System Control API Reference".

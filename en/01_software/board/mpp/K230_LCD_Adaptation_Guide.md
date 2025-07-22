@@ -53,7 +53,7 @@ This document (this guide) is mainly intended for the following personnel:
 |            |          |        |            |
 |            |          |        |            |
 
-## 1. Overview
+## Overview
 
 This document mainly describes the basic framework of the K230 platform LCD and how to add support for a new LCD.
 
@@ -63,7 +63,7 @@ The K230 platform supports LCDs with MIPI-DSI interfaces. The hardware connectio
 
 The main control sends configuration information to the LCD through the MIPI-DSI interface while transmitting image data to the LCD.
 
-## 2. LCD Adaptation Preparation Work
+## LCD Adaptation Preparation Work
 
 Before adapting a new LCD, users need to do the following preparation work:
 
@@ -71,7 +71,7 @@ Before adapting a new LCD, users need to do the following preparation work:
 1. Carefully analyze the LCD Datasheet to obtain the LCD output timing, specifically including: pixelclock, vtotal, vactive, vfp, vbp, vsa, htotal, hactive, hfp, hbp, hsa, etc.
 1. Refer to the "K230_Video Output_API Reference" to calculate the TxDPHY clock parameters.
 
-## 3. LCD Adaptation Example
+## LCD Adaptation Example
 
 Here we take the hx8399 driver as an example to explain, the corresponding driver file source path is as follows:
 
@@ -79,7 +79,7 @@ Here we take the hx8399 driver as an example to explain, the corresponding drive
 src/big/mpp/kernel/connector/src/hx8399.c
 ```
 
-### 3.1 Define Supported LCD Types
+### Define Supported LCD Types
 
 Define the following enumeration variables in the src/big/mpp/include/comm/k_connector_comm.h file:
 
@@ -103,11 +103,11 @@ typedef enum {
 
 When users need to add new LCD support types, they first need to add the corresponding type definition here. **This type is the only identifier for the application to obtain the LCD configuration.**
 
-### 3.2 LCD Driver Adaptation
+### LCD Driver Adaptation
 
 The LCD driver adaptation is the most important part of the entire process. Users can modify by copying existing LCD driver files.
 
-#### 3.2.1 Add LCD Initialization Code
+#### Add LCD Initialization Code
 
 ```c
 k_s32 hx8399_init(void *ctx, k_connector_info *info)
@@ -127,7 +127,7 @@ k_s32 hx8399_init(void *ctx, k_connector_info *info)
 1. hx8399_dsi_resolution_init initializes the MIPI-DSI controller, including the LCD's initialization firmware data.
 1. hx8399_dsi_resolution_init initializes the display controller.
 
-#### 3.2.2 Implement LCD Operation Interface
+#### Implement LCD Operation Interface
 
 The LCD operation interface is defined by the data type k_connector_function. Users implement the relevant operation interfaces according to the actual situation. Not all interfaces must be implemented.
 
@@ -152,7 +152,7 @@ The following is the supported operation set of the LCD:
     },
 ```
 
-#### 3.2.3 Define LCD Driver Structure
+#### Define LCD Driver Structure
 
 The LCD driver structure is defined by struct connector_driver_dev, mainly including the LCD driver name, GPIO reset signal, and LCD operation set.
 
@@ -185,7 +185,7 @@ struct connector_driver_dev hx8399_connector_drv = {
 };
 ```
 
-#### 3.2.4 Update LCD Driver List
+#### Update LCD Driver List
 
 Add the LCD driver structure defined in the previous section to the connector_drv_list array. The list of LCDs supported by the current system is as follows:
 
@@ -200,7 +200,7 @@ struct connector_driver_dev *connector_drv_list[CONNECTOR_NUM_MAX] = {
 };
 ```
 
-### 3.3 Update LCD Configuration Information List
+### Update LCD Configuration Information List
 
 The LCD configuration information is defined by the structure k_connector_info:
 

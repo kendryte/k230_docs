@@ -80,15 +80,15 @@ This document (this guide) is mainly intended for the following personnel:
 | V2.2             | Updated part of the feature description | Rong Jian | 2024-01-30 |
 | V2.3             | Updated part of the feature description | Rong Jian | 2024-04-28 |
 
-## 1. Module Software Architecture
+## Module Software Architecture
 
 ![arch](../../../../zh/01_software/pc/pqtools/images/28a799580bb5670cb8d29dc709a4dcc6.png)
 
 Figure 1-1
 
-## 2. Tuning Tool Connection and Activation
+## Tuning Tool Connection and Activation
 
-### 2.1 Tool Acquisition Path
+### Tool Acquisition Path
 
 | **File Name**      | **Storage Location**       | **Function**                                            |
 |--------------------|----------------------------|---------------------------------------------------------|
@@ -96,14 +96,14 @@ Figure 1-1
 | t_server_c-6.1.0   | Small core file system /mnt | Tuning server executable program                        |
 | sample_sys_init.elf | Large core file system /sdcard/app | Large core server side                                  |
 
-### 2.2 Startup Procedure
+### Startup Procedure
 
 1. Configure the IP on the small core of the board.
 1. After the small core of the board waits for sharefs to start, start sample_sys_init.elf on the large core, and run `/sharefs/app/sample_sys_init.elf`.
 1. Start the tuning server on the small core of the board, and run `/mnt/t_server_c-6.1.0`, adding parameters as needed. Use the `-?` parameter to view help.
 1. Start the tuning tool on the PC and connect to K230.
 
-## 3. Tuning Tool Interface Introduction
+## Tuning Tool Interface Introduction
 
 ![User Interface](../../../../zh/01_software/pc/pqtools/images/01.png)
 
@@ -136,9 +136,9 @@ As shown in Figure 3-1, the basic operation UI of the tuning tool is divided int
 
 (6) Echo Area: Used to print logs of parameter sending and receiving
 
-### 3.1 Connect to Board-side Tuning Server
+### Connect to Board-side Tuning Server
 
-#### 3.1.1 Connect to Board-side Tuning Server Using HTTP
+#### Connect to Board-side Tuning Server Using HTTP
 
 The SDK supports HTTP connection by default. Click the configure connection to debugging server button ![Configure Connection](../../../../zh/01_software/pc/pqtools/images/02.png) in the toolbar, and the window shown in Figure 3-2 will pop up.
 
@@ -148,12 +148,12 @@ Figure 3-2
 
 Select HTTP mode, ensure that the PC and the board-side network are in the same subnet, enter the board-side IP in the "Host" input box, and enter the fixed port 34567 in the "Port" input box. After configuration, click the "OK" button. If the board-side tuning-server has been started, the connection will be automatically completed. Switch any module in area ④ of Figure 3-1 to see the function print of the tuning-server.
 
-### 3.2 Create/Select Project
+### Create/Select Project
 
 If the project to be debugged is already in area ③ of Figure 3-1, click to select the project to start ISP debugging.
 If the project to be debugged has not been created, create the project first.
 
-#### 3.2.1 Create Debugging Project
+#### Create Debugging Project
 
 As shown in Figure 3-3, click File -> New -> Project... sequentially, and the project creation wizard window will pop up as shown in Figure 3-4.
 
@@ -173,7 +173,7 @@ Figure 3-5
 
 Enter the project name, specify the project address, and click the "Finish" button to complete the project creation. The project will be displayed in area ③ of Figure 3-1. Click the project to start ISP debugging.
 
-### 3.3 Online Debugging Interface and Function Description
+### Online Debugging Interface and Function Description
 
 This section briefly introduces the main functions of the debugging modules on the tuning tool interface. The specific debugging strategies and steps are described in detail in the image tuning document.
 
@@ -183,17 +183,17 @@ The ISP function modules are shown in Figure 3-6.
 
 Figure 3-6
 
-#### 3.3.1 Bypass Settings
+#### Bypass Settings
 
 Enable control of all ISP function modules.
 
-#### 3.3.2 Auto Focus Control (Focus Control)
+#### Auto Focus Control (Focus Control)
 
 Focus control debugging module.
 
 When auto mode is selected (Auto Mode View), the interface list shows Auto Focus Control; when manual mode is selected (Manual Mode View), the interface list shows Focus Control.
 
-#### 3.3.3 Auto Exposure Control (Exposure Control)
+#### Auto Exposure Control (Exposure Control)
 
 Exposure control debugging module.
 
@@ -203,79 +203,79 @@ Auto exposure control parameters control image brightness and AE adjustment conv
 
 Supports setting ROI window. To enable ROI mode, select FIX mode in semMode and enable AE.
 
-#### 3.3.4 Auto White Balance (White Balance)
+#### Auto White Balance (White Balance)
 
 White balance control debugging module.
 
 When auto mode is selected (Auto Mode View), the interface list shows Auto White Balance; when manual mode is selected (Manual Mode View), the interface list shows White Balance.
 
-#### 3.3.5 Exposure Statistics
+#### Exposure Statistics
 
 Not supported yet.
 
-#### 3.3.6 Auto Focus Measurement
+#### Auto Focus Measurement
 
 Not supported yet.
 
-#### 3.3.7 High Dynamic Range
+#### High Dynamic Range
 
 Multi-exposure wide dynamic range, adjustable exposure ratio between exposures, and fusion range.
 
-#### 3.3.8 Compand
+#### Compand
 
 Data stretching and compression module, adjustable action curves.
 
-#### 3.3.9 Black Level Subtraction
+#### Black Level Subtraction
 
 Provides sensor-related black level correction, adjustable for R, Gr, Gb, and B channels.
 
-#### 3.3.10 RGB Infrared Radiation
+#### RGB Infrared Radiation
 
 Not supported yet.
 
-#### 3.3.11 Lens Shading Correction
+#### Lens Shading Correction
 
 Provides lens shading correction, calibration coefficients are generated by the calibration tool.
 
-#### 3.3.12 Digital Gain
+#### Digital Gain
 
 Enables and adjusts ISP Digital Gain.
 
-#### 3.3.13 Wide Dynamic Range
+#### Wide Dynamic Range
 
 Provides global and local contrast adjustment for images.
 
-#### 3.3.14 Green Equilibrate
+#### Green Equilibrate
 
 Calibrates the imbalance between Gr and Gb channels, adjustable green balance strength.
 
-#### 3.3.15 Defect Pixel Cluster Correction
+#### Defect Pixel Cluster Correction
 
 Provides functions for detecting and calibrating pixel defects, different calibration methods can be set by selecting set.
 
-#### 3.3.16 Denoising Prefilter
+#### Denoising Prefilter
 
 Bilateral filtering denoising module.
 
-#### 3.3.17 3D Noise Reduction
+#### D Noise Reduction
 
 Adjusts the image noise reduction intensity by configuring parameters.
 
-#### 3.3.18 Demosaic
+#### Demosaic
 
 Converts Bayer format raw images to RGB images through interpolation, providing anti-moire, anti-purple fringe, sharpening, and noise reduction functions.
 
 This module also includes a CAC sub-module for correcting chromatic aberration mainly introduced by the lens, calibration parameters are generated by the calibration tool.
 
-#### 3.3.19 Color Correction Matrix
+#### Color Correction Matrix
 
 Color restoration matrix. Adjusting the 3x3 CCM matrix and offset can calibrate color deviation.
 
-#### 3.3.20 Gamma Correction
+#### Gamma Correction
 
 Supports custom gamma, the gamma index can be changed in this mode.
 
-#### 3.3.21 Edge Enhance
+#### Edge Enhance
 
 Enhances image clarity. By setting appropriate parameters, it enhances image clarity while suppressing noise enhancement.
 
@@ -285,13 +285,13 @@ The CA module adjusts image saturation. It adjusts saturation based on changes i
 
 The DCI module adjusts image dynamic contrast.
 
-#### 3.3.22 Color Processing
+#### Color Processing
 
 Color processing module, adjustable image contrast, brightness, saturation, and hue, setting different color preferences or styles.
 
-### 3.4 Capture Image
+### Capture Image
 
-### 3.4.1 Set Image Format and Size
+### Set Image Format and Size
 
 Click the preview button in the toolbar ![Preview Button](../../../../zh/01_software/pc/pqtools/images/09.png), and the window shown in Figure 3-7 will pop up.
 
@@ -311,7 +311,7 @@ Figure 3-8
 
 Click the "OK" button to complete the settings.
 
-#### 3.4.2 Capture Image
+#### Capture Image
 
 Click the capture button in the toolbar ![Capture Button](../../../../zh/01_software/pc/pqtools/images/10.png), and the window shown in Figure 3-9 will pop up.
 
@@ -324,9 +324,9 @@ In the "Save Path" section, select the location to save the image file.
 - To capture a single frame image, simply click the "Capture" button.
 - To capture multiple frames, set the number of frames to be captured in the "Snapshot Num" option and configure the "Output as One File" option (checked or unchecked) based on the desired number of output files. After completing the above configuration, click the "Capture" button to start capturing.
 
-### 3.5 Import and Export Parameters
+### Import and Export Parameters
 
-#### 3.5.1 Import Parameters
+#### Import Parameters
 
 The tool supports importing parameter files in standard XML and JSON formats by default, divided into calibration parameters and tuning parameters, and supports local import on the PC.
 
@@ -338,7 +338,7 @@ Figure 3-10
 
 In the window shown in Figure 3-10, select the XML or JSON parameter file you need to import, and click the "Open" button to start importing.
 
-#### 3.5.2 Export Parameters
+#### Export Parameters
 
 The tool's default export method will summarize the online debugging parameters into a JSON file for storage.
 

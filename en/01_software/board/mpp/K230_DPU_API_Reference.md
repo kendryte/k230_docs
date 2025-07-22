@@ -50,49 +50,49 @@ This document (this guide) is mainly intended for the following personnel:
 | Document Version | Modification Description                                                                 | Author | Date       |
 |------------------|------------------------------------------------------------------------------------------|----------|------------|
 | v1.0             | Initial version                                                                          | Liu Suntao | 2023/3/30  |
-| v1.1             | Added the interface function for setting the reference image after offline processing [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image); added module debugging information. | Liu Suntao | 2023/4/20  |
+| v1.1             | Added the interface function for setting the reference image after offline processing [kd_mpi_dpu_set_processed_ref_image](#kd_mpi_dpu_set_processed_ref_image); added module debugging information. | Liu Suntao | 2023/4/20  |
 | V1.2             | Added configurable buffer functionality                                                  | Liu Suntao | 2023/5/31  |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 The DPU is mainly responsible for the depth calculation of 3D structured light, providing depth information for 3D facial recognition.
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 Binding Mode Call Process
+#### Binding Mode Call Process
 
 ![Diagram](../../../../zh/01_software/board/mpp/images/b85b814d3911bf8b3802ba97751ff941.png)
 
-#### 1.2.2 Non-Binding Mode Call Process
+#### Non-Binding Mode Call Process
 
 ![Diagram](../../../../zh/01_software/board/mpp/images/dca3cfa887a526c493abced31b59afd2.png)
 
-## 2. API Reference
+## API Reference
 
-### 2.1 DPU Usage
+### DPU Usage
 
 This module provides the following APIs:
 
-- [kd_mpi_dpu_init](#211-kd_mpi_dpu_init)
-- [kd_mpi_dpu_delete](#212-kd_mpi_dpu_delete)
-- [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
-- [kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
-- [kd_mpi_dpu_get_dev_attr](#215-kd_mpi_dpu_get_dev_attr)
-- [kd_mpi_dpu_set_ref_image](#216-kd_mpi_dpu_set_ref_image)
-- [kd_mpi_dpu_set_processed_ref_image](#217-kd_mpi_dpu_set_processed_ref_image)
-- [kd_mpi_dpu_set_template_image](#218-kd_mpi_dpu_set_template_image)
-- [kd_mpi_dpu_start_dev](#219-kd_mpi_dpu_start_dev)
-- [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
-- [kd_mpi_dpu_get_chn_attr](#2111-kd_mpi_dpu_get_chn_attr)
-- [kd_mpi_dpu_start_chn](#2112-kd_mpi_dpu_start_chn)
-- [kd_mpi_dpu_stop_chn](#2113-kd_mpi_dpu_stop_chn)
-- [kd_mpi_dpu_send_frame](#2114-kd_mpi_dpu_send_frame)
-- [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
-- [kd_mpi_dpu_release_frame](#2116-kd_mpi_dpu_release_frame)
+- [kd_mpi_dpu_init](#kd_mpi_dpu_init)
+- [kd_mpi_dpu_delete](#kd_mpi_dpu_delete)
+- [kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
+- [kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
+- [kd_mpi_dpu_get_dev_attr](#kd_mpi_dpu_get_dev_attr)
+- [kd_mpi_dpu_set_ref_image](#kd_mpi_dpu_set_ref_image)
+- [kd_mpi_dpu_set_processed_ref_image](#kd_mpi_dpu_set_processed_ref_image)
+- [kd_mpi_dpu_set_template_image](#kd_mpi_dpu_set_template_image)
+- [kd_mpi_dpu_start_dev](#kd_mpi_dpu_start_dev)
+- [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
+- [kd_mpi_dpu_get_chn_attr](#kd_mpi_dpu_get_chn_attr)
+- [kd_mpi_dpu_start_chn](#kd_mpi_dpu_start_chn)
+- [kd_mpi_dpu_stop_chn](#kd_mpi_dpu_stop_chn)
+- [kd_mpi_dpu_send_frame](#kd_mpi_dpu_send_frame)
+- [kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
+- [kd_mpi_dpu_release_frame](#kd_mpi_dpu_release_frame)
 
-#### 2.1.1 kd_mpi_dpu_init
+#### kd_mpi_dpu_init
 
 **Description**:
 
@@ -136,9 +136,9 @@ None
 
 **Related Topics**:
 
-[k_dpu_init_t](#311-k_dpu_init_t)
+[k_dpu_init_t](#k_dpu_init_t)
 
-#### 2.1.2 kd_mpi_dpu_delete
+#### kd_mpi_dpu_delete
 
 **Description**:
 
@@ -184,7 +184,7 @@ None
 
 None
 
-#### 2.1.3 kd_mpi_dpu_parse_file
+#### kd_mpi_dpu_parse_file
 
 **Description**:
 
@@ -234,9 +234,9 @@ None
 
 **Related Topics**:
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
 
-#### 2.1.4 kd_mpi_dpu_set_dev_attr
+#### kd_mpi_dpu_set_dev_attr
 
 **Description**:
 
@@ -281,9 +281,9 @@ None
 
 **Related Topics**:
 
-[k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
+[k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
 
-#### 2.1.5 kd_mpi_dpu_get_dev_attr
+#### kd_mpi_dpu_get_dev_attr
 
 **Description**:
 
@@ -327,9 +327,9 @@ None
 
 **Related Topics**:
 
-[k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
+[k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
 
-#### 2.1.6 kd_mpi_dpu_set_ref_image
+#### kd_mpi_dpu_set_ref_image
 
 **Description**:
 
@@ -375,7 +375,7 @@ None
 
 None
 
-#### 2.1.7 kd_mpi_dpu_set_processed_ref_image
+#### kd_mpi_dpu_set_processed_ref_image
 
 **Description**:
 
@@ -411,7 +411,7 @@ None
 
 **Notes**:
 
-- This function should be called after configuring DPU device attributes to configure the reference image. The configured reference image should be pre-processed offline, and calling this function can save about 70ms compared to [kd_mpi_dpu_set_ref_image](#216-kd_mpi_dpu_set_ref_image).
+- This function should be called after configuring DPU device attributes to configure the reference image. The configured reference image should be pre-processed offline, and calling this function can save about 70ms compared to [kd_mpi_dpu_set_ref_image](#kd_mpi_dpu_set_ref_image).
 
 **Example**:
 
@@ -421,7 +421,7 @@ None
 
 None
 
-#### 2.1.8 kd_mpi_dpu_set_template_image
+#### kd_mpi_dpu_set_template_image
 
 **Description**:
 
@@ -458,7 +458,7 @@ None
 **Notes**:
 
 - This function should be called after configuring DPU device attributes to configure the template image.
-- temp_space should be passed as a parameter during [kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file) to obtain template image information from the configuration file.
+- temp_space should be passed as a parameter during [kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file) to obtain template image information from the configuration file.
 
 **Example**:
 
@@ -466,10 +466,10 @@ None
 
 **Related Topics**:
 
-[k_dpu_user_space_t](#315-k_dpu_user_space_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[k_dpu_user_space_t](#k_dpu_user_space_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 2.1.9 kd_mpi_dpu_start_dev
+#### kd_mpi_dpu_start_dev
 
 **Description**:
 
@@ -515,7 +515,7 @@ None
 
 None
 
-#### 2.1.10 kd_mpi_dpu_set_chn_attr
+#### kd_mpi_dpu_set_chn_attr
 
 **Description**:
 
@@ -553,7 +553,7 @@ None
 **Notes**:
 
 - The current DPU device has two channels: 0 and 1. Configure `lcn_attr->chn_num` and `ir_attr->chn_num` (if the infrared image channel is enabled) to specify the input and output channels for the speckle and infrared images, respectively.
-- After initially starting the DPU device [kd_mpi_dpu_start_dev](#219-kd_mpi_dpu_start_dev), this function should be called to configure channel attributes. The speckle image channel must be configured, while the infrared image channel can be left unconfigured (set to NULL) if it is not enabled.
+- After initially starting the DPU device [kd_mpi_dpu_start_dev](#kd_mpi_dpu_start_dev), this function should be called to configure channel attributes. The speckle image channel must be configured, while the infrared image channel can be left unconfigured (set to NULL) if it is not enabled.
 - During operation, if only one channel's attributes need to be changed, only the structure for that channel needs to be passed in, and the other channel's parameter can be NULL. Both channels' parameters can also be passed in simultaneously. If both channels' parameters are NULL, the configuration will not take effect.
 
 **Example**:
@@ -562,10 +562,10 @@ None
 
 **Related Topics**:
 
-[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
+[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
 
-#### 2.1.11 kd_mpi_dpu_get_chn_attr
+#### kd_mpi_dpu_get_chn_attr
 
 **Description**:
 
@@ -610,10 +610,10 @@ None
 
 **Related Topics**:
 
-[k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-[k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
+[k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+[k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
 
-#### 2.1.12 kd_mpi_dpu_start_chn
+#### kd_mpi_dpu_start_chn
 
 **Description**:
 
@@ -659,7 +659,7 @@ None
 
 None
 
-#### 2.1.13 kd_mpi_dpu_stop_chn
+#### kd_mpi_dpu_stop_chn
 
 **Description**:
 
@@ -705,7 +705,7 @@ None
 
 None
 
-#### 2.1.14 kd_mpi_dpu_send_frame
+#### kd_mpi_dpu_send_frame
 
 **Description**:
 
@@ -723,7 +723,7 @@ k_s32 kd_mpi_dpu_send_frame(k_u32 chn_num, k_u64 addr, k_s32 s32_millisec);
 |----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
 | chn_num        | Channel number                                                                                                                                                                                     | Input        |
 | addr           | Physical address of the data to be sent                                                                                                                                                            | Input        |
-| s32_millisec   | Wait time. When this parameter is set to -1, it is blocking mode, and it will return only after the sending is successful; when this parameter is set to 0, it is non-blocking mode, and it will return immediately if the sending is successful, and return other values immediately if the sending fails. For detailed failure information, refer to [DPU error codes](#41-dpu-error-codes). | Input        |
+| s32_millisec   | Wait time. When this parameter is set to -1, it is blocking mode, and it will return only after the sending is successful; when this parameter is set to 0, it is non-blocking mode, and it will return immediately if the sending is successful, and return other values immediately if the sending fails. For detailed failure information, refer to [DPU error codes](#dpu-error-codes). | Input        |
 
 **Return Value**:
 
@@ -753,7 +753,7 @@ None
 
 None
 
-#### 2.1.15 kd_mpi_dpu_get_frame
+#### kd_mpi_dpu_get_frame
 
 **Description**:
 
@@ -770,8 +770,8 @@ k_s32 kd_mpi_dpu_get_frame(k_u32 chn_num, k_dpu_chn_result_u *result, k_s32 s32_
 | Parameter Name | Description                                                                                                                                                                                                     | Input/Output |
 |----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
 | chn_num        | Channel number                                                                                                                                                                                                  | Input        |
-| result         | DPU output result union, its member variables are `k_dpu_chn_lcn_result_t` and `k_dpu_chn_ir_result_t`. The user should decide which member to use as the output result for this channel based on the configuration in [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr). | Output       |
-| s32_millisec   | Wait time. When this parameter is set to -1, it is blocking mode, and it will return only after the fetching is successful; when this parameter is set to 0, it is non-blocking mode, and it will return immediately if the fetching is successful, and return other values immediately if the fetching fails. For detailed failure information, refer to [DPU error codes](#41-dpu-error-codes).  | Input        |
+| result         | DPU output result union, its member variables are `k_dpu_chn_lcn_result_t` and `k_dpu_chn_ir_result_t`. The user should decide which member to use as the output result for this channel based on the configuration in [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr). | Output       |
+| s32_millisec   | Wait time. When this parameter is set to -1, it is blocking mode, and it will return only after the fetching is successful; when this parameter is set to 0, it is non-blocking mode, and it will return immediately if the fetching is successful, and return other values immediately if the fetching fails. For detailed failure information, refer to [DPU error codes](#dpu-error-codes).  | Input        |
 
 **Return Value**:
 
@@ -799,15 +799,15 @@ None
 
 **Related Topics**:
 
-[k_dpu_chn_result_u](#319-k_dpu_chn_result_u)
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-[k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-[k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-[k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
+[k_dpu_chn_result_u](#k_dpu_chn_result_u)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[k_dpu_disp_out_t](#k_dpu_disp_out_t)
+[k_dpu_depth_out_t](#k_dpu_depth_out_t)
+[k_dpu_ir_out_t](#k_dpu_ir_out_t)
+[k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
 
-#### 2.1.16 kd_mpi_dpu_release_frame
+#### kd_mpi_dpu_release_frame
 
 **Description**:
 
@@ -839,7 +839,7 @@ None
 
 **Notes**:
 
-- This function will release the data in the buffer sequentially, with the earliest generated result being released first. The DPU buffer is currently set to 3, so please release the result obtained from [kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame) as soon as possible after use.
+- This function will release the data in the buffer sequentially, with the earliest generated result being released first. The DPU buffer is currently set to 3, so please release the result obtained from [kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame) as soon as possible after use.
 
 **Example**:
 
@@ -849,29 +849,29 @@ None
 
 None
 
-## 3. Data Types
+## Data Types
 
-### 3.1 public data types
+### public data types
 
 This module has the following data types:
 
-- [k_dpu_init_t](#311-k_dpu_init_t)
-- [k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-- [k_dpu_lcn_param_t](#313-k_dpu_lcn_param_t)
-- [k_dpu_ir_param_t](#314-k_dpu_ir_param_t)
-- [k_dpu_user_space_t](#315-k_dpu_user_space_t)
-- [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t)
-- [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t)
-- [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t)
-- [k_dpu_chn_result_u](#319-k_dpu_chn_result_u)
-- [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-- [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-- [k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-- [k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-- [k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-- [k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
+- [k_dpu_init_t](#k_dpu_init_t)
+- [k_dpu_dev_param_t](#k_dpu_dev_param_t)
+- [k_dpu_lcn_param_t](#k_dpu_lcn_param_t)
+- [k_dpu_ir_param_t](#k_dpu_ir_param_t)
+- [k_dpu_user_space_t](#k_dpu_user_space_t)
+- [k_dpu_dev_attr_t](#k_dpu_dev_attr_t)
+- [k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t)
+- [k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t)
+- [k_dpu_chn_result_u](#k_dpu_chn_result_u)
+- [k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+- [k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+- [k_dpu_disp_out_t](#k_dpu_disp_out_t)
+- [k_dpu_depth_out_t](#k_dpu_depth_out_t)
+- [k_dpu_ir_out_t](#k_dpu_ir_out_t)
+- [k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
 
-#### 3.1.1 k_dpu_init_t
+#### k_dpu_init_t
 
 **Description**:
 
@@ -899,9 +899,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_init](#211-kd_mpi_dpu_init)
+[kd_mpi_dpu_init](#kd_mpi_dpu_init)
 
-#### 3.1.2 k_dpu_dev_param_t
+#### k_dpu_dev_param_t
 
 **Description**:
 
@@ -930,10 +930,10 @@ typedef struct
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_long_parameter_t](#321-k_dpu_long_parameter_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[k_dpu_long_parameter_t](#k_dpu_long_parameter_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.3 k_dpu_lcn_param_t
+#### k_dpu_lcn_param_t
 
 **Description**:
 
@@ -970,9 +970,9 @@ typedef struct {
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.4 k_dpu_ir_param_t
+#### k_dpu_ir_param_t
 
 **Description**:
 
@@ -1002,9 +1002,9 @@ typedef struct {
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.5 k_dpu_user_space_t
+#### k_dpu_user_space_t
 
 **Description**:
 
@@ -1036,9 +1036,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
 
-#### 3.1.6 k_dpu_dev_attr_t
+#### k_dpu_dev_attr_t
 
 **Description**:
 
@@ -1074,10 +1074,10 @@ typedef struct {
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
 
-#### 3.1.7 k_dpu_chn_lcn_attr_t
+#### k_dpu_chn_lcn_attr_t
 
 **Description**:
 
@@ -1107,9 +1107,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
+[kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
 
-#### 3.1.8 k_dpu_chn_ir_attr_t
+#### k_dpu_chn_ir_attr_t
 
 **Description**:
 
@@ -1139,9 +1139,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr)
+[kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr)
 
-#### 3.1.9 k_dpu_chn_result_u
+#### k_dpu_chn_result_u
 
 **Description**:
 
@@ -1160,20 +1160,20 @@ typedef union {
 
 | Member Name   | Description                                                                        |
 |---------------|------------------------------------------------------------------------------------|
-| lcn_result    | Speckle image channel output result structure. [k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t) |
-| ir_result     | Infrared image channel output result structure. [k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)   |
+| lcn_result    | Speckle image channel output result structure. [k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t) |
+| ir_result     | Infrared image channel output result structure. [k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)   |
 
 **Notes**:
 
-- Users should choose which member to use as the output result based on their own configuration. In [kd_mpi_dpu_set_chn_attr](#2110-kd_mpi_dpu_set_chn_attr), users configure the mapping between channel numbers and channel types.
+- Users should choose which member to use as the output result based on their own configuration. In [kd_mpi_dpu_set_chn_attr](#kd_mpi_dpu_set_chn_attr), users configure the mapping between channel numbers and channel types.
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.10 k_dpu_chn_lcn_result_t
+#### k_dpu_chn_lcn_result_t
 
 **Description**:
 
@@ -1200,7 +1200,7 @@ typedef struct {
 | disp_out     | Disparity image output result structure.                                                                                                                                                                                       |
 | depth_out    | Depth image output result structure.                                                                                                                                                                                           |
 | qlt_out      | Quality check output result structure. Includes quality check results, coarse and fine column disparity (initial resolution) results, and initial row-column disparity results.                                               |
-| flag         | This structure is used to mark which frame the user-configured parameters take effect. The structure includes the param_valid variables from [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t), and [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t). |
+| flag         | This structure is used to mark which frame the user-configured parameters take effect. The structure includes the param_valid variables from [k_dpu_dev_attr_t](#k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t), and [k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t). |
 
 **Notes**:
 
@@ -1208,12 +1208,12 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_disp_out_t](#3112-k_dpu_disp_out_t)
-[k_dpu_depth_out_t](#3113-k_dpu_depth_out_t)
-[k_dpu_qlt_out_t](#3115-k_dpu_qlt_out_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_disp_out_t](#k_dpu_disp_out_t)
+[k_dpu_depth_out_t](#k_dpu_depth_out_t)
+[k_dpu_qlt_out_t](#k_dpu_qlt_out_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.11 k_dpu_chn_ir_result_t
+#### k_dpu_chn_ir_result_t
 
 **Description**:
 
@@ -1236,7 +1236,7 @@ typedef struct {
 |-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | pts         | Timestamp, valid in binding mode.                                                                                                                                                                                              |
 | ir_out      | Infrared image output result structure.                                                                                                                                                                                        |
-| flag        | This structure is used to mark which frame the user-configured parameters take effect. The structure includes the param_valid variables from [k_dpu_dev_attr_t](#316-k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#317-k_dpu_chn_lcn_attr_t), and [k_dpu_chn_ir_attr_t](#318-k_dpu_chn_ir_attr_t). |
+| flag        | This structure is used to mark which frame the user-configured parameters take effect. The structure includes the param_valid variables from [k_dpu_dev_attr_t](#k_dpu_dev_attr_t), [k_dpu_chn_lcn_attr_t](#k_dpu_chn_lcn_attr_t), and [k_dpu_chn_ir_attr_t](#k_dpu_chn_ir_attr_t). |
 
 **Notes**:
 
@@ -1244,10 +1244,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_ir_out_t](#3114-k_dpu_ir_out_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_ir_out_t](#k_dpu_ir_out_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.12 k_dpu_disp_out_t
+#### k_dpu_disp_out_t
 
 **Description**:
 
@@ -1279,10 +1279,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.13 k_dpu_depth_out_t
+#### k_dpu_depth_out_t
 
 **Description**:
 
@@ -1318,10 +1318,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.14 k_dpu_ir_out_t
+#### k_dpu_ir_out_t
 
 **Description**:
 
@@ -1353,10 +1353,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_chn_ir_result_t](#3111-k_dpu_chn_ir_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_ir_result_t](#k_dpu_chn_ir_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-#### 3.1.15 k_dpu_qlt_out_t
+#### k_dpu_qlt_out_t
 
 **Description**:
 
@@ -1400,17 +1400,17 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_chn_lcn_result_t](#3110-k_dpu_chn_lcn_result_t)
-[kd_mpi_dpu_get_frame](#2115-kd_mpi_dpu_get_frame)
+[k_dpu_chn_lcn_result_t](#k_dpu_chn_lcn_result_t)
+[kd_mpi_dpu_get_frame](#kd_mpi_dpu_get_frame)
 
-### 3.2 Long and Short Cycle Parameter Types
+### Long and Short Cycle Parameter Types
 
 This module includes the following data types:
 
-- [k_dpu_long_parameter_t](#321-k_dpu_long_parameter_t)
-- [k_dpu_short_parameter_t](#322-k_dpu_short_parameter_t)
+- [k_dpu_long_parameter_t](#k_dpu_long_parameter_t)
+- [k_dpu_short_parameter_t](#k_dpu_short_parameter_t)
 
-#### 3.2.1 k_dpu_long_parameter_t
+#### k_dpu_long_parameter_t
 
 **Description**:
 
@@ -1426,11 +1426,11 @@ The long cycle parameter has too many members to display here. Refer to the stru
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_parse_file](#213-kd_mpi_dpu_parse_file)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_parse_file](#kd_mpi_dpu_parse_file)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
 
-#### 3.2.2 k_dpu_short_parameter_t
+#### k_dpu_short_parameter_t
 
 **Description**:
 
@@ -1446,13 +1446,13 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dpu_dev_param_t](#312-k_dpu_dev_param_t)
-[kd_mpi_dpu_set_dev_attr](#214-kd_mpi_dpu_set_dev_attr)
-[kd_mpi_dpu_get_dev_attr](#215-kd_mpi_dpu_get_dev_attr)
+[k_dpu_dev_param_t](#k_dpu_dev_param_t)
+[kd_mpi_dpu_set_dev_attr](#kd_mpi_dpu_set_dev_attr)
+[kd_mpi_dpu_get_dev_attr](#kd_mpi_dpu_get_dev_attr)
 
-## 4. Error Codes
+## Error Codes
 
-### 4.1 DPU Error Codes
+### DPU Error Codes
 
 Table 41
 
@@ -1475,9 +1475,9 @@ Table 41
 | 0xa00118011  | K_ERR_DPU_BADADDR          | Invalid address                |
 | 0xa00118012  | K_ERR_DPU_BUSY             | DPU is busy                    |
 
-## 5. Debug Information
+## Debug Information
 
-### 5.1 Overview
+### Overview
 
 Debug information uses the proc file system to reflect the current running state of the system in real-time. The recorded information can be used for problem localization and analysis.
 
@@ -1490,8 +1490,6 @@ Debug information uses the proc file system to reflect the current running state
 | File Name  | Description                   |
 |------------|-------------------------------|
 | umap/dpu   | Records some information about the current DPU module |
-
-### 5.2 Debug Information
 
 ### Debug Information
 
@@ -1558,24 +1556,24 @@ from open to close, dpu has send 0 frames
 
 Debug information needs to be viewed during DPU operation. After DPU stops running, all current information will be reset to zero.
 
-## 6. Demo Description
+## Demo Description
 
-### 6.1 DPU Demo Introduction
+### DPU Demo Introduction
 
 The DPU demo implements both binding and non-binding modes. In the msh, input `/bin/sample_dpu.elf` to execute the non-binding mode, which ends after running ten frames. Input `/bin/sample_dpu.elf BOUND` to execute the binding mode, where VVI simulates the upper layer continuously inputting data to the DPU, and the DPU displays information after computation.
 
-### 6.2 Feature Description
+### Feature Description
 
 The demo includes functions such as initializing and deleting the DPU, parsing parameters from the configuration file, configuring device attributes, configuring channel attributes, starting and pausing the device, starting and pausing the channel, input and output data, and pipeline binding.
 
-#### 6.2.1 Non-binding Mode
+#### Non-binding Mode
 
 By calling the API, the DPU device is initialized, parameters are parsed from the configuration file, device attributes are configured based on the parsed parameters, the API is called to set the reference image and template image, the DPU device is started, speckle and infrared image channel attributes are configured, the channel is started, ten frames are looped through and the results are compared, then the channel is stopped, the device is stopped, and the device is deleted.
 
-#### 6.2.2 Binding Mode
+#### Binding Mode
 
 By calling the API, the DPU device is initialized, parameters are parsed from the configuration file, VVI and DPU channels are bound, device attributes are configured based on the parsed parameters, the API is called to set the reference image and template image, the DPU device is started, speckle and infrared image channel attributes are configured, the DPU channel is started, the VVI channel is started, and VVI continuously inputs data to the DPU as the simulated upper layer. The user inputs 'e' to stop the channel and device.
 
-#### 6.2.3 Compilation and Execution
+#### Compilation and Execution
 
 Refer to the document "K230 SDK Demo Usage Guide" for compilation and execution.

@@ -58,9 +58,9 @@ This document (this guide) is mainly intended for the following personnel:
 | V1.7             | Added boot medium partition chapter, adjusted image burning chapter | Wang Jianxin | 2023-07-05 |
 | V1.8             | Added CanMV-K230 motherboard information | Chen Haibin | 2023-10-11 |
 
-## 1. Overview
+## Overview
 
-### 1.1 SDK Software Architecture Overview
+### SDK Software Architecture Overview
 
 The K230 SDK is a software development kit for the K230 development board, containing the source code, toolchain, and other related resources needed for dual-core heterogeneous system development based on Linux & RT-smart.
 
@@ -70,9 +70,9 @@ The K230 SDK software architecture is shown in Figure 1-1:
 
 Figure 1-1 K230 SDK Software Architecture Diagram
 
-## 2. Development Environment Setup
+## Development Environment Setup
 
-### 2.1 Supported Hardware
+### Supported Hardware
 
 For hardware information on the K230 platform, refer to the directory: [00_hardware](../../00_hardware). The hardware information documents for different motherboards are as follows:
 
@@ -84,9 +84,9 @@ For hardware information on the K230 platform, refer to the directory: [00_hardw
 | CanMV-K230            | For specific hardware information, refer to: [00_hardware](../../../zh/00_hardware/CanMV_K230) |
 | CanMV-K230D-Zero      |                              |
 
-### 2.2 Development Environment Setup
+### Development Environment Setup
 
-#### 2.2.1 Compilation Environment
+#### Compilation Environment
 
 | Host Environment              | Description                                               |
 |-------------------------------|-----------------------------------------------------------|
@@ -99,15 +99,15 @@ The Docker image used by the SDK is based on Ubuntu 20.04. If not using the Dock
 
 The K230 SDK has not been verified in other Linux versions of host environments, and it is not guaranteed that the SDK can be compiled in other environments.
 
-#### 2.2.2 SDK Development Package
+#### SDK Development Package
 
 The K230 SDK is released in the form of a compressed package, or you can download it using the `git clone https://github.com/kendryte/k230_sdk` command.
 
-### 2.3 Board Preparation
+### Board Preparation
 
 This section takes the K230-USIP-LP3-EVB and CanMV-K230 motherboards as examples.
 
-#### 2.3.1 CanMV-K230
+#### CanMV-K230
 
 Please prepare the following hardware:
 
@@ -122,7 +122,7 @@ Note: The CanMV-K230 motherboard shares a Type-C port for power and serial commu
 
 ![Diagram](../../../zh/01_software/board/images/canmv_power_001.png)
 
-#### 2.3.2 K230-USIP-LP3-EVB
+#### K230-USIP-LP3-EVB
 
 Please prepare the following hardware:
 
@@ -136,7 +136,7 @@ Note: The recommended model for the Type-C USB to Ethernet adapter is `https://i
 
 Refer to the "K230 DEMO BOARD Resource Usage Instructions" to prepare the development board.
 
-#### 2.3.3 Serial Port
+#### Serial Port
 
 The K230 motherboard provides two debug serial ports via USB. To use the debug serial ports on Windows, you need to install the USB to serial driver. The driver download link is as follows:
 
@@ -152,13 +152,13 @@ In the example above, `COM47` is the debug serial port for the small core, and `
 
 Serial port baud rate settings: `115200 8N1`
 
-## 3. SDK Installation Preparation
+## SDK Installation Preparation
 
-### 3.1 Install SDK
+### Install SDK
 
 The K230 SDK development package is released in the form of a compressed package for use in a Linux environment.
 
-### 3.2 SDK Directory Structure
+### SDK Directory Structure
 
 The K230 SDK directory structure is shown below:
 
@@ -221,17 +221,17 @@ The purpose of each directory is described as follows:
 - `tools`: Stores various tools, scripts, etc., such as `kconfig`, `doxygen`, `dockerfile`, etc.
 - `board`: Environment variables, image configuration files, file systems, etc.
 
-## 4. SDK Compilation
+## SDK Compilation
 
-### 4.1 SDK Compilation Introduction
+### SDK Compilation Introduction
 
 The K230 SDK supports one-click compilation of large and small core operating systems and common components, generating image files that can be burned for deployment to the development board for startup and operation. The username of the Linux system on the device is root without a password.
 
-### 4.2 SDK Configuration
+### SDK Configuration
 
 The K230 SDK uses Kconfig as the SDK configuration interface, and the default board-level configurations supported are placed in the configs directory.
 
-#### 4.2.1 Some Configuration File Descriptions
+#### Some Configuration File Descriptions
 
 `k230_evb_defconfig`: Default SDK configuration file based on K230 USIP LP3 EVB.
 
@@ -257,9 +257,9 @@ The K230 SDK uses Kconfig as the SDK configuration interface, and the default bo
 
 `k230d_canmv_only_rtt_defconfig`: RT-Thread system configuration file based on CanMV-K230-Zero board.
 
-### 4.3 Compile SDK
+### Compile SDK
 
-#### 4.3.1 Compilation Steps
+#### Compilation Steps
 
 Note: The commands in this section are for reference only. Please replace the file names according to the actual situation.
 
@@ -305,7 +305,7 @@ make CONF=k230_evb_defconfig  # Compile image for K230-USIP-LP3-EVB board
 Note:
 The SDK does not support multi-process compilation, so do not add multi-process compilation parameters like `-j32`.
 
-#### 4.3.2 Compilation Output
+#### Compilation Output
 
 After the compilation is complete, you can find the output products in the `output/xx_defconfig/images` directory. Example:
 
@@ -326,7 +326,7 @@ The compilation output for the large core system is placed in the `images/big-co
 
 The compilation output for the small core system is placed in the `images/little-core` directory.
 
-#### 4.3.3 Non-Quick Boot Image
+#### Non-Quick Boot Image
 
 By default, the SDK compiles a quick boot image (U-Boot directly starts the system and does not enter the U-Boot command line). If you need to enter the U-Boot command line, refer to the following to disable the `CONFIG_QUICK_BOOT` configuration:
 
@@ -334,26 +334,26 @@ In the SDK main directory, execute `make menuconfig`, select `board configuratio
 
 To convert a non-quick boot system to a quick boot system: enter the U-Boot command line and execute `setenv quick_boot true; saveenv;`.
 
-#### 4.3.4 Secure Image
+#### Secure Image
 
 By default, the SDK does not generate secure images. If secure images are needed, refer to the following to add the `CONFIG_GEN_SECURITY_IMG` configuration:
 
 In the SDK main directory, execute `make menuconfig`, select `board configuration`, and check the `create security image` option.
 
-#### 4.3.5 Debug Image
+#### Debug Image
 
 By default, the SDK generates a release image. If a debug image is needed, refer to the following to add the `CONFIG_BUILD_DEBUG_VER` configuration:
 
 In the SDK main directory, execute `make menuconfig`, select `build debug/release version`, and check the `debug` option.
 
-## 5. SDK Image Burning
+## SDK Image Burning
 
 Depending on the hardware characteristics and software requirements of different boards, choose the supported image burning method.
 > The CanMV-K230 board only supports SD card image booting.
 
-### 5.1 SD Card Image Burning
+### SD Card Image Burning
 
-#### 5.1.1 Burning on Ubuntu
+#### Burning on Ubuntu
 
 Before inserting the SD card into the host, enter:
 
@@ -373,7 +373,7 @@ Assuming `/dev/sdc` is the SD card device node, execute the following command to
 
 Note: `sysimage-sdcard.img` can be the `sysimage-sdcard.img` file in the `images` directory or the decompressed file of the `sysimage-sdcard_aes.img.gz`, `sysimage-sdcard.img.gz`, or `sysimage-sdcard_sm.img.gz` files.
 
-#### 5.1.2 Burning on Windows
+#### Burning on Windows
 
 On Windows, you can use the Rufus tool to burn the TF card (Rufus tool download link: `http://rufus.ie/downloads/`).
 
@@ -386,9 +386,9 @@ On Windows, you can use the Rufus tool to burn the TF card (Rufus tool download 
 ![rufus-warning](../../../zh/images/rufus_warning.png)
 ![rufus-finish](../../../zh/images/rufus_finish.png)
 
-### 5.2 eMMC Image Burning Reference
+### eMMC Image Burning Reference
 
-#### 5.2.1 Burning eMMC on Linux
+#### Burning eMMC on Linux
 
 1) Download the compressed image package to the SD card.
 Boot Linux from the SD card. In Linux, you can refer to the following commands to download the compressed image package to the SD card:
@@ -402,7 +402,7 @@ scp wangjianxin@10.10.1.94:/home/wangjianxin/k230_sdk/output/k230_evb_defconfig/
 `gunzip sysimage-sdcard.img.gz -c > /dev/mmcblk0`
 1) Switch to eMMC boot and restart the board.
 
-#### 5.2.2 Burning eMMC in U-Boot
+#### Burning eMMC in U-Boot
 
 1) Download the `sysimage-sdcard.img.gz` image to memory:
 
@@ -419,9 +419,9 @@ gzwrite mmc 0 0x${fileaddr} 0x${filesize};
 
 1) Restart the board.
 
-### 5.3 Spinor Image Burning Reference
+### Spinor Image Burning Reference
 
-#### 5.3.1 Burning in U-Boot
+#### Burning in U-Boot
 
 1) Download the `sysimage-spinor32m.img` image to memory:
 
@@ -438,7 +438,7 @@ sf probe 0:0; sf erase 0 0x2000000; sf write 0x$fileaddr 0 0x$filesize; sf remov
 
 1) Restart the board.
 
-#### 5.3.2 Burning Spinor on Linux
+#### Burning Spinor on Linux
 
 1) Download the spinor image `sysimage-spinor32m.img` to the SD card.
 
@@ -461,13 +461,13 @@ Verifying data: 32512k/32512k (100%)
 
 1) Switch to SPI NOR boot and restart the board.
 
-#### 5.3.3 Spinor Image Description
+#### Spinor Image Description
 
 Due to the small size of the spinor flash, Linux has removed ko files and RT-Thread has removed some demo programs.
 
-### 5.4 Spinand Image Burning Reference
+### Spinand Image Burning Reference
 
-#### 5.4.1 Burning in U-Boot
+#### Burning in U-Boot
 
 1) Download the `sysimage-spinand32m.img` image to memory:
 
@@ -479,11 +479,11 @@ Due to the small size of the spinor flash, Linux has removed ko files and RT-Thr
 
 1) Restart the board.
 
-## 6. SDK Boot Medium Partition and Modification
+## SDK Boot Medium Partition and Modification
 
-### 6.1 SPI NOR
+### SPI NOR
 
-#### 6.1.1 Default SPI NOR Partition
+#### Default SPI NOR Partition
 
 ![image-spi_nor_default_part](../../../zh/01_software/board/images/image-spi_nor_default_part.png)
 
@@ -503,7 +503,7 @@ Due to the small size of the spinor flash, Linux has removed ko files and RT-Thr
 | Linux             | 0xfc0000  | 0x700000 | 7      | 7MB     |
 | Rootfs            | 0x16c0000 | 0xb00000 | 13     | 13MB    |
 
-#### 6.1.2 Partition Modification and Implementation Description
+#### Partition Modification and Implementation Description
 
 In the SDK main directory, execute `make menuconfig` ---> `storage configurations` ---> `spi nor partition config` to modify the partition (interface shown below). After modification, execute `make build-image`.
 
@@ -597,7 +597,7 @@ Finally, `genimage` will parse the `board/common/gen_image_cfg/genimage-spinor.c
 genimage --rootpath little-core/rootfs/ --tmppath genimage.tmp --inputpath images --outputpath images --config board/common/gen_image_cfg/genimage-spinor.cfg
 ```
 
-### 6.1.3 Partition Data Format and Generation Process
+### Partition Data Format and Generation Process
 
 Currently, the data in parameter partitions such as quick boot parameters, facial features, calibration parameters, AI models, speckle, RTT, and RTApp are not encrypted. The format and generation process are as follows:
 
@@ -639,7 +639,7 @@ The memory locations for each parameter partition can be configured via `make me
 
 ![image-20230705153242437](../../../zh/01_software/board/images/image-memconfig_part.png)
 
-#### 6.1.4 Special Notes on RTApp and AI Model Partitions
+#### Special Notes on RTApp and AI Model Partitions
 
 The app in the RTApp partition cannot be executed repeatedly. The purpose of designing this partition is to save memory. After executing the app in this partition once, the memory may be released and cannot be executed again.
 
@@ -658,13 +658,13 @@ for f in ${all_kmode};
     done
 ```
 
-#### 6.1.5 Verified SPI NOR Models
+#### Verified SPI NOR Models
 
 - gd25lx256e
 
-### 6.2 SD and eMMC
+### SD and eMMC
 
-#### 6.2.1 Default SD and eMMC Partitions
+#### Default SD and eMMC Partitions
 
 ![image-20230705100321637](../../../zh/01_software/board/images/sd_emmc_default_partion.png)
 
@@ -681,13 +681,13 @@ for f in ${all_kmode};
 | Rootfs                     | 0x8000000 | 0x5000000  | 80     | 80MB  |
 | Test Partition             | 0xd000000 | 0x10000000 | 256    | 256MB |
 
-#### 6.2.2 SD and eMMC Partition Modification
+#### SD and eMMC Partition Modification
 
 If partitioning is required, modify the `board/common/gen_image_cfg/genimage-sdcard.cfg` file. After modification, execute `make build-image`.
 
-### 6.3 SPI NAND
+### SPI NAND
 
-#### 6.3 Default SPI NAND Partitions
+#### Default SPI NAND Partitions
 
 ![image-20230705111015174](../../../zh/01_software/board/images/image-spi_nand_part.png)
 
@@ -701,15 +701,15 @@ If partitioning is required, modify the `board/common/gen_image_cfg/genimage-sdc
 | Linux               | 0xa00000  | 0x700000 | 0xa00000  | 7      | 7MB     |
 | Rootfs              | 0x1100000 | 0xf00000 | 0x1100000 | 15     | 15MB    |
 
-#### 6.3.2 SPI NAND Partition Modification
+#### SPI NAND Partition Modification
 
 If partitioning is required, modify the `board/common/gen_image_cfg/genimage-spinand.cfg` file. After modification, execute `make build-image`.
 
-#### 6.3.4 Verified SPI NAND Models
+#### Verified SPI NAND Models
 
 - w25n01gw
 
-## 7. SDK Memory Configuration
+## SDK Memory Configuration
 
 Run `make menuconfig -> Memory configuration` under `k230_sdk` to configure the memory space used by each area. You can also directly compile `configs/k230_evb_defconfig` to modify. The descriptions of each area are as follows:
 
@@ -732,11 +732,11 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  # Isolation zone         Not con
 
 > The `CONFIG_MEM_LINUX_SYS_BASE` address needs to be 2MB aligned.
 
-## 8. SDK Board Debugging
+## SDK Board Debugging
 
 > The CanMV-K230 board's default debug port is a serial port. For debugging, please refer to the [SDK FAQ](../../../zh/03_other/K230_SDK常见问题解答_C.md).
 
-### 8.1 Preparation for Debugging
+### Preparation for Debugging
 
 1. Download the `T-Head-DebugServer` software and the "DebugServer User Guide v5.6" from T-Head's OCC platform `https://occ.t-head.cn/community/download`, and install the `T-Head-DebugServer` software on your PC following the "DebugServer User Guide v5.6".
 
@@ -748,7 +748,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  # Isolation zone         Not con
 
 ![图片包含 游戏机, 电缆, 电路 描述已自动生成](../../../zh/01_software/board/images/8e91f1cc85daee080e3de5f875542bc8.png)
 
-### 8.2 Debugging
+### Debugging
 
 1. Connect the CKLink, K230 EVB board, and PC as shown below, then power on the EVB.
 
@@ -759,13 +759,13 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  # Isolation zone         Not con
 1. On the server where the code is compiled, start `riscv64-unknown-linux-gnu-gdb` and execute the `target remote xx.xx.xx.xx:1025` command to connect to the board. Once connected, you can perform GDB debugging.
 ![文本 描述已自动生成](../../../zh/01_software/board/images/2fed09a9dbe48eeeb639b6f977861c77.png)
 
-## 9. SDK Boot
+## SDK Boot
 
 With the default compiled image, after burning it to the board, the large core will automatically run a facial detection program, and the display will show images captured by the camera. After booting, you can enter 'q' on the large core console to exit the program.
 
 > 1. If the EVB series board is not connected to the IMX335 camera, the auto-start program will report an error and exit automatically. Press Enter to return to the console.
 > 1. To disable the auto-start function of the large core, comment out the content in `k230_sdk/src/big/rt-smart/init.sh`.
 
-## 10. K230 Debian and Ubuntu Image Instructions
+## K230 Debian and Ubuntu Image Instructions
 
 For the image and build methods, refer to [K230_debian_ubuntu.md](../../../en/03_other/K230_debian_ubuntu.md).

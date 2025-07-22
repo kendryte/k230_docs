@@ -53,16 +53,16 @@ This document (this guide) is mainly intended for the following personnel:
 |------------------|-----------------------------------------------------------------|--------------|------------|
 | V1.0             | Initial version                                                 | Sun Xiaopeng | 2023/3/7   |
 | V1.1             | 1) Added support for i2s built-in codec 2) Added support for pdm single/dual channel 3) Added support for different sampling precision (16/24/32) for ai and ao 4) API interface unchanged, added parameter attributes, improved documentation. | Sun Xiaopeng | 2023/3/27  |
-| V1.1.1           | Added audio encoding and decoding API interfaces, added sound quality enhancement API interfaces [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr), and explanations. | Sun Xiaopeng/Cui Yan | 2023/4/12 |
-| V1.2             | Modified sound quality enhancement API interfaces [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr), added audio encoding and decoding mapi interface functions | Sun Xiaopeng/Cui Yan | 2023/4/27 |
+| V1.1.1           | Added audio encoding and decoding API interfaces, added sound quality enhancement API interfaces [kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr), and explanations. | Sun Xiaopeng/Cui Yan | 2023/4/12 |
+| V1.2             | Modified sound quality enhancement API interfaces [kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr), added audio encoding and decoding mapi interface functions | Sun Xiaopeng/Cui Yan | 2023/4/27 |
 | V1.3             | 1) Added built-in Audio Codec API interfaces                     | Sun Xiaopeng | 2023/5/10  |
-| v1.4             | 1) i2s supports single and dual channel input and output, modified [k_audio_i2s_attr](#3110-k_audio_i2s_attr) attributes, added snd_mode attribute. 2) Added built-in Audio Codec API interfaces: including volume acquisition and reset related interfaces: [k_acodec_get_gain_micl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)/[k_acodec_reset](#2510-k_acodec_reset) | Sun Xiaopeng | 2023/6/15 |
+| v1.4             | 1) i2s supports single and dual channel input and output, modified [k_audio_i2s_attr](#k_audio_i2s_attr) attributes, added snd_mode attribute. 2) Added built-in Audio Codec API interfaces: including volume acquisition and reset related interfaces: [k_acodec_get_gain_micl](#k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#k_acodec_get_dacr_volume)/[k_acodec_reset](#k_acodec_reset) | Sun Xiaopeng | 2023/6/15 |
 | V1.5             | 1) Added control for selecting single channel for audio input and output | Sun Xiaopeng | 2024/6/5   |
 | V1.6             | 1) Optimized audio 3A interface                                          | Sun Xiaopeng | 2024/11/4  |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 The audio module includes four sub-modules: audio input (ai), audio output (ao), audio encoding (aenc), and audio decoding (adec), as well as support for the built-in analog audio codec. The audio input module includes two types of audio interfaces, i2s and pdm, working with pdma for memory copying. It supports digital microphones (pdm/i2s) and analog audio codec (i2s) sound source input, with an internal analog audio codec that supports sound quality enhancement (VQE) processing: 3A (AEC echo cancellation, ANR noise reduction, AGC automatic gain control). The audio output module supports the i2s audio interface, working with pdma for memory copying, and can connect external data speakers or analog audio codecs for sound output. The audio encoding and decoding modules currently support G711 format audio encoding and decoding functions and support external codec registration.
 
@@ -70,9 +70,9 @@ The audio module is split into multiple sub-modules, with low-coupling data flow
 
 ![img](../../../../zh/01_software/board/mpp/images/b96e2ea6fe9536e76af33afe46b2069e.png)
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 Audio Input
+#### Audio Input
 
 The audio input module (AI) mainly implements the configuration and activation of audio input devices and the acquisition of audio frame data.
 
@@ -96,7 +96,7 @@ The audio input module supports i2s and pdm protocol interfaces. i2s supports si
 
   1. Enabled channel numbers are continuous from small to large and do not support random enabling of channels.
 
-#### 1.2.2 Audio Output
+#### Audio Output
 
 The audio output (AO) mainly implements the activation of audio output devices and the sending of audio frames to the output channel.
 
@@ -108,7 +108,7 @@ The audio output module supports the i2s protocol interface. i2s supports simult
 
   1. Supports 2 configurable IO groups for input/output of I2S audio data, supporting full-duplex mode.
 
-#### 1.2.3 Audio Link
+#### Audio Link
 
 - The signal received from the analog microphone by the audio codec is converted to I2S format PCM data and input into the audio's I2S. The PCM data output by I2S, after passing through the audio codec, is converted to an analog signal and emitted. This mode does not use digital IO, and the fixed I2S sdi0 and sdo0 interfaces are used.
 
@@ -128,29 +128,29 @@ You can use the built-in codec or external devices (audio sub-boards) to test au
 
 ![img](../../../../zh/01_software/board/mpp/images/b76dc39c5256a09c53be0e7572c2f587.png)
 
-#### 1.2.4 Sound Quality Enhancement
+#### Sound Quality Enhancement
 
 The audio module supports sound quality enhancement processing for audio data, realizing audio 3A functions. Currently supported sampling precision is 16bit, with a supported sampling rate of 16k.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 Audio Input
+### Audio Input
 
 This functional module provides the following APIs:
 
-- [kd_mpi_ai_set_pub_attr](#211-kd_mpi_ai_set_pub_attr)
-- [kd_mpi_ai_get_pub_attr](#212-kd_mpi_ai_get_pub_attr)
-- [kd_mpi_ai_enable](#213-kd_mpi_ai_enable)
-- [kd_mpi_ai_disable](#214-kd_mpi_ai_disable)
-- [kd_mpi_ai_enable_chn](#215-kd_mpi_ai_enable_chn)
-- [kd_mpi_ai_disable_chn](#215-kd_mpi_ai_enable_chn)
-- [kd_mpi_ai_get_frame](#217-kd_mpi_ai_get_frame)
-- [kd_mpi_ai_release_frame](#218-kd_mpi_ai_release_frame)
-- [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)
-- [kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr)
-- [kd_mpi_ai_send_far_echo_frame](#2111-kd_mpi_ai_send_far_echo_frame)
+- [kd_mpi_ai_set_pub_attr](#kd_mpi_ai_set_pub_attr)
+- [kd_mpi_ai_get_pub_attr](#kd_mpi_ai_get_pub_attr)
+- [kd_mpi_ai_enable](#kd_mpi_ai_enable)
+- [kd_mpi_ai_disable](#kd_mpi_ai_disable)
+- [kd_mpi_ai_enable_chn](#kd_mpi_ai_enable_chn)
+- [kd_mpi_ai_disable_chn](#kd_mpi_ai_enable_chn)
+- [kd_mpi_ai_get_frame](#kd_mpi_ai_get_frame)
+- [kd_mpi_ai_release_frame](#kd_mpi_ai_release_frame)
+- [kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)
+- [kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr)
+- [kd_mpi_ai_send_far_echo_frame](#kd_mpi_ai_send_far_echo_frame)
 
-#### 2.1.1 kd_mpi_ai_set_pub_attr
+#### kd_mpi_ai_set_pub_attr
 
 **Description**:
 
@@ -159,7 +159,7 @@ Set AI device attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#k_audio_dev) ai_dev, const [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 ```
 
 **Parameters**:
@@ -212,7 +212,7 @@ if (K_SUCCESS != kd_mpi_ai_enable_chn(0, 0)) {
 }
 ```
 
-### 2.1.2 kd_mpi_ai_get_pub_attr
+### kd_mpi_ai_get_pub_attr
 
 **Description**:
 
@@ -221,7 +221,7 @@ Get AI device attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 ```
 
 **Parameters**:
@@ -243,7 +243,7 @@ k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.3 kd_mpi_ai_enable
+### kd_mpi_ai_enable
 
 **Description**:
 
@@ -252,7 +252,7 @@ Enable AI device.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
+k_s32 kd_mpi_ai_enable([k_audio_dev](#k_audio_dev) ai_dev);
 ```
 
 **Parameters**:
@@ -273,7 +273,7 @@ k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.4 kd_mpi_ai_disable
+### kd_mpi_ai_disable
 
 **Description**:
 
@@ -282,7 +282,7 @@ Disable AI device.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
+k_s32 kd_mpi_ai_disable([k_audio_dev](#k_audio_dev) ai_dev);
 ```
 
 **Parameters**:
@@ -303,7 +303,7 @@ k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.5 kd_mpi_ai_enable_chn
+### kd_mpi_ai_enable_chn
 
 **Description**:
 
@@ -312,7 +312,7 @@ Enable AI channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn);
+k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn);
 ```
 
 **Parameters**:
@@ -334,7 +334,7 @@ k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#3
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.6 kd_mpi_ai_disable_chn
+### kd_mpi_ai_disable_chn
 
 **Description**:
 
@@ -343,7 +343,7 @@ Disable AI channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn);
+k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn);
 ```
 
 **Parameters**:
@@ -365,7 +365,7 @@ k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.1.7 kd_mpi_ai_get_frame
+### kd_mpi_ai_get_frame
 
 **Description**:
 
@@ -374,7 +374,7 @@ Get audio frame.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_get_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, [k_audio_frame](#3114-k_audio_frame) *frame, k_u32 milli_sec);
+k_s32 kd_mpi_ai_get_frame([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, [k_audio_frame](#k_audio_frame) *frame, k_u32 milli_sec);
 ```
 
 **Parameters**:
@@ -420,7 +420,7 @@ while(true) {
 }
 ```
 
-### 2.1.8 kd_mpi_ai_release_frame
+### kd_mpi_ai_release_frame
 
 **Description**:
 
@@ -429,7 +429,7 @@ Release audio frame.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_audio_frame](#3114-k_audio_frame) *frame);
+k_s32 kd_mpi_ai_release_frame([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, const [k_audio_frame](#k_audio_frame) *frame);
 ```
 
 **Parameters**:
@@ -452,7 +452,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn]
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-#### 2.1.9 kd_mpi_ai_set_vqe_attr
+#### kd_mpi_ai_set_vqe_attr
 
 **Description**:
 
@@ -461,7 +461,7 @@ Set AI voice quality enhancement attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
+k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, const [k_ai_vqe_enable](#k_ai_vqe_enable) vqe_enable);
 ```
 
 **Parameters**:
@@ -488,7 +488,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 Audio 3A supports 16-bit sampling precision, and AGC only supports 8k/16k/32k/48k.
 
-#### 2.1.10 kd_mpi_ai_get_vqe_attr
+#### kd_mpi_ai_get_vqe_attr
 
 **Description**:
 
@@ -497,7 +497,7 @@ Get AI voice quality enhancement attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
+k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, [k_ai_vqe_enable](#k_ai_vqe_enable) vqe_enable);
 ```
 
 **Parameters**:
@@ -520,7 +520,7 @@ k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-#### 2.1.11 kd_mpi_ai_send_far_echo_frame
+#### kd_mpi_ai_send_far_echo_frame
 
 **Description**:
 
@@ -529,7 +529,7 @@ Send far-end voice signal. This signal is collected by the far-end microphone (s
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, const [k_audio_frame](#k_audio_frame) *frame, k_s32 milli_sec);
 ```
 
 **Parameters**:
@@ -553,19 +553,19 @@ k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_a
 - Header file: mpi_ai_api.h
 - Library file: libai.a
 
-### 2.2 Audio Output
+### Audio Output
 
 This functional module provides the following APIs:
 
-- [kd_mpi_ao_set_pub_attr](#221-kd_mpi_ao_set_pub_attr)
-- [kd_mpi_ao_get_pub_attr](#222-kd_mpi_ao_get_pub_attr)
-- [kd_mpi_ao_enable](#223-kd_mpi_ao_enable)
-- [kd_mpi_ao_disable](#224-kd_mpi_ao_disable)
-- [kd_mpi_ao_enable_chn](#225-kd_mpi_ao_enable_chn)
-- [kd_mpi_ao_disable_chn](#226-kd_mpi_ao_disable_chn)
-- [kd_mpi_ao_send_frame](#227-kd_mpi_ao_send_frame)
+- [kd_mpi_ao_set_pub_attr](#kd_mpi_ao_set_pub_attr)
+- [kd_mpi_ao_get_pub_attr](#kd_mpi_ao_get_pub_attr)
+- [kd_mpi_ao_enable](#kd_mpi_ao_enable)
+- [kd_mpi_ao_disable](#kd_mpi_ao_disable)
+- [kd_mpi_ao_enable_chn](#kd_mpi_ao_enable_chn)
+- [kd_mpi_ao_disable_chn](#kd_mpi_ao_disable_chn)
+- [kd_mpi_ao_send_frame](#kd_mpi_ao_send_frame)
 
-### 2.2.1 kd_mpi_ao_set_pub_attr
+### kd_mpi_ao_set_pub_attr
 
 **Description**:
 
@@ -574,7 +574,7 @@ Set AO device attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#k_audio_dev) ao_dev, const [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 ```
 
 **Parameters**:
@@ -629,7 +629,7 @@ if (K_SUCCESS != kd_mpi_ao_enable_chn(0, 1)) {
 }
 ```
 
-### 2.2.2 kd_mpi_ao_get_pub_attr
+### kd_mpi_ao_get_pub_attr
 
 **Description**:
 
@@ -638,7 +638,7 @@ Get AO device attributes.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#k_audio_dev) ao_dev, [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 ```
 
 **Parameters**:
@@ -660,7 +660,7 @@ k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
-### 2.2.3 kd_mpi_ao_enable
+### kd_mpi_ao_enable
 
 **Description**:
 
@@ -669,7 +669,7 @@ Enable AO device.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
+k_s32 kd_mpi_ao_enable([k_audio_dev](#k_audio_dev) ao_dev);
 ```
 
 **Parameters**:
@@ -690,7 +690,7 @@ k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
-### 2.2.4 kd_mpi_ao_disable
+### kd_mpi_ao_disable
 
 **Description**:
 
@@ -699,7 +699,7 @@ Disable AO device.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
+k_s32 kd_mpi_ao_disable([k_audio_dev](#k_audio_dev) ao_dev);
 ```
 
 **Parameters**:
@@ -720,7 +720,7 @@ k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
-### 2.2.5 kd_mpi_ao_enable_chn
+### kd_mpi_ao_enable_chn
 
 **Description**:
 
@@ -729,7 +729,7 @@ Enable AO channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev, [k_ao_chn](#314-k_ao_chn) ao_chn);
+k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#k_audio_dev) ao_dev, [k_ao_chn](#k_ao_chn) ao_chn);
 ```
 
 **Parameters**:
@@ -764,7 +764,7 @@ k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev, [k_ao_chn](#3
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
-#### 2.2.6 kd_mpi_ao_disable_chn
+#### kd_mpi_ao_disable_chn
 
 **Description**:
 
@@ -773,7 +773,7 @@ Disable AO channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev, [k_ao_chn](#314-k_ao_chn) ao_chn);
+k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#k_audio_dev) ao_dev, [k_ao_chn](#k_ao_chn) ao_chn);
 ```
 
 **Parameters**:
@@ -795,7 +795,7 @@ k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev, [k_ao_chn](#
 - Header file: mpi_ao_api.h
 - Library file: libao.a
 
-#### 2.2.7 kd_mpi_ao_send_frame
+#### kd_mpi_ao_send_frame
 
 **Description**:
 
@@ -804,7 +804,7 @@ Send AO frame data.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_ao_send_frame([k_audio_dev](#312-k_audio_dev) ao_dev, [k_ao_chn](#314-k_ao_chn) ao_chn, const [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+k_s32 kd_mpi_ao_send_frame([k_audio_dev](#k_audio_dev) ao_dev, [k_ao_chn](#k_ao_chn) ao_chn, const [k_audio_frame](#k_audio_frame) *frame, k_s32 milli_sec);
 ```
 
 **Parameters**:
@@ -855,7 +855,7 @@ while (true) {
 }
 ```
 
-### 2.3 Audio Encoding
+### Audio Encoding
 
 Audio encoding primarily implements creating encoding channels, sending audio frames for encoding, and retrieving encoded streams.
 
@@ -863,15 +863,15 @@ The audio encoding section provides G711a/u encoding, currently only supporting 
 
 This functional module provides the following APIs:
 
-- [kd_mpi_aenc_register_encoder](#231-kd_mpi_aenc_register_encoder): Register encoder.
-- [kd_mpi_aenc_unregister_encoder](#232-kd_mpi_aenc_unregister_encoder): Unregister encoder.
-- [kd_mpi_aenc_create_chn](#233-kd_mpi_aenc_create_chn): Create encoding channel.
-- [kd_mpi_aenc_destroy_chn](#234-kd_mpi_aenc_destroy_chn): Destroy encoding channel.
-- [kd_mpi_aenc_send_frame](#235-kd_mpi_aenc_send_frame): Send audio frame for encoding.
-- [kd_mpi_aenc_get_stream](#236-kd_mpi_aenc_get_stream): Get encoded audio stream.
-- [kd_mpi_aenc_release_stream](#237-kd_mpi_aenc_release_stream): Release encoded audio stream.
+- [kd_mpi_aenc_register_encoder](#kd_mpi_aenc_register_encoder): Register encoder.
+- [kd_mpi_aenc_unregister_encoder](#kd_mpi_aenc_unregister_encoder): Unregister encoder.
+- [kd_mpi_aenc_create_chn](#kd_mpi_aenc_create_chn): Create encoding channel.
+- [kd_mpi_aenc_destroy_chn](#kd_mpi_aenc_destroy_chn): Destroy encoding channel.
+- [kd_mpi_aenc_send_frame](#kd_mpi_aenc_send_frame): Send audio frame for encoding.
+- [kd_mpi_aenc_get_stream](#kd_mpi_aenc_get_stream): Get encoded audio stream.
+- [kd_mpi_aenc_release_stream](#kd_mpi_aenc_release_stream): Release encoded audio stream.
 
-#### 2.3.1 kd_mpi_aenc_register_encoder
+#### kd_mpi_aenc_register_encoder
 
 **Description**:
 
@@ -880,7 +880,7 @@ Register encoder.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_register_encoder(k_s32 *handle, const [k_aenc_encoder](#322-k_aenc_encoder) *encoder);
+k_s32 kd_mpi_aenc_register_encoder(k_s32 *handle, const [k_aenc_encoder](#k_aenc_encoder) *encoder);
 ```
 
 **Parameters**:
@@ -910,7 +910,7 @@ The same encoding protocol cannot register multiple encoders. For example, if a 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.2 kd_mpi_aenc_unregister_encoder
+#### kd_mpi_aenc_unregister_encoder
 
 **Description**:
 
@@ -940,7 +940,7 @@ k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.3 kd_mpi_aenc_create_chn
+#### kd_mpi_aenc_create_chn
 
 **Description**:
 
@@ -949,19 +949,19 @@ Create audio encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_create_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_aenc_chn_attr](#323-k_aenc_chn_attr) *attr);
+k_s32 kd_mpi_aenc_create_chn([k_aenc_chn](#k_aenc_chn) aenc_chn, const [k_aenc_chn_attr](#k_aenc_chn_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter | Description                                                                  | Input/Output |
 |-----------|------------------------------------------------------------------------------|--------------|
-| aenc_chn  | Channel number. Range: [0, [AENC_MAX_CHN_NUM](#324-aenc_max_chn_nums)).      | Input        |
+| aenc_chn  | Channel number. Range: [0, [AENC_MAX_CHN_NUM](#aenc_max_chn_nums)).      | Input        |
 | attr      | Pointer to audio encoding channel attributes.                                | Input        |
 
 **Notes**:
 
-Buffer size is in frames, ranging from [2, [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num)], recommended to be configured above 10. Small buffer configurations may result in frame loss and other anomalies. Each encoding channel configures queue size based on buffer size to cache encoded frame data.
+Buffer size is in frames, ranging from [2, [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num)], recommended to be configured above 10. Small buffer configurations may result in frame loss and other anomalies. Each encoding channel configures queue size based on buffer size to cache encoded frame data.
 
 **Return Value**:
 
@@ -975,7 +975,7 @@ Buffer size is in frames, ranging from [2, [K_MAX_AUDIO_FRAME_NUM](#315-k_max_au
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.4 kd_mpi_aenc_destroy_chn
+#### kd_mpi_aenc_destroy_chn
 
 **Description**:
 
@@ -984,14 +984,14 @@ Destroy audio encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
+k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#k_aenc_chn) aenc_chn);
 ```
 
 **Parameters**:
 
 | Parameter | Description                                                                  | Input/Output |
 |-----------|------------------------------------------------------------------------------|--------------|
-| aenc_chn  | Channel number. Range: [0, [AENC_MAX_CHN_NUM](#324-aenc_max_chn_nums)).      | Input        |
+| aenc_chn  | Channel number. Range: [0, [AENC_MAX_CHN_NUM](#aenc_max_chn_nums)).      | Input        |
 
 **Notes**:
 
@@ -1009,7 +1009,7 @@ None
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.5 kd_mpi_aenc_send_frame
+#### kd_mpi_aenc_send_frame
 
 **Description**:
 
@@ -1018,7 +1018,7 @@ Send audio frame for encoding.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_audio_frame](#3114-k_audio_frame) *frame);
+k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#k_aenc_chn) aenc_chn, const [k_audio_frame](#k_audio_frame) *frame);
 ```
 
 **Parameters**:
@@ -1044,7 +1044,7 @@ Sending encoded audio frames is a non-blocking interface. If the audio stream bu
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.6 kd_mpi_aenc_get_stream
+#### kd_mpi_aenc_get_stream
 
 **Description**:
 
@@ -1053,7 +1053,7 @@ Get encoded audio stream.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_get_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, [k_audio_stream](#327-k_audio_stream) *stream, k_s32 milli_sec);
+k_s32 kd_mpi_aenc_get_stream([k_aenc_chn](#k_aenc_chn) aenc_chn, [k_audio_stream](#k_audio_stream) *stream, k_s32 milli_sec);
 ```
 
 **Parameters**:
@@ -1082,7 +1082,7 @@ The value of milli_sec must be greater than or equal to -1. When it is -1, data 
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-#### 2.3.7 kd_mpi_aenc_release_stream
+#### kd_mpi_aenc_release_stream
 
 **Description**:
 
@@ -1091,7 +1091,7 @@ Release encoded audio stream.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_audio_stream](#327-k_audio_stream) *stream);
+k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#k_aenc_chn) aenc_chn, const [k_audio_stream](#k_audio_stream) *stream);
 ```
 
 **Parameters**:
@@ -1117,7 +1117,7 @@ None
 - Header file: mpi_aenc_api.h
 - Library file: libaenc.a
 
-### 2.4 Audio Decoding
+### Audio Decoding
 
 Audio decoding primarily implements creating decoding channels, sending audio streams for decoding, and retrieving decoded audio frames.
 
@@ -1125,16 +1125,16 @@ The audio encoding and decoding section provides G711a/u decoding, currently sup
 
 This functional module provides the following APIs:
 
-- [kd_mpi_adec_register_decoder](#241-kd_mpi_adec_register_decoder): Register decoder.
-- [kd_mpi_adec_unregister_decoder](#242-kd_mpi_adec_unregister_decoder): Unregister decoder.
-- [kd_mpi_adec_create_chn](#243-kd_mpi_adec_create_chn): Create audio decoding channel.
-- [kd_mpi_adec_destroy_chn](#244-kd_mpi_adec_destroy_chn): Destroy audio decoding channel.
-- [kd_mpi_adec_send_stream](#245-kd_mpi_adec_send_stream): Send audio stream to audio decoding channel.
-- [kd_mpi_adec_clr_chn_buf](#246-kd_mpi_adec_clr_chn_buf): Clear current audio data buffer in ADEC channel.
-- [kd_mpi_adec_get_frame](#247-kd_mpi_adec_get_frame): Retrieve decoded audio frame.
-- [kd_mpi_adec_release_frame](#248-kd_mpi_adec_release_frame): Release decoded audio frame.
+- [kd_mpi_adec_register_decoder](#kd_mpi_adec_register_decoder): Register decoder.
+- [kd_mpi_adec_unregister_decoder](#kd_mpi_adec_unregister_decoder): Unregister decoder.
+- [kd_mpi_adec_create_chn](#kd_mpi_adec_create_chn): Create audio decoding channel.
+- [kd_mpi_adec_destroy_chn](#kd_mpi_adec_destroy_chn): Destroy audio decoding channel.
+- [kd_mpi_adec_send_stream](#kd_mpi_adec_send_stream): Send audio stream to audio decoding channel.
+- [kd_mpi_adec_clr_chn_buf](#kd_mpi_adec_clr_chn_buf): Clear current audio data buffer in ADEC channel.
+- [kd_mpi_adec_get_frame](#kd_mpi_adec_get_frame): Retrieve decoded audio frame.
+- [kd_mpi_adec_release_frame](#kd_mpi_adec_release_frame): Release decoded audio frame.
 
-#### 2.4.1 kd_mpi_adec_register_decoder
+#### kd_mpi_adec_register_decoder
 
 **Description**:
 
@@ -1143,7 +1143,7 @@ Register decoder.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_register_decoder(k_s32 *handle, const [k_adec_decoder](#329-k_adec_decoder) *decoder);
+k_s32 kd_mpi_adec_register_decoder(k_s32 *handle, const [k_adec_decoder](#k_adec_decoder) *decoder);
 ```
 
 **Parameters**:
@@ -1169,7 +1169,7 @@ Users register a decoder to the ADEC module by passing in the decoder attribute 
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.2 kd_mpi_adec_unregister_decoder
+#### kd_mpi_adec_unregister_decoder
 
 **Description**:
 
@@ -1199,7 +1199,7 @@ k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.3 kd_mpi_adec_create_chn
+#### kd_mpi_adec_create_chn
 
 **Description**:
 
@@ -1208,19 +1208,19 @@ Create audio decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_create_chn([k_adec_chn](#3212-k_adec_chn) adec_chn, const [k_adec_chn_attr](#328-k_adec_chn_attr) *attr);
+k_s32 kd_mpi_adec_create_chn([k_adec_chn](#k_adec_chn) adec_chn, const [k_adec_chn_attr](#k_adec_chn_attr) *attr);
 ```
 
 **Parameters**:
 
 | **Parameter** | **Description**                                                            | **Input/Output** |
 |---------------|---------------------------------------------------------------------------|------------------|
-| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums)).   | Input            |
+| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums)).   | Input            |
 | attr          | Pointer to channel attributes.                                            | Input            |
 
 **Notes**:
 
-The protocol type specifies the decoding protocol for the channel, currently supporting G711. Some attributes of audio decoding need to match the output device attributes, such as sampling rate, frame length (number of samples per frame), etc. Buffer size is in frames, ranging from [2, [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num)], recommended to be configured above 10. Small buffer configurations may result in frame loss and other anomalies. This interface can only be used before the channel is created (or after it is destroyed). If the channel has already been created, it returns that the channel is already created.
+The protocol type specifies the decoding protocol for the channel, currently supporting G711. Some attributes of audio decoding need to match the output device attributes, such as sampling rate, frame length (number of samples per frame), etc. Buffer size is in frames, ranging from [2, [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num)], recommended to be configured above 10. Small buffer configurations may result in frame loss and other anomalies. This interface can only be used before the channel is created (or after it is destroyed). If the channel has already been created, it returns that the channel is already created.
 
 **Return Value**:
 
@@ -1234,7 +1234,7 @@ The protocol type specifies the decoding protocol for the channel, currently sup
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.4 kd_mpi_adec_destroy_chn
+#### kd_mpi_adec_destroy_chn
 
 **Description**:
 
@@ -1243,14 +1243,14 @@ Destroy audio decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#3212-k_adec_chn) adec_chn);
+k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#k_adec_chn) adec_chn);
 ```
 
 **Parameters**:
 
 | **Parameter** | **Description**                                                            | **Input/Output** |
 |---------------|---------------------------------------------------------------------------|------------------|
-| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums)).   | Input            |
+| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums)).   | Input            |
 
 **Notes**:
 
@@ -1268,7 +1268,7 @@ None
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.5 kd_mpi_adec_send_stream
+#### kd_mpi_adec_send_stream
 
 **Description**:
 
@@ -1284,7 +1284,7 @@ k_s32 kd_mpi_adec_send_stream(k_adec_chn adec_chn, const k_audio_stream *stream,
 
 | **Parameter** | **Description**:                                                            | **Input/Output** |
 |---------------|---------------------------------------------------------------------------|------------------|
-| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums)).   | Input            |
+| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums)).   | Input            |
 | stream        | Audio stream.                                                             | Input            |
 | block         | Blocking flag. HI_TRUE: Blocking. HI_FALSE: Non-blocking.                 | Input            |
 
@@ -1304,7 +1304,7 @@ When sending data, the channel must already be created; otherwise, it directly r
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.6 kd_mpi_adec_clr_chn_buf
+#### kd_mpi_adec_clr_chn_buf
 
 **Description**:
 
@@ -1313,14 +1313,14 @@ Clear current audio data buffer in ADEC channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#3212-k_adec_chn) adec_chn);
+k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#k_adec_chn) adec_chn);
 ```
 
 **Parameters**:
 
 | **Parameter** | **Description**                                                            | **Input/Output** |
 |---------------|---------------------------------------------------------------------------|------------------|
-| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums)).   | Input            |
+| adec_chn      | Channel number. Range: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums)).   | Input            |
 
 **Notes**:
 
@@ -1338,7 +1338,7 @@ The decoding channel must be created; otherwise, it returns a channel does not e
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.7 kd_mpi_adec_get_frame
+#### kd_mpi_adec_get_frame
 
 **Description**:
 
@@ -1347,7 +1347,7 @@ Retrieve decoded audio frame.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+k_s32 kd_mpi_adec_get_frame([k_adec_chn](#k_adec_chn) adec_chn, [k_audio_frame](#k_audio_frame) *frame, k_s32 milli_sec);
 ```
 
 **Parameters**:
@@ -1370,7 +1370,7 @@ k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_fr
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-#### 2.4.8 kd_mpi_adec_release_frame
+#### kd_mpi_adec_release_frame
 
 **Description**:
 
@@ -1379,7 +1379,7 @@ Release the retrieved audio decoding frame data.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k_audio_frame](#3114-k_audio_frame) *frame);
+k_s32 kd_mpi_adec_release_frame([k_adec_chn](#k_aenc_chn) adec_chn, const [k_audio_frame](#k_audio_frame) *frame);
 ```
 
 **Parameters**:
@@ -1401,7 +1401,7 @@ k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k
 - Header file: mpi_adec_api.h
 - Library file: libadec.a
 
-### 2.5 Built-in Audio Codec
+### Built-in Audio Codec
 
 The built-in Audio Codec primarily provides operations on hardware devices through ioctl. Among the provided ioctl commands, some commands can be used with the default values set during module loading. The ioctl call implements reading and writing to the built-in Audio Codec registers.
 
@@ -1409,33 +1409,33 @@ The current version of audio codec control operations mainly includes: ADC digit
 
 Standard function commands for the built-in Audio Codec:
 
-- [k_acodec_set_gain_micl](#251-k_acodec_set_gain_micl): Left channel input analog gain control
-- [k_acodec_set_gain_micr](#252-k_acodec_set_gain_micr): Right channel input analog gain control
-- [k_acodec_set_adcl_volume](#253-k_acodec_set_adcl_volume): Left channel input digital volume control
-- [k_acodec_set_adcr_volume](#254-k_acodec_set_adcr_volume): Right channel input digital volume control
-- [k_acodec_set_alc_gain_micl](#255-k_acodec_set_alc_gain_micl): ALC left channel input analog gain control
-- [k_acodec_set_alc_gain_micr](#256-k_acodec_set_alc_gain_micr): ALC right channel input analog gain control
-- [k_acodec_set_gain_hpoutl](#257-k_acodec_set_gain_hpoutl): Left channel output analog volume control
-- [k_acodec_set_gain_hpoutr](#258-k_acodec_set_gain_hpoutr): Right channel output analog volume control
-- [k_acodec_set_dacl_volume](#259-k_acodec_set_dacl_volume): Left channel output digital volume control
-- [k_acodec_set_dacr_volume](#2510-k_acodec_set_dacr_volume): Right channel output digital volume control
-- [k_acodec_set_micl_mute](#2511-k_acodec_set_micl_mute): Left channel input mute control
-- [k_acodec_set_micr_mute](#2512-k_acodec_set_micr_mute): Right channel input mute control
-- [k_acodec_set_dacl_mute](#2513-k_acodec_set_dacl_mute): Left channel output mute control
-- [k_acodec_set_dacr_mute](#2514-k_acodec_set_dacr_mute): Right channel output mute control
-- [k_acodec_get_gain_micl](#2515-k_acodec_get_gain_micl): Get left channel input analog gain value
-- [k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr): Get right channel input analog gain value
-- [k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume): Get left channel input digital volume value
-- [k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume): Get right channel input digital volume value
-- [k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl): Get ALC left channel input analog gain value
-- [k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr): Get ALC right channel input analog gain value
-- [k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl): Get left channel output analog volume value
-- [k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr): Get right channel output analog volume value
-- [k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume): Get left channel output digital volume value
-- [k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume): Get right channel output digital volume value
-- [k_acodec_reset](#2510-k_acodec_reset): Volume reset
+- [k_acodec_set_gain_micl](#k_acodec_set_gain_micl): Left channel input analog gain control
+- [k_acodec_set_gain_micr](#k_acodec_set_gain_micr): Right channel input analog gain control
+- [k_acodec_set_adcl_volume](#k_acodec_set_adcl_volume): Left channel input digital volume control
+- [k_acodec_set_adcr_volume](#k_acodec_set_adcr_volume): Right channel input digital volume control
+- [k_acodec_set_alc_gain_micl](#k_acodec_set_alc_gain_micl): ALC left channel input analog gain control
+- [k_acodec_set_alc_gain_micr](#k_acodec_set_alc_gain_micr): ALC right channel input analog gain control
+- [k_acodec_set_gain_hpoutl](#k_acodec_set_gain_hpoutl): Left channel output analog volume control
+- [k_acodec_set_gain_hpoutr](#k_acodec_set_gain_hpoutr): Right channel output analog volume control
+- [k_acodec_set_dacl_volume](#k_acodec_set_dacl_volume): Left channel output digital volume control
+- [k_acodec_set_dacr_volume](#k_acodec_set_dacr_volume): Right channel output digital volume control
+- [k_acodec_set_micl_mute](#k_acodec_set_micl_mute): Left channel input mute control
+- [k_acodec_set_micr_mute](#k_acodec_set_micr_mute): Right channel input mute control
+- [k_acodec_set_dacl_mute](#k_acodec_set_dacl_mute): Left channel output mute control
+- [k_acodec_set_dacr_mute](#k_acodec_set_dacr_mute): Right channel output mute control
+- [k_acodec_get_gain_micl](#k_acodec_get_gain_micl): Get left channel input analog gain value
+- [k_acodec_get_gain_micr](#k_acodec_get_gain_micr): Get right channel input analog gain value
+- [k_acodec_get_adcl_volume](#k_acodec_get_adcl_volume): Get left channel input digital volume value
+- [k_acodec_get_adcr_volume](#k_acodec_get_adcr_volume): Get right channel input digital volume value
+- [k_acodec_get_alc_gain_micl](#k_acodec_get_alc_gain_micl): Get ALC left channel input analog gain value
+- [k_acodec_get_alc_gain_micr](#k_acodec_get_alc_gain_micr): Get ALC right channel input analog gain value
+- [k_acodec_get_gain_hpoutl](#k_acodec_get_gain_hpoutl): Get left channel output analog volume value
+- [k_acodec_get_gain_hpoutr](#k_acodec_get_gain_hpoutr): Get right channel output analog volume value
+- [k_acodec_get_dacl_volume](#k_acodec_get_dacl_volume): Get left channel output digital volume value
+- [k_acodec_get_dacr_volume](#k_acodec_get_dacr_volume): Get right channel output digital volume value
+- [k_acodec_reset](#k_acodec_reset): Volume reset
 
-#### 2.5.1 k_acodec_set_gain_micl
+#### k_acodec_set_gain_micl
 
 **Description**:
 
@@ -1471,7 +1471,7 @@ int ioctl (int fd, k_acodec_set_gain_micl, k_u32 *arg);
 
 The analog gain range is 0db, 6db, 20db, 30db.
 
-#### 2.5.2 k_acodec_set_gain_micr
+#### k_acodec_set_gain_micr
 
 - **Description**:
 
@@ -1508,7 +1508,7 @@ Library file: libacodec.a
 
 The analog gain range is 0db, 6db, 20db, 30db.
 
-#### 2.5.3 k_acodec_set_adcl_volume
+#### k_acodec_set_adcl_volume
 
 - **Description**:
 
@@ -1545,7 +1545,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-97, 30]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.4 k_acodec_set_adcr_volume
+#### k_acodec_set_adcr_volume
 
 - **Description**:
 
@@ -1582,7 +1582,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-97, 30]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.5 k_acodec_set_alc_gain_micl
+#### k_acodec_set_alc_gain_micl
 
 - **Description**:
 
@@ -1619,7 +1619,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-18, 28.5]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.6 k_acodec_set_alc_gain_micr
+#### k_acodec_set_alc_gain_micr
 
 - **Description**:
 
@@ -1656,7 +1656,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-18, 28.5]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.7 k_acodec_set_gain_hpoutl
+#### k_acodec_set_gain_hpoutl
 
 - **Description**:
 
@@ -1693,7 +1693,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-39, 6]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.8 k_acodec_set_gain_hpoutr
+#### k_acodec_set_gain_hpoutr
 
 - **Description**:
 
@@ -1730,7 +1730,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-39, 6]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.9 k_acodec_set_dacl_volume
+#### k_acodec_set_dacl_volume
 
 - **Description**:
 
@@ -1767,7 +1767,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-120, 7]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.10 k_acodec_set_dacr_volume
+#### k_acodec_set_dacr_volume
 
 - **Description**:
 
@@ -1804,7 +1804,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-120, 7]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.11 k_acodec_set_micl_mute
+#### k_acodec_set_micl_mute
 
 - **Description**:
 
@@ -1841,7 +1841,7 @@ Library file: libacodec.a
 
 Value range: K_TRUE for mute, K_FALSE to unmute.
 
-#### 2.5.12 k_acodec_set_micr_mute
+#### k_acodec_set_micr_mute
 
 - **Description**:
 
@@ -1878,7 +1878,7 @@ Library file: libacodec.a
 
 Value range: K_TRUE for mute, K_FALSE to unmute.
 
-#### 2.5.13 k_acodec_set_dacl_mute
+#### k_acodec_set_dacl_mute
 
 - **Description**:
 
@@ -1915,7 +1915,7 @@ Library file: libacodec.a
 
 Value range: K_TRUE for mute, K_FALSE to unmute.
 
-#### 2.5.14 k_acodec_set_dacr_mute
+#### k_acodec_set_dacr_mute
 
 - **Description**:
 
@@ -1952,7 +1952,7 @@ Library file: libacodec.a
 
 Value range: K_TRUE for mute, K_FALSE to unmute.
 
-#### 2.5.15 k_acodec_get_gain_micl
+#### k_acodec_get_gain_micl
 
 - **Description**:
 
@@ -1989,7 +1989,7 @@ Library file: libacodec.a
 
 The analog gain range obtained is 0db, 6db, 20db, 30db.
 
-#### 2.5.16 k_acodec_get_gain_micr
+#### k_acodec_get_gain_micr
 
 - **Description**:
 
@@ -2026,7 +2026,7 @@ Library file: libacodec.a
 
 The analog gain range obtained is 0db, 6db, 20db, 30db.
 
-#### 2.5.18 k_acodec_get_adcl_volume
+#### k_acodec_get_adcl_volume
 
 **Description**:
 
@@ -2063,7 +2063,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-97, 30]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.19 k_acodec_get_adcr_volume
+#### k_acodec_get_adcr_volume
 
 **Description**:
 
@@ -2100,7 +2100,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-97, 30]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.5 k_acodec_get_alc_gain_micl
+#### k_acodec_get_alc_gain_micl
 
 **Description**:
 
@@ -2137,7 +2137,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-18, 28.5]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.6 k_acodec_get_alc_gain_micr
+#### k_acodec_get_alc_gain_micr
 
 **Description**:
 
@@ -2174,7 +2174,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-18, 28.5]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.7 k_acodec_get_gain_hpoutl
+#### k_acodec_get_gain_hpoutl
 
 **Description**:
 
@@ -2211,7 +2211,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-39, 6]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.8 k_acodec_get_gain_hpoutr
+#### k_acodec_get_gain_hpoutr
 
 **Description**:
 
@@ -2248,7 +2248,7 @@ Library file: libacodec.a
 
 The analog gain range is `[-39, 6]`, the larger the value, the higher the volume, incremented by 1.5db.
 
-#### 2.5.9 k_acodec_get_dacl_volume
+#### k_acodec_get_dacl_volume
 
 **Description**:
 
@@ -2285,7 +2285,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-120, 7]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.10 k_acodec_get_dacr_volume
+#### k_acodec_get_dacr_volume
 
 **Description**:
 
@@ -2322,7 +2322,7 @@ Library file: libacodec.a
 
 The digital gain range is `[-120, 7]`, the larger the value, the higher the volume, incremented by 0.5db.
 
-#### 2.5.10 k_acodec_reset
+#### k_acodec_reset
 
 **Description**:
 
@@ -2358,23 +2358,23 @@ Library file: libacodec.a
 
 None
 
-### 2.6 Audio Encoding MAPI
+### Audio Encoding MAPI
 
 The audio encoding function module provides the following MAPI:
 
-- [kd_mapi_aenc_init](#261-kd_mapi_aenc_init): Initialize encoding channel
-- [kd_mapi_aenc_deinit](#262-kd_mapi_aenc_deinit): Deinitialize encoding channel
-- [kd_mapi_aenc_start](#263-kd_mapi_aenc_start): Start encoding channel
-- [kd_mapi_aenc_stop](#264-kd_mapi_aenc_stop): Stop encoding channel
-- [kd_mapi_aenc_registercallback](#265-kd_mapi_aenc_registercallback): Register encoding callback function
-- [kd_mapi_aenc_unregistercallback](#266-kd_mapi_aenc_unregistercallback): Unregister encoding callback function
-- [kd_mapi_aenc_bind_ai](#267-kd_mapi_aenc_bind_ai): Bind AI
-- [kd_mapi_aenc_unbind_ai](#268-kd_mapi_aenc_unbind_ai): Unbind AI
-- [kd_mapi_register_ext_audio_encoder](#269-kd_mapi_register_ext_audio_encoder): Register external audio encoder
-- [kd_mapi_unregister_ext_audio_encoder](#2610-kd_mapi_unregister_ext_audio_encoder): Unregister external audio encoder
-- [kd_mapi_aenc_send_frame](#2611-kd_mapi_aenc_send_frame): Send audio encoding frame
+- [kd_mapi_aenc_init](#kd_mapi_aenc_init): Initialize encoding channel
+- [kd_mapi_aenc_deinit](#kd_mapi_aenc_deinit): Deinitialize encoding channel
+- [kd_mapi_aenc_start](#kd_mapi_aenc_start): Start encoding channel
+- [kd_mapi_aenc_stop](#kd_mapi_aenc_stop): Stop encoding channel
+- [kd_mapi_aenc_registercallback](#kd_mapi_aenc_registercallback): Register encoding callback function
+- [kd_mapi_aenc_unregistercallback](#kd_mapi_aenc_unregistercallback): Unregister encoding callback function
+- [kd_mapi_aenc_bind_ai](#kd_mapi_aenc_bind_ai): Bind AI
+- [kd_mapi_aenc_unbind_ai](#kd_mapi_aenc_unbind_ai): Unbind AI
+- [kd_mapi_register_ext_audio_encoder](#kd_mapi_register_ext_audio_encoder): Register external audio encoder
+- [kd_mapi_unregister_ext_audio_encoder](#kd_mapi_unregister_ext_audio_encoder): Unregister external audio encoder
+- [kd_mapi_aenc_send_frame](#kd_mapi_aenc_send_frame): Send audio encoding frame
 
-#### 2.6.1 kd_mapi_aenc_init
+#### kd_mapi_aenc_init
 
 **Description**:
 
@@ -2383,10 +2383,10 @@ Initialize encoding channel.
 **Syntax**:
 
 ```c
-kd_mapi_aenc_init([k_handle](#331-k_handle) aenc_hdl, const [k_aenc_chn_attr](#323-k_aenc_chn_attr) *attr);
+kd_mapi_aenc_init([k_handle](#k_handle) aenc_hdl, const [k_aenc_chn_attr](#k_aenc_chn_attr) *attr);
 ```
 
-#### 2.6.2 kd_mapi_aenc_deinit
+#### kd_mapi_aenc_deinit
 
 **Description**:
 
@@ -2395,10 +2395,10 @@ Deinitialize encoding channel.
 **Parameters**:
 
 ```c
-kd_mapi_aenc_deinit([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_deinit([k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.3 kd_mapi_aenc_start
+#### kd_mapi_aenc_start
 
 **Description**:
 
@@ -2407,10 +2407,10 @@ Start encoding channel.
 **Syntax**:
 
 ```c
-kd_mapi_aenc_start([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_start([k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.4 kd_mapi_aenc_stop
+#### kd_mapi_aenc_stop
 
 **Description**:
 
@@ -2419,10 +2419,10 @@ Stop encoding channel.
 **Syntax**:
 
 ```c
-kd_mapi_aenc_stop([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_stop([k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.5 kd_mapi_aenc_registercallback
+#### kd_mapi_aenc_registercallback
 
 **Description**:
 
@@ -2431,10 +2431,10 @@ Register encoding callback function.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_aenc_registercallback([k_handle](#331-k_handle) aenc_hdl, k_aenc_callback_s *aenc_cb);
+k_s32 kd_mapi_aenc_registercallback([k_handle](#k_handle) aenc_hdl, k_aenc_callback_s *aenc_cb);
 ```
 
-#### 2.6.6 kd_mapi_aenc_unregistercallback
+#### kd_mapi_aenc_unregistercallback
 
 **Description**:
 
@@ -2443,10 +2443,10 @@ Unregister encoding callback function.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_aenc_unregistercallback([k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_unregistercallback([k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.7 kd_mapi_aenc_bind_ai
+#### kd_mapi_aenc_bind_ai
 
 **Description**:
 
@@ -2455,10 +2455,10 @@ Bind AI.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_aenc_bind_ai([k_handle](#331-k_handle) ai_hdl, [k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_bind_ai([k_handle](#k_handle) ai_hdl, [k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.8 kd_mapi_aenc_unbind_ai
+#### kd_mapi_aenc_unbind_ai
 
 **Description**:
 
@@ -2467,10 +2467,10 @@ Unbind AI.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_aenc_unbind_ai([k_handle](#331-k_handle) ai_hdl, [k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_unbind_ai([k_handle](#k_handle) ai_hdl, [k_handle](#k_handle) aenc_hdl);
 ```
 
-#### 2.6.9 kd_mapi_register_ext_audio_encoder
+#### kd_mapi_register_ext_audio_encoder
 
 **Description**:
 
@@ -2479,10 +2479,10 @@ Register external audio encoder.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#322-k_aenc_encoder) *encoder, [k_handle](#331-k_handle) * aencoder_hdl);
+k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#k_aenc_encoder) *encoder, [k_handle](#k_handle) * aencoder_hdl);
 ```
 
-#### 2.6.10 kd_mapi_unregister_ext_audio_encoder
+#### kd_mapi_unregister_ext_audio_encoder
 
 **Description**:
 
@@ -2491,10 +2491,10 @@ Unregister external audio encoder.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_unregister_ext_audio_encoder([k_handle](#331-k_handle) aencoder_hdl);
+k_s32 kd_mapi_unregister_ext_audio_encoder([k_handle](#k_handle) aencoder_hdl);
 ```
 
-#### 2.6.11 kd_mapi_aenc_send_frame
+#### kd_mapi_aenc_send_frame
 
 **Description**:
 
@@ -2503,26 +2503,26 @@ Send audio encoding frame.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_aenc_send_frame([k_handle](#331-k_handle) ai_hdl, const [k_audio_frame](#3114-k_audio_frame) *frame);
+k_s32 kd_mapi_aenc_send_frame([k_handle](#k_handle) ai_hdl, const [k_audio_frame](#k_audio_frame) *frame);
 ```
 
-### 2.7 Audio Decoding MAPI
+### Audio Decoding MAPI
 
 The audio decoding function module provides the following MAPI:
 
-- [kd_mapi_adec_init](#261-kd_mapi_aenc_init): Initialize decoding channel
-- [kd_mapi_adec_deinit](#271-kd_mapi_adec_init): Deinitialize decoding channel
-- [kd_mapi_adec_start](#273-kd_mapi_adec_start): Start decoding channel.
-- [kd_mapi_adec_stop](#274-kd_mapi_adec_stop): Stop decoding channel.
-- [kd_mapi_adec_registercallback](#275-kd_mapi_adec_registercallback): Register decoding callback function.
-- [kd_mapi_adec_unregistercallback](#276-kd_mapi_adec_unregistercallback): Unregister decoding callback function.
-- [kd_mapi_adec_bind_ao](#277-kd_mapi_adec_bind_ao): Bind AO.
-- [kd_mapi_adec_unbind_ao](#278-kd_mapi_adec_unbind_ao): Unbind AO.
-- [kd_mapi_register_ext_audio_decoder](#279-kd_mapi_register_ext_audio_decoder): Register external audio decoder.
-- [kd_mapi_unregister_ext_audio_decoder](#2710-kd_mapi_unregister_ext_audio_decoder): Unregister external audio decoder.
-- [kd_mapi_adec_send_stream](#2711-kd_mapi_adec_send_stream): Send audio decoding frame.
+- [kd_mapi_adec_init](#kd_mapi_aenc_init): Initialize decoding channel
+- [kd_mapi_adec_deinit](#kd_mapi_adec_init): Deinitialize decoding channel
+- [kd_mapi_adec_start](#kd_mapi_adec_start): Start decoding channel.
+- [kd_mapi_adec_stop](#kd_mapi_adec_stop): Stop decoding channel.
+- [kd_mapi_adec_registercallback](#kd_mapi_adec_registercallback): Register decoding callback function.
+- [kd_mapi_adec_unregistercallback](#kd_mapi_adec_unregistercallback): Unregister decoding callback function.
+- [kd_mapi_adec_bind_ao](#kd_mapi_adec_bind_ao): Bind AO.
+- [kd_mapi_adec_unbind_ao](#kd_mapi_adec_unbind_ao): Unbind AO.
+- [kd_mapi_register_ext_audio_decoder](#kd_mapi_register_ext_audio_decoder): Register external audio decoder.
+- [kd_mapi_unregister_ext_audio_decoder](#kd_mapi_unregister_ext_audio_decoder): Unregister external audio decoder.
+- [kd_mapi_adec_send_stream](#kd_mapi_adec_send_stream): Send audio decoding frame.
 
-#### 2.7.1 kd_mapi_adec_init
+#### kd_mapi_adec_init
 
 - **Description**:
 
@@ -2531,10 +2531,10 @@ Initialize decoding channel.
 - **Syntax**:
 
 ```c
-kd_mapi_adec_init([k_handle](#331-k_handle) adec_hdl, const [k_adec_chn_attr](#323-k_adec_chn_attr) *attr);
+kd_mapi_adec_init([k_handle](#k_handle) adec_hdl, const [k_adec_chn_attr](#k_adec_chn_attr) *attr);
 ```
 
-#### 2.7.2 kd_mapi_adec_deinit
+#### kd_mapi_adec_deinit
 
 - **Description**:
 
@@ -2543,10 +2543,10 @@ Deinitialize decoding channel.
 - **Syntax**:
 
 ```c
-kd_mapi_adec_deinit([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_deinit([k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.3 kd_mapi_adec_start
+#### kd_mapi_adec_start
 
 - **Description**:
 
@@ -2555,10 +2555,10 @@ Start decoding channel.
 - **Syntax**:
 
 ```c
-kd_mapi_adec_start([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_start([k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.4 kd_mapi_adec_stop
+#### kd_mapi_adec_stop
 
 - **Description**:
 
@@ -2567,10 +2567,10 @@ Stop decoding channel.
 - **Syntax**:
 
 ```c
-kd_mapi_adec_stop([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_stop([k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.5 kd_mapi_adec_registercallback
+#### kd_mapi_adec_registercallback
 
 - **Description**:
 
@@ -2579,10 +2579,10 @@ Register decoding callback function.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_adec_registercallback([k_handle](#331-k_handle) adec_hdl, k_adec_callback_s *adec_cb);
+k_s32 kd_mapi_adec_registercallback([k_handle](#k_handle) adec_hdl, k_adec_callback_s *adec_cb);
 ```
 
-#### 2.7.6 kd_mapi_adec_unregistercallback
+#### kd_mapi_adec_unregistercallback
 
 - **Description**:
 
@@ -2591,10 +2591,10 @@ Unregister decoding callback function.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_adec_unregistercallback([k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_unregistercallback([k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.7 kd_mapi_adec_bind_ao
+#### kd_mapi_adec_bind_ao
 
 - **Description**:
 
@@ -2603,10 +2603,10 @@ Bind AO.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_adec_bind_ao([k_handle](#331-k_handle) ao_hdl, [k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_bind_ao([k_handle](#k_handle) ao_hdl, [k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.8 kd_mapi_adec_unbind_ao
+#### kd_mapi_adec_unbind_ao
 
 - **Description**:
 
@@ -2615,10 +2615,10 @@ Unbind AO.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_adec_unbind_ao([k_handle](#331-k_handle) ao_hdl, [k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_unbind_ao([k_handle](#k_handle) ao_hdl, [k_handle](#k_handle) adec_hdl);
 ```
 
-#### 2.7.9 kd_mapi_register_ext_audio_decoder
+#### kd_mapi_register_ext_audio_decoder
 
 - **Description**:
 
@@ -2627,10 +2627,10 @@ Register external audio decoder.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#329-k_adec_decoder) *decoder, [k_handle](#331-k_handle) *adecoder_hdl);
+k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#k_adec_decoder) *decoder, [k_handle](#k_handle) *adecoder_hdl);
 ```
 
-#### 2.7.10 kd_mapi_unregister_ext_audio_decoder
+#### kd_mapi_unregister_ext_audio_decoder
 
 - **Description**:
 
@@ -2639,10 +2639,10 @@ Unregister external audio decoder.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_unregister_ext_audio_decoder([k_handle](#331-k_handle) adecoder_hdl);
+k_s32 kd_mapi_unregister_ext_audio_decoder([k_handle](#k_handle) adecoder_hdl);
 ```
 
-#### 2.7.11 kd_mapi_adec_send_stream
+#### kd_mapi_adec_send_stream
 
 - **Description**:
 
@@ -2651,32 +2651,32 @@ Send audio decoding frame.
 - **Syntax**:
 
 ```c
-k_s32 kd_mapi_adec_send_stream([k_handle](#331-k_handle) ai_hdl, const [k_audio_stream](#327-k_audio_stream) *stream);
+k_s32 kd_mapi_adec_send_stream([k_handle](#k_handle) ai_hdl, const [k_audio_stream](#k_audio_stream) *stream);
 ```
 
-## 3. Data Types
+## Data Types
 
-### 3.1 Audio Input/Output
+### Audio Input/Output
 
 The data types and structures related to audio input/output are defined as follows:
 
-- [k_audio_type](#311-k_audio_type): Defines audio input/output types.
-- [k_audio_dev](#312-k_audio_dev): Defines audio devices.
-- [k_ai_chn](#313-k_ai_chn): Defines AI channels.
-- [k_ao_chn](#314-k_ao_chn): Defines AO channels.
-- [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num): Defines the maximum number of audio decoding buffer frames.
-- [k_audio_bit_width](#316-k_audio_bit_width): Defines audio sampling precision.
-- [k_audio_snd_mode](#317-k_audio_snd_mode): Defines audio channel modes.
-- [k_audio_pdm_oversample](#318-k_audio_pdm_oversample): Defines PDM oversampling.
-- [k_aio_dev_attr](#3112-k_aio_dev_attr): Defines the attribute structure of audio input/output devices.
-- [k_audio_pdm_attr](#319-k_audio_pdm_attr): Defines PDM audio input attributes.
-- [k_i2s_work_mode](#3111-k_i2s_work_mode): Defines I2S working modes.
-- [k_audio_i2s_attr](#3110-k_audio_i2s_attr): Defines I2S audio input attributes.
-- [k_aio_i2s_type](#3113-k_aio_i2s_type): Defines I2S interfacing device types.
-- [k_audio_frame](#3114-k_audio_frame): Defines audio frame structures.
-- [k_ai_vqe_enable](#3115-k_ai_vqe_enable): Defines the configuration structure for audio input voice quality enhancement.
+- [k_audio_type](#k_audio_type): Defines audio input/output types.
+- [k_audio_dev](#k_audio_dev): Defines audio devices.
+- [k_ai_chn](#k_ai_chn): Defines AI channels.
+- [k_ao_chn](#k_ao_chn): Defines AO channels.
+- [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num): Defines the maximum number of audio decoding buffer frames.
+- [k_audio_bit_width](#k_audio_bit_width): Defines audio sampling precision.
+- [k_audio_snd_mode](#k_audio_snd_mode): Defines audio channel modes.
+- [k_audio_pdm_oversample](#k_audio_pdm_oversample): Defines PDM oversampling.
+- [k_aio_dev_attr](#k_aio_dev_attr): Defines the attribute structure of audio input/output devices.
+- [k_audio_pdm_attr](#k_audio_pdm_attr): Defines PDM audio input attributes.
+- [k_i2s_work_mode](#k_i2s_work_mode): Defines I2S working modes.
+- [k_audio_i2s_attr](#k_audio_i2s_attr): Defines I2S audio input attributes.
+- [k_aio_i2s_type](#k_aio_i2s_type): Defines I2S interfacing device types.
+- [k_audio_frame](#k_audio_frame): Defines audio frame structures.
+- [k_ai_vqe_enable](#k_ai_vqe_enable): Defines the configuration structure for audio input voice quality enhancement.
 
-#### 3.1.1 k_audio_type
+#### k_audio_type
 
 - **Description**:
 
@@ -2700,7 +2700,7 @@ Audio input includes I2S and PDM, while audio output only includes I2S.
 
 None
 
-#### 3.1.2 k_audio_dev
+#### k_audio_dev
 
 - **Description**:
 
@@ -2718,7 +2718,7 @@ For the AI module, `k_audio_dev` can be 0 or 1, where 0 is for I2S audio input a
 
 For the AO module, `k_audio_dev` is fixed at 0, which means I2S audio output.
 
-#### 3.1.3 k_ai_chn
+#### k_ai_chn
 
 - **Description**:
 
@@ -2736,7 +2736,7 @@ I2S audio input has 2 channels, with values ranging from `[0, 1]`.
 
 PDM audio input has 4 channels, with values ranging from `[0, 3]`.
 
-#### 3.1.4 k_ao_chn
+#### k_ao_chn
 
 - **Description**:
 
@@ -2752,7 +2752,7 @@ typedef k_u32 k_ao_chn;
 
 I2S audio output has 2 channels, with values ranging from `[0, 1]`.
 
-#### 3.1.5 K_MAX_AUDIO_FRAME_NUM
+#### K_MAX_AUDIO_FRAME_NUM
 
 - **Description**:
 
@@ -2764,7 +2764,7 @@ Defines the maximum number of audio decoding buffer frames.
 #define K_MAX_AUDIO_FRAME_NUM 50
 ```
 
-#### 3.1.6 k_audio_bit_width
+#### k_audio_bit_width
 
 - **Description**:
 
@@ -2788,7 +2788,7 @@ None
 
 None
 
-#### 3.1.7 k_audio_snd_mode
+#### k_audio_snd_mode
 
 - **Description**:
 
@@ -2803,7 +2803,7 @@ typedef enum {
 } k_audio_snd_mode;
 ```
 
-#### 3.1.8 k_audio_pdm_oversample
+#### k_audio_pdm_oversample
 
 - **Description**:
 
@@ -2819,7 +2819,7 @@ typedef enum {
 } k_audio_pdm_oversample;
 ```
 
-#### 3.1.9 k_audio_pdm_attr
+#### k_audio_pdm_attr
 
 - **Description**:
 
@@ -2859,7 +2859,7 @@ None
 
 None
 
-#### 3.1.10 k_audio_i2s_attr
+#### k_audio_i2s_attr
 
 - **Description**:
 
@@ -2903,7 +2903,7 @@ The value of `point_num_per_frame` and `sample_rate` determines the interrupt fr
 
 None
 
-#### 3.1.11 k_i2s_work_mode
+#### k_i2s_work_mode
 
 - **Description**:
 
@@ -2927,7 +2927,7 @@ None
 
 None
 
-#### 3.1.12 k_aio_dev_attr
+#### k_aio_dev_attr
 
 - **Description**:
 
@@ -2960,7 +2960,7 @@ None
 
 None
 
-#### 3.1.13 k_aio_i2s_type
+#### k_aio_i2s_type
 
 - **Description**:
 
@@ -2983,7 +2983,7 @@ The built-in audio codec uses I2S channel 0, while I2S channel 1 is used for ext
 
 None
 
-### 3.1.14 k_audio_frame
+### k_audio_frame
 
 - **Description**:
 
@@ -3025,7 +3025,7 @@ None
 
 None
 
-#### 3.1.15 k_ai_vqe_enable
+#### k_ai_vqe_enable
 
 **Description**:
 
@@ -3060,7 +3060,7 @@ None
 
 None
 
-#### 3.1.16 k_i2s_in_mono_channel
+#### k_i2s_in_mono_channel
 
 - **Description**:
 
@@ -3075,23 +3075,23 @@ typedef enum {
 } k_i2s_in_mono_channel;
 ```
 
-### 3.2 Audio Encoding/Decoding
+### Audio Encoding/Decoding
 
 The data types and structures related to audio encoding/decoding are defined as follows:
 
-- [k_payload_type](#321-k_payload_type)
-- [k_aenc_encoder](#322-k_aenc_encoder)
-- [k_aenc_chn_attr](#323-k_aenc_chn_attr)
-- [AENC_MAX_CHN_NUMS](#324-aenc_max_chn_nums)
-- [K_MAX_ENCODER_NAME_LEN](#325-k_max_encoder_name_len)
-- [k_aenc_chn](#326-k_aenc_chn)
-- [k_audio_stream](#327-k_audio_stream)
-- [k_adec_chn_attr](#328-k_adec_chn_attr)
-- [k_adec_decoder](#329-k_adec_decoder)
-- [K_MAX_DECODER_NAME_LEN](#3210-k_max_decoder_name_len)
-- [ADEC_MAX_CHN_NUMS](#3211-adec_max_chn_nums)
+- [k_payload_type](#k_payload_type)
+- [k_aenc_encoder](#k_aenc_encoder)
+- [k_aenc_chn_attr](#k_aenc_chn_attr)
+- [AENC_MAX_CHN_NUMS](#aenc_max_chn_nums)
+- [K_MAX_ENCODER_NAME_LEN](#k_max_encoder_name_len)
+- [k_aenc_chn](#k_aenc_chn)
+- [k_audio_stream](#k_audio_stream)
+- [k_adec_chn_attr](#k_adec_chn_attr)
+- [k_adec_decoder](#k_adec_decoder)
+- [K_MAX_DECODER_NAME_LEN](#k_max_decoder_name_len)
+- [ADEC_MAX_CHN_NUMS](#adec_max_chn_nums)
 
-#### 3.2.1 k_payload_type
+#### k_payload_type
 
 - **Description**:
 
@@ -3191,7 +3191,7 @@ None
 
 None
 
-#### 3.2.2 k_aenc_encoder
+#### k_aenc_encoder
 
 - **Description**:
 
@@ -3229,7 +3229,7 @@ None
 
 None
 
-#### 3.2.3 k_aenc_chn_attr
+#### k_aenc_chn_attr
 
 - **Description**:
 
@@ -3261,7 +3261,7 @@ None
 
 None
 
-#### 3.2.4 AENC_MAX_CHN_NUMS
+#### AENC_MAX_CHN_NUMS
 
 - **Description**:
 
@@ -3281,7 +3281,7 @@ None
 
 None
 
-#### 3.2.5 K_MAX_ENCODER_NAME_LEN
+#### K_MAX_ENCODER_NAME_LEN
 
 - **Description**:
 
@@ -3301,7 +3301,7 @@ None
 
 None
 
-#### 3.2.6 k_aenc_chn
+#### k_aenc_chn
 
 - **Description**:
 
@@ -3321,7 +3321,7 @@ None
 
 None
 
-#### 3.2.7 k_audio_stream
+#### k_audio_stream
 
 - **Description**:
 
@@ -3357,7 +3357,7 @@ None
 
 None
 
-#### 3.2.8 k_adec_chn_attr
+#### k_adec_chn_attr
 
 - **Description**:
 
@@ -3389,7 +3389,7 @@ Some attributes of audio decoding need to match the attributes of the output dev
 
 None
 
-#### 3.2.9 k_adec_decoder
+#### k_adec_decoder
 
 - **Description**:
 
@@ -3429,7 +3429,7 @@ None
 
 None
 
-#### 3.2.10 K_MAX_DECODER_NAME_LEN
+#### K_MAX_DECODER_NAME_LEN
 
 - **Description**:
 
@@ -3449,7 +3449,7 @@ None
 
 None
 
-#### 3.2.11 ADEC_MAX_CHN_NUMS
+#### ADEC_MAX_CHN_NUMS
 
 - **Description**:
 
@@ -3469,7 +3469,7 @@ None
 
 None
 
-#### 3.2.12 k_adec_chn
+#### k_adec_chn
 
 - **Description**:
 
@@ -3489,13 +3489,13 @@ None
 
 None
 
-### 3.3 MAPI
+### MAPI
 
 The data types and structures related to audio MAPI are defined as follows:
 
-- [k_handle](#331-k_handle)
+- [k_handle](#k_handle)
 
-#### 3.3.1 k_handle
+#### k_handle
 
 - **Description**:
 
@@ -3511,7 +3511,7 @@ typedef k_u32 k_handle;
 
 None
 
-### 4.1 Audio Input API Error Codes
+### Audio Input API Error Codes
 
 | Error Code | Macro Definition         | Description                        |
 |------------|--------------------------|------------------------------------|
@@ -3530,7 +3530,7 @@ None
 | 0xA015800D | K_ERR_AI_NOT_READY       | Audio input system not initialized |
 | 0xA015800E | K_ERR_AI_BUSY            | Audio input system is busy         |
 
-### 4.2 Audio Output API Error Codes
+### Audio Output API Error Codes
 
 | Error Code | Macro Definition          | Description                        |
 |------------|---------------------------|------------------------------------|

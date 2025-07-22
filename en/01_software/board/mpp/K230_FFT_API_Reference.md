@@ -51,7 +51,7 @@ This document (this guide) is mainly suitable for the following personnel:
 | ---------------- | ------------------------ | -------- | ---------- |
 | V1.0             | Initial Version          | Wang Jianxin | 2023-08-08 |
 
-## 1. Introduction to K230 FFT
+## Introduction to K230 FFT
 
 The FFT module of K230 is mainly used for hardware acceleration of FFT and IFFT calculations. Its features are as follows:
 
@@ -64,17 +64,17 @@ The FFT module of K230 is mainly used for hardware acceleration of FFT and IFFT 
 - The calculation time for 4096-point FFT/IFFT is controlled within 1ms, including the total overhead of data transfer, calculation, and interrupt interaction.
 - Supports interrupt mask and raw interrupt query.
 
-## 2. API Reference
+## API Reference
 
 The K230 FFT module mainly provides the following APIs:
 
-- [kd_mpi_fft_or_ifft](#21-kd_mpi_fft_or_ifft)
-- [kd_mpi_fft_args_init](#22-kd_mpi_fft_args_init)
-- [kd_mpi_fft_args_2_array](#23-kd_mpi_fft_args_2_array)
-- [kd_mpi_fft](#24-kd_mpi_fft)
-- [kd_mpi_ifft](#25-kd_mpi_ifft)
+- [kd_mpi_fft_or_ifft](#kd_mpi_fft_or_ifft)
+- [kd_mpi_fft_args_init](#kd_mpi_fft_args_init)
+- [kd_mpi_fft_args_2_array](#kd_mpi_fft_args_2_array)
+- [kd_mpi_fft](#kd_mpi_fft)
+- [kd_mpi_ifft](#kd_mpi_ifft)
 
-### 2.1 kd_mpi_fft_or_ifft
+### kd_mpi_fft_or_ifft
 
 **Description**:
 
@@ -90,7 +90,7 @@ int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 
 | Parameter | Description                               | Input/Output |
 | --------- | ----------------------------------------- | ------------ |
-| fft_args  | FFT parameters [k_fft_args_st](#31-k_fft_args_st) | Input/Output |
+| fft_args  | FFT parameters [k_fft_args_st](#k_fft_args_st) | Input/Output |
 
 **Return Value**:
 
@@ -132,7 +132,7 @@ int kd_mpi_fft(int point, k_fft_input_mode_e im, k_fft_out_mode_e om,
 
 None
 
-### 2.2 kd_mpi_fft_args_init
+### kd_mpi_fft_args_init
 
 **Description**:
 
@@ -151,14 +151,14 @@ int kd_mpi_fft_args_init(int point, k_fft_mode_e mode, k_fft_input_mode_e im,
 | Parameter | Description                                        | Input/Output |
 | --------- | -------------------------------------------------- | ------------ |
 | point     | Number of points, valid values are 64, 128, 256, 512, 1024, 2048, 4096 | Input      |
-| mode      | [k_fft_mode_e](#32-k_fft_mode_e) FFT_MODE IFFT_MODE | Input      |
-| im        | [k_fft_input_mode_e](#33-k_fft_input_mode_e) Input mode | Input      |
-| om        | [k_fft_out_mode_e](#34-k_fft_out_mode_e) Output mode | Input      |
+| mode      | [k_fft_mode_e](#k_fft_mode_e) FFT_MODE IFFT_MODE | Input      |
+| im        | [k_fft_input_mode_e](#k_fft_input_mode_e) Input mode | Input      |
+| om        | [k_fft_out_mode_e](#k_fft_out_mode_e) Output mode | Input      |
 | timeout   | Timeout                                            | Input      |
 | shift     | Offset                                             | Input      |
 | rx_input  | Input real data                                    | Input      |
 | iy_input  | Input imaginary data                               | Input      |
-| fft_args  | [k_fft_args_st](#31-k_fft_args_st) Variable to be filled | Output     |
+| fft_args  | [k_fft_args_st](#k_fft_args_st) Variable to be filled | Output     |
 
 **Return Value**:
 
@@ -200,7 +200,7 @@ int kd_mpi_fft(int point, k_fft_input_mode_e im, k_fft_out_mode_e om,
 
 None
 
-### 2.3 kd_mpi_fft_args_2_array
+### kd_mpi_fft_args_2_array
 
 **Description**:
 
@@ -216,7 +216,7 @@ int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 
 | Parameter | Description                               | Input/Output |
 | --------- | ----------------------------------------- | ------------ |
-| fft_args  | [k_fft_args_st](#31-k_fft_args_st) Structure | Input      |
+| fft_args  | [k_fft_args_st](#k_fft_args_st) Structure | Input      |
 | rx_out    | Real data                                 | Output      |
 | iy_out    | Imaginary data                            | Output      |
 
@@ -260,7 +260,7 @@ int kd_mpi_fft(int point, fft_input_mode_e im, fft_out_mode_e om,
 
 None
 
-### 2.4 kd_mpi_fft
+### kd_mpi_fft
 
 **Description**:
 
@@ -281,8 +281,8 @@ int kd_mpi_fft(int point, k_fft_input_mode_e im, k_fft_out_mode_e om,
 | Parameter   | Description                                        | Input/Output |
 | ----------- | -------------------------------------------------- | ------------ |
 | point_num   | Number of points, valid values are 64, 128, 256, 512, 1024, 2048, 4096 | Input      |
-| im          | [fft_input_mode_e](#33-k_fft_input_mode_e) Input mode | Input      |
-| om          | [fft_out_mode_e](#34-k_fft_out_mode_e) Output mode | Input      |
+| im          | [fft_input_mode_e](#k_fft_input_mode_e) Input mode | Input      |
+| om          | [fft_out_mode_e](#k_fft_out_mode_e) Output mode | Input      |
 | timeout     | Timeout                                            | Input      |
 | shift       | Offset                                             | Input      |
 | rx_input    | Input real data                                    | Input      |
@@ -333,7 +333,7 @@ static int fft_test(int point)
 
 None
 
-### 2.5 kd_mpi_ifft
+### kd_mpi_ifft
 
 **Description**:
 
@@ -354,8 +354,8 @@ int kd_mpi_ifft(int point, k_fft_input_mode_e im, k_fft_out_mode_e om,
 | Parameter   | Description                                        | Input/Output |
 | ----------- | -------------------------------------------------- | ------------ |
 | point_num   | Number of points, valid values are 64, 128, 256, 512, 1024, 2048, 4096 | Input      |
-| im          | [fft_input_mode_e](#33-k_fft_input_mode_e) Input mode | Input      |
-| om          | [fft_out_mode_e](#34-k_fft_out_mode_e) Output mode | Input      |
+| im          | [fft_input_mode_e](#k_fft_input_mode_e) Input mode | Input      |
+| om          | [fft_out_mode_e](#k_fft_out_mode_e) Output mode | Input      |
 | timeout     | Timeout                                            | Input      |
 | shift       | Offset                                             | Input      |
 | dma_ch      | DMA channel, valid values are 0-3; other values are invalid | Input      |
@@ -407,16 +407,16 @@ static int fft_test(int point)
 
 None
 
-## 3. Data Structures
+## Data Structures
 
 The data types related to this functional module are defined as follows:
 
-- [k_fft_args_st](#31-k_fft_args_st)
-- [k_fft_mode_e](#32-k_fft_mode_e)
-- [k_fft_input_mode_e](#33-k_fft_input_mode_e)
-- [k_fft_out_mode_e](#34-k_fft_out_mode_e)
+- [k_fft_args_st](#k_fft_args_st)
+- [k_fft_mode_e](#k_fft_mode_e)
+- [k_fft_input_mode_e](#k_fft_input_mode_e)
+- [k_fft_out_mode_e](#k_fft_out_mode_e)
 
-### 3.1 k_fft_args_st
+### k_fft_args_st
 
 **Description**: FFT ioctl parameters
 
@@ -457,7 +457,7 @@ typedef struct {
 
 None
 
-### 3.2 k_fft_mode_e
+### k_fft_mode_e
 
 **Description**: FFT ioctl parameters
 
@@ -481,7 +481,7 @@ typedef enum  {
 
 None
 
-### 3.3 k_fft_input_mode_e
+### k_fft_input_mode_e
 
 **Description**: FFT ioctl parameters
 
@@ -507,7 +507,7 @@ typedef enum {
 
 None
 
-### 3.4 k_fft_out_mode_e
+### k_fft_out_mode_e
 
 **Description**: FFT ioctl parameters
 

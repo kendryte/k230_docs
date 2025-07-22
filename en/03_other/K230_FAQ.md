@@ -60,15 +60,15 @@ This document (this guide) is intended primarily for:
 |------------|----------|------------|----------|
 | V1.0       | Initial     | System Software Department | 2023-9-4 |
 
-## 1. Version Information
+## Version Information
 
 | Affiliated products | Version number | Release date |
 |----------|--------|----------|
 | K230 SDK | V1.0.0 | 2023-9-4|
 
-## 2. FAQs
+## FAQs
 
-### 2.1 TF boot failed with exit code 13
+### TF boot failed with exit code 13
 
 Problem: TF card boot fails with exit code 13 error
 
@@ -76,7 +76,7 @@ Answer: The reasons are as follows: 1. The file error in the boot media. 2. The 
 
 TF card boot pin setting special instructions: The two start pin levels are high (need to dial to silkscreen 1 and 2, that is, the opposite direction of ON) to boot from the TF card.
 
-### 2.2 BootROM boot error code
+### BootROM boot error code
 
 Question: What does the bootrom boot error code mean?
 
@@ -88,7 +88,7 @@ When bootROM fails to boot, it will print an error similar to the following boot
 | 19   | Boot media initialization failed, such as not inserting an SD card                |
 | 17   | The OTP requirement must be a secure image, but the files on the media are non-secure images |
 
-### 2.3 SPI NOR and SPI NAND Flash identify
+### SPI NOR and SPI NAND Flash identify
 
 Question: How do I know if SPI NOR or SPI NAND Flash is connected to the EVB board?
 
@@ -104,7 +104,7 @@ Method 2: The Linux boot log will be printed, for example, when connecting to SP
 [    1.318147] Creating 2 MTD partitions on "spi0.0":
 ```
 
-### 2.4 Perf Use
+### Perf Use
 
 Question: How is perf compiled and what hardware events are supported?
 
@@ -169,25 +169,25 @@ CONFIG_FRAME_POINTER=y
 
 ```
 
-### 2.5 Big core run vector Linux
+### Big core run vector Linux
 
 Question: How does Big Core run Linux with Vector?
 
 Answer: make CONF=k230_evb_only_linux_defconfig ; The compiled image, the big core runs Linux with vector by default.
 
-### 2.6 Big core serial port ID
+### Big core serial port ID
 
 Question: How to modify the serial port ID of the big core?
 
 Answer: The configuration file below configs CONFIG_RTT_CONSOLE_ID stands for the big core serial port ID, modify it to the correct value.
 
-### 2.7uboot command line
+### uboot command line
 
 How to compile the version that can enter the uboot command line
 
 Answer: The configuration file below configs CONFIG_QUICK_BOOT stands for fast, modify it to CONFIG_QUICK_BOOT=n to generate a command-line version that can be entered into uboot.
 
-### 2.8 How to start slowly
+### How to start slowly
 
 Answer: Enter the uboot command line and execute the following command:
 
@@ -195,7 +195,7 @@ Answer: Enter the uboot command line and execute the following command:
 setenv quick_boot true;saveenv;reset;
 ```
 
-### 2.9 Linux How to modify the last partition size
+### Linux How to modify the last partition size
 
 Answer: You can use the parted tool to dynamically modify the size of the last partition, refer to the following command:
 
@@ -280,7 +280,7 @@ tmpfs                    51.8M     36.0K     51.7M   0% /run
 
 ```
 
-### 2.10 How to modify bootargs
+### How to modify bootargs
 
 Answer: Method 1: Modify bootargs using env file. For example, you can add the following content to the board/common/env/default.env file:
 
@@ -294,7 +294,7 @@ Method 2: Enter the uboot command line and modify bootargs with reference to the
 setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi" ;saveenv;reset;
 ```
 
-### 2.11 How to view bootargs
+### How to view bootargs
 
 Answer: Method 1: Under linux, enter cat /proc/cmdline to view
 
@@ -313,7 +313,7 @@ Method 2: Linux command line input dmesg | grep command view
 [root@canaan
 ```
 
-### 2.12 The default serial port modification of little core
+### The default serial port modification of little core
 
 Answer: At present, the little core serial port in the SDK defaults to 0, if you need to modify it to other serial ports (such as serial port 2), please refer to the following to modify:
 
@@ -362,7 +362,7 @@ Modification 3: Modify bootargs using env files (see 2.10).
 bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS2,115200 earlycon=sbi；
 ```
 
-### 2.13 How to completely reprogram the SDK
+### How to completely reprogram the SDK
 
 Answer: After updating and modifying the SDK source code, or after modifying the SDK source code, it is recommended to enter the following command to completely reprogram the SDK.
 
@@ -370,7 +370,7 @@ Answer: After updating and modifying the SDK source code, or after modifying the
 make clean; make;
 ```
 
-### 2.15 Whether cklink jtag can be used on canmmv?
+### Whether cklink jtag can be used on canmmv?
 
 Answer：uboot default disable cklink jtag,you can enable cklink jtag by modify follow code:
 
@@ -382,7 +382,7 @@ Answer：uboot default disable cklink jtag,you can enable cklink jtag by modify 
 
 >need rebuild uboot code
 
-## 2.16 How to quickly compile one of the  buildroot packages
+## How to quickly compile one of the  buildroot packages
 
 Answer：Reference the following command to quickly rebuild one of the buildroot packages
 

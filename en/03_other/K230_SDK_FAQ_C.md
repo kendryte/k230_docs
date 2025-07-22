@@ -25,7 +25,7 @@ No unit or individual may excerpt, copy, or disseminate part or all of the conte
 
 [TOC]
 
-## 1 TF Boot Failed with Exit Code 13
+## TF Boot Failed with Exit Code 13
 
 Issue: TF card boot reports boot failed with exit code 13 error
 
@@ -33,7 +33,7 @@ Answer: The reasons are as follows: 1. File error in the boot medium. 2. Incorre
 
 Special note on TF card boot pin settings: The TF card will only boot when the two boot pins are high (need to be switched to the silk screen positions 1 and 2, which is the opposite direction of ON).
 
-## 2 Bootrom Startup Error Codes
+## Bootrom Startup Error Codes
 
 Issue: What is the meaning of the bootrom startup error codes?
 
@@ -45,7 +45,7 @@ When bootrom boot fails, it will print an error similar to boot failed with exit
 | 19    | Boot medium initialization failed, such as no SD card inserted |
 | 17    | OTP requires a secure image, but the file in the medium is a non-secure image |
 
-## 3 SPI NOR and SPI NAND Flash Identification
+## SPI NOR and SPI NAND Flash Identification
 
 Issue: How to know whether the EVB board is connected to SPI NOR or SPI NAND flash?
 
@@ -61,7 +61,7 @@ Answer: Method 1: The sub-board silkscreen is different, and the silkscreen will
 [    1.318147] Creating 2 MTD partitions on "spi0.0":
 ```
 
-## 4 Perf Usage
+## Perf Usage
 
 Issue: How to compile perf and what hardware events does it support?
 
@@ -123,7 +123,7 @@ CONFIG_FRAME_POINTER=y
 [root@canaan ~ ]#
 ```
 
-## 5 Running Vector Linux on the Big Core
+## Running Vector Linux on the Big Core
 
 Issue: How to run Linux with vector support on the big core?
 
@@ -134,19 +134,19 @@ make CONF=k230_canmv_only_linux_defconfig
 # k230_canmv_only_linux_defconfig corresponds to the Linux image with vector support for the big core
 ```
 
-## 6 Big Core Serial Port ID
+## Big Core Serial Port ID
 
 Issue: How to modify the serial port ID of the big core?
 
 Answer: The configuration file CONFIG_RTT_CONSOLE_ID under configs represents the serial port ID of the big core. Modify it to the correct value.
 
-## 7 Uboot Command Line
+## Uboot Command Line
 
 How to compile a version that can enter the Uboot command line?
 
 Answer: The configuration file CONFIG_QUICK_BOOT under configs represents quick boot. Modify it to CONFIG_QUICK_BOOT=n to generate a version that can enter the Uboot command line.
 
-## 8 How to Change Slow Boot to Fast Boot
+## How to Change Slow Boot to Fast Boot
 
 Answer: Enter the Uboot command line and execute the following commands:
 
@@ -154,7 +154,7 @@ Answer: Enter the Uboot command line and execute the following commands:
 setenv quick_boot true;saveenv;reset;
 ```
 
-## 9 How to Modify the Size of the Last Partition in Linux
+## How to Modify the Size of the Last Partition in Linux
 
 Answer: You can dynamically modify the size of the last partition using the parted tool. Refer to the following commands:
 
@@ -235,7 +235,7 @@ tmpfs                    51.8M     36.0K     51.7M   0% /run
 
 ```
 
-## 10 How to Modify Bootargs
+## How to Modify Bootargs
 
 Answer: Method 1: Modify the bootargs in the env file. For example, you can add the following content to the board/common/env/default.env file:
 
@@ -249,7 +249,7 @@ Method 2: Enter the Uboot command line and modify the bootargs using the followi
 setenv bootargs "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi"; saveenv; reset;
 ```
 
-## 11 How to View Bootargs
+## How to View Bootargs
 
 Answer: Method 1: In Linux, enter `cat /proc/cmdline` to view:
 
@@ -267,7 +267,7 @@ Method 2: In the Linux command line, enter `dmesg | grep command` to view:
 [root@canaan ~ ]
 ```
 
-## 12 How to Modify the Default Serial Port of the Small Core
+## How to Modify the Default Serial Port of the Small Core
 
 Answer: Currently, the default serial port for the small core in the SDK is 0. If you need to change it to another serial port (e.g., serial port 2), please follow the steps below:
 
@@ -316,7 +316,7 @@ For example, you can add the following content to the board/common/env/default.e
 bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS2,115200 earlycon=sbi;
 ```
 
-## 13 How to Completely Recompile the SDK
+## How to Completely Recompile the SDK
 
 Answer: After updating or modifying the SDK source code, it is recommended to enter the following commands to completely recompile the SDK:
 
@@ -324,7 +324,7 @@ Answer: After updating or modifying the SDK source code, it is recommended to en
 make clean; make;
 ```
 
-## 14 Where is the List of Supported Sensors
+## Where is the List of Supported Sensors
 
 Answer: Please refer to section 4.1 "Supported Sensor Types" in the [K230_Camera_Sensor Adaptation Guide](../01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md). Currently supported sensors include:
 
@@ -335,7 +335,7 @@ Answer: Please refer to section 4.1 "Supported Sensor Types" in the [K230_Camera
 - ov5647
 - sc201
 
-## 15 Can the Canmmv Board Use Pingtouge's CKLink for JTAG Debugging
+## Can the Canmmv Board Use Pingtouge's CKLink for JTAG Debugging
 
 Answer: By default, it cannot (Uboot disables the JTAG function). You need to make the following modifications to use Pingtouge CKLink for JTAG debugging:
 
@@ -347,7 +347,7 @@ Answer: By default, it cannot (Uboot disables the JTAG function). You need to ma
 
 > After modification, you need to recompile the Uboot code.
 
-## 16 How to Quickly Compile a Specific Package Under Buildroot
+## How to Quickly Compile a Specific Package Under Buildroot
 
 Answer: Refer to the following commands to quickly recompile a specific package under Buildroot:
 
@@ -362,7 +362,7 @@ make build-image # Regenerate the image
 
 For more information, search "buildroot how to rebuild packages" on Baidu.
 
-## 17 How to Run Only the RTT System and Mount the SD Card on Canmv
+## How to Run Only the RTT System and Mount the SD Card on Canmv
 
 Answer: Please use the following command to compile:
 
@@ -371,7 +371,7 @@ make CONF=k230_canmv_only_rtt_defconfig
 # k230_canmv_only_rtt_defconfig corresponds to an image that only runs the RTT system and mounts the SD card.
 ```
 
-## 18 How to Quickly Verify Serial Port Transmission and Reception in Linux
+## How to Quickly Verify Serial Port Transmission and Reception in Linux
 
 Answer: Refer to the following commands:
 
@@ -383,7 +383,7 @@ echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  # Send a string,
 cat /dev/ttyS2  # Receive serial port data
 ```
 
-## 19 How to Quickly Modify Linux Configuration
+## How to Quickly Modify Linux Configuration
 
 Answer:
 1). Modify the linux-savedefconfig target in the Makefile as follows (around line 382):
@@ -403,7 +403,7 @@ make linux-menuconfig # Modify Linux configuration
 make linux-savedefconfig # Save Linux configuration
 ```
 
-## 20 How to Switch the Auto-Start Program on the Big Core
+## How to Switch the Auto-Start Program on the Big Core
 
 Answer:
 If the auto-start program is in the /bin directory, modify it as follows:
@@ -450,7 +450,7 @@ Modification 2: Add a wait for the shared file system action (applicable to SDK 
         }
 ```
 
-## 21 Can libxml2 Be Used?
+## Can libxml2 Be Used?
 
 Answer: Yes, it can. Refer to the following method to enable BR2_PACKAGE_LIBXML2 in Buildroot.
 
@@ -535,7 +535,7 @@ all:
 
 Special Note: The SDK does not support multi-process compilation, so do not add multi-process compilation options like -j32.
 
-## 22 What Screens Are Supported?
+## What Screens Are Supported?
 
 Answer: For porting new screens, please refer to the [K230_LCD Adaptation Guide](../01_software/board/mpp/K230_LCD_Adaptation_Guide.md).
 Currently, the supported screens are:

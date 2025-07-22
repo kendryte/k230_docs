@@ -44,11 +44,11 @@ This document (this guide) is mainly intended for the following personnel:
 | --- | --- | --- | --- |
 | V1.0 | Initial version | Wang Jianxin | 2024/05/08 |
 
-## 1. Introduction to the EC200A 4G Module
+## Introduction to the EC200A 4G Module
 
 The EC200A series is an LTE Cat 4 wireless communication module designed by Quectel for the M2M and IoT fields, supporting USB-to-serial PPP, RNDIS, and ECM networking modes. The EC200A has 5 USB interfaces; interfaces 2-4 need to adapt to the USB serial driver and use PPP dial-up internet through the ttyUSB2 node; interfaces 0-1 need to adapt to the ECM/RNDIS driver.
 
-### 1.1 Hardware Information Seen in `dmesg`
+### Hardware Information Seen in `dmesg`
 
 The `dmesg` output shows information like the following (if not seen, please check the hardware), indicating idVendor=2c7c, idProduct=6005,
 
@@ -70,7 +70,7 @@ The `dmesg` output shows information like the following (if not seen, please che
 [    3.261388] option 1-1:1.6: GSM modem (1-port) converter detected
 ```
 
-### 1.2 `lsusb`
+### `lsusb`
 
 The `lsusb` command output shows information like the following:
 
@@ -83,7 +83,7 @@ Bus 002 Device 001: ID 1d6b:0002
 [root@canaan ~ ]#
 ```
 
-### 1.3 Viewing EC200A Information in `/usb/devices`
+### Viewing EC200A Information in `/usb/devices`
 
 ```bash
 [root@canaan ~ ]#mount -t debugfs none /sys/kernel/debug/
@@ -119,15 +119,13 @@ E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 ```
 
-## 2
-
 ## Kernel Mode Driver Modification
 
-### 2.1 USB Serial Driver Modification (Mandatory)
+### USB Serial Driver Modification (Mandatory)
 
 After loading the USB-to-serial option driver for the module, device files such as ttyUSB0, ttyUSB1, and ttyUSB2 are created in the /dev directory. This section describes the modifications needed for the USB-to-serial option driver.
 
-#### 2.1.1 Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration)
+#### Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration)
 
 ```bash
 CONFIG_USB_SERIAL
@@ -143,14 +141,14 @@ CONFIG_PPP_ASYNC=y
 CONFIG_PPP_SYNC_TTY=y
 ```
 
-#### 2.1.2 Add VID and PID to the option driver
+#### Add VID and PID to the option driver
 
 ```c
 // Add the following option to the option_ids[] array in src/little/linux/drivers/usb/serial/option.c (approximately line 583)
 { USB_DEVICE_AND_INTERFACE_INFO(0x2c7c, 0x6005, 0xff, 0, 0) },
 ```
 
-### 2.2 RNDIS/ECM Driver Modification
+### RNDIS/ECM Driver Modification
 
 Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration):
 
@@ -162,11 +160,11 @@ CONFIG_USB_NET_CDCETHER
 CONFIG_USB_NET_CDC_NCM
 ```
 
-## 3. User-mode pppd Program Compilation and Configuration
+## User-mode pppd Program Compilation and Configuration
 
 Note: This chapter is needed only for PPPoE dial-up internet (PPP mode).
 
-### 3.1 Adding pppd Program
+### Adding pppd Program
 
 Add the following configurations to buildroot:
 
@@ -184,16 +182,16 @@ Add the required configurations, save the configuration;
 
 Execute `make buildroot-savedefconfig`.
 
-### 3.2 Adding PPP Configuration Files
+### Adding PPP Configuration Files
 
-#### 3.2.1 Create directories in the SDK main directory
+#### Create directories in the SDK main directory
 
 ```sh
 mkdir board/common/post_copy_rootfs/etc/ppp
 mkdir board/common/post_copy_rootfs/etc/ppp/peers
 ```
 
-#### 3.2.2 Create the following files
+#### Create the following files
 
 - `board/common/post_copy_rootfs/etc/ppp/ip-up`
 - `board/common/post_copy_rootfs/etc/ppp/peers/quectel-pppd`
@@ -348,9 +346,9 @@ chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-pppd.sh
 chmod a+x board/common/post_copy_rootfs/etc/ppp/quectel-ppp-kill
 ```
 
-## 3. Testing
+## Testing
 
-### 3.1 Confirm Whether the Driver is Loaded Correctly
+### Confirm Whether the Driver is Loaded Correctly
 
 Execute `cat /sys/kernel/debug/usb/devices` and `dmesg` commands to check if the driver is loaded correctly. Correct output should be similar to the following:
 
@@ -423,7 +421,7 @@ Using `dmesg`, you can see output similar to the following:
 [    3.253786] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB2
 ```
 
-### 3.2 Testing AT Functionality
+### Testing AT Functionality
 
 You can use UART tools like "minicom" or "busybox microcom" to test AT functionality.
 
@@ -436,9 +434,9 @@ at+cpin?;+csq;+cops? +CSQ: 31,99
 +COPS: 0
 ```
 
-### 3.3 RNDIS/ECM Mode Network Testing
+### RNDIS/ECM Mode Network Testing
 
-#### 3.3.1 Set Module Working Mode
+#### Set Module Working Mode
 
 ```sh
 If in ECM mode, execute the following command:
@@ -457,13 +455,13 @@ echo -e "AT+QCFG=\"usbnet\",3\n\n;AT+CFUN=1,1\n\n" > /dev/ttyUSB2 ;sleep 15;
 >
 > `AT+qnetdevctl=3,1,1`  // Dial-up;
 
-#### 3.3.2 Dial-up
+#### Dial-up
 
 ```sh
 echo -e "AT+qnetdevctl=3,1,1\n\n" > /dev/ttyUSB2
 ```
 
-#### 3.3.3 Obtain IP Address
+#### Obtain IP Address
 
 ```sh
 [root@canaan ~ ]# ifconfig eth0 down; udhcpc -i usb0; ifconfig;
@@ -476,7 +474,7 @@ adding dns 183.230.126.225
 adding dns 183.230.126.224
 ```
 
-#### 3.3.4 Network Testing
+#### Network Testing
 
 ```shell
 [root@canaan ~ ]# ping -I usb0 www.163.com
@@ -490,9 +488,9 @@ round-trip min/avg/max = 45.732/46.245/46.759 ms
 [root@canaan ~ ]#
 ```
 
-### 3.4 PPP Mode Network Testing
+### PPP Mode Network Testing
 
-#### 3.4.1 Dial-up
+#### Dial-up
 
 ```shell
 ifconfig eth0 down
@@ -500,14 +498,14 @@ ifconfig eth0 down
 /etc/ppp/quectel-pppd.sh  /dev/ttyUSB2 CMNET
 ```
 
-#### 3.4.2 Testing
+#### Testing
 
 ```shell
 ifconfig
 ping www.163.com
 ```
 
-## 4. References
+## References
 
 - "Quectel_UMTS_LTE_5G_Linux_USB_Driver_User_Guide"
 - "Quectel_LTE_Standard(A)_Series_AT_Commands_Manual_V1.1"
