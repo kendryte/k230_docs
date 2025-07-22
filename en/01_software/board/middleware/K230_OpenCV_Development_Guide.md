@@ -50,7 +50,7 @@ This document (this guide) is mainly intended for the following personnel:
 |------------------|--------------------------|----------|------------|
 | V1.0             | Initial Version          | Algorithm Department | 2023-05-30 |
 
-## 1. Introduction to OpenCV
+## Introduction to OpenCV
 
 OpenCV stands for Open Source Computer Vision Library, a cross-platform computer vision library. OpenCV was initiated and developed by Intel, released under the BSD license, and can be used freely in commercial and research fields. OpenCV can be used to develop real-time image processing, computer vision, and pattern recognition programs. Canaan Technology provides an optimized and upgraded version of the OpenCV acceleration library for K230, which significantly reduces the inference time of OpenCV operators compared to the original version of OpenCV. The comparison examples are as follows:
 
@@ -66,7 +66,7 @@ Note:
 
 In addition, the SDK includes a pre-cross-compiled upgraded OpenCV acceleration library (located in the `k230_sdk/src/big/utils/lib/opencv/` path), and users can directly use this static library to compile their executable programs.
 
-## 2. Example of Test Case Compilation
+## Example of Test Case Compilation
 
 This section explains how to compile executable programs using the pre-set OpenCV static library in the SDK. The SDK includes multiple executable program compilation examples based on OpenCV (located in the `k230_sdk/src/big/utils/examples/opencv/` path). This section explains based on these examples. The directory structure under this path is explained as follows:
 
@@ -123,12 +123,12 @@ Finally, the `k230_sdk/src/big/utils/examples/opencv/out/bin` folder contains al
 - `4_opencv_features2d.elf`
 - `5_opencv_objdetect.elf`
 
-## 3. Example of Running Test Cases
+## Example of Running Test Cases
 
 Note:
 > All input image data required for running the test cases are located in the `k230_sdk/src/big/utils/examples/opencv/resources` path of the SDK.
 
-### 3.1 opencv_calcHist
+### opencv_calcHist
 
 The running method of the `1_opencv_calcHist` test case is as follows:
 
@@ -142,7 +142,7 @@ The running result of the `1_opencv_calcHist` test case is as follows:
 
 On the left is the original image, and on the right is the pixel histogram information of the 3 channels.
 
-### 3.2 opencv_threshold
+### opencv_threshold
 
 The running method of the `2_opencv_threshold` test case is as follows:
 
@@ -155,7 +155,7 @@ The running result of the `2_opencv_threshold` test case is as follows:
 
 On the left is the original image, and on the right is the thresholded image.
 
-### 3.3 opencv_findContours
+### opencv_findContours
 
 The running method of the `3_opencv_findContours` test case is as follows:
 
@@ -168,7 +168,7 @@ The running result of the `3_opencv_findContours` test case is as follows:
 
 On the left is the original image, and on the right is the processed contour information image.
 
-### 3.4 opencv_features2d
+### opencv_features2d
 
 The running method of the `4_opencv_features2d` test case is as follows:
 
@@ -180,7 +180,7 @@ The running result of the `4_opencv_features2d` test case is as follows:
 ![test_opencv_features2d](../../../../zh/01_software/board/middleware/images/test_opencv_features2d.png)
 On the left is the original image, and on the right is the processed feature extraction result image.
 
-### 3.5 opencv_objdetect
+### opencv_objdetect
 
 The running method of the `5_opencv_objdetect` test case is as follows:
 
@@ -193,12 +193,12 @@ The running result of the `5_opencv_objdetect` test case is as follows:
 
 On the left is the original image, and on the right is the target detection result image for eyes and faces.
 
-## 4. Cross-compilation and Use of the Original Version of OpenCV Library
+## Cross-compilation and Use of the Original Version of OpenCV Library
 
 Note:
 > In chapters 1-3, the K230 accelerated version of the OpenCV library provided by Canaan Technology is used. If users wish to use the native OpenCV library for application development, they can refer to this section: first, cross-compile the original version of the OpenCV static library; then, based on the original version of the OpenCV static library, compile the executable program.
 
-### 4.1 Download OpenCV Source Code
+### Download OpenCV Source Code
 
 First, use Github to obtain the OpenCV repository. Since OpenCV is from Github, the cloning speed may be slow, which is normal, please be patient:
 
@@ -213,7 +213,7 @@ OpenCV has many versions, here we use the latest version 4.6.0:
 git checkout tags/4.6.0 -b v4.6.0-branch
 ```
 
-### 4.2 Apply Patch Package
+### Apply Patch Package
 
 The patch package is located in the SDK at `k230_sdk/src/big/rt-smart/userapps/opencv/v4.6.0`.
 
@@ -271,7 +271,7 @@ At this point, the directory structure of OpenCV after applying the patch is as 
 `-- version
 ```
 
-### 4.3 Cross-compile OpenCV Static Library
+### Cross-compile OpenCV Static Library
 
 First, check whether the toolchain path in the `build.sh` file is correct:
 
@@ -296,7 +296,7 @@ make install
 
 If no warning messages appear in the terminal during the compilation process, it means the compilation is successful. The compiled products are in `build/install`, which contains the static library files of the original version of OpenCV.
 
-### 4.4 Compile Executable Program
+### Compile Executable Program
 
 This section explains how to compile executable programs based on the original version of the OpenCV library by modifying the test cases in Section 2.
 First, copy the original version of the OpenCV library to `k230_sdk/src/big/utils/lib/` and name the folder `opencv_rtt`.

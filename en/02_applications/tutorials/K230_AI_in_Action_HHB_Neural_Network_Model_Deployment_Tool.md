@@ -50,7 +50,7 @@ This document (this guide) is mainly intended for the following personnel:
 | ---------------- | ------------ | ------ | ---------- |
 | V1.0             | Initial Draft | Zhang Yang | 2023/6/25  |
 
-## 1. Overview
+## Overview
 
 To deploy and run the HHB program on the K230 RTT, the following steps are required:
 
@@ -58,7 +58,7 @@ To deploy and run the HHB program on the K230 RTT, the following steps are requi
 - Use the K230 RTT cross-compilation toolchain to compile the C code.
 - Run the executable program on the board.
 
-### 1.1 HHB
+### HHB
 
 HHB (Heterogeneous Honey Badger) is a neural network model deployment toolset provided by T-Head for the Xuantie chip platform. It includes a series of tools needed for deployment, such as compilation optimization, performance analysis, process debugging, and result simulation.
 
@@ -81,7 +81,7 @@ HHB is based on the open-source project [TVM](https://github.com/apache/tvm), ad
 
 For detailed usage, please refer to the [HHB User Manual](https://www.yuque.com/za4k4z/oxlbxl).
 
-### 1.2 SHL
+### SHL
 
 SHL is a set of neural network library APIs provided by T-HEAD for the Xuantie CPU platform. It abstracts the interfaces of various commonly used network layers and provides a series of optimized binary libraries.
 
@@ -100,9 +100,9 @@ SHL provides complete interface declarations and reference implementations of th
 
 For detailed usage, please refer to the [SHL User Manual](https://www.yuque.com/za4k4z/isgz8o/ayilv9).
 
-## 2. HHB Model Compilation
+## HHB Model Compilation
 
-### 2.1 Environment Setup
+### Environment Setup
 
 > Prerequisite: Docker is installed on the local PC.
 
@@ -117,7 +117,7 @@ For detailed usage, please refer to the [SHL User Manual](https://www.yuque.com/
   ./start_hhb.sh
   ```
 
-### 2.2 Model Compilation
+### Model Compilation
 
 The current version of the docker image does not integrate the C908 model compilation. Here, we copy C906 and modify the relevant configuration.
 
@@ -216,9 +216,9 @@ Copy the hhb_out directory to /mnt and export it to the PC. You will need to re-
 root@02297217e66d:/home/example/c908/onnx_mobilenetv2# cp -a hhb_out/ /mnt/
 ```
 
-## 3. Demo
+## Demo
 
-### 3.1 Environment Setup
+### Environment Setup
 
 > Prerequisite: The user has compiled the docker image according to the k230_sdk documentation.
 
@@ -229,7 +229,7 @@ cd /path/to/k230_sdk
 docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) k230_docker /bin/bash
 ```
 
-### 3.2 Compile the Demo
+### Compile the Demo
 
 We provide an HHB demo in k230_sdk. Users only need to copy the C code compiled by HHB to compile an executable program that can run on the board.
 
@@ -271,7 +271,7 @@ total 5560
 -rw-r--r--    1 sshd     sshd        602112 Jun 25  2023 persian_cat.jpg.0.bin
 ```
 
-### 3.3 Running the Demo
+### Running the Demo
 
 - Start the K230, and execute the following commands in the large core RTT serial console.
 

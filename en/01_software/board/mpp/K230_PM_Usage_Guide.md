@@ -51,7 +51,7 @@ This document (this guide) is mainly applicable to the following personnel:
 | ---------------- | ------------------------- | -------- | ---------- |
 | V1.0             | Initial version           | Zhang Tao | 2023/07/17 |
 
-## 1. Overview
+## Overview
 
 The K230 platform power consumption management framework is divided into large core power management and small core power management, with both cores being independently controlled.
 The large core (rt-smart) mainly controls CPU1, AI module, display module, multimedia module, etc., while the small core (linux) mainly controls CPU0, etc.
@@ -65,11 +65,11 @@ After the chip is powered on, all power domains and clocks are enabled by defaul
 
 At the same time, each device driver is responsible for the corresponding clock and power domain management. When the user turns on the device, the driver should turn on the power domain and clock. When the user turns off the device, the driver should turn off the clock and power domain. For devices that do not support power domain management, only clock control is required.
 
-## 2. Large Core Power Control
+## Large Core Power Control
 
-### 2.1 Control Framework Introduction
+### Control Framework Introduction
 
-#### 2.1.1 Power Management Domains
+#### Power Management Domains
 
 Large core power control mainly revolves around several power management domains:
 
@@ -81,7 +81,7 @@ Large core power control mainly revolves around several power management domains
 
 Each power management domain can be set to different frequencies. Among them, CPU1 and KPU also support DVFS, while other power management domains only support frequency settings. The frequencies supported by power management domains are built into the driver, and users can modify them according to their actual scenarios.
 
-#### 2.1.2 Control Strategies
+#### Control Strategies
 
 Each power management domain can be set with different power control strategies, divided into four strategies:
 
@@ -90,44 +90,44 @@ Each power management domain can be set with different power control strategies,
 1. Power-saving mode, locking the lowest frequency.
 1. Automatic mode, automatically switching frequencies based on load (only supported by CPU1).
 
-#### 2.1.3 Thermal Protection
+#### Thermal Protection
 
 Power control supports two levels of thermal protection. The first level limits the frequency of the module when the specified temperature is exceeded, and the second level forcibly shuts down the power domain of the module when the specified temperature is exceeded. Both levels support user configuration.
 
-#### 2.1.4 Power and Clock
+#### Power and Clock
 
 Power control supports manual power on/off and clock control for each power management domain. Users generally do not need to manually call these; the device driver will turn on the power and clock when using the device and turn off the power and clock when turning off the device.
 
-#### 2.1.5 CPU1
+#### CPU1
 
 The CPU supports four strategies: `Manual Mode`, `Performance Mode`, `Power-saving Mode`, `Automatic Mode`.
 
 For the current power consumption optimization of CPU1 in door lock and dictionary pen POC, the main approach is to use manual mode. Users set a high frequency before the program segment with heavy computation and set it to a low frequency after completion. For multi-process or multi-threaded applications, each application can lock the minimum operating frequency.
 You can adjust the application to achieve the best power consumption by viewing the CPU statistics.
 
-#### 2.1.6 KPU
+#### KPU
 
 The KPU supports three strategies: `Manual Mode`, `Performance Mode`, `Power-saving Mode`.
 
 KPU power control mainly adjusts the KPU frequency and switches the power clock. Through nncase, the `kd_mpi_pm_runtime_runstage` interface is called to inform the current running stage of the KPU. Users can control the clocks and power of each module according to each stage. For example, when using KPU in AI, the KPU clock can be turned on, and the clock can be turned off immediately after use (the control of the AI2D clock is automatically controlled by hardware by default). Users can also manually set the KPU frequency according to actual scenarios, such as setting the maximum frequency for high frame rate requirements and setting a lower frequency to reduce power consumption if there are no frame rate requirements or if the requirements are met.
 
-#### 2.1.7 DPU
+#### DPU
 
 Refer to KPU.
 
-#### 2.1.8 VPU
+#### VPU
 
 Refer to KPU.
 
-#### 2.1.9 DISPLAY
+#### DISPLAY
 
 For the display-related part, several frequency combinations are built in, such as 60fps, 30fps, etc. Set them according to different scenarios at startup. Frequency adjustment during operation is not supported, only clock and power domain shutdown are supported.
 
-### 2.2 Usage
+### Usage
 
 The power management framework is enabled by default, with all domains initially set to `Manual Mode`, and the frequency is the system default initial value, which does not affect the original system functions.
 
-#### 2.2.1 Using Manual Mode
+#### Using Manual Mode
 
 Users can refer to the following process to use `Manual Mode`:
 
@@ -135,18 +135,18 @@ Users can refer to the following process to use `Manual Mode`:
 1. Use the `kd_mpi_pm_set_governor` interface to set the management strategy of the power management domain to manual mode.
 1. Use the `kd_mpi_pm_set_profile` or `kd_mpi_pm_set_profile_lock` interface to set the profile number of the power management domain.
 
-#### 2.2.2 Using Other Modes
+#### Using Other Modes
 
 Users can refer to the following process to use `Performance Mode`, `Power-saving Mode`, `Automatic Mode`:
 
 1. Use the `kd_mpi_pm_set_governor` interface to set the management strategy of the power management domain to the corresponding mode.
 
-#### 2.2.3 Using Thermal Protection
+#### Using Thermal Protection
 
 1. Use the `kd_mpi_pm_set_thermal_protect` interface to set the thermal protection temperature and downclock profile number. When the temperature exceeds the specified value, it will downclock to the specified profile.
 1. Use the `kd_mpi_pm_set_thermal_shutdown` interface to set the thermal shutdown temperature. When the temperature exceeds the specified value, each power management domain will be forcibly powered off.
 
-#### 2.2.4 Using Custom Frequencies
+#### Using Custom Frequencies
 
 For example, if you need to modify the frequencies supported by the CPU, you can modify the `profiles` array in the `k230_sdk/src/big/mpp/kernel/pm/src/pm_domain_cpu.c` file:
 
@@ -167,29 +167,29 @@ Modifications for KPU, DPU, and VPU are similar.
 
 *Note:* If you need to use the CPU `Automatic Mode` strategy, after modifying the frequency, you also need to modify the load conversion table `load_table`.
 
-### 2.3 API Reference
+### API Reference
 
 The framework provides the following APIs:
 
-- [kd_mpi_pm_set_reg](#231-kd_mpi_pm_set_reg)
-- [kd_mpi_pm_get_reg](#232-kd_mpi_pm_get_reg)
-- [kd_mpi_pm_get_profiles](#233-kd_mpi_pm_get_profiles)
-- [kd_mpi_pm_get_stat](#234-kd_mpi_pm_get_stat)
-- [kd_mpi_pm_set_governor](#235-kd_mpi_pm_set_governor)
-- [kd_mpi_pm_get_governor](#236-kd_mpi_pm_get_governor)
-- [kd_mpi_pm_set_profile](#237-kd_mpi_pm_set_profile)
-- [kd_mpi_pm_get_profile](#238-kd_mpi_pm_get_profile)
-- [kd_mpi_pm_set_profile_lock](#239-kd_mpi_pm_set_profile_lock)
-- [kd_mpi_pm_set_profile_unlock](#2310-kd_mpi_pm_set_profile_unlock)
-- [kd_mpi_pm_set_thermal_protect](#2311-kd_mpi_pm_set_thermal_protect)
-- [kd_mpi_pm_get_thermal_protect](#2312-kd_mpi_pm_get_thermal_protect)
-- [kd_mpi_pm_set_thermal_shutdown](#2313-kd_mpi_pm_set_thermal_shutdown)
-- [kd_mpi_pm_get_thermal_shutdown](#2314-kd_mpi_pm_get_thermal_shutdown)
-- [kd_mpi_pm_set_clock](#2315-kd_mpi_pm_set_clock)
-- [kd_mpi_pm_set_power](#2316-kd_mpi_pm_set_power)
-- [kd_mpi_pm_runtime_runstage](#2317-kd_mpi_pm_runtime_runstage)
+- [kd_mpi_pm_set_reg](#kd_mpi_pm_set_reg)
+- [kd_mpi_pm_get_reg](#kd_mpi_pm_get_reg)
+- [kd_mpi_pm_get_profiles](#kd_mpi_pm_get_profiles)
+- [kd_mpi_pm_get_stat](#kd_mpi_pm_get_stat)
+- [kd_mpi_pm_set_governor](#kd_mpi_pm_set_governor)
+- [kd_mpi_pm_get_governor](#kd_mpi_pm_get_governor)
+- [kd_mpi_pm_set_profile](#kd_mpi_pm_set_profile)
+- [kd_mpi_pm_get_profile](#kd_mpi_pm_get_profile)
+- [kd_mpi_pm_set_profile_lock](#kd_mpi_pm_set_profile_lock)
+- [kd_mpi_pm_set_profile_unlock](#kd_mpi_pm_set_profile_unlock)
+- [kd_mpi_pm_set_thermal_protect](#kd_mpi_pm_set_thermal_protect)
+- [kd_mpi_pm_get_thermal_protect](#kd_mpi_pm_get_thermal_protect)
+- [kd_mpi_pm_set_thermal_shutdown](#kd_mpi_pm_set_thermal_shutdown)
+- [kd_mpi_pm_get_thermal_shutdown](#kd_mpi_pm_get_thermal_shutdown)
+- [kd_mpi_pm_set_clock](#kd_mpi_pm_set_clock)
+- [kd_mpi_pm_set_power](#kd_mpi_pm_set_power)
+- [kd_mpi_pm_runtime_runstage](#kd_mpi_pm_runtime_runstage)
 
-#### 2.3.1 kd_mpi_pm_set_reg
+#### kd_mpi_pm_set_reg
 
 【Description】
 
@@ -213,7 +213,7 @@ int kd_mpi_pm_set_reg(uint32_t reg, uint32_t val);
 | Return Value | **Description** |
 | ------------ | --------------- |
 | 0            | Success         |
-| Non-zero     | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero     | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -228,7 +228,7 @@ Only supports CMU, PWR address segments.
 
 None
 
-#### 2.3.2 kd_mpi_pm_get_reg
+#### kd_mpi_pm_get_reg
 
 【Description】
 
@@ -252,7 +252,7 @@ int kd_mpi_pm_get_reg(uint32_t reg, uint32_t *pval);
 | Return Value | **Description** |
 | ------------ | --------------- |
 | 0            | Success         |
-| Non-zero     | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero     | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -267,7 +267,7 @@ Only supports CMU, PWR address segments.
 
 None
 
-#### 2.3.3 kd_mpi_pm_get_profiles
+#### kd_mpi_pm_get_profiles
 
 【Description】
 
@@ -292,7 +292,7 @@ int kd_mpi_pm_get_profiles(k_pm_domain domain, uint32_t *pcount, k_pm_profile *p
 | Return Value | **Description** |
 | ------------ | --------------- |
 | 0            | Success         |
-| Non-zero     | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero     | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -311,7 +311,7 @@ int kd_mpi_pm_get_profiles(k_pm_domain domain, uint32_t *pcount, k_pm_profile *p
 
 None
 
-#### 2.3.4 kd_mpi_pm_get_stat
+#### kd_mpi_pm_get_stat
 
 【Description】
 
@@ -334,7 +334,7 @@ int kd_mpi_pm_get_stat(k_pm_domain domain);
 | Return Value | **Description** |
 | ------------ | --------------- |
 | 0            | Success         |
-| Non-zero     | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero     | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -349,7 +349,7 @@ int kd_mpi_pm_get_stat(k_pm_domain domain);
 
 None
 
-#### 2.3.5 kd_mpi_pm_set_governor
+#### kd_mpi_pm_set_governor
 
 【Description】
 
@@ -373,7 +373,7 @@ int kd_mpi_pm_set_governor(k_pm_domain domain, k_pm_governor governor);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -388,7 +388,7 @@ None
 
 None
 
-#### 2.3.6 kd_mpi_pm_get_governor
+#### kd_mpi_pm_get_governor
 
 【Description】
 
@@ -412,7 +412,7 @@ int kd_mpi_pm_get_governor(k_pm_domain domain, k_pm_governor *pgovernor);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -427,7 +427,7 @@ None
 
 None
 
-#### 2.3.7 kd_mpi_pm_set_profile
+#### kd_mpi_pm_set_profile
 
 【Description】
 
@@ -451,7 +451,7 @@ int kd_mpi_pm_set_profile(k_pm_domain domain, int32_t index);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -469,7 +469,7 @@ int kd_mpi_pm_set_profile(k_pm_domain domain, int32_t index);
 
 None
 
-#### 2.3.8 kd_mpi_pm_get_profile
+#### kd_mpi_pm_get_profile
 
 【Description】
 
@@ -493,7 +493,7 @@ int kd_mpi_pm_get_profile(k_pm_domain domain, int32_t *pindex);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -508,7 +508,7 @@ None
 
 None
 
-#### 2.3.9 kd_mpi_pm_set_profile_lock
+#### kd_mpi_pm_set_profile_lock
 
 【Description】
 
@@ -532,7 +532,7 @@ int kd_mpi_pm_set_profile_lock(k_pm_domain domain, int32_t index);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -542,13 +542,13 @@ int kd_mpi_pm_set_profile_lock(k_pm_domain domain, int32_t index);
 【Note】
 
 1. After setting, the current profile may be greater than the set value. For example, if another process sets the minimum profile to 1, and the current process sets the minimum profile to 2, the actual profile will be 1.
-1. Refer to [kd_mpi_pm_set_profile](#237-kd_mpi_pm_set_profile) for other details.
+1. Refer to [kd_mpi_pm_set_profile](#kd_mpi_pm_set_profile) for other details.
 
 【Example】
 
 None
 
-#### 2.3.10 kd_mpi_pm_set_profile_unlock
+#### kd_mpi_pm_set_profile_unlock
 
 【Description】
 
@@ -572,7 +572,7 @@ int kd_mpi_pm_set_profile_unlock(k_pm_domain domain, int32_t index);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -587,7 +587,7 @@ None
 
 None
 
-#### 2.3.11 kd_mpi_pm_set_thermal_protect
+#### kd_mpi_pm_set_thermal_protect
 
 【Description】
 
@@ -612,7 +612,7 @@ int kd_mpi_pm_set_thermal_protect(k_pm_domain domain, int32_t temp, int32_t inde
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -627,7 +627,7 @@ int kd_mpi_pm_set_thermal_protect(k_pm_domain domain, int32_t temp, int32_t inde
 
 None
 
-#### 2.3.12 kd_mpi_pm_get_thermal_protect
+#### kd_mpi_pm_get_thermal_protect
 
 【Description】
 
@@ -652,7 +652,7 @@ int kd_mpi_pm_get_thermal_protect(k_pm_domain domain, int32_t *ptemp, int32_t *p
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -667,7 +667,7 @@ int kd_mpi_pm_get_thermal_protect(k_pm_domain domain, int32_t *ptemp, int32_t *p
 
 None
 
-#### 2.3.13 kd_mpi_pm_set_thermal_shutdown
+#### kd_mpi_pm_set_thermal_shutdown
 
 【Description】
 
@@ -690,7 +690,7 @@ int kd_mpi_pm_set_thermal_shutdown(int32_t temp);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -705,7 +705,7 @@ None
 
 None
 
-#### 2.3.14 kd_mpi_pm_get_thermal_shutdown
+#### kd_mpi_pm_get_thermal_shutdown
 
 【Description】
 
@@ -728,7 +728,7 @@ int kd_mpi_pm_get_thermal_shutdown(int32_t *ptemp);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -743,7 +743,7 @@ None
 
 None
 
-#### 2.3.15 kd_mpi_pm_set_clock
+#### kd_mpi_pm_set_clock
 
 【Description】
 
@@ -767,7 +767,7 @@ int kd_mpi_pm_set_clock(k_pm_domain domain, bool enable);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -782,7 +782,7 @@ None
 
 None
 
-#### 2.3.16 kd_mpi_pm_set_power
+#### kd_mpi_pm_set_power
 
 【Description】
 
@@ -806,7 +806,7 @@ int kd_mpi_pm_set_power(k_pm_domain domain, bool enable);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -821,7 +821,7 @@ None
 
 None
 
-#### 2.3.17 kd_mpi_pm_runtime_runstage
+#### kd_mpi_pm_runtime_runstage
 
 【Description】
 
@@ -844,7 +844,7 @@ int kd_mpi_pm_runtime_runstage(k_runtimestage_id stage);
 | Return Value | **Description** |
 | :-- | :-- |
 | 0 | Success |
-| Non-zero | Failure, see [Error Codes](#25-error-codes) for its value |
+| Non-zero | Failure, see [Error Codes](#error-codes) for its value |
 
 【Requirements】
 
@@ -859,9 +859,9 @@ int kd_mpi_pm_runtime_runstage(k_runtimestage_id stage);
 
 None
 
-### 2.4 Data Structures
+### Data Structures
 
-#### 2.4.1 k_pm_domain
+#### k_pm_domain
 
 【Description】
 
@@ -897,7 +897,7 @@ typedef enum {
 
 None
 
-#### 2.4.2 k_pm_governor
+#### k_pm_governor
 
 【Description】
 
@@ -927,7 +927,7 @@ typedef enum {
 
 None
 
-#### 2.4.3 k_pm_profile
+#### k_pm_profile
 
 【Description】
 
@@ -953,7 +953,7 @@ typedef struct {
 
 1. Frequency points are arranged in descending order, with index 0 being the highest frequency, and the larger the index, the lower the frequency.
 
-#### 2.4.4 k_runtimestage_id
+#### k_runtimestage_id
 
 【Description】
 
@@ -987,7 +987,7 @@ typedef enum {
 
 None
 
-### 2.5 Error Codes
+### Error Codes
 
 | **Error Code** | **Macro Definition** | **Description** |
 | :-- | :-- | :-- |
@@ -1003,12 +1003,12 @@ None
 | 0xa0178011 | K_ERR_PM_BADADDR | Bad address |
 | 0xa0178012 | K_ERR_PM_BUSY | Device busy |
 
-## 3. Low-Power Core Control
+## Low-Power Core Control
 
-### 3.1 Control Framework Introduction
+### Control Framework Introduction
 
 The low-power core control mainly targets CPU0, supporting Linux `cpu_freq`, temperature protection, and cooling control.
 
-### 3.1.1 cpu_freq
+### cpu_freq
 
 `cpu_freq` is a Linux standard. Please refer to the [kernel documentation](https://www.kernel.org/doc/html/v5.10/cpu-freq/index.html).

@@ -55,9 +55,9 @@ This document (this guide) is mainly intended for the following personnel:
 | V1.3             | nncase_k230_v2.1.0, ai2d/runtime_tensor supports physical address | Zhang Yang | 2023/7/3  |
 | V1.4             | Document description updated                        | Yang Haoqi        | 2024/5/15  |
 
-## 1. Overview
+## Overview
 
-### 1.1 What is nncase
+### What is nncase
 
 nncase is a neural network compiler designed for AI accelerators. Currently supported targets include CPU/K210/K510/K230, etc.
 
@@ -75,7 +75,7 @@ Supported neural network model formats by nncase:
 - TFLite
 - ONNX
 
-### 1.2 nncase Architecture
+### nncase Architecture
 
 ![nncase architecture](../../../../zh/01_software/board/ai/images/185762ac17039d6c4961faa2fba0d66e.png)
 
@@ -95,13 +95,13 @@ Compiler: Used to compile neural network models on a PC, ultimately generating k
 
 Runtime: Integrated into the user's App, providing functions such as loading kmodel, setting input data, executing KPU, and retrieving output data.
 
-### 1.3 Development Environment
+### Development Environment
 
-#### 1.3.1 Operating System
+#### Operating System
 
 Supported operating systems include Ubuntu 18.04/Ubuntu 20.04
 
-#### 1.3.2 Software Environment
+#### Software Environment
 
 | No. | Software         | Version              |
 | --- | ---------------- | -------------------- |
@@ -114,17 +114,17 @@ Supported operating systems include Ubuntu 18.04/Ubuntu 20.04
 | 7   | Onnxruntime      | 1.8.0                |
 | 8   | dotnet-runtime   | 7.0                  |
 
-#### 1.3.3 Hardware Environment
+#### Hardware Environment
 
 K230 evb
 
-## 2. Model Compilation APIs (Python)
+## Model Compilation APIs (Python)
 
 nncase provides Python APIs for compiling neural network models on a PC
 
-### 2.1 Supported Operators
+### Supported Operators
 
-#### 2.1.1 TFLite Operators
+#### TFLite Operators
 
 | Operator                | Is Supported |
 | ----------------------- | ------------ |
@@ -207,7 +207,7 @@ nncase provides Python APIs for compiling neural network models on a PC
 | SPLIT                   | Yes          |
 | HARD_SWISH              | Yes          |
 
-#### 2.1.2 ONNX Operators
+#### ONNX Operators
 
 | Operator              | Is Supported |
 | --------------------- | ------------ |
@@ -329,11 +329,11 @@ nncase provides Python APIs for compiling neural network models on a PC
 | Unsqueeze             | Yes          |
 | Where                 | Yes          |
 
-### 2.2 APIs
+### APIs
 
 Currently, the model compilation APIs support deep learning models in TFLite/ONNX formats.
 
-#### 2.2.1 CompileOptions
+#### CompileOptions
 
 **Description**:
 
@@ -363,7 +363,7 @@ The `CompileOptions` class is used to configure nncase compilation options. The 
 | shape_bucket_segments_count |         int         |    Yes   | Specifies the number of segments to divide the input variable's range                                                 |
 | shape_bucket_fix_var_map    |   Dict[str, int]    |    No    | Specifies fixed values for variables in the shape dimension information                                               |
 
-##### 2.2.1.1 Preprocessing Workflow
+##### Preprocessing Workflow
 
 Currently, custom preprocessing order is not supported. You can configure the required preprocessing parameters based on the following workflow diagram.
 
@@ -416,7 +416,7 @@ subgraph A
     end
 </div>
 
-##### 2.2.1.2 Dynamic Shape Parameters
+##### Dynamic Shape Parameters
 
 ShapeBucket is a solution for dynamic shapes that optimizes based on the range of input lengths and the specified number of segments. This feature is disabled by default and needs to be enabled through the corresponding option. Apart from specifying the relevant field information, the rest of the compilation process is the same as compiling a static model.
 
@@ -453,7 +453,7 @@ compile_options.shape_bucket_fix_var_map = {"batch_size" : 3}
 
 After configuring these options, the entire compilation process is the same as for a static shape model.
 
-##### 2.2.1.3 Parameter Configuration Example
+##### Parameter Configuration Example
 
 Instantiate `CompileOptions` and configure the attribute values.
 
@@ -487,7 +487,7 @@ if compile_options.shape_bucket_enable:
     compile_options.shape_bucket_fix_var_map = {"batch_size": 3}
 ```
 
-#### 2.2.2 ImportOptions
+#### ImportOptions
 
 **Description**:
 
@@ -510,7 +510,7 @@ Instantiate `ImportOptions` and configure attribute values.
 import_options = nncase.ImportOptions()
 ```
 
-#### 2.2.3 PTQTensorOptions
+#### PTQTensorOptions
 
 **Description**:
 
@@ -550,7 +550,7 @@ ptq_options.export_weight_range_by_channel = True
 compiler.use_ptq(ptq_options)
 ```
 
-#### 2.2.4 set_tensor_data
+#### set_tensor_data
 
 **Description**:
 
@@ -585,7 +585,7 @@ ptq_options.set_tensor_data(generate_data(input_shape, ptq_options.samples_count
 compiler.use_ptq(ptq_options)
 ```
 
-#### 2.2.5 Compiler
+#### Compiler
 
 **Description**:
 
@@ -603,7 +603,7 @@ class Compiler:
     _module: IRModule
 ```
 
-#### 2.2.6 import_tflite
+#### import_tflite
 
 **Description**:
 
@@ -635,7 +635,7 @@ model_content = read_model_file(model)
 compiler.import_tflite(model_content, import_options)
 ```
 
-#### 2.2.7 import_onnx
+#### import_onnx
 
 **Description**:
 
@@ -667,7 +667,7 @@ model_content = read_model_file(model)
 compiler.import_onnx(model_content, import_options)
 ```
 
-#### 2.2.8 use_ptq
+#### use_ptq
 
 **Description**:
 
@@ -693,7 +693,7 @@ None
 
 `compiler.use_ptq(ptq_options)`
 
-#### 2.2.9 compile
+#### compile
 
 **Description**:
 
@@ -715,7 +715,7 @@ None
 
 `compiler.compile()`
 
-#### 2.2.10 gencode_tobytes
+#### gencode_tobytes
 
 **Description**:
 
@@ -741,14 +741,14 @@ with open(os.path.join(infer_dir, 'test.kmodel'), 'wb') as f:
     f.write(kmodel)
 ```
 
-### 2.3 Examples
+### Examples
 
 The following examples use models and Python compilation scripts.
 
 - The original model files are located in `/path/to/k230_sdk/src/big/nncase/examples/models`
 - The Python compilation scripts are located in `/path/to/k230_sdk/src/big/nncase/examples/scripts`
 
-#### 2.3.1 Compiling a TFLite Model
+#### Compiling a TFLite Model
 
 The `mbv2_tflite.py` script is as follows:
 
@@ -834,7 +834,7 @@ root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/mbv2_tflite.py --target k230 --model models/mbv2.tflite --dataset calibration_dataset
 ```
 
-#### 2.3.2 Compiling an ONNX Model
+#### Compiling an ONNX Model
 
 For ONNX models, it is recommended to use the [ONNX Simplifier](https://github.com/daquexian/onnx-simplifier) to simplify the model before using nncase to compile it.
 
@@ -976,13 +976,13 @@ root@c285a41a7243:/mnt/# cd src/big/nncase/examples
 root@c285a41a7243:/mnt/src/big/nncase/examples# python3 ./scripts/yolov5s_onnx.py --target k230 --model models/yolov5s.onnx --dataset calibration_dataset
 ```
 
-## 3. Simulator APIs (Python)
+## Simulator APIs (Python)
 
 In addition to model compilation APIs, nncase also provides inference APIs that allow you to run compiled kmodel on a PC to verify if the nncase inference results are consistent with the runtime results of the corresponding deep learning framework.
 
-### 3.1 APIs
+### APIs
 
-#### 3.1.1 MemoryRange
+#### MemoryRange
 
 **Description**:
 
@@ -1013,7 +1013,7 @@ py::class_<memory_range>(m, "MemoryRange")
 
 `mr = nncase.MemoryRange()`
 
-### 3.1.2 RuntimeTensor
+### RuntimeTensor
 
 **Description**:
 
@@ -1064,7 +1064,7 @@ py::class_<runtime_tensor>(m, "RuntimeTensor")
 | dtype | Python data type | Data type of the tensor |
 | shape | list             | Shape of the tensor  |
 
-#### 3.1.3 from_numpy
+#### from_numpy
 
 **Description**:
 
@@ -1088,7 +1088,7 @@ Constructs a `RuntimeTensor` object from a `numpy.ndarray`.
 
 `tensor = nncase.RuntimeTensor.from_numpy(self.inputs[i]['data'])`
 
-#### 3.1.4 copy_to
+#### copy_to
 
 **Description**:
 
@@ -1112,7 +1112,7 @@ None
 
 `sim.get_output_tensor(i).copy_to(to)`
 
-#### 3.1.5 to_numpy
+#### to_numpy
 
 **Description**:
 
@@ -1134,7 +1134,7 @@ None
 
 `arr = sim.get_output_tensor(i).to_numpy()`
 
-#### 3.1.6 Simulator
+#### Simulator
 
 **Description**:
 
@@ -1168,7 +1168,7 @@ py::class_<interpreter>(m, "Simulator")
 
 `sim = nncase.Simulator()`
 
-#### 3.1.7 load_model
+#### load_model
 
 **Description**:
 
@@ -1192,7 +1192,7 @@ None
 
 `sim.load_model(kmodel)`
 
-#### 3.1.8 get_input_desc
+#### get_input_desc
 
 **Description**:
 
@@ -1216,7 +1216,7 @@ Gets the description of the input at the specified index.
 
 `input_desc_0 = sim.get_input_desc(0)`
 
-#### 3.1.9 get_output_desc
+#### get_output_desc
 
 **Description**:
 
@@ -1240,7 +1240,7 @@ Gets the description of the output at the specified index.
 
 `output_desc_0 = sim.get_output_desc(0)`
 
-#### 3.1.10 get_input_tensor
+#### get_input_tensor
 
 **Description**:
 
@@ -1264,7 +1264,7 @@ Gets the `RuntimeTensor` of the input at the specified index.
 
 `input_tensor_0 = sim.get_input_tensor(0)`
 
-#### 3.1.11 set_input_tensor
+#### set_input_tensor
 
 **Description**:
 
@@ -1289,7 +1289,7 @@ None
 
 `sim.set_input_tensor(0, nncase.RuntimeTensor.from_numpy(self.inputs[0]['data']))`
 
-#### 3.1.12 get_output_tensor
+#### get_output_tensor
 
 **Description**:
 
@@ -1313,7 +1313,7 @@ Gets the `RuntimeTensor` of the output at the specified index.
 
 `output_arr_0 = sim.get_output_tensor(0).to_numpy()`
 
-#### 3.1.13 set_output_tensor
+#### set_output_tensor
 
 **Description**:
 
@@ -1338,7 +1338,7 @@ None
 
 `sim.set_output_tensor(0, tensor)`
 
-#### 3.1.14 run
+#### run
 
 **Description**:
 
@@ -1360,7 +1360,7 @@ None
 
 `sim.run()`
 
-### 3.2 Examples
+### Examples
 
 **Precondition**: The `yolov5s_onnx.py` script has already compiled the `yolov5s.onnx` model.
 
@@ -1454,9 +1454,9 @@ output 1 cosine similarity : 0.999757707118988
 output 2 cosine similarity : 0.9997308850288391
 ```
 
-## 4. KPU Runtime APIs (C++)
+## KPU Runtime APIs (C++)
 
-### 4.1 Introduction
+### Introduction
 
 KPU Runtime APIs are used to load kmodel on AI devices, set input data, execute KPU/CPU computation, and get output data, etc.
 
@@ -1485,9 +1485,9 @@ riscv64/
 8 directories, 8 files
 ```
 
-### 4.2 APIs
+### APIs
 
-#### 4.2.1 hrt::create
+#### hrt::create
 
 **Description**:
 
@@ -1526,7 +1526,7 @@ auto input_shape = interp.input_shape(0);
 auto input_tensor = host_runtime_tensor::create(input_desc.datatype, input_shape, hrt::pool_shared).expect("cannot create input tensor");
 ```
 
-#### 4.2.2 hrt::sync
+#### hrt::sync
 
 **Description**:
 
@@ -1557,7 +1557,7 @@ Synchronizes the cache of the tensor.
 hrt::sync(input_tensor, sync_op_t::sync_write_back, true).expect("sync write_back failed");
 ```
 
-#### 4.2.3 interpreter::load_model
+#### interpreter::load_model
 
 **Description**：
 
@@ -1585,7 +1585,7 @@ auto model = read_binary_file<unsigned char>(kmodel);
 interp.load_model({(const gsl::byte *)model.data(), model.size()}).expect("cannot load model.");
 ```
 
-#### 4.2.4 interpreter::inputs_size
+#### interpreter::inputs_size
 
 **Description**:
 
@@ -1607,7 +1607,7 @@ None
 
 `auto inputs_size = interp.inputs_size();`
 
-#### 4.2.5 interpreter::outputs_size
+#### interpreter::outputs_size
 
 **Description**:
 
@@ -1629,7 +1629,7 @@ None
 
 `auto outputs_size = interp.outputs_size();`
 
-#### 4.2.6 interpreter::input_shape
+#### interpreter::input_shape
 
 **Description**：
 
@@ -1653,7 +1653,7 @@ Gets the shape of the specified input.
 
 `auto shape = interp.input_shape(0);`
 
-#### 4.2.7 interpreter::output_shape
+#### interpreter::output_shape
 
 **Description**:
 
@@ -1677,7 +1677,7 @@ Gets the shape of the specified output.
 
 `auto shape = interp.output_shape(0);`
 
-#### 4.2.8 interpreter::input_tensor
+#### interpreter::input_tensor
 
 **Description**:
 
@@ -1711,7 +1711,7 @@ Gets/Sets the input tensor at the specified index.
 interp.input_tensor(0, input_tensor).expect("cannot set input tensor");
 ```
 
-#### 4.2.9 interpreter::output_tensor
+#### interpreter::output_tensor
 
 **Description**:
 
@@ -1745,7 +1745,7 @@ Gets/Sets the output tensor at the specified index.
 auto output_tensor = interp.output_tensor(0).expect("cannot get output tensor");
 ```
 
-#### 4.2.10 interpreter::run
+#### interpreter::run
 
 **Description**:
 
@@ -1770,7 +1770,7 @@ None
 interp.run().expect("error occurred in running model");
 ```
 
-### 4.3 Example
+### Example
 
 ```cpp
 #include <chrono>
@@ -1958,13 +1958,13 @@ int main(int argc, char *argv[])
 }
 ```
 
-## 5. AI2D Runtime APIs (C++)
+## AI2D Runtime APIs (C++)
 
-### 5.1 Introduction
+### Introduction
 
 AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate related register configurations, execute AI2D computations, etc. Please read the last section [Precautions](./K230_nncase_Development_Guide.md#54-Precautions) before use.
 
-#### 5.1.1 Supported Format Conversions
+#### Supported Format Conversions
 
 | Input Format       | Output Format           | Remarks               |
 | ------------------ | ----------------------- | --------------------- |
@@ -1976,7 +1976,7 @@ AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate 
 | RGB_packed         | RGB_planar/RGB_packed   |                       |
 | RAW16              | RAW16/8                 | Depth map, performs shift operation |
 
-#### 5.1.2 Function Descriptions
+#### Function Descriptions
 
 | Function              | Description                                                                                     | Remarks           |
 | --------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
@@ -1985,9 +1985,9 @@ AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate 
 | Shift                 | Supports input format Raw16; supports output format Raw8                                        |                   |
 | Sign Bit              | Supports signed and unsigned input                                                              |                   |
 
-### 5.2 APIs
+### APIs
 
-#### 5.2.1 ai2d_format
+#### ai2d_format
 
 **Description**:
 
@@ -2007,7 +2007,7 @@ enum class ai2d_format
 };
 ```
 
-#### 5.2.2 ai2d_interp_method
+#### ai2d_interp_method
 
 **Description**:
 
@@ -2025,7 +2025,7 @@ enum class ai2d_interp_method
 };
 ```
 
-#### 5.2.3 ai2d_interp_mode
+#### ai2d_interp_mode
 
 **Description**:
 
@@ -2042,7 +2042,7 @@ enum class ai2d_interp_mode
 };
 ```
 
-#### 5.2.4 ai2d_pad_mode
+#### ai2d_pad_mode
 
 **Description**:
 
@@ -2059,7 +2059,7 @@ enum class ai2d_pad_mode
 };
 ```
 
-#### 5.2.5 ai2d_datatype_t
+#### ai2d_datatype_t
 
 **Description**:
 
@@ -2096,7 +2096,7 @@ struct ai2d_datatype_t
 ai2d_datatype_t ai2d_dtype { ai2d_format::RAW16, ai2d_format::NCHW_FMT, datatype_t::dt_uint16, datatype_t::dt_uint8 };
 ```
 
-#### 5.2.6 ai2d_crop_param_t
+#### ai2d_crop_param_t
 
 **Description**:
 
@@ -2131,7 +2131,7 @@ struct ai2d_crop_param_t
 ai2d_crop_param_t crop_param { true, 40, 30, 400, 600 };
 ```
 
-#### 5.2.7 ai2d_shift_param_t
+#### ai2d_shift_param_t
 
 **Description**:
 
@@ -2158,7 +2158,7 @@ struct ai2d_shift_param_t
 
 `ai2d_shift_param_t shift_param { true, 2 };`
 
-#### 5.2.8 ai2d_pad_param_t
+#### ai2d_pad_param_t
 
 **Description**:
 
@@ -2191,7 +2191,7 @@ struct ai2d_pad_param_t
 ai2d_pad_param_t pad_param { false, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 60, 60 } }, ai2d_pad_mode::constant, { 255 } };
 ```
 
-#### 5.2.9 ai2d_resize_param_t
+#### ai2d_resize_param_t
 
 **Description**:
 
@@ -2222,7 +2222,7 @@ struct ai2d_resize_param_t
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
 ```
 
-#### 5.2.10 ai2d_affine_param_t
+#### ai2d_affine_param_t
 
 **Description**:
 
@@ -2261,7 +2261,7 @@ struct ai2d_affine_param_t
 ai2d_affine_param_t affine_param { true, ai2d_interp_method::cv2_bilinear, 0, 0, 127, 1, { 0.5, 0.1, 0.0, 0.1, 0.5, 0.0 } };
 ```
 
-#### 5.2.11 ai2d_builder::ai2d_builder
+#### ai2d_builder::ai2d_builder
 
 **Description**:
 
@@ -2305,7 +2305,7 @@ ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
-#### 5.2.12 ai2d_builder::build_schedule
+#### ai2d_builder::build_schedule
 
 **Description**：
 
@@ -2331,7 +2331,7 @@ None
 ai2d_builder_->build_schedule();
 ```
 
-#### 5.2.13 ai2d_builder::invoke
+#### ai2d_builder::invoke
 
 **Description**：
 
@@ -2361,7 +2361,7 @@ result<void> invoke(runtime_tensor &input, runtime_tensor &output);
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 
-### 5.3 Example
+### Example
 
 ```cpp
 static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
@@ -2412,7 +2412,7 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
 }
 ```
 
-### 5.4 Notes
+### Notes
 
 1. Affine and Resize functions are mutually exclusive and cannot be enabled simultaneously.
 1. The input format for the Shift function can only be Raw16.

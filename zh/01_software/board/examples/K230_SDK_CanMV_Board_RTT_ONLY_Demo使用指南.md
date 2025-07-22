@@ -51,34 +51,34 @@
 |---|---|---|---|
 | V1.0       | 初版 | 系统软件部 | 2023-10-11 |
 
-## 1. 概述
+## 概述
 
 此文档介绍K230 SDK提供的demo功能，使用方法等。其中rt-smart上的可执行程序都默认编译到了小核/sharefs目录下, 测试大核程序时，需要等待小核完全启动，之后在大核的msh中进入/sharefs/app目录内测试。各测试demo用到的音视频资源文件，可到以下链接地址获取
 <https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
 
-## 2. Demo介绍
+## Demo介绍
 
-### 2.1 Display_demo
+### Display_demo
 
-#### 2.1.1 display_demo简介
+#### display_demo简介
 
 VO（Video Output，视频输出）模块主动从内存相应位置读取视频和图形数据，并通过相应的显示设备输出视频和图形。芯片支持的显示/回写设备、视频层和图形层情况。
 
-#### 2.1.2 Feature说明
+#### Feature说明
 
 video ouput 包含了一个用例，即vo osd层插入帧的测试
 
-#### 2.1.3 依赖资源
+#### 依赖资源
 
 带HDMI接口的显示器及HDMI连接线，显示器要求支持1080P30，否则无法显示
 
-#### 2.1.4 使用说明
+#### 使用说明
 
-##### 2.1.4.1 编译
+##### 编译
 
 软件编译参考release sdk软件包中的README.md
 
-##### 2.1.4.2 执行
+##### 执行
 
 vo osd 层插入帧
 
@@ -90,23 +90,23 @@ vo osd 层插入帧
 
 ![图片描述](images/sample_vo_hdmi_15.png)
 
-### 2.2 Venc_demo
+### Venc_demo
 
-#### 2.2.1 Venc_demo简介
+#### Venc_demo简介
 
 Venc demo实现对vi接收到到图形进行编码，并且可以对输入图像进行画框和OSD叠加。支持编码协议为H.264/H.265/JPEG。编码结果可以存储成文件，导出到本地，使用视频软件播放。
 
-#### 2.2.2 Feature说明
+#### Feature说明
 
 只支持1280x720分辨率。
 
-#### 2.2.3 依赖资源
+#### 依赖资源
 
 摄像头
 
-#### 2.2.4 使用说明
+#### 使用说明
 
-##### 2.2.4.1 mpp_demo执行
+##### mpp_demo执行
 
 执行`./sample_venc.elf -h`后，输出demo的使用说明，如下：
 
@@ -130,25 +130,25 @@ sensor_index取值参看`k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor�
 ./sample_venc.elf 0 -sensor 39 -o out.265 // Canmv-K230-V2.0板
 ```
 
-##### 2.2.4.2 查看结果
+##### 查看结果
 
 输出文件可以导出到本地，用视频播放软件查看。
 
-### 2.3 Nonai_2d_demo
+### Nonai_2d_demo
 
-#### 2.3.1 Nonai_2d_demo简介
+#### Nonai_2d_demo简介
 
 Nonai_2d demo对输入文件实现图像叠加的功能。
 
-#### 2.3.2 Feature说明
+#### Feature说明
 
 Nonai_2d通过读取yuv(I420格式）文件，进行图像叠加运算。
 
-#### 2.3.3 依赖资源
+#### 依赖资源
 
 无。
 
-#### 2.3.4 使用说明
+#### 使用说明
 
 输入参数如下：
 
@@ -159,7 +159,7 @@ Nonai_2d通过读取yuv(I420格式）文件，进行图像叠加运算。
 | -h | 图像高度  | - |
 | -o | 输出文件名 | - |
 
-##### 2.3.4.1 执行
+##### 执行
 
 举例：
 
@@ -169,27 +169,27 @@ Nonai_2d通过读取yuv(I420格式）文件，进行图像叠加运算。
 
 如果测试程序跑在sd上，不挂载nfs，2d使用nfs，测试报错。
 
-##### 2.3.4.2 查看结果
+##### 查看结果
 
 输出文件可以导出到本地，用yuv播放软件查看。
 
-### 2.4 Vdec_demo
+### Vdec_demo
 
-#### 2.4.1 Vdec_demo简介
+#### Vdec_demo简介
 
 Vdec demo实现视频解码的功能。解码功能支持H.264/H.265/JPEG解码。支持的输入数据格式为.264/.265/.jpeg。
 
-#### 2.4.2 Feature说明
+#### Feature说明
 
 Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显示。
 
-#### 2.4.3 依赖资源
+#### 依赖资源
 
 无。
 
-#### 2.4.4 使用说明
+#### 使用说明
 
-##### 2.4.4.1 执行
+##### 执行
 
 执行`./sample_vdec.elf -help`，可以看到可配置参数及说明，其默认值如下表所示：
 
@@ -200,51 +200,51 @@ Vdec demo通过读取流文件进行解码。解码输出结果通过屏幕显�
 
 其中type取值参看`k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`中关于k_connector_type的描述，设置为0
 
-###### 2.4.4.1.1 VDEC绑定VO解码显示
+###### VDEC绑定VO解码显示
 
 `./sample_vdec.elf -type 1 -i canaan.264`
 
-##### 2.4.4.2 查看结果
+##### 查看结果
 
 解码结果可以在屏幕上查看。
 
-### 2.5 Audio_demo
+### Audio_demo
 
-#### 2.5.1 audio_demo简介
+#### audio_demo简介
 
 audio demo通过调用api接口来实现音频输入和输出功能。音频输入输出均使用i2s模块。demo中包含了可以单独测试音频输入或音频输出用例，也包含音频输入和输出同时测试的用例。
 
-#### 2.5.2 Feature说明
+#### Feature说明
 
-##### 2.5.2.1 音频输入
+##### 音频输入
 
 音频输入通过采集环境中的声音并将其保存成文件来分析是否正常。
 
 demo中采集15s钟的音频数据，采集到的文件格式为wav，可使用vlc直接播放。
 
-##### 2.5.2.2 音频输出
+##### 音频输出
 
 音频输出通过播放wav文件，插上耳机听声音来判断是否正常。
 
 demo中通过播放wav来测试音频输出功能,可上传不同音频格式的wav文件来测试音频输出功能。
 
-##### 2.5.2.3 音频输入输出
+##### 音频输入输出
 
 音频输入和输出可同时测试。
 
 1. 测试i2s模块功能，即:通过i2s音频输入实时采集环境中声音并通过i2s音频输出，接上耳机可实时听到环境中的声音。
 
-##### 2.5.2.4 音频编解码
+##### 音频编解码
 
 内置g711a/u 16bit 音频编解码器，用户可以注册其他外置编解码器。
 
-#### 2.5.3 使用说明
+#### 使用说明
 
-##### 2.5.3.1 编译
+##### 编译
 
 1. 软件编译环境参考SDK中的`README.md`。
 
-##### 2.5.3.2 执行
+##### 执行
 
 启动rt-smart系统后，进入/sharefs/app目录下，`sample_audio.elf`为测试demo。
 
@@ -288,7 +288,7 @@ Please input:
 -audio3a: enable audio3a:enable_ans:0x01,enable_agc:0x02,enable_aec:0x04
 ```
 
-###### 2.5.3.2.1 I2S音频输入测试
+###### I2S音频输入测试
 
 输入`./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1`来采集15s中的pcm音频数据,并保存为wav格式文件，
 
@@ -324,7 +324,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.2 I2S音频输出测试
+###### I2S音频输出测试
 
 支持播放wav文件，需将wav文件拷贝到sharefs路径下。该demo会循环播放wav文件（其他任意wav文件也可），用户可以按任意键来退出该功能测试。
 输入`./sample_audio.elf -type 2 -filename test.wav -enablecodec 1`播放wav音频。
@@ -348,7 +348,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.3 I2S音频输入输出api接口测试
+###### I2S音频输入输出api接口测试
 
 输入`./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1`，通过api接口实时测试音频输入输出功能。
 
@@ -391,7 +391,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.4 I2S音频输入和输出模块的系统绑定测试
+###### I2S音频输入和输出模块的系统绑定测试
 
 输入`./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1`，通过ai和ao模块绑定实时测试音频输入输出功能。
 
@@ -420,7 +420,7 @@ sample done
 
 ```
 
-###### 2.5.3.2.5 编码测试
+###### 编码测试
 
 获取ai数据并编码保存到文件。编解码只支持g711a/u/lpcm，16bit。
 
@@ -460,7 +460,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.6 解码测试
+###### 解码测试
 
 读取文件数据并解码播放。编解码只支持g711a/u/lpcm，16bit。
 
@@ -502,7 +502,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.7 音频全流程测试
+###### 音频全流程测试
 
 1)录制模块ai-\>aenc-\>file 和播放模块 file-\>adec-\>ao 两条链路同时运行，模拟语音对讲的场景。使用内置codec，16bit精度来模拟。`-filename`来选择待播放的文件，为g711a格式，`-samplerate`选择采样精度。录制文件名称:为播放文件名称后+`_rec`:如-filename为`/sharefs/test.g711a`,则录制文件名为:`/sharefs/test.g711a_rec`.
 
@@ -570,7 +570,7 @@ sample done
     adec       0       0      ao       0       0    null       0       0        310          0
 ```
 
-###### 2.5.3.2.8 mapi音频测试
+###### mapi音频测试
 
 系统启动后，现在大核输入命令:`/sharefs/app/sample_sys_init.elf &`
 
@@ -671,29 +671,29 @@ q
 sample done
 ```
 
-### 2.6 Vicap_demo
+### Vicap_demo
 
-#### 2.6.1 vicap_demo简介
+#### vicap_demo简介
 
 vicap demo通过调用mpi接口实现摄像头数据采集预览功能。
 
-#### 2.6.2 Feature说明
+#### Feature说明
 
 CanMV开发板默认使用OV5647摄像头模组，支持单个摄像头最多输出三路数据流。
 
-#### 2.6.3 依赖资源
+#### 依赖资源
 
 摄像头模组
 
-#### 2.6.4 使用说明
+#### 使用说明
 
-##### 2.6.4.1 编译
+##### 编译
 
 软件编译环境参考SDK中的`README.md`。
 
 1. 在k230_sdk目录下执行`make mpp-clean && rt-smart && make build-image`，将大核的修改编译进sd卡镜像中，会在`k230_sdk/output/k230_evb_defconfig/images/`目录下生成镜像文件`sysimage-sdcard.img`。
 
-##### 2.6.4.2 执行
+##### 执行
 
 1. 将 `src/big/mpp/userapps/sample/elf/sample_vicap.elf`文件拷贝至本地指定的目录
 1. 将该目录通过nfs挂载至小核Linux的`/sharefs`
@@ -766,11 +766,11 @@ Options:
 
 ![三摄结果](images/Tri_camera_result.png)
 
-### 2.7 DMA_demo
+### DMA_demo
 
-#### 2.7.1 DMA_demo简介
+#### DMA_demo简介
 
-##### 2.7.1.1 非绑定模式
+##### 非绑定模式
 
 dma 通道 0-3 是 gdma，4-7 是 sdma。
 
@@ -780,25 +780,25 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 - 通道 4 为 1d 模式循环传输一段数据，传输完成后和 golden 数据比对
 - 通道 5 为 2d 模式循环传输一段数据，传输完成后和 golden 数据比对
 
-##### 2.7.1.2 绑定模式
+##### 绑定模式
 
 使用 vvi 作为 dma 模拟输入，vvi 设备 0 的通道 0 绑定 dma 的通道 0，vvi 设备 0 的通道 1 绑定 dma 的通道 1。vvi 每隔一秒，向通道 0 输入 640x320，YUV400，8bit，旋转 90° 的图像，向通道 1 输入 640x320，YUV400，8bit，旋转 180° 的图像。
 
-#### 2.7.2 Feature说明
+#### Feature说明
 
 包括 dma 设备属性配置，通道属性配置，图形输入、输出、释放，pipeline 绑定等功能。
 
-#### 2.7.3 依赖资源
+#### 依赖资源
 
 无
 
-#### 2.7.4 使用说明
+#### 使用说明
 
-##### 2.7.4.1 编译
+##### 编译
 
 软件编译参考 release sdk 软件包中的 README.md。
 
-##### 2.7.4.2 执行
+##### 执行
 
 非绑定模式 demo 运行：
 
@@ -812,25 +812,25 @@ dma 通道 0-3 是 gdma，4-7 是 sdma。
 
 会有测试信息在屏幕上显示出来，输入 q 结束运行。
 
-### 2.8 USB_demo
+### USB_demo
 
-### 2.9 Rtsp推流Demo
+### Rtsp推流Demo
 
 多媒体demo可参看[../middleware/K230_RTT_only_多媒体中间件_API参考.md](../middleware/K230_RTT_only_多媒体中间件_API参考.md)中demo章节。
 
-### 2.10 FaceAeDemo
+### FaceAeDemo
 
-#### 2.10.1 Demo介绍
+#### Demo介绍
 
 该demo在大核使用，是VICAP、KPU、VO（视频输出）、AERoi联调的demo，可通过人脸检测的接口适当调节人脸曝光亮度。
 
-#### 2.10.2 编译
+#### 编译
 
 1. 首先参考release sdk软件包中的README.md，使用docker编译镜像。
 1. 编译完成后，默认将该sample（sample_face_ae.elf）存放在该路径下`k230_sdk/src/big/mpp/userapps/sample/elf`
 1. 由于KPU联动需要使用检测模型test.kmodel，编译后存放路径`k230_sdk/src/big/mpp/userapps/sample/elf`
 
-#### 2.10.3 执行
+#### 执行
 
 ```shell
 cd /sharefs/app
@@ -840,27 +840,27 @@ cd /sharefs/app
 执行成功后，会打印每一帧图像的物理地址
 ```
 
-### 2.11 FFT Demo
+### FFT Demo
 
-#### 2.11.1 Demo 简介
+#### Demo 简介
 
 本 demo 用于验证fft api使用，测试fft功能，代码见src/big/mpp/userapps/sample/sample_fft/
 
-#### 2.11.2 Feature说明
+#### Feature说明
 
 先进行fft计算，在进行ifft计算
 
-#### 2.11.3 依赖资源
+#### 依赖资源
 
 无
 
-#### 2.11.4 使用说明
+#### 使用说明
 
-##### 2.11.4.1 编译
+##### 编译
 
 > 请参考release sdk软件包中的README.md。
 
-##### 2.11.4.2 执行
+##### 执行
 
 1. 大小核系统都起来后，在大核命令行执行下面命令：
 
@@ -922,4 +922,4 @@ cd /sharefs/app
 
    ```
 
-### 2.12 SDIO WIFI
+### SDIO WIFI

@@ -25,7 +25,7 @@
 
 [TOC]
 
-## 1 TF boot failed with exit code 13
+## TF boot failed with exit code 13
 
 问题： TF卡启动报boot failed with exit code 13错误
 
@@ -33,7 +33,7 @@
 
 TF卡启动管脚设置特别说明： 两个启动管脚电平为高(需要拨到丝印的1和2，也就是ON的反方向)时才会从TF卡启动。
 
-## 2 bootrom启动错误码
+## bootrom启动错误码
 
 问题：bootrom 启动错误码含义是什么？
 
@@ -45,7 +45,7 @@ bootrom引导失败时会打印类似下面错误  boot failed with exit code 19
 | 19   | 启动介质初始化失败，比如没有插sd卡等                |
 | 17   | otp要求必需是安全镜像，但是介质里面文件是非安全镜像 |
 
-## 3 spi nor 和 spi nand flash识别
+## spi nor 和 spi nand flash识别
 
 问题： 怎么知道evb板上连接的是spi nor还是spi nand flash？
 
@@ -61,7 +61,7 @@ bootrom引导失败时会打印类似下面错误  boot failed with exit code 19
 [    1.318147] Creating 2 MTD partitions on "spi0.0":
 ```
 
-## 4 perf 使用
+## perf 使用
 
 问题：perf如何编译，支持那些硬件事件？
 
@@ -124,7 +124,7 @@ CONFIG_FRAME_POINTER=y
 
 ```
 
-## 5大核运行vector linux
+## 大核运行vector linux
 
 问题：大核如何运行带vector的linux？
 
@@ -135,19 +135,19 @@ make CONF=k230_canmv_only_linux_defconfig
 #k230_canmv_only_linux_defconfig 对应的是带vector大核linux镜像
 ```
 
-## 6 大核串口id
+## 大核串口id
 
 问题：怎么修改大核的串口id？
 
 答：configs下面配置文件 CONFIG_RTT_CONSOLE_ID代表大核串口id，修改为正确的值就可以了。
 
-## 7 uboot命令行
+## uboot命令行
 
 怎么编译可以进入uboot命令行的版本
 
 答：  configs下面配置文件 CONFIG_QUICK_BOOT代表快起，修改为CONFIG_QUICK_BOOT=n 就可以生成可进去uboot命令行版本。
 
-## 8 慢启怎么变快启动
+## 慢启怎么变快启动
 
 答：进入uboot命令行执行如下命令：
 
@@ -155,7 +155,7 @@ make CONF=k230_canmv_only_linux_defconfig
 setenv quick_boot true;saveenv;reset;
 ```
 
-## 9 linux如何修改最后一个分区大小
+## linux如何修改最后一个分区大小
 
 答：使用parted工具可以动态修改最后一个分区大小，参考命令如下：
 
@@ -240,7 +240,7 @@ tmpfs                    51.8M     36.0K     51.7M   0% /run
 
 ```
 
-## 10如何修改bootargs
+## 如何修改bootargs
 
 答：方法1：修改使用env文件里面的bootargs 。比如可以在board/common/env/default.env文件里面添加如下内容：
 
@@ -254,7 +254,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 setenv bootargs  "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi" ;saveenv;reset;
 ```
 
-## 11如何查看bootargs
+## 如何查看bootargs
 
 答：方法1：linux下 输入cat /proc/cmdline  查看
 
@@ -273,7 +273,7 @@ root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,1152
 [root@canaan
 ```
 
-## 12小核默认串口修改
+## 小核默认串口修改
 
 答：目前sdk里面小核串口默认0，如果需要修改成其他串口(比如串口2)，请参考下面进行修改：
 
@@ -322,7 +322,7 @@ chosen {
 bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS2,115200 earlycon=sbi；
 ```
 
-## 13如何彻底重编sdk
+## 如何彻底重编sdk
 
 答：更新修改SDK源代码之后，或者修改SDK源代码之后，建议输入如下命令彻底重编下sdk。
 
@@ -330,7 +330,7 @@ bootargs=root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=t
 make clean; make;
 ```
 
-## 14 支持的sensor list在哪里
+## 支持的sensor list在哪里
 
 答：请参考 [K230_Camera_Sensor适配指南](../01_software/board/mpp/K230_Camera_Sensor适配指南.md) 第4.1章节“支持的sensor类型”，目前支持
 
@@ -354,7 +354,7 @@ os08a20
 
 sc132gs
 
-## 15canmmv板子是否可以使用平头哥的cklink进行jtag调试
+## canmmv板子是否可以使用平头哥的cklink进行jtag调试
 
 答：默认不可以(uboot会关闭jtag功能)，需要进行如下修改才可以使用平头哥cklink进行jtag调试。
 
@@ -366,7 +366,7 @@ sc132gs
 
 >修改完后需要重新编译uboot代码
 
-## 16 如何快速编译buildroot下面的某一个软件包
+## 如何快速编译buildroot下面的某一个软件包
 
 答：参考如下命令快速重编buildroot下面的某一个软件包
 
@@ -381,7 +381,7 @@ sc132gs
 
 更多信息请百度搜索buildroot how to rebuild packages。
 
-## 17 canmv如何仅运行rtt系统，并且挂载sd卡？
+## canmv如何仅运行rtt系统，并且挂载sd卡？
 
 答：请使用如下命令编译
 
@@ -390,7 +390,7 @@ make CONF=k230_canmv_only_rtt_defconfig
 #k230_canmv_only_rtt_defconfig对应镜像仅运行rtt系统，并且rtt挂载sd。
 ```
 
-## 18 linux下如何快速验证下串口收发是否正常？
+## linux下如何快速验证下串口收发是否正常？
 
 答：参考如下命令，
 
@@ -402,7 +402,7 @@ echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  #发送字符串
 cat  /dev/ttyS2   #接受串口数据
 ```
 
-## 19 如何快速修改linux配置？
+## 如何快速修改linux配置？
 
 答：
 1).Makefile里面linux-savedefconfig目标修改为如下内容(382行附近)：
@@ -422,7 +422,7 @@ make linux-menuconfig #修改linux配置
 make linux-savedefconfig #保存linux配置
 ```
 
-## 20大核如何切换自启动程序
+## 大核如何切换自启动程序
 
 答：
 如果自启动程序在/bin目录下，修改方法如下：
@@ -469,7 +469,7 @@ cd /sdcard/app/onboard
         }
 ```
 
-## 21是否可以使用libxml2？
+## 是否可以使用libxml2？
 
 答：可以，参考下面方法在buildroot里面使能BR2_PACKAGE_LIBXML2就可以使用了。
 
@@ -556,7 +556,7 @@ all:
 
 特别说明：sdk不支持多进程编译，不要增加类似-j32多进程编译选项。
 
-## 22 支持的屏有哪些？
+## 支持的屏有哪些？
 
 答：移植新的屏请参考 [K230_LCD适配指南](../01_software/board/mpp/K230_LCD适配指南.md)。
 目前我们支持的屏有

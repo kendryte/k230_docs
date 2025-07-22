@@ -50,19 +50,19 @@ This document (this guide) is mainly intended for the following personnel:
 | ---------------- | ----------- | ------ | ---------- |
 | V1.0             | Initial Version | Yang Fan | 2023-05-30 |
 
-## 1. Function Introduction
+## Function Introduction
 
 SHA256 is mainly used to calculate the hash value of data. The SHA256 algorithm is implemented in the rt-smart of the main core to calculate the hash value of data. The code logic is shown in the following figure:
 
 ![sha256](../../../../zh/01_software/board/mpp/images/sha256.png)
 
-## 2. API Reference
+## API Reference
 
 The SHA256 module mainly provides the following API:
 
-- [kd_mpi_cipher_sha256](#21-kd_mpi_cipher_sha256)
+- [kd_mpi_cipher_sha256](#kd_mpi_cipher_sha256)
 
-### 2.1 kd_mpi_cipher_sha256
+### kd_mpi_cipher_sha256
 
 **Description**:
 
@@ -110,7 +110,7 @@ None
 
 None
 
-## 3. Debugging and Print Information
+## Debugging and Print Information
 
 Write a user-mode application *sample_cipher.c* to test the SHA256 functionality.
 

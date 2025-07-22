@@ -51,21 +51,21 @@
 |------------|----------|--------|----------|
 | V1.0       | 初版     | 郝海波 | 2023/3/4 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 系统控制根据 k230芯片特性，完成硬件各个部件的复位、基本初始化工作，同时负责完成 MPP（Media Process Platform 媒体处理平台）系统内存管理，日志管理，绑定管理等模块的初始化、去初始化。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 视频缓存池
+#### 视频缓存池
 
 视频缓存池是一组缓冲区（而不是一个），主要提供给多媒体硬件设备使用，并在多媒体硬件设备之间流转。缓存池分为公共缓存池和私有缓存池，公共缓存池主要是针对VI的，使用前要根据VI的图像参数确定缓存块的大小，然后申请一定数量的缓存块组成一个缓存池。总体来说，对于VI输入的原始画面，一帧的大小对应一个缓存块的大小，多个缓存块相当于给VI提供了多帧缓存的机制。同时这些公共缓存块也可以给VO或VENC使用。私有的缓存池往往代表存储在内存中的数据是与多媒体设备本身紧密相关的，例如编码的码流数据与实际的图像像素组成的视频流差别还是很大的，这些码流只有编解码器可用，而VB为这些设备提供专用的缓冲池。下图展示了虚拟VI和虚拟VO使用VB进行缓存块流转的流程。
 
 ![图示 描述已自动生成](images/4c6fbf213dcaf35f8d035d69fcc43750.png)
 
-#### 1.2.2 系统绑定
+#### 系统绑定
 
 系统绑定，即通过数据接收者绑定数据源来建立两者之间的关联关系（只允许数据接收者绑定数据源）。绑定后，数据源生成的数据将自动发送给接收者。K230大的语音和视频处理主要分为几个大的模块如下：
 
@@ -98,41 +98,41 @@ K230支持的绑定关系如下
 | AENC(语音编码)    | 无             | 不支持绑定关系                                           |
 | AO(音频输出)      | 无             | AO是音频数据的终点，不支持绑定关系                       |
 
-## 2. API 参考
+## API 参考
 
-### 2.1 多媒体内存管理
+### 多媒体内存管理
 
 该功能模块提供以下API：
 
-- [kd\_mpi\_sys\_mmz\_alloc](#211-kd_mpi_sys_mmz_alloc)
-- [kd\_mpi\_sys\_mmz\_alloc\_cached](#212-kd_mpi_sys_mmz_alloc_cached)
-- [kd\_mpi\_sys\_mmap](#213-kd_mpi_sys_mmap)
-- [kd\_mpi\_sys\_mmap\_cached](#214-kd_mpi_sys_mmap_cached)
-- [kd\_mpi\_sys\_munmap](#215-kd_mpi_sys_munmap)
-- [kd\_mpi\_sys\_mmz\_flush\_cache](#216-kd_mpi_sys_mmz_flush_cache)
-- [kd\_mpi\_sys\_mmz\_free](#217-kd_mpi_sys_mmz_free)
-- [kd\_mpi\_sys\_get\_virmem\_info](#218-kd_mpi_sys_get_virmem_info)
-- [kd\_mpi\_vb\_set\_config](#219-kd_mpi_vb_set_config)
-- [kd\_mpi\_vb\_get\_config](#2110-kd_mpi_vb_get_config)
-- [kd\_mpi\_vb\_init](#2111-kd_mpi_vb_init)
-- [kd\_mpi\_vb\_exit](#2112-kd_mpi_vb_exit)
-- [kd\_mpi\_vb\_create\_pool](#2113-kd_mpi_vb_create_pool)
-- [kd\_mpi\_vb\_destory\_pool](#2114-kd_mpi_vb_destory_pool)
-- [kd\_mpi\_vb\_get\_block](#2115-kd_mpi_vb_get_block)
-- [kd\_mpi\_vb\_release\_block](#2116-kd_mpi_vb_release_block)
-- [kd\_mpi\_vb\_phyaddr\_to\_handle](#2117-kd_mpi_vb_phyaddr_to_handle)
-- [kd\_mpi\_vb\_handle\_to\_phyaddr](#2118-kd_mpi_vb_handle_to_phyaddr)
-- [kd\_mpi\_vb\_handle\_to\_pool\_id](#2119-kd_mpi_vb_handle_to_pool_id)
-- [kd\_mpi\_vb\_inquire\_user\_cnt](#2120-kd_mpi_vb_inquire_user_cnt)
-- [kd\_mpi\_vb\_get\_supplement\_attr](#2121-kd_mpi_vb_get_supplement_attr)
-- [kd\_mpi\_vb\_set\_supplement\_config](#2122-kd_mpi_vb_set_supplement_config)
-- [kd\_mpi\_vb\_get\_supplement\_config](#2123-kd_mpi_vb_get_supplement_config)
-- [kd\_mpi\_vb\_set\_mod\_pool\_config](#2124-kd_mpi_vb_set_mod_pool_config)
-- [kd\_mpi\_vb\_get\_mod\_pool\_config](#2125-kd_mpi_vb_get_mod_pool_config)
-- [kd\_mpi\_vb\_init\_mod\_common\_pool](#2126-kd_mpi_vb_init_mod_common_pool)
-- [kd\_mpi\_vb\_exit\_mod\_common\_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
+- [kd\_mpi\_sys\_mmz\_alloc](#kd_mpi_sys_mmz_alloc)
+- [kd\_mpi\_sys\_mmz\_alloc\_cached](#kd_mpi_sys_mmz_alloc_cached)
+- [kd\_mpi\_sys\_mmap](#kd_mpi_sys_mmap)
+- [kd\_mpi\_sys\_mmap\_cached](#kd_mpi_sys_mmap_cached)
+- [kd\_mpi\_sys\_munmap](#kd_mpi_sys_munmap)
+- [kd\_mpi\_sys\_mmz\_flush\_cache](#kd_mpi_sys_mmz_flush_cache)
+- [kd\_mpi\_sys\_mmz\_free](#kd_mpi_sys_mmz_free)
+- [kd\_mpi\_sys\_get\_virmem\_info](#kd_mpi_sys_get_virmem_info)
+- [kd\_mpi\_vb\_set\_config](#kd_mpi_vb_set_config)
+- [kd\_mpi\_vb\_get\_config](#kd_mpi_vb_get_config)
+- [kd\_mpi\_vb\_init](#kd_mpi_vb_init)
+- [kd\_mpi\_vb\_exit](#kd_mpi_vb_exit)
+- [kd\_mpi\_vb\_create\_pool](#kd_mpi_vb_create_pool)
+- [kd\_mpi\_vb\_destory\_pool](#kd_mpi_vb_destory_pool)
+- [kd\_mpi\_vb\_get\_block](#kd_mpi_vb_get_block)
+- [kd\_mpi\_vb\_release\_block](#kd_mpi_vb_release_block)
+- [kd\_mpi\_vb\_phyaddr\_to\_handle](#kd_mpi_vb_phyaddr_to_handle)
+- [kd\_mpi\_vb\_handle\_to\_phyaddr](#kd_mpi_vb_handle_to_phyaddr)
+- [kd\_mpi\_vb\_handle\_to\_pool\_id](#kd_mpi_vb_handle_to_pool_id)
+- [kd\_mpi\_vb\_inquire\_user\_cnt](#kd_mpi_vb_inquire_user_cnt)
+- [kd\_mpi\_vb\_get\_supplement\_attr](#kd_mpi_vb_get_supplement_attr)
+- [kd\_mpi\_vb\_set\_supplement\_config](#kd_mpi_vb_set_supplement_config)
+- [kd\_mpi\_vb\_get\_supplement\_config](#kd_mpi_vb_get_supplement_config)
+- [kd\_mpi\_vb\_set\_mod\_pool\_config](#kd_mpi_vb_set_mod_pool_config)
+- [kd\_mpi\_vb\_get\_mod\_pool\_config](#kd_mpi_vb_get_mod_pool_config)
+- [kd\_mpi\_vb\_init\_mod\_common\_pool](#kd_mpi_vb_init_mod_common_pool)
+- [kd\_mpi\_vb\_exit\_mod\_common\_pool](#kd_mpi_vb_exit_mod_common_pool)
 
-#### 2.1.1 kd_mpi_sys_mmz_alloc
+#### kd_mpi_sys_mmz_alloc
 
 【描述】
 
@@ -157,7 +157,7 @@ k_s32 kd_mpi_sys_mmz_alloc(k_u64\* phy_addr, void\*\* virt_addr, const k_char\* 
 | 返回值 | **描述**                                           |
 |--------|-----------------------------------------------|
 | 0      | 成功                                          |
-| 非0    | 失败，其值参见[错误码](#412-多媒体内存zone错误码) |
+| 非0    | 失败，其值参见[错误码](#多媒体内存zone错误码) |
 
 【芯片差异】
 
@@ -180,7 +180,7 @@ MMZ由多个zone组成，每个zone有多个MMB。你可以调用这个MPI，在
 
 无
 
-#### 2.1.2 kd_mpi_sys_mmz_alloc_cached
+#### kd_mpi_sys_mmz_alloc_cached
 
 【描述】
 
@@ -205,7 +205,7 @@ k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_
 | 返回值 | **描述**                                           |
 |--------|-----------------------------------------------|
 | 0      | 成功                                          |
-| 非0    | 失败，其值参见[错误码](#412-多媒体内存zone错误码) |
+| 非0    | 失败，其值参见[错误码](#多媒体内存zone错误码) |
 
 【芯片差异】
 
@@ -218,8 +218,8 @@ k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_
 
 【注意】
 
-- [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)与[kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)之间的区别：通过调用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)分配的内存支持缓存，如果要分配的内存将被频繁使用，推荐使用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)。这样可以提高CPU的读/写效率和系统性能。
-- 当 cpu 访问此接口分配的内存时，会将内存中的数据放在 cache 中。若硬件设备只能访问物理内存而不是缓存，在这种情况下[kd_mpi_sys_mmz_flush_cache](#216-kd_mpi_sys_mmz_flush_cache)需要被调用来同步数据。
+- [kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)与[kd_mpi_sys_mmz_alloc](#kd_mpi_sys_mmz_alloc)之间的区别：通过调用[kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)分配的内存支持缓存，如果要分配的内存将被频繁使用，推荐使用[kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)。这样可以提高CPU的读/写效率和系统性能。
+- 当 cpu 访问此接口分配的内存时，会将内存中的数据放在 cache 中。若硬件设备只能访问物理内存而不是缓存，在这种情况下[kd_mpi_sys_mmz_flush_cache](#kd_mpi_sys_mmz_flush_cache)需要被调用来同步数据。
 
 【举例】
 
@@ -229,7 +229,7 @@ k_s32 kd_mpi_sys_mmz_alloc_cached(k_u64\* phy_addr, void\*\* virt_addr, const k_
 
 无
 
-#### 2.1.3 kd_mpi_sys_mmap
+#### kd_mpi_sys_mmap
 
 【描述】
 
@@ -273,9 +273,9 @@ void \*kd_mpi_sys_mmap(k_u64 phy_addr, k_u32 size);
 
 【相关主题】
 
-[kd_mpi_sys_munmap()](#215-kd_mpi_sys_munmap)
+[kd_mpi_sys_munmap()](#kd_mpi_sys_munmap)
 
-#### 2.1.4 kd_mpi_sys_mmap_cached
+#### kd_mpi_sys_mmap_cached
 
 【描述】
 
@@ -321,7 +321,7 @@ void \*kd_mpi_sys_mmap_cached(k_u64 phy_addr, k_u32 size);
 
 无
 
-#### 2.1.5 kd_mpi_sys_munmap
+#### kd_mpi_sys_munmap
 
 【描述】
 
@@ -364,10 +364,10 @@ void \*kd_mpi_sys_munmap(void \*virt_addr, k_u32 size);
 
 【相关主题】
 
-- [kd_mpi_sys_mmap](#213-kd_mpi_sys_mmap)
-- [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
+- [kd_mpi_sys_mmap](#kd_mpi_sys_mmap)
+- [kd_mpi_sys_mmap_cached](#kd_mpi_sys_mmap_cached)
 
-#### 2.1.6 kd_mpi_sys_mmz_flush_cache
+#### kd_mpi_sys_mmz_flush_cache
 
 【描述】
 
@@ -390,7 +390,7 @@ k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 | 返回值 | **描述**                                           |
 |--------|-----------------------------------------------|
 | 0      | 成功                                          |
-| 非0    | 失败，其值参见[错误码](#412-多媒体内存zone错误码) |
+| 非0    | 失败，其值参见[错误码](#多媒体内存zone错误码) |
 
 【芯片差异】
 
@@ -404,10 +404,10 @@ k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 【注意】
 
 - 如果缓存中的数据是最新的数据，你需要调用这个MPI来同步数据到内存。这可以确保不能直接访问缓存的硬件可以获得正确的数据。.
-- 必须先调用[kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)然后再使用这个MPI
+- 必须先调用[kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)然后再使用这个MPI
 - 若将 phy_addr 设为 0，则表示操作整个 cache 区域。(暂不支持)
 - 你需要确保传输的参数是有效的
-- 确保在执行刷新操作时不调用[kd_mpi_sys_mmz_free](#217-kd_mpi_sys_mmz_free)来释放被刷新的内存。否则，可能会发生不可预知的异常。
+- 确保在执行刷新操作时不调用[kd_mpi_sys_mmz_free](#kd_mpi_sys_mmz_free)来释放被刷新的内存。否则，可能会发生不可预知的异常。
 
 【举例】
 
@@ -415,10 +415,10 @@ k_s32 kd_mpi_sys_mmz_flush_cache(k_u64 phy_addr, void\* virt_addr, k_u32 size);
 
 【相关主题】
 
-- [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
-- [kd_mpi_sys_mmap_cached](#214-kd_mpi_sys_mmap_cached)
+- [kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)
+- [kd_mpi_sys_mmap_cached](#kd_mpi_sys_mmap_cached)
 
-#### 2.1.7 kd_mpi_sys_mmz_free
+#### kd_mpi_sys_mmz_free
 
 【描述】
 
@@ -440,7 +440,7 @@ k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void\* virt_addr);
 | 返回值 | **描述**                                           |
 |--------|-----------------------------------------------|
 | 0      | 成功                                          |
-| 非0    | 失败，其值参见[错误码](#412-多媒体内存zone错误码) |
+| 非0    | 失败，其值参见[错误码](#多媒体内存zone错误码) |
 
 【芯片差异】
 
@@ -462,10 +462,10 @@ k_s32 kd_mpi_sys_mmz_free(k_u64 phy_addr, void\* virt_addr);
 
 【相关主题】
 
-- [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
-- [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
+- [kd_mpi_sys_mmz_alloc](#kd_mpi_sys_mmz_alloc)
+- [kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)
 
-#### 2.1.8 kd_mpi_sys_get_virmem_info
+#### kd_mpi_sys_get_virmem_info
 
 【描述】
 
@@ -487,7 +487,7 @@ k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem
 | 返回值 | **描述**                                           |
 |--------|-----------------------------------------------|
 | 0      | 成功                                          |
-| 非0    | 失败，其值参见[错误码](#412-多媒体内存zone错误码) |
+| 非0    | 失败，其值参见[错误码](#多媒体内存zone错误码) |
 
 【芯片差异】
 
@@ -509,10 +509,10 @@ k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem
 
 【相关主题】
 
-- [kd_mpi_sys_mmz_alloc](#211-kd_mpi_sys_mmz_alloc)
-- [kd_mpi_sys_mmz_alloc_cached](#212-kd_mpi_sys_mmz_alloc_cached)
+- [kd_mpi_sys_mmz_alloc](#kd_mpi_sys_mmz_alloc)
+- [kd_mpi_sys_mmz_alloc_cached](#kd_mpi_sys_mmz_alloc_cached)
 
-#### 2.1.9 kd_mpi_vb_set_config
+#### kd_mpi_vb_set_config
 
 【描述】
 
@@ -520,7 +520,7 @@ k_s32 kd_mpi_sys_get_virmem_info(const void\* virt_addr, k_sys_virmem_info\* mem
 
 【语法】
 
-k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
+k_s32 kd_mpi_vb_set_config(const [k_vb_config](#k_vb_config) \*config);
 
 【参数】
 
@@ -533,7 +533,7 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -547,7 +547,7 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 【注意】
 
 - 只能在系统处于未初始化的状态下，才可以设置缓存池属性，否则会返回失败。
-- 公共缓存池中每个缓存块的大小应根据当前图像像素格式以及图像是否压缩而有所不同。具体分配大小请参考 [k_vb_config](#323-k_vb_config) 结构体中的描述。
+- 公共缓存池中每个缓存块的大小应根据当前图像像素格式以及图像是否压缩而有所不同。具体分配大小请参考 [k_vb_config](#k_vb_config) 结构体中的描述。
 
 【举例】
 
@@ -555,9 +555,9 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 
 【相关主题】
 
-[kd_mpi_vb_get_config](#2110-kd_mpi_vb_get_config)
+[kd_mpi_vb_get_config](#kd_mpi_vb_get_config)
 
-#### 2.1.10 kd_mpi_vb_get_config
+#### kd_mpi_vb_get_config
 
 【描述】
 
@@ -565,7 +565,7 @@ k_s32 kd_mpi_vb_set_config(const [k_vb_config](#323-k_vb_config) \*config);
 
 【语法】
 
-k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
+k_s32 kd_mpi_vb_get_config(const [k_vb_config](#k_vb_config) \*config);
 
 【参数】
 
@@ -578,7 +578,7 @@ k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -591,7 +591,7 @@ k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
 
 【注意】
 
-必须先调用 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再获取属性。
+必须先调用 [kd_mpi_vb_set_config](#kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再获取属性。
 
 【举例】
 
@@ -599,9 +599,9 @@ k_s32 kd_mpi_vb_get_config(const [k_vb_config](#323-k_vb_config) \*config);
 
 【相关主题】
 
-[kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
+[kd_mpi_vb_set_config](#kd_mpi_vb_set_config)
 
-#### 2.1.11 kd_mpi_vb_init
+#### kd_mpi_vb_init
 
 【描述】
 
@@ -620,7 +620,7 @@ k_s32 kd_mpi_vb_init(void);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -633,7 +633,7 @@ k_s32 kd_mpi_vb_init(void);
 
 【注意】
 
-- 必须先调用 [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再初始化缓存池，否则会失败。
+- 必须先调用 [kd_mpi_vb_set_config](#kd_mpi_vb_set_config) 设置 MPP 视频缓存池属性，再初始化缓存池，否则会失败。
 - 可反复初始化，不返回失败。
 
 【举例】
@@ -642,9 +642,9 @@ k_s32 kd_mpi_vb_init(void);
 
 【相关主题】
 
-[kd_mpi_vb_exit](#2112-kd_mpi_vb_exit)
+[kd_mpi_vb_exit](#kd_mpi_vb_exit)
 
-#### 2.1.12 kd_mpi_vb_exit
+#### kd_mpi_vb_exit
 
 【描述】
 
@@ -663,7 +663,7 @@ k_s32 kd_mpi_vb_exit(void);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -686,9 +686,9 @@ k_s32 kd_mpi_vb_exit(void);
 
 【相关主题】
 
-[kd_mpi_vb_init](#2111-kd_mpi_vb_init)
+[kd_mpi_vb_init](#kd_mpi_vb_init)
 
-#### 2.1.13 kd_mpi_vb_create_pool
+#### kd_mpi_vb_create_pool
 
 【描述】
 
@@ -696,7 +696,7 @@ k_s32 kd_mpi_vb_exit(void);
 
 【语法】
 
-k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) \*config);
+k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#k_vb_pool_config) \*config);
 
 【参数】
 
@@ -730,9 +730,9 @@ k_s32 kd_mpi_vb_create_pool([k_vb_pool_config](#324-k_vb_pool_config) \*config);
 
 【相关主题】
 
-[kd_mpi_vb_destory_pool](#2114-kd_mpi_vb_destory_pool)
+[kd_mpi_vb_destory_pool](#kd_mpi_vb_destory_pool)
 
-#### 2.1.14 kd_mpi_vb_destory_pool
+#### kd_mpi_vb_destory_pool
 
 【描述】
 
@@ -753,7 +753,7 @@ k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 | 返回值 | **描述**                                         |
 |--------|---------------------------------------------|
 | 0      | 成功。                                      |
-| 非 0   | 失败，其值参见[错误码](#411-视频缓存池错误码)。 |
+| 非 0   | 失败，其值参见[错误码](#视频缓存池错误码)。 |
 
 【芯片差异】
 
@@ -766,8 +766,8 @@ k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 
 【注意】
 
-- 销毁一个不存在的缓存池，会返回[K_ERR_VB_UNEXIST](#411-视频缓存池错误码)
-- 只有通过[k_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)创建的缓存池才可以销毁
+- 销毁一个不存在的缓存池，会返回[K_ERR_VB_UNEXIST](#视频缓存池错误码)
+- 只有通过[k_mpi_vb_create_pool](#kd_mpi_vb_create_pool)创建的缓存池才可以销毁
 
 【举例】
 
@@ -775,9 +775,9 @@ k_s32 kd_mpi_vb_destory_pool(k_u32 pool_id);
 
 【相关主题】
 
-[kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
+[kd_mpi_vb_create_pool](#kd_mpi_vb_create_pool)
 
-#### 2.1.15 kd_mpi_vb_get_block
+#### kd_mpi_vb_get_block
 
 【描述】
 
@@ -822,9 +822,9 @@ k_vb_blk_handle kd_mpi_vb_get_block(k_u32 pool_id, k_u64 blk_size, const k_char 
 
 【相关主题】
 
-[kd_mpi_vb_release_block](#2116-kd_mpi_vb_release_block)
+[kd_mpi_vb_release_block](#kd_mpi_vb_release_block)
 
-#### 2.1.16 kd_mpi_vb_release_block
+#### kd_mpi_vb_release_block
 
 【描述】
 
@@ -845,7 +845,7 @@ k_s32 kd_mpi_vb_release_block(k_vb_blk_handle block);
 | 返回值 | **描述**                                         |
 |--------|---------------------------------------------|
 | 0      | 成功。                                      |
-| 非 0   | 失败，其值参见[错误码](#411-视频缓存池错误码)。 |
+| 非 0   | 失败，其值参见[错误码](#视频缓存池错误码)。 |
 
 【芯片差异】
 
@@ -866,9 +866,9 @@ k_s32 kd_mpi_vb_release_block(k_vb_blk_handle block);
 
 【相关主题】
 
-[kd_mpi_vb_get_block](#2115-kd_mpi_vb_get_block)
+[kd_mpi_vb_get_block](#kd_mpi_vb_get_block)
 
-#### 2.1.17 kd_mpi_vb_phyaddr_to_handle
+#### kd_mpi_vb_phyaddr_to_handle
 
 【描述】
 
@@ -912,7 +912,7 @@ k_vb_blk_handle kd_mpi_vb_phyaddr_to_handle(k_u64 phys_addr);
 
 无
 
-#### 2.1.18 kd_mpi_vb_handle_to_phyaddr
+#### kd_mpi_vb_handle_to_phyaddr
 
 【描述】
 
@@ -956,7 +956,7 @@ k_u64 kd_mpi_vb_handle_to_phyaddr(k_vb_blk_handle block);
 
 无
 
-#### 2.1.19 kd_mpi_vb_handle_to_pool_id
+#### kd_mpi_vb_handle_to_pool_id
 
 【描述】
 
@@ -1000,7 +1000,7 @@ k_s32 kd_mpi_vb_handle_to_pool_id(k_vb_blk_handle block);
 
 无
 
-#### 2.1.20 kd_mpi_vb_inquire_user_cnt
+#### kd_mpi_vb_inquire_user_cnt
 
 【描述】
 
@@ -1044,7 +1044,7 @@ k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
 
 无
 
-#### 2.1.21 kd_mpi_vb_get_supplement_attr
+#### kd_mpi_vb_get_supplement_attr
 
 【描述】
 
@@ -1052,7 +1052,7 @@ k_s32 kd_mpi_vb_inquire_user_cnt(k_vb_blk_handle block);
 
 【语法】
 
-k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#333-k_video_supplement) \*supplement);
+k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](#k_video_supplement) \*supplement);
 
 【参数】
 
@@ -1066,7 +1066,7 @@ k_s32 kd_mpi_vb_get_supplement_attr(k_vb_blk_handle block, [k_video_supplement](
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1089,7 +1089,7 @@ Supplement保存的DCF和ISP的虚拟地址信息为内核态虚拟地址
 
 无
 
-#### 2.1.22 kd_mpi_vb_set_supplement_config
+#### kd_mpi_vb_set_supplement_config
 
 【描述】
 
@@ -1101,7 +1101,7 @@ Supplement保存的DCF和ISP的虚拟地址信息为内核态虚拟地址
 
 【语法】
 
-k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
+k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#k_vb_supplement_config) \*supplement_config);
 
 【参数】
 
@@ -1114,7 +1114,7 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1128,9 +1128,9 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 【注意】
 
 - 当前支持 2 种 VB 内存附加信息，分别为：
-- DCF 信息，对应结构体[k_jpeg_dcf](#335-k_jpeg_dcf)。对应的 MASK 为VB_SUPPLEMENT_JPEG_MASK。
-- ISP信息，对应结果提[k_isp_frame_info](#334-k_isp_frame_info)。对应的MASK为VB_SUPPLEMENT_ISPINFO_MASK。
-- 需要在 [kd_mpi_vb_init](#2111-kd_mpi_vb_init) 前调用此接口，辅助信息才能生效。
+- DCF 信息，对应结构体[k_jpeg_dcf](#k_jpeg_dcf)。对应的 MASK 为VB_SUPPLEMENT_JPEG_MASK。
+- ISP信息，对应结果提[k_isp_frame_info](#k_isp_frame_info)。对应的MASK为VB_SUPPLEMENT_ISPINFO_MASK。
+- 需要在 [kd_mpi_vb_init](#kd_mpi_vb_init) 前调用此接口，辅助信息才能生效。
 
 【举例】
 
@@ -1138,9 +1138,9 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 
 【相关主题】
 
-[kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
+[kd_mpi_vb_get_supplement_config](#kd_mpi_vb_get_supplement_config)
 
-#### 2.1.23 kd_mpi_vb_get_supplement_config
+#### kd_mpi_vb_get_supplement_config
 
 【描述】
 
@@ -1148,7 +1148,7 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 
 【语法】
 
-k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_supplement_config) \*supplement_config);
+k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#k_vb_supplement_config) \*supplement_config);
 
 【参数】
 
@@ -1161,7 +1161,7 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1184,7 +1184,7 @@ k_s32 kd_mpi_vb_set_supplement_config(const [k_vb_supplement_config](#326-k_vb_s
 
 kd_mpi_vb_set_supplement_config
 
-#### 2.1.24 kd_mpi_vb_set_mod_pool_config
+#### kd_mpi_vb_set_mod_pool_config
 
 【描述】
 
@@ -1192,7 +1192,7 @@ kd_mpi_vb_set_supplement_config
 
 【语法】
 
-k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_vb_config) \*config);
+k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#k_vb_config) \*config);
 
 【参数】
 
@@ -1206,7 +1206,7 @@ k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1228,9 +1228,9 @@ k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_
 
 【相关主题】
 
-[kd_mpi_vb_get_mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
+[kd_mpi_vb_get_mod_pool_config](#kd_mpi_vb_get_mod_pool_config)
 
-#### 2.1.25 kd_mpi_vb_get_mod_pool_config
+#### kd_mpi_vb_get_mod_pool_config
 
 【描述】
 
@@ -1238,7 +1238,7 @@ k_s32 kd_mpi_vb_set_mod_pool_config(k_vb_uid vb_uid, const [k_vb_config](#323-k_
 
 【语法】
 
-k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_config) \*config);
+k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#k_vb_config) \*config);
 
 【参数】
 
@@ -1252,7 +1252,7 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1265,7 +1265,7 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 
 【注意】
 
-必须先调用 [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config) 设置模块公共视频缓存池属性，再获取属
+必须先调用 [kd_mpi_vb_set_mod_pool_config](#kd_mpi_vb_set_mod_pool_config) 设置模块公共视频缓存池属性，再获取属
 
 性。
 
@@ -1275,9 +1275,9 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 
 【相关主题】
 
-[kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
+[kd_mpi_vb_set_mod_pool_config](#kd_mpi_vb_set_mod_pool_config)
 
-#### 2.1.26 kd_mpi_vb_init_mod_common_pool
+#### kd_mpi_vb_init_mod_common_pool
 
 【描述】
 
@@ -1285,7 +1285,7 @@ k_s32 kd_mpi_vb_get_mod_pool_config(k_vb_uid vb_uid, [k_vb_config](#323-k_vb_con
 
 【语法】
 
-k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
+k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#k_vb_uid) vb_uid);
 
 【参数】
 
@@ -1298,7 +1298,7 @@ k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1311,8 +1311,8 @@ k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【注意】
 
-- 必须先调用[kd_mpi_vb_init](#2111-kd_mpi_vb_init) 进行公共视频缓冲池初始化。
-- 必须先调用 [kd_mpi_vb_set_mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)f配置缓存池属性，再初始化缓存池，否则会失败。
+- 必须先调用[kd_mpi_vb_init](#kd_mpi_vb_init) 进行公共视频缓冲池初始化。
+- 必须先调用 [kd_mpi_vb_set_mod_pool_config](#kd_mpi_vb_set_mod_pool_config)f配置缓存池属性，再初始化缓存池，否则会失败。
 - 可反复初始化，不返回失败。
 
 【举例】
@@ -1321,9 +1321,9 @@ k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【相关主题】
 
-[kd_mpi_vb_exit_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
+[kd_mpi_vb_exit_mod_common_pool](#kd_mpi_vb_exit_mod_common_pool)
 
-#### 2.1.27 kd_mpi_vb_exit_mod_common_pool
+#### kd_mpi_vb_exit_mod_common_pool
 
 【描述】
 
@@ -1331,7 +1331,7 @@ k_s32 kd_mpi_vb_init_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【语法】
 
-k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
+k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#k_vb_uid) vb_uid);
 
 【参数】
 
@@ -1344,7 +1344,7 @@ k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 | 返回值 | **描述**                                       |
 |--------|-------------------------------------------|
 | 0      | 成功                                      |
-| 非0    | 失败，其值参见[错误码](#411-视频缓存池错误码) |
+| 非0    | 失败，其值参见[错误码](#视频缓存池错误码) |
 
 【芯片差异】
 
@@ -1357,7 +1357,7 @@ k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【注意】
 
-- 必须在调用[kd_mpi_vb_exit](#2112-kd_mpi_vb_exit) 之前调用该接口，否则会返回失败。
+- 必须在调用[kd_mpi_vb_exit](#kd_mpi_vb_exit) 之前调用该接口，否则会返回失败。
 - 退出后会清除先前对模块公共视频缓存池的配置。
 - 可反复退出，不返回失败。
 - 退出 VB 池之前请确保 VB 池里的任何 VB 都没有被占用，否则无法退出。
@@ -1368,17 +1368,17 @@ k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【相关主题】
 
-[kd_mpi_vb_init_mod_common_pool](#2126-kd_mpi_vb_init_mod_common_pool)
+[kd_mpi_vb_init_mod_common_pool](#kd_mpi_vb_init_mod_common_pool)
 
-### 2.2 系统绑定
+### 系统绑定
 
 该功能模块提供以下API：
 
-- [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
-- [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
-- [kd_mpi_sys_get_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
+- [kd_mpi_sys_bind](#kd_mpi_sys_bind)
+- [kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
+- [kd_mpi_sys_get_bind_by_dest](#kd_mpi_sys_get_bind_by_dest)
 
-#### 2.2.1 kd_mpi_sys_bind
+#### kd_mpi_sys_bind
 
 【描述】
 
@@ -1386,7 +1386,7 @@ k_s32 kd_mpi_vb_exit_mod_common_pool([k_vb_uid](#322-k_vb_uid) vb_uid);
 
 【语法】
 
-k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
+k_s32 kd_mpi_sys_bind([k_mpp_chn](#k_mpp_chn) \*src_chn, [k_mpp_chn](#k_mpp_chn) \*dest_chn);
 
 【参数】
 
@@ -1400,7 +1400,7 @@ k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#42-系统绑定错误码) |
+| 非0    | 失败，其值参见[错误码](#系统绑定错误码) |
 
 【芯片差异】
 
@@ -1413,7 +1413,7 @@ k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_
 
 【注意】
 
-- 系统目前支持的绑定关系，请参见[表 1-1](#411-视频缓存池错误码)。
+- 系统目前支持的绑定关系，请参见[表 1-1](#视频缓存池错误码)。
 - 同一个数据接收者只能绑定一个数据源。
 - 绑定是指数据源和数据接收者建立关联关系。绑定后，数据源生成的数据将自动
     发送给接收者
@@ -1424,9 +1424,9 @@ k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_
 
 【相关主题】
 
-[kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
+[kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
 
-#### 2.2.2 kd_mpi_sys_unbind
+#### kd_mpi_sys_unbind
 
 【描述】
 
@@ -1434,7 +1434,7 @@ k_s32 kd_mpi_sys_bind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_
 
 【语法】
 
-k_s32 kd_mpi_sys_unbind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-k_mpp_chn) \*dest_chn);
+k_s32 kd_mpi_sys_unbind([k_mpp_chn](#k_mpp_chn) \*src_chn, [k_mpp_chn](#k_mpp_chn) \*dest_chn);
 
 【参数】
 
@@ -1448,7 +1448,7 @@ k_s32 kd_mpi_sys_unbind([k_mpp_chn](#312-k_mpp_chn) \*src_chn, [k_mpp_chn](#312-
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#42-系统绑定错误码) |
+| 非0    | 失败，其值参见[错误码](#系统绑定错误码) |
 
 【芯片差异】
 
@@ -1470,9 +1470,9 @@ pstDestChn 如果找不到绑定的源通道，则直接返回成功。如果找
 
 【相关主题】
 
-[kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
+[kd_mpi_sys_bind](#kd_mpi_sys_bind)
 
-#### 2.2.3 kd_mpi_sys_get_bind_by_dest
+#### kd_mpi_sys_get_bind_by_dest
 
 【描述】
 
@@ -1480,7 +1480,7 @@ pstDestChn 如果找不到绑定的源通道，则直接返回成功。如果找
 
 【语法】
 
-k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp_chn](#312-k_mpp_chn) \*src_chn);
+k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#k_mpp_chn) \*dest_chn, [k_mpp_chn](#k_mpp_chn) \*src_chn);
 
 【参数】
 
@@ -1494,7 +1494,7 @@ k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#42-系统绑定错误码) |
+| 非0    | 失败，其值参见[错误码](#系统绑定错误码) |
 
 【芯片差异】
 
@@ -1515,22 +1515,22 @@ k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp
 
 【相关主题】
 
-- [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
-- [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
+- [kd_mpi_sys_bind](#kd_mpi_sys_bind)
+- [kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
 
-### 2.3 日志管理
+### 日志管理
 
 该功能模块提供以下API：
 
-- [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
-- [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
-- [kd_mpi_log_set_wait_flag](#233-kd_mpi_log_set_wait_flag)
-- [kd_mpi_log_read](#234-kd_mpi_log_read)
-- [kd_mpi_log_close](#235-kd_mpi_log_close)
-- [kd_mpi_log_set_console](#236-kd_mpi_log_set_console)
-- [kd_mpi_log_get_console](#237-kd_mpi_log_get_console)
+- [kd_mpi_log_set_level_conf](#kd_mpi_log_set_level_conf)
+- [kd_mpi_log_get_level_conf](#kd_mpi_log_get_level_conf)
+- [kd_mpi_log_set_wait_flag](#kd_mpi_log_set_wait_flag)
+- [kd_mpi_log_read](#kd_mpi_log_read)
+- [kd_mpi_log_close](#kd_mpi_log_close)
+- [kd_mpi_log_set_console](#kd_mpi_log_set_console)
+- [kd_mpi_log_get_console](#kd_mpi_log_get_console)
 
-#### 2.3.1 kd_mpi_log_set_level_conf
+#### kd_mpi_log_set_level_conf
 
 【描述】
 
@@ -1538,7 +1538,7 @@ k_s32 kd_mpi_sys_get_bind_by_dest([k_mpp_chn](#312-k_mpp_chn) \*dest_chn, [k_mpp
 
 【语法】
 
-k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) \*conf);
+k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#k_log_level_conf) \*conf);
 
 【参数】
 
@@ -1551,7 +1551,7 @@ k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) 
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#43-日志管理错误码) |
+| 非0    | 失败，其值参见[错误码](#日志管理错误码) |
 
 【芯片差异】
 
@@ -1573,9 +1573,9 @@ k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) 
 
 【相关主题】
 
-[kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
+[kd_mpi_log_get_level_conf](#kd_mpi_log_get_level_conf)
 
-#### 2.3.2 kd_mpi_log_get_level_conf
+#### kd_mpi_log_get_level_conf
 
 【描述】
 
@@ -1583,7 +1583,7 @@ k_s32 kd_mpi_log_set_level_conf(const [k_log_level_conf](#341-k_log_level_conf) 
 
 【语法】
 
-k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf);
+k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#k_log_level_conf) \*conf);
 
 【参数】
 
@@ -1598,7 +1598,7 @@ k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#43-日志管理错误码) |
+| 非0    | 失败，其值参见[错误码](#日志管理错误码) |
 
 【芯片差异】
 
@@ -1619,9 +1619,9 @@ k_s32 kd_mpi_log_get_level_conf([k_log_level_conf](#341-k_log_level_conf) \*conf
 
 【相关主题】
 
-[kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
+[kd_mpi_log_set_level_conf](#kd_mpi_log_set_level_conf)
 
-#### 2.3.3 kd_mpi_log_set_wait_flag
+#### kd_mpi_log_set_wait_flag
 
 【描述】
 
@@ -1642,7 +1642,7 @@ k_s32 kd_mpi_log_set_wait_flag(k_bool is_wait);
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#43-日志管理错误码) |
+| 非0    | 失败，其值参见[错误码](#日志管理错误码) |
 
 【芯片差异】
 
@@ -1665,7 +1665,7 @@ k_s32 kd_mpi_log_set_wait_flag(k_bool is_wait);
 
 无
 
-#### 2.3.4 kd_mpi_log_read
+#### kd_mpi_log_read
 
 【描述】
 
@@ -1709,7 +1709,7 @@ k_s32 kd_mpi_log_read(k_char \*buf, k_u32 size);
 
 无
 
-#### 2.3.5 kd_mpi_log_close
+#### kd_mpi_log_close
 
 【描述】
 
@@ -1748,7 +1748,7 @@ void kd_mpi_log_close(void);
 
 无
 
-#### 2.3.6 kd_mpi_log_set_console
+#### kd_mpi_log_set_console
 
 【描述】
 
@@ -1769,7 +1769,7 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#43-日志管理错误码) |
+| 非0    | 失败，其值参见[错误码](#日志管理错误码) |
 
 【芯片差异】
 
@@ -1790,9 +1790,9 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 
 【相关主题】
 
-[kd_mpi_log_get_console](#237-kd_mpi_log_get_console)
+[kd_mpi_log_get_console](#kd_mpi_log_get_console)
 
-#### 2.3.7 kd_mpi_log_get_console
+#### kd_mpi_log_get_console
 
 【描述】
 
@@ -1813,7 +1813,7 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 | 返回值 | **描述**                                     |
 |--------|-----------------------------------------|
 | 0      | 成功                                    |
-| 非0    | 失败，其值参见[错误码](#43-日志管理错误码) |
+| 非0    | 失败，其值参见[错误码](#日志管理错误码) |
 
 【芯片差异】
 
@@ -1834,18 +1834,18 @@ k_s32 kd_mpi_log_set_console(k_bool is_console);
 
 【相关主题】
 
-[kd_mpi_log_set_console](#236-kd_mpi_log_set_console)
+[kd_mpi_log_set_console](#kd_mpi_log_set_console)
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 公共数据类型
+### 公共数据类型
 
 该模块有如下数据类型
 
-- [k_mod_id](#311-k_mod_id)
-- [k_mpp_chn](#312-k_mpp_chn)
+- [k_mod_id](#k_mod_id)
+- [k_mpp_chn](#k_mpp_chn)
 
-#### 3.1.1 k_mod_id
+#### k_mod_id
 
 【说明】
 
@@ -1911,7 +1911,7 @@ K_ID_BUTT, /*< Invalid */
 
 无
 
-#### 3.1.2 k_mpp_chn
+#### k_mpp_chn
 
 【说明】
 
@@ -1945,22 +1945,22 @@ k_s32 chn_id; /*< Channel ID */
 
 【相关数据类型及接口】
 
-- [kd_mpi_sys_bind](#221-kd_mpi_sys_bind)
-- [kd_mpi_sys_unbind](#222-kd_mpi_sys_unbind)
-- [kd_mpi_sys_get_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
+- [kd_mpi_sys_bind](#kd_mpi_sys_bind)
+- [kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
+- [kd_mpi_sys_get_bind_by_dest](#kd_mpi_sys_get_bind_by_dest)
 
-### 3.2 多媒体内存管理
+### 多媒体内存管理
 
 该模块有如下数据类型
 
-- [VB_MAX_POOLS](#321-vb_max_pools)
-- [k_vb_uid](#322-k_vb_uid)
-- [k_vb_config](#323-k_vb_config)
-- [k_vb_pool_config](#324-k_vb_pool_config)
-- [k_vb_remap_mode](#325-k_vb_remap_mode)
-- [k_vb_supplement_config](#326-k_vb_supplement_config)
+- [VB_MAX_POOLS](#vb_max_pools)
+- [k_vb_uid](#k_vb_uid)
+- [k_vb_config](#k_vb_config)
+- [k_vb_pool_config](#k_vb_pool_config)
+- [k_vb_remap_mode](#k_vb_remap_mode)
+- [k_vb_supplement_config](#k_vb_supplement_config)
 
-#### 3.2.1 VB_MAX_POOLS
+#### VB_MAX_POOLS
 
 【说明】
 
@@ -1980,7 +1980,7 @@ k_s32 chn_id; /*< Channel ID */
 
 无
 
-#### 3.2.2 k_vb_uid
+#### k_vb_uid
 
 【说明】
 
@@ -2034,7 +2034,7 @@ VB_UID_BUTT = 15,
 
 无
 
-#### 3.2.3 k_vb_config
+#### k_vb_config
 
 【说明】
 
@@ -2068,7 +2068,7 @@ k_vb_pool_config comm_pool[VB_MAX_COMM_POOLS];
 
 - kd_mpi_vb_get_config
 
-#### 3.2.4 k_vb_pool_config
+#### k_vb_pool_config
 
 【说明】
 
@@ -2109,10 +2109,10 @@ char mmz_name[MAX_MMZ_NAME_LEN];/*< Name of the MMZ that allocates the memory fo
 
 【相关数据类型及接口】
 
-- [kd_mpi_vb_set_config](#219-kd_mpi_vb_set_config)
-- [kd_mpi_vb_create_pool](#2113-kd_mpi_vb_create_pool)
+- [kd_mpi_vb_set_config](#kd_mpi_vb_set_config)
+- [kd_mpi_vb_create_pool](#kd_mpi_vb_create_pool)
 
-#### 3.2.5 k_vb_remap_mode
+#### k_vb_remap_mode
 
 【说明】
 
@@ -2150,7 +2150,7 @@ VB_REMAP_MODE_BUTT
 
 无
 
-#### 3.2.6 k_vb_supplement_config
+#### k_vb_supplement_config
 
 【说明】
 
@@ -2176,33 +2176,33 @@ k_u32 supplement_config; /*<Control of the auxiliary information*/
 
 【注意事项】
 
-当前支持 2种附加信息，具体请参考接口[kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config)的描述。
+当前支持 2种附加信息，具体请参考接口[kd_mpi_vb_set_supplement_config](#kd_mpi_vb_set_supplement_config)的描述。
 
 【相关数据类型及接口】
 
-- [kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config)
-- [kd_mpi_vb_get_supplement_config](#2123-kd_mpi_vb_get_supplement_config)
+- [kd_mpi_vb_set_supplement_config](#kd_mpi_vb_set_supplement_config)
+- [kd_mpi_vb_get_supplement_config](#kd_mpi_vb_get_supplement_config)
 
-### 3.3 视频公共数据类型
+### 视频公共数据类型
 
 本模块有如下数据类型
 
-- [k_video_frame_info](#331-k_video_frame_info)
-- [k_video_frame](#332-k_video_frame)
-- [k_video_supplement](#333-k_video_supplement)
-- [k_isp_frame_info](#334-k_isp_frame_info)
-- [k_jpeg_dcf](#335-k_jpeg_dcf)
-- [k_isp_dcf_info](#336-k_isp_dcf_info)
-- [k_isp_dcf_update_info](#337-k_isp_dcf_update_info)
-- [k_isp_dcf_const_info](#338-k_isp_dcf_const_info)
-- [k_compress_mode](#339-k_compress_mode)
-- [k_color_gamut](#3310-k_color_gamut)
-- [k_dynamic_range](#3311-k_dynamic_range)
-- [k_video_format](#3312-k_video_format)
-- [k_video_field](#3313-k_video_field)
-- [k_pixel_format](#3314-k_pixel_format)
+- [k_video_frame_info](#k_video_frame_info)
+- [k_video_frame](#k_video_frame)
+- [k_video_supplement](#k_video_supplement)
+- [k_isp_frame_info](#k_isp_frame_info)
+- [k_jpeg_dcf](#k_jpeg_dcf)
+- [k_isp_dcf_info](#k_isp_dcf_info)
+- [k_isp_dcf_update_info](#k_isp_dcf_update_info)
+- [k_isp_dcf_const_info](#k_isp_dcf_const_info)
+- [k_compress_mode](#k_compress_mode)
+- [k_color_gamut](#k_color_gamut)
+- [k_dynamic_range](#k_dynamic_range)
+- [k_video_format](#k_video_format)
+- [k_video_field](#k_video_field)
+- [k_pixel_format](#k_pixel_format)
 
-#### 3.3.1 k_video_frame_info
+#### k_video_frame_info
 
 【说明】
 
@@ -2232,13 +2232,13 @@ k_mod_id mod_id; /*< Logical unit for generating video frames */
 
 【注意事项】
 
-当前支持 2种附加信息，具体请参考接口[kd_mpi_vb_set_supplement_config](#2122-kd_mpi_vb_set_supplement_config)的描述。
+当前支持 2种附加信息，具体请参考接口[kd_mpi_vb_set_supplement_config](#kd_mpi_vb_set_supplement_config)的描述。
 
 【相关数据类型及接口】
 
-[k_video_frame](#332-k_video_frame)
+[k_video_frame](#k_video_frame)
 
-#### 3.3.2 k_video_frame
+#### k_video_frame
 
 【说明】
 
@@ -2331,7 +2331,7 @@ k_video_supplement supplement; /*< Supplementary information about images */
 
 无
 
-#### 3.3.3 k_video_supplement
+#### k_video_supplement
 
 【说明】
 
@@ -2368,9 +2368,9 @@ void isp_info_kvirt_addr; /*< isp_frame_info, used in ISP debug, when get raw an
 
 【相关数据类型及接口】
 
-[k_video_frame](#332-k_video_frame)
+[k_video_frame](#k_video_frame)
 
-#### 3.3.4 k_isp_frame_info
+#### k_isp_frame_info
 
 【说明】
 
@@ -2436,7 +2436,7 @@ k_u32 vc_num; /*< when dump wdr frame, which is long or short exposure frame. */
 
 无
 
-#### 3.3.5 k_jpeg_dcf
+#### k_jpeg_dcf
 
 【说明】
 
@@ -2477,19 +2477,19 @@ k_isp_dcf_info isp_dcf_info;
 
 无
 
-#### 3.3.6 k_isp_dcf_info
+#### k_isp_dcf_info
 
 当前版本暂不更新该数据类型的详细信息
 
-#### 3.3.7 k_isp_dcf_update_info
+#### k_isp_dcf_update_info
 
 当前版本暂不更新该数据类型的详细信息
 
-#### 3.3.8 k_isp_dcf_const_info
+#### k_isp_dcf_const_info
 
 当前版本暂不更新该数据类型的详细信息
 
-#### 3.3.9 k_compress_mode
+#### k_compress_mode
 
 【说明】
 
@@ -2535,7 +2535,7 @@ COMPRESS_MODE_BUTT
 
 无
 
-#### 3.3.10 k_color_gamut
+#### k_color_gamut
 
 【说明】
 
@@ -2583,7 +2583,7 @@ COLOR_GAMUT_BUTT
 
 无
 
-#### 3.3.11 k_dynamic_range
+#### k_dynamic_range
 
 【说明】
 
@@ -2634,7 +2634,7 @@ DYNAMIC_RANGE_BUTT
 
 无
 
-#### 3.3.12 k_video_format
+#### k_video_format
 
 【说明】
 
@@ -2677,7 +2677,7 @@ VIDEO_FORMAT_BUTT
 
 无
 
-#### 3.3.13 k_video_field
+#### k_video_field
 
 【说明】
 
@@ -2718,9 +2718,9 @@ VIDEO_FIELD_BUTT
 
 【相关数据类型及接口】
 
-[k_video_frame](#332-k_video_frame)
+[k_video_frame](#k_video_frame)
 
-#### 3.3.14 k_pixel_format
+#### k_pixel_format
 
 【说明】
 
@@ -2868,13 +2868,13 @@ PIXEL_FORMAT_BUTT
 
 略
 
-### 3.4 多媒体日志管理
+### 多媒体日志管理
 
 本模块有以下数据结构
 
-- [k_log_level_conf](#341-k_log_level_conf)
+- [k_log_level_conf](#k_log_level_conf)
 
-#### 3.4.1 k_log_level_conf
+#### k_log_level_conf
 
 【说明】
 
@@ -2908,14 +2908,14 @@ k_char mod_name[16];
 
 【相关数据类型及接口】
 
-- [kd_mpi_log_set_level_conf](#231-kd_mpi_log_set_level_conf)
-- [kd_mpi_log_get_level_conf](#232-kd_mpi_log_get_level_conf)
+- [kd_mpi_log_set_level_conf](#kd_mpi_log_set_level_conf)
+- [kd_mpi_log_get_level_conf](#kd_mpi_log_get_level_conf)
 
-## 4. 错误码
+## 错误码
 
-### 4.1 多媒体内存管理错误码
+### 多媒体内存管理错误码
 
-#### 4.1.1 视频缓存池错误码
+#### 视频缓存池错误码
 
 表 41
 
@@ -2931,7 +2931,7 @@ k_char mod_name[16];
 | 0xa0048009 | K_ERR_VB_NOT_PERM      | 操作不允许       |
 | 0xa0048040 | K_ERR_VB_2MPOOLS       | 创建的缓存池太多 |
 
-#### 4.1.2 多媒体内存zone错误码
+#### 多媒体内存zone错误码
 
 表 42
 
@@ -2946,7 +2946,7 @@ k_char mod_name[16];
 | 0xa0038011 | K_ERR_MMZ_USERDEV_BADADDR       | 错误的地址     |
 | 0xa0038012 | K_ERR_MMZ_USERDEV_BUSY          | 系统忙         |
 
-### 4.2 系统绑定错误码
+### 系统绑定错误码
 
 表 43
 
@@ -2960,7 +2960,7 @@ k_char mod_name[16];
 | 0xa0058011 | K_ERR_SYS_BADADDR       | 错误的地址                       |
 | 0xa005800c | K_ERR_SYS_NOMEM         | 分配内存失败，如系统内存不足 |
 
-### 4.3 日志管理错误码
+### 日志管理错误码
 
 表 44
 
@@ -2972,9 +2972,9 @@ k_char mod_name[16];
 | 0xa0018010 | K_ERR_LOG_NOTREADY      | 日志设备未就绪               |
 | 0xa001800c | K_ERR_LOG_NOMEM         | 分配内存失败，如系统内存不足 |
 
-## 5. 调试信息
+## 调试信息
 
-### 5.1 概述
+### 概述
 
 调试信息采用了 proc 文件系统，可实时反映当前系统的运行状态，所记录的信息可供问题定位及分析时使用
 
@@ -2990,9 +2990,9 @@ k_char mod_name[16];
 | umap/vb       | 记录当前 VB 模块的 buffer 使用情况。 |
 | mem-media     | 记录当前多媒体内存的使用情况         |
 
-### 5.2 多媒体内存管理
+### 多媒体内存管理
 
-#### 5.2.1 视频缓存池调试信息
+#### 视频缓存池调试信息
 
 【调试信息】
 
@@ -3069,7 +3069,7 @@ PoolId  PhysAddr            VirtAddr            IsComm  Owner  BlkSz     BlkCnt 
 |                                                              | BLK                                                                    | 缓存池内缓存块的句柄。                                                                                 |
 |                                                              | VI/VPROC/VREC/VENC /VDEC/VO/USER/AI/AREC /AENC/ADEC/AO/V_VI/ V_VO/DMA  | 模块名 下面对应的数字表示当前模块有多少个 地方占用缓存池内的该缓存块。  0：没占用。  非 0：占用次数    |
 
-### 5.2.2 多媒体内存zone调试信息
+### 多媒体内存zone调试信息
 
 【调试信息】
 
@@ -3101,9 +3101,9 @@ msh /bin\>cat /proc/media-mem
 
 无
 
-### 5.3 系统绑定
+### 系统绑定
 
-#### 5.3.1 系统绑定调试信息
+#### 系统绑定调试信息
 
 【调试信息】
 

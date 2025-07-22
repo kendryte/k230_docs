@@ -25,25 +25,25 @@
 
 [toc]
 
-## 1. 安装 `whl`包出错
+## 安装 `whl`包出错
 
-### 1.1 `xxx.whl is not a supported wheel on this platform.`
+### `xxx.whl is not a supported wheel on this platform.`
 
 - A：升级 pip `pip install --upgrade pip`
 
 ---
 
-## 2.编译模型时报错
+## 编译模型时报错
 
-### 2.1 `System.NotSupportedException: Not Supported *** op: XXX`
+### `System.NotSupportedException: Not Supported *** op: XXX`
 
 - A：该异常表明 `XXX`算子尚未支持，可以在[nncase Github Issue](https://github.com/kendryte/nncase/issues)中提需求。算子支持列表见[nncase repo](https://github.com/kendryte/nncase/tree/release/2.0/docs)中的`***_ops.md`文档。如果 `XXX`属于 `FAKE_QUANT`、`DEQUANTIZE`、`QUANTIZE`等量化相关的算子，表明当前模型属于量化模型，`nncase`目前不支持这类模型，请使用浮点模型来编译 `kmodel`。
 
-### 2.2 `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached, or the per-process limit on the number of open file descriptors has been reached`
+### `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached, or the per-process limit on the number of open file descriptors has been reached`
 
 - A：使用 `sudo gedit /proc/sys/fs/inotify/max_user_instances`修改128为更大的值即可。
 
-### 2.3 `RuntimeError: Failed to initialize hostfxr.` or `RuntimeError: Failed to get hostfxr path.`
+### `RuntimeError: Failed to initialize hostfxr.` or `RuntimeError: Failed to get hostfxr path.`
 
 - A：需要安装dotnet-sdk-7.0，不要在`anaconda`的虚拟环境中安装。
   - Linux:
@@ -61,7 +61,7 @@
 
   - Windows: 请自行查阅微软官方文档。
 
-### 2.4 `The given key 'K230' was not present in the dictionary`
+### `The given key 'K230' was not present in the dictionary`
 
 - A：需要安装nncase-kpu
 
@@ -79,9 +79,9 @@
 
 ---
 
-## 3. 推理时报错
+## 推理时报错
 
-### 3.1 `nncase.simulator.k230.sc: not found`
+### `nncase.simulator.k230.sc: not found`
 
 或者以下情况：
 
@@ -98,19 +98,19 @@
 
 ---
 
-## 4. k230开发板推理时报错
+## k230开发板推理时报错
 
-### 4.1 `data.size_bytes() == size = false (bool)`
+### `data.size_bytes() == size = false (bool)`
 
 - A：推理时输入数据有错误，与模型输入节点shape、type不匹配。当编译模型时配置了前处理相关参数，模型输入节点shape和type信息会有相应的更新。请以模型编译时配置的 `input_shape`、`input_type`为准来生成输入数据。
 
-### 4.2 `std::bad_alloc`
+### `std::bad_alloc`
 
 - A：通常是因为内存分配失败导致的，可做如下排查。
   - 检查生成的kmodel是否超过当前系统可用内存
   - 检查App是否存在内存泄露
 
-### 4.3 `terminate:Invalid kmodel`
+### `terminate:Invalid kmodel`
 
 加载`kmodel`代码如下时，抛出该自定义异常内容。
 

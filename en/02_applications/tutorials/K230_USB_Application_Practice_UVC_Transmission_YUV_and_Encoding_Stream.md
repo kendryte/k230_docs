@@ -25,9 +25,9 @@ No part of this document may be excerpted, reproduced, or transmitted in any for
 
 This document explains how to implement the USB camera function on the K230 development board. This means connecting the K230 development board to a computer, allowing the computer to play images captured by the K230 camera through a media player.
 
-## 1. Environment Preparation
+## Environment Preparation
 
-### 1.1 Hardware Environment
+### Hardware Environment
 
 - K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
@@ -36,7 +36,7 @@ This document explains how to implement the USB camera function on the K230 deve
 - One Ethernet cable
 - SD card (if using SD card boot, or if the software needs to access the SD card)
 
-### 1.2 Software Environment
+### Software Environment
 
 The k230_sdk provides toolchains located in the following paths:
 
@@ -59,21 +59,21 @@ wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
-## 2. SDK UVC Demo Experience
+## SDK UVC Demo Experience
 
-### 2.1 Compile and Flash Firmware with Release SDK
+### Compile and Flash Firmware with Release SDK
 
 Refer to [K230_SDK_User_Manual](../../01_software/board/K230_SDK_User_Manual.md) chapters 2/3/4/5 for detailed instructions.
 
-### 2.2 Execute Command to Test Demo
+### Execute Command to Test Demo
 
 Refer to [K230_SDK_Demo_User_Guide](../../01_software/board/examples/K230_SDK_EVB_Board_Demo_User_Guide.md) chapter 2.9 UVC_demo.
 
-## 3. How to Develop UVC Functionality
+## How to Develop UVC Functionality
 
-### 3.1 USB/UVC Protocol
+### USB/UVC Protocol
 
-### 3.1.1 USB Protocol
+### USB Protocol
 
 The USB protocol is extensive and widely used, with plenty of information available online. This document only describes points that I believe are helpful for understanding the USB protocol.
 
@@ -117,9 +117,9 @@ Bulk Transfer - Used in scenarios with large data volumes but no real-time requi
 
 No matter the USB device protocol, all are implemented through these four types of transfers. Therefore, USB protocol stacks in operating systems like Linux provide interfaces for these four transfer types.
 
-### 3.1.2 UVC Protocol
+### UVC Protocol
 
-### 3.1.2.1 UVC Descriptors
+### UVC Descriptors
 
 USB descriptors let the host know the device's attribute information. When a device is first connected to the host, the host sends requests supported by all devices. General descriptors include device descriptor, configuration descriptor, interface descriptor, endpoint descriptor, and string descriptor. Different device types may define specific descriptors to extend device descriptions.
 
@@ -137,7 +137,7 @@ The host can understand the UVC camera's topology and control it through video c
 
 ![usb_unit](../../../zh/02_applications/tutorials/images/usb_unit.png)
 
-### 3.1.2.2 UVC Video Stream Format Selection
+### UVC Video Stream Format Selection
 
 The VS interface includes many formats (YUV/MJPEG/H264, etc.), each containing multiple frames (various resolutions). Parameter settings require negotiation between the host and the USB device. The negotiation process is roughly as shown below:
 
@@ -150,7 +150,7 @@ Process Description:
 - If the host considers the settings feasible, it commits (COMMIT).
 - The current settings of the interface are set to a specific setting.
 
-### 3.1.2.3 UVC Video Stream Payload
+### UVC Video Stream Payload
 
 ![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_payload.png)
 
@@ -160,13 +160,13 @@ The payload header has a fixed first 2 bytes and an extended part. Focus on the 
 
 ![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_payload_header.png)
 
-### 3.2 Linux Driver Layer
+### Linux Driver Layer
 
 The K230 SDK design places video and audio functions on the big core RTT for performance. The USB functionality on Linux is mature, so UVC functionality is developed based on Linux, obtaining video data from the big core via inter-core mapi communication.
 
 ![uvc_payload](../../../zh/02_applications/tutorials/images/uvc_framework.png)
 
-### 3.2.1 Controller Driver
+### Controller Driver
 
 ![usb_gadget](../../../zh/02_applications/tutorials/images/usb_gadget.png)
 
@@ -193,7 +193,7 @@ usbotg1: usb-otg@91540000 {
 };
 ```
 
-### 3.2.2 Gadget Driver
+### Gadget Driver
 
 The source code is located in linux/drivers/usb/gadget.
 
@@ -225,7 +225,7 @@ Since UVC involves V4L2 module functionality, the media framework also needs to 
 
 ![media_linux_menuconfig](../../../zh/02_applications/tutorials/images/media_linux_menuconfig.png)
 
-### 3.3 UVC-Gadget Application Layer
+### UVC-Gadget Application Layer
 
 From the K230 SDK design architecture, the difference between K230's UVC functionality and a pure Linux UVC functionality is that video data is obtained from the big core RTT via inter-core communication.
 
@@ -278,7 +278,7 @@ Here we will discuss the private operations of the K230, focusing on the handlin
   - Callback function after encoding completion to get the encoded image data.
     - `get_venc_stream`
 
-### 3.4 Recommended Reference Materials
+### Recommended Reference Materials
 
 - [USB 2.0 Official Documentation Download](https://www.usb.org/document-library/usb-20-specification)
 - [UVC 1.1 Official Documentation Download](https://www.usb.org/document-library/video-class-v11-document-set)

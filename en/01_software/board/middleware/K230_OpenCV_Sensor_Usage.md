@@ -50,7 +50,7 @@ This document (this guide) is mainly suitable for the following personnel:
 |------------------|-------------|--------|------------|
 | V1.0             | Initial Version | Zhao Zhongxiang | 2024-03-22 |
 
-## 1. Environment Setup
+## Environment Setup
 
 In `k230_sdk/src/big/mpp/userapps/src`
 
@@ -78,7 +78,7 @@ git am ./patch/*.patch
 
 Ignore the warnings.
 
-## 2. Compiling OpenCV
+## Compiling OpenCV
 
 First, confirm the toolchain path in the `build.sh` path. After applying the patch, `build.sh` should be correct.
 
@@ -92,7 +92,7 @@ make install
 
 During the compilation process, if no warning messages appear in the terminal, the compilation is successful. The compiled product will be in `build/install`, which is the OpenCV library file for the rt-smart platform.
 
-## 3. Compiling Examples
+## Compiling Examples
 
 Modify `k230_sdk/src/big/mpp/userapps/sample/Makefile`
 

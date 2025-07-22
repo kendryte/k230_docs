@@ -25,7 +25,7 @@ Without written permission from the Company, no unit or individual is allowed to
 
 [TOC]
 
-## 1 AI Cube Usage Issues
+## AI Cube Usage Issues
 
 ### Issue 1: License prompt appears when AI Cube is opened
 

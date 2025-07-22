@@ -60,9 +60,9 @@ This document (this guide) is intended primarily for:
 | V1.2 | Added OTP TS section      | Juntao Fan | 2023/5/31 |
 | V1.3 | Add PWM RTC Timer section | Juntao Fan | 2023/6/29 |
 
-## 1 Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 UART：
 
@@ -99,7 +99,7 @@ RTC: The real-time clock can provide accurate real-time time, which can be used 
 
 TIMER (HWTIMER): Counts internal and external pulse signals through the internal counter module, which can work in timer mode and counter mode.
 
-### 1.2 Function Description
+### Function Description
 
 The UART drive structure is as follows:
 
@@ -143,9 +143,9 @@ The TIMER drive structure is shown in the following figure:
 
 ![timer](../../../../zh/01_software/board/osdrv/images/timer-driver.png)
 
-### 1.3 Driver API usage
+### Driver API usage
 
-#### 1.3.1 UART
+#### UART
 
 ##### Kernel-state programs use uart
 
@@ -165,7 +165,7 @@ The TIMER drive structure is shown in the following figure:
 
 `rt_device_write(uart_dev, 0, str, (sizeof(str) - 1))`
 
-#### 1.3.2 I2C
+#### I2C
 
 ##### Kernel-state programs use I2C
 
@@ -187,7 +187,7 @@ msgs.len = 2;
 
 `rt_i2c_transfer(bus, &msgs, 1)`
 
-#### 1.3.3 GPIO
+#### GPIO
 
 ##### Kernel-state programs use GPIO
 
@@ -235,7 +235,7 @@ msgs.len = 2;
 
 `ioctl(fd, GPIO_READ_VALUE, &mode27)`
 
-#### 1.3.4 Hard-lock
+#### Hard-lock
 
 ##### The kernel state uses hard-lock
 
@@ -251,9 +251,9 @@ msgs.len = 2;
 
 `kd_hardlock_unlock(rt_uint32_t num)`
 
-#### 1.3.5 ADC
+#### ADC
 
-##### 1.3.5.1 User-mode MSH uses ADC
+##### User-mode MSH uses ADC
 
 The steps for the user to obtain the ADC sampling value through MSH are as follows:
 
@@ -277,7 +277,7 @@ The steps for the user to obtain the ADC sampling value through MSH are as follo
 `msh />adc disable 0`
 `adc channel 0 disable success`
 
-##### 1.3.5.2 User-mode programs use ADC
+##### User-mode programs use ADC
 
 The steps to obtain the ADC sampling value in a user-mode program are as follows:
 
@@ -316,7 +316,7 @@ p = (uint32_t *)(intptr_t)channel;
 ret = rt_device_control(adc_dev, 0, (void *)p);
 ```
 
-##### 1.3.5.3 Kernel-state programs use ADC
+##### Kernel-state programs use ADC
 
 1. Find the ADC device
 
@@ -336,9 +336,9 @@ The application obtains a device handle based on the ADC device name, which in t
 
 `rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_uint32_t channel);`
 
-#### 1.3.6 WDT
+#### WDT
 
-##### 1.3.6.1 User-mode programs use WDT
+##### User-mode programs use WDT
 
 1. Open the Devices node
 
@@ -356,7 +356,7 @@ The application obtains a device handle based on the ADC device name, which in t
 
 `ioctl(wdt_fd, CTRL_WDT_KEEPALIVE, NULL)`
 
-##### 1.3.6.2 Kernel-state programs use WDT
+##### Kernel-state programs use WDT
 
 1. Gets the device handle
 
@@ -378,11 +378,11 @@ The application obtains a device handle based on the ADC device name, which in t
 
 `rt_device_control(wdt_dev, KD_DEVICE_CTRL_WDT_KEEPALIVE, RT_NULL);`
 
-#### 1.3.7 OTP
+#### OTP
 
 The big core-side OTP driver can support scenarios such as being invoked by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of OTP drivers in these two application scenarios.
 
-##### 1.3.7.1 User-mode programs use OTP
+##### User-mode programs use OTP
 
 In rt-smart, applications access hardware devices through I/O device management interfaces, and applications can access the hardware after implementing the corresponding device drivers. The RT-smart user layer accesses `/dev/otp` OTP hardware through operations,  and when user-mode applications use OTP, they can access OTP devices through operations such as open, read, write, etc. The specific operation of using OTP for user-mode applications is as follows:
 
@@ -423,7 +423,7 @@ rt_device_close(otp_dev);
 
 ```
 
-##### 1.3.7.2 Kernel-state programs use OTP
+##### Kernel-state programs use OTP
 
 In rt-smart, when other kernel-mode drivers want to read and write to the OTP space, they only need to call the interface provided by the OTP driver. The specific steps are as follows:
 
@@ -456,7 +456,7 @@ ret = otp_device_write(otp_dev, pos, (void *)buffer, size);
 
 ```
 
-##### 1.3.7.3 Precautions
+##### Precautions
 
 When using the read-write API, you need to pay attention to the following key points:
 
@@ -464,11 +464,11 @@ When using the read-write API, you need to pay attention to the following key po
 - Read and write offset: The base addresses of read and write operations are different, the readable space range of the OTP region is , and`(otp_read_base + 0x0)~(otp_read_base + 0xc00)` the length of the writable space is`(otp_write_base + 0x0)~(otp_write_base + 0x200)` ;
 - Read and write size: size is a multiple of 4.
 
-#### 1.3.8 TS
+#### TS
 
 The big core-side TS driver can support scenarios such as being called by other kernel-state drivers and user-mode applications, and the following describes the use and precautions of TS drivers in these two application scenarios.
 
-##### 1.3.8.1 User-mode programs use TS
+##### User-mode programs use TS
 
 In rt-smart, applications access hardware devices through I/O device management interfaces, and applications can access the hardware after implementing the corresponding device drivers. The RT-smart user layer accesses `/dev/ts` the TS hardware through operations ,  and when user-mode applications use TS, they can access TS devices through `open` operations such as , , ,`read` and `close` so on. The specific operation of using TS for user-mode applications is as follows:
 
@@ -514,7 +514,7 @@ rt_device_close(ts_dev);
 
 ```
 
-##### 1.3.8.2 Kernel-state programs use TS
+##### Kernel-state programs use TS
 
 In rt-smart, when other drivers in kernel mode want to read the die junction temperature, they only need to call the interface provided by the TS driver. The specific steps are as follows:
 
@@ -538,7 +538,7 @@ ret = ts_device_read (ts_dev, pos, (void *)buffer, size);
 
 ```
 
-##### 1.3.8.3 Precautions
+##### Precautions
 
 When calling the API to read the TS temperature, you need to pay attention to the following key points:
 
@@ -551,11 +551,11 @@ temp = (1e-10 * pow(code, 4) * 1.01472 - 1e-6 * pow(code, 3) * 1.10063 + 4.36150
 
 ```
 
-#### 1.3.9 PWM
+#### PWM
 
 At present, the PWM driver only provides a call method from the kernel state, and the usage method is as follows:
 
-##### 1.3.9.1 Kernel-state programs use PWM
+##### Kernel-state programs use PWM
 
 ```c
 pwm_demo:
@@ -579,7 +579,7 @@ pwm_demo:
     rt_pwm_disable(pwm_dev, PWM_DEV_CHANNEL_4);
 ```
 
-##### 1.3.9.2 The FinSH command uses PWM
+##### The FinSH command uses PWM
 
 ```shell
 Set the period and duty cycle of a channel of a PWM device
@@ -592,14 +592,14 @@ Disable a channel of the PWM device
 msh />pwm_disable pwm1 1
 ```
 
-##### 1.3.9.3 Precautions
+##### Precautions
 
 K230 has a total of 6 PWM channels, of which channel 0 ~ 2 (pwm 0 ~ 2) belongs to the same PWM, channel 3 ~ 5 (pwm 3 ~ 5) belongs to one PWM, when using multi-channel PWM at the same time, the same PWM, only need to enable one of the channels.
-As [Kernel-state programs use PWM](#1391-kernel-state-programs-use-pwm) and channel4 only enable channel4, in which case channel3 is also enabled.
+As [Kernel-state programs use PWM](#kernel-state-programs-use-pwm) and channel4 only enable channel4, in which case channel3 is also enabled.
 
-#### 1.3.10 RTC
+#### RTC
 
-##### 1.3.10.1 Kernel mode uses RTC
+##### Kernel mode uses RTC
 
 The RTC driver provides kernel-mode call methods, which are used as follows:
 
@@ -668,7 +668,7 @@ void alarm_rtc()
 }
 ```
 
-##### 1.3.10.2 Precautions
+##### Precautions
 
 When using the K230's RTC module, the PMU must be activated when the chip is powered on (refer to the PMU documentation), otherwise the RTC will not work.
 
@@ -682,9 +682,9 @@ The K230's RTC supports two interrupt modes:
 2. tick interrupts (periodic interrupts), such as every second, every minute, every hour, every day, etc.  Maximum accuracy: 1/64 second
 ```
 
-#### 1.3.11 TIMER
+#### TIMER
 
-##### 1.3.11.1 The kernel state uses TIMER
+##### The kernel state uses TIMER
 
 The TIMER driver provides kernel-state call methods, which are used as follows:
 
@@ -751,26 +751,26 @@ void test_hwtimer(void)
 }
 ```
 
-##### 1.3.11.2 Precautions
+##### Precautions
 
 When setting the freq counting frequency, only 12.5M 25M 50M 100M can be selected, no other values can be set, the larger the freq, the higher the counting accuracy.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 Kernel-mode API
+### Kernel-mode API
 
-#### 2.1.1 UART
+#### UART
 
 The UART module provides the following APIs:
 
-- [rt_serial_init](#2111-rt_serial_init)
-- [rt_serial_open](#2112-rt_serial_open)
-- [rt_serial_close](#2113-rt_serial_close)
-- [rt_serial_read](#2114-rt_serial_read)
-- [rt_serial_write](#2115-rt_serial_write)
-- [rt_serial_control](#2116-rt_serial_control)
+- [rt_serial_init](#rt_serial_init)
+- [rt_serial_open](#rt_serial_open)
+- [rt_serial_close](#rt_serial_close)
+- [rt_serial_read](#rt_serial_read)
+- [rt_serial_write](#rt_serial_write)
+- [rt_serial_control](#rt_serial_control)
 
-##### 2.1.1.1 rt_serial_init
+##### rt_serial_init
 
 【Description】
 
@@ -793,7 +793,7 @@ Initialize a serial device.
 | RT_EOK | succeed |
 | other   | fail |
 
-##### 2.1.1.2 rt_serial_open
+##### rt_serial_open
 
 【Description】
 
@@ -817,7 +817,7 @@ Turn on a serial device.
 |     RT_EOK    |   succeed   |
 |     -RT_EIO   |   fail      |
 
-##### 2.1.1.3 rt_serial_close
+##### rt_serial_close
 
 【Description】
 
@@ -840,7 +840,7 @@ Turn off a serial device.
 | RT_EOK | succeed |
 | other   | fail |
 
-##### 2.1.1.4 rt_serial_read
+##### rt_serial_read
 
 【Description】
 
@@ -865,7 +865,7 @@ Read serial port data.
 |--------------|-------------|
 |   rt_size_t  | The number of bytes read |
 
-##### 2.1.1.5 rt_serial_write
+##### rt_serial_write
 
 【Description】
 
@@ -890,7 +890,7 @@ Send serial port data.
 |--------------|-------------|
 |   rt_size_t  | The number of bytes written |
 
-##### 2.1.1.6 rt_serial_control
+##### rt_serial_control
 
 【Description】
 
@@ -936,16 +936,16 @@ none
 
 none
 
-#### 2.1.2 I2C
+#### I2C
 
 The I2C module provides the following APIs:
 
-- [rt_i2c_bus_device_find](#2121-rt_i2c_bus_device_find)
-- [rt_i2c_master_send](#2122-rt_i2c_master_send)
-- [rt_i2c_master_recv](#2123-rt_i2c_master_recv)
-- [rt_i2c_transfer](#2124-rt_i2c_transfer)
+- [rt_i2c_bus_device_find](#rt_i2c_bus_device_find)
+- [rt_i2c_master_send](#rt_i2c_master_send)
+- [rt_i2c_master_recv](#rt_i2c_master_recv)
+- [rt_i2c_transfer](#rt_i2c_transfer)
 
-##### 2.1.2.1 rt_i2c_bus_device_find
+##### rt_i2c_bus_device_find
 
 【Description】
 
@@ -968,7 +968,7 @@ Look for the I2C bus.
 | rt_i2c_bus_device* | The function executes successfully and returns a bus handle |
 | RT_NULL | The bus does not exist                 |
 
-##### 2.1.2.2 rt_i2c_master_send
+##### rt_i2c_master_send
 
 【Description】
 
@@ -1001,7 +1001,7 @@ rt_uint32_t count);
 | positive value | Success, returns the number of bytes sent |
 | Negative | fail                                 |
 
-##### 2.1.2.3 rt_i2c_master_recv
+##### rt_i2c_master_recv
 
 【Description】
 
@@ -1034,7 +1034,7 @@ rt_uint32_t count)
 | positive value | Success, returns the number of bytes received |
 | Negative | fail                   |
 
-##### 2.1.2.4 rt_i2c_transfer
+##### rt_i2c_transfer
 
 【Description】
 
@@ -1084,19 +1084,19 @@ none
 
 none
 
-#### 2.1.3 GPIO
+#### GPIO
 
 The GPIO module provides the following APIs:
 
-- [kd_pin_mode](#2131-kd_pin_mode)
-- [kd_pin_write](#2132-kd_pin_write)
-- [kd_pin_read](#2133-kd_pin_read)
-- [kd_pin_attach_irq](#2134-kd_pin_attach_irq)
-- [kd_pin_detach_irq](#2135-kd_pin_detach_irq)
-- [kd_pin_irq_enable](#2136-kd_pin_irq_enable)
-- [gpio_device_ioctl](#2137-gpio_device_ioctl)
+- [kd_pin_mode](#kd_pin_mode)
+- [kd_pin_write](#kd_pin_write)
+- [kd_pin_read](#kd_pin_read)
+- [kd_pin_attach_irq](#kd_pin_attach_irq)
+- [kd_pin_detach_irq](#kd_pin_detach_irq)
+- [kd_pin_irq_enable](#kd_pin_irq_enable)
+- [gpio_device_ioctl](#gpio_device_ioctl)
 
-##### 2.1.3.1 kd_pin_mode
+##### kd_pin_mode
 
 【Description】
 
@@ -1120,7 +1120,7 @@ Set the GPIO pin input and output mode.
 | RT_EOK | succeed |
 | other   | fail |
 
-##### 2.1.3.2 kd_pin_write
+##### kd_pin_write
 
 【Description】
 
@@ -1143,7 +1143,7 @@ Set the GPIO pin level.
 |----------|------|
 | No return value |      |
 
-##### 2.1.3.3 kd_pin_read
+##### kd_pin_read
 
 【Description】
 
@@ -1166,7 +1166,7 @@ Set the GPIO pin level.
 | 0      | The current state of the pin is low     |
 | 1      | Pin current level state high |
 
-##### 2.1.3.4 kd_pin_attach_irq
+##### kd_pin_attach_irq
 
 【Description】
 
@@ -1192,7 +1192,7 @@ Bind the pin interrupt function and set the interrupt mode.
 | RT_EOK | Binding succeeded |
 | Error code | Binding failed |
 
-##### 2.1.3.5 kd_pin_detach_irq
+##### kd_pin_detach_irq
 
 【Description】
 
@@ -1215,7 +1215,7 @@ Unbind the pin interrupt function and disable interrupt enable for the GPIO pin.
 | Pin number | Dismissed successfully |
 | Error code   | Dismiss failed |
 
-##### 2.1.3.6 kd_pin_irq_enable
+##### kd_pin_irq_enable
 
 【Description】
 
@@ -1239,7 +1239,7 @@ Interrupt enable for GPIO pins.
 | RT_EOK | Enable success |
 | Error code | Enable failed |
 
-##### 2.1.3.7 gpio_device_ioctl
+##### gpio_device_ioctl
 
 【Description】
 
@@ -1284,15 +1284,15 @@ none
 
 none
 
-#### 2.1.4 Hard-lock
+#### Hard-lock
 
 The Hard-lock module provides the following APIs:
 
-- [kd_request_lock](#2141-kd_request_lock)
-- [kd_hardlock_lock](#2142-kd_hardlock_lock)
-- [kd_hardlock_unlock](#2143-kd_hardlock_unlock)
+- [kd_request_lock](#kd_request_lock)
+- [kd_hardlock_lock](#kd_hardlock_lock)
+- [kd_hardlock_unlock](#kd_hardlock_unlock)
 
-##### 2.1.4.1 kd_request_lock
+##### kd_request_lock
 
 【Description】
 
@@ -1315,7 +1315,7 @@ Request the use of a lock.
 | 0      | The application was successful |
 | -1     | The application failed |
 
-##### 2.1.4.2 kd_hardlock_lock
+##### kd_hardlock_lock
 
 【Description】
 
@@ -1338,7 +1338,7 @@ Lock.
 | 0      | The lock is successful                     |
 | -1     | The lock is in the locked state and cannot be locked this time |
 
-##### 2.1.4.3 kd_hardlock_unlock
+##### kd_hardlock_unlock
 
 【Description】
 
@@ -1380,16 +1380,16 @@ none
 
 none
 
-#### 2.1.5 ADC
+#### ADC
 
 The ADC module provides the following APIs:
 
-- [rt_device_find](#2151-rt_device_find)
-- [rt_adc_enable](#2152-rt_adc_enable)
-- [rt_adc_read](#2153-rt_adc_read)
-- [rt_adc_disable](#2154-rt_adc_disable)
+- [rt_device_find](#rt_device_find)
+- [rt_adc_enable](#rt_adc_enable)
+- [rt_adc_read](#rt_adc_read)
+- [rt_adc_disable](#rt_adc_disable)
 
-##### 2.1.5.1 rt_device_find
+##### rt_device_find
 
 【Description】
 
@@ -1432,7 +1432,7 @@ none
 
 none
 
-##### 2.1.5.2 rt_adc_enable
+##### rt_adc_enable
 
 【Description】
 
@@ -1477,7 +1477,7 @@ none
 
 none
 
-##### 2.1.5.3 rt_adc_read
+##### rt_adc_read
 
 【Description】
 
@@ -1520,7 +1520,7 @@ none
 
 none
 
-##### 2.1.5.4 rt_adc_disable
+##### rt_adc_disable
 
 【Description】
 
@@ -1565,15 +1565,15 @@ none
 
 none
 
-#### 2.1.6 WDT
+#### WDT
 
 The WDT module provides the following APIs:
 
-- [rt_device_find](#2161-rt_device_find)
-- [rt_device_init](#2162-rt_device_init)
-- [rt_device_control](#2163-rt_device_control)
+- [rt_device_find](#rt_device_find)
+- [rt_device_init](#rt_device_init)
+- [rt_device_control](#rt_device_control)
 
-##### 2.1.6.1 rt_device_find
+##### rt_device_find
 
 【Description】
 
@@ -1616,7 +1616,7 @@ none
 
 none
 
-##### 2.1.6.2 rt_device_init
+##### rt_device_init
 
 【Description】
 
@@ -1658,7 +1658,7 @@ none
 
 none
 
-##### 2.1.6.3 rt_device_control
+##### rt_device_control
 
 【Description】
 
@@ -1704,14 +1704,14 @@ none
 
 none
 
-#### 2.1.7 OTP
+#### OTP
 
 In the large-core rt-smart, the OTP module mainly provides the following APIs:
 
-- [otp_device_read](#2171-otp_device_read)
-- [otp_device_write](#2172-otp_device_write)
+- [otp_device_read](#otp_device_read)
+- [otp_device_write](#otp_device_write)
 
-##### 2.1.7.1 otp_device_read
+##### otp_device_read
 
 【Description】
 
@@ -1758,7 +1758,7 @@ none
 
 none
 
-##### 2.1.7.2 otp_device_write
+##### otp_device_write
 
 【Description】
 
@@ -1805,13 +1805,13 @@ none
 
 none
 
-#### 2.1.8 TS
+#### TS
 
 In the large-core rt-smart, the TS module mainly provides the following APIs:
 
-- [ts_device_read](#2181-ts_device_read)
+- [ts_device_read](#ts_device_read)
 
-##### 2.1.8.1 ts_device_read
+##### ts_device_read
 
 【Description】
 
@@ -1858,15 +1858,15 @@ none
 
 none
 
-#### 2.1.9 PWM
+#### PWM
 
 The PWM module provides the following kernel-state APIs:
 
-- [rt_pwm_set](#2191-rt_pwm_set)
-- [rt_pwm_enable](#2192-rt_pwm_enable)
-- [rt_pwm_disable](#2193-rt_pwm_disable)
+- [rt_pwm_set](#rt_pwm_set)
+- [rt_pwm_enable](#rt_pwm_enable)
+- [rt_pwm_disable](#rt_pwm_disable)
 
-##### 2.1.9.1 rt_pwm_set
+##### rt_pwm_set
 
 【Description】
 
@@ -1914,7 +1914,7 @@ none
 
 none
 
-##### 2.1.9.2 rt_pwm_enable
+##### rt_pwm_enable
 
 【Description】
 
@@ -1959,7 +1959,7 @@ none
 
 none
 
-##### 2.1.9.3 rt_pwm_disable
+##### rt_pwm_disable
 
 【Description】
 
@@ -2004,14 +2004,14 @@ none
 
 none
 
-#### 2.1.10 RTC
+#### RTC
 
 The PWM module provides the following kernel-state APIs:
 
-- [set_date](#21101-set_date)
-- [set_time](#21102-set_time)
+- [set_date](#set_date)
+- [set_time](#set_time)
 
-##### 2.1.10.1 set_date
+##### set_date
 
 【Description】
 
@@ -2057,7 +2057,7 @@ none
 
 none
 
-##### 2.1.10.2 set_time
+##### set_time
 
 【Description】
 
@@ -2103,17 +2103,17 @@ none
 
 none
 
-#### 2.1.11 TIMER
+#### TIMER
 
 The TIMER module provides the following kernel-state APIs:
 
 - `rt_device_open`
 - `rt_device_control`
-- [rt_device_set_rx_indicate](#21111-rt_device_set_rx_indicate)
+- [rt_device_set_rx_indicate](#rt_device_set_rx_indicate)
 - `rt_device_read`
 - `rt_device_write`
 
-##### 2.1.11.1 rt_device_set_rx_indicate
+##### rt_device_set_rx_indicate
 
 【Description】
 
@@ -2157,18 +2157,18 @@ none
 
 none
 
-### 2.2 User-mode API
+### User-mode API
 
-#### 2.2.1 ADC
+#### ADC
 
 The ADC block provides the following APIs in user mode:
 
-- [rt_device_find](#2211-rt_device_find)
-- [rt_device_open](#2212-rt_device_open)
-- [rt_device_control](#2213-rt_device_control)
-- [rt_device_read](#2214-rt_device_read)
+- [rt_device_find](#rt_device_find)
+- [rt_device_open](#rt_device_open)
+- [rt_device_control](#rt_device_control)
+- [rt_device_read](#rt_device_read)
 
-##### 2.2.1.1 rt_device_find
+##### rt_device_find
 
 【Description】
 
@@ -2211,7 +2211,7 @@ none
 
 none
 
-##### 2.2.1.2 rt_device_open
+##### rt_device_open
 
 【Description】
 
@@ -2255,7 +2255,7 @@ none
 
 none
 
-##### 2.2.1.3 rt_device_control
+##### rt_device_control
 
 【Description】
 
@@ -2300,7 +2300,7 @@ none
 
 none
 
-##### 2.2.1.4 rt_device_read
+##### rt_device_read
 
 【Description】
 
@@ -2347,14 +2347,14 @@ none
 
 none
 
-#### 2.2.2 WDT
+#### WDT
 
 WDT modules can use the posix interface in user mode:
 
-- [open](#2221-open)
-- [ioctl](#2222-ioctl)
+- [open](#open)
+- [ioctl](#ioctl)
 
-##### 2.2.2.1 open
+##### open
 
 【Description】
 
@@ -2398,7 +2398,7 @@ none
 
 none
 
-##### 2.2.2.2 ioctl
+##### ioctl
 
 【Description】
 
@@ -2442,17 +2442,17 @@ none
 
 none
 
-#### 2.2.3 OTP
+#### OTP
 
 The OTP module provides the following APIs in user mode:
 
-- [rt_device_find](#2231-rt_device_find)
-- [rt_device_open](#2232-rt_device_open)
-- [rt_device_read](#2233-rt_device_read)
-- [rt_device_write](#2234-rt_device_write)
-- [rt_device_close](#2235-rt_device_close)
+- [rt_device_find](#rt_device_find)
+- [rt_device_open](#rt_device_open)
+- [rt_device_read](#rt_device_read)
+- [rt_device_write](#rt_device_write)
+- [rt_device_close](#rt_device_close)
 
-##### 2.2.3.1 rt_device_find
+##### rt_device_find
 
 【Description】
 
@@ -2495,7 +2495,7 @@ none
 
 none
 
-##### 2.2.3.2 rt_device_open
+##### rt_device_open
 
 【Description】
 
@@ -2539,7 +2539,7 @@ none
 
 none
 
-##### 2.2.3.3 rt_device_read
+##### rt_device_read
 
 【Description】
 
@@ -2585,7 +2585,7 @@ none
 
 none
 
-##### 2.2.3.4 rt_device_write
+##### rt_device_write
 
 【Description】
 
@@ -2631,7 +2631,7 @@ none
 
 none
 
-##### 2.2.3.5 rt_device_close
+##### rt_device_close
 
 【Description】
 
@@ -2674,16 +2674,16 @@ none
 
 none
 
-#### 2.2.4 TS
+#### TS
 
-The TS module provides the following APIs in user mode, which are consistent with the APIs provided by OTP, please refer to the introduction of user-mode APIs in OTP [](#223-otp) .
+The TS module provides the following APIs in user mode, which are consistent with the APIs provided by OTP, please refer to the introduction of user-mode APIs in OTP [OTP](#otp) .
 
 - rt_device_find
 - rt_device_open
 - rt_device_read
 - rt_device_close
 
-## 3. Data Type
+## Data Type
 
 Data type used by the UART module: No private data type is defined
 
@@ -2693,13 +2693,13 @@ Data type used by ADC module: No private data type defined
 
 Data types used by GPIO modules:
 
-- [struct rt_device_gpio](#31-struct-rt_device_gpio)
+- [struct rt_device_gpio](#struct-rt_device_gpio)
 
 Data type used by ADC module: No private data type defined
 
 Types of data used by the Hard-lock module:
 
-- [struct device_hardlock](#32-device_hardlock)
+- [struct device_hardlock](#device_hardlock)
 
 Data type used by WDT module: No private data type defined
 
@@ -2711,9 +2711,9 @@ Data type used by PWM module: No private data type is defined
 
 Types of data used by RTC modules:
 
-- [struct kd_alarm_setup](#33-struct-kd_alarm_setup)
+- [struct kd_alarm_setup](#struct-kd_alarm_setup)
 
-### 3.1 struct rt_device_gpio
+### struct rt_device_gpio
 
 【Description】
 
@@ -2737,7 +2737,7 @@ none
 
 none
 
-### 3.2 device_hardlock
+### device_hardlock
 
 【Description】
 
@@ -2761,7 +2761,7 @@ none
 
 none
 
-### 3.3 struct kd_alarm_setup
+### struct kd_alarm_setup
 
 【Description】
 
@@ -2785,16 +2785,16 @@ none
 
 none
 
-## 4. Error codes
+## Error codes
 
 | Error code | Macro definitions | description       |
 |----------|--------|------------|
 | RT_EOK   | 0      | succeed       |
 | RT_ERROR | 1      | An error has occurred |
 
-## 5. Calculation formula
+## Calculation formula
 
-### 5.1 ADC calculation formula
+### ADC calculation formula
 
 The ADC hardware reference voltage is 1.8 V, 12 bit digital signal output, and 10 bits significant bit due to noise interference. After obtaining the ADC sampling voltage value through the API, the conversion to the actual voltage value is calculated as follows:
 
@@ -2802,7 +2802,7 @@ For example, when MSH gets the sampling value of the ADC of 0x713, which is 1811
 
 V\~1.8V, floating range of 5mV.
 
-### 5.2 WDT timeout calculation formula
+### WDT timeout calculation formula
 
 ```text
 value = clock * timeout;   timeout：Timeout period set by the user, in seconds

@@ -49,13 +49,13 @@ This document (this guide) is intended primarily for:
 |            |          |        |            |
 |            |          |        |            |
 
-## 1. Overview
+## Overview
 
 This topic explains how to use audio demos to implement audio capture, playback, encoding, and decoding on big core RT-Smart or little core Linux.
 
-## 2. Environmental preparation
+## Environmental preparation
 
-### 2.1 Hardware Environment
+### Hardware Environment
 
 - K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 
@@ -75,25 +75,25 @@ This topic explains how to use audio demos to implement audio capture, playback,
 
   ![image-20230703161821233](../../../zh/02_applications/tutorials/images/audio-board-en.png)
 
-### 2.2 Compiling the Program
+### Compiling the Program
 
-#### 2.2.1 Compilation method
+#### Compilation method
 
 Executed under the directory, `k230_sdk`generated under`make rt-smart` the directory`k230_sdk/src/big/mpp/userapps/sample/elf``sample_audio.elf`, for the audio demo under the big core rt-smart.
 Executed under`k230_sdk` a directory, generated`make cdk-user` under a directory`k230_sdk/src/common/cdk/user/out/little/``sample_audio`, an audio demo executed under a little core Linux.
 By default, after the board starts, the big core rt-smart system sample_audio.elf under /sharefs, and the little core audio demo sample_audio under /mnt.
 
-#### 2.2.2 Code Location
+#### Code Location
 
 Program source directory:
 Big core audio demo source code location:`k230_sdk/src/big/mpp/userapps/sample/sample_audio`
 Little core audio demo source code location:`k230_sdk/src/common/cdk/user/mapi/sample/sample_audio`
 
-## 3. Big core audio in action
+## Big core audio in action
 
 The big core demo file is sample_audio.elf, which supports audio capture (AI), audio playback (AO), audio coding (AENC), audio decoding (ADEC) and other functions.
 
-### 3.1 Parameter description
+### Parameter description
 
 | The parameter name | description | Default value |
 |:--|:--|:--|
@@ -120,7 +120,7 @@ The big core demo file is sample_audio.elf, which supports audio capture (AI), a
 | 10     | Audio decoding function: ADEC->AO, implemented using API interface, AO is the I2S interface, and ADEC is the G711A decoding format. |
 | 12     | AI->AENC, ADEC->AO loopback function: Use module binding (AI-bound AENC, ADEC-bound AO) implementation. AI is the I2S interface and AO is the I2S interface. |
 
-### 3.2 Audio Capture
+### Audio Capture
 
 Audio capture supports two audio transmission interfaces: I2S and PDM. I2S audio acquisition supports two groups and can work at the same time, and PDM audio capture supports four groups and can work at the same time.
 
@@ -132,7 +132,7 @@ PDM audio acquisition: external daughter board is required, a total of four grou
 
 ![image-20230704101309168](../../../zh/02_applications/tutorials/images/audio-capture-pdm-en.png)
 
-### 3.2.1 I2S audio capture
+### I2S audio capture
 
 After the board is started, run the following test program on the big core:`/sharefs/sample_audio.elf -type 0 -enablecodec 1 -samplerate 48000 -bitwidth 24 -channels 2 -filename /sharefs/test.wav`
 The demo uses a sampling rate of 48000, uses a built-in codec path, sampling accuracy of 24bit, two channels, collects data in WAV format to save to /sharefs/test.wav file, and exits after collecting 15s data.
@@ -167,7 +167,7 @@ destroy vb block
 sample done
 ```
 
-### 3.2.2 PDM audio capture
+### PDM audio capture
 
 After the board is started, run the following test program on the big core:`/sharefs/sample_audio.elf -type 1 -samplerate 16000 -bitwidth 16 -channels 2 -filename /sharefs/test.wav`
 Demo sampling rate 16000, external audio path (need to connect to audio daughter board), sampling accuracy 16bit, dual channel, collected data saved to /sharefs/test .wav file in WAV format, and exit after collecting 15s data.
@@ -203,13 +203,13 @@ destroy vb block
 sample done
 ```
 
-### 3.3 Audio Playback
+### Audio Playback
 
 Audio playback supports I2S audio transmission interface. I2S audio capture supports two groups and can work simultaneously. The first group can be selected as an internal or external path, and the second group is fixed as an external path. When the first set is used as a built-in path, the sound output is the on-board headphone output, and when using the external path, the sound output is the daughter board headphone output.
 
 ![image-20230704104012443](../../../zh/02_applications/tutorials/images/audio-play-i2s-en.png)
 
-#### 3.3.1 I2S audio playback
+#### I2S audio playback
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 2 -filename test.wav -enablecodec 1`
 The demo automatically sets audio properties according to the WAV file format, loops the WAV file, and uses the headphones to plug into the onboard headphone jack to hear the sound. Press any key to exit the demo.
@@ -234,11 +234,11 @@ destroy vb block
 sample done
 ```
 
-### 3.4 Audio codec
+### Audio codec
 
 Built-in G711A/U codec module, if you need to support other codec formats, you can register external codecs. All codec modules use CPU software to encode and decode and only support 16-bit sampling accuracy.
 
-#### 3.4.1 Audio Coding
+#### Audio Coding
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 7 -filename /sharefs/test.g711a -channels 2 -samplerate 8000 -bitwidth 16 -enablecodec 1`
 Encode the data collected by AI (two-channel, sample rate 8000, built-in codec link, sampling accuracy 16) into G711A format, save it to a file, and press any key to exit the demo.
@@ -257,7 +257,7 @@ destroy vb block
 sample done
 ```
 
-#### 3.4.2 Audio Decoding
+#### Audio Decoding
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 8 -filename /sharefs/test.g711a -channels 2 -samplerate 8000 -bitwidth 16 -enablecodec 1`
 Decode the G711A format (sampling rate 8000, channel number 2, sampling accuracy 16) file, play the output through AO (built-in codec path), press any key to exit the demo.
@@ -280,9 +280,9 @@ destroy vb block
 sample done
 ```
 
-### 3.5 Loopback test
+### Loopback test
 
-### 3.5.1 I2S acquisition playback loop
+### I2S acquisition playback loop
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 4 -enablecodec 1 -bitwidth 16 -samplerate 48000 -channels 2`
 Run the AI and AO modules at the same time, output the sound data collected by AI (sampling accuracy 16, sampling rate 48000, dual channel) to AO (sampling accuracy 16, sampling rate 48000, dual channel) in real time, use the built-in codec path, press any key to exit the demo.
@@ -307,7 +307,7 @@ destroy vb block
 sample done
 ```
 
-### 3.5.2 PDM acquisition playback loopback
+### PDM acquisition playback loopback
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 6 -bitwidth 32 -samplerate 48000 -channels 2 -enablecodec 0`
 Run the AI and AO modules at the same time, output the sound data collected by AI (sampling accuracy 32, sampling rate 48000, dual channel) to AO (sampling accuracy 32, sampling rate 48000, dual channel) in real time, use the external daughter board path, press any key to exit the demo.
@@ -330,7 +330,7 @@ destroy vb block
 sample done
 ```
 
-### 3.5.3 Codec loopback
+### Codec loopback
 
 After the board is started, run the following test program on the big core:`./sample_audio.elf -type 12 -samplerate 44100`
 At the same time, the AI, ADEC, AENC, and AO modules are run, and the AI-bound AENC and ADEC-bound AO are sent to ADEC to achieve the loopback effect. The audio sampling accuracy is fixed to 16bit, and the built-in codec path is fixed, and any key is pressed to exit the demo.
@@ -364,11 +364,11 @@ destroy vb block
 sample done
 ```
 
-## 4. Little core audio in action
+## Little core audio in action
 
 The littlecore demo file is sample_audio, which supports audio capture (AI), audio playback (AO), audio coding (AENC), audio decoding (ADEC) and other functions.
 
-### 4.1 Parameter description
+### Parameter description
 
 | The parameter name | description | Default value |
 |:--|:--|:--|
@@ -385,7 +385,7 @@ The littlecore demo file is sample_audio, which supports audio capture (AI), aud
 | 1      | Audio decoding and playback function: ADEC->AO, using module binding (ADEC binding AO), AO is the I2S interface, ADEC is the G711A decoding format, and the sampling accuracy is fixed 16bit. |
 | 2      | AI->AENC, ADEC->AO loopback function: Use module binding (AI-bound AENC, ADEC-bound AO) implementation. AI is the I2S interface, AENC is the G711A format, ADEC is the G711A format, AO is the I2S interface, and the sampling accuracy is fixed at 16bit. |
 
-### 4.2 Audio Capture Coding
+### Audio Capture Coding
 
 After the board is launched, run the program on the big core: /sharefs/sample_sys_init.elf &
 Run the following program on the little core:`./sample_audio -type 0 -samplerate 8000 -enablecodec 1 -channels 1 -filename test.g711a`
@@ -431,7 +431,7 @@ q
 sample done
 ```
 
-### 4.3 Audio decoding playback
+### Audio decoding playback
 
 After the board is launched, run the program on the big core: /sharefs/sample_sys_init.elf &
 Run the following test program on the little core:`./sample_audio -type 1 -samplerate 8000 -enablecodec 1 -channels 1 -filename test.g711a`
@@ -451,7 +451,7 @@ q
 sample done
 ```
 
-### 4.4 Codec loopback
+### Codec loopback
 
 After the board starts, run the program on the big core:`/sharefs/sample_sys_init.elf &`
 Run the following test program on the little core:`./sample_audio -type 2 -samplerate 48000 -enablecodec 1 -channels 2`

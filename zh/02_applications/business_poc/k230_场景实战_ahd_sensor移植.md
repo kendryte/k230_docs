@@ -53,11 +53,11 @@
 | --- | --- | --- | --- |
 | V1.0 | 初版 | zs | 2024/10/23 |
 
-## 1. ahd sensor介绍
+## ahd sensor介绍
 
 AHD（Analog High Definition）即模拟高清技术，是一种基于模拟同轴电缆传输逐行扫描的高清视频技术，具有高清、传输距离远的特点。本次用的AHD 转 mipi 的芯片是XS9950 芯片，这款芯片是国产的支持将高清制式AHD 信号转换成mipi 信号的芯片。
 
-## 2.硬件介绍
+## 硬件介绍
 
 k230 芯片支持3路mipi 输出，也就可以同时支持3路AHD sensor 输入， 下边是AHD sensor 接入k230 芯片的示意图，第一张是k230 芯片的mipi 引脚图、第二张是 AHD sensor 的接线图。
 
@@ -72,7 +72,7 @@ k230 芯片支持3路mipi 输出，也就可以同时支持3路AHD sensor 输入
 
 本次的测试是已经在k230 canmv 开发板基础上做的适配、所以每个ahd 的配置已经在sdk当中配置完成、如果需要设计对应自己的开发板，具体的硬件设置请参考硬件设置指南 [K230_硬件设计指南](../../00_hardware/K230_%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%8C%87%E5%8D%97.md)
 
-## 3.软件介绍
+## 软件介绍
 
 k230 软件部分采用的是RTT 操作系统，这个操作系统分为两部分，一部分是RTT 内核态、另一部分是RTT 用户态 ，配置AHD sensor 也需要修改这两部分。
 
@@ -96,7 +96,7 @@ RTT 用户态 部分主要是用户态程序、本次的用例是以3路720p 25f
 
 补充：pipe 中的 dev 和 chn 是模块的通道、每个模块支持的不同、有的可能支持多个dev、多个chn。以pipe 0 vicap （dev0 chn0）为例子dev0 ：vicap 的dev 0 设置，chn0 ：vicap 的 0 通道。
 
-### 3.1 RTT 内核态修改介绍
+### RTT 内核态修改介绍
 
 本次本次的测试是已经在k230 canmv 开发板基础上做的适配，所以AHD sesnor 的drver 已经是是配好的、如果需要设配新的AHD sensor 或者以XS9950为基础设置新的开发板请参考sensor配置指南[K230_Camera_Sensor](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md)
 
@@ -152,7 +152,7 @@ struct sensor_driver_dev xs9950_csi0_sensor_drv = {
 }
 ```
 
-### 3.2 RTT 用户态 修改介绍
+### RTT 用户态 修改介绍
 
 上边已经介绍了用户态代码的流程、下边就按照这个流程做逐个模块介绍。
 
@@ -195,7 +195,7 @@ k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
 
 上边主要是定义了一些输出和输入的size和每个模块对应vb大小的定义。
 
-#### 3.2.1 vb
+#### vb
 
 vb（Video Buff）是用来在各个模块存储数据和数据中转的内存空间，每个模块接受数据和发送数据都是以VB 的形式做传输的、所以每个模块都需要分配一些vb 用来存储和发送数据，初始化整个pipe 的时候先把所有模块的vb先配置好。下边是vb 初始化用例：
 
@@ -315,7 +315,7 @@ k230_sdk/src/big/mpp/userapps/sample/sample_ahd_sensor/ahd_sensor.c:
 
 上边是所有模块的vb 定义，gdma 分配了6个、三路dw 每路分配了4个、三路vicap 每路分配了10个，这个可以根据内存做自己的裁剪。如果你裁剪了某个模块，对应的内存可以去掉。
 
-#### 3.2.2 vicap
+#### vicap
 
 vicap 主要是用来接受sensor 的输出，然后经过处理存储到内存中的模块，在这里主要接收AHD sensor 的yuv422_8 的数据转换成yuv444 的数据存储到ddr 当中，如果想具体了解vicap，可以参考[K230_VICAP_API](../../01_software/board/mpp/K230_VICAP_API%E5%8F%82%E8%80%83.md) 参考指南。下边是vicap 相关的代码：
 
@@ -488,7 +488,7 @@ sample_vicap_stream(VICAP_DEV_ID_2, K_TRUE);
 
 本次的AHD sensor 的demo 是以k230 canmv 开发板为基础做的开发、所以目前已经支持了三路AHD sesnor 的 支持了，用户只需要配置XS9950_MIPI_CSI0_1280X720_30FPS_YUV422， XS9950_MIPI_CSI1_1280X720_30FPS_YUV422， XS9950_MIPI_CSI2_1280X720_30FPS_YUV422 这三个sensor type 到对应的dev就可以了，不需要自己做修改，如果需要配置其他的开发板可以参考[K230_Camera_Sensor](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md) 配置指南这个文档。
 
-#### 3.2.3 nonai-2d
+#### nonai-2d
 
 nonai-2d 主要是做格式转换的模块、可以将输入的yuv444格式转换成yuv420、rgb888 plane 等格式，具体的功能可以参考[K230_nonai_2D](../../01_software/board/mpp/K230_nonai_2D_API%E5%8F%82%E8%80%83.md) nonai-2d配置指南这个文档。
 
@@ -551,7 +551,7 @@ static k_s32 nonai_2d_exit()
 }
 ```
 
-#### 3.2.4 dw
+#### dw
 
 dw 主要是做图像缩放使用、根据不同的需求做不同尺寸的缩放，代码如下：
 
@@ -706,7 +706,7 @@ static void dw_exit(void)
 }
 ```
 
-#### 3.2.5 gdma
+#### gdma
 
 gdma 主要是用来做mirror、 rotation 功能，具体的可以参考[K230_DMA_API](../../01_software/board/mpp/K230_DMA_API%E5%8F%82%E8%80%83.md) dma 配置指南这个文档。
 
@@ -827,7 +827,7 @@ gdma_exit(1);
 gdma_exit(2);
 ```
 
-#### 3.2.6 display
+#### display
 
 display 主要是用来做显示用的、具体的可以参考[K230_VO_API](../../01_software/board/mpp/K230_%E8%A7%86%E9%A2%91%E8%BE%93%E5%87%BA_API%E5%8F%82%E8%80%83.md) display 配置指南。本次主要是用来显示采集三路AHD sensor 的图像。
 
@@ -929,7 +929,7 @@ static void sample_vo_init(k_connector_type type)
 
 这块主要是配置显示相关的代码，type 这个参数是已经支持的屏幕或者hdmi 的connector 的type，具体的看k_connector_comm.h 中已经支持的参数，剩下的就是配置图层了、目前显示部分大核支持两个layer（显示yuv）、4个osd（显示rgb），所以三个sensor 的显示采用了配置两个layer 和 一个osd， 最后的那个osd 是用来给ai 画字使用的，不用在这个pipe 中关系。在这里边主要是配置plane的尺寸和位置信息还有格式，每个图层显示的尺寸都是360x640的。
 
-#### 3.2.7 bind
+#### bind
 
 bind 这个是mpp的一种数据传输方式、将上级模块和下级模块绑定，通过绑定的方式将数据从上级传入到下一级，这样可以保证数据正确传输。下边就是本demo 的整个绑定方式、分为三路，具体流程如下：
 
@@ -1154,7 +1154,7 @@ static void sample_unbind()
 
 需要注意先关掉每个模块之后在去做解绑。在这块不用哪个模块只需要将哪个模块在bind 当中去掉即可，比如去掉dw ，就可以2d 和 下一级的gdma 做bind ，但是就需要修改gdma 的 size 和数据格式了。
 
-#### 3.2.8 main
+#### main
 
 main 函数主要是将上边的所有模块串接起来，分别建立三个 Pipeline, 将 3个 AHD Sensor的内容送到 Display 做显示，具体的代码如下：
 
@@ -1307,11 +1307,11 @@ vb_init_error:
 
 while 之前是所有模块的初始话和start、这个需要注意将所有的模块都配置完成之后才可以调用vicap start。在while中的代码完全是为了做ai 使用的，dump 一帧vcaip 的数据、通过2d 转换成rgb888 plane 格式、给ai 做识别、然后再将2d 和vicap 给release 掉即可，最后边就是退出了，整体的代码详见 k230_sdk/src/big/mpp/userapps/sample/ahd_sensor/ 目录。
 
-## 4 编译
+## 编译
 
 这份文档撰写时是以 SDK V1.7 以基础，需要下载SDK V1.7 的源码。
 
-### 4.1 sdk编译
+### sdk编译
 
 首先需要编译sdk 、编译AHD sensor demo 需要依赖sdk 相关的代码，编译命令如下：
 
@@ -1321,7 +1321,7 @@ make CONF=k230_canmv_defconfig
 
 如果你用的不同的板子可以根据[K230 SDK 使用说明](../../01_software/board/K230_SDK_%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md) 来修改。
 
-### 4.2 ahd sensor 编译
+### ahd sensor 编译
 
 ahd 编译需要先编译完成sdk 才可以编译，编译命令如下：
 
@@ -1340,7 +1340,7 @@ make mpp-apps
 
 ```
 
-## 5 运行
+## 运行
 
 将 生成的 sample_ahd_sensor.elf 拷贝到开发板上，在大核命令行执行：
 
@@ -1348,7 +1348,7 @@ make mpp-apps
 ./sample_ahd_sensor.elf
 ```
 
-## 6 注意事项
+## 注意事项
 
 - 第一个就是注意上一级传过来的图像尺寸和数据格式和当前模块对应的尺寸和数据格式是否一致、因为这块做个很多尺寸的变换、比如gdma 的旋转，dw 的缩放都是做了尺寸的改变，2d 的yuv444转换成yuv420，dw 将yuv420 转换成 rgb888 ，如果配置的格式不对和尺寸不对、后边的整个显示都是错误的
 - 第二个就是vb 大小和数量，每个模块用的尺寸可能不一样、可以根据不同的尺寸和数据格式计算出大小来申请vb，如果系统的内存不够、就得注意这个问题、根据实验找到一个可以运行的最小子集
@@ -1405,6 +1405,6 @@ k230_sdk/src/big/mpp/userapps/src/sensor/mpi_sensor.c：
 
 ```
 
-## 7 后续
+## 后续
 
 这个只是在已经有的ahd 的sensor drver 基础上做的开发，如果你要移植新的ahd sensor 可一参考文档中的[K230_Camera_Sensor适配指南](../../01_software/board/mpp/K230_Camera_Sensor%E9%80%82%E9%85%8D%E6%8C%87%E5%8D%97.md) 。该文档详细的写了怎么移植一个新的sensor，ahd sensor 移植过程和别的sensor 没有任何区别.

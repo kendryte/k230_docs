@@ -60,9 +60,9 @@
 | V1.2       | 增加OTP TS部分        | 范俊涛 | 2023/5/31 |
 | V1.3       | 增加pwm rtc timer部分 | 范俊涛 | 2023/6/29 |
 
-## 1 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 UART：
 
@@ -99,7 +99,7 @@ RTC：实时时钟可以提供精确的实时时间，它可以用于产生年�
 
 TIMER(HWTIMER)：通过内部计数器模块对内外部脉冲信号进行计数，可以工作在定时器模式和计数器模式。
 
-### 1.2 功能描述
+### 功能描述
 
 UART驱动结构如下图：
 
@@ -147,9 +147,9 @@ TIMER 驱动结构如下图所示：
 
 ![timer](images/timer-driver.png)
 
-### 1.3 驱动API使用方法
+### 驱动API使用方法
 
-#### 1.3.1 UART
+#### UART
 
 ##### 内核态程序使用uart
 
@@ -169,7 +169,7 @@ TIMER 驱动结构如下图所示：
 
 `rt_device_write(uart_dev, 0, str, (sizeof(str) - 1))`
 
-#### 1.3.2 I2C
+#### I2C
 
 ##### 内核态程序使用i2c
 
@@ -191,7 +191,7 @@ msgs.len = 2;
 
 `rt_i2c_transfer(bus, &msgs, 1)`
 
-#### 1.3.3 GPIO
+#### GPIO
 
 ##### 内核态程序使用gpio
 
@@ -239,7 +239,7 @@ msgs.len = 2;
 
 `ioctl(fd, GPIO_READ_VALUE, &mode27)`
 
-#### 1.3.4 Hard-lock
+#### Hard-lock
 
 ##### 内核态使用hard-lock
 
@@ -255,9 +255,9 @@ msgs.len = 2;
 
 `kd_hardlock_unlock(rt_uint32_t num)`
 
-#### 1.3.5 ADC
+#### ADC
 
-##### 1.3.5.1 用户态 msh 使用 adc
+##### 用户态 msh 使用 adc
 
 用户通过 msh 来获取 adc 采样值的步骤如下：
 
@@ -281,7 +281,7 @@ msgs.len = 2;
 `msh />adc disable 0`
 `adc channel 0 disable success`
 
-##### 1.3.5.2 用户态程序使用 adc
+##### 用户态程序使用 adc
 
 用户态程序中获取 adc 采样值的步骤如下：
 
@@ -320,7 +320,7 @@ p = (uint32_t *)(intptr_t)channel;
 ret = rt_device_control(adc_dev, 0, (void *)p);
 ```
 
-##### 1.3.5.3 内核态程序使用 adc
+##### 内核态程序使用 adc
 
 1. 查找 adc 设备
 
@@ -340,9 +340,9 @@ ret = rt_device_control(adc_dev, 0, (void *)p);
 
 `rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_uint32_t channel);`
 
-#### 1.3.6 WDT
+#### WDT
 
-##### 1.3.6.1 用户态程序使用WDT
+##### 用户态程序使用WDT
 
 1. 打开设备节点
 
@@ -360,7 +360,7 @@ ret = rt_device_control(adc_dev, 0, (void *)p);
 
 `ioctl(wdt_fd, CTRL_WDT_KEEPALIVE, NULL)`
 
-##### 1.3.6.2 内核态程序使用WDT
+##### 内核态程序使用WDT
 
 1. 获取设备句柄
 
@@ -382,11 +382,11 @@ ret = rt_device_control(adc_dev, 0, (void *)p);
 
 `rt_device_control(wdt_dev, KD_DEVICE_CTRL_WDT_KEEPALIVE, RT_NULL);`
 
-#### 1.3.7 OTP
+#### OTP
 
 大核侧 OTP 驱动可以支持被内核态其它驱动调用、用户态应用程序调用等场景，下面，将分别介绍这两种应用场景下 OTP 驱动的使用方法、注意事项。
 
-##### 1.3.7.1 用户态程序使用 OTP
+##### 用户态程序使用 OTP
 
 在 rt-smart 中，应用程序通过 I/O 设备管理接口来访问硬件设备，当实现对应的设备驱动之后，应用程序就可以访问该硬件。Rt-smart 用户层通过操作 `/dev/otp` 来访问 OTP 硬件，用户态应用程序使用 OTP 时，可以通过 open、read、write 等操作来访问 otp 设备。用户态应用程序使用 OTP 的具体操作如下：
 
@@ -427,7 +427,7 @@ rt_device_close(otp_dev);
 
 ```
 
-##### 1.3.7.2 内核态程序使用 OTP
+##### 内核态程序使用 OTP
 
 在rt-smart中，内核态其它驱动程序想要读写 OTP 空间时，只需要调用 OTP 驱动提供的接口即可。具体的步骤如下所示：
 
@@ -460,18 +460,18 @@ ret = otp_device_write(otp_dev, pos, (void *)buffer, size);
 
 ```
 
-##### 1.3.7.3 注意事项
+##### 注意事项
 
 在使用读写 API 的时候，需要注意以下几个关键点：
 
 - 危险操作：OTP 空间为一次可编程的区域，bit 位一旦由0写为1，便不能恢复；
 - 读写size：size 是4的倍数。
 
-#### 1.3.8 TS
+#### TS
 
 大核侧 TS 驱动可以支持被内核态其它驱动调用、用户态应用程序调用等场景，下面，将分别介绍这两种应用场景下 TS 驱动的使用方法、注意事项。
 
-##### 1.3.8.1 用户态程序使用 TS
+##### 用户态程序使用 TS
 
 在 rt-smart 中，应用程序通过 I/O 设备管理接口来访问硬件设备，当实现对应的设备驱动之后，应用程序就可以访问该硬件。Rt-smart 用户层通过操作 `/dev/ts` 来访问 TS 硬件，用户态应用程序使用 TS 时，可以通过 `open`、`read`、`close` 等操作来访问 ts 设备。用户态应用程序使用 TS 的具体操作如下：
 
@@ -517,7 +517,7 @@ rt_device_close(ts_dev);
 
 ```
 
-##### 1.3.8.2 内核态程序使用 TS
+##### 内核态程序使用 TS
 
 在rt-smart中，内核态其它驱动程序想要读芯片结温时，只需要调用 TS 驱动提供的接口即可。具体的步骤如下所示：
 
@@ -543,7 +543,7 @@ ret = ts_device_read (ts_dev, pos, (void *)buffer, size);
 
 ```
 
-##### 1.3.8.3 注意事项
+##### 注意事项
 
 在调用API读TS温度的时候，需要注意以下几个关键点：
 
@@ -556,11 +556,11 @@ temp = (1e-10 * pow(code, 4) * 1.01472 - 1e-6 * pow(code, 3) * 1.10063 + 4.36150
 
 ```
 
-#### 1.3.9 PWM
+#### PWM
 
 目前PWM驱动仅提供了从内核态的调用方法，使用方法如下：
 
-##### 1.3.9.1 内核态程序使用PWM
+##### 内核态程序使用PWM
 
 ```c
 pwm_demo:
@@ -584,7 +584,7 @@ pwm_demo:
     rt_pwm_disable(pwm_dev, PWM_DEV_CHANNEL_4);
 ```
 
-##### 1.3.9.2 FinSH命令使用PWM
+##### FinSH命令使用PWM
 
 ```shell
 设置 PWM 设备的某个通道的周期和占空比
@@ -597,14 +597,14 @@ msh />pwm_enable pwm1 1
 msh />pwm_disable pwm1 1
 ```
 
-##### 1.3.9.3 注意事项
+##### 注意事项
 
 K230共有6个PWM通道，其中channel 0 ~ 2（pwm 0 ~ 2）同属一路PWM，channel 3 ~ 5（pwm 3 ~ 5）通属一路PWM，在同时使用多通道PWM时，同属一路的PWM，仅需任意使能其中一个channel即可。
-如 [1.3.9.1](#1391-内核态程序使用pwm) 中的示例，channel3和channel4仅使能了channel4，此时channel3也被使能。
+如 [1.3.9.1](#内核态程序使用pwm) 中的示例，channel3和channel4仅使能了channel4，此时channel3也被使能。
 
-#### 1.3.10 RTC
+#### RTC
 
-##### 1.3.10.1 内核态使用RTC
+##### 内核态使用RTC
 
 RTC驱动提供了内核态的调用方法，使用方法如下：
 
@@ -673,7 +673,7 @@ void alarm_rtc()
 }
 ```
 
-##### 1.3.10.2 注意事项
+##### 注意事项
 
 使用K230的RTC模块时，必须在芯片上电时激活PMU(请参考PMU相关文档)，否则RTC无法工作。
 
@@ -687,9 +687,9 @@ K230的RTC支持两种中断模式：
 2、tick中断(周期中断)，如每秒钟，每分钟，每小时，每天等都会产生中断。最大精度：1/64秒
 ```
 
-#### 1.3.11 TIMER
+#### TIMER
 
-##### 1.3.11.1 内核态使用TIMER
+##### 内核态使用TIMER
 
 TIMER驱动提供了内核态的调用方法，使用方法如下：
 
@@ -756,26 +756,26 @@ void test_hwtimer(void)
 }
 ```
 
-##### 1.3.11.2 注意事项
+##### 注意事项
 
 设置freq计数频率时，只有12.5M 25M 50M 100M可供选择，不可设置其他数值，freq越大计数精度越高。
 
-## 2. API 参考
+## API 参考
 
-### 2.1 内核态 API
+### 内核态 API
 
-#### 2.1.1 UART
+#### UART
 
 UART模块提供以下API：
 
-- [rt_serial_init](#2111-rt_serial_init)
-- [rt_serial_open](#2112-rt_serial_open)
-- [rt_serial_close](#2113-rt_serial_close)
-- [rt_serial_read](#2114-rt_serial_read)
-- [rt_serial_write](#2115-rt_serial_write)
-- [rt_serial_control](#2116-rt_serial_control)
+- [rt_serial_init](#rt_serial_init)
+- [rt_serial_open](#rt_serial_open)
+- [rt_serial_close](#rt_serial_close)
+- [rt_serial_read](#rt_serial_read)
+- [rt_serial_write](#rt_serial_write)
+- [rt_serial_control](#rt_serial_control)
 
-##### 2.1.1.1 rt_serial_init
+##### rt_serial_init
 
 【描述】
 
@@ -798,7 +798,7 @@ UART模块提供以下API：
 | RT_EOK | 成功 |
 | 其他   | 失败 |
 
-##### 2.1.1.2 rt_serial_open
+##### rt_serial_open
 
 【描述】
 
@@ -822,7 +822,7 @@ UART模块提供以下API：
 | RT_EOK  | 成功 |
 | -RT_EIO | 失败 |
 
-##### 2.1.1.3 rt_serial_close
+##### rt_serial_close
 
 【描述】
 
@@ -845,7 +845,7 @@ UART模块提供以下API：
 | RT_EOK | 成功 |
 | 其他   | 失败 |
 
-##### 2.1.1.4 rt_serial_read
+##### rt_serial_read
 
 【描述】
 
@@ -870,7 +870,7 @@ UART模块提供以下API：
 |-----------|----------------|
 | rt_size_t | 读取到的字节数 |
 
-##### 2.1.1.5 rt_serial_write
+##### rt_serial_write
 
 【描述】
 
@@ -895,7 +895,7 @@ UART模块提供以下API：
 |-----------|--------------|
 | rt_size_t | 写入的字节数 |
 
-##### 2.1.1.6 rt_serial_control
+##### rt_serial_control
 
 【描述】
 
@@ -941,7 +941,7 @@ UART模块提供以下API：
 
 无
 
-#### 2.1.2 I2C
+#### I2C
 
 将引脚配置为 I2C 时，需要在外部接上拉电阻，或者配置 IOMUX 使用引脚内部上拉，配置 IOMUX 可以通过修改 uboot 中的设备树文件来实现，文件位置在 `src/little/uboot/arch/riscv/dts/<board>.dts`，例如 K230-CanMV 的 uboot 设备树文件就是 `src/little/uboot/arch/riscv/dts/k230_canmv.dts`，在设备树的 iomux 节点中有全部引脚的配置，例如使用 32、33 两个引脚作为 `IIC0_SCL` 和 `IIC0_SDA` 时，可以将 `IO32` 和 `IO33` 的配置修改为如下内容
 
@@ -956,12 +956,12 @@ UART模块提供以下API：
 
 I2C模块提供以下API：
 
-- [rt_i2c_bus_device_find](#2121-rt_i2c_bus_device_find)
-- [rt_i2c_master_send](#2122-rt_i2c_master_send)
-- [rt_i2c_master_recv](#2123-rt_i2c_master_recv)
-- [rt_i2c_transfer](#2124-rt_i2c_transfer)
+- [rt_i2c_bus_device_find](#rt_i2c_bus_device_find)
+- [rt_i2c_master_send](#rt_i2c_master_send)
+- [rt_i2c_master_recv](#rt_i2c_master_recv)
+- [rt_i2c_transfer](#rt_i2c_transfer)
 
-##### 2.1.2.1 rt_i2c_bus_device_find
+##### rt_i2c_bus_device_find
 
 【描述】
 
@@ -984,7 +984,7 @@ I2C模块提供以下API：
 | rt_i2c_bus_device* | 函数执行成功，返回总线句柄 |
 | RT_NULL | 总线不存在                 |
 
-##### 2.1.2.2 rt_i2c_master_send
+##### rt_i2c_master_send
 
 【描述】
 
@@ -1017,7 +1017,7 @@ rt_uint32_t count);
 | 正值 | 成功，返回发送的字节数 |
 | 负值 | 失败                                 |
 
-##### 2.1.2.3 rt_i2c_master_recv
+##### rt_i2c_master_recv
 
 【描述】
 
@@ -1050,7 +1050,7 @@ rt_uint32_t count)
 | 正值 | 成功，返回接收到的字节数 |
 | 负值 | 失败                   |
 
-##### 2.1.2.4 rt_i2c_transfer
+##### rt_i2c_transfer
 
 【描述】
 
@@ -1100,7 +1100,7 @@ rt_uint32_t num)
 
 无
 
-##### 2.1.2.5 I2C slave
+##### I2C slave
 
 K230 的 5 个 I2C 模块均支持从机模式，在 `src/big/rt-smart/kernel/bsp/maix3/rtconfig.h` 中声明相应的宏定义即可打开 I2C slave 功能，开启后默认将 I2C 模拟为一个 256 字节的 EEPROM 设备，在用户态可以通过读写 `/dev/slave-eeprom` 文件来使用，也可以 poll 这个文件来监听变更，示例程序放在 `/sharefs/app/sample_i2c_slave.elf`，其代码在 `src/big/mpp/userapps/sample/sample_i2c_slave/sample_i2c_slave.c`。
 
@@ -1131,19 +1131,19 @@ I2C 驱动的代码在 `src/big/rt-smart/kernel/bsp/maix3/board/interdrv/i2c/drv
 
 编写完你的 `slave_callback` 回调函数后，将其赋值给 `i2c_buses` 数组中对应的 I2C 结构体即可。
 
-#### 2.1.3 GPIO
+#### GPIO
 
 GPIO模块提供以下API：
 
-- [kd_pin_mode](#2131-kd_pin_mode)
-- [kd_pin_write](#2132-kd_pin_write)
-- [kd_pin_read](#2133-kd_pin_read)
-- [kd_pin_attach_irq](#2134-kd_pin_attach_irq)
-- [kd_pin_detach_irq](#2135-kd_pin_detach_irq)
-- [kd_pin_irq_enable](#2136-kd_pin_irq_enable)
-- [gpio_device_ioctl](#2137-gpio_device_ioctl)
+- [kd_pin_mode](#kd_pin_mode)
+- [kd_pin_write](#kd_pin_write)
+- [kd_pin_read](#kd_pin_read)
+- [kd_pin_attach_irq](#kd_pin_attach_irq)
+- [kd_pin_detach_irq](#kd_pin_detach_irq)
+- [kd_pin_irq_enable](#kd_pin_irq_enable)
+- [gpio_device_ioctl](#gpio_device_ioctl)
 
-##### 2.1.3.1 kd_pin_mode
+##### kd_pin_mode
 
 【描述】
 
@@ -1167,7 +1167,7 @@ GPIO模块提供以下API：
 | RT_EOK | 成功 |
 | 其他   | 失败 |
 
-##### 2.1.3.2 kd_pin_write
+##### kd_pin_write
 
 【描述】
 
@@ -1190,7 +1190,7 @@ GPIO模块提供以下API：
 |----------|------|
 | 无返回值 |      |
 
-##### 2.1.3.3 kd_pin_read
+##### kd_pin_read
 
 【描述】
 
@@ -1213,7 +1213,7 @@ GPIO模块提供以下API：
 | 0      | 管脚当前状态低电平     |
 | 1      | 管脚当前电平状态高电平 |
 
-##### 2.1.3.4 kd_pin_attach_irq
+##### kd_pin_attach_irq
 
 【描述】
 
@@ -1239,7 +1239,7 @@ GPIO模块提供以下API：
 | RT_EOK | 绑定成功 |
 | 错误码 | 绑定失败 |
 
-##### 2.1.3.5 kd_pin_detach_irq
+##### kd_pin_detach_irq
 
 【描述】
 
@@ -1262,7 +1262,7 @@ GPIO模块提供以下API：
 | 管脚编号 | 解除成功 |
 | 错误码   | 解除失败 |
 
-##### 2.1.3.6 kd_pin_irq_enable
+##### kd_pin_irq_enable
 
 【描述】
 
@@ -1286,7 +1286,7 @@ gpio管脚的中断使能。
 | RT_EOK | 使能成功 |
 | 错误码 | 使能失败 |
 
-##### 2.1.3.7 gpio_device_ioctl
+##### gpio_device_ioctl
 
 【描述】
 
@@ -1331,15 +1331,15 @@ gpio功能控制。
 
 无
 
-#### 2.1.4 Hard-lock
+#### Hard-lock
 
 Hard-lock模块提供以下API：
 
-- [kd_request_lock](#2141-kd_request_lock)
-- [kd_hardlock_lock](#2142-kd_hardlock_lock)
-- [kd_hardlock_unlock](#2143-kd_hardlock_unlock)
+- [kd_request_lock](#kd_request_lock)
+- [kd_hardlock_lock](#kd_hardlock_lock)
+- [kd_hardlock_unlock](#kd_hardlock_unlock)
 
-##### 2.1.4.1 kd_request_lock
+##### kd_request_lock
 
 【描述】
 
@@ -1362,7 +1362,7 @@ Hard-lock模块提供以下API：
 | 0      | 申请成功 |
 | -1     | 申请失败 |
 
-##### 2.1.4.2 kd_hardlock_lock
+##### kd_hardlock_lock
 
 【描述】
 
@@ -1385,7 +1385,7 @@ Hard-lock模块提供以下API：
 | 0      | 加锁成功                     |
 | -1     | 锁正在加锁状态，本次无法加锁 |
 
-##### 2.1.4.3 kd_hardlock_unlock
+##### kd_hardlock_unlock
 
 【描述】
 
@@ -1427,16 +1427,16 @@ Hard-lock模块提供以下API：
 
 无
 
-#### 2.1.5 ADC
+#### ADC
 
 ADC 模块提供以下API：
 
-- [rt_device_find](#2151-rt_device_find)
-- [rt_adc_enable](#2152-rt_adc_enable)
-- [rt_adc_read](#2153-rt_adc_read)
-- [rt_adc_disable](#2154-rt_adc_disable)
+- [rt_device_find](#rt_device_find)
+- [rt_adc_enable](#rt_adc_enable)
+- [rt_adc_read](#rt_adc_read)
+- [rt_adc_disable](#rt_adc_disable)
 
-##### 2.1.5.1 rt_device_find
+##### rt_device_find
 
 【描述】
 
@@ -1479,7 +1479,7 @@ ADC 模块提供以下API：
 
 无
 
-##### 2.1.5.2 rt_adc_enable
+##### rt_adc_enable
 
 【描述】
 
@@ -1524,7 +1524,7 @@ ADC 模块提供以下API：
 
 无
 
-##### 2.1.5.3 rt_adc_read
+##### rt_adc_read
 
 【描述】
 
@@ -1567,7 +1567,7 @@ ADC 模块提供以下API：
 
 无
 
-##### 2.1.5.4 rt_adc_disable
+##### rt_adc_disable
 
 【描述】
 
@@ -1612,15 +1612,15 @@ ADC 模块提供以下API：
 
 无
 
-#### 2.1.6 WDT
+#### WDT
 
 WDT 模块提供以下API：
 
-- [rt_device_find](#2161-rt_device_find)
-- [rt_device_init](#2162-rt_device_init)
-- [rt_device_control](#2163-rt_device_control)
+- [rt_device_find](#rt_device_find)
+- [rt_device_init](#rt_device_init)
+- [rt_device_control](#rt_device_control)
 
-##### 2.1.6.1 rt_device_find
+##### rt_device_find
 
 【描述】
 
@@ -1663,7 +1663,7 @@ WDT 模块提供以下API：
 
 无
 
-##### 2.1.6.2 rt_device_init
+##### rt_device_init
 
 【描述】
 
@@ -1705,7 +1705,7 @@ WDT 模块提供以下API：
 
 无
 
-##### 2.1.6.3 rt_device_control
+##### rt_device_control
 
 【描述】
 
@@ -1751,14 +1751,14 @@ WDT 模块提供以下API：
 
 无
 
-#### 2.1.7 OTP
+#### OTP
 
 大核 rt-smart 中，OTP 模块主要提供了以下 API：
 
-- [otp_device_read](#2171-otp_device_read)
-- [otp_device_write](#2172-otp_device_write)
+- [otp_device_read](#otp_device_read)
+- [otp_device_write](#otp_device_write)
 
-##### 2.1.7.1 otp_device_read
+##### otp_device_read
 
 【描述】
 
@@ -1805,7 +1805,7 @@ otp_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 
 无
 
-##### 2.1.7.2 otp_device_write
+##### otp_device_write
 
 【描述】
 
@@ -1852,13 +1852,13 @@ otp_device_write(rt_device_t dev, rt_off_t pos, const void \*buffer, rt_size_t s
 
 无
 
-#### 2.1.8 TS
+#### TS
 
 大核 rt-smart 中，TS 模块主要提供了以下 API：
 
-- [ts_device_read](#2181-ts_device_read)
+- [ts_device_read](#ts_device_read)
 
-##### 2.1.8.1 ts_device_read
+##### ts_device_read
 
 【描述】
 
@@ -1905,15 +1905,15 @@ ts_device_read(rt_device_t dev, rt_off_t pos, void \*buffer, rt_size_t size);
 
 无
 
-#### 2.1.9 PWM
+#### PWM
 
 PWM模块提供以下内核态API：
 
-- [rt_pwm_set](#2191-rt_pwm_set)
-- [rt_pwm_enable](#2192-rt_pwm_enable)
-- [rt_pwm_disable](#2193-rt_pwm_disable)
+- [rt_pwm_set](#rt_pwm_set)
+- [rt_pwm_enable](#rt_pwm_enable)
+- [rt_pwm_disable](#rt_pwm_disable)
 
-##### 2.1.9.1 rt_pwm_set
+##### rt_pwm_set
 
 【描述】
 
@@ -1961,7 +1961,7 @@ PWM模块提供以下内核态API：
 
 无
 
-##### 2.1.9.2 rt_pwm_enable
+##### rt_pwm_enable
 
 【描述】
 
@@ -2006,7 +2006,7 @@ PWM模块提供以下内核态API：
 
 无
 
-##### 2.1.9.3 rt_pwm_disable
+##### rt_pwm_disable
 
 【描述】
 
@@ -2051,14 +2051,14 @@ PWM模块提供以下内核态API：
 
 无
 
-#### 2.1.10 RTC
+#### RTC
 
 PWM模块提供以下内核态API：
 
-- [set_date](#21101-set_date)
-- [set_time](#21102-set_time)
+- [set_date](#set_date)
+- [set_time](#set_time)
 
-##### 2.1.10.1 set_date
+##### set_date
 
 【描述】
 
@@ -2104,7 +2104,7 @@ PWM模块提供以下内核态API：
 
 无
 
-##### 2.1.10.2 set_time
+##### set_time
 
 【描述】
 
@@ -2150,17 +2150,17 @@ PWM模块提供以下内核态API：
 
 无
 
-#### 2.1.11 TIMER
+#### TIMER
 
 TIMER模块提供以下内核态API：
 
 - `rt_device_open`
 - `rt_device_control`
-- [rt_device_set_rx_indicate](#21111-rt_device_set_rx_indicate)
+- [rt_device_set_rx_indicate](#rt_device_set_rx_indicate)
 - `rt_device_read`
 - `rt_device_write`
 
-##### 2.1.11.1 rt_device_set_rx_indicate
+##### rt_device_set_rx_indicate
 
 【描述】
 
@@ -2204,18 +2204,18 @@ TIMER模块提供以下内核态API：
 
 无
 
-### 2.2 用户态 API
+### 用户态 API
 
-#### 2.2.1 ADC
+#### ADC
 
 ADC 模块在用户态提供以下API：
 
-- [rt_device_find](#2211-rt_device_find)
-- [rt_device_open](#2212-rt_device_open)
-- [rt_device_control](#2213-rt_device_control)
-- [rt_device_read](#2214-rt_device_read)
+- [rt_device_find](#rt_device_find)
+- [rt_device_open](#rt_device_open)
+- [rt_device_control](#rt_device_control)
+- [rt_device_read](#rt_device_read)
 
-##### 2.2.1.1 rt_device_find
+##### rt_device_find
 
 【描述】
 
@@ -2258,7 +2258,7 @@ ADC 模块在用户态提供以下API：
 
 无
 
-##### 2.2.1.2 rt_device_open
+##### rt_device_open
 
 【描述】
 
@@ -2302,7 +2302,7 @@ ADC 模块在用户态提供以下API：
 
 无
 
-##### 2.2.1.3 rt_device_control
+##### rt_device_control
 
 【描述】
 
@@ -2347,7 +2347,7 @@ ADC 模块在用户态提供以下API：
 
 无
 
-##### 2.2.1.4 rt_device_read
+##### rt_device_read
 
 【描述】
 
@@ -2394,14 +2394,14 @@ ADC 模块在用户态提供以下API：
 
 无
 
-#### 2.2.2 WDT
+#### WDT
 
 WDT 模块在用户态可以使用posix接口：
 
-- [open](#2221-open)
-- [ioctl](#2222-ioctl)
+- [open](#open)
+- [ioctl](#ioctl)
 
-##### 2.2.2.1 open
+##### open
 
 【描述】
 
@@ -2445,7 +2445,7 @@ WDT 模块在用户态可以使用posix接口：
 
 无
 
-##### 2.2.2.2 ioctl
+##### ioctl
 
 【描述】
 
@@ -2489,17 +2489,17 @@ WDT 模块在用户态可以使用posix接口：
 
 无
 
-#### 2.2.3 OTP
+#### OTP
 
 OTP 模块在用户态提供以下API：
 
-- [rt_device_find](#2231-rt_device_find)
-- [rt_device_open](#2232-rt_device_open)
-- [rt_device_read](#2233-rt_device_read)
-- [rt_device_write](#2234-rt_device_write)
-- [rt_device_close](#2235-rt_device_close)
+- [rt_device_find](#rt_device_find)
+- [rt_device_open](#rt_device_open)
+- [rt_device_read](#rt_device_read)
+- [rt_device_write](#rt_device_write)
+- [rt_device_close](#rt_device_close)
 
-##### 2.2.3.1 rt_device_find
+##### rt_device_find
 
 【描述】
 
@@ -2542,7 +2542,7 @@ OTP 模块在用户态提供以下API：
 
 无
 
-##### 2.2.3.2 rt_device_open
+##### rt_device_open
 
 【描述】
 
@@ -2586,7 +2586,7 @@ OTP 模块在用户态提供以下API：
 
 无
 
-##### 2.2.3.3 rt_device_read
+##### rt_device_read
 
 【描述】
 
@@ -2632,7 +2632,7 @@ OTP 模块在用户态提供以下API：
 
 无
 
-##### 2.2.3.4 rt_device_write
+##### rt_device_write
 
 【描述】
 
@@ -2678,7 +2678,7 @@ OTP 模块在用户态提供以下API：
 
 无
 
-##### 2.2.3.5 rt_device_close
+##### rt_device_close
 
 【描述】
 
@@ -2721,16 +2721,16 @@ OTP 模块在用户态提供以下API：
 
 无
 
-#### 2.2.4 TS
+#### TS
 
-TS 模块在用户态提供以下 API，这些 API 跟 OTP 提供的 API 保持一致，请参考 [OTP](#223-otp) 中对于用户态 API 的介绍。
+TS 模块在用户态提供以下 API，这些 API 跟 OTP 提供的 API 保持一致，请参考 [OTP](#otp) 中对于用户态 API 的介绍。
 
 - rt_device_find
 - rt_device_open
 - rt_device_read
 - rt_device_close
 
-## 3. 数据类型
+## 数据类型
 
 UART模块使用到的数据类型：未定义私有数据类型
 
@@ -2740,13 +2740,13 @@ ADC 模块使用到的数据类型：未定义私有数据类型
 
 GPIO模块使用到的数据类型：
 
-- [struct rt_device_gpio](#31-struct-rt_device_gpio)
+- [struct rt_device_gpio](#struct-rt_device_gpio)
 
 ADC 模块使用到的数据类型：未定义私有数据类型
 
 Hard-lock模块使用到的数据类型：
 
-- [struct device_hardlock](#32-device_hardlock)
+- [struct device_hardlock](#device_hardlock)
 
 WDT 模块使用到的数据类型：未定义私有数据类型
 
@@ -2758,9 +2758,9 @@ PWM 模块使用到的数据类型：未定义私有数据类型
 
 RTC 模块使用到的数据类型：
 
-- [struct kd_alarm_setup](#33-struct-kd_alarm_setup)
+- [struct kd_alarm_setup](#struct-kd_alarm_setup)
 
-### 3.1 struct rt_device_gpio
+### struct rt_device_gpio
 
 【说明】
 
@@ -2784,7 +2784,7 @@ struct rt_device_gpio
 
 无
 
-### 3.2 device_hardlock
+### device_hardlock
 
 【说明】
 
@@ -2808,7 +2808,7 @@ struct device_hardlock
 
 无
 
-### 3.3 struct kd_alarm_setup
+### struct kd_alarm_setup
 
 【说明】
 
@@ -2832,16 +2832,16 @@ struct kd_alarm_setup
 
 无
 
-## 4. 错误码
+## 错误码
 
 | 错误代码 | 宏定义 | 描述       |
 |----------|--------|------------|
 | RT_EOK   | 0      | 成功       |
 | RT_ERROR | 1      | 发生了错误 |
 
-## 5. 计算公式
+## 计算公式
 
-### 5.1 ADC 计算公式
+### ADC 计算公式
 
 adc 硬件参考电压为 1.8V，12 bit 数字信号输出，受噪声干扰有效位为 10 bit。通过 API 获取 adc 采样电压值以后，转换为实际电压值的计算公式如下：
 
@@ -2849,7 +2849,7 @@ adc 硬件参考电压为 1.8V，12 bit 数字信号输出，受噪声干扰有�
 
 V\~1.8V，浮动范围为 5mv。
 
-### 5.2 WDT超时时间计算公式
+### WDT超时时间计算公式
 
 ```text
 value = clock * timeout;   timeout：用户设置的超时时间，单位是：秒

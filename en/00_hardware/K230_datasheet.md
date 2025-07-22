@@ -60,14 +60,14 @@ The main people to whom this document (this guide) applies:
 
 ## Chapter 1 Introduction
 
-### 1.1 Overview
+### Overview
 
 The K230 chip is the latest generation SoC product in Canaan Technology's (NASDAQ: CAN) Kendryte® series of AIOT chips. The chip adopts a brand-new multi-heterogeneous unit acceleration computing architecture, integrates two RISC-V C908 computing cores, and has a built-in new generation KPU (Knowledge Process Unit) intelligent computing unit. Multi-precision AI computing power with INT8 and INT16. Supports general AI computing framework. The chip also has a variety of peripheral interfaces, as well as multiple scalar, vector, graphics, and other dedicated hardware acceleration units such as image 2D engine, AI 2D engine, 2.5D GPU, and 3D depth engine. K230 provides full-process computing acceleration for various computing tasks such as images, videos, audio, AI, etc. The chip has many features such as low latency, high performance, low power consumption, fast startup, and high security.
 K230 can be used in various smart hardware products, such as smart door locks, home smart security cameras, dictionary pens, payment recognition, 3D structured light vision modules, drones, interactive robots, smart home appliances, smart toys, and smart manufacturing, intelligent vehicle cockpit and many other fields.
 
-### 1.2 Feature
+### Feature
 
-#### 1.2.1 CPU subsystem
+#### CPU subsystem
 
 - CPU0 subsystem
 
@@ -96,7 +96,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
   - Supports the Joint Test Action Group (JTAG) debugging interface
   - Supports WFI
 
-#### 1.2.2 KPU subsystem
+#### KPU subsystem
 
 - Support INT8 and INT16
 - Support weight sparse compression
@@ -109,7 +109,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - Loss of quantization accuracy <1%
 - Support Abs, Acos, Acosh, And, ArgMax, ArgMin, Asin, Asinh, Add, AveragePool, BatchNormalization, Cast, Ceil, Celu, Clip, Concat, Constant, ConstantOfShape, Conv, ConvTranspose, Cos, Cosh, CumSum, DepthToSpace, DequantizeLinear, Div, Dropout, Elu, Equal, Exp, Erf, Expand, Flatten, Floor, Gather, GatherElements, GatherND, Gemm, GlobalAveragePool, GlobalMaxPool, Greater, GreaterOrEqual, Hardmax, HardSigmoid, HardSwish, Identity, InstanceNormalization, LpNormalization, LeakyRelu, Less, LessOrEqual, Log, LogSoftmax, LRN, LSTM, MatMul, MaxPool, Max, Min, Mod, Mul, Neg, Not, OneHot, Pad, Pow, PRelu, QuantizeLinear, QLinearConv, QLinearMatmul, RandomNormal, RandomNormalLike, RandomUniform, RandomUniformLike, Range, ReduceL1, ReduceL2, ReduceLogSum, ReduceLogSumExp, ReduceMax, ReduceMean, ReduceMin, ReduceProd, ReduceSum, ReduceSumSquare, Relu, Reshape, Resize, ReverseSequence, Round, ScatterND, Selu, Shape, Sin, Sinh, Sigmoid, Sign, Size, Slice, Softmax, Softplus, Softsign, SpaceToDepth, Split, Sqrt, Squeeze, Sub, Sum, Tanh, Tile, TopK, Transpose, Upsample, Unsqueeze, Where
 
-#### 1.2.3 2D Engine
+#### D Engine
 
 - 2D GDMA Engine
 
@@ -172,7 +172,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 
   - Note4: When configuring cpu, configure 32bit each time, and configure 4 times for each 128bit, and must configure 4 times, the order is from low to high; when configuring GNNE, configure 128bit at a time
 
-#### 1.2.4 DPU (Depth Processing Unit)
+#### DPU (Depth Processing Unit)
 
 - Using 3D structured light depth calculation
 - The maximum resolution of the landscape image is 1920\*1080, and the maximum resolution of the portrait image is 1080\*1440
@@ -188,7 +188,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - Support normal calculation end interrupt, timeout interrupt, instruction exception interrupt, configuration instruction overflow interrupt, AXI write response exception interrupt
 - Support independent soft reset, interrupt clear operation
 
-#### 1.2.5 Memory
+#### Memory
 
 - DDR
 
@@ -259,7 +259,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 
     If data frame size is set to 8bit and DDR mode is selected, one clock pulse corresponds to two byte data. So total data length must be set to an even number.
 
-#### 1.2.6 system component
+#### system component
 
 - RMU
 
@@ -372,7 +372,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
   - Supply voltages: VDD 0.72-0.88V, VDDA 1.62-1.98V
   - Temperature Measurement Range: -40 ~ 125℃
 
-#### 1.2.6 Video input
+#### Video input
 
 - Compatible with MIPI 1.2 RX protocol, max up to three 2lane sensors or one 4lane sensor and one 2lane sensor
 - 3 x MIPI CSI
@@ -384,7 +384,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - Support hardware discard frame
 - 8/10/12/16 Bit Bayer RAW
 
-#### 1.2.7 ISP
+#### ISP
 
 - Total throughput：8MP@30fps
 - Auto Focus measurement (AF)
@@ -423,7 +423,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - Video Stabilization (VSM)
 - Multi-Context Management to support three sensors within a single ISP Core (MCM). In MCM mode, only DVP0 supports HDR
 
-#### 1.2.8 Video output
+#### Video output
 
 - 1 x MIPI DSI, 1 x 4 lane or 1 x 2 lane
 - Resolution: 2MP@60fps
@@ -464,7 +464,7 @@ K230 can be used in various smart hardware products, such as smart door locks, h
 - When not using scaling, it is recommended to use layer1 (supports rotation but not scaling)/layer2 (does not support rotation and scaling)/layer3 (does not support rotation and scaling). The video layer can only use three layers
 - When scaling is necessary and layer0 is required, the maximum frame rate at 1080p is 20fps, and 30 frames can be supported at 720p
 
-#### 1.2.9 video codec
+#### video codec
 
   **video encoding**
   General encoding features
@@ -599,7 +599,7 @@ JPEG decoding features
 - Maximum frame height is 8,192 pixels.
 - Error concealment is performed in case of bit errors.
 
-#### 1.2.10 2.5D GPU
+#### D GPU
 
 - Support following Hardware Components
   - Command list based DMAs, Fire and Forgot Control mechanism to minimize CPU overhead
@@ -631,7 +631,7 @@ JPEG decoding features
   - 16x MSAA(4x4), no quality difference betwwen horizon and vertical direction
   - 8x MSAA(4x2), low cost version, horizon quality is better than veritical directon
 
-#### 1.2.11 Audio
+#### Audio
 
 K230 audio supports the following features:
 
@@ -664,7 +664,7 @@ K230 audio supports the following features:
   - DMA mode enable and disable
   - IO number and left/right channel flag can be fetched from higher bits of data when valid data width is less than 32bits in DMA mode
 
-#### 1.2.12 peripheral
+#### peripheral
 
 - UART
   - Support 5 UART interface
@@ -796,7 +796,7 @@ K230 audio supports the following features:
   - Programmable delay on the sample time of received serial data bit(rxd)
   - Programmable clock bit rate
 
-#### 1.2.13 security
+#### security
 
 - Support PUF / OTP / TRNG
 - Support following symmetric algorithm
@@ -824,7 +824,7 @@ K230 audio supports the following features:
 - OTP program region has raw OTP density 32Kbits, with security protection
 - Support security boot with signature
 
-#### 1.2.14 PMU
+#### PMU
 
 - Support RTC function in 32Khz
 - Support the default 6 inputs and 2 outputs
@@ -837,7 +837,7 @@ K230 audio supports the following features:
 - Support 512 bits system log when it is been shutdown
 - Support two sets of output IOs with configurable delay time
 
-#### 1.2.15 Others
+#### Others
 
 - decompression
 
@@ -867,7 +867,7 @@ K230 audio supports the following features:
 - Fastboot: 3A first picture ≤ 400ms
 - Working environment temperature: -40 ~ 85°C
 
-### 1.3 Block Diagram
+### Block Diagram
 
 <div align=center>Figure 1-3-1 K230 block diagram</div>
 
@@ -877,25 +877,25 @@ K230 audio supports the following features:
 
 K230 have two types of package, one is K230 that has a single die, the other is K230D that merges a 1Gb LPDDR4.
 
-## 2.1 K230
+## K230
 
 <div align=center>Figure 2-1-1 K230 Package</div>
 
 ![K230_package](../../zh/00_hardware/images/K230_package.png)
 
-### 2.2 K230D
+### K230D
 
 <div align=center>Figure 2-2-1 K230D Package</div>
 
 ![K230_package](../../zh/00_hardware/images/K230D_package.png)
 
-### 2.3 Pin information description
+### Pin information description
 
 This part please refer to《K230_PINOUT_V1.0_20230524》document.
 
 ## chapter 3 Electrical Specification
 
-### 3.1 Absolute Max Rating
+### Absolute Max Rating
 
 <div align=center>Table 3-1-1 Absolute Max Rating</div>
 
@@ -928,7 +928,7 @@ This part please refer to《K230_PINOUT_V1.0_20230524》document.
 | K230D LPDDR4 | VDD1P1_DDR_VDD2 | -0.1 | 1.21            | V     |
 | K230D LPDDR4 | VDD1P1_DDR_VDDQ | -0.1 | 1.21            | V     |
 
-### 3.2 Recommended Operating Condition
+### Recommended Operating Condition
 
 <div align=center>Table 3-2-1 Recommended operating conditions for power supplies</div>
 
@@ -961,15 +961,15 @@ This part please refer to《K230_PINOUT_V1.0_20230524》document.
 | K230D LPDDR4 | VDD1P1_DDR_VDD2 | 1.06            | 1.1          | 1.21            | V     |
 | K230D LPDDR4 | VDD1P1_DDR_VDDQ | 1.06            | 1.1          | 1.21            | V     |
 
-### 3.3 DC Characteristics
+### DC Characteristics
 
-#### 3.3.1 Electrical Characteristics for General IO
+#### Electrical Characteristics for General IO
 
 <div align=center>Table 3-3-1 Electrical Characteristics for General IO</div>
 
 ![GPIO_ecectric](../../zh/00_hardware/images/GPIO_electric.png)
 
-#### 3.3.2 Electrical Characteristics for PLL
+#### Electrical Characteristics for PLL
 
 <div align=center>Table 3-3-2 Electrical Characteristics for PLL</div>
 
@@ -981,7 +981,7 @@ This part please refer to《K230_PINOUT_V1.0_20230524》document.
 | Tlt       | Lock time                         | 500  |      |     | div referency clock cycle |
 | Ijitter   | input jitter                      |      | 2%   |     | div referency clock cycle |
 
-### 3.3.3 Electrical Characteristics for DDR
+### Electrical Characteristics for DDR
 
 <div align=center>Table 3-3-3 common DC input conditions </div>
 
@@ -1080,7 +1080,7 @@ Note：
 | ODT high-level (0.5*VDDQ) smallsignal resistance     | RODTss-H /RTT |      | 0.95         |         | 1.75         |
 | Input crossing voltage for differential signals DQS* | VIX           | mV   | VDQSavg-75   | VDQSavg | VDQSavg +75  |
 
-#### 3.3.4 Electrical Characteristics for MIPI DSI
+#### Electrical Characteristics for MIPI DSI
 
 <div align=center>Table 3-3-10 Supply Requirements</div>
 
@@ -1137,7 +1137,7 @@ Note：
 | VILF   | Input low fault threshold  |         |         | 200     | mV   |
 | VIHF   | Input high fault threshold | 450     |         |         | mV   |
 
-#### 3.3.5 Electrical Characteristics for MIPI CSI
+#### Electrical Characteristics for MIPI CSI
 
 <div align=center>Table 3-3-16 Supply Requirements</div>
 
@@ -1195,7 +1195,7 @@ Note：
 | VILF   | Input low fault threshold  |         |         | 200     | mV   |
 | VIHF   | Input high fault threshold | 450     |         |         | mV   |
 
-### 3.3.6 Electrical Characteristics for USB
+### Electrical Characteristics for USB
 
 <div align=center>Table 3-3-22 Electrical Characteristics for USB</div>
 
@@ -1240,7 +1240,7 @@ Note：
 | Termination voltage for upstream facing port pullup (RPU)                    | VTERM   |                                                       | 3         | 3.6   | V    |
 | Termination voltage in high speed                                            | VHSTERM |                                                       | -10       | 10    | mV   |
 
-#### 3.3.7 Electrical Characteristics for SD/eMMC
+#### Electrical Characteristics for SD/eMMC
 
 <div align=center>Table 3-3-23 SD/eMMC electrical specifications</div>
 

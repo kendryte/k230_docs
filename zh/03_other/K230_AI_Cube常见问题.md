@@ -25,7 +25,7 @@
 
 [TOC]
 
-## 1 AI Cube使用问题
+## AI Cube使用问题
 
 **Notes**：
 1、在使用AI Cube前一定要将本月授权License放置在AI Cube安装目录。

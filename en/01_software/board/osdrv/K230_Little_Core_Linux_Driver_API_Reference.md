@@ -62,9 +62,9 @@ This document (this guide) is intended primarily for:
 | V1.1 |   Add ADC, PWM parts   | Juntao Fan | 2023/8/4 |
 | V1.2 | Added ST7735S configuration section | Juntao Fan | 2023/9/5 |
 
-## 1 Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 UART：
 A universal asynchronous transceiver that communicates bidirectionally and enables full-duplex transmission and reception. In embedded designs, UART is used to communicate with PCs, including supervisory debuggers and other devices such as EEPROMs.
@@ -99,61 +99,61 @@ PWM pulse-width modulation is a method of digitally encoding the level of an ana
 FBTFT：
 FBTFT small screen driver, support framebuffer, kernel is now rarely maintained, driver code under `driver/staging/fbtft` .
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 UART module
+#### UART module
 
 K230 has a total of 5 UARTs, and the UART module supports infrared mode, supports RS485 mode, supports DMA, some ports support flow control, data bits support 5/6/7/8 bits, stop bit 1/2 bit, baud rate can support up to 1.5MHz.
 
-#### 1.2.2 I2C module
+#### I2C module
 
 K230 has a total of 5 channels I2C, I2C module supports main mode, supports DMA, supports 7/10 bit addressing, supports interrupt, I2C module transmission rate supports 100K/400K/1M/3.4M.
 
-#### 1.2.3 GPIO module
+#### GPIO module
 
 K230 has a total of 2 GPIOs, each GPIO contains 32 GPIO ports, a total of 64 GPIO ports, each GPIO port supports input and output functions, support rising edge interrupt, falling edge interrupt, high and low level interrupt, and bilateral edge interrupt. The interrupts of each GPIO port of the K230 are independent of each other.
 
-#### 1.2.4 Hard-lock module
+#### Hard-lock module
 
 The k230 has 128 hardware mutexes, which act like Linux spinlocks and can be used to mutually exclusive the same resource.
 
-#### 1.2.5 WDT module
+#### WDT module
 
 WDT, watchdog module, K230 has two WDT, the size of the core uses one way, WDT supports interrupt and reset two modes, default use reset mode, that is, when the WDT timeout overflows, directly reset the SOC.
 
-#### 1.2.6 OTP module
+#### OTP module
 
 The OTP is integrated into the security module PUF, providing secure storage capabilities for the entire SoC, protecting critical data such as the root key and boot code from being compromised by attackers. The small-core side OTP driver mainly provides the read function, and the readable area is 24Kbits including production information. The Linux OTP driver is mounted on the nvmem framework, and the specific framework structure is shown in the following figure:
 
 ![OTP](../../../../zh/01_software/board/osdrv/images/otp_linux.png)
 
-#### 1.2.7 TS module
+#### TS module
 
 The big core-side TS driver mainly provides the read function, and before reading the TS, it is necessary to configure the TS register enable signal, output mode, and then read the junction temperature of the chip. In addition, the TS register reads the die junction temperature every 2.6s. The structure of the TS driver on the RT-smart side is shown in the following figure:
 
 ![ts](../../../../zh/01_software/board/osdrv/images/ts_linux.png)
 
-#### 1.2.8 TRNG module
+#### TRNG module
 
 Integrated in the security module PUF, TRNG provides true random number functionality to the entire SoC, protecting critical data such as root key and boot code from attackers. The little core side TRNG driver mainly provides read function, and the TRNG driver is mounted on the HW random framework, and the specific framework structure is shown in the following figure:
 
 ![trng](../../../../zh/01_software/board/osdrv/images/trng_linux.png)
 
-#### 1.2.9 ADC Module
+#### ADC Module
 
 The K230 integrates an ADC converter with a total of 6 channels with a resolution of 12 bits, and a maximum of 1M consecutive analog-to-digital conversions per second.
 
-#### 1.2.10 PWM module
+#### PWM module
 
 K230 integrates 2 PWMs, each channel has 3 channels, that is, channel 0~2 belongs to PWM0, channel 3~5 belongs to PWM1 (software manifested as channel 0~5), each channel can output independent waveform.
 
-#### 1.2.11 FBTFT module
+#### FBTFT module
 
 The K230 is adapted to the screen of the ST7735S driver chip, which is turned off by default, and can be enabled if needed according to the [FBTFT configuration reference]section (#211-fbtft configuration reference).
 
-## 2 Usage reference
+## Usage reference
 
-### 2.1 UART Usage Reference
+### UART Usage Reference
 
 Linux encapsulates the termios API for user use, and the termios API describes a common terminal interface that provides configuration and read/write to control asynchronous communication ports.
 
@@ -175,15 +175,15 @@ int cfsetspeed(struct termios *termios_p, speed_t speed);
 
 Please refer to it for details`Documentation/driver-api/serial/tty.rst`.
 
-### 2.2 I2C Usage Reference
+### I2C Usage Reference
 
 Linux encapsulates system calls for users to use I2C.
 
 `open`,`read`,`write`, etc. Please refer to`buildroot` the `i2c-tools`relevant source code in .
 
-### 2.3 GPIO Usage Reference
+### GPIO Usage Reference
 
-#### 2.3.1 sysfs operates GPIO
+#### sysfs operates GPIO
 
 After the GPIO driver is loaded, a GPIO port device node will be `/sys/class/gpio/` created under , each node represents a GPIO port, and the GPIO port can be operated through sysfs to achieve the role of operating GPIO input, output and interrupt.
 
@@ -233,7 +233,7 @@ while(1)
 
 ```
 
-#### 2.3.2 Using gpio via ioctl
+#### Using gpio via ioctl
 
 User program direct manipulation `/dev/gpiochipN`:
 
@@ -282,13 +282,13 @@ close(req.fd);
 
 ```
 
-### 2.4 Hardlock usage reference
+### Hardlock usage reference
 
 Hardlock does not provide a user API interface, and its use is limited to kernel-state drivers.
 
-### 2.5 Watchdog usage reference
+### Watchdog usage reference
 
-#### 2.5.1 Using Watchdog via IOCTL
+#### Using Watchdog via IOCTL
 
 ```text
 Examples:
@@ -311,7 +311,7 @@ ioctl(fd, WDIOC_KEEPALIVE, &dummy); /* Feed dog */
 .....
 ```
 
-#### 2.5.2 Using watchdog via file system
+#### Using watchdog via file system
 
 ```text
 echo V > /dev/watchdog     //Start watchdog timer,start the kernel automatic dog feed thread
@@ -321,11 +321,11 @@ echo A > /dev/watchdog     //Stop the kernel automatic dog feed thread，but the
 
 > Note: When writing characters to the watchdog node on the command line, watchdog is enabled and counts with the default timeout, and the kernel autofeed dog thread is woken up
 
-### 2.6 OTP Usage Reference
+### OTP Usage Reference
 
 Users can  access OTP hardware through and read `sysfs` OTP space by running user-mode programs.
 
-#### 2.6.1 Sysfs file system
+#### Sysfs file system
 
 The Linux kernel uses `sysfs` a file system, which exports device and driver information to user space, making it easier for users to read device information, while supporting modification and adjustment. `Sysfs` Virtual file systems are typically mounted in `/sys` the  directory. Once the OTP is registered with `NVMEM` the  Linux framework,  the `sysfs` OTP information can be easily viewed through the virtual file system.
 
@@ -381,7 +381,7 @@ Alternatively, utilize `dd` the command:
 
 ```
 
-#### 2.6.2 User-mode access to OTP
+#### User-mode access to OTP
 
 Write a user-mode application that falls into kernel mode by calling functions such as open(), close(), read(), etc. by standard system calls, and eventually calls the interface registered in the OTP driver to test OTP functionality.
 
@@ -421,7 +421,7 @@ Addr                    Value
 
 ```
 
-#### 2.6.3 OTP space defaults
+#### OTP space defaults
 
 The OTP space default value information is shown below, please verify whether the OTP space is read correctly against the default value.
 
@@ -490,11 +490,11 @@ The OTP space default value information is shown below, please verify whether th
 
 ```
 
-### 2.7 TS Usage Reference
+### TS Usage Reference
 
 The  user `sysfs` can access the TS hardware through and can also read the die junction temperature by running a user-mode program.
 
-#### 2.7.1 sysfs file system
+#### sysfs file system
 
 The Linux kernel uses `sysfs` a file system, which exports device and driver information to user space, making it easier for users to read device information, while supporting modification and adjustment. `sysfs` Virtual file systems are typically mounted in `/sys` the  directory. Once TS is registered with the Thermal Framework in Linux,  TS `sysfs` information can be easily viewed through the virtual file system.
 
@@ -543,7 +543,7 @@ temp = (1e-10 * pow(code, 4) * 1.01472 - 1e-6 * pow(code, 3) * 1.10063 + 4.36150
 - code: The value of the TS register is kept in the lower 12 bits;
 - temp: The calculated temperature value.
 
-#### 2.7.2 User-mode access TS
+#### User-mode access TS
 
 Write a user-mode application that falls into kernel mode through standard system calls to functions such as open(), close(), read(), etc., and eventually calls the interface registered in the TS driver to test TS functionality.
 
@@ -570,11 +570,11 @@ ts_val: 0x1c0a, TS = 42.780447 C
 
 ```
 
-### 2.8 TRNG Usage Reference
+### TRNG Usage Reference
 
 The  user `sysfs` can access the TRNG hardware through and can read true random numbers by running a user-mode program.
 
-#### 2.8.1 sysfs file system
+#### sysfs file system
 
 The Linux kernel uses `sysfs` a file system, which exports device and driver information to user space, making it easier for users to read device information, while supporting modification and adjustment. `sysfs` Virtual file systems are typically mounted in  the `/sys` directory. Once TRNG is registered with the HW random framework in Linux, TRNG `sysfs` information can be easily viewed through the virtual file system.
 
@@ -601,7 +601,7 @@ After starting Linux, run the following command:
 
 ```
 
-#### 2.8.2 User access to TRNG
+#### User access to TRNG
 
 Write a user-mode application, the user-mode application through the standard system call open(), close(), read() and other functions into the kernel state, and eventually call the interface registered in the TRNG driver to see if the data obtained each time is inconsistent, so as to test the functionality of TRNG.
 
@@ -628,11 +628,11 @@ After starting the little core Linux, run the following command:
 
 By default, 16 bytes of random numbers are printed each time, and the random numbers are different each time.
 
-### 2.9 ADC Usage Reference
+### ADC Usage Reference
 
 The user can access  each channel `sysfs` of the ADC through and read the voltage conversion data for each channel by running a user-mode program.
 
-#### 2.9.1 sysfs access ADC
+#### sysfs access ADC
 
 The ADC under Linux is mounted under the IIO subsystem, and`sysfs` the following example can be referred to through access
 
@@ -648,15 +648,15 @@ The ADC under Linux is mounted under the IIO subsystem, and`sysfs` the following
 
 Note: On the Canaan K230_EVB board, ADC channel 5 is already connected to the audio output interface at the other end, so it is not recommended to use this channel for other purposes.
 
-#### 2.9.2 User-mode access ADC
+#### User-mode access ADC
 
 Outline.
 
-### 2.10 PWM usage reference
+### PWM usage reference
 
 The  user `sysfs` can access each PWM channel through and can also control the output waveform period and duty cycle of each channel by running a user-mode program.
 
-#### 2.10.1 sysfs access PWM
+#### sysfs access PWM
 
 ```shell
 1、cd /sys/devices/platform/soc/9140a000.pwm/pwm/pwmchip0
@@ -668,11 +668,11 @@ The  user `sysfs` can access each PWM channel through and can also control the o
 
 ```
 
-#### 2.10.2 User-mode access PWM
+#### User-mode access PWM
 
 Outline.
 
-### 2.11 FBTFT Configuration Reference
+### FBTFT Configuration Reference
 
 K230 SDK supports small screen drivers and adapts to ST7735S driver chip (spi), this configuration is turned off by default, if you need to open it, please refer to the following operations:
 

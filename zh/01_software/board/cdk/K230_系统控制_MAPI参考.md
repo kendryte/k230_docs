@@ -51,38 +51,38 @@
 |------------|----------|--------|----------|
 | V1.0       | 初版     | 郝海波 | 2023/5/4 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 系统控制根据 k230芯片特性，完成硬件各个部件的复位、基本初始化工作，同时负责完成 MPP（Media Process Platform 媒体处理平台）系统核间通讯建立，多媒体内存管理等模块的初始化、去初始化。
 
-### 1.2 功能描述
+### 功能描述
 
 MAPI的特性是跨OS调用，在K230的大小核上均可以调用相同的API来实现需要的功能。
 
 关于MAPI中涉及绑定以及内存管理的具体内容请参考文档《K230 系统控制 API参考 V1.0》中的相关内容
 
-## 2. API参考
+## API参考
 
 该功能模块提供以下API：
 
-- [2. API参考](#2-api参考)
-  - [2.1 kd\_mapi\_sys\_init](#21-kd_mapi_sys_init)
-  - [2.2 kd\_mapi\_sys\_deinit](#22-kd_mapi_sys_deinit)
-  - [2.3 kd\_mapi\_media\_init](#23-kd_mapi_media_init)
-  - [2.4 kd\_mapi\_media\_deinit](#24-kd_mapi_media_deinit)
-  - [2.5 kd\_mapi\_alloc\_buffer](#25-kd_mapi_alloc_buffer)
-  - [2.6 kd\_mapi\_free\_buffer](#26-kd_mapi_free_buffer)
-  - [2.7 kd\_mapi\_sys\_get\_vb\_block](#27-kd_mapi_sys_get_vb_block)
-  - [2.8 kd\_mapi\_sys\_release\_vb\_block](#28-kd_mapi_sys_release_vb_block)
-- [3. 数据类型](#3-数据类型)
-  - [3.1 k\_mapi\_mod\_id\_e](#31-k_mapi_mod_id_e)
-  - [3.2 k\_mapi\_media\_config\_t](#32-k_mapi_media_config_t)
-  - [3.3 k\_mapi\_media\_attr\_t](#33-k_mapi_media_attr_t)
-- [4. 错误码](#4-错误码)
+- [2. API参考](#api参考)
+  - [2.1 kd\_mapi\_sys\_init](#kd_mapi_sys_init)
+  - [2.2 kd\_mapi\_sys\_deinit](#kd_mapi_sys_deinit)
+  - [2.3 kd\_mapi\_media\_init](#kd_mapi_media_init)
+  - [2.4 kd\_mapi\_media\_deinit](#kd_mapi_media_deinit)
+  - [2.5 kd\_mapi\_alloc\_buffer](#kd_mapi_alloc_buffer)
+  - [2.6 kd\_mapi\_free\_buffer](#kd_mapi_free_buffer)
+  - [2.7 kd\_mapi\_sys\_get\_vb\_block](#kd_mapi_sys_get_vb_block)
+  - [2.8 kd\_mapi\_sys\_release\_vb\_block](#kd_mapi_sys_release_vb_block)
+- [3. 数据类型](#数据类型)
+  - [3.1 k\_mapi\_mod\_id\_e](#k_mapi_mod_id_e)
+  - [3.2 k\_mapi\_media\_config\_t](#k_mapi_media_config_t)
+  - [3.3 k\_mapi\_media\_attr\_t](#k_mapi_media_attr_t)
+- [4. 错误码](#错误码)
 
-### 2.1 kd_mapi_sys_init
+### kd_mapi_sys_init
 
 【描述】
 
@@ -103,7 +103,7 @@ k_s32 kd_mapi_sys_init(void );
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -126,7 +126,7 @@ k_s32 kd_mapi_sys_init(void );
 
 无
 
-### 2.2 kd_mapi_sys_deinit
+### kd_mapi_sys_deinit
 
 【描述】
 
@@ -147,7 +147,7 @@ k_s32 kd_mapi_sys_deinit(void );
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -170,7 +170,7 @@ k_s32 kd_mapi_sys_deinit(void );
 
 无
 
-### 2.3 kd_mapi_media_init
+### kd_mapi_media_init
 
 【描述】
 
@@ -193,7 +193,7 @@ k_s32 kd_mapi_media_init(const k_mapi_media_attr_t *media_attr);
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -216,7 +216,7 @@ k_s32 kd_mapi_media_init(const k_mapi_media_attr_t *media_attr);
 
 无
 
-### 2.4 kd_mapi_media_deinit
+### kd_mapi_media_deinit
 
 【描述】
 
@@ -237,7 +237,7 @@ k_s32 kd_mapi_media_deinit(void);
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -260,7 +260,7 @@ k_s32 kd_mapi_media_deinit(void);
 
 无
 
-### 2.5 kd_mapi_alloc_buffer
+### kd_mapi_alloc_buffer
 
 【描述】
 
@@ -286,7 +286,7 @@ k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const 
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -310,7 +310,7 @@ k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const 
 
 无
 
-### 2.6 kd_mapi_free_buffer
+### kd_mapi_free_buffer
 
 【描述】
 
@@ -335,7 +335,7 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -358,7 +358,7 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 
 无
 
-### 2.7 kd_mapi_sys_get_vb_block
+### kd_mapi_sys_get_vb_block
 
 【描述】
 
@@ -384,7 +384,7 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 *pool_id, k_u64 *phys_addr, k_u64 blk_size,
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -408,7 +408,7 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 *pool_id, k_u64 *phys_addr, k_u64 blk_size,
 
 无
 
-### 2.8 kd_mapi_sys_release_vb_block
+### kd_mapi_sys_release_vb_block
 
 【描述】
 
@@ -432,7 +432,7 @@ k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
 | **返回值** | **描述**                            |
 |--------|---------------------------------|
 | 0      | 成功                            |
-| 非0    | 失败，其值参见[错误码](#4-错误码) |
+| 非0    | 失败，其值参见[错误码](#错误码) |
 
 【芯片差异】
 
@@ -455,9 +455,9 @@ k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
 
 无
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 k_mapi_mod_id_e
+### k_mapi_mod_id_e
 
 【说明】
 
@@ -524,7 +524,7 @@ K_MAPI_MOD_BUTT,
 
 无
 
-### 3.2 k_mapi_media_config_t
+### k_mapi_media_config_t
 
 【说明】
 
@@ -558,7 +558,7 @@ k_vb_config vb_config;
 
 无
 
-### 3.3 k_mapi_media_attr_t
+### k_mapi_media_attr_t
 
 【说明】
 
@@ -589,7 +589,7 @@ k_mapi_media_config_t media_config;
 
 无
 
-## 4. 错误码
+## 错误码
 
 表 41
 

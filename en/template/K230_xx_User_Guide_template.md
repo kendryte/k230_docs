@@ -53,27 +53,27 @@ This document (this guide) is mainly applicable to the following personnel:
 | V1.1             |                          |                |            |
 | V1.2             |                          |                |            |
 
-## 1. Overview
+## Overview
 
 This document introduces xxx, etc.
 
-## 2. xx Module Introduction
+## xx Module Introduction
 
-### 2.1 xx Module
+### xx Module
 
-#### 2.1.1 Introduction to xx Module
+#### Introduction to xx Module
 
 xxx
 
-#### 2.1.2 Feature Description
+#### Feature Description
 
 xx includes.
 
-#### 2.1.3 Dependent Resources
+#### Dependent Resources
 
 Requires a screen
 
-## 3. Markdown Syntax Reference (Delete when completing the document)
+## Markdown Syntax Reference (Delete when completing the document)
 
 ### Inserting Images
 

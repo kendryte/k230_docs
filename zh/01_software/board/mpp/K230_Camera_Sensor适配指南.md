@@ -53,7 +53,7 @@
 | V1.1       | 示例修改为ov5647并添加4.4章节 | 赵忠祥 | 2023-04-11  |
 |            |          |        |            |
 
-## 1. 概述
+## 概述
 
 本文档主要描述K230平台Camera Sensor基本框架以及如何新增支持一款新的Camera Sensor。
 
@@ -63,9 +63,9 @@ K230平台支持多种接口类型的sensor，我们以当前最常用的MIPI CS
 
 主控通过I2C接口下发配置寄存器控制sensor的工作方式，sensor通过MIPI CSI接口将图像数据发送至主控SOC。
 
-## 2. Camera Sensor框架
+## Camera Sensor框架
 
-### 2.1 框架简介
+### 框架简介
 
 Camera Sensor框架如图2-1所示，最底层是sensor驱动层
 
@@ -79,7 +79,7 @@ Camera Sensor框架如图2-1所示，最底层是sensor驱动层
 - 驱动层：该层包括sensor公共操作接口具体的sensor设备驱动。公共操作接口主要是ioctl操作命令和sensor i2c读写接口，sensor驱动主要提供设备节点以及操作接口的实现。这部分也是sensor适配的主要工作。
 - 硬件层：对应各个具体的sensor硬件
 
-## 3. Sensor适配准备工作
+## Sensor适配准备工作
 
 用户在适配新的sensor之前需要做以下一些准备工作：
 
@@ -91,7 +91,7 @@ Camera Sensor框架如图2-1所示，最底层是sensor驱动层
 1. 确认 wdr mode 是 VC、DT 或者 DOL 等。
 1. 确认不同时序是否需要图像裁剪。
 
-## 4. Sensor适配示例
+## Sensor适配示例
 
 本节将按照如何增加支持一个新的camera sensor的步骤来进行详细描述。
 
@@ -101,7 +101,7 @@ Camera Sensor框架如图2-1所示，最底层是sensor驱动层
 src/big/mpp/kernel/sensor/src/ov5647_drv.c
 ```
 
-### 4.1 定义支持的sensor类型
+### 定义支持的sensor类型
 
 系统支持的Sensor类型是由如下枚举变量定义：
 
@@ -169,11 +169,11 @@ typedef enum {
 
 用户需要增加新的sensor支持类型时，首先需要在这里增加对应类型的定义，**该类型是应用程序获取sensor配置的唯一标志**
 
-### 4.2 sensor驱动适配
+### sensor驱动适配
 
 sensor驱动适配在整个环节中最重要的环节，用户可以通过拷贝现有的sensor驱动文件来修改，其中关于sensor的AE相关寄存器配置和计算方式需要查看对应的手册或者寻求专业人事协助。
 
-#### 4.2.1 定义sensor寄存器配置列表
+#### 定义sensor寄存器配置列表
 
 sensor寄存器配置由数据类型 k_sensor_reg_list 定义：
 
@@ -202,7 +202,7 @@ static const k_sensor_reg ov5647_mipi2lane_1080p_30fps_linear[] = {
 };
 ```
 
-#### 4.2.2 定义sensor支持的模式
+#### 定义sensor支持的模式
 
 sensor的模式参数由数据类型k_sensor_mode 定义
 
@@ -242,7 +242,7 @@ static k_sensor_mode ov5647_mode_info[] = {
 }
 ```
 
-#### 4.2.3 实现sensor操作接口
+#### 实现sensor操作接口
 
 sensor的操作接口由数据类型k_sensor_function定义，用户根据实际情况实现相关的操作接口，不是所有接口都必须实现。
 
@@ -310,7 +310,7 @@ typedef struct {
     },
 ```
 
-#### 4.2.4 定义sensor驱动结构体
+#### 定义sensor驱动结构体
 
 sensor驱动结构体由 struct sensor_driver_dev 定义，主要包括sensor I2C配置信息，sensor驱动名称以及sensor操作集合
 
@@ -349,7 +349,7 @@ struct sensor_driver_dev ov5647_sensor_drv = {
 };
 ```
 
-#### 4.2.5 更新sensor驱动列表
+#### 更新sensor驱动列表
 
 将上一节定义的sensor驱动结构体添加到sensor_common.c中的sensor_drv_list数组中。
 当前系统支持的sensor列表如下：
@@ -364,7 +364,7 @@ struct sensor_driver_dev *sensor_drv_list[SENSOR_NUM_MAX] = {
 };
 ```
 
-### 4.3 更新sensor配置信息列表
+### 更新sensor配置信息列表
 
 sensor配置信息有结构体k_vicap_sensor_info定义：
 
@@ -413,7 +413,7 @@ const k_vicap_sensor_info sensor_info_list[] = {
 
 用户每增加一个sensor配置模式，就需要在sensor_info_list这个结构体中增加一项对应模式的配置。
 
-### 4.4 增加sensor配置文件
+### 增加sensor配置文件
 
 当前SDK版本sensor配置文件包括xml文件和json文件，文件存放路径如下：
 
@@ -429,7 +429,7 @@ ov5647.xml  ov5647_auto.json  ov5647_manual.json
 
 对于新增加的sensor，可以通过拷贝修改现有文件实现支持，其中的calibration和tuning参数可以通过相关工具修改导出。
 
-### 4.5 现有sensor驱动的移植
+### 现有sensor驱动的移植
 
 如果重新打板，一般情况下可能会修改的sensor的reset、shutdown、CSI、I2C。仍然以canmv的ov5647为例。
 

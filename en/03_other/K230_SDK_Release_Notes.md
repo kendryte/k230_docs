@@ -54,17 +54,17 @@ This document (this guide) is mainly intended for the following personnel:
 | NonAI-2D            | 2D graphics acceleration module, supports OSD overlay, frame drawing, CSC transformation, etc. |
 | MCM                 | Multi Camera Management                                 |
 
-## 1. Version Information
+## Version Information
 
 | Product   | Version  | Release Date |
 |-----------|----------|--------------|
 | K230 SDK  | V1.6.0   | 2024-6-14    |
 
-## 2. Supported Hardware
+## Supported Hardware
 
 The K230 platform supports mainboards like K230 USIP LP3 EVB and CanMV-K230. For specific hardware information, refer to the documentation directory: [00_hardware](../00_hardware).
 
-## 3. Version Usage Restrictions
+## Version Usage Restrictions
 
 The current SDK's memory layout on USIP LP3 EVB and CanMV-K230 is as shown below:
 
@@ -74,9 +74,9 @@ Figure-1 SDK Memory Layout
 
 You can configure the memory regions for each module by entering `make menuconfig` under the k230_sdk directory and selecting `Memory->Configuration`. Currently, configuring the memory for parameter areas and inter-core communication areas is not supported.
 
-## 4. Version Feature Statistics
+## Version Feature Statistics
 
-### 4.1 Multimedia
+### Multimedia
 
 | ID | Supported Version | Feature Summary      | Feature Description                                                                      | Remarks |
 |----|-------------------|----------------------|------------------------------------------------------------------------------------------|---------|
@@ -121,7 +121,7 @@ You can configure the memory regions for each module by entering `make menuconfi
 | 36 | K230 SDK V1.4 | nonai_2d API | Added nonai_2d CSC function mpi and mapi | |
 | 37 | K230 SDK V1.4 | YUV Sensor Demo | Added YUV sensor demo, 3-way YUV sensor input, 3-way streaming and display | |
 
-### 4.2 Image
+### Image
 
 | ID | Supported Version | Feature Summary  | Feature Description                                                                                                                | Remarks |
 |----|-------------------|------------------|------------------------------------------------------------------------------------------------------------------------------------|---------|
@@ -156,7 +156,7 @@ You can configure the memory regions for each module by entering `make menuconfi
 | 29 | K230 SDK V1.4     | linear mode supports adaptive | linear mode supports adaptive                                                                                                      |         |
 | 30 | K230 SDK V1.5     | GC2053           | Added GC2053 driver                                                                  |         |
 
-### 4.3 Platform
+### Platform
 
 | ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
 |----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
@@ -208,7 +208,7 @@ You can configure the memory regions for each module by entering `make menuconfi
 | 46 | K230 SDK V1.6     | 01Studio-CanMV-K230 | Supports 01Studio-CanMV-K230 board                                                   |         |
 | 47 | K230 SDK V1.6     | Supports RTT Only System | Supports RTT only single system                                                      |         |
 
-### 4.4 Architecture
+### Architecture
 
 | ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
 |----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
@@ -240,7 +240,7 @@ You can configure the memory regions for each module by entering `make menuconfi
 | 26 | K230 SDK V1.2     | Door Lock OTA Function | Added door lock OTA function                                                          |         |
 | 27 | K230 SDK V1.3     | OTP Space Adjustment | Adjusted the OTP space operated by SDK, users can read/write 768 bytes. The remaining space is reserved for chip manufacturers |         |
 
-### 4.5 Others
+### Others
 
 | ID | Supported Version | Function Overview | Function Description                                                                 | Remarks |
 |----|-------------------|-------------------|--------------------------------------------------------------------------------------|---------|
