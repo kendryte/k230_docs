@@ -214,6 +214,7 @@ build web docs:
     - python3 preprocess.py
     - python3 preprocessEn.py
     - git commit "*.md" -m "remove cover"
+    - pip install --force-reinstall "sphinx==7.3.7"
     - make mhtml
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
