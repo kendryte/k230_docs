@@ -26,10 +26,6 @@ extensions = [
     'sphinx_multiversion',
     'sphinxcontrib.mermaid'
 ]
-html_js_files = [
-    'mermaid.min.js',
-    'init_mermaid.js',
-]
 source_suffix = {
    '.rst': 'restructuredtext',  
     '.md': 'markdown',
@@ -65,6 +61,11 @@ locale_dirs = ['locale']
 
 html_css_files = ['topbar.css', 'custom-theme.css']
 
+html_js_files = [
+    'mermaid.min.js',
+    'init_mermaid.js',
+    'transform.js'
+]
 def setup(app):
     # 获取当前构建版本（分支/标签）
     current_version = getattr(app.config, "smv_current_version", "dev")  # 默认main分支
