@@ -52,17 +52,17 @@
 | V1.1       | 修改VICAP概述 2、添加API、数据类型的跳转                                                                                                   | 赵忠祥        | 2023/4/6  |
 | V1.2       | 移除ISP相关接口 增加API及数据类型描述 将sensor接口从libvicap库分离出来独立为libsensor库 增加ov9286红外/散斑类型 更新VICAP描述 更新文档格式 | 郭世栋 汪成根 | 2023/4/26 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 VICAP子系统是K230 SOC中负责视频图像输入捕获处理的子系统。通过对sensor输出的信号进行实时处理，得到经过复原、增强后的数字图像，使其更接近现实中人眼所见的图像。主要包括MIPI RxDphy、MIPI CSI、ISP和DW。MIPI用于接收sensor传来的高速差分信号，并将其转为DVP接口，供ISP处理；ISP用于图像信息的处理；DW用于鱼眼矫正和多路resize输出。
 
 本文档主要描述VICAP模块应用编程接口，它提供了应用开发者通过VICAP模块捕获视频图像数据的操作接口和配置参数。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 VICAP
+#### VICAP
 
 VICAP模块是对整个图像采集处理单元的抽象描述。
 
@@ -83,7 +83,7 @@ VICAP软件架构如图1-2所示，从上到下依次是：应用接口层，媒
 
 ![图形用户界面, 文本, 应用程序 描述已自动生成](images/250b6c36cbd4447bd8c734548fc3b890.png)
 
-#### 1.2.2 Sensor
+#### Sensor
 
 Sensor模块是VICAP捕获图像的数据源之一，负责配置图像感光单元的运行参数及工作模式。
 
@@ -109,31 +109,31 @@ Sensor模块系统架构如下图1-4所示：
 - sensor_drv：具体sensor的硬件驱动，并将针对sensor的操作封装为统一的接口。
 - 硬件层：sensor模组硬件，当前系统中最多同时支持三路硬件sensor。
 
-## 2. API 参考
+## API 参考
 
-### 2.1 VICAP
+### VICAP
 
 该功能模块提供以下API：
 
-- [kd_mpi_vicap_get_sensor_info](#211-kd_mpi_vicap_get_sensor_info)
-- [kd_mpi_vicap_set_dev_attr](#212-kd_mpi_vicap_set_dev_attr)
-- [kd_mpi_vicap_get_dev_attr](#213-kd_mpi_vicap_get_dev_attr)
-- [kd_mpi_vicap_set_chn_attr](#214-kd_mpi_vicap_set_chn_attr)
-- [kd_mpi_vicap_get_chn_attr](#215-kd_mpi_vicap_get_chn_attr)
-- [kd_mpi_vicap_init](#216-kd_mpi_vicap_init)
-- [kd_mpi_vicap_deinit](#217-kd_mpi_vicap_deinit)
-- [kd_mpi_vicap_start_stream](#218-kd_mpi_vicap_start_stream)
-- [kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream)
-- [kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame)
-- [kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release)
-- [kd_mpi_vicap_set_vi_drop_frame](#2112-kd_mpi_vicap_set_vi_drop_frame)
-- [kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk)
-- [kd_mpi_vicap_set_dump_reserved](#2114-kd_mpi_vicap_set_dump_reserved)
-- [kd_mpi_vicap_set_slave_enable](#2115-kd_mpi_vicap_set_slave_enable)
-- [kd_mpi_vicap_set_slave_attr](#2116-kd_mpi_vicap_set_slave_attr)
-- [kd_mpi_vicap_3d_mode_crtl](#2117-kd_mpi_vicap_3d_mode_crtl)
+- [kd_mpi_vicap_get_sensor_info](#kd_mpi_vicap_get_sensor_info)
+- [kd_mpi_vicap_set_dev_attr](#kd_mpi_vicap_set_dev_attr)
+- [kd_mpi_vicap_get_dev_attr](#kd_mpi_vicap_get_dev_attr)
+- [kd_mpi_vicap_set_chn_attr](#kd_mpi_vicap_set_chn_attr)
+- [kd_mpi_vicap_get_chn_attr](#kd_mpi_vicap_get_chn_attr)
+- [kd_mpi_vicap_init](#kd_mpi_vicap_init)
+- [kd_mpi_vicap_deinit](#kd_mpi_vicap_deinit)
+- [kd_mpi_vicap_start_stream](#kd_mpi_vicap_start_stream)
+- [kd_mpi_vicap_stop_stream](#kd_mpi_vicap_stop_stream)
+- [kd_mpi_vicap_dump_frame](#kd_mpi_vicap_dump_frame)
+- [kd_mpi_vicap_dump_release](#kd_mpi_vicap_dump_release)
+- [kd_mpi_vicap_set_vi_drop_frame](#kd_mpi_vicap_set_vi_drop_frame)
+- [kd_mpi_vicap_set_mclk](#kd_mpi_vicap_set_mclk)
+- [kd_mpi_vicap_set_dump_reserved](#kd_mpi_vicap_set_dump_reserved)
+- [kd_mpi_vicap_set_slave_enable](#kd_mpi_vicap_set_slave_enable)
+- [kd_mpi_vicap_set_slave_attr](#kd_mpi_vicap_set_slave_attr)
+- [kd_mpi_vicap_3d_mode_crtl](#kd_mpi_vicap_3d_mode_crtl)
 
-#### 2.1.1 kd_mpi_vicap_get_sensor_info
+#### kd_mpi_vicap_get_sensor_info
 
 【描述】
 
@@ -176,7 +176,7 @@ k_s32 kd_mpi_vicap_get_sensor_info(k_vicap_sensor_type sensor_type, k_vicap_sens
 
 【相关主题】
 
-#### 2.1.2 kd_mpi_vicap_set_dev_attr
+#### kd_mpi_vicap_set_dev_attr
 
 【描述】
 
@@ -219,7 +219,7 @@ k_s32 kd_mpi_vicap_set_dev_attr(k_vicap_dev dev_num, k_vicap_dev_attr dev_attr)
 
 【相关主题】
 
-#### 2.1.3 kd_mpi_vicap_get_dev_attr
+#### kd_mpi_vicap_get_dev_attr
 
 【描述】
 
@@ -262,7 +262,7 @@ k_s23 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev, k_vicap_chn_attr chn_attr)
 
 【相关主题】
 
-#### 2.1.4 kd_mpi_vicap_set_chn_attr
+#### kd_mpi_vicap_set_chn_attr
 
 【描述】
 
@@ -306,7 +306,7 @@ k_s32 kd_mpi_vicap_set_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vica
 
 【相关主题】
 
-#### 2.1.5 kd_mpi_vicap_get_chn_attr
+#### kd_mpi_vicap_get_chn_attr
 
 【描述】
 
@@ -350,7 +350,7 @@ k_s32 kd_mpi_vicap_get_chn_attr(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vica
 
 【相关主题】
 
-#### 2.1.6 kd_mpi_vicap_init
+#### kd_mpi_vicap_init
 
 【描述】
 
@@ -392,7 +392,7 @@ k_s32 kd_mpi_vicap_init(k_vicap_dev dev_num)
 
 【相关主题】
 
-#### 2.1.7 kd_mpi_vicap_deinit
+#### kd_mpi_vicap_deinit
 
 【描述】
 
@@ -434,7 +434,7 @@ k_s32 kd_mpi_vicap_deinit(k_vicap_dev dev_num)
 
 【相关主题】
 
-#### 2.1.8 kd_mpi_vicap_start_stream
+#### kd_mpi_vicap_start_stream
 
 【描述】
 
@@ -476,7 +476,7 @@ k_s32 kd_mpi_vicap_start_stream(k_vicap_dev dev_num)
 
 【相关主题】
 
-#### 2.1.9 kd_mpi_vicap_stop_stream
+#### kd_mpi_vicap_stop_stream
 
 【描述】
 
@@ -518,7 +518,7 @@ k_s32 kd_mpi_vicap_stop_stream(k_vicap_dev dev_num)
 
 【相关主题】
 
-#### 2.1.10 kd_mpi_vicap_dump_frame
+#### kd_mpi_vicap_dump_frame
 
 【描述】
 
@@ -566,7 +566,7 @@ k_video_frame_info \*vf_info, k_u32 milli_sec)
 
 【相关主题】
 
-#### 2.1.11 kd_mpi_vicap_dump_release
+#### kd_mpi_vicap_dump_release
 
 【描述】
 
@@ -610,7 +610,7 @@ k_s32 kd_mpi_vicap_dump_release(k_vicap_dev dev_num, k_vicap_chn chn_num, const 
 
 【相关主题】
 
-#### 2.1.12 kd_mpi_vicap_set_vi_drop_frame
+#### kd_mpi_vicap_set_vi_drop_frame
 
 【描述】
 
@@ -647,7 +647,7 @@ k_s32 kd_mpi_vicap_set_vi_drop_frame(k_vicap_csi_num csi, k_vicap_drop_frame *fr
 - 头文件：mpi_vicap_api.h
 - 库文件：libvicap.a
 
-#### 2.1.13 kd_mpi_vicap_set_mclk
+#### kd_mpi_vicap_set_mclk
 
 【描述】
 
@@ -682,7 +682,7 @@ k_s32 kd_mpi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk_
 - 头文件：mpi_vicap_api.h
 - 库文件：libvicap.a
 
-#### 2.1.14 kd_mpi_vicap_set_dump_reserved
+#### kd_mpi_vicap_set_dump_reserved
 
 【描述】
 
@@ -711,7 +711,7 @@ void kd_mpi_vicap_set_dump_reserved(k_vicap_dev dev_num, k_vicap_chn chn_num, k_
 
 无。
 
-#### 2.1.15 kd_mpi_vicap_set_slave_enable
+#### kd_mpi_vicap_set_slave_enable
 
 【描述】
 
@@ -739,7 +739,7 @@ k_s32 kd_mpi_vicap_set_slave_enable(k_vicap_slave_id id, k_vicap_slave_enable *e
 
 无。
 
-#### 2.1.16 kd_mpi_vicap_set_slave_attr
+#### kd_mpi_vicap_set_slave_attr
 
 【描述】
 
@@ -767,7 +767,7 @@ k_s32 kd_mpi_vicap_set_slave_attr(k_vicap_slave_id id, k_vicap_slave_info *info)
 
 无。
 
-#### 2.1.17 kd_mpi_vicap_3d_mode_crtl
+#### kd_mpi_vicap_3d_mode_crtl
 
 【描述】
 
@@ -799,30 +799,30 @@ k_s32 kd_mpi_vicap_3d_mode_crtl(k_bool enable)
 - 头文件：mpi_vicap_api.h
 - 库文件：libvicap.a
 
-### 2.2 Sensor
+### Sensor
 
 该功能模块提供以下API：
 
-- [kd_mpi_sensor_open](#221-kd_mpi_sensor_open)
-- [kd_mpi_sensor_close](#222-kd_mpi_sensor_close)
-- [kd_mpi_sensor_power_set](#223-kd_mpi_sensor_power_set)
-- [kd_mpi_sensor_id_get](#224-kd_mpi_sensor_id_get)
-- [kd_mpi_sensor_init](#225-kd_mpi_sensor_init)
-- [kd_mpi_sensor_reg_read](#226-kd_mpi_sensor_reg_read)
-- [kd_mpi_sensor_reg_write](#227-kd_mpi_sensor_reg_write)
-- [kd_mpi_sensor_mode_get](#228-kd_mpi_sensor_mode_get)
-- [kd_mpi_sensor_mode_set](#229-kd_mpi_sensor_mode_set)
-- [kd_mpi_sensor_stream_enable](#2210-kd_mpi_sensor_stream_enable)
-- [kd_mpi_sensor_again_set](#2211-kd_mpi_sensor_again_set)
-- [kd_mpi_sensor_again_get](#2212-kd_mpi_sensor_again_get)
-- [kd_mpi_sensor_dgain_set](#2213-kd_mpi_sensor_dgain_set)
-- [kd_mpi_sensor_dgain_get](#2214-kd_mpi_sensor_dgain_get)
-- [kd_mpi_sensor_intg_time_set](#2215-kd_mpi_sensor_intg_time_set)
-- [kd_mpi_sensor_intg_time_get](#2216-kd_mpi_sensor_intg_time_get)
-- [kd_mpi_sensor_otpdata_get](#2217-kd_mpi_sensor_otpdata_get)
-- [kd_mpi_sensor_otpdata_set](#2218-kd_mpi_sensor_otpdata_set)
+- [kd_mpi_sensor_open](#kd_mpi_sensor_open)
+- [kd_mpi_sensor_close](#kd_mpi_sensor_close)
+- [kd_mpi_sensor_power_set](#kd_mpi_sensor_power_set)
+- [kd_mpi_sensor_id_get](#kd_mpi_sensor_id_get)
+- [kd_mpi_sensor_init](#kd_mpi_sensor_init)
+- [kd_mpi_sensor_reg_read](#kd_mpi_sensor_reg_read)
+- [kd_mpi_sensor_reg_write](#kd_mpi_sensor_reg_write)
+- [kd_mpi_sensor_mode_get](#kd_mpi_sensor_mode_get)
+- [kd_mpi_sensor_mode_set](#kd_mpi_sensor_mode_set)
+- [kd_mpi_sensor_stream_enable](#kd_mpi_sensor_stream_enable)
+- [kd_mpi_sensor_again_set](#kd_mpi_sensor_again_set)
+- [kd_mpi_sensor_again_get](#kd_mpi_sensor_again_get)
+- [kd_mpi_sensor_dgain_set](#kd_mpi_sensor_dgain_set)
+- [kd_mpi_sensor_dgain_get](#kd_mpi_sensor_dgain_get)
+- [kd_mpi_sensor_intg_time_set](#kd_mpi_sensor_intg_time_set)
+- [kd_mpi_sensor_intg_time_get](#kd_mpi_sensor_intg_time_get)
+- [kd_mpi_sensor_otpdata_get](#kd_mpi_sensor_otpdata_get)
+- [kd_mpi_sensor_otpdata_set](#kd_mpi_sensor_otpdata_set)
 
-#### 2.2.1 kd_mpi_sensor_open
+#### kd_mpi_sensor_open
 
 【描述】
 
@@ -864,7 +864,7 @@ k_s32 kd_mpi_sensor_open(const char \*sensor_name)
 
 【相关主题】
 
-#### 2.2.2 kd_mpi_sensor_close
+#### kd_mpi_sensor_close
 
 【描述】
 
@@ -906,7 +906,7 @@ k_s32 kd_mpi_sensor_close (k_s32 fd)
 
 【相关主题】
 
-#### 2.2.3 kd_mpi_sensor_power_set
+#### kd_mpi_sensor_power_set
 
 【描述】
 
@@ -949,7 +949,7 @@ k_s32 kd_mpi_sensor_power_set(k_s32 fd, k_bool on)
 
 【相关主题】
 
-#### 2.2.4 kd_mpi_sensor_id_get
+#### kd_mpi_sensor_id_get
 
 【描述】
 
@@ -992,7 +992,7 @@ k_s32 kd_mpi_sensor_id_get(k_s32 fd, k_u32 \*sensor_id)
 
 【相关主题】
 
-#### 2.2.5 kd_mpi_sensor_init
+#### kd_mpi_sensor_init
 
 【描述】
 
@@ -1035,7 +1035,7 @@ k_s32 kd_mpi_sensor_init(k_s32 fd, k_sensor_mode mode)
 
 【相关主题】
 
-#### 2.2.6 kd_mpi_sensor_reg_read
+#### kd_mpi_sensor_reg_read
 
 【描述】
 
@@ -1079,7 +1079,7 @@ k_s32 kd_mpi_sensor_reg_read(k_s32 fd, k_u32 reg_addr, k_u32 \*reg_val)
 
 【相关主题】
 
-#### 2.2.7 kd_mpi_sensor_reg_write
+#### kd_mpi_sensor_reg_write
 
 【描述】
 
@@ -1123,7 +1123,7 @@ k_s32 kd_mpi_sensor_reg_write(k_s32 fd, k_u32 reg_addr, k_u32 reg_val)
 
 【相关主题】
 
-#### 2.2.8 kd_mpi_sensor_mode_get
+#### kd_mpi_sensor_mode_get
 
 【描述】
 
@@ -1166,7 +1166,7 @@ k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode \*mode)
 
 【相关主题】
 
-#### 2.2.9 kd_mpi_sensor_mode_set
+#### kd_mpi_sensor_mode_set
 
 【描述】
 
@@ -1209,7 +1209,7 @@ k_s32 kd_mpi_sensor_mode_get(k_s32 fd, k_sensor_mode mode)
 
 【相关主题】
 
-#### 2.2.10 kd_mpi_sensor_stream_enable
+#### kd_mpi_sensor_stream_enable
 
 【描述】
 
@@ -1252,7 +1252,7 @@ k_s32 kd_mpi_sensor_stream_enable(k_s32 fd, k_s32 enable)
 
 【相关主题】
 
-#### 2.2.11 kd_mpi_sensor_again_set
+#### kd_mpi_sensor_again_set
 
 【描述】
 
@@ -1295,7 +1295,7 @@ k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain gain)
 
 【相关主题】
 
-#### 2.2.12 kd_mpi_sensor_again_get
+#### kd_mpi_sensor_again_get
 
 【描述】
 
@@ -1338,7 +1338,7 @@ k_s32 kd_mpi_sensor_again_set(k_s32 fd, k_sensor_gain \*gain)
 
 【相关主题】
 
-#### 2.2.13 kd_mpi_sensor_dgain_set
+#### kd_mpi_sensor_dgain_set
 
 【描述】
 
@@ -1381,7 +1381,7 @@ k_s32 kd_mpi_sensor_dgain_set(k_s32 fd, k_sensor_gain gain)
 
 【相关主题】
 
-#### 2.2.14 kd_mpi_sensor_dgain_get
+#### kd_mpi_sensor_dgain_get
 
 【描述】
 
@@ -1424,7 +1424,7 @@ k_s32 kd_mpi_sensor_dgain_get(k_s32 fd, k_sensor_gain \*gain)
 
 【相关主题】
 
-#### 2.2.15 kd_mpi_sensor_intg_time_set
+#### kd_mpi_sensor_intg_time_set
 
 【描述】
 
@@ -1467,7 +1467,7 @@ k_s32 kd_mpi_sensor_intg_time_set(k_s32 fd, k_sensor_intg_time time)
 
 【相关主题】
 
-#### 2.2.16 kd_mpi_sensor_intg_time_get
+#### kd_mpi_sensor_intg_time_get
 
 【描述】
 
@@ -1510,7 +1510,7 @@ k_s32 kd_mpi_sensor_intg_time_get(k_s32 fd, k_sensor_intg_time \*time)
 
 【相关主题】
 
-#### 2.2.17 kd_mpi_sensor_otpdata_get
+#### kd_mpi_sensor_otpdata_get
 
 【描述】
 
@@ -1553,7 +1553,7 @@ k_s32 kd_mpi_sensor_otpdata_get(k_s32 fd, void *ota_data)
 
 【相关主题】
 
-#### 2.2.18 kd_mpi_sensor_otpdata_set
+#### kd_mpi_sensor_otpdata_set
 
 【描述】
 
@@ -1596,29 +1596,29 @@ k_s32 kd_mpi_sensor_otpdata_set(k_s32 fd, void *ota_data)
 
 【相关主题】
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 VICAP
+### VICAP
 
 该功能模块的相关数据类型定义如下：
 
-- [k_vicap_sensor_type](#311-k_vicap_sensor_type)
-- [k_vicap_dev](#312-k_vicap_dev)
-- [k_vicap_chn](#313-k_vicap_chn)
-- [k_vicap_csi_num](#314-k_vicap_csi_num)
-- [k_vicap_mipi_lanes](#315-k_vicap_mipi_lanes)
-- [k_vicap_csi_data_type](#316-k_vicap_csi_data_type)
-- [k_vicap_data_source](#317-k_vicap_data_source)
-- [k_vicap_vi_dvp_port](#318-k_vicap_vi_dvp_port)
-- [k_vicap_vi_flash_mode](#319-k_vicap_vi_flash_mode)
-- [k_vicap_img_window](#3110-k_vicap_img_window)
-- [k_vicap_work_mode](#3111-k_vicap_work_mode)
-- [k_vicap_sensor_info](#3112-k_vicap_sensor_info)
-- [k_vicap_dump_format](#3113-k_vicap_dump_format)
-- [k_vicap_dev_attr](#3114-k_vicap_dev_attr)
-- [k_vicap_chn_attr](#3115-k_vicap_chn_attr)
+- [k_vicap_sensor_type](#k_vicap_sensor_type)
+- [k_vicap_dev](#k_vicap_dev)
+- [k_vicap_chn](#k_vicap_chn)
+- [k_vicap_csi_num](#k_vicap_csi_num)
+- [k_vicap_mipi_lanes](#k_vicap_mipi_lanes)
+- [k_vicap_csi_data_type](#k_vicap_csi_data_type)
+- [k_vicap_data_source](#k_vicap_data_source)
+- [k_vicap_vi_dvp_port](#k_vicap_vi_dvp_port)
+- [k_vicap_vi_flash_mode](#k_vicap_vi_flash_mode)
+- [k_vicap_img_window](#k_vicap_img_window)
+- [k_vicap_work_mode](#k_vicap_work_mode)
+- [k_vicap_sensor_info](#k_vicap_sensor_info)
+- [k_vicap_dump_format](#k_vicap_dump_format)
+- [k_vicap_dev_attr](#k_vicap_dev_attr)
+- [k_vicap_chn_attr](#k_vicap_chn_attr)
 
-#### 3.1.1 k_vicap_sensor_type
+#### k_vicap_sensor_type
 
 【说明】当前系统支持的sensor类型定义
 
@@ -1715,7 +1715,7 @@ SENSOR_TYPE_MAX,
 
 1. 该列表需要有sensor驱动开发人员维护，应用开发者通过此处定义的sensor type来打开指定类型的sensor设备
 
-#### 3.1.2 k_vicap_dev
+#### k_vicap_dev
 
 【说明】vicap设备号定义
 
@@ -1738,7 +1738,7 @@ VICAP_DEV_ID_MAX,
 | VICAP_DEV_ID_1 | VICAP设备1 |
 | VICAP_DEV_ID_2 | VICAP设备2 |
 
-#### 3.1.3 k_vicap_chn
+#### k_vicap_chn
 
 【说明】vicap输出通道号定义
 
@@ -1761,7 +1761,7 @@ VICAP_CHN_ID_MAX,
 | VICAP_CHN_ID_1 | VICAP输出通道1 |
 | VICAP_CHN_ID_2 | VICAP输出通道2 |
 
-#### 3.1.4 k_vicap_csi_num
+#### k_vicap_csi_num
 
 【说明】vicap csi标号定义
 
@@ -1787,7 +1787,7 @@ VICAP_CSI2 = 3,
 
 Sensor连接的CSI号由硬件物理连接决定。
 
-#### 3.1.5 k_vicap_mipi_lanes
+#### k_vicap_mipi_lanes
 
 【说明】vicap mipi通道数定义
 
@@ -1813,7 +1813,7 @@ VICAP_MIPI_4LANE = 3,
 
 Sensor连接使用的mipi 通道个数由硬件物理连接决定，当使用4lane时，最多只能连接两个sensor。
 
-#### 3.1.6 k_vicap_csi_data_type
+#### k_vicap_csi_data_type
 
 【说明】vicap mipi通道数定义
 
@@ -1841,7 +1841,7 @@ VICAP_CSI_DATA_TYPE_RAW14 = 0x2D,
 
 无
 
-#### 3.1.7 k_vicap_data_source
+#### k_vicap_data_source
 
 【说明】vicap 数据源
 
@@ -1869,7 +1869,7 @@ VICAP_SOURCE_CSI2 = 4, /**< vicap acquire data from the csi2*/
 
 【注意事项】
 
-#### 3.1.8 k_vicap_vi_dvp_port
+#### k_vicap_vi_dvp_port
 
 【说明】vicap vi dvp端口号
 
@@ -1898,7 +1898,7 @@ VICAP_VI_DVP_PORT_MAX,
 1. 只有端口0支持HDR sensor，当用户需要使用HDR模式时，必需要将其绑定到DVP端口0。
 1. 当用户需要改变端口映射关系时需要执行绑定操作
 
-#### 3.1.9 k_vicap_vi_flash_mode
+#### k_vicap_vi_flash_mode
 
 【说明】vicap 闪光灯光源控制模式
 
@@ -1924,7 +1924,7 @@ VICAP_FLASH_DISABLE = 3, /**< disable flash light*/
 
 【注意事项】
 
-#### 3.1.10 k_vicap_img_window
+#### k_vicap_img_window
 
 【说明】VICAP图像窗口定义
 
@@ -1948,7 +1948,7 @@ k_u16 height;
 | width        | 图像宽度     |
 | height       | 图像高度     |
 
-#### 3.1.11 k_vicap_work_mode
+#### k_vicap_work_mode
 
 【说明】vicap工作模式
 
@@ -1974,7 +1974,7 @@ VICAP_WORK_ONLY_MCM_MODE,
 支持多个摄像头输入时，必须指定为离线模式。
 配置VICAP_WORK_ONLY_MCM_MODE，dump图像只能用yuv444这种格式。
 
-#### 3.1.12 k_vicap_sensor_info
+#### k_vicap_sensor_info
 
 【说明】VICAP sensor配置信息
 
@@ -2010,7 +2010,7 @@ k_vicap_sensor_type sensor_type;
 | flash_mode   | 闪光灯配置模式                        |
 | sensor_type  | Sensor配置类型                        |
 
-#### 3.1.13 k_vicap_dump_format
+#### k_vicap_dump_format
 
 【说明】VICAPdumo数据帧格式
 
@@ -2034,7 +2034,7 @@ VICAP_DUMP_YUV444 = 3,
 | VICAP_DUMP_RAW | Dump RAW数据 |
 | VICAP_DUMP_YUV444 | Dump YUV444数据 |
 
-#### 3.1.14 k_vicap_dev_attr
+#### k_vicap_dev_attr
 
 【说明】VICAP设备属性
 
@@ -2070,7 +2070,7 @@ typedef struct {
 
 【注意事项】对于小内存应用场景，建议关闭3DNR模块，减小内存占用。关闭方式为应用设置设备属性时，将 pipe_ctrl.bits.dnr3_enable 设置为0
 
-#### 3.1.15 k_vicap_chn_attr
+#### k_vicap_chn_attr
 
 【说明】VICAP设备属性
 
@@ -2106,7 +2106,7 @@ typedef struct {
 | buffer_size  | 缓冲区大小               |
 | alignment    | 缓冲区对齐方式           |
 
-#### 3.1.16 k_vicap_mirror
+#### k_vicap_mirror
 
 【说明】vicap sensor mirror 功能
 
@@ -2133,21 +2133,21 @@ VICAP_MIRROR_BOTH = 3,
 
 【注意事项】
 
-### 3.2 Sensor
+### Sensor
 
 该功能模块的相关数据类型定义如下：
 
-- [k_sensor_bayer_pattern](#321-k_sensor_bayer_pattern)
-- [k_sensor_exp_frame_type](#322-k_sensor_exp_frame_type)
-- [k_sensor_exposure_param](#323-k_sensor_exposure_param)
-- [k_sensor_intg_time](#324-k_sensor_intg_time)
-- [k_sensor_gain](#325-k_sensor_gain)
-- [k_sensor_size](#326-k_sensor_size)
-- [k_sensor_ae_info](#327-k_sensor_ae_info)
-- [k_sensor_mode](#328-k_sensor_mode)
-- [k_sensor_otp_date](#329-k_sensor_otp_date)
+- [k_sensor_bayer_pattern](#k_sensor_bayer_pattern)
+- [k_sensor_exp_frame_type](#k_sensor_exp_frame_type)
+- [k_sensor_exposure_param](#k_sensor_exposure_param)
+- [k_sensor_intg_time](#k_sensor_intg_time)
+- [k_sensor_gain](#k_sensor_gain)
+- [k_sensor_size](#k_sensor_size)
+- [k_sensor_ae_info](#k_sensor_ae_info)
+- [k_sensor_mode](#k_sensor_mode)
+- [k_sensor_otp_date](#k_sensor_otp_date)
 
-#### 3.2.1 k_sensor_bayer_pattern
+#### k_sensor_bayer_pattern
 
 【定义】sensor 输出的拜耳模式定义
 
@@ -2169,7 +2169,7 @@ BAYER_BUTT } k_sensor_bayer_pattern;
 | BAYER_GBRG   | GBRG模式 |
 | BAYER_BGGR   | BGGR模式 |
 
-#### 3.2.2 k_sensor_exp_frame_type
+#### k_sensor_exp_frame_type
 
 【说明】
 
@@ -2193,7 +2193,7 @@ SENSOR_EXPO_FRAME_TYPE_MAX } k_sensor_exp_frame_type;
 | SENSOR_EXPO_FRAME_TYPE_3FRAMES | 2帧HDR曝光模式     |
 | SENSOR_EXPO_FRAME_TYPE_4FRAMES | 4帧HDR曝光模式     |
 
-#### 3.2.3 k_sensor_exposure_param
+#### k_sensor_exposure_param
 
 【说明】sensor曝光参数定义
 
@@ -2215,7 +2215,7 @@ float exp_time[SENSOR_EXPO_FRAME_TYPE_MAX];
 | gain           | 曝光增益 |
 | exp_time       | 曝光时间 |
 
-#### 3.2.4 k_sensor_intg_time
+#### k_sensor_intg_time
 
 【说明】sensor曝光时间定义
 
@@ -2235,7 +2235,7 @@ float intg_time[SENSOR_EXPO_FRAME_TYPE_MAX];
 | exp_frame_type | 曝光类型 |
 | intg_time      | 积分时间 |
 
-#### 3.2.5 k_sensor_gain
+#### k_sensor_gain
 
 【说明】曝光增益定义
 
@@ -2255,7 +2255,7 @@ float gain[SENSOR_EXPO_FRAME_TYPE_MAX];
 | exp_frame_type | 曝光类型 |
 | gain           | 曝光增益 |
 
-#### 3.2.6 k_sensor_size
+#### k_sensor_size
 
 【说明】sensor支持的图像尺寸定义
 
@@ -2283,7 +2283,7 @@ k_u32 height;
 | width         | 宽度     |
 | height        | 高度     |
 
-#### 3.2.7 k_sensor_ae_info
+#### k_sensor_ae_info
 
 【说明】ae参数配置
 
@@ -2390,7 +2390,7 @@ k_u32 hdr_ratio;
 | cur_fps                    | 当前帧率              |
 | hdr_ratio                  | HDR 比率              |
 
-#### 3.2.8 k_sensor_mode
+#### k_sensor_mode
 
 【说明】sensor模式参数
 
@@ -2430,7 +2430,7 @@ k_sensor_reg_list *reg_list;
 | otp_type          | otp 类型：sensor 自用的和user             |
 | otp_date    | otp数据           |
 
-#### 3.2.9 k_sensor_otp_date
+#### k_sensor_otp_date
 
 【说明】sensor otp参数
 
@@ -2450,7 +2450,7 @@ k_u8 otp_date[20];
 | otp_type          | otp 类型：sensor 自用的和user             |
 | otp_date    | otp数据           |
 
-## 4. MAPI
+## MAPI
 
 该功能模块提供以下API：
 
@@ -2469,9 +2469,9 @@ k_u8 otp_date[20];
 - [kd_mapi_isp_ae_set_roi]
 - [kd_mapi_sensor_otpdata_get]
 
-### 4.1 API
+### API
 
-#### 4.1.1 kd_mapi_vicap_get_sensor_fd
+#### kd_mapi_vicap_get_sensor_fd
 
 【描述】
 
@@ -2503,11 +2503,11 @@ k_s32 kd_mapi_vicap_get_sensor_fd(k_vicap_sensor_attr \*sensor_attr)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.2 kd_mapi_vicap_get_sensor_info
+#### kd_mapi_vicap_get_sensor_info
 
 【描述】
 
-根据指定的sensor配置类型获取sensor配置信息，参见[kd_mpi_vicap_get_sensor_info](#211-kd_mpi_vicap_get_sensor_info)，将 `sensor_type` 放入 `sensor_info.sensor_type` ，用法一致
+根据指定的sensor配置类型获取sensor配置信息，参见[kd_mpi_vicap_get_sensor_info](#kd_mpi_vicap_get_sensor_info)，将 `sensor_type` 放入 `sensor_info.sensor_type` ，用法一致
 
 【语法】
 
@@ -2529,11 +2529,11 @@ k_s32 kd_mapi_vicap_get_sensor_info(k_vicap_sensor_info \*sensor_info)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.3 kd_mapi_vicap_set_dev_attr
+#### kd_mapi_vicap_set_dev_attr
 
 【描述】
 
-设置VICAP设备属性，参见[kd_mpi_vicap_set_dev_attr](#212-kd_mpi_vicap_set_dev_attr)，将 `dev_num` 放入 `dev_info.vicap_dev`，用法一致
+设置VICAP设备属性，参见[kd_mpi_vicap_set_dev_attr](#kd_mpi_vicap_set_dev_attr)，将 `dev_num` 放入 `dev_info.vicap_dev`，用法一致
 
 【语法】
 
@@ -2555,11 +2555,11 @@ k_s32 kd_mapi_vicap_set_dev_attr(k_vicap_dev_set_info dev_info)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.4 kd_mapi_vicap_set_chn_attr
+#### kd_mapi_vicap_set_chn_attr
 
 【描述】
 
-设置VICAP通道属性，参见[kd_mpi_vicap_set_chn_attr](#214-kd_mpi_vicap_set_chn_attr)，将 `dev_num` 放入 `chn_info.vicap_dev`，将 `chn_num` 放入 `chn_info.vicap_chn`，用法一致
+设置VICAP通道属性，参见[kd_mpi_vicap_set_chn_attr](#kd_mpi_vicap_set_chn_attr)，将 `dev_num` 放入 `chn_info.vicap_dev`，将 `chn_num` 放入 `chn_info.vicap_chn`，用法一致
 
 【语法】
 
@@ -2581,11 +2581,11 @@ k_s32 kd_mapi_vicap_set_chn_attr(k_vicap_chn_set_info chn_info)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.5 kd_mapi_vicap_start
+#### kd_mapi_vicap_start
 
 【描述】
 
-[kd_mpi_vicap_init](#216-kd_mpi_vicap_init) + [kd_mpi_vicap_start_stream](#218-kd_mpi_vicap_start_stream)
+[kd_mpi_vicap_init](#kd_mpi_vicap_init) + [kd_mpi_vicap_start_stream](#kd_mpi_vicap_start_stream)
 
 【语法】
 
@@ -2607,11 +2607,11 @@ k_s32 kd_mapi_vicap_start(k_vicap_dev vicap_dev)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.6 kd_mapi_vicap_stop
+#### kd_mapi_vicap_stop
 
 【描述】
 
-[kd_mpi_vicap_stop_stream](#219-kd_mpi_vicap_stop_stream) + [kd_mpi_vicap_deinit](#217-kd_mpi_vicap_deinit)
+[kd_mpi_vicap_stop_stream](#kd_mpi_vicap_stop_stream) + [kd_mpi_vicap_deinit](#kd_mpi_vicap_deinit)
 
 【语法】
 
@@ -2633,11 +2633,11 @@ k_s32 kd_mapi_vicap_stop(k_vicap_dev vicap_dev)
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.7 kd_mapi_vicap_dump_frame
+#### kd_mapi_vicap_dump_frame
 
 【描述】
 
-根据指定的设备和输出通道dump vicap数据，参见[kd_mpi_vicap_dump_frame](#2110-kd_mpi_vicap_dump_frame)
+根据指定的设备和输出通道dump vicap数据，参见[kd_mpi_vicap_dump_frame](#kd_mpi_vicap_dump_frame)
 
 【语法】
 
@@ -2669,11 +2669,11 @@ k_s32 kd_mapi_vicap_dump_frame(k_vicap_dev dev_num, k_vicap_chn chn_num, k_vicap
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.8 kd_mapi_vicap_release_frame
+#### kd_mapi_vicap_release_frame
 
 【描述】
 
-释放dump数据帧，参见[kd_mpi_vicap_dump_release](#2111-kd_mpi_vicap_dump_release)
+释放dump数据帧，参见[kd_mpi_vicap_dump_release](#kd_mpi_vicap_dump_release)
 
 【语法】
 
@@ -2703,11 +2703,11 @@ k_s32 kd_mapi_vicap_release_frame(k_vicap_dev dev_num, k_vicap_chn chn_num, cons
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.9 kd_mapi_vicap_set_vi_drop_frame
+#### kd_mapi_vicap_set_vi_drop_frame
 
 【描述】
 
-设置硬件丢帧，参见[kd_mpi_vicap_set_vi_drop_frame](#419-kd_mapi_vicap_set_vi_drop_frame)
+设置硬件丢帧，参见[kd_mpi_vicap_set_vi_drop_frame](#kd_mapi_vicap_set_vi_drop_frame)
 
 【语法】
 
@@ -2740,11 +2740,11 @@ k_s32 kd_mapi_vicap_set_vi_drop_frame(k_vicap_csi_num csi, k_vicap_drop_frame *f
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.10 kd_mapi_vicap_set_mclk
+#### kd_mapi_vicap_set_mclk
 
 【描述】
 
-设置 MCLK 频率，参见[kd_mpi_vicap_set_mclk](#2113-kd_mpi_vicap_set_mclk)
+设置 MCLK 频率，参见[kd_mpi_vicap_set_mclk](#kd_mpi_vicap_set_mclk)
 
 【语法】
 
@@ -2775,7 +2775,7 @@ k_s32 kd_mapi_vicap_set_mclk(k_vicap_mclk_id id, k_vicap_mclk_sel sel, k_u8 mclk
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.11 kd_mapi_vicap_tuning
+#### kd_mapi_vicap_tuning
 
 【描述】
 
@@ -2801,7 +2801,7 @@ k_s32 kd_mapi_vicap_tuning(char\* string, k_u32 size, char\*\* response, k_u32\*
 - 头文件：mapi_vicap_api.h
 - 库文件：libmapi.a
 
-#### 4.1.12 kd_mapi_isp_ae_get_roi
+#### kd_mapi_isp_ae_get_roi
 
 【描述】
 
@@ -2827,7 +2827,7 @@ k_s32 kd_mapi_isp_ae_get_roi(k_vicap_dev dev_num, k_isp_ae_roi \*ae_roi)
 - 头文件：mapi_isp_api.h
 - 库文件：libmapi.a
 
-#### 4.1.13 kd_mapi_isp_ae_set_roi
+#### kd_mapi_isp_ae_set_roi
 
 【描述】
 
@@ -2853,7 +2853,7 @@ k_s32 kd_mapi_isp_ae_set_roi(k_vicap_dev dev_num, k_isp_ae_roi ae_roi)
 - 头文件：mapi_isp_api.h
 - 库文件：libmapi.a
 
-#### 4.1.14 kd_mapi_sensor_otpdata_get
+#### kd_mapi_sensor_otpdata_get
 
 【描述】
 
@@ -2879,7 +2879,7 @@ k_s32 kd_mapi_sensor_otpdata_get(k_s32 sensor_type, k_sensor_otp_date *otp_data)
 - 头文件：mapi_isp_api.h
 - 库文件：libmapi.a
 
-## 5. 错误码
+## 错误码
 
 表 41 VICAP API 错误码
 
@@ -2902,6 +2902,6 @@ k_s32 kd_mapi_sensor_otpdata_get(k_s32 sensor_type, k_sensor_otp_date *otp_data)
 | 0xA0158011 | K_ERR_VICAP_BADADDR       | 地址超出合法范围                             |
 | 0xA0158012 | K_ERR_VICAP_BUSY          | VICAP系统忙                                  |
 
-## 6. 调试信息
+## 调试信息
 
 VICAP内存管理和和系统绑定调试信息，请参考《K230 系统控制 API参考》。

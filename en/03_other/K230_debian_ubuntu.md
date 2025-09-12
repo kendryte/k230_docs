@@ -51,9 +51,9 @@ This document (this guide) is mainly applicable to the following personnel:
 |------------------|--------------------------|----------|------------|
 | V1.0             | Initial version          | SDK Dept | 2023-12-28 |
 
-## 1. Image Description
+## Image Description
 
-Please download the images from the [Canaan Developer Community](https://developer.canaan-creative.com/resource). You can find Debian and Ubuntu related files under k230/images on the Canaan Developer Community website.
+Please download the images from the [Kendryte Developer Community](https://www.kendryte.com/resource). You can find Debian and Ubuntu related files under k230/images on the Kendryte Developer Community website.
 
 1.1) Files like xxxx_debian_sdcard_x.x.img.gz are compressed Debian images for the K230:
 
@@ -73,9 +73,9 @@ Using the Ubuntu 23.10 version, you will see "Welcome to Ubuntu 23.10!" printed 
 >
 > Note 3: If the network port is unstable and cannot be found, restart the board.
 
-## 2. Creating and Verifying the K230 Debian Root Filesystem
+## Creating and Verifying the K230 Debian Root Filesystem
 
-### 2.1 Environment
+### Environment
 
 I created the Debian root filesystem under the Ubuntu 21.04 system (other systems should also work). Root privileges are required during creation.
 
@@ -88,7 +88,7 @@ wangjianxin@v:~/t$ lsb_release -a
  Codename:       hirsute
 ```
 
-### 2.2 Creating the Debian Root Filesystem
+### Creating the Debian Root Filesystem
 
 Refer to the following commands to build the Debian root filesystem:
 
@@ -114,7 +114,7 @@ tar -czvf debian13.ext4.tar.gz debian13.ext4
 # debian13.ext4.tar.gz is the compressed package of the Debian ext4 format root filesystem
 ```
 
-### 2.3 Creating the Image
+### Creating the Image
 
 1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md#4-sdk-编译).
 
@@ -157,7 +157,7 @@ Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file 
 
 Note: If the network port is unstable and cannot be found, please restart the device and try again.
 
-### 2.3 GCC Verification
+### GCC Verification
 
 Note: If the network port is unstable and cannot be found, please restart and try again.
 
@@ -175,9 +175,9 @@ gcc a.c
 ./a.out 
 ```
 
-## 3. Creating and Verifying the K230 Ubuntu 23 System
+## Creating and Verifying the K230 Ubuntu 23 System
 
-### 3.1 Environment
+### Environment
 
 Creating the K230 Ubuntu 23 requires an Ubuntu 23 operating system. I used the following Dockerfile to build the Ubuntu system.
 
@@ -203,7 +203,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ```
 
-### 3.2 Creating the K230 Ubuntu Root Filesystem
+### Creating the K230 Ubuntu Root Filesystem
 
 Use the following script to create the K230 Ubuntu 23 root filesystem.
 
@@ -239,7 +239,7 @@ mkfs.ext4 -d ubuntu23_rootfs -r 1 -N 0 -m 1 -L "rootfs" -O ^64bit ubuntu23_rootf
 tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
 ```
 
-### 3.3 Creating and Verifying the Image
+### Creating and Verifying the Image
 
 1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md#43-编译-sdk).
 
@@ -282,7 +282,7 @@ Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file 
 
 Note: If the network port is unstable and cannot be found, please restart the device and try again.
 
-### 3.4 GCC Verification
+### GCC Verification
 
 Main commands:
 
@@ -298,9 +298,9 @@ gcc a.c
 ./a.out 
 ```
 
-## 4. Adding Qt and LXQt Support
+## Adding Qt and LXQt Support
 
-### 4.1 Installing Qt, LXQt
+### Installing Qt, LXQt
 
 Refer to [Creating the Debian Root Filesystem](#22 Creating the Debian Root Filesystem) or [Creating the K230 Ubuntu Root Filesystem](#32 Creating the K230 Ubuntu Root Filesystem) steps.
 
@@ -313,7 +313,7 @@ apt-get install lxqt
 systemctl disable sddm
 ```
 
-### 4.2 Running Qt Example
+### Running Qt Example
 
 Create a new QPA output configuration file and copy the following content to `kms_config.json`:
 
@@ -345,7 +345,7 @@ source env.sh
 
 Currently, LXQt can only be displayed on a PC or other platforms via X11 Forwarding. Connect to the board using `ssh -X`, and then execute `startlxqt`.
 
-## 5. References
+## References
 
 <https://wiki.debian.org/RISC-V>
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>

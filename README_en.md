@@ -4,7 +4,7 @@
 [![Gitee repository](https://img.shields.io/badge/gitee-repository-blue?logo=gitee&style=plastic)](https://gitee.com/kendryte/k230_docs)
 [![GitHub release](https://img.shields.io/github/v/release/kendryte/k230_docs?color=brightgreen&display_name=tag&logo=github&style=plastic)](https://github.com/kendryte/k230_docs/releases)
 
-[中文文档](https://developer.canaan-creative.com/k230/zh/dev/index.html) | [English Docs](https://developer.canaan-creative.com/k230/en/dev/index.html)
+[中文文档](https://www.kendryte.com/k230/zh/dev/index.html) | [English Docs](https://www.kendryte.com/k230/en/dev/index.html)
 
 [TOC]
 
@@ -19,8 +19,8 @@
 |[K230 Docs Gitee mirror](https://gitee.com/kendryte/k230_docs)| Kendryte K230 Docs Gitee mirror Repo |
 |[K230 SDK Release mirror](https://kendryte-download.canaan-creative.com/k230/release/sdk/k230_sdk.tar.gz)|Canaan Kendryte K230 SDK release k230_sdk.tar.gz download|
 |[K230 Docs Release mirror](https://kendryte-download.canaan-creative.com/k230/release/docs/k230_docs.tar.gz)|Canaan Kendryte K230 Docs release k230_docs.tar.gz download|
-|[Canaan Kendryte K230](https://www.canaan-creative.com/product/k230)|Canaan Kendryte K230|
-|[Canaan Kendryte Forum](https://developer.canaan-creative.com/)|Canaan Kendryte developer forum|
+|[Canaan Kendryte K230](https://www.kendryte.com/product/k230)|Canaan Kendryte K230|
+|[Canaan Kendryte Forum](https://www.kendryte.com/)|Canaan Kendryte developer forum|
 
 ## K230 hardware documentation
 
@@ -205,6 +205,6 @@ IF YOU ARE INTERESTED IN THIS PROJECT, WOULD LIKE TO GIVE FEEDBACK OR SUBMIT DOC
 
 Canaan Inc.
 
-Website:[www.canaan-creative.com](https://www.canaan-creative.com/)
+Website:[www.kendryte.com](https://www.kendryte.com/)
 
 Business inquiries:[salesAI@canaan-creative.com](mailto:salesAI@canaan-creative.com)

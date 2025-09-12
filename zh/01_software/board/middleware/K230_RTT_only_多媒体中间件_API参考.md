@@ -51,17 +51,17 @@
 |---|---|---|---|
 | V0.1       | 软件部 | 2024.06.21 | 初版  |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 中间件代码在系统中的位置为`k230_sdk/src/big/mpp/middleware`，其中`k230_sdk/src/big/mpp/middleware/src`目录下为多媒体封装的api接口，`k230_sdk/src/big/mpp/middleware/sample`目录下为使用多媒体api接口对应的demo。
 
 本文档提供了中间件中每个模块的API接口的详细描述，以及演示示例，帮助用户更好地理解不同模块API的使用场景。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 rtsp server
+#### rtsp server
 
 rtsp-server支持将板子上的音频和视频数据以rtsp server协议发送给rtsp client客户端。
 
@@ -71,7 +71,7 @@ rtsp-server支持将板子上的音频和视频数据以rtsp server协议发送�
 - 多媒体流媒体服务：搭建一个rtsp server，提供音视频流媒体服务，供客户端进行播放和访问。
 - 远程监控：将板子上的音视频数据以rtsp server协议发送给远程客户端，实现远程监控功能。
 
-#### 1.2.2 rtsp client
+#### rtsp client
 
 rtsp-client支持板子使用rtsp客户端协议从rtsp服务器获取音频和视频数据。
 
@@ -81,7 +81,7 @@ rtsp-client支持板子使用rtsp客户端协议从rtsp服务器获取音频和�
 - 多媒体播放器：使用rtsp-client从rtsp服务器获取音频和视频数据，用于播放多媒体内容。
 - 视频会议系统：通过rtsp-client从rtsp服务器获取音频和视频数据，用于实现视频会议功能。
 
-#### 1.2.3 rtsp推流
+#### rtsp推流
 
 实现将板子上的视频数据以RTSP协议推送到第三方流媒体服务器，客户端可以通过第三方流媒体服务器获取板子推送的视频数据。
 
@@ -92,35 +92,35 @@ rtsp-client支持板子使用rtsp客户端协议从rtsp服务器获取音频和�
 - 视频录制：将板子上的视频数据推送到流媒体服务器，实现视频录制功能。
 - 视频分发：将板子上的视频数据推送到流媒体服务器，供多个客户端同时获取视频数据。
 
-#### 1.2.4 播放器
+#### 播放器
 
 实现mp4文件播放。视频支持h264、h265，音频支持g711a/u。
 
-#### 1.2.5 MP4格式封装解封装
+#### MP4格式封装解封装
 
 实现音视频与mp4格式间的封装与解封装。
 
-#### 1.2.6 其他
+#### 其他
 
 本文件包含了K230中间件的API参考，其中包括了live555和ffmpeg开源多媒体库。
 用户可以根据自己的需求使用这些库提供的功能。
 
-## 2. API参考
+## API参考
 
-### 2.1 rtsp-server
+### rtsp-server
 
 KdRtspServer提供以下API：
 
-- [Init](#211-kdrtspserverinit)：初始化。
-- [DeInit](#212-kdrtspserverdeinit)：反初始化。
-- [CreateSession](#213-kdrtspservercreatesession)：创建rtsp session。
-- [DestroySession](#214-kdrtspserverdestroysession)：销毁rtsp session。
-- [Start](#215-kdrtspserverstart)：开启rtsp-server服务。
-- [Stop](#216-kdrtspserverstop)：停止rtsp-server服务。
-- [SendVideoData](#217-kdrtspserversendvideodata)：写入视频码流数据。
-- [SendAudioData](#218-kdrtspserversendaudiodata)：写入音频码流数据。
+- [Init](#kdrtspserverinit)：初始化。
+- [DeInit](#kdrtspserverdeinit)：反初始化。
+- [CreateSession](#kdrtspservercreatesession)：创建rtsp session。
+- [DestroySession](#kdrtspserverdestroysession)：销毁rtsp session。
+- [Start](#kdrtspserverstart)：开启rtsp-server服务。
+- [Stop](#kdrtspserverstop)：停止rtsp-server服务。
+- [SendVideoData](#kdrtspserversendvideodata)：写入视频码流数据。
+- [SendAudioData](#kdrtspserversendaudiodata)：写入音频码流数据。
 
-#### 2.1.1 KdRtspServer::Init
+#### KdRtspServer::Init
 
 【描述】
 
@@ -161,7 +161,7 @@ int Init(Port port = 8554, IOnBackChannel *back_channel = nullptr);
 
 无。
 
-#### 2.1.2 KdRtspServer::DeInit
+#### KdRtspServer::DeInit
 
 【描述】
 
@@ -188,7 +188,7 @@ void DeInit();
 
 无。
 
-#### 2.1.3 KdRtspServer::CreateSession
+#### KdRtspServer::CreateSession
 
 【描述】
 
@@ -223,7 +223,7 @@ int CreateSession(const std::string &session_name, const SessionAttr &session_at
 
 无。
 
-#### 2.1.4 KdRtspServer::DestroySession
+#### KdRtspServer::DestroySession
 
 【描述】
 
@@ -259,7 +259,7 @@ int DestroySession(const std::string &session_name);
 
 【相关主题】
 
-#### 2.1.5 KdRtspServer::Start
+#### KdRtspServer::Start
 
 【描述】
 
@@ -291,7 +291,7 @@ void Start();
 
 【相关主题】
 
-#### 2.1.6 KdRtspServer::Stop
+#### KdRtspServer::Stop
 
 【描述】
 
@@ -320,7 +320,7 @@ void Stop();
 
 无。
 
-#### 2.1.7 KdRtspServer::SendVideoData
+#### KdRtspServer::SendVideoData
 
 【描述】
 
@@ -355,7 +355,7 @@ int SendVideoData(const std::string &session_name, const uint8_t *data, size_t s
 
 无。
 
-#### 2.1.8 KdRtspServer::SendAudioData
+#### KdRtspServer::SendAudioData
 
 【描述】
 
@@ -390,17 +390,17 @@ int SendAudioData(const std::string &session_name, const uint8_t *data, size_t s
 
 无。
 
-### 2.2 rtsp-client
+### rtsp-client
 
 KdRtspClient模块提供以下API：
 
-- [Init](#221-kdrtspclientinit)：初始化。
-- [DeInit](#222-kdrtspclientdeinit)：反初始化。
-- [Open](#223-kdrtspclientopen)：打开并运行rtspclient连接。
-- [Close](#224-kdrtspclientclose)：关闭rtspclient连接。
-- [SendAudioData](#225-kdrtspclientsendaudiodata)：写入backchannel音频码流数据。
+- [Init](#kdrtspclientinit)：初始化。
+- [DeInit](#kdrtspclientdeinit)：反初始化。
+- [Open](#kdrtspclientopen)：打开并运行rtspclient连接。
+- [Close](#kdrtspclientclose)：关闭rtspclient连接。
+- [SendAudioData](#kdrtspclientsendaudiodata)：写入backchannel音频码流数据。
 
-#### 2.2.1 KdRtspClient::Init
+#### KdRtspClient::Init
 
 【描述】
 
@@ -469,7 +469,7 @@ int Init(const RtspClientInitParam &param);
 
 无。
 
-#### 2.2.2 KdRtspClient::Deinit
+#### KdRtspClient::Deinit
 
 【描述】
 
@@ -504,7 +504,7 @@ void DeInit();
 
 无。
 
-#### 2.2.3 KdRtspClient::Open
+#### KdRtspClient::Open
 
 【描述】
 
@@ -544,7 +544,7 @@ int Open(const char *url);
 
 无。
 
-#### 2.2.4 KdRtspClient::Close
+#### KdRtspClient::Close
 
 【描述】
 
@@ -575,7 +575,7 @@ void Close();
 
 无。
 
-#### 2.2.5 KdRtspClient::SendAudioData
+#### KdRtspClient::SendAudioData
 
 【描述】
 
@@ -617,18 +617,18 @@ int SendAudioData(const uint8_t *data, size_t size, uint64_t timestamp);
 
 无。
 
-### 2.3 播放器封装
+### 播放器封装
 
 KdPlayer模块提供以下API：
 
-- [kd_player_init](#231-kd_player_init)：初始化。
-- [kd_player_deinit](#232-kd_player_deinit)：反初始化。
-- [kd_player_setdatasource](#233-kd_player_setdatasource)：设置媒体播放文件。
-- [kd_player_regcallback](#234-kd_player_regcallback)：注册事件回调。
-- [kd_player_start](#235-kd_player_start)：开始播放。
-- [kd_player_stop](#236-kd_player_stop)：停止播放。
+- [kd_player_init](#kd_player_init)：初始化。
+- [kd_player_deinit](#kd_player_deinit)：反初始化。
+- [kd_player_setdatasource](#kd_player_setdatasource)：设置媒体播放文件。
+- [kd_player_regcallback](#kd_player_regcallback)：注册事件回调。
+- [kd_player_start](#kd_player_start)：开始播放。
+- [kd_player_stop](#kd_player_stop)：停止播放。
 
-#### 2.3.1 kd_player_init
+#### kd_player_init
 
 【描述】
 
@@ -666,7 +666,7 @@ k_s32 kd_player_init();
 
 无。
 
-#### 2.3.2 kd_player_deinit
+#### kd_player_deinit
 
 【描述】
 
@@ -704,7 +704,7 @@ k_s32 kd_player_deinit();
 
 无。
 
-#### 2.3.3 kd_player_setdatasource
+#### kd_player_setdatasource
 
 【描述】
 
@@ -744,7 +744,7 @@ k_s32 kd_player_setdatasource(const k_char* filePath);
 
 无。
 
-#### 2.3.4 kd_player_regcallback
+#### kd_player_regcallback
 
 【描述】
 
@@ -785,7 +785,7 @@ k_s32 kd_player_regcallback( K_PLAYER_EVENT_FN pfnCallback,void* pData);
 
 无。
 
-#### 2.3.5 kd_player_start
+#### kd_player_start
 
 【描述】
 
@@ -823,7 +823,7 @@ k_s32 kd_player_start();
 
 无。
 
-#### 2.3.6 kd_player_stop
+#### kd_player_stop
 
 【描述】
 
@@ -861,20 +861,20 @@ k_s32 kd_player_stop();
 
 无。
 
-### 2.4 MP4格式封装解封装
+### MP4格式封装解封装
 
 MP4格式封装解封装提供如下API：
 
-- [kd_mp4_create](#241-kd_mp4_create)：MP4实例创建
-- [kd_mp4_destroy](#242-kd_mp4_destroy)：MP4实例销毁
-- [kd_mp4_create_track](#243-kd_mp4_create_track)：为MP4创建track
-- [kd_mp4_destroy_tracks](#244-kd_mp4_destroy_tracks)：为MP4销毁所有track
-- [kd_mp4_write_frame](#245-kd_mp4_write_frame)：MP4中写入帧数据。
-- [kd_mp4_get_file_info](#246-kd_mp4_get_file_info)：获取MP4文件信息。
-- [kd_mp4_get_track_by_index](#247-kd_mp4_get_track_by_index)：根据下标获取track信息。
-- [kd_mp4_get_frame](#248-kd_mp4_get_frame)：获取track码流信息。
+- [kd_mp4_create](#kd_mp4_create)：MP4实例创建
+- [kd_mp4_destroy](#kd_mp4_destroy)：MP4实例销毁
+- [kd_mp4_create_track](#kd_mp4_create_track)：为MP4创建track
+- [kd_mp4_destroy_tracks](#kd_mp4_destroy_tracks)：为MP4销毁所有track
+- [kd_mp4_write_frame](#kd_mp4_write_frame)：MP4中写入帧数据。
+- [kd_mp4_get_file_info](#kd_mp4_get_file_info)：获取MP4文件信息。
+- [kd_mp4_get_track_by_index](#kd_mp4_get_track_by_index)：根据下标获取track信息。
+- [kd_mp4_get_frame](#kd_mp4_get_frame)：获取track码流信息。
 
-#### 2.4.1 kd_mp4_create
+#### kd_mp4_create
 
 【描述】
 
@@ -915,7 +915,7 @@ int kd_mp4_create(KD_HANDLE *mp4_handle, k_mp4_config_s \*mp4_cfg);
 
 无
 
-#### 2.4.2 kd_mp4_destroy
+#### kd_mp4_destroy
 
 【描述】
 
@@ -955,7 +955,7 @@ int kd_mp4_destroy(KD_HANDLE mp4_handle);
 
 无
 
-#### 2.4.3 kd_mp4_create_track
+#### kd_mp4_create_track
 
 【描述】
 
@@ -998,7 +998,7 @@ int kd_mp4_create_track(KD_HANDLE mp4_handle, KD_HANDLE \*track_handle, k_mp4_tr
 
 无
 
-#### 2.4.4 kd_mp4_destroy_tracks
+#### kd_mp4_destroy_tracks
 
 【描述】
 
@@ -1039,7 +1039,7 @@ int kd_mp4_destroy_tracks(KD_HANDLE mp4_handle);
 
 无
 
-#### 2.4.5 kd_mp4_write_frame
+#### kd_mp4_write_frame
 
 【描述】
 
@@ -1082,7 +1082,7 @@ int kd_mp4_write_frame(KD_HANDLE mp4_handle, KD_HANDLE track_handle, k_mp4_frame
 
 无
 
-#### 2.4.6 kd_mp4_get_file_info
+#### kd_mp4_get_file_info
 
 【描述】
 
@@ -1123,7 +1123,7 @@ int kd_mp4_get_file_info(KD_HANDLE mp4_handle, k_mp4_file_info_s *file_info);
 
 无
 
-#### 2.4.7 kd_mp4_get_track_by_index
+#### kd_mp4_get_track_by_index
 
 【描述】
 
@@ -1165,7 +1165,7 @@ int kd_mp4_get_track_by_index(KD_HANDLE mp4_handle, uint32_t index, k_mp4_track_
 
 无
 
-#### 2.4.8 kd_mp4_get_frame
+#### kd_mp4_get_frame
 
 【描述】
 
@@ -1206,17 +1206,17 @@ int kd_mp4_get_frame(KD_HANDLE mp4_handle, k_mp4_frame_data_s *frame_data);
 
 无
 
-### 2.5 rtsp 推流
+### rtsp 推流
 
 rtsp推流提供如下API：
 
-- [Init](#251-kdrtsppusherinit)：初始化。
-- [DeInit](#252-kdrtsppusherdeinit)：反初始化。
-- [Open](#253-kdrtsppusheropen)：与流媒体服务器建立rtsp推流连接。
-- [Close](#254-kdrtsppusherclose)：关闭流媒体服务器连接。
-- [PushVideoData](#255-kdrtsppusherpushvideodata)：推送视频数据到流媒体。
+- [Init](#kdrtsppusherinit)：初始化。
+- [DeInit](#kdrtsppusherdeinit)：反初始化。
+- [Open](#kdrtsppusheropen)：与流媒体服务器建立rtsp推流连接。
+- [Close](#kdrtsppusherclose)：关闭流媒体服务器连接。
+- [PushVideoData](#kdrtsppusherpushvideodata)：推送视频数据到流媒体。
 
-#### 2.5.1 KdRtspPusher::Init
+#### KdRtspPusher::Init
 
 【描述】
 
@@ -1271,7 +1271,7 @@ struct RtspPusherInitParam {
 
 无。
 
-#### 2.5.2 KdRtspPusher::Deinit
+#### KdRtspPusher::Deinit
 
 【描述】
 
@@ -1306,7 +1306,7 @@ void DeInit();
 
 无。
 
-#### 2.5.3 KdRtspPusher::Open
+#### KdRtspPusher::Open
 
 【描述】
 
@@ -1344,7 +1344,7 @@ int Open();
 
 无。
 
-#### 2.5.4 KdRtspPusher::Close
+#### KdRtspPusher::Close
 
 【描述】
 
@@ -1374,7 +1374,7 @@ void Close();
 
 无。
 
-#### 2.5.5 KdRtspPusher::PushVideoData
+#### KdRtspPusher::PushVideoData
 
 【描述】
 
@@ -1417,13 +1417,13 @@ int  PushVideoData(const uint8_t *data, size_t size, bool key_frame,uint64_t tim
 
 无。
 
-## 3. demo
+## demo
 
-### 3.1 rtsp server
+### rtsp server
 
 该示例介绍了如何使用RTSP协议实时将板子上的sensor画面和采集到的音频输出。通过拉取RTSP流，客户端可以获取到板子上的音视频数据。
 
-#### 3.1.1 编译程序
+#### 编译程序
 
 在`k230_sdk`目录下执行`make mpp-middleware`，在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下生成`sample_rtspserver.elf`可执行文件。
 程序源码目录:
@@ -1431,7 +1431,7 @@ int  PushVideoData(const uint8_t *data, size_t size, bool key_frame,uint64_t tim
 板子上可执行文件位置:
 `/sdcard/app/sample_rtspserver.elf`。
 
-#### 3.1.2 参数说明
+#### 参数说明
 
 | 参数名 | 描述 |参数范围 | 默认值 |
 |:--|:--|:--|:--|
@@ -1442,7 +1442,7 @@ int  PushVideoData(const uint8_t *data, size_t size, bool key_frame,uint64_t tim
 | b | 视频编码码率 | - | 2000 |
 | s | sensor类型| 查看camera sensor文档（evb:-s 7,Canmv 1.0/1.1板:-s 24,Canmv 2.0板:-s 39） | 7 |
 
-#### 3.1.3 运行程序
+#### 运行程序
 
 以Canmv 1.0板子为例，开机启动后，在大核串口按`q`键退出自启动程序。输入命令:`/sdcard/app/sample_rtspserver.elf -t h264 -w 1280 -h 720 -s 24`,如下所示，
 串口输出会打印出形如：`rtsp://<server_ip>:8554/test` 的url地址.客户端使用vlc打开该url地址即可获取到板子上的音视频数据。
@@ -1476,11 +1476,11 @@ ov5647_power_rest OV5647_CAM_PIN is 0
 
 ```
 
-### 3.2 rtsp client
+### rtsp client
 
 该示例介绍了如何使用RTSP协议作为客户端从RTSP服务器获取音频和视频流，并将视频数据显示在HDMI输出显示器上。
 
-#### 3.2.1 编译程序
+#### 编译程序
 
 在`k230_sdk`目录下执行`make mpp-middleware`，在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下生成`sample_rtspclient.elf`可执行文件。
 程序源码目录:
@@ -1488,7 +1488,7 @@ ov5647_power_rest OV5647_CAM_PIN is 0
 板子上可执行文件位置:
 `/sdcard/app/sample_rtspclient.elf`。
 
-#### 3.2.2 运行程序
+#### 运行程序
 
 以Canmv 1.0板子为例，开机启动后，在大核串口按`q`键退出自启动程序。输入命令:`/sdcard/app/sample_rtspclient.elf <rtsp_url> <out_type>`,如下所示，拉取服务器端的`rtsp://10.10.1.94:8554/canaan.264`流数据。注:evb板 out_type为0，Canmv 1.0/1.1板out_type为1。
 
@@ -1519,11 +1519,11 @@ Content-Length: 524
 
 注：服务器rtsp server搭建方式有多种，如：使用live555 中的Meidaserver输出rtsp地址， 使用上例中的rtsp server输出rtsp地址。
 
-### 3.3 rtsp pusher
+### rtsp pusher
 
 该示例介绍了如何使用RTSP协议实时将板子上的sensor画面推流到三方流媒体服务器。通过从流媒体服务器拉取RTSP流，客户端可以获取到板子上的音视频数据。
 
-#### 3.3.1 编译程序
+#### 编译程序
 
 在`k230_sdk`目录下执行`make mpp-middleware`，在`k230_sdk/src/big/mpp/userapps/sample/elf`目录下生成`sample_rtsppusher.elf`可执行文件。
 程序源码目录:
@@ -1531,7 +1531,7 @@ Content-Length: 524
 板子上可执行文件位置:
 `/sdcard/app/sample_rtsppusher.elf`。
 
-#### 3.3.2 参数说明
+#### 参数说明
 
 | 参数名 | 描述 |参数范围 | 默认值 |
 |:--|:--|:--|:--|
@@ -1542,7 +1542,7 @@ Content-Length: 524
 | s | sensor类型| 查看camera sensor文档（evb:-s 7,Canmv 1.0/1.1板:-s 24,Canmv 2.0板:-s 39） | 7 |
 | o | rtsp 推流地址 | - | - |
 
-#### 3.3.3 运行程序
+#### 运行程序
 
 以Canmv 1.0板子为例，开机启动后，在大核串口按下`q`键退出自启动程序。然后输入以下命令：`/sdcard/app/sample_rtsppusher.elf -w 1280 -h 720 -s 24 -o <rtsp_url>`。如下所示，这将把板子上的视频推送到`rtsp://10.10.1.94:10554/live/test1`的流媒体地址。
 

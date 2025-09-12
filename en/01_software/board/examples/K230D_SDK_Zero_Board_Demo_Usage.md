@@ -51,35 +51,35 @@ This document (this guide) is mainly applicable to the following personnel:
 |------------------|-------------|--------|------|
 | V1.0             | Initial version | System Software Department | 2023-10-11 |
 
-## 1. Overview
+## Overview
 
 This document introduces the demo functions provided by the K230 SDK, usage methods, etc.
 
-## 2. Demo Introduction
+## Demo Introduction
 
-### 2.1 Vicap_demo
+### Vicap_demo
 
-#### 2.1.1 Vicap_demo Introduction
+#### Vicap_demo Introduction
 
 The vicap demo implements camera data capture and preview functions by calling the mpi interface.
 
-#### 2.1.2 Feature Description
+#### Feature Description
 
 The CanMV development board uses the OV5647 camera module by default, supporting up to three data streams from a single camera.
 
-#### 2.1.3 Dependency Resources
+#### Dependency Resources
 
 Camera module
 
-#### 2.1.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.1.4.1 Compilation
+##### Compilation
 
 Refer to the `README.md` in the SDK for the software compilation environment.
 
 1. Execute `make mpp-clean && make rt-smart && make build-image` in the k230_sdk directory to compile the changes into the SD card image. The image file `sysimage-sdcard.img` will be generated in the `k230_sdk/output/k230_evb_defconfig/images/` directory.
 
-##### 2.1.4.2 Execution
+##### Execution
 
 1. On the main core, navigate to `/sdcard/app` using the command `cd /sdcard/app`.
 1. Execute the command `./sample_vicap` in this directory to get command help information.
@@ -131,11 +131,11 @@ Example:
 
 Explanation: Bind ov5647@1920x1080 to vicap device 0, enable vicap device output channel 0, and display 800x480 through the screen.
 
-### 2.2 DMA_demo
+### DMA_demo
 
-#### 2.2.1 DMA_demo Introduction
+#### DMA_demo Introduction
 
-##### 2.2.1.1 Non-Binding Mode
+##### Non-Binding Mode
 
 DMA channels 0-3 are GDMA, and 4-7 are SDMA.
 
@@ -145,25 +145,25 @@ DMA channels 0-3 are GDMA, and 4-7 are SDMA.
 - Channel 4 is in 1D mode, cyclically transmitting a segment of data, and compares with golden data after transmission.
 - Channel 5 is in 2D mode, cyclically transmitting a segment of data, and compares with golden data after transmission.
 
-##### 2.2.1.2 Binding Mode
+##### Binding Mode
 
 Use VVI as DMA simulated input, bind channel 0 of VVI device 0 to DMA channel 0, and bind channel 1 of VVI device 0 to DMA channel 1. VVI inputs a 640x320, YUV400, 8bit image rotated 90° to channel 0 every second, and a 640x320, YUV400, 8bit image rotated 180° to channel 1.
 
-#### 2.2.2 Feature Description
+#### Feature Description
 
 Includes DMA device attribute configuration, channel attribute configuration, graphic input, output, release, pipeline binding, and other functions.
 
-#### 2.2.3 Dependency Resources
+#### Dependency Resources
 
 None
 
-#### 2.2.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.2.4.1 Compilation
+##### Compilation
 
 Refer to the `README.md` in the release SDK package for software compilation.
 
-##### 2.2.4.2 Execution
+##### Execution
 
 1. Non-binding mode demo run
 
@@ -177,9 +177,9 @@ Test information will be displayed on the screen, and input `q` to end the run.
 
 Test information will be displayed on the screen, and input `q` to end the run.
 
-### 2.3 USB_demo
+### USB_demo
 
-#### 2.3.1 USB_demo Introduction
+#### USB_demo Introduction
 
 The USB demo currently has four functions debugged:
 
@@ -187,17 +187,17 @@ As a device, it simulates a USB drive and simulates a mouse and keyboard.
 
 As a host, it connects to a USB drive and connects to a mouse and keyboard.
 
-#### 2.3.2 Feature Description
+#### Feature Description
 
 The USB demo functions are originally integrated into the Linux system.
 
-#### 2.3.3 Dependency Resources
+#### Dependency Resources
 
 Type-C cable, Type-C to Type-A adapter.
 
-#### 2.3.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.3.4.1 Simulate USB Drive as Device
+##### Simulate USB Drive as Device
 
 ```shell
 # Allocate a memory space as the disk space for the simulated USB drive.
@@ -222,11 +222,11 @@ mkfs.fat 4.1 (2017-01-24)
 
 Connect the USB port of the development board, and the Type-C connects to the PC. The PC will display the USB drive connection.
 
-##### 2.3.4.2 Connect USB Drive as Host
+##### Connect USB Drive as Host
 
 The USB port of the K230 development board connects to a USB drive through a Type-C to Type-A adapter.
 
-##### 2.3.4.3 Simulate Mouse and Keyboard as Device
+##### Simulate Mouse and Keyboard as Device
 
 The USB port of the K230 development board connects to another computer device via Type-C for testing.
 
@@ -240,7 +240,7 @@ The USB port of the K230 development board connects to another computer device v
 # Input the corresponding operations as prompted, and you can see similar keyboard inputs on the PC. For example, a b c --return
 ```
 
-##### 2.3.4.4 Connect Mouse and Keyboard as Host
+##### Connect Mouse and Keyboard as Host
 
 The USB port of the K230 development board connects to a mouse or keyboard through a Type-C to Type-A adapter.
 
@@ -269,27 +269,27 @@ B: MSC=10
 # Press different keys on the keyboard, and corresponding information will be displayed on the serial port.
 ```
 
-### 2.4 FFT Demo
+### FFT Demo
 
-#### 2.4.1 Demo Introduction
+#### Demo Introduction
 
 This demo is used to verify the usage of the FFT API and test the FFT functionality. The code can be found in `src/big/mpp/userapps/sample/sample_fft/`.
 
-#### 2.4.2 Feature Description
+#### Feature Description
 
 First, perform FFT calculation, then perform IFFT calculation.
 
-#### 2.4.3 Dependency Resources
+#### Dependency Resources
 
 None
 
-#### 2.4.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.4.4.1 Compilation
+##### Compilation
 
 > Please refer to the `README.md` in the release SDK package.
 
-##### 2.4.4.2 Execution
+##### Execution
 
 1. After the system is up, execute the following commands on the main core command line:
 

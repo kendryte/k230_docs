@@ -50,11 +50,11 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 刘家安、黄子懿 | 2023-06-08 |
 
-## 1. Dewarp 标定介绍
+## Dewarp 标定介绍
 
 Dewarp 标定过程产生一个包含相机矩阵和畸变系数的 YAML 文件，K230 SDK 在构建时会通过这个 YAML 文件来生成 remap 文件，并放入大核根文件系统的 `/bin` 目录下，在配置 VICAP 时将 `k_vicap_dev_attr` 结构体的 `dw_enable` 设为1来启用 Dewarp，VICAP 会在当前路径下查找 `<sensor_name>-<width>x<height>.bin` （例如对于 IMX335 全分辨率，即为 `imx335-2592x1944.bin`）文件作为 Dewarp 配置文件进行畸变矫正。
 
-### 1.1 抓取图像
+### 抓取图像
 
 1. 在同一平面上旋转棋盘并拍摄至少 20 张图片
 1. 选择涵盖所有角度至少10张照片保存到一个固定目录，推荐选择差异较大的图片
@@ -67,7 +67,7 @@ Dewarp 标定过程产生一个包含相机矩阵和畸变系数的 YAML 文件�
 ffmpeg -f rawvideo -pixel_format nv12 -video_size 2592x1944 -i dev_00_chn_00_2592x1944_0000.yuv420sp 0.png
 ```
 
-### 1.3 Dewarp 模式介绍
+### Dewarp 模式介绍
 
 Dewarp 有多种模式，这里介绍两种，镜头校正(lens correction)和分屏(split screen)。
 
@@ -85,7 +85,7 @@ Dewarp 有多种模式，这里介绍两种，镜头校正(lens correction)和�
 
 ![分屏](images/splitscreen.png)
 
-### 1.2 执行标定程序
+### 执行标定程序
 
 创建包含图片路径的xml文件，例如 `imx335-2592x1944-0.xml`，填入上一步保存的图片路径，形如
 
@@ -101,7 +101,7 @@ images/imx335-2592x1944-0/0.png
 
 编辑 `run.bat`，将最后一个参数改为刚才创建的 XML 文件路径，将 -o 参数改为保存输出的 YAML 文件路径，然后执行 `run.bat`
 
-## 2. Dewarp 与 VICAP 模块配合使用
+## Dewarp 与 VICAP 模块配合使用
 
 VICAP 通过加载 Dewarp 配置文件来控制畸变校正，K230 SDK编译后生成的Dewarp配置文件放置在 `<K230 SDK> src/big/mpp/userapps/src/sensor/config` 下，后缀名为 .bin 的都是 dewarp 配置文件，其内容的前8个字节为分屏参数，之后全部的内容都是映射表，VICAP会根据文件名匹配当前sensor进行加载。
 

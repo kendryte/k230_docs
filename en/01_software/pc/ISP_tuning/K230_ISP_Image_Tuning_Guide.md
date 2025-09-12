@@ -47,7 +47,7 @@ This document (this guide) is primarily intended for the following personnel:
 | V1.1             | Updated some parameter descriptions | Rong Jian | 2024-01-30 |
 | V1.2             | Updated some parameter descriptions | Rong Jian | 2024-04-28 |
 
-## 1. Overview of K230 ISP Image Tuning
+## Overview of K230 ISP Image Tuning
 
 When tuning images, brightness, color, contrast, and clarity are our main focus areas. Through calibration of the sensor and lens and joint tuning of ISP sub-modules, we aim to achieve reasonable overall brightness, accurate color reproduction, good image clarity without obvious noise, high image contrast, and an overall transparent look.
 
@@ -71,9 +71,9 @@ Please note:
 - In K230 HDR mode, the K230 CSI (Camera serial interface) module does not support the sensor data mode of Hsync before Vsync. And when the Vsync of each frame (L/S/VS) is high (effective data output), there should be no overlap.
 - When enabling TNR in 3DNR, the ISP requires that the sensor Hblank should not be less than 180 pixel clocks (it is recommended to set it to not less than 256 pixel clocks), and it is recommended： the Frame length - Active lines >= 92 lines.
 
-## 2. Calibration
+## Calibration
 
-### 2.1 Overview
+### Overview
 
 Use the calibration tool (K230ISPCalibrationTool.exe) to complete the parameter calibration for the six ISP modules: BLC, LSC, CC, AWB, Noise Profile, and CAC.
 
@@ -89,13 +89,13 @@ The main interface of the calibration tool is shown below.
 
 Click the corresponding module button to directly jump to the calibration interface of each module and start calibration.
 
-### 2.2 Black Level Correction
+### Black Level Correction
 
-#### 2.2.1 Principle and Significance of Black Level Calibration
+#### Principle and Significance of Black Level Calibration
 
 When the analog signal is very weak, it may not be converted by the A/D, resulting in loss of image details when the light is very dim. Therefore, the sensor will give the analog signal a fixed offset before A/D conversion to ensure that the output digital signal retains more image details. The black level correction module determines the specific value of this offset through calibration. Subsequent ISP processing modules need to subtract this offset to ensure data linearity. If the sensor's black level parameters are not obtained in advance, or more accurate black level values are needed, black level calibration is performed.
 
-#### 2.2.2 Collecting RAW Images for Black Level Calibration
+#### Collecting RAW Images for Black Level Calibration
 
 The steps for collecting RAW images during black level calibration are as follows:
 
@@ -104,7 +104,7 @@ The steps for collecting RAW images during black level calibration are as follow
 1. Collect 12 RAW images with different combinations of Gain values (1x, 2x, 3x, 4x) and integration times (0.01ms, 0.02ms, 0.03ms).
 1. Save them in a folder according to the naming rules. The naming format of the folder is: Gain_4_T_0.03 (Gain_4_T_0.03 indicates exposure gain = 4, exposure time = 0.03s), other exposure times and Gain naming formats follow suit.
 
-#### 2.2.3 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Black level correction" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -127,13 +127,13 @@ After calibration, the Black Level vs Integration Time chart is shown below.
 
 ![image-20230821152200148](../../../../zh/01_software/pc/ISP_tuning/images/05.png)
 
-### 2.3 Lens Shading Correction
+### Lens Shading Correction
 
-#### 2.3.1 Basic Principle and Significance of LSC Calibration
+#### Basic Principle and Significance of LSC Calibration
 
 The purpose of LSC calibration is to eliminate vignetting caused by uneven optical refraction of the lens. In the phenomenon of lens shading, the brightness attenuation from the center target point to the corners follows the cosine fourth power law. The calibration results can effectively reflect the brightness attenuation trend, and the brightness of each region of the image is restored to the target point brightness using a 32x16 grid to store the calibration results. LSC calibration includes luma shading and color shading calibration. Since the color shading characteristic curves under different color temperatures are different, LSC calibration needs to be performed under different color temperatures to meet the correction requirements of color shading under different color temperatures.
 
-#### 2.3.2 Collecting RAW Images for LSC Calibration
+#### Collecting RAW Images for LSC Calibration
 
 Notes before collecting RAW images:
 
@@ -147,7 +147,7 @@ The steps for collecting RAW images during LSC calibration are as follows:
 1. Collect a RAW image.
 1. Switch the light source of the DNP lightbox (D50, TL84, F12, A) and repeat steps 2-3.
 
-#### 2.3.3 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Lens Shade correction" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -166,13 +166,13 @@ Specific steps:
 
 Note: When setting the compensation ratio in step 5, it should be determined based on the severity of the lens shading. When the lens shading is severe, the gain of the four corners after compensation is large, which can easily cause noise in the four corners. In this case, reduce the compensation ratio to optimize the noise in the four corners.
 
-### 2.4 Color Correction
+### Color Correction
 
-#### 2.4.1 Principle of CCM Calibration
+#### Principle of CCM Calibration
 
 The principle of CCM calibration is to compare the actual color information of the 24-color card color blocks collected by the sensor with their expected values and calculate the 3x3 CCM matrix. The 3x3 matrix of the CCM converts the sensor's color space to the sRGB standard color space.
 
-#### 2.4.2 Collecting RAW Images for CC Calibration
+#### Collecting RAW Images for CC Calibration
 
 The steps for collecting RAW images during CC calibration are as follows:
 
@@ -184,7 +184,7 @@ The steps for collecting RAW images during CC calibration are as follows:
 1. Switch the light source (D50, TL84, F12, A) and repeat step 5.
 1. Keep the lens position unchanged, remove the 24-color card, and collect the RAW images of the gray wall background inside the lightbox under the five light sources.
 
-#### 2.4.3 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Color Correction" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -206,13 +206,13 @@ Specific steps are as follows:
    <br/>In semi-automatic mode, the crosshair can be controlled by moving the mouse to position it at the center of the four color blocks at the upper left, upper right, lower left, and lower right corners of the color card image, and click the mouse sequentially to complete the specification of the reference color card area.
 1. Click "Calibrate" to start calibration.
 
-### 2.5 Auto White Balance
+### Auto White Balance
 
-### 2.5.1 Basic Principle and Significance of AWB Calibration
+### Basic Principle and Significance of AWB Calibration
 
 AWB calibration involves calculating the best Planckian fit curve and color temperature fit curve based on the white point characteristics (R/G, B/G) of the sensor under several standard light sources. The purpose of AWB calibration is to enable the camera to automatically recognize and adapt to various color temperature light source conditions, ensuring accurate reproduction of white and other colors in the image.
 
-#### 2.5.2 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Auto White Balance" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -250,19 +250,19 @@ The specific steps are as follows:
 
    ![image-20230822164058879](../../../../zh/01_software/pc/ISP_tuning/images/15.png)
 
-#### 2.5.3 Calibration of AWB Parameter K_Factor
+#### Calibration of AWB Parameter K_Factor
 
 In the AWB algorithm, the determination of an outdoor environment is: Exp * K_Factor <= 0.12 (where Exp is the exposure).
 
 For example, if 2000 lux is taken as the illumination threshold between outdoor and transition environments, obtain the exposure value (ET *gain) corresponding to this illumination, and calculate: K_Factor = 0.12 / (ET* gain).
 
-### 2.6 Noise Calibration
+### Noise Calibration
 
-#### 2.6.1 Principle and Significance of Noise Profile Calibration
+#### Principle and Significance of Noise Profile Calibration
 
 Noise Profile calibration involves quantitatively measuring and describing the noise characteristics generated by the sensor under different conditions. This is crucial because sensors produce different types and magnitudes of noise when operating under varying light, temperature, or ISO settings. Understanding these noise characteristics is key to effective noise reduction or correction.
 
-#### 2.6.2 Collecting RAW Images for Noise Profile Calibration
+#### Collecting RAW Images for Noise Profile Calibration
 
 During CC calibration, the steps for collecting RAW images are as follows:
 
@@ -271,7 +271,7 @@ During CC calibration, the steps for collecting RAW images are as follows:
     - Bright set: Adjust the lightbox brightness, keep the exposure time and gain at 1x constant, and ensure the black area of the gradient card is at the middle gray level.
     - Dark set: Adjust the lightbox brightness, keep the exposure time and gain at 1x constant, and ensure the white area of the gradient card is at the middle gray level.
 
-#### 2.6.3 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Noise Calibration" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -287,13 +287,13 @@ The specific steps are as follows:
 1. Click "Evaluate Measures".
 1. Click "Fit to Model" to complete the Noise calibration and save the results.
 
-### 2.7 Chromatic Aberration Correction
+### Chromatic Aberration Correction
 
-#### 2.7.1 Principle and Significance of CAC Calibration
+#### Principle and Significance of CAC Calibration
 
 Chromatic aberration is a common optical defect that occurs when a lens cannot focus all colors of light at the same focal point. This usually results in red-green or blue-purple color shifts at the edges of the image. To correct this shift, we need to perform CAC calibration. By analyzing the captured image data, a mathematical model can be established to describe the chromatic aberration. Once the model is established, correction parameters can be determined and used to correct the chromatic aberration.
 
-#### 2.7.2 Collecting RAW Images for CAC Calibration
+#### Collecting RAW Images for CAC Calibration
 
 During CAC calibration, the steps for collecting RAW images are as follows:
 
@@ -301,7 +301,7 @@ During CAC calibration, the steps for collecting RAW images are as follows:
 1. Adjust the AE settings so that the minimum value of the black block points is greater than the BLC value, and the maximum value of the white area does not exceed 208.
 1. Capture and save a RAW image.
 
-#### 2.7.3 Starting Calibration Using the Calibration Tool
+#### Starting Calibration Using the Calibration Tool
 
 When the "Chromatic Aberration Correction" button is clicked on the main interface, the tool will pop up a dialog box as shown below.
 
@@ -339,32 +339,32 @@ The specific steps are as follows:
 
 1. Click the "CAC" button to view the calibration results from this interface.
 
-## 3. Module Introduction
+## Module Introduction
 
-### 3.1 BLS
+### BLS
 
-#### 3.1.1 Function Description
+#### Function Description
 
 Subtract the black level offset value to ensure data linearity.
 
-#### 3.1.2 Main Parameters
+#### Main Parameters
 
 | Parameter   | Type and Range       | Description                                     |
 |-------------|----------------------|-------------------------------------------------|
 | bls_enable  | bool                 | BLS enable switch                               |
 | bls         | int bls[4] 0~4095    | Black level compensation values for four channels, based on ISP 12 bits |
 
-#### 3.1.3 Debugging Strategy
+#### Debugging Strategy
 
 Although separate black level compensation values for the four channels are supported, it is recommended to use the same value.
 
-### 3.2 LSC
+### LSC
 
-#### 3.2.1 Function Description
+#### Function Description
 
 In K230, the LSC algorithm uses a 32x16 grid to calibrate the image. During RAW image data processing, the LSC algorithm divides the image into 32x16 sub-blocks and processes the four channels of the RAW image.
 
-#### 3.2.2 Main Parameters
+#### Main Parameters
 
 | Parameter | Type and Range      | Description                                       |
 |-----------|---------------------|---------------------------------------------------|
@@ -373,13 +373,13 @@ In K230, the LSC algorithm uses a 32x16 grid to calibrate the image. During RAW 
 | x_size    | xSize[32]           | Distance between every two grid nodes on the x-axis, obtained from the calibration file |
 | y_size    | ySize[16]           | Distance between every two grid nodes on the y-axis, obtained from the calibration file |
 
-### 3.3 Dgain
+### Dgain
 
-#### 3.3.1 Function Description
+#### Function Description
 
 The digital gain of the ISP is mainly used to enhance the brightness of the image.
 
-#### 3.3.2 Main Parameters
+#### Main Parameters
 
 | Parameter           | Type and Range   | Description                  |
 |---------------------|------------------|------------------------------|
@@ -389,13 +389,13 @@ The digital gain of the ISP is mainly used to enhance the brightness of the imag
 | digital_gain_gb     | float 1.0~255.99 | Digital gain for the Gb channel |
 | digital_gain_b      | float 1.0~255.99 | Digital gain for the B channel |
 
-### 3.4 AE
+### AE
 
-#### 3.4.1 Function Description
+#### Function Description
 
 AE (Auto Exposure) controls the brightness of the image. The main debugging involves adjusting the AE target brightness, AE convergence speed, and smoothness.
 
-#### 3.4.2 Main Parameters
+#### Main Parameters
 
 | Parameter          | Type and Range     | Description                                                                                 |
 |--------------------|--------------------|---------------------------------------------------------------------------------------------|
@@ -428,13 +428,13 @@ AE (Auto Exposure) controls the brightness of the image. The main debugging invo
 | wdrContrast.max  | float 0~255.0   | Maximum contrast value for calculating AE setpoint in AE scene evaluation adaptive mode |
 | wdrContrast.min  | float 0~255.0   | Minimum contrast value for calculating AE setpoint in AE scene evaluation adaptive mode |
 
-### 3.5 AWB
+### AWB
 
-#### 3.5.1 Function Description
+#### Function Description
 
 Under different light source environments, the color of objects will vary. Human eyes have the characteristic of constancy, being able to recognize the true color of objects under different color temperatures, but sensors react differently under various light sources compared to human eyes, leading to color cast. AWB (Auto White Balance) can reduce the impact of external light sources on the true color of objects, making color-cast objects appear as if they are under ideal daylight without color cast.
 
-#### 3.5.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range | Description                       |
 | ------- | -------------- | ------------------------------------ |
@@ -449,7 +449,7 @@ Under different light source environments, the color of objects will vary. Human
 | useDamping  | bool  | true: Enable AWB damping change <br/> false: Disable AWB damping change |
 | kFactor     | float | Sensitivity coefficient used to identify outdoor and transition areas |
 
-#### 3.5.3 Explanation of kFactor Calibration
+#### Explanation of kFactor Calibration
 
 In the AWB algorithm, the determination of an outdoor environment is: Exp * kFactor <= 0.12 (where Exp is the exposure).
 
@@ -459,13 +459,13 @@ The larger the kFactor, the stronger the sensor's sensitivity; the smaller the k
 
 This kFactor parameter is located in the AWB parameters of the XML file and needs to be calculated using the above method and filled in.
 
-### 3.6 WDR
+### WDR
 
-#### 3.6.1 Function Description
+#### Function Description
 
 During image processing, it is easy to notice insufficient contrast in the image, and there may be a loss of details in both bright and dark areas. The WDR (Wide Dynamic Range) module enhances image contrast using histogram equalization methods while improving detail information in both bright and dark areas.
 
-#### 3.6.2 Main Parameters
+#### Main Parameters
 
 | Parameter            | Type and Range    | Description   |
 | --------------- | --------------- | ------------------------------------------------------------ |
@@ -484,30 +484,30 @@ During image processing, it is easy to notice insufficient contrast in the image
 | low_strength    | int 0~255      | Protection strength for dark areas of the image. The larger the value, the stronger the protection for dark areas in the image |
 | strength        | int 0~128      | Total strength |
 
-#### 3.6.3 Debugging Strategy
+#### Debugging Strategy
 
 In linear mode, set Strength to 128. Low Strength is essentially the maximum gain and is used along with High Strength to adjust image brightness. When the dark areas of the image need to be brightened, increase Low Strength. When the bright areas of the image are overexposed and need to be suppressed, increase High Strength. To avoid excessive noise amplification, as the gain increases, Low Strength should gradually decrease, while High Strength can remain the same or gradually increase. Global Strength is used to control overall contrast. When the overall contrast of the image is weak, this parameter can be appropriately increased. Contrast, Flat Strength, and Flat Threshold are used to adjust local contrast. You can start with the default parameters; if the local contrast is not good, you can appropriately increase Contrast. Increasing contrast can make gray shadows in flat areas more pronounced. Currently, adjust Flat Threshold to identify texture and flat areas and increase Flat Strength to smooth flat areas to reduce gray shadows.
 
-### 3.7 GE
+### GE
 
-#### 3.7.1 Function Description
+#### Function Description
 
 The main function of green balance is to balance the differences between adjacent Gr and Gb pixels in RAW data, preventing the formation of grid or maze-like patterns in subsequent demosaic interpolation algorithms. This module is located before the DPCC.
 
-#### 3.7.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range | Description             |
 | ----------- | -------------- | ---------------- |
 | enable | bool           | Green balance enable switch |
 | threshold   | float 0~511.0  | Green balance strength threshold |
 
-### 3.8 DPCC
+### DPCC
 
-#### 3.8.1 Function Description
+#### Function Description
 
 Due to the limitations of sensor manufacturing processes, it is impossible for all pixels to be perfect, especially for lower-cost sensors, which may have more defective pixels. If defective pixels in the sensor are not addressed early, they may be amplified and spread in subsequent demosaic interpolation algorithms. Therefore, this module calibrates defective pixels before the demosaic module. The fixed defect table can accommodate up to 2048 defective pixels. Seven sets of settings are available for selection.
 
-#### 3.8.2 Main Parameters
+#### Main Parameters
 
 | Parameter         | Type and Range              | Description               |
 | ------------ | --------------------------- | ------------------ |
@@ -529,13 +529,13 @@ Due to the limitations of sensor manufacturing processes, it is impossible for a
 | ro_limits   | int roLimits\[2][3] 0~3   | Rank offset limits |
 | set_use     | int 1~7                  | Select which set of calibration settings to use |
 
-### 3.9 DPF
+### DPF
 
-#### 3.9.1 Function Description
+#### Function Description
 
 Bilateral filter denoising.
 
-#### 3.9.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description      |
 | ----------- | ---------------- | ----------------------------------- |
@@ -549,13 +549,13 @@ Bilateral filter denoising.
 | sigma_rb    | float 1.0~128.0  | Spatial filtering for the R&B channels, the larger the value, the greater the weight |
 | noise_curve | float 0~4095.0   | 17-point curve obtained from the calibration file      |
 
-### 3.10 3DNR
+### DNR
 
-#### 3.10.1 Function Description
+#### Function Description
 
 Image denoising is an important step in digital image processing, and the denoising effect will affect subsequent image processing. 3DNR (Three-Dimensional Noise Reduction) combines temporal and spatial information to more effectively identify and reduce noise, with motion detection to ensure that the denoising process does not affect the details and clarity of moving objects.
 
-#### 3.10.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description      |
 | ---------------- | --------------- | ------------------------------------------------------------ |
@@ -582,7 +582,7 @@ Image denoising is an important step in digital image processing, and the denois
 | sadweight        | float           | Sets the weight of motion difference type a; the final motion detection is the weighted sum of two types of motion differences, a parameter for calculating block diff |
 | thr_motion_slope | float           | Transition segment, beyond the slope is considered a 100% motion area |
 
-#### 3.10.3 Debugging Strategy
+#### Debugging Strategy
 
 1. First, enable tnr, nlm, dilate, erode, and pregamma;
 1. Set filter_len to control the damping ratio of the reference frame;
@@ -592,13 +592,13 @@ Image denoising is an important step in digital image processing, and the denois
 
 Please note: When enabling TNR, the ISP requires the sensor/ISP Hblank to be no less than 180 pixel clocks (recommended to set to 256 pixel clocks), and Vblank should be no less than 60 sensor ET lines.
 
-### 3.11 Demosaic
+### Demosaic
 
-#### 3.11.1 Function Description
+#### Function Description
 
 The Demosaic module primarily converts input Bayer format data into RGB format data using interpolation algorithms. It also supports noise reduction, sharpening, moiré removal, and purple fringe removal.
 
-#### 3.11.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description      |
 | ---------------- | ------------------- | ---------------- |
@@ -642,7 +642,7 @@ The Demosaic module primarily converts input Bayer format data into RGB format d
 | dmsc_depurple_sat_shrink | int 0~8       | Saturation reduction value in the purple fringe area. The larger the value, the stronger the saturation reduction |
 | dmsc_depurple_thr | int 8~255           | Detection threshold for purple fringe intensity. The smaller the value, the more pixels are considered purple fringes |
 
-#### 3.11.3 Debugging Strategy
+#### Debugging Strategy
 
 1. Interpolation
 
@@ -674,26 +674,26 @@ The Demosaic module primarily converts input Bayer format data into RGB format d
 
    ![image-20230904094333522](../../../../zh/01_software/pc/ISP_tuning/images/21.png)
 
-### 3.12 ManualWB
+### ManualWB
 
-#### 3.12.1 Function Description
+#### Function Description
 
 Manually set the gain values for white balance.
 
-#### 3.12.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range      | Description                       |
 | ------------ | ------------------- | --------------------------------- |
 | driver_load  | bool                | Indicates whether to load the parameters under this module |
 | gain         | float [4] 1.0~3.999 | White balance gain values for four channels |
 
-### 3.13 CCM
+### CCM
 
-#### 3.13.1 Function Description
+#### Function Description
 
 Complete linear correction of the color space using a standard 3×3 matrix and vector offset. The 3x3 matrix of CCM converts the sensor's color space to the sRGB standard color space.
 
-#### 3.13.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range                 | Description      |
 | ------------ | ------------------------------ | ---------------- |
@@ -701,13 +701,13 @@ Complete linear correction of the color space using a standard 3×3 matrix and v
 | ccmatrix     | float ccMatrix[9] -8.0~7.996   | Color calibration matrix |
 | ccoffset     | ccOffset[3] -2048~2047 (12bit) | Offset value |
 
-### 3.14 Gamma
+### Gamma
 
-#### 3.14.1 Function Description
+#### Function Description
 
 The Gamma module primarily performs nonlinear transformation of the brightness space to adapt to general output devices.
 
-#### 3.14.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range  | Description                       |
 | ------------ | --------------- | --------------------------------- |
@@ -716,17 +716,17 @@ The Gamma module primarily performs nonlinear transformation of the brightness s
 | standard_val | float           | Value of gamma, default is 2.2    |
 | curve        | int [64]        | 64-point gamma curve              |
 
-#### 3.14.3 Debugging Strategy
+#### Debugging Strategy
 
 By default, use the gamma value of 2.2. Users can customize the gamma curve as needed.
 
-### 3.15 EE
+### EE
 
-#### 3.15.1 Function Description
+#### Function Description
 
 The EE module is used to enhance the sharpening of image details and textures, improving image clarity. While sharpening the image edges, controlling related parameters can also suppress black and white edges.
 
-#### 3.15.2 Main Parameters
+#### Main Parameters
 
 | Parameter        | Type and Range      | Description      |
 | ---------------- | ------------------- | ---------------- |
@@ -738,13 +738,13 @@ The EE module is used to enhance the sharpening of image details and textures, i
 | ee_uv_gain       | int 0~1024          | Control of edge color saturation; the larger the value, the more significant the saturation reduction |
 | ee_edge_gain     | int 0~10000         | Detection strength of edge details. The larger the gain value, the more edge details are detected |
 
-### 3.16 CA
+### CA
 
-#### 3.16.1 Function Description
+#### Function Description
 
 The CA module adjusts image saturation based on the UV gain curve. Its main function is to eliminate color noise in dark areas or low saturation areas. In practical applications, it can help eliminate false colors caused by the nonlinearity of the R/G/B channels in overexposed areas and white balance deviations in low saturation areas.
 
-#### 3.16.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range  | Description      |
 | ------------ | --------------- | ---------------- |
@@ -753,26 +753,26 @@ The CA module adjusts image saturation based on the UV gain curve. Its main func
 | ca_mode      | int [0,1,2]     | 0: Adjust saturation based on brightness; 1: Adjust saturation based on original saturation; 2: Adjust saturation based on brightness and original saturation |
 | ca_curve     | float           | 64-point ca curve |
 
-### 3.17 DCI
+### DCI
 
-#### 3.17.1 Function Description
+#### Function Description
 
 Dynamic Contrast Improve is used to adjust the global contrast of the image.
 
-### 3.17.2 Main Parameters
+### Main Parameters
 
 | Parameter  | Type and Range | Description          |
 | ---------- | -------------- | -------------------- |
 | dci_en     | bool           | DCI enable switch    |
 | dci_curve  | float          | 64-point DCI curve   |
 
-### 3.18 CProcess (Color Processing)
+### CProcess (Color Processing)
 
-#### 3.18.1 Function Description
+#### Function Description
 
 Processes the color of the image in the YUV domain.
 
-#### 3.18.2 Main Parameters
+#### Main Parameters
 
 | Parameter    | Type and Range      | Description                                                   |
 | ------------ | ------------------- | ------------------------------------------------------------- |
@@ -785,13 +785,13 @@ Processes the color of the image in the YUV domain.
 | hue          | float -90~89        | Hue adjustment value                                           |
 | saturation   | float 0~1.9921875   | Saturation adjustment value                                    |
 
-### 3.19 Compand
+### Compand
 
-#### 3.19.1 Function Description
+#### Function Description
 
 Data compression and stretching module. Used for data compression and stretching processing.
 
-#### 3.19.2 Main Parameters
+#### Main Parameters
 
 | Parameter              | Type and Range      | Description                                  |
 | ---------------------- | ------------------- | -------------------------------------------- |
@@ -805,13 +805,13 @@ Data compression and stretching module. Used for data compression and stretching
 | expand_use_out_y_curve | bool                | Data expansion output Y-axis curve enable switch |
 | expand_curve_y         | int[64] 0~16777216  | Data expansion y-axis value curve            |
 
-### 3.20 CAC (Chromatic Aberration Correction)
+### CAC (Chromatic Aberration Correction)
 
-#### 3.20.1 Function Description
+#### Function Description
 
 This module is used for chromatic aberration correction.
 
-#### 3.20.2 Main Parameters
+#### Main Parameters
 
 | Parameter      | Type and Range      | Description                                                  |
 | -------------- | ------------------- | ------------------------------------------------------------ |

@@ -25,7 +25,7 @@ No part of this document may be excerpted, reproduced, or distributed in any for
 
 ## Explanation of nncase Runtime Library Version Issues
 
-### 1. Explanation of kmodel Version
+### Explanation of kmodel Version
 
 Since the `kmodel` ***does not include the nncase version information***, it is impossible to directly determine which version of nncase generated the `kmodel`. You need to manage version information yourself. Here are two reference methods:
 
@@ -42,16 +42,16 @@ Since the `kmodel` ***does not include the nncase version information***, it is 
       f.write(kmodel)
   ```
 
-### 2. Version Incompatibility Issues
+### Version Incompatibility Issues
 
 Due to potential incompatibilities between different versions of nncase, the version of the nncase runtime library in the SDK might not match the version of nncase used to compile the `kmodel`, causing anomalies during inference on the board. Therefore, it is best to check whether the versions match before inference on the board.
 
 Here are two ways to confirm if the version information matches:
 
 - Check the [version correspondence table](./K230_SDK_nncase_version_correspondence.md#k230-sdk-nncase-version-correspondence).
-- Determine the versions by the image name, for example, `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`, where `v1.4` indicates the SDK version, and `v2.8.0` indicates the nncase version. This means SDK-v1.4 can infer `kmodel` compiled by nncase-v2.8.0. The image can be obtained from the [Canaan Developer Community](https://developer.canaan-creative.com/resource).
+- Determine the versions by the image name, for example, `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`, where `v1.4` indicates the SDK version, and `v2.8.0` indicates the nncase version. This means SDK-v1.4 can infer `kmodel` compiled by nncase-v2.8.0. The image can be obtained from the [Kendryte Developer Community](https://www.kendryte.com/resource).
 
-### 3. Solutions for Version Incompatibility Issues
+### Solutions for Version Incompatibility Issues
 
 1. Align with the SDK version
    After determining the required nncase version, use `pip` to install it. Refer to [nncase install](https://github.com/kendryte/nncase?tab=readme-ov-file#install) for details. Then recompile 'kmodel'.

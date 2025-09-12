@@ -51,13 +51,13 @@ This document (this guide) is mainly applicable to the following personnel:
 |------------------|--------------------------|----------|------------|
 | v1.0             | Initial version          | Haibo Hao | 2023/3/8   |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 This document describes the relevant content of K230 heterogeneous inter-core communication.
 
-#### 1.1.1 Inter-Core Communication Implementation Principle
+#### Inter-Core Communication Implementation Principle
 
 ![Schedule Low Confidence Description Automatically Generated](../../../../zh/01_software/board/cdk/images/91c0f5a20c9460bd6c865a704f7b9404.png)
 
@@ -65,43 +65,43 @@ This document describes the relevant content of K230 heterogeneous inter-core co
 - Shared memory management is used to identify the attributes of communication messages such as address, size, port number, etc.
 - Mailbox realizes the notification mechanism after large and small cores send messages through interrupts.
 
-#### 1.1.2 Memory Space Usage
+#### Memory Space Usage
 
 Currently, the data shared memory area used by large and small cores is designed with a total space of 1M, with each party involved in the communication occupying 512KB for sending and receiving. The shared memory area used to maintain the state of each core is 4KB.
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 IPCMSG
+#### IPCMSG
 
 IPCMSG is a component for communication between large and small cores of K230 in user mode, mainly used for sending control messages. This module includes functions such as adding and deleting services, creating and deleting messages, disconnecting, and sending messages. It supports three types of message sending: sending asynchronous messages, sending synchronous messages, and sending messages that do not require a reply from the other party. Among them, synchronous messages support a timeout mechanism, and users can set the timeout period when calling the API. For messages that need a reply, if the reply is received after 60 seconds, the reply message will be discarded.
 
-#### 1.2.2 DATAFIFO
+#### DATAFIFO
 
 DATAFIFO is a component used for inter-core communication when large and small cores of K230 perform large data interactions (such as encoded data) in user mode. Internally, it mainly uses shared memory to complete data interaction, transmitting data pointers without copying the data content. The notification of data sending and receiving relies on thread polling.
 
 DATAFIFO mainly includes opening and closing channels, writing and reading data, and other control commands.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 IPCMSG
+### IPCMSG
 
 This functional module provides the following APIs:
 
-- [kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
-- [kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
-- [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
-- [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
-- [kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
-- [kd_ipcmsg_is_connect](#216-kd_ipcmsg_is_connect)
-- [kd_ipcmsg_send_only](#217-kd_ipcmsg_send_only)
-- [kd_ipcmsg_send_async](#218-kd_ipcmsg_send_async)
-- [kd_ipcmsg_send_sync](#219-kd_ipcmsg_send_sync)
-- [kd_ipcmsg_run](#2110-kd_ipcmsg_run)
-- [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
-- [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
-- [kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+- [kd_ipcmsg_add_service](#kd_ipcmsg_add_service)
+- [kd_ipcmsg_del_service](#kd_ipcmsg_del_service)
+- [kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
+- [kd_ipcmsg_connect](#kd_ipcmsg_connect)
+- [kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
+- [kd_ipcmsg_is_connect](#kd_ipcmsg_is_connect)
+- [kd_ipcmsg_send_only](#kd_ipcmsg_send_only)
+- [kd_ipcmsg_send_async](#kd_ipcmsg_send_async)
+- [kd_ipcmsg_send_sync](#kd_ipcmsg_send_sync)
+- [kd_ipcmsg_run](#kd_ipcmsg_run)
+- [kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
+- [kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
+- [kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.1 kd_ipcmsg_add_service
+#### kd_ipcmsg_add_service
 
 [Description]
 
@@ -109,7 +109,7 @@ Add a service
 
 [Syntax]
 
-k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_connect_s](#314-k_ipcmsg_connect_s)* pstConnectAttr);
+k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_connect_s](#k_ipcmsg_connect_s)* pstConnectAttr);
 
 [Parameters]
 
@@ -123,7 +123,7 @@ k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_conne
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -144,9 +144,9 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
+[kd_ipcmsg_del_service](#kd_ipcmsg_del_service)
 
-#### 2.1.2 kd_ipcmsg_del_service
+#### kd_ipcmsg_del_service
 
 [Description]
 
@@ -167,7 +167,7 @@ k_s32 kd_ipcmsg_del_service(const k_char* pszServiceName);
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -188,9 +188,9 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
+[kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
 
-#### 2.1.3 kd_ipcmsg_try_connect
+#### kd_ipcmsg_try_connect
 
 [Description]
 
@@ -198,7 +198,7 @@ Establish a connection in a non-blocking manner
 
 [Syntax]
 
-k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
+k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
 [Parameters]
 
@@ -213,7 +213,7 @@ k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ip
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -234,11 +234,11 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+[kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-[kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
+[kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
 
-#### 2.1.4 kd_ipcmsg_connect
+#### kd_ipcmsg_connect
 
 [Description]
 
@@ -246,7 +246,7 @@ Establish a connection in a blocking manner
 
 [Syntax]
 
-k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
+k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
 [Parameters]
 
@@ -261,7 +261,7 @@ k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -282,11 +282,11 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
+[kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
 
-[kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
+[kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
 
-#### 2.1.5 kd_ipcmsg_disconnect
+#### kd_ipcmsg_disconnect
 
 [Description]
 
@@ -307,7 +307,7 @@ k_s32 kd_ipcmsg_disconnect(k_s32 s32Id);
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -328,11 +328,11 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
+[kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
 
-[kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+[kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-#### 2.1.6 kd_ipcmsg_is_connect
+#### kd_ipcmsg_is_connect
 
 [Description]
 
@@ -374,7 +374,7 @@ None
 
 [Related Topics]
 
-#### 2.1.7 kd_ipcmsg_send_only
+#### kd_ipcmsg_send_only
 
 [Description]
 
@@ -382,7 +382,7 @@ Only send a message to the other end without receiving a return value from the o
 
 [Syntax]
 
-k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s) *pstRequest);
+k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s) *pstRequest);
 
 [Parameters]
 
@@ -396,7 +396,7 @@ k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -417,7 +417,7 @@ None
 
 [Related Topics]
 
-#### 2.1.8 kd_ipcmsg_send_async
+#### kd_ipcmsg_send_async
 
 [Description]
 
@@ -427,7 +427,7 @@ If this interface is used to send a reply message, no reply from the other end i
 
 [Syntax]
 
-k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, k_ipcmsg_resphandle_fn_ptr pfnRespHandle);
+k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg, k_ipcmsg_resphandle_fn_ptr pfnRespHandle);
 
 [Parameters]
 
@@ -442,7 +442,7 @@ k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messs
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -463,7 +463,7 @@ None
 
 [Related Topics]
 
-#### 2.1.9 kd_ipcmsg_send_sync
+#### kd_ipcmsg_send_sync
 
 [Description]
 
@@ -471,7 +471,7 @@ Send a synchronous message. This interface will block and wait until the message
 
 [Syntax]
 
-k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
+k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
 
 [Parameters]
 
@@ -487,7 +487,7 @@ k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#41-ipcmsg) |
+| Non-zero         | Failure, with the value being [error code](#ipcmsg) |
 
 [Chip Differences]
 
@@ -500,7 +500,7 @@ None
 
 [Notes]
 
-In case of a timeout, this interface will internally call [kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message) to destroy *ppstMsg (reply message). Since the same message cannot be destroyed twice, there is no need to destroy the reply message again after the timeout exits.
+In case of a timeout, this interface will internally call [kd_ipcmsg_destroy_message](#kd_ipcmsg_destroy_message) to destroy *ppstMsg (reply message). Since the same message cannot be destroyed twice, there is no need to destroy the reply message again after the timeout exits.
 
 [Example]
 
@@ -508,7 +508,7 @@ None
 
 [Related Topics]
 
-#### 2.1.10 kd_ipcmsg_run
+#### kd_ipcmsg_run
 
 [Description]
 
@@ -549,7 +549,7 @@ None
 
 [Related Topics]
 
-#### 2.1.11 kd_ipcmsg_create_message
+#### kd_ipcmsg_create_message
 
 [Description]
 
@@ -557,7 +557,7 @@ Create a message
 
 [Syntax]
 
-[k_ipcmsg_message_s *](#315-k_ipcmsg_messsage_s) kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void* pBody, k_u32 u32BodyLen);
+[k_ipcmsg_message_s *](#k_ipcmsg_messsage_s) kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void* pBody, k_u32 u32BodyLen);
 
 [Parameters]
 
@@ -594,9 +594,9 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destroy_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.12 kd_ipcmsg_create_resp_message
+#### kd_ipcmsg_create_resp_message
 
 [Description]
 
@@ -604,7 +604,7 @@ Create a reply message
 
 [Syntax]
 
-[k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* kd_ipcmsg_create_resp_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* pstRequest, k_s32 s32RetVal, k_void* pBody, k_u32 u32BodyLen);
+[k_ipcmsg_message_s](#k_ipcmsg_messsage_s)\* kd_ipcmsg_create_resp_message([k_ipcmsg_message_s](#k_ipcmsg_messsage_s)\* pstRequest, k_s32 s32RetVal, k_void* pBody, k_u32 u32BodyLen);
 
 [Parameters]
 
@@ -641,9 +641,9 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destroy_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.13 kd_ipcmsg_destroy_message
+#### kd_ipcmsg_destroy_message
 
 [Description]
 
@@ -651,7 +651,7 @@ Destroy a message
 
 [Syntax]
 
-k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg);
+k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg);
 
 [Parameters]
 
@@ -684,22 +684,22 @@ None
 
 [Related Topics]
 
-[kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
+[kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
 
-[kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
+[kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
 
-### 2.2 DATAFIFO
+### DATAFIFO
 
 This functional module provides the following APIs:
 
-- [kd_datafifo_open](#221-kd_datafifo_open)
-- [kd_datafifo_open_by_addr](#222-kd_datafifo_open_by_addr)
-- [kd_datafifo_close](#223-kd_datafifo_close)
-- [kd_datafifo_read](#224-kd_datafifo_read)
-- [kd_datafifo_write](#225-kd_datafifo_write)
-- [kd_datafifo_cmd](#226-kd_datafifo_cmd)
+- [kd_datafifo_open](#kd_datafifo_open)
+- [kd_datafifo_open_by_addr](#kd_datafifo_open_by_addr)
+- [kd_datafifo_close](#kd_datafifo_close)
+- [kd_datafifo_read](#kd_datafifo_read)
+- [kd_datafifo_write](#kd_datafifo_write)
+- [kd_datafifo_cmd](#kd_datafifo_cmd)
 
-#### 2.2.1 kd_datafifo_open
+#### kd_datafifo_open
 
 [Description]
 
@@ -707,7 +707,7 @@ Open a data channel.
 
 [Syntax]
 
-k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_datafifo_params_s](#325-k_datafifo_params_s)\* pstParams)
+k_s32 kd_datafifo_open([k_datafifo_handle](#k_datafifo_handle)\* Handle, [k_datafifo_params_s](#k_datafifo_params_s)\* pstParams)
 
 [Parameters]
 
@@ -721,7 +721,7 @@ k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -740,7 +740,7 @@ None
 
 None
 
-#### 2.2.2 kd_datafifo_open_by_addr
+#### kd_datafifo_open_by_addr
 
 [Description]
 
@@ -748,7 +748,7 @@ Open a data channel by physical address.
 
 [Syntax]
 
-k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Handle, [k_datafifo_params_s](#325-k_datafifo_params_s) *pstParams, k_u64 u64Phyaddr)
+k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#k_datafifo_handle) \*Handle, [k_datafifo_params_s](#k_datafifo_params_s) *pstParams, k_u64 u64Phyaddr)
 
 [Parameters]
 
@@ -763,7 +763,7 @@ k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Han
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -782,7 +782,7 @@ None
 
 None
 
-#### 2.2.3 kd_datafifo_close
+#### kd_datafifo_close
 
 [Description]
 
@@ -790,7 +790,7 @@ Close a data channel.
 
 [Syntax]
 
-k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
+k_s32 kd_datafifo_close([k_datafifo_handle](#k_datafifo_handle) Handle)
 
 [Parameters]
 
@@ -803,7 +803,7 @@ k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -816,13 +816,13 @@ None
 
 [Notes]
 
-When closing DataFifo, to ensure the normal release of data at both the read and write ends, the user needs to ensure that the read end reads all the data existing in DataFifo. After the write end finishes writing data, it needs to call [kd_datafifo_write](#225-kd_datafifo_write) (Handle, NULL) once to trigger the release of data at the write end and update the read pointer.
+When closing DataFifo, to ensure the normal release of data at both the read and write ends, the user needs to ensure that the read end reads all the data existing in DataFifo. After the write end finishes writing data, it needs to call [kd_datafifo_write](#kd_datafifo_write) (Handle, NULL) once to trigger the release of data at the write end and update the read pointer.
 
 [Example]
 
 None
 
-#### 2.2.4 kd_datafifo_read
+#### kd_datafifo_read
 
 [Description]
 
@@ -830,7 +830,7 @@ Read data.
 
 [Syntax]
 
-k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void** ppData)
+k_s32 kd_datafifo_read([k_datafifo_handle](#k_datafifo_handle) Handle, void** ppData)
 
 [Parameters]
 
@@ -844,7 +844,7 @@ k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void*
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -863,7 +863,7 @@ None
 
 None
 
-#### 2.2.5 kd_datafifo_write
+#### kd_datafifo_write
 
 [Description]
 
@@ -871,7 +871,7 @@ Write data.
 
 [Syntax]
 
-k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void* pData)
+k_s32 kd_datafifo_write([k_datafifo_handle](#k_datafifo_handle) Handle, void* pData)
 
 [Parameters]
 
@@ -885,7 +885,7 @@ k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -904,7 +904,7 @@ When pData is NULL, it triggers the data release callback function at the write 
 
 None
 
-#### 2.2.6 kd_datafifo_cmd
+#### kd_datafifo_cmd
 
 [Description]
 
@@ -912,7 +912,7 @@ Other operations.
 
 [Syntax]
 
-k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_datafifo_cmd_e](#326-k_datafifo_cmd_e) enCMD, void* pArg)
+k_s32 kd_datafifo_cmd([k_datafifo_handle](#k_datafifo_handle) Handle, [k_datafifo_cmd_e](#k_datafifo_cmd_e) enCMD, void* pArg)
 
 [Parameters]
 
@@ -927,7 +927,7 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 | **Return Value** | **Description**                      |
 |------------------|--------------------------------------|
 | 0                | Success.                             |
-| Non-zero         | Failure, with the value being [error code](#42-datafifo) |
+| Non-zero         | Failure, with the value being [error code](#datafifo) |
 
 [Chip Differences]
 
@@ -955,20 +955,20 @@ Control commands and corresponding parameters:
 
 None
 
-## 3. Data Types
+## Data Types
 
-### 3.1 IPCMSG
+### IPCMSG
 
 This module has the following data types:
 
-- [K_IPCMSG_MAX_CONTENT_LEN](#311-k_ipcmsg_max_content_len)
-- [K_IPCMSG_PRIVDATA_NUM](#312-k_ipcmsg_privdata_num)
-- [K_IPCMSG_INVALID_MSGID](#313-k_ipcmsg_invalid_msgid)
-- [k_ipcmsg_connect_s](#314-k_ipcmsg_connect_s)
-- [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)
-- [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr)
+- [K_IPCMSG_MAX_CONTENT_LEN](#k_ipcmsg_max_content_len)
+- [K_IPCMSG_PRIVDATA_NUM](#k_ipcmsg_privdata_num)
+- [K_IPCMSG_INVALID_MSGID](#k_ipcmsg_invalid_msgid)
+- [k_ipcmsg_connect_s](#k_ipcmsg_connect_s)
+- [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)
+- [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr)
 
-#### 3.1.1 K_IPCMSG_MAX_CONTENT_LEN
+#### K_IPCMSG_MAX_CONTENT_LEN
 
 [Description]
 
@@ -990,7 +990,7 @@ None
 
 This module has the following data types:
 
-#### 3.1.2 K_IPCMSG_PRIVDATA_NUM
+#### K_IPCMSG_PRIVDATA_NUM
 
 [Description]
 
@@ -1010,7 +1010,7 @@ None
 
 None
 
-#### 3.1.3 K_IPCMSG_INVALID_MSGID
+#### K_IPCMSG_INVALID_MSGID
 
 [Description]
 
@@ -1030,7 +1030,7 @@ None
 
 None
 
-#### 3.1.4 k_ipcmsg_connect_s
+#### k_ipcmsg_connect_s
 
 [Description]
 
@@ -1061,9 +1061,9 @@ None
 
 [Related Data Types and Interfaces]
 
-[kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
+[kd_ipcmsg_add_service](#kd_ipcmsg_add_service)
 
-#### 3.1.5 k_ipcmsg_messsage_s
+#### k_ipcmsg_messsage_s
 
 [Description]
 
@@ -1104,14 +1104,14 @@ None
 
 [Related Data Types and Interfaces]
 
-- [kd_ipcmsg_send_only](#217-kd_ipcmsg_send_only)
-- [kd_ipcmsg_send_async](#218-kd_ipcmsg_send_async)
-- [kd_ipcmsg_send_sync](#219-kd_ipcmsg_send_sync)
-- [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
-- [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
-- [kd_ipcmsg_destroy_message](#2113-kd_ipcmsg_destroy_message)
+- [kd_ipcmsg_send_only](#kd_ipcmsg_send_only)
+- [kd_ipcmsg_send_async](#kd_ipcmsg_send_async)
+- [kd_ipcmsg_send_sync](#kd_ipcmsg_send_sync)
+- [kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
+- [kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
+- [kd_ipcmsg_destroy_message](#kd_ipcmsg_destroy_message)
 
-#### 3.1.6 k_ipcmsg_handle_fn_ptr
+#### k_ipcmsg_handle_fn_ptr
 
 [Description]
 
@@ -1136,21 +1136,21 @@ None
 
 [Related Data Types and Interfaces]
 
-- [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
-- [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+- [kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
+- [kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-### 3.2 DATAFIFO
+### DATAFIFO
 
 This module has the following data structures:
 
-- [k_datafifo_handle](#321-k_datafifo_handle)
-- [K_DATAFIFO_INVALID_HANDLE](#322-k_datafifo_invalid_handle)
-- [K_DATAFIFO_RELEASESTREAM_FN_PTR](#323-k_datafifo_releasestream_fn_ptr)
-- [K_DATAFIFO_OPEN_MODE_E](#324-k_datafifo_open_mode_e)
-- [k_datafifo_params_s](#325-k_datafifo_params_s)
-- [k_datafifo_cmd_e](#326-k_datafifo_cmd_e)
+- [k_datafifo_handle](#k_datafifo_handle)
+- [K_DATAFIFO_INVALID_HANDLE](#k_datafifo_invalid_handle)
+- [K_DATAFIFO_RELEASESTREAM_FN_PTR](#k_datafifo_releasestream_fn_ptr)
+- [K_DATAFIFO_OPEN_MODE_E](#k_datafifo_open_mode_e)
+- [k_datafifo_params_s](#k_datafifo_params_s)
+- [k_datafifo_cmd_e](#k_datafifo_cmd_e)
 
-#### 3.2.1 k_datafifo_handle
+#### k_datafifo_handle
 
 [Description]
 
@@ -1177,7 +1177,7 @@ None
 
 None
 
-#### 3.2.2 K_DATAFIFO_INVALID_HANDLE
+#### K_DATAFIFO_INVALID_HANDLE
 
 [Description]
 
@@ -1197,7 +1197,7 @@ None
 
 None
 
-#### 3.2.3 K_DATAFIFO_RELEASESTREAM_FN_PTR
+#### K_DATAFIFO_RELEASESTREAM_FN_PTR
 
 [Description]
 
@@ -1217,7 +1217,7 @@ None
 
 None
 
-#### 3.2.4 K_DATAFIFO_OPEN_MODE_E
+#### K_DATAFIFO_OPEN_MODE_E
 
 [Description]
 
@@ -1250,7 +1250,7 @@ None
 
 None
 
-#### 3.2.5 k_datafifo_params_s
+#### k_datafifo_params_s
 
 [Description]
 
@@ -1285,7 +1285,7 @@ There are no restrictions on the values of u32EntriesNum and u32CacheLineSize. A
 
 None
 
-#### 3.2.6 k_datafifo_cmd_e
+#### k_datafifo_cmd_e
 
 [Description]
 
@@ -1324,9 +1324,9 @@ None
 
 None
 
-## 4. Error Codes
+## Error Codes
 
-### 4.1 IPCMSG
+### IPCMSG
 
 Table 41
 
@@ -1342,7 +1342,7 @@ Table 41
 | 0x1901      | K_IPCMSG_EINVAL       | Invalid configuration parameter |
 | 0x1902      | K_IPCMSG_ETIMEOUT     | Timeout error         |
 
-### 4.2 DATAFIFO
+### DATAFIFO
 
 Table 42
 
@@ -1360,9 +1360,9 @@ Table 42
 | 0x00000000  | K_SUCCESS                           | Success               |
 | 0xFFFFFFFF  | K_FAILURE                           | Failure               |
 
-## 5. Debug Information
+## Debug Information
 
-### 5.1 ipcm
+### ipcm
 
 [Debug Information]
 

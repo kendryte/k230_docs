@@ -61,17 +61,17 @@ This document (guide) is mainly applicable to the following personnel:
 | V1.3.3           | System Software Department | 2023-06-20 | 1. Added H.264/H.265 entropy coding mode setting/getting interfaces kd_mpi_venc_set_h264_entropy, kd_mpi_venc_get_h264_entropy, kd_mpi_venc_set_h265_entropy, kd_mpi_venc_get_h265_entropy 2. Renamed k_venc_rotation enumeration to k_rotation 3. Added decoding rotation setting interface kd_mpi_vdec_set_rotation |
 | V1.3.4           | System Software Department | 2023-06-30 | Modified data types supported by encoding, decoding, and 2D |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 The video encoding and decoding module supports H.264, H.265, and JPEG encoding and decoding. The VENC module implements 2D computation and encoding functions, which can be enabled simultaneously or used separately. The VDEC module implements decoding functions.
 
 VENC, VENC+2D, and VDEC support system binding, while 2D computation alone does not support system binding.
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 Video Encoding
+#### Video Encoding
 
 ![encode flow](../../../../zh/01_software/board/mpp/images/9f7f41ea96a97ae9bf514535f6af1622.jpeg)
 
@@ -102,7 +102,7 @@ Table 1-2 2D Computation Capabilities
 |--------------------|---------------------|---------------------|--------------------|
 | I420/NV12/ARGB8888/BGRA8888 | Same as input format | ARGB8888/ARGB4444/ARGB1555 | 3840x2160 |
 
-##### 1.2.1.1 Encoding Channel
+##### Encoding Channel
 
 The encoding channel serves as the basic container, storing various user settings and managing various internal resources of the encoding channel. The encoding channel completes the functions of image overlay and encoding. The 2D module performs image overlay computation, and the encoder module performs image encoding. Both can be used separately or in conjunction.
 
@@ -110,7 +110,7 @@ The encoding channel serves as the basic container, storing various user setting
 
 Figure 1-2 Encoding Channel
 
-##### 1.2.1.2 Bitrate Control
+##### Bitrate Control
 
 The bitrate controller manages the control of the encoding bitrate.
 
@@ -120,27 +120,27 @@ H264/H265 encoding supports CBR, VBR, and FIXQP bitrate control modes.
 
 MJPEG only supports FIXQP mode.
 
-###### 1.2.1.2.1 CBR
+###### CBR
 
 (Constant Bit Rate) Fixed bitrate. Ensures stable encoding bitrate within the bitrate statistics time.
 
-###### 1.2.1.2.2 VBR
+###### VBR
 
 (Variable Bit Rate) Allows bitrate fluctuations within the bitrate statistics time to ensure stable image quality.
 
-###### 1.2.1.2.3 FIXQP
+###### FIXQP
 
 Fixed QP value. Within the bitrate statistics time, all macroblock QP values of the encoded image are the same, using the user-set image QP value.
 
-##### 1.2.1.3 GOP Structure
+##### GOP Structure
 
 This module only supports I-frames and P-frames.
 
-##### 1.2.1.4 2D Computation
+##### D Computation
 
 The 2D computation module can achieve OSD overlay on image data. The OSD mode can achieve overlay of 8 regions, with no overlap between regions. Supported OSD formats are: ARGB4444/ARGB1555/ARGB8888.
 
-###### 1.2.1.4.1 2D Conversion Coefficient Calculation
+###### D Conversion Coefficient Calculation
 
 During OSD overlay computation, if the input video format is YUV, the OSD layer needs to perform RGB to YUV conversion. The kernel has a set of default conversion coefficients. If the user needs to customize a set of 12-bit conversion coefficients, they can be obtained from the RGB to YUV conversion formula.
 
@@ -160,11 +160,11 @@ V = 0.4392\*R - 0.3990\*G - 0.0402\*B + 128
 
 The conversion coefficients are: { 47, 157, 16, 16, -26, -86, 112, 128, 112, -102, -10, 128 }
 
-###### 1.2.1.4.2 2D Conversion Coefficient Configuration
+###### D Conversion Coefficient Configuration
 
-2D conversion coefficients can be configured through the user-defined coefficient interface [kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef) and the color gamut configuration interface [kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut). Either interface can be used for configuration. If neither interface is called before the computation starts, the default coefficients will be used for color gamut conversion.
+2D conversion coefficients can be configured through the user-defined coefficient interface [kd_mpi_venc_set_2d_custom_coef](#kd_mpi_venc_set_2d_custom_coef) and the color gamut configuration interface [kd_mpi_venc_set_2d_color_gamut](#kd_mpi_venc_set_2d_color_gamut). Either interface can be used for configuration. If neither interface is called before the computation starts, the default coefficients will be used for color gamut conversion.
 
-##### 1.2.1.5 Limitations
+##### Limitations
 
 Encoding operations have the following limitations:
 
@@ -181,13 +181,13 @@ Decoding operations have the following limitations:
 
 1. The physical starting address of the input data for each frame must be 4k aligned.
 
-##### 1.2.1.6 Typical Encoding Application Example
+##### Typical Encoding Application Example
 
 ![venc sample flow](../../../../zh/01_software/board/mpp/images/e57bfe4e5657980663f22e7cdef1f182.jpeg)
 
 Figure 1-3 Typical Encoding Application Scenario Flow Diagram
 
-### 1.2.2 Video Decoding
+### Video Decoding
 
 Table 12 VPU Decoding Capabilities
 
@@ -203,60 +203,60 @@ VDEC supports streaming mode:
 
 - Streaming Mode (K_VDEC_SEND_MODE_STREAM): Users can send any length of code stream to the decoder each time, and the decoder will internally complete the identification process of one frame of the code stream. Note that for H.264/H.265, the end of the current frame code stream can only be identified after receiving the next frame code stream, so in this sending mode, if you input one frame of H.264/H.265 code stream, you cannot expect the image decoding to start immediately.
 
-#### 1.2.2.1 Typical Decoding Application Example
+#### Typical Decoding Application Example
 
 ![vdec sample flow](../../../../zh/01_software/board/mpp/images/e49f8a05613f3b2524e3dc075009146e.jpeg)
 
 Figure 1-3 Typical Encoding Application Scenario Flow Diagram
 
-## 2. API Reference
+## API Reference
 
-### 2.1 Video Encoding
+### Video Encoding
 
 This functional module provides the following APIs:
 
-- [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn): Create an encoding channel.
-- [kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn): Destroy an encoding channel.
-- [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn): Start the encoding channel to receive input images.
-- [kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn): Stop the encoding channel from receiving input images.
-- [kd_mpi_venc_query_status](#215-kd_mpi_venc_query_status): Query the status of the encoding channel.
-- [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream): Get the encoded stream.
-- [kd_mpi_venc_release_stream](#217-kd_mpi_venc_release_stream): Release the stream buffer.
-- [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame): Support users to send raw images for encoding.
-- [kd_mpi_venc_set_rotation](#219-kd_mpi_venc_set_rotation): Set the rotation angle of the encoded image.
-- [kd_mpi_venc_get_rotation](#2110-kd_mpi_venc_get_rotation): Get the rotation angle of the encoded image.
-- [kd_mpi_venc_set_mirror](#2111-kd_mpi_venc_set_mirror): Set the rotation angle of the encoded image.
-- [kd_mpi_venc_get_mirror](#2112-kd_mpi_venc_get_mirror): Get the mirroring method of the encoded image.
-- [kd_mpi_venc_enable_idr](#2113-kd_mpi_venc_enable_idr): Enable IDR frame, generating IDR frames according to the GOP interval.
-- [kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode): Set the 2D computation mode.
-- [kd_mpi_venc_get_2d_mode](#2115-kd_mpi_venc_get_2d_mode): Get the 2D computation mode.
-- [kd_mpi_venc_set_2d_osd_param](#2116-kd_mpi_venc_set_2d_osd_param): Set the region attributes of OSD in 2D computation.
-- [kd_mpi_venc_get_2d_osd_param](#2117-kd_mpi_venc_get_2d_osd_param): Get the region attributes of the specified index OSD in 2D computation.
-- [kd_mpi_venc_set_2d_border_param](#2118-kd_mpi_venc_set_2d_border_param): Set the frame attributes in 2D computation.
-- [kd_mpi_venc_get_2d_border_param](#2119-kd_mpi_venc_get_2d_border_param): Get the frame attributes in 2D computation.
-- [kd_mpi_venc_set_2d_custom_coef](#2120-kd_mpi_venc_set_2d_custom_coef): Set the image format conversion coefficients in 2D computation.
-- [kd_mpi_venc_get_2d_custom_coef](#2121-kd_mpi_venc_get_2d_custom_coef): Get the image format conversion coefficients in 2D computation.
-- [kd_mpi_venc_set_2d_color_gamut](#2122-kd_mpi_venc_set_2d_color_gamut): Set the color gamut for 2D computation.
-- [kd_mpi_venc_get_2d_color_gamut](#2123-kd_mpi_venc_get_2d_color_gamut): Get the color gamut for 2D computation.
-- [kd_mpi_venc_attach_2d](#2124-kd_mpi_venc_attach_2d): Associate 2D computation with VENC.
-- [kd_mpi_venc_detach_2d](#2125-kd_mpi_venc_detach_2d): Disassociate 2D computation from VENC.
-- [kd_mpi_venc_send_2d_frame](#2126-kd_mpi_venc_send_2d_frame): Send a frame of data to the 2D module.
-- [kd_mpi_venc_get_2d_frame](#2127-kd_mpi_venc_get_2d_frame): Get the result of 2D computation.
-- [kd_mpi_venc_start_2d_chn](#2128-kd_mpi_venc_start_2d_chn): Start the 2D channel to receive input images.
-- [kd_mpi_venc_stop_2d_chn](#2129-kd_mpi_venc_stop_2d_chn): Stop the 2D channel from receiving input images.
-- [kd_mpi_venc_request_idr](#2130-kd_mpi_venc_request_idr): Request an IDR frame, generating an IDR frame immediately after calling.
-- [kd_mpi_venc_set_h265_sao](#2131-kd_mpi_venc_set_h265_sao): Set the Sao attributes for the H.265 channel.
-- [kd_mpi_venc_get_h265_sao](#2132-kd_mpi_venc_get_h265_sao): Get the Sao attributes for the H.265 channel.
-- [kd_mpi_venc_set_dblk](#2133-kd_mpi_venc_set_dblk): Enable deblocking for the codec channel.
-- [kd_mpi_venc_get_dblk](#2134-kd_mpi_venc_get_dblk): Get the deblocking status of the codec channel.
-- [kd_mpi_venc_set_roi_attr](#2135-kd_mpi_venc_set_roi_attr): Set the ROI attributes for the H.264/H.265 channel.
-- [kd_mpi_venc_get_roi_attr](#2136-kd_mpi_venc_get_roi_attr): Get the ROI attributes for the H.264/H.265 channel.
-- [kd_mpi_venc_set_h264_entropy](#2137-kd_mpi_venc_set_h264_entropy): Set the entropy encoding mode for the H.264 codec channel.
-- [kd_mpi_venc_get_h264_entropy](#2138-kd_mpi_venc_get_h264_entropy): Get the entropy encoding mode for the H.264 codec channel.
-- [kd_mpi_venc_set_h265_entropy](#2139-kd_mpi_venc_set_h265_entropy): Set the entropy encoding mode for the H.265 codec channel.
-- [kd_mpi_venc_get_h265_entropy](#2140-kd_mpi_venc_get_h265_entropy): Get the entropy encoding mode for the H.265 codec channel.
+- [kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn): Create an encoding channel.
+- [kd_mpi_venc_destory_chn](#kd_mpi_venc_destory_chn): Destroy an encoding channel.
+- [kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn): Start the encoding channel to receive input images.
+- [kd_mpi_venc_stop_chn](#kd_mpi_venc_stop_chn): Stop the encoding channel from receiving input images.
+- [kd_mpi_venc_query_status](#kd_mpi_venc_query_status): Query the status of the encoding channel.
+- [kd_mpi_venc_get_stream](#kd_mpi_venc_get_stream): Get the encoded stream.
+- [kd_mpi_venc_release_stream](#kd_mpi_venc_release_stream): Release the stream buffer.
+- [kd_mpi_venc_send_frame](#kd_mpi_venc_send_frame): Support users to send raw images for encoding.
+- [kd_mpi_venc_set_rotation](#kd_mpi_venc_set_rotation): Set the rotation angle of the encoded image.
+- [kd_mpi_venc_get_rotation](#kd_mpi_venc_get_rotation): Get the rotation angle of the encoded image.
+- [kd_mpi_venc_set_mirror](#kd_mpi_venc_set_mirror): Set the rotation angle of the encoded image.
+- [kd_mpi_venc_get_mirror](#kd_mpi_venc_get_mirror): Get the mirroring method of the encoded image.
+- [kd_mpi_venc_enable_idr](#kd_mpi_venc_enable_idr): Enable IDR frame, generating IDR frames according to the GOP interval.
+- [kd_mpi_venc_set_2d_mode](#kd_mpi_venc_set_2d_mode): Set the 2D computation mode.
+- [kd_mpi_venc_get_2d_mode](#kd_mpi_venc_get_2d_mode): Get the 2D computation mode.
+- [kd_mpi_venc_set_2d_osd_param](#kd_mpi_venc_set_2d_osd_param): Set the region attributes of OSD in 2D computation.
+- [kd_mpi_venc_get_2d_osd_param](#kd_mpi_venc_get_2d_osd_param): Get the region attributes of the specified index OSD in 2D computation.
+- [kd_mpi_venc_set_2d_border_param](#kd_mpi_venc_set_2d_border_param): Set the frame attributes in 2D computation.
+- [kd_mpi_venc_get_2d_border_param](#kd_mpi_venc_get_2d_border_param): Get the frame attributes in 2D computation.
+- [kd_mpi_venc_set_2d_custom_coef](#kd_mpi_venc_set_2d_custom_coef): Set the image format conversion coefficients in 2D computation.
+- [kd_mpi_venc_get_2d_custom_coef](#kd_mpi_venc_get_2d_custom_coef): Get the image format conversion coefficients in 2D computation.
+- [kd_mpi_venc_set_2d_color_gamut](#kd_mpi_venc_set_2d_color_gamut): Set the color gamut for 2D computation.
+- [kd_mpi_venc_get_2d_color_gamut](#kd_mpi_venc_get_2d_color_gamut): Get the color gamut for 2D computation.
+- [kd_mpi_venc_attach_2d](#kd_mpi_venc_attach_2d): Associate 2D computation with VENC.
+- [kd_mpi_venc_detach_2d](#kd_mpi_venc_detach_2d): Disassociate 2D computation from VENC.
+- [kd_mpi_venc_send_2d_frame](#kd_mpi_venc_send_2d_frame): Send a frame of data to the 2D module.
+- [kd_mpi_venc_get_2d_frame](#kd_mpi_venc_get_2d_frame): Get the result of 2D computation.
+- [kd_mpi_venc_start_2d_chn](#kd_mpi_venc_start_2d_chn): Start the 2D channel to receive input images.
+- [kd_mpi_venc_stop_2d_chn](#kd_mpi_venc_stop_2d_chn): Stop the 2D channel from receiving input images.
+- [kd_mpi_venc_request_idr](#kd_mpi_venc_request_idr): Request an IDR frame, generating an IDR frame immediately after calling.
+- [kd_mpi_venc_set_h265_sao](#kd_mpi_venc_set_h265_sao): Set the Sao attributes for the H.265 channel.
+- [kd_mpi_venc_get_h265_sao](#kd_mpi_venc_get_h265_sao): Get the Sao attributes for the H.265 channel.
+- [kd_mpi_venc_set_dblk](#kd_mpi_venc_set_dblk): Enable deblocking for the codec channel.
+- [kd_mpi_venc_get_dblk](#kd_mpi_venc_get_dblk): Get the deblocking status of the codec channel.
+- [kd_mpi_venc_set_roi_attr](#kd_mpi_venc_set_roi_attr): Set the ROI attributes for the H.264/H.265 channel.
+- [kd_mpi_venc_get_roi_attr](#kd_mpi_venc_get_roi_attr): Get the ROI attributes for the H.264/H.265 channel.
+- [kd_mpi_venc_set_h264_entropy](#kd_mpi_venc_set_h264_entropy): Set the entropy encoding mode for the H.264 codec channel.
+- [kd_mpi_venc_get_h264_entropy](#kd_mpi_venc_get_h264_entropy): Get the entropy encoding mode for the H.264 codec channel.
+- [kd_mpi_venc_set_h265_entropy](#kd_mpi_venc_set_h265_entropy): Set the entropy encoding mode for the H.265 codec channel.
+- [kd_mpi_venc_get_h265_entropy](#kd_mpi_venc_get_h265_entropy): Get the entropy encoding mode for the H.265 codec channel.
 
-#### 2.1.1 kd_mpi_venc_create_chn
+#### kd_mpi_venc_create_chn
 
 **Description**:
 
@@ -265,14 +265,14 @@ Create an encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#3115-k_venc_chn_attr) *attr);
+k_s32 kd_mpi_venc_create_chn(k_u32 chn_num, const [k_venc_chn_attr](#k_venc_chn_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encoding channel information. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Encoding channel information. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | attr     | Pointer to encoding channel attributes. | Input |
 
 **Return Values**:
@@ -309,7 +309,7 @@ None.
 
 None.
 
-#### 2.1.2 kd_mpi_venc_destory_chn
+#### kd_mpi_venc_destory_chn
 
 **Description**:
 
@@ -325,7 +325,7 @@ k_s32 kd_mpi_venc_destory_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
@@ -353,9 +353,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
+[kd_mpi_venc_stop_chn](#kd_mpi_venc_stop_chn)
 
-#### 2.1.3 kd_mpi_venc_start_chn
+#### kd_mpi_venc_start_chn
 
 **Description**:
 
@@ -371,7 +371,7 @@ k_s32 kd_mpi_venc_start_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
@@ -401,10 +401,10 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
-[kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
+[kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn)
+[kd_mpi_venc_stop_chn](#kd_mpi_venc_stop_chn)
 
-#### 2.1.4 kd_mpi_venc_stop_chn
+#### kd_mpi_venc_stop_chn
 
 **Description**:
 
@@ -420,7 +420,7 @@ k_s32 kd_mpi_venc_stop_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
@@ -451,9 +451,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_destory_chn](#212-kd_mpi_venc_destory_chn)
+[kd_mpi_venc_destory_chn](#kd_mpi_venc_destory_chn)
 
-#### 2.1.5 kd_mpi_venc_query_status
+#### kd_mpi_venc_query_status
 
 **Description**:
 
@@ -462,14 +462,14 @@ Query the status of the encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#3115-k_venc_chn_attr) *status);
+k_s32 kd_mpi_venc_query_status(k_u32 chn_num, [k_venc_chn_status](#k_venc_chn_attr) *status);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | status   | Pointer to the status of the encoding channel. | Output |
 
 **Return Values**:
@@ -499,7 +499,7 @@ None.
 **Related Topics**:
 
 None.
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -520,9 +520,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
+[kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn)
 
-#### 2.1.6 kd_mpi_venc_get_stream
+#### kd_mpi_venc_get_stream
 
 **Description**:
 
@@ -531,14 +531,14 @@ Get the encoded stream.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) *stream, k_s32 milli_sec);
+k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#k_venc_stream) *stream, k_s32 milli_sec);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | stream  | Pointer to the stream structure. | Output |
 | milli_sec | Timeout for getting the stream. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. Greater than 0: Timeout | Input |
 
@@ -547,7 +547,7 @@ k_s32 kd_mpi_venc_get_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream)
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -570,10 +570,10 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
-[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn)
 
-#### 2.1.7 kd_mpi_venc_release_stream
+#### kd_mpi_venc_release_stream
 
 **Description**:
 
@@ -582,14 +582,14 @@ Release the stream buffer.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_stream) *stream);
+k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#k_venc_stream) *stream);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | stream  | Pointer to the stream structure. | Output |
 
 **Return Values**:
@@ -597,7 +597,7 @@ k_s32 kd_mpi_venc_release_stream(k_u32 chn_num, [k_venc_stream](#3123-k_venc_str
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -619,10 +619,10 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
-[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn)
 
-#### 2.1.8 kd_mpi_venc_send_frame
+#### kd_mpi_venc_send_frame
 
 **Description**:
 
@@ -638,7 +638,7 @@ k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 mil
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Encoding channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | frame   | Pointer to the raw image information structure, refer to "K230 System Control API Reference". | Input |
 | milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. Greater than 0: Timeout. | Input |
 
@@ -647,7 +647,7 @@ k_s32 kd_mpi_venc_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 mil
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -670,10 +670,10 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn)
-[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn)
+[kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn)
 
-#### 2.1.9 kd_mpi_venc_set_rotation
+#### kd_mpi_venc_set_rotation
 
 **Description**:
 
@@ -682,14 +682,14 @@ Set the rotation angle of the encoded image.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
+k_s32 kd_mpi_venc_set_rotation(k_u32 chn_num, const [k_rotation](#k_rotation) rotation);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | rotation | Rotation angle enumeration. | Input |
 
 **Return Values**:
@@ -697,7 +697,7 @@ k_s32 kd_mpi_venc_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotatio
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -720,7 +720,7 @@ None.
 
 None.
 
-#### 2.1.10 kd_mpi_venc_get_rotation
+#### kd_mpi_venc_get_rotation
 
 **Description**:
 
@@ -729,14 +729,14 @@ Get the rotation angle of the encoded image.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_rotation(k_u32 chn_num, [k_rotation](#3112-k_rotation) *rotation);
+k_s32 kd_mpi_venc_get_rotation(k_u32 chn_num, [k_rotation](#k_rotation) *rotation);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [VENC_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | rotation | Pointer to the rotation angle enumeration. | Output |
 
 **Return Values**:
@@ -744,7 +744,7 @@ k_s32 kd_mpi_venc_get_rotation(k_u32 chn_num, [k_rotation](#3112-k_rotation) *ro
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -767,7 +767,7 @@ None.
 
 None.
 
-#### 2.1.11 kd_mpi_venc_set_mirror
+#### kd_mpi_venc_set_mirror
 
 **Description**:
 
@@ -776,7 +776,7 @@ Set the mirroring method of the encoded image.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_mirror) mirror);
+k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#k_venc_mirror) mirror);
 ```
 
 **Parameters**:
@@ -791,7 +791,7 @@ k_s32 kd_mpi_venc_set_mirror(k_u32 chn_num, const [k_venc_mirror](#3113-k_venc_m
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -814,7 +814,7 @@ None.
 
 None.
 
-#### 2.1.12 kd_mpi_venc_get_mirror
+#### kd_mpi_venc_get_mirror
 
 **Description**:
 
@@ -823,7 +823,7 @@ Get the mirroring method of the encoded image.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror) *mirror);
+k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#k_venc_mirror) *mirror);
 ```
 
 **Parameters**:
@@ -838,7 +838,7 @@ k_s32 kd_mpi_venc_get_mirror(k_u32 chn_num, [k_venc_mirror](#3113-k_venc_mirror)
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -861,7 +861,7 @@ None.
 
 None.
 
-#### 2.1.13 kd_mpi_venc_enable_idr
+#### kd_mpi_venc_enable_idr
 
 **Description**:
 
@@ -877,7 +877,7 @@ k_s32 kd_mpi_venc_enable_idr(k_u32 chn_num, const k_bool idr_enable);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num   | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num   | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | idr_enable | Enable IDR frame. 0: Disable. 1: Enable. | Input |
 
 **Return Values**:
@@ -885,7 +885,7 @@ k_s32 kd_mpi_venc_enable_idr(k_u32 chn_num, const k_bool idr_enable);
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -908,7 +908,7 @@ None.
 
 None.
 
-#### 2.1.14 kd_mpi_venc_set_2d_mode
+#### kd_mpi_venc_set_2d_mode
 
 **Description**:
 
@@ -917,14 +917,14 @@ Set the 2D computation mode.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) mode);
+k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#k_venc_2d_calc_mode) mode);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | mode    | 2D computation mode enumeration. | Input |
 
 **Return Values**:
@@ -932,7 +932,7 @@ k_s32 kd_mpi_venc_set_2d_mode(k_u32 chn_num, const [k_venc_2d_calc_mode](#318-k_
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -955,7 +955,7 @@ None.
 
 None.
 
-#### 2.1.15 kd_mpi_venc_get_2d_mode
+#### kd_mpi_venc_get_2d_mode
 
 **Description**:
 
@@ -964,14 +964,14 @@ Get the 2D computation mode.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode) *mode);
+k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#k_venc_2d_calc_mode) *mode);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | mode    | Pointer to the 2D computation mode enumeration. | Output |
 
 **Return Values**:
@@ -979,7 +979,7 @@ k_s32 kd_mpi_venc_get_2d_mode(k_u32 chn_num, [k_venc_2d_calc_mode](#318-k_venc_2
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1002,7 +1002,7 @@ None.
 
 None.
 
-#### 2.1.16 kd_mpi_venc_set_2d_osd_param
+#### kd_mpi_venc_set_2d_osd_param
 
 **Description**:
 
@@ -1011,15 +1011,15 @@ Set the region attributes of OSD in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) *attr);
+k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#k_venc_2d_osd_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num)). | Input |
+| chn_num | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#k_venc_max_2d_osd_region_num)). | Input |
 | attr     | Pointer to OSD attributes. | Input |
 
 **Return Values**:
@@ -1027,7 +1027,7 @@ k_s32 kd_mpi_venc_set_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1050,7 +1050,7 @@ None.
 
 None.
 
-#### 2.1.17 kd_mpi_venc_get_2d_osd_param
+#### kd_mpi_venc_get_2d_osd_param
 
 **Description**:
 
@@ -1059,15 +1059,15 @@ Get the region attributes of the OSD with the specified index in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr) *attr);
+k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_osd_attr](#k_venc_2d_osd_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| index    | OSD region index. Value range: [0, [K_VENC_MAX_2D_OSD_REGION_NUM](#k_venc_max_2d_osd_region_num)). | Input |
 | attr     | Pointer to OSD attributes. | Output |
 
 **Return Values**:
@@ -1075,7 +1075,7 @@ k_s32 kd_mpi_venc_get_2d_osd_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_o
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1098,7 +1098,7 @@ None.
 
 None.
 
-#### 2.1.18 kd_mpi_venc_set_2d_border_param
+#### kd_mpi_venc_set_2d_border_param
 
 **Description**:
 
@@ -1107,15 +1107,15 @@ Set the border attributes in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) *attr);
+k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2d_border_attr](#k_venc_2d_border_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#k_venc_max_2d_border_num)). | Input |
 | attr     | Pointer to border attributes. | Input |
 
 **Return Values**:
@@ -1123,7 +1123,7 @@ k_s32 kd_mpi_venc_set_2d_border_param(k_u32 chn_num, k_u8 index, const [k_venc_2
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1146,7 +1146,7 @@ None.
 
 None.
 
-#### 2.1.19 kd_mpi_venc_get_2d_border_param
+#### kd_mpi_venc_get_2d_border_param
 
 **Description**:
 
@@ -1155,15 +1155,15 @@ Get the border attributes in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr) *attr);
+k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_border_attr](#k_venc_2d_border_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| index    | Border index. Value range: [0, [K_VENC_MAX_2D_BORDER_NUM](#k_venc_max_2d_border_num)). | Input |
 | attr     | Pointer to border attributes. | Output |
 
 **Return Values**:
@@ -1171,7 +1171,7 @@ k_s32 kd_mpi_venc_get_2d_border_param(k_u32 chn_num, k_u8 index, [k_venc_2d_bord
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1194,7 +1194,7 @@ None.
 
 None.
 
-#### 2.1.20 kd_mpi_venc_set_2d_custom_coef
+#### kd_mpi_venc_set_2d_custom_coef
 
 **Description**:
 
@@ -1210,15 +1210,15 @@ k_s32 kd_mpi_venc_set_2d_custom_coef(k_u32 chn_num, const k_s16 *coef);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#2D Conversion Coefficient Calculation). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1233,7 +1233,7 @@ None.
 
 - The kernel has a set of default conversion coefficients. If custom conversion coefficients are needed, they can be configured through this interface.
 - This interface should be called after setting the computation mode.
-- For details on conversion coefficients, refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation).
+- For details on conversion coefficients, refer to [2D Conversion Coefficient Calculation](#2D Conversion Coefficient Calculation).
 - When the computation mode is K_VENC_2D_CALC_MODE_BORDER, conversion coefficients are not applicable, and calling this interface will result in an error.
 
 **Example**:
@@ -1242,9 +1242,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_set_2d_mode](#2114-kd_mpi_venc_set_2d_mode)
+[kd_mpi_venc_set_2d_mode](#kd_mpi_venc_set_2d_mode)
 
-#### 2.1.21 kd_mpi_venc_get_2d_custom_coef
+#### kd_mpi_venc_get_2d_custom_coef
 
 **Description**:
 
@@ -1260,15 +1260,15 @@ k_s32 kd_mpi_venc_get_2d_custom_coef(k_u32 chn_num, k_s16 *coef);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
-| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#12141-2D Conversion Coefficient Calculation). | Output |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
+| coef     | Pointer to conversion coefficients. Refer to [2D Conversion Coefficient Calculation](#2D Conversion Coefficient Calculation). | Output |
 
 **Return Values**:
 
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1292,7 +1292,7 @@ None.
 
 None.
 
-#### 2.1.22 kd_mpi_venc_set_2d_color_gamut
+#### kd_mpi_venc_set_2d_color_gamut
 
 **Description**:
 
@@ -1301,14 +1301,14 @@ Set the color gamut in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) color_gamut);
+k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut](#k_venc_2d_color_gamut) color_gamut);
 ```
 
 **Parameters**:
 
 | Parameter Name    | Description | Input/Output |
 |---|---|---|
-| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | color_gamut | Color gamut enumeration. | Input |
 
 **Return Values**:
@@ -1316,7 +1316,7 @@ k_s32 kd_mpi_venc_set_2d_color_gamut(k_u32 chn_num, const [k_venc_2d_color_gamut
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1341,7 +1341,7 @@ None.
 
 None.
 
-#### 2.1.23 kd_mpi_venc_get_2d_color_gamut
+#### kd_mpi_venc_get_2d_color_gamut
 
 **Description**:
 
@@ -1350,14 +1350,14 @@ Get the color gamut in 2D computation.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut) *color_gamut);
+k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#k_venc_2d_color_gamut) *color_gamut);
 ```
 
 **Parameters**:
 
 | Parameter Name    | Description | Input/Output |
 |---|---|---|
-| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num     | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | color_gamut | Pointer to color gamut enumeration. | Output |
 
 **Return Values**:
@@ -1365,7 +1365,7 @@ k_s32 kd_mpi_venc_get_2d_color_gamut(k_u32 chn_num, [k_venc_2d_color_gamut](#311
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1390,7 +1390,7 @@ None.
 
 None.
 
-#### 2.1.24 kd_mpi_venc_attach_2d
+#### kd_mpi_venc_attach_2d
 
 **Description**:
 
@@ -1406,14 +1406,14 @@ k_s32 kd_mpi_venc_attach_2d(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1436,7 +1436,7 @@ None.
 
 None.
 
-#### 2.1.25 kd_mpi_venc_detach_2d
+#### kd_mpi_venc_detach_2d
 
 **Description**:
 
@@ -1452,14 +1452,14 @@ k_s32 kd_mpi_venc_detach_2d(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |--------|-------------------------------|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1480,9 +1480,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_stop_chn](#214-kd_mpi_venc_stop_chn)
+[kd_mpi_venc_stop_chn](#kd_mpi_venc_stop_chn)
 
-#### 2.1.26 kd_mpi_venc_send_2d_frame
+#### kd_mpi_venc_send_2d_frame
 
 **Description**:
 
@@ -1498,7 +1498,7 @@ k_s32 kd_mpi_venc_send_2d_frame(k_u32 chn_num, const k_video_frame_info *frame, 
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | frame | Pointer to the original image information structure. Refer to the "K230 System Control API Reference". | Input |
 | milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. > 0: Timeout duration. | Input |
 
@@ -1507,7 +1507,7 @@ k_s32 kd_mpi_venc_send_2d_frame(k_u32 chn_num, const k_video_frame_info *frame, 
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1520,7 +1520,7 @@ None.
 
 **Notes**:
 
-- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use the VENC interface [kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame) to send the image.
+- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use the VENC interface [kd_mpi_venc_send_frame](#kd_mpi_venc_send_frame) to send the image.
 
 **Example**:
 
@@ -1528,9 +1528,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_send_frame](#218-kd_mpi_venc_send_frame)
+[kd_mpi_venc_send_frame](#kd_mpi_venc_send_frame)
 
-#### 2.1.27 kd_mpi_venc_get_2d_frame
+#### kd_mpi_venc_get_2d_frame
 
 **Description**:
 
@@ -1546,7 +1546,7 @@ k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 m
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | frame | Pointer to the output image information structure. Refer to the "K230 System Control API Reference". | Output |
 | milli_sec | Timeout for sending the image. Value range: [-1, +∞) -1: Blocking. 0: Non-blocking. > 0: Timeout duration. | Input |
 
@@ -1555,7 +1555,7 @@ k_s32 kd_mpi_venc_get_2d_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 m
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1568,7 +1568,7 @@ None.
 
 **Notes**:
 
-- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use [kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream) to get the encoded stream.
+- This interface is used only in scenarios involving single 2D computation. For scenarios involving 2D computation followed by encoding, use [kd_mpi_venc_get_stream](#kd_mpi_venc_get_stream) to get the encoded stream.
 
 **Example**:
 
@@ -1576,9 +1576,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_get_stream](#216-kd_mpi_venc_get_stream)
+[kd_mpi_venc_get_stream](#kd_mpi_venc_get_stream)
 
-#### 2.1.28 kd_mpi_venc_start_2d_chn
+#### kd_mpi_venc_start_2d_chn
 
 **Description**:
 
@@ -1594,14 +1594,14 @@ k_s32 kd_mpi_venc_start_2d_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1613,7 +1613,7 @@ None.
 
 **Notes**:
 
-- This interface is used only in scenarios involving single 2D computation. For VENC+2D scenarios, use [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn).
+- This interface is used only in scenarios involving single 2D computation. For VENC+2D scenarios, use [kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn).
 
 **Example**:
 
@@ -1621,9 +1621,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn)
+[kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn)
 
-#### 2.1.29 kd_mpi_venc_stop_2d_chn
+#### kd_mpi_venc_stop_2d_chn
 
 **Description**:
 
@@ -1639,14 +1639,14 @@ k_s32 kd_mpi_venc_stop_2d_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num | 2D computation channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1669,7 +1669,7 @@ None.
 
 None.
 
-#### 2.1.30 kd_mpi_venc_request_idr
+#### kd_mpi_venc_request_idr
 
 **Description**:
 
@@ -1685,14 +1685,14 @@ k_s32 kd_mpi_venc_request_idr(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1715,7 +1715,7 @@ None.
 
 None.
 
-#### 2.1.31 kd_mpi_venc_set_h265_sao
+#### kd_mpi_venc_set_h265_sao
 
 **Description**:
 
@@ -1724,14 +1724,14 @@ Set the Sao attributes for the H.265 channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
+k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#k_venc_h265_sao) *h265_sao);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h265_sao | Sao configuration for the H.265 encoding channel. | Input |
 
 **Return Values**:
@@ -1739,7 +1739,7 @@ k_s32 kd_mpi_venc_set_h265_sao(k_u32 chn_num, const [k_venc_h265_sao](#3127-k_ve
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1762,7 +1762,7 @@ None.
 
 None.
 
-#### 2.1.32 kd_mpi_venc_get_h265_sao
+#### kd_mpi_venc_get_h265_sao
 
 **Description**:
 
@@ -1771,14 +1771,14 @@ Get the Sao attributes for the H.265 channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#3127-k_venc_h265_sao) *h265_sao);
+k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#k_venc_h265_sao) *h265_sao);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h265_sao | Sao configuration for the H.265 encoding channel. | Output |
 
 **Return Values**:
@@ -1786,7 +1786,7 @@ k_s32 kd_mpi_venc_get_h265_sao(k_u32 chn_num, [k_venc_h265_sao](#3127-k_venc_h26
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1809,7 +1809,7 @@ None.
 
 None.
 
-#### 2.1.33 kd_mpi_venc_set_dblk
+#### kd_mpi_venc_set_dblk
 
 **Description**:
 
@@ -1825,7 +1825,7 @@ k_s32 kd_mpi_venc_set_dblk(k_u32 chn_num, const k_bool dblk_en);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | dblk_en | Enable or disable deblocking. K_TRUE: Enable. K_FALSE: Disable. Default is enabled. | Input |
 
 **Return Values**:
@@ -1833,7 +1833,7 @@ k_s32 kd_mpi_venc_set_dblk(k_u32 chn_num, const k_bool dblk_en);
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1856,7 +1856,7 @@ None.
 
 None.
 
-#### 2.1.34 kd_mpi_venc_get_dblk
+#### kd_mpi_venc_get_dblk
 
 **Description**:
 
@@ -1872,7 +1872,7 @@ k_s32 kd_mpi_venc_get_dblk(k_u32 chn_num, k_bool *dblk_en);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | dblk_en | Enable or disable deblocking. K_TRUE: Enable. K_FALSE: Disable. Default is enabled. | Output |
 
 **Return Values**:
@@ -1880,7 +1880,7 @@ k_s32 kd_mpi_venc_get_dblk(k_u32 chn_num, k_bool *dblk_en);
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1903,7 +1903,7 @@ None.
 
 None.
 
-#### 2.1.35 kd_mpi_venc_set_roi_attr
+#### kd_mpi_venc_set_roi_attr
 
 **Description**:
 
@@ -1912,14 +1912,14 @@ Set the ROI attributes for the H.264/H.265 channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
+k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#k_venc_roi_attr) *roi_attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | roi_attr | ROI attributes for the H.264/H.265 encoding channel. | Input |
 
 **Return Values**:
@@ -1927,7 +1927,7 @@ k_s32 kd_mpi_venc_set_roi_attr(k_u32 chn_num, const [k_venc_roi_attr](#3129-k_ve
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1950,7 +1950,7 @@ None.
 
 None.
 
-#### 2.1.36 kd_mpi_venc_get_roi_attr
+#### kd_mpi_venc_get_roi_attr
 
 **Description**:
 
@@ -1959,14 +1959,14 @@ Get the ROI attributes for the H.264/H.265 channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#3129-k_venc_roi_attr) *roi_attr);
+k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#k_venc_roi_attr) *roi_attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | roi_attr | ROI attributes for the H.264/H.265 encoding channel. | Output |
 
 **Return Values**:
@@ -1974,7 +1974,7 @@ k_s32 kd_mpi_venc_get_roi_attr(k_u32 chn_num, [k_venc_roi_attr](#3129-k_venc_roi
 | Return Value | Description |
 |---|---|
 | 0      | Success. |
-| Non-zero | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -1997,7 +1997,7 @@ None.
 
 None.
 
-#### 2.1.37 kd_mpi_venc_set_h264_entropy
+#### kd_mpi_venc_set_h264_entropy
 
 **Description**:
 
@@ -2006,14 +2006,14 @@ Set the entropy encoding mode for the H.264 encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
+k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#k_venc_h264_entropy) *h264_entropy);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h264_entropy | Entropy encoding mode for the H.264 encoding channel. | Input |
 
 **Return Values**:
@@ -2021,7 +2021,7 @@ k_s32 kd_mpi_venc_set_h264_entropy(k_u32 chn_num, const [k_venc_h264_entropy](#3
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2044,7 +2044,7 @@ None.
 
 None.
 
-#### 2.1.38 kd_mpi_venc_get_h264_entropy
+#### kd_mpi_venc_get_h264_entropy
 
 **Description**:
 
@@ -2053,14 +2053,14 @@ Get the entropy encoding mode for the H.264 encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#3130-k_venc_h264_entropy) *h264_entropy);
+k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#k_venc_h264_entropy) *h264_entropy);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h264_entropy | Entropy encoding mode for the H.264 encoding channel. | Output |
 
 **Return Values**:
@@ -2068,7 +2068,7 @@ k_s32 kd_mpi_venc_get_h264_entropy(k_u32 chn_num, [k_venc_h264_entropy](#3130-k_
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2091,7 +2091,7 @@ None.
 
 None.
 
-#### 2.1.39 kd_mpi_venc_set_h265_entropy
+#### kd_mpi_venc_set_h265_entropy
 
 **Description**:
 
@@ -2100,14 +2100,14 @@ Set the entropy encoding mode for the H.265 encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
+k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#k_venc_h265_entropy) *h265_entropy);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h265_entropy | Entropy encoding mode for the H.265 encoding channel. | Input |
 
 **Return Values**:
@@ -2115,7 +2115,7 @@ k_s32 kd_mpi_venc_set_h265_entropy(k_u32 chn_num, const [k_venc_h265_entropy](#3
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2138,7 +2138,7 @@ None.
 
 None.
 
-#### 2.1.40 kd_mpi_venc_get_h265_entropy
+#### kd_mpi_venc_get_h265_entropy
 
 **Description**:
 
@@ -2147,14 +2147,14 @@ Get the entropy encoding mode for the H.265 encoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_venc_h265_entropy) *h265_entropy);
+k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#k_venc_h265_entropy) *h265_entropy);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#311-venc_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VENC_2D_MAX_CHN_NUM](#venc_max_chn_num)). | Input |
 | h265_entropy | Entropy encoding mode for the H.265 encoding channel. | Output |
 
 **Return Values**:
@@ -2162,7 +2162,7 @@ k_s32 kd_mpi_venc_get_h265_entropy(k_u32 chn_num, [k_venc_h265_entropy](#3131-k_
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2185,22 +2185,22 @@ None.
 
 None.
 
-### 2.2 Video Decoding
+### Video Decoding
 
 This module provides the following APIs:
 
-- [kd_mpi_vdec_create_chn](#221-kd_mpi_vdec_create_chn): Create a video decoding channel.
-- [kd_mpi_vdec_destroy_chn](#222-kd_mpi_vdec_destroy_chn): Destroy a video decoding channel.
-- [kd_mpi_vdec_start_chn](#223-kd_mpi_vdec_start_chn): Start a video decoding channel.
-- [kd_mpi_vdec_stop_chn](#224-kd_mpi_vdec_stop_chn): Stop a video decoding channel.
-- [kd_mpi_vdec_query_status](#225-kd_mpi_vdec_query_status): Query the status of the decoding channel.
-- [kd_mpi_vdec_send_stream](#226-kd_mpi_vdec_send_stream): Send stream data to the video decoding channel.
-- [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame): Get the decoded image from the video decoding channel.
-- [kd_mpi_vdec_release_frame](#228-kd_mpi_vdec_release_frame): Release the decoded image from the video decoding channel.
-- [kd_mpi_vdec_set_downscale](#229-kd_mpi_vdec_set_downscale): Set the downscaling of the output image (specify width and height or by ratio).
-- [kd_mpi_vdec_set_rotation](#2210-kd_mpi_vdec_set_rotation): Set the rotation angle of the decoded image.
+- [kd_mpi_vdec_create_chn](#kd_mpi_vdec_create_chn): Create a video decoding channel.
+- [kd_mpi_vdec_destroy_chn](#kd_mpi_vdec_destroy_chn): Destroy a video decoding channel.
+- [kd_mpi_vdec_start_chn](#kd_mpi_vdec_start_chn): Start a video decoding channel.
+- [kd_mpi_vdec_stop_chn](#kd_mpi_vdec_stop_chn): Stop a video decoding channel.
+- [kd_mpi_vdec_query_status](#kd_mpi_vdec_query_status): Query the status of the decoding channel.
+- [kd_mpi_vdec_send_stream](#kd_mpi_vdec_send_stream): Send stream data to the video decoding channel.
+- [kd_mpi_vdec_get_frame](#kd_mpi_vdec_get_frame): Get the decoded image from the video decoding channel.
+- [kd_mpi_vdec_release_frame](#kd_mpi_vdec_release_frame): Release the decoded image from the video decoding channel.
+- [kd_mpi_vdec_set_downscale](#kd_mpi_vdec_set_downscale): Set the downscaling of the output image (specify width and height or by ratio).
+- [kd_mpi_vdec_set_rotation](#kd_mpi_vdec_set_rotation): Set the rotation angle of the decoded image.
 
-#### 2.2.1 kd_mpi_vdec_create_chn
+#### kd_mpi_vdec_create_chn
 
 **Description**:
 
@@ -2209,14 +2209,14 @@ Create a video decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
+k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#k_vdec_chn_attr) *attr);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | attr     | Pointer to the decoding channel attributes. | Input |
 
 **Return Values**:
@@ -2224,7 +2224,7 @@ k_s32 kd_mpi_vdec_create_chn(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2247,7 +2247,7 @@ None.
 
 None.
 
-#### 2.2.2 kd_mpi_vdec_destroy_chn
+#### kd_mpi_vdec_destroy_chn
 
 **Description**:
 
@@ -2263,14 +2263,14 @@ k_s32 kd_mpi_vdec_destroy_chn(k_u32 chn_num);
 
 | Parameter Name | Description  | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2293,7 +2293,7 @@ None.
 
 None.
 
-#### 2.2.3 kd_mpi_vdec_start_chn
+#### kd_mpi_vdec_start_chn
 
 **Description**:
 
@@ -2309,14 +2309,14 @@ k_s32 kd_mpi_vdec_start_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2339,7 +2339,7 @@ None.
 
 None.
 
-#### 2.2.4 kd_mpi_vdec_stop_chn
+#### kd_mpi_vdec_stop_chn
 
 **Description**:
 
@@ -2355,14 +2355,14 @@ k_s32 kd_mpi_vdec_stop_chn(k_u32 chn_num);
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 
 **Return Values**:
 
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2385,7 +2385,7 @@ None.
 
 None.
 
-#### 2.2.5 kd_mpi_vdec_query_status
+#### kd_mpi_vdec_query_status
 
 **Description**:
 
@@ -2394,14 +2394,14 @@ Query the status of the decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#324-k_vdec_chn_status) *status);
+k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#k_vdec_chn_status) *status);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | status   | Pointer to the video decoding channel status structure. | Output |
 
 **Return Values**:
@@ -2409,7 +2409,7 @@ k_s32 kd_mpi_vdec_query_status(k_u32 chn_num, [k_vdec_chn_status](#324-k_vdec_ch
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2432,7 +2432,7 @@ None.
 
 None.
 
-#### 2.2.6 kd_mpi_vdec_send_stream
+#### kd_mpi_vdec_send_stream
 
 **Description**:
 
@@ -2441,14 +2441,14 @@ Send stream data to the video decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_stream) *stream, k_s32 milli_sec);
+k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#k_vdec_stream) *stream, k_s32 milli_sec);
 ```
 
 **Parameters**:
 
 | Parameter Name  | Description | Input/Output |
 |---|---|---|
-| chn_num   | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num   | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | stream    | Pointer to the decoding stream data. | Input |
 | milli_sec | Timeout flag for sending stream. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout duration in milliseconds, no upper limit. | Input |
 
@@ -2457,7 +2457,7 @@ k_s32 kd_mpi_vdec_send_stream(k_u32 chn_num, const [k_vdec_stream](#326-k_vdec_s
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2480,7 +2480,7 @@ None.
 
 None.
 
-#### 2.2.7 kd_mpi_vdec_get_frame
+#### kd_mpi_vdec_get_frame
 
 **Description**:
 
@@ -2489,14 +2489,14 @@ Get the decoded image from the video decoding channel.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info *frame_info, [k_vdec_supplement_info](#327-k_vdec_supplement_info) *supplement, k_s32 milli_sec);
+k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info *frame_info, [k_vdec_supplement_info](#k_vdec_supplement_info) *supplement, k_s32 milli_sec);
 ```
 
 **Parameters**:
 
 | Parameter Name   | Description | Input/Output |
 |---|---|---|
-| chn | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | frame_info | Pointer to the decoded image information. Refer to the "K230 System Control API Reference". | Output |
 | supplement | Pointer to the decoded image supplementary information. | Output |
 | milli_sec  | Timeout flag for sending stream. Value range: -1: Blocking. 0: Non-blocking. Positive value: Timeout duration in milliseconds. | Input |
@@ -2506,7 +2506,7 @@ k_s32 kd_mpi_vdec_get_frame(k_u32 chn_num, k_video_frame_info *frame_info, [k_vd
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes). |
+| Non-zero    | Failure, see [Error Codes](#error-codes). |
 
 **Chip Differences**:
 
@@ -2535,7 +2535,7 @@ None.
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
+| Non-zero    | Failure, see [Error Codes](#error-codes).  |
 
 **Chip Differences**:
 
@@ -2558,7 +2558,7 @@ None.
 
 None.
 
-#### 2.2.8 kd_mpi_vdec_release_frame
+#### kd_mpi_vdec_release_frame
 
 **Description**:
 
@@ -2574,15 +2574,15 @@ k_s32 kd_mpi_vdec_release_frame(k_u32 chn_num, const k_video_frame_info *frame_i
 
 | Parameter Name   | Description | Input/Output |
 |---|---|---|
-| chn        | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
-| frame_info | Pointer to the decoded image information obtained by the [kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame) interface. Refer to the "K230 System Control API Reference". | Input |
+| chn        | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
+| frame_info | Pointer to the decoded image information obtained by the [kd_mpi_vdec_get_frame](#kd_mpi_vdec_get_frame) interface. Refer to the "K230 System Control API Reference". | Input |
 
 **Return Values**:
 
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
+| Non-zero    | Failure, see [Error Codes](#error-codes).  |
 
 **Chip Differences**:
 
@@ -2603,9 +2603,9 @@ None.
 
 **Related Topics**:
 
-[kd_mpi_vdec_get_frame](#227-kd_mpi_vdec_get_frame)
+[kd_mpi_vdec_get_frame](#kd_mpi_vdec_get_frame)
 
-#### 2.2.9 kd_mpi_vdec_set_downscale
+#### kd_mpi_vdec_set_downscale
 
 **Description**:
 
@@ -2614,14 +2614,14 @@ Set the downscaling of the output image (specify width and height or by ratio).
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const [k_vdec_downscale](#3211-k_vdec_downscale) *downscale);
+k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const [k_vdec_downscale](#k_vdec_downscale) *downscale);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | downscale    | Pointer to the downscaling parameter structure. | Input |
 
 **Return Values**:
@@ -2629,7 +2629,7 @@ k_s32 kd_mpi_vdec_set_downscale(k_u32 chn_num, const [k_vdec_downscale](#3211-k_
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
+| Non-zero    | Failure, see [Error Codes](#error-codes).  |
 
 **Chip Differences**:
 
@@ -2652,7 +2652,7 @@ None.
 
 None.
 
-#### 2.2.10 kd_mpi_vdec_set_rotation
+#### kd_mpi_vdec_set_rotation
 
 **Description**:
 
@@ -2661,14 +2661,14 @@ Set the rotation angle of the decoded image.
 **Syntax**:
 
 ```c
-k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotation) rotation);
+k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const [k_rotation](#k_rotation) rotation);
 ```
 
 **Parameters**:
 
 | Parameter Name | Description | Input/Output |
 |---|---|---|
-| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num)). | Input |
+| chn_num  | Channel number. Value range: [0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num)). | Input |
 | rotation | Rotation angle enumeration. | Input |
 
 **Return Values**:
@@ -2676,7 +2676,7 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const [k_rotation](#3112-k_rotatio
 | Return Value | Description                          |
 |--------|-------------------------------|
 | 0      | Success.                         |
-| Non-zero    | Failure, see [Error Codes](#5-error-codes).  |
+| Non-zero    | Failure, see [Error Codes](#error-codes).  |
 
 **Chip Differences**:
 
@@ -2699,45 +2699,45 @@ None.
 
 None.
 
-## 3. Data Types
+## Data Types
 
-### 3.1 Video Encoding
+### Video Encoding
 
 The related data type definitions for this module are as follows:
 
-- [VENC_MAX_CHN_NUM](#311-venc_max_chn_num): Defines the maximum number of channels.
-- [K_VENC_MAX_2D_OSD_REGION_NUM](#312-k_venc_max_2d_osd_region_num): Defines the maximum number of 2D OSD regions.
-- [K_VENC_MAX_2D_BORDER_NUM](#313-k_venc_max_2d_border_num): Defines the maximum number of 2D borders.
-- [K_VENC_2D_COFF_NUM](#314-k_venc_2d_coff_num): Defines the number of 2D CSC conversion coefficients.
-- [K_VENC_2D_MAX_CHN_NUM](#315-k_venc_2d_max_chn_num): Defines the number of 2D channels.
-- [k_venc_rc_mode](#316-k_venc_rc_mode): Defines the rate control mode for the encoding channel.
-- [k_venc_pack_type](#317-k_venc_pack_type): Defines the JPEG stream pack type enumeration.
-- [k_venc_2d_calc_mode](#318-k_venc_2d_calc_mode): Defines the calculation mode enumeration for 2D operations.
-- [k_venc_2d_src_dst_fmt](#319-k_venc_2d_src_dst_fmt): Defines the input/output data format enumeration for 2D operations.
-- [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt): Defines the OSD layer data format enumeration for 2D operations.
-- [k_venc_2d_add_order](#3111-k_venc_2d_add_order): Defines the OSD overlay enumeration for 2D operations.
-- [k_rotation](#3112-k_rotation): Defines the rotation angle enumeration.
-- [k_venc_mirror](#3113-k_venc_mirror): Defines the mirror mode enumeration.
-- [k_venc_2d_color_gamut](#3114-k_venc_2d_color_gamut): Defines the color gamut enumeration for 2D operations.
-- [k_venc_chn_attr](#3115-k_venc_chn_attr): Defines the attributes structure for the encoding channel.
-- [k_venc_attr](#3116-k_venc_attr): Defines the encoder attributes structure.
-- [k_venc_rc_attr](#3117-k_venc_rc_attr): Defines the rate controller attributes structure for the encoding channel.
-- [k_venc_cbr](#3118-k_venc_cbr): Defines the CBR attributes structure for H.264/H.265 encoding channels.
-- [k_venc_vbr](#3119-k_venc_vbr): Defines the VBR attributes structure for H.264/H.265 encoding channels.
-- [k_venc_fixqp](#3120-k_venc_fixqp): Defines the Fixqp attributes structure for H.264/H.265 encoding channels.
-- [k_venc_mjpeg_fixqp](#3121-k_venc_mjpeg_fixqp): Defines the Fixqp attributes structure for MJPEG encoding channels.
-- [k_venc_chn_status](#3122-k_venc_chn_status): Defines the status structure for the encoding channel.
-- [k_venc_stream](#3123-k_venc_stream): Defines the frame stream type structure.
-- [k_venc_pack](#3124-k_venc_pack): Defines the frame stream pack structure.
-- [k_venc_2d_osd_attr](#3125-k_venc_2d_osd_attr): Defines the 2D overlay attributes structure.
-- [k_venc_2d_border_attr](#3126-k_venc_2d_border_attr): Defines the 2D border attributes structure.
-- [k_venc_h265_sao](#3127-k_venc_h265_sao): Defines the SAO structure for H.265 protocol encoding channels.
-- [k_venc_rect](#3128-k_venc_rect): Defines the rectangle region information structure.
-- [k_venc_roi_attr](#3129-k_venc_roi_attr): Defines the ROI information for encoding.
-- [k_venc_h264_entropy](#3130-k_venc_h264_entropy): Defines the entropy encoding structure for H.264 protocol encoding channels.
-- [k_venc_h265_entropy](#3131-k_venc_h265_entropy): Defines the entropy encoding structure for H.265 protocol encoding channels.
+- [VENC_MAX_CHN_NUM](#venc_max_chn_num): Defines the maximum number of channels.
+- [K_VENC_MAX_2D_OSD_REGION_NUM](#k_venc_max_2d_osd_region_num): Defines the maximum number of 2D OSD regions.
+- [K_VENC_MAX_2D_BORDER_NUM](#k_venc_max_2d_border_num): Defines the maximum number of 2D borders.
+- [K_VENC_2D_COFF_NUM](#k_venc_2d_coff_num): Defines the number of 2D CSC conversion coefficients.
+- [K_VENC_2D_MAX_CHN_NUM](#k_venc_2d_max_chn_num): Defines the number of 2D channels.
+- [k_venc_rc_mode](#k_venc_rc_mode): Defines the rate control mode for the encoding channel.
+- [k_venc_pack_type](#k_venc_pack_type): Defines the JPEG stream pack type enumeration.
+- [k_venc_2d_calc_mode](#k_venc_2d_calc_mode): Defines the calculation mode enumeration for 2D operations.
+- [k_venc_2d_src_dst_fmt](#k_venc_2d_src_dst_fmt): Defines the input/output data format enumeration for 2D operations.
+- [k_venc_2d_osd_fmt](#k_venc_2d_osd_fmt): Defines the OSD layer data format enumeration for 2D operations.
+- [k_venc_2d_add_order](#k_venc_2d_add_order): Defines the OSD overlay enumeration for 2D operations.
+- [k_rotation](#k_rotation): Defines the rotation angle enumeration.
+- [k_venc_mirror](#k_venc_mirror): Defines the mirror mode enumeration.
+- [k_venc_2d_color_gamut](#k_venc_2d_color_gamut): Defines the color gamut enumeration for 2D operations.
+- [k_venc_chn_attr](#k_venc_chn_attr): Defines the attributes structure for the encoding channel.
+- [k_venc_attr](#k_venc_attr): Defines the encoder attributes structure.
+- [k_venc_rc_attr](#k_venc_rc_attr): Defines the rate controller attributes structure for the encoding channel.
+- [k_venc_cbr](#k_venc_cbr): Defines the CBR attributes structure for H.264/H.265 encoding channels.
+- [k_venc_vbr](#k_venc_vbr): Defines the VBR attributes structure for H.264/H.265 encoding channels.
+- [k_venc_fixqp](#k_venc_fixqp): Defines the Fixqp attributes structure for H.264/H.265 encoding channels.
+- [k_venc_mjpeg_fixqp](#k_venc_mjpeg_fixqp): Defines the Fixqp attributes structure for MJPEG encoding channels.
+- [k_venc_chn_status](#k_venc_chn_status): Defines the status structure for the encoding channel.
+- [k_venc_stream](#k_venc_stream): Defines the frame stream type structure.
+- [k_venc_pack](#k_venc_pack): Defines the frame stream pack structure.
+- [k_venc_2d_osd_attr](#k_venc_2d_osd_attr): Defines the 2D overlay attributes structure.
+- [k_venc_2d_border_attr](#k_venc_2d_border_attr): Defines the 2D border attributes structure.
+- [k_venc_h265_sao](#k_venc_h265_sao): Defines the SAO structure for H.265 protocol encoding channels.
+- [k_venc_rect](#k_venc_rect): Defines the rectangle region information structure.
+- [k_venc_roi_attr](#k_venc_roi_attr): Defines the ROI information for encoding.
+- [k_venc_h264_entropy](#k_venc_h264_entropy): Defines the entropy encoding structure for H.264 protocol encoding channels.
+- [k_venc_h265_entropy](#k_venc_h265_entropy): Defines the entropy encoding structure for H.265 protocol encoding channels.
 
-#### 3.1.1 VENC_MAX_CHN_NUM
+#### VENC_MAX_CHN_NUM
 
 **Description**:
 
@@ -2757,7 +2757,7 @@ None.
 
 None.
 
-#### 3.1.2 K_VENC_MAX_2D_OSD_REGION_NUM
+#### K_VENC_MAX_2D_OSD_REGION_NUM
 
 **Description**:
 
@@ -2777,7 +2777,7 @@ None.
 
 None.
 
-#### 3.1.3 K_VENC_MAX_2D_BORDER_NUM
+#### K_VENC_MAX_2D_BORDER_NUM
 
 **Description**:
 
@@ -2797,7 +2797,7 @@ None.
 
 None.
 
-#### 3.1.4 K_VENC_2D_COFF_NUM
+#### K_VENC_2D_COFF_NUM
 
 **Description**:
 
@@ -2817,7 +2817,7 @@ None.
 
 None.
 
-#### 3.1.5 K_VENC_2D_MAX_CHN_NUM
+#### K_VENC_2D_MAX_CHN_NUM
 
 **Description**:
 
@@ -2837,7 +2837,7 @@ None.
 
 None.
 
-#### 3.1.6 k_venc_rc_mode
+#### k_venc_rc_mode
 
 **Description**:
 
@@ -2872,7 +2872,7 @@ None.
 
 None.
 
-#### 3.1.7 k_venc_pack_type
+#### k_venc_pack_type
 
 **Description**:
 
@@ -2905,7 +2905,7 @@ None.
 
 None.
 
-#### 3.1.8 k_venc_2d_calc_mode
+#### k_venc_2d_calc_mode
 
 **Description**:
 
@@ -2940,7 +2940,7 @@ typedef enum {
 
 None.
 
-#### 3.1.9 k_venc_2d_src_dst_fmt
+#### k_venc_2d_src_dst_fmt
 
 **Description**:
 
@@ -2982,7 +2982,7 @@ None.
 
 None.
 
-#### 3.1.10 k_venc_2d_osd_fmt
+#### k_venc_2d_osd_fmt
 
 **Description**:
 
@@ -3021,7 +3021,7 @@ typedef enum {
 
 None.
 
-#### 3.1.11 k_venc_2d_add_order
+#### k_venc_2d_add_order
 
 **Description**:
 
@@ -3069,7 +3069,7 @@ None.
 
 None.
 
-#### 3.1.12 k_rotation
+#### k_rotation
 
 **Description**:
 
@@ -3104,7 +3104,7 @@ None.
 
 None.
 
-#### 3.1.13 k_venc_mirror
+#### k_venc_mirror
 
 **Description**:
 
@@ -3135,7 +3135,7 @@ None.
 
 None.
 
-#### 3.1.14 k_venc_2d_color_gamut
+#### k_venc_2d_color_gamut
 
 **Description**:
 
@@ -3168,7 +3168,7 @@ None.
 
 None.
 
-#### 3.1.15 k_venc_chn_attr
+#### k_venc_chn_attr
 
 **Description**:
 
@@ -3198,7 +3198,7 @@ None.
 
 None.
 
-#### 3.1.16 k_venc_attr
+#### k_venc_attr
 
 **Description**:
 
@@ -3236,7 +3236,7 @@ None.
 
 None.
 
-#### 3.1.17 k_venc_rc_attr
+#### k_venc_rc_attr
 
 **Description**:
 
@@ -3274,7 +3274,7 @@ None.
 
 None.
 
-#### 3.1.18 k_venc_cbr
+#### k_venc_cbr
 
 **Description**:
 
@@ -3310,7 +3310,7 @@ typedef struct {
 
 None.
 
-#### 3.1.19 k_venc_vbr
+#### k_venc_vbr
 
 **Description**:
 
@@ -3342,13 +3342,13 @@ typedef struct {
 
 **Notes**:
 
-Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on src_frame_rate and dst_frame_rate.
+Refer to [k_venc_cbr](#k_venc_cbr) for details on src_frame_rate and dst_frame_rate.
 
 **Related Data Types and Interfaces**:
 
 None.
 
-### 3.1.20 k_venc_fixqp
+### k_venc_fixqp
 
 **Description**:
 
@@ -3378,13 +3378,13 @@ typedef struct {
 
 **Notes**:
 
-Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
+Refer to [k_venc_cbr](#k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
 
 **Related Data Types and Interfaces**:
 
 None.
 
-### 3.1.21 k_venc_mjpeg_fixqp
+### k_venc_mjpeg_fixqp
 
 **Description**:
 
@@ -3410,13 +3410,13 @@ typedef struct {
 
 **Notes**:
 
-Refer to [k_venc_cbr](#3118-k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
+Refer to [k_venc_cbr](#k_venc_cbr) for details on `src_frame_rate` and `dst_frame_rate`.
 
 **Related Data Types and Interfaces**:
 
 None.
 
-### 3.1.22 k_venc_chn_status
+### k_venc_chn_status
 
 **Description**:
 
@@ -3448,7 +3448,7 @@ None.
 
 None.
 
-### 3.1.23 k_venc_stream
+### k_venc_stream
 
 **Description**:
 
@@ -3458,7 +3458,7 @@ Defines the structure for frame stream type.
 
 ```c
 typedef struct {
-    [k_venc_pack](#3124-k_venc_pack) *pack;
+    [k_venc_pack](#k_venc_pack) *pack;
     k_u32 pack_cnt;
 } k_venc_stream;
 ```
@@ -3478,7 +3478,7 @@ None.
 
 None.
 
-### 3.1.24 k_venc_pack
+### k_venc_pack
 
 **Description**:
 
@@ -3491,7 +3491,7 @@ typedef struct {
     k_u64 phys_addr;
     k_u32 len;
     k_u64 pts;
-    [k_venc_pack_type](#317-k_venc_pack_type) type;
+    [k_venc_pack_type](#k_venc_pack_type) type;
 } k_venc_pack;
 ```
 
@@ -3512,7 +3512,7 @@ None.
 
 None.
 
-### 3.1.25 k_venc_2d_osd_attr
+### k_venc_2d_osd_attr
 
 **Description**:
 
@@ -3530,9 +3530,9 @@ typedef struct {
     k_u8 bg_alpha;
     k_u8 osd_alpha;
     k_u8 video_alpha;
-    [k_venc_2d_add_order](#3111-k_venc_2d_add_order) add_order;
+    [k_venc_2d_add_order](#k_venc_2d_add_order) add_order;
     k_u32 bg_color;
-    [k_venc_2d_osd_fmt](#3110-k_venc_2d_osd_fmt) fmt;
+    [k_venc_2d_osd_fmt](#k_venc_2d_osd_fmt) fmt;
 } k_venc_2d_osd_attr;
 ```
 
@@ -3562,7 +3562,7 @@ typedef struct {
 
 None.
 
-### 3.1.26 k_venc_2d_border_attr
+### k_venc_2d_border_attr
 
 **Description**:
 
@@ -3602,7 +3602,7 @@ typedef struct {
 
 None.
 
-### 3.1.27 k_venc_h265_sao
+### k_venc_h265_sao
 
 **Description**:
 
@@ -3632,7 +3632,7 @@ None.
 
 None.
 
-### 3.1.28 k_venc_rect
+### k_venc_rect
 
 **Description**:
 
@@ -3666,7 +3666,7 @@ None.
 
 None.
 
-### 3.1.29 k_venc_roi_attr
+### k_venc_roi_attr
 
 **Description**:
 
@@ -3680,7 +3680,7 @@ typedef struct {
     k_bool enable;
     k_bool is_abs_qp;
     k_s32 qp;
-    [k_venc_rect](#3128-k_venc_rect) rect;
+    [k_venc_rect](#k_venc_rect) rect;
 } k_venc_roi_attr;
 ```
 
@@ -3702,7 +3702,7 @@ None.
 
 None.
 
-### 3.1.30 k_venc_h264_entropy
+### k_venc_h264_entropy
 
 **Description**:
 
@@ -3732,7 +3732,7 @@ None.
 
 None.
 
-### 3.1.31 k_venc_h265_entropy
+### k_venc_h265_entropy
 
 **Description**:
 
@@ -3760,19 +3760,19 @@ None.
 
 None.
 
-### 3.2 Video Decoding
+### Video Decoding
 
 The relevant data type definitions for this functional module are as follows:
 
-- [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num): Defines the maximum number of channels.
-- [k_vdec_send_mode](#322-k_vdec_send_mode): Defines the structure for decoding channel attributes.
-- [k_vdec_chn_attr](#323-k_vdec_chn_attr): Defines the structure for decoding channel attributes.
-- [k_vdec_chn_status](#324-k_vdec_chn_status): Defines the structure for channel status.
-- [k_vdec_dec_err](#325-k_vdec_dec_err): Defines the structure for decoding error information.
-- [k_vdec_stream](#326-k_vdec_stream): Defines the structure for video decoding stream.
-- [k_vdec_supplement_info](#327-k_vdec_supplement_info): Defines the structure for output frame supplementary information.
+- [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num): Defines the maximum number of channels.
+- [k_vdec_send_mode](#k_vdec_send_mode): Defines the structure for decoding channel attributes.
+- [k_vdec_chn_attr](#k_vdec_chn_attr): Defines the structure for decoding channel attributes.
+- [k_vdec_chn_status](#k_vdec_chn_status): Defines the structure for channel status.
+- [k_vdec_dec_err](#k_vdec_dec_err): Defines the structure for decoding error information.
+- [k_vdec_stream](#k_vdec_stream): Defines the structure for video decoding stream.
+- [k_vdec_supplement_info](#k_vdec_supplement_info): Defines the structure for output frame supplementary information.
 
-#### 3.2.1 K_VDEC_MAX_CHN_NUM
+#### K_VDEC_MAX_CHN_NUM
 
 **Description**:
 
@@ -3792,7 +3792,7 @@ None.
 
 None.
 
-#### 3.2.2 k_vdec_send_mode
+#### k_vdec_send_mode
 
 **Description**:
 
@@ -3823,7 +3823,7 @@ Currently, only stream mode is supported.
 
 None.
 
-#### 3.2.3 k_vdec_chn_attr
+#### k_vdec_chn_attr
 
 **Description**:
 
@@ -3834,7 +3834,7 @@ Defines the structure for decoding channel attributes.
 ```c
 typedef struct {
     k_payload_type type;
-    [k_vdec_send_mode](#322-k_vdec_send_mode) mode;
+    [k_vdec_send_mode](#k_vdec_send_mode) mode;
     k_u32 pic_width;
     k_u32 pic_height;
     k_u32 stream_buf_size;
@@ -3874,7 +3874,7 @@ None.
 
 None.
 
-#### 3.2.4 k_vdec_chn_status
+#### k_vdec_chn_status
 
 【Description】
 
@@ -3888,7 +3888,7 @@ typedef struct {
     k_bool is_started;
     k_u32 recv_stream_frames;
     k_u32 dec_stream_frames;
-    [k_vdec_dec_err](#325-k_vdec_dec_err) dec_err;
+    [k_vdec_dec_err](#k_vdec_dec_err) dec_err;
     k_u32 width;
     k_u32 height;
     k_u64 latest_frame_pts;
@@ -3918,7 +3918,7 @@ None.
 
 None.
 
-#### 3.2.5 k_vdec_dec_err
+#### k_vdec_dec_err
 
 【Description】
 
@@ -3950,7 +3950,7 @@ None.
 
 None.
 
-#### 3.2.6 k_vdec_stream
+#### k_vdec_stream
 
 【Description】
 
@@ -3984,7 +3984,7 @@ None.
 
 None.
 
-#### 3.2.7 k_vdec_supplement_info
+#### k_vdec_supplement_info
 
 【Description】
 
@@ -4016,7 +4016,7 @@ None.
 
 None.
 
-#### 3.2.8 k_vdec_dsl_mode
+#### k_vdec_dsl_mode
 
 【Description】
 
@@ -4047,7 +4047,7 @@ None.
 
 None.
 
-#### 3.2.9 k_vdec_dsl_size
+#### k_vdec_dsl_size
 
 【Description】
 
@@ -4077,7 +4077,7 @@ None.
 
 None.
 
-#### 3.2.10 k_vdec_dsl_ratio
+#### k_vdec_dsl_ratio
 
 【Description】
 
@@ -4107,7 +4107,7 @@ None.
 
 None.
 
-#### 3.2.11 k_vdec_downscale
+#### k_vdec_downscale
 
 【Description】
 
@@ -4117,11 +4117,11 @@ Defines the structure for downscaling.
 
 ```c
 typedef struct {
-    [k_vdec_dsl_mode](#328-k_vdec_dsl_mode) dsl_mode;
+    [k_vdec_dsl_mode](#k_vdec_dsl_mode) dsl_mode;
     union
     {
-        [k_vdec_dsl_size](#329-k_vdec_dsl_size) dsl_size;
-        [k_vdec_dsl_ratio](#3210-k_vdec_dsl_ratio) dsl_ratio;
+        [k_vdec_dsl_size](#k_vdec_dsl_size) dsl_size;
+        [k_vdec_dsl_ratio](#k_vdec_dsl_ratio) dsl_ratio;
     };
 } k_vdec_downscale;
 ```
@@ -4142,15 +4142,15 @@ None.
 
 None.
 
-## 4. MAPI
+## MAPI
 
-### 4.1 Video Encoding
+### Video Encoding
 
-#### 4.1.1 Overview
+#### Overview
 
 MAPI is called on the small core to obtain VENC stream data.
 
-#### 4.1.2 Encoding Data Flow Diagram
+#### Encoding Data Flow Diagram
 
 Figure 4-1
 
@@ -4158,35 +4158,35 @@ Figure 4-1
 
 A typical encoding process includes receiving input images, encoding the images, cross-core data stream transmission, and stream output.
 
-The encoding module (VENC) in the above figure consists of the VENC receiving channel, encoding channel, 2D receiving channel, and 2D operation module. For details, see [1.2.1 Video Encoding](#121-Video Encoding).
+The encoding module (VENC) in the above figure consists of the VENC receiving channel, encoding channel, 2D receiving channel, and 2D operation module. For details, see [1.2.1 Video Encoding](#Video Encoding).
 
-#### 4.1.3 API
+#### API
 
 The video encoding module mainly provides functions for creating and destroying video encoding channels, starting and stopping the reception of images on encoding channels, setting and getting encoding channel attributes, registering and deregistering callback functions for stream acquisition, etc.
 
 This functional module provides the following MAPI:
 
-[kd_mapi_venc_init](#4131-kd_mapi_venc_init)
+[kd_mapi_venc_init](#kd_mapi_venc_init)
 
-[kd_mapi_venc_deinit](#4132-kd_mapi_venc_deinit)
+[kd_mapi_venc_deinit](#kd_mapi_venc_deinit)
 
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+[kd_mapi_venc_registercallback](#kd_mapi_venc_registercallback)
 
-[kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+[kd_mapi_venc_unregistercallback](#kd_mapi_venc_unregistercallback)
 
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-[kd_mapi_venc_stop](#4136-kd_mapi_venc_stop)
+[kd_mapi_venc_stop](#kd_mapi_venc_stop)
 
-[kd_mapi_venc_bind_vi](#4137-kd_mapi_venc_bind_vi)
+[kd_mapi_venc_bind_vi](#kd_mapi_venc_bind_vi)
 
-[kd_mapi_venc_unbind_vi](#4138-kd_mapi_venc_unbind_vi)
+[kd_mapi_venc_unbind_vi](#kd_mapi_venc_unbind_vi)
 
-[kd_mapi_venc_request_idr](#4139-kd_mapi_venc_request_idr)
+[kd_mapi_venc_request_idr](#kd_mapi_venc_request_idr)
 
-[kd_mapi_venc_enable_idr](#41310-kd_mapi_venc_enable_idr)
+[kd_mapi_venc_enable_idr](#kd_mapi_venc_enable_idr)
 
-##### 4.1.3.1 kd_mapi_venc_init
+##### kd_mapi_venc_init
 
 【Description】
 
@@ -4195,7 +4195,7 @@ Initializes the encoding channel.
 【Syntax】
 
 ```c
-k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#3115-k_venc_chn_attr) *pst_venc_attr)
+k_s32 kd_mapi_venc_init(k_u32 chn_num, [k_venc_chn_attr](#k_venc_chn_attr) *pst_venc_attr)
 ```
 
 【Parameters】
@@ -4232,10 +4232,10 @@ Please refer to the `sample_venc` code.
 
 【Related Topics】
 
-[kd_mapi_venc_deinit](#4132-kd_mapi_venc_deinit)
-[k_venc_chn_attr](#3115-k_venc_chn_attr)
+[kd_mapi_venc_deinit](#kd_mapi_venc_deinit)
+[k_venc_chn_attr](#k_venc_chn_attr)
 
-##### 4.1.3.2 kd_mapi_venc_deinit
+##### kd_mapi_venc_deinit
 
 【Description】
 
@@ -4279,9 +4279,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_init](#4131-kd_mapi_venc_init)
+[kd_mapi_venc_init](#kd_mapi_venc_init)
 
-##### 4.1.3.3 kd_mapi_venc_registercallback
+##### kd_mapi_venc_registercallback
 
 【Description】
 
@@ -4290,7 +4290,7 @@ Registers a callback function for the encoding channel to acquire encoding data.
 【Syntax】
 
 ```c
-k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) *pst_venc_cb);
+k_s32 kd_mapi_venc_registercallback(k_u32 chn_num, [kd_venc_callback_s](#kd_venc_callback_s) *pst_venc_cb);
 ```
 
 【Parameters】
@@ -4331,7 +4331,7 @@ None.
 kd_mapi_venc_unregistercallback
 kd_venc_callback_s
 
-##### 4.1.3.4 kd_mapi_venc_unregistercallback
+##### kd_mapi_venc_unregistercallback
 
 【Description】
 
@@ -4340,7 +4340,7 @@ Unregisters a callback function for the encoding channel.
 【Syntax】
 
 ```c
-k_s32 kd_mapi_venc_unregistercallback(k_u32 chn_num, [kd_venc_callback_s](#4141-kd_venc_callback_s) *pst_venc_cb);
+k_s32 kd_mapi_venc_unregistercallback(k_u32 chn_num, [kd_venc_callback_s](#kd_venc_callback_s) *pst_venc_cb);
 ```
 
 【Parameters】
@@ -4376,9 +4376,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
+[kd_mapi_venc_registercallback](#kd_mapi_venc_registercallback)
 
-##### 4.1.3.5 kd_mapi_venc_start
+##### kd_mapi_venc_start
 
 【Description】
 
@@ -4414,11 +4414,11 @@ Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
 【Notes】
 
-- Scenario 1: In the video stream encoding scenario, `s32_frame_cnt` should be set to `[KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)`.
+- Scenario 1: In the video stream encoding scenario, `s32_frame_cnt` should be set to `[KD_VENC_LIMITLESS_FRAME_COUNT](#kd_venc_limitless_frame_count)`.
 - Scenario 2: In the scenario of single or multiple data encoding, you can only restart after the previous encoding is finished.
 - When switching from Scenario 1 to Scenario 2, you need to call the `kd_mapi_venc_stop` interface first.
 - When switching from Scenario 2 to Scenario 1, you can call the `kd_mapi_venc_stop` interface first or restart encoding after the current encoding is finished.
-- For the encoding completion flag, please refer to `end_of_stream` in [kd_venc_data_s](#4143-kd_venc_data_s).
+- For the encoding completion flag, please refer to `end_of_stream` in [kd_venc_data_s](#kd_venc_data_s).
 
 【Example】
 
@@ -4426,9 +4426,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_stop](#4136-kd_mapi_venc_stop)
+[kd_mapi_venc_stop](#kd_mapi_venc_stop)
 
-##### 4.1.3.6 kd_mapi_venc_stop
+##### kd_mapi_venc_stop
 
 【Description】
 
@@ -4472,9 +4472,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-##### 4.1.3.7 kd_mapi_venc_bind_vi
+##### kd_mapi_venc_bind_vi
 
 【Description】
 
@@ -4520,9 +4520,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_unbind_vi](#4138-kd_mapi_venc_unbind_vi)
+[kd_mapi_venc_unbind_vi](#kd_mapi_venc_unbind_vi)
 
-##### 4.1.3.8 kd_mapi_venc_unbind_vi
+##### kd_mapi_venc_unbind_vi
 
 【Description】
 
@@ -4568,9 +4568,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_bind_vi](#4137-kd_mapi_venc_bind_vi)
+[kd_mapi_venc_bind_vi](#kd_mapi_venc_bind_vi)
 
-##### 4.1.3.9 kd_mapi_venc_request_idr
+##### kd_mapi_venc_request_idr
 
 【Description】
 
@@ -4614,9 +4614,9 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-##### 4.1.3.10 kd_mapi_venc_enable_idr
+##### kd_mapi_venc_enable_idr
 
 【Description】
 
@@ -4653,7 +4653,7 @@ Library files: `libmapi.a`, `libipcmsg.a`, `libdatafifo.a`
 
 【Notes】
 
-- This interface should be called after [kd_mpi_venc_create_chn](#211-kd_mpi_venc_create_chn) and before [kd_mpi_venc_start_chn](#213-kd_mpi_venc_start_chn).
+- This interface should be called after [kd_mpi_venc_create_chn](#kd_mpi_venc_create_chn) and before [kd_mpi_venc_start_chn](#kd_mpi_venc_start_chn).
 
 【Example】
 
@@ -4661,20 +4661,20 @@ None.
 
 【Related Topics】
 
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-#### 4.1.4 Data Types
+#### Data Types
 
 The data types related to video encoding are defined as follows:
 
-- [kd_venc_callback_s](#4141-kd_venc_callback_s)
-- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-- [kd_venc_data_s](#4143-kd_venc_data_s)
-- [k_venc_data_pack_s](#4144-k_venc_data_pack_s)
-- [KD_VENC_MAX_FRAME_PACKCOUNT](#4145-kd_venc_max_frame_packcount)
-- [KD_VENC_LIMITLESS_FRAME_COUNT](#4146-kd_venc_limitless_frame_count)
+- [kd_venc_callback_s](#kd_venc_callback_s)
+- [pfn_venc_dataproc](#pfn_venc_dataproc)
+- [kd_venc_data_s](#kd_venc_data_s)
+- [k_venc_data_pack_s](#k_venc_data_pack_s)
+- [KD_VENC_MAX_FRAME_PACKCOUNT](#kd_venc_max_frame_packcount)
+- [KD_VENC_LIMITLESS_FRAME_COUNT](#kd_venc_limitless_frame_count)
 
-##### 4.1.4.1 kd_venc_callback_s
+##### kd_venc_callback_s
 
 【Description】
 
@@ -4685,7 +4685,7 @@ Encoding callback function structure.
 ```c
 typedef struct
 {
-    [pfn_venc_dataproc](#4142-pfn_venc_dataproc);
+    [pfn_venc_dataproc](#pfn_venc_dataproc);
     k_u8 *p_private_data;
 } kd_venc_callback_s;
 ```
@@ -4704,11 +4704,11 @@ typedef struct
 
 【Related Data Types and Interfaces】
 
-- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
-- [pfn_venc_dataproc](#4142-pfn_venc_dataproc)
+- [kd_mapi_venc_registercallback](#kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#kd_mapi_venc_unregistercallback)
+- [pfn_venc_dataproc](#pfn_venc_dataproc)
 
-##### 4.1.4.2 pfn_venc_dataproc
+##### pfn_venc_dataproc
 
 【Description】
 
@@ -4717,7 +4717,7 @@ Defines the encoding data callback function.
 【Definition】
 
 ```c
-typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#4144-k_venc_data_pack_s) *p_vstream_data, k_u8 *p_private_data);
+typedef k_s32 (*pfn_venc_dataproc)(k_u32 chn_num, [kd_venc_data_s](#k_venc_data_pack_s) *p_vstream_data, k_u8 *p_private_data);
 ```
 
 【Members】
@@ -4734,10 +4734,10 @@ None.
 
 【Related Data Types and Interfaces】
 
-- [kd_mapi_venc_registercallback](#4133-kd_mapi_venc_registercallback)
-- [kd_mapi_venc_unregistercallback](#4134-kd_mapi_venc_unregistercallback)
+- [kd_mapi_venc_registercallback](#kd_mapi_venc_registercallback)
+- [kd_mapi_venc_unregistercallback](#kd_mapi_venc_unregistercallback)
 
-##### 4.1.4.3 kd_venc_data_s
+##### kd_venc_data_s
 
 【Description】
 
@@ -4748,9 +4748,9 @@ Encoded data packet type.
 ```c
 typedef struct
 {
-    [k_venc_chn_status](#3122-k_venc_chn_status);
+    [k_venc_chn_status](#k_venc_chn_status);
     k_u32 u32_pack_cnt;
-    [k_venc_data_pack_s](#4144-k_venc_data_pack_s) astPack[KD_VENC_MAX_FRAME_PACKCOUNT];
+    [k_venc_data_pack_s](#k_venc_data_pack_s) astPack[KD_VENC_MAX_FRAME_PACKCOUNT];
 } kd_venc_data_s;
 ```
 
@@ -4768,10 +4768,10 @@ None.
 
 【Related Data Types and Interfaces】
 
-[pfn_venc_dataproc](#4142-pfn_venc_dataproc)
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[pfn_venc_dataproc](#pfn_venc_dataproc)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-##### 4.1.4.4 k_venc_data_pack_s
+##### k_venc_data_pack_s
 
 【Description】
 
@@ -4806,9 +4806,9 @@ Both `vir_addr` and `phys_addr` have one address.
 
 【Related Data Types and Interfaces】
 
-[kd_venc_data_s](#4143-kd_venc_data_s)
+[kd_venc_data_s](#kd_venc_data_s)
 
-##### 4.1.4.5 KD_VENC_MAX_FRAME_PACKCOUNT
+##### KD_VENC_MAX_FRAME_PACKCOUNT
 
 【Description】
 
@@ -4828,7 +4828,7 @@ None.
 
 None.
 
-##### 4.1.4.6 KD_VENC_LIMITLESS_FRAME_COUNT
+##### KD_VENC_LIMITLESS_FRAME_COUNT
 
 【Description】
 
@@ -4846,33 +4846,33 @@ None.
 
 【Related Data Types and Interfaces】
 
-[kd_mapi_venc_start](#4135-kd_mapi_venc_start)
+[kd_mapi_venc_start](#kd_mapi_venc_start)
 
-### 4.2 Video Decoding
+### Video Decoding
 
-#### 4.2.1 API
+#### API
 
 The video decoding module mainly provides functions for creating and destroying video decoding channels, starting and stopping the reception of images on decoding channels, setting and getting decoding channel attributes, and binding output decoded images to VO.
 
 This functional module provides the following MAPI:
 
-[kd_mapi_vdec_init](#4211-kd_mapi_vdec_init)
+[kd_mapi_vdec_init](#kd_mapi_vdec_init)
 
-[kd_mapi_vdec_deinit](#4212-kd_mapi_vdec_deinit)
+[kd_mapi_vdec_deinit](#kd_mapi_vdec_deinit)
 
-[kd_mapi_vdec_start](#4213-kd_mapi_vdec_start)
+[kd_mapi_vdec_start](#kd_mapi_vdec_start)
 
-[kd_mapi_vdec_stop](#4214-kd_mapi_vdec_stop)
+[kd_mapi_vdec_stop](#kd_mapi_vdec_stop)
 
-[kd_mapi_vdec_bind_vo](#4137-kd_mapi_venc_bind_vi)
+[kd_mapi_vdec_bind_vo](#kd_mapi_venc_bind_vi)
 
-[kd_mapi_vdec_unbind_vo](#4138-kd_mapi_venc_unbind_vi)
+[kd_mapi_vdec_unbind_vo](#kd_mapi_venc_unbind_vi)
 
-[kd_mapi_vdec_send_stream](#4139-kd_mapi_venc_request_idr)
+[kd_mapi_vdec_send_stream](#kd_mapi_venc_request_idr)
 
-[kd_mapi_vdec_query_status](#4218-kd_mapi_vdec_query_status)
+[kd_mapi_vdec_query_status](#kd_mapi_vdec_query_status)
 
-##### 4.2.1.1 kd_mapi_vdec_init
+##### kd_mapi_vdec_init
 
 【Description】
 
@@ -4881,7 +4881,7 @@ Initializes the decoding channel.
 【Syntax】
 
 ```c
-k_s32 kd_mapi_vdec_init(k_u32 chn_num, const [k_vdec_chn_attr](#323-k_vdec_chn_attr) *attr);
+k_s32 kd_mapi_vdec_init(k_u32 chn_num, const [k_vdec_chn_attr](#k_vdec_chn_attr) *attr);
 ```
 
 【Parameters】
@@ -4918,9 +4918,9 @@ Please refer to the `sample_vdec` code.
 
 【Related Topics】
 
-[kd_mapi_vdec_deinit](#4212-kd_mapi_vdec_deinit)
+[kd_mapi_vdec_deinit](#kd_mapi_vdec_deinit)
 
-##### 4.2.1.2 kd_mapi_vdec_deinit
+##### kd_mapi_vdec_deinit
 
 【Description】
 
@@ -4964,9 +4964,9 @@ None.
 
 **Related Topics**:
 
-[kd_mapi_vdec_init](#4211-kd_mapi_vdec_init)
+[kd_mapi_vdec_init](#kd_mapi_vdec_init)
 
-##### 4.2.1.3 kd_mapi_vdec_start
+##### kd_mapi_vdec_start
 
 **Description**:
 
@@ -5010,9 +5010,9 @@ None.
 
 **Related Topics**:
 
-[kd_mapi_vdec_stop](#4214-kd_mapi_vdec_stop)
+[kd_mapi_vdec_stop](#kd_mapi_vdec_stop)
 
-##### 4.2.1.4 kd_mapi_vdec_stop
+##### kd_mapi_vdec_stop
 
 **Description**:
 
@@ -5056,9 +5056,9 @@ None.
 
 **Related Topics**:
 
-[kd_mapi_vdec_start](#4213-kd_mapi_vdec_start)
+[kd_mapi_vdec_start](#kd_mapi_vdec_start)
 
-##### 4.2.1.5 kd_mapi_vdec_bind_vo
+##### kd_mapi_vdec_bind_vo
 
 **Description**:
 
@@ -5104,9 +5104,9 @@ None.
 
 **Related Topics**:
 
-[kd_mapi_vdec_unbind_vo](#4216-kd_mapi_vdec_unbind_vo)
+[kd_mapi_vdec_unbind_vo](#kd_mapi_vdec_unbind_vo)
 
-##### 4.2.1.6 kd_mapi_vdec_unbind_vo
+##### kd_mapi_vdec_unbind_vo
 
 **Description**:
 
@@ -5152,9 +5152,9 @@ None.
 
 **Related Topics**:
 
-[kd_mapi_vdec_bind_vo](#4215-kd_mapi_vdec_bind_vo)
+[kd_mapi_vdec_bind_vo](#kd_mapi_vdec_bind_vo)
 
-##### 4.2.1.7 kd_mapi_vdec_send_stream
+##### kd_mapi_vdec_send_stream
 
 **Description**:
 
@@ -5163,7 +5163,7 @@ Sends stream data for decoding.
 **Syntax**:
 
 ```c
-k_s32 kd_mapi_vdec_send_stream(k_u32 chn_num, [k_vdec_stream](#326-k_vdec_stream) *stream, k_s32 milli_sec);
+k_s32 kd_mapi_vdec_send_stream(k_u32 chn_num, [k_vdec_stream](#k_vdec_stream) *stream, k_s32 milli_sec);
 ```
 
 **Parameters**:
@@ -5202,7 +5202,7 @@ None.
 
 None.
 
-##### 4.2.1.8 kd_mapi_vdec_query_status
+##### kd_mapi_vdec_query_status
 
 **Description**:
 
@@ -5218,7 +5218,7 @@ k_s32 kd_mapi_vdec_query_status(k_u32 chn_num, k_vdec_chn_status *status);
 
 | Parameter Name | Description                                | Input/Output |
 |----------------|--------------------------------------------|--------------|
-| chn_num        | Encoding channel information. Range: `[0, [K_VDEC_MAX_CHN_NUM](#321-k_vdec_max_chn_num))` | Input       |
+| chn_num        | Encoding channel information. Range: `[0, [K_VDEC_MAX_CHN_NUM](#k_vdec_max_chn_num))` | Input       |
 | status         | Pointer to the video decoding channel status structure | Output      |
 
 **Return Values**:
@@ -5249,7 +5249,7 @@ None.
 
 None.
 
-## 5. Error Codes
+## Error Codes
 
 Table 41 Encoding API Error Codes
 | Error Code | Macro Definition           | Description                                    |
@@ -5291,6 +5291,6 @@ Table 42 Decoding API Error Codes
 | 0xa00a8011 | K_ERR_VDEC_BADADDR         | Address out of valid range                     |
 | 0xa00a8012 | K_ERR_VDEC_BUSY            | VDEC system busy                               |
 
-## 6. Debug Information
+## Debug Information
 
 For multimedia memory management and system binding debug information, please refer to the "K230 System Control API Reference".

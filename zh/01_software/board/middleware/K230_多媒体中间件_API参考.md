@@ -51,17 +51,17 @@
 |---|---|---|---|
 | V0.1       | 软件部 | 2023.07.20 | 初版  |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 中间件在系统中的位置为`k230_sdk/src/common/cdk/user/middleware`
 
 本文档描述相关的中间件部分，涉及可视对讲协议、混音、mp4格式封装与解封装、播放器等。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 可视对讲rtsp协议
+#### 可视对讲rtsp协议
 
 参照ONVIF rtsp扩展，实现单线视频的可视对讲协议；
 
@@ -71,34 +71,34 @@ rtsp-client支持接收audio、video以及发送backchannel audio mediaSubSessio
 
 相关描述见可视对讲协议章节
 
-#### 1.2.2 播放器
+#### 播放器
 
 实现mp4文件播放。视频支持h264、h265，音频支持g711a/u。
 
-#### 1.2.3 混音
+#### 混音
 
 实现两路g711a/u混音。
 
-#### 1.2.4 MP4格式封装解封装
+#### MP4格式封装解封装
 
 实现音视频与mp4格式间的封装与解封装。
 
-## 2. API参考
+## API参考
 
-### 2.1 可视对讲rtsp-server
+### 可视对讲rtsp-server
 
 KdRtspServer提供以下API：
 
-- [Init](#211-kdrtspserverinit)：初始化。
-- [DeInit](#212-kdrtspserverdeinit)：反初始化。
-- [CreateSession](#213-kdrtspservercreatesession)：创建rtsp session。
-- [DestroySession](#214-kdrtspserverdestroysession)：销毁rtsp session。
-- [Start](#215-kdrtspserverstart)：开启rtsp-server服务。
-- [Stop](#216-kdrtspserverstop)：停止rtsp-server服务。
-- [SendVideoData](#217-kdrtspserversendvideodata)：写入视频码流数据。
-- [SendAudioData](#218-kdrtspserversendaudiodata)：写入音频码流数据。
+- [Init](#kdrtspserverinit)：初始化。
+- [DeInit](#kdrtspserverdeinit)：反初始化。
+- [CreateSession](#kdrtspservercreatesession)：创建rtsp session。
+- [DestroySession](#kdrtspserverdestroysession)：销毁rtsp session。
+- [Start](#kdrtspserverstart)：开启rtsp-server服务。
+- [Stop](#kdrtspserverstop)：停止rtsp-server服务。
+- [SendVideoData](#kdrtspserversendvideodata)：写入视频码流数据。
+- [SendAudioData](#kdrtspserversendaudiodata)：写入音频码流数据。
 
-#### 2.1.1 KdRtspServer::Init
+#### KdRtspServer::Init
 
 【描述】
 
@@ -139,7 +139,7 @@ int Init(Port port = 8554, IOnBackChannel *back_channel = nullptr);
 
 无。
 
-#### 2.1.2 KdRtspServer::DeInit
+#### KdRtspServer::DeInit
 
 【描述】
 
@@ -166,7 +166,7 @@ void DeInit();
 
 无。
 
-#### 2.1.3 KdRtspServer::CreateSession
+#### KdRtspServer::CreateSession
 
 【描述】
 
@@ -201,7 +201,7 @@ int CreateSession(const std::string &session_name, const SessionAttr &session_at
 
 无。
 
-#### 2.1.4 KdRtspServer::DestroySession
+#### KdRtspServer::DestroySession
 
 【描述】
 
@@ -237,7 +237,7 @@ int DestroySession(const std::string &session_name);
 
 【相关主题】
 
-#### 2.1.5 KdRtspServer::Start
+#### KdRtspServer::Start
 
 【描述】
 
@@ -269,7 +269,7 @@ void Start();
 
 【相关主题】
 
-#### 2.1.6 KdRtspServer::Stop
+#### KdRtspServer::Stop
 
 【描述】
 
@@ -298,7 +298,7 @@ void Stop();
 
 无。
 
-#### 2.1.7 KdRtspServer::SendVideoData
+#### KdRtspServer::SendVideoData
 
 【描述】
 
@@ -333,7 +333,7 @@ int SendVideoData(const std::string &session_name, const uint8_t *data, size_t s
 
 无。
 
-#### 2.1.8 KdRtspServer::SendAudioData
+#### KdRtspServer::SendAudioData
 
 【描述】
 
@@ -368,17 +368,17 @@ int SendAudioData(const std::string &session_name, const uint8_t *data, size_t s
 
 无。
 
-### 2.2 可视对讲rtsp-client
+### 可视对讲rtsp-client
 
 KdRtspClient模块提供以下API：
 
-- [Init](#221-kdrtspclientinit)：初始化。
-- [DeInit](#222-kdrtspclientdeinit)：反初始化。
-- [Open](#223-kdrtspclientopen)：打开并运行rtspclient连接。
-- [Close](#224-kdrtspclientclose)：关闭rtspclient连接。
-- [SendAudioData](#225-kdrtspclientsendaudiodata)：写入backchannel音频码流数据。
+- [Init](#kdrtspclientinit)：初始化。
+- [DeInit](#kdrtspclientdeinit)：反初始化。
+- [Open](#kdrtspclientopen)：打开并运行rtspclient连接。
+- [Close](#kdrtspclientclose)：关闭rtspclient连接。
+- [SendAudioData](#kdrtspclientsendaudiodata)：写入backchannel音频码流数据。
 
-#### 2.2.1 KdRtspClient::Init
+#### KdRtspClient::Init
 
 【描述】
 
@@ -447,7 +447,7 @@ int Init(const RtspClientInitParam &param);
 
 无。
 
-#### 2.2.2 KdRtspClient::Deinit
+#### KdRtspClient::Deinit
 
 【描述】
 
@@ -482,7 +482,7 @@ void DeInit();
 
 无。
 
-#### 2.2.3 KdRtspClient::Open
+#### KdRtspClient::Open
 
 【描述】
 
@@ -522,7 +522,7 @@ int Open(const char *url);
 
 无。
 
-#### 2.2.4 KdRtspClient::Close
+#### KdRtspClient::Close
 
 【描述】
 
@@ -553,7 +553,7 @@ void Close();
 
 无。
 
-#### 2.2.5 KdRtspClient::SendAudioData
+#### KdRtspClient::SendAudioData
 
 【描述】
 
@@ -595,18 +595,18 @@ int SendAudioData(const uint8_t *data, size_t size, uint64_t timestamp);
 
 无。
 
-### 2.3 播放器封装
+### 播放器封装
 
 KdPlayer模块提供以下API：
 
-- [kd_player_init](#231-kd_player_init)：初始化。
-- [kd_player_deinit](#232-kd_player_deinit)：反初始化。
-- [kd_player_setdatasource](#233-kd_player_setdatasource)：设置媒体播放文件。
-- [kd_player_regcallback](#234-kd_player_regcallback)：注册事件回调。
-- [kd_player_start](#235-kd_player_start)：开始播放。
-- [kd_player_stop](#236-kd_player_stop)：停止播放。
+- [kd_player_init](#kd_player_init)：初始化。
+- [kd_player_deinit](#kd_player_deinit)：反初始化。
+- [kd_player_setdatasource](#kd_player_setdatasource)：设置媒体播放文件。
+- [kd_player_regcallback](#kd_player_regcallback)：注册事件回调。
+- [kd_player_start](#kd_player_start)：开始播放。
+- [kd_player_stop](#kd_player_stop)：停止播放。
 
-#### 2.3.1 kd_player_init
+#### kd_player_init
 
 【描述】
 
@@ -644,7 +644,7 @@ k_s32 kd_player_init();
 
 无。
 
-#### 2.3.2 kd_player_deinit
+#### kd_player_deinit
 
 【描述】
 
@@ -682,7 +682,7 @@ k_s32 kd_player_deinit();
 
 无。
 
-#### 2.3.3 kd_player_setdatasource
+#### kd_player_setdatasource
 
 【描述】
 
@@ -722,7 +722,7 @@ k_s32 kd_player_setdatasource(const k_char* filePath);
 
 无。
 
-#### 2.3.4 kd_player_regcallback
+#### kd_player_regcallback
 
 【描述】
 
@@ -763,7 +763,7 @@ k_s32 kd_player_regcallback( K_PLAYER_EVENT_FN pfnCallback,void* pData);
 
 无。
 
-#### 2.3.5 kd_player_start
+#### kd_player_start
 
 【描述】
 
@@ -801,7 +801,7 @@ k_s32 kd_player_start();
 
 无。
 
-#### 2.3.6 kd_player_stop
+#### kd_player_stop
 
 【描述】
 
@@ -839,14 +839,14 @@ k_s32 kd_player_stop();
 
 无。
 
-### 2.4 音频混音
+### 音频混音
 
 混音模块提供以下API：
 
-- [kd_mix_g711a_audio](#241-kd_mix_g711a_audio)：g711a混音。
-- [kd_mix_g711u_audio](#242-kd_mix_g711u_audio)：g711u混音。
+- [kd_mix_g711a_audio](#kd_mix_g711a_audio)：g711a混音。
+- [kd_mix_g711u_audio](#kd_mix_g711u_audio)：g711u混音。
 
-#### 2.4.1 kd_mix_g711a_audio
+#### kd_mix_g711a_audio
 
 【描述】
 
@@ -889,7 +889,7 @@ k_s32 kd_mix_g711a_audio(k_char \*src_data1, k_char \*src_data2, k_u32 data_len,
 
 无。
 
-#### 2.4.2 kd_mix_g711u_audio
+#### kd_mix_g711u_audio
 
 【描述】
 
@@ -932,20 +932,20 @@ k_s32 kd_mix_g711u_audio(k_char \*src_data1, k_char \*src_data2, k_u32 data_len,
 
 无。
 
-### 2.5 MP4格式封装解封装
+### MP4格式封装解封装
 
 MP4格式封装解封装提供如下API：
 
-- [kd_mp4_create](#251-kd_mp4_create)：MP4实例创建
-- [kd_mp4_destroy](#252-kd_mp4_destroy)：MP4实例销毁
-- [kd_mp4_create_track](#253-kd_mp4_create_track)：为MP4创建track
-- [kd_mp4_destroy_tracks](#254-kd_mp4_destroy_tracks)：为MP4销毁所有track
-- [kd_mp4_write_frame](#255-kd_mp4_write_frame)：MP4中写入帧数据。
-- [kd_mp4_get_file_info](#256-kd_mp4_get_file_info)：获取MP4文件信息。
-- [kd_mp4_get_track_by_index](#257-kd_mp4_get_track_by_index)：根据下标获取track信息。
-- [kd_mp4_get_frame](#258-kd_mp4_get_frame)：获取track码流信息。
+- [kd_mp4_create](#kd_mp4_create)：MP4实例创建
+- [kd_mp4_destroy](#kd_mp4_destroy)：MP4实例销毁
+- [kd_mp4_create_track](#kd_mp4_create_track)：为MP4创建track
+- [kd_mp4_destroy_tracks](#kd_mp4_destroy_tracks)：为MP4销毁所有track
+- [kd_mp4_write_frame](#kd_mp4_write_frame)：MP4中写入帧数据。
+- [kd_mp4_get_file_info](#kd_mp4_get_file_info)：获取MP4文件信息。
+- [kd_mp4_get_track_by_index](#kd_mp4_get_track_by_index)：根据下标获取track信息。
+- [kd_mp4_get_frame](#kd_mp4_get_frame)：获取track码流信息。
 
-#### 2.5.1 kd_mp4_create
+#### kd_mp4_create
 
 【描述】
 
@@ -986,7 +986,7 @@ int kd_mp4_create(KD_HANDLE *mp4_handle, k_mp4_config_s \*mp4_cfg);
 
 无
 
-#### 2.5.2 kd_mp4_destroy
+#### kd_mp4_destroy
 
 【描述】
 
@@ -1026,7 +1026,7 @@ int kd_mp4_destroy(KD_HANDLE mp4_handle);
 
 无
 
-#### 2.5.3 kd_mp4_create_track
+#### kd_mp4_create_track
 
 【描述】
 
@@ -1069,7 +1069,7 @@ int kd_mp4_create_track(KD_HANDLE mp4_handle, KD_HANDLE \*track_handle, k_mp4_tr
 
 无
 
-#### 2.5.4 kd_mp4_destroy_tracks
+#### kd_mp4_destroy_tracks
 
 【描述】
 
@@ -1110,7 +1110,7 @@ int kd_mp4_destroy_tracks(KD_HANDLE mp4_handle);
 
 无
 
-#### 2.5.5 kd_mp4_write_frame
+#### kd_mp4_write_frame
 
 【描述】
 
@@ -1153,7 +1153,7 @@ int kd_mp4_write_frame(KD_HANDLE mp4_handle, KD_HANDLE track_handle, k_mp4_frame
 
 无
 
-#### 2.5.6 kd_mp4_get_file_info
+#### kd_mp4_get_file_info
 
 【描述】
 
@@ -1194,7 +1194,7 @@ int kd_mp4_get_file_info(KD_HANDLE mp4_handle, k_mp4_file_info_s *file_info);
 
 无
 
-#### 2.5.7 kd_mp4_get_track_by_index
+#### kd_mp4_get_track_by_index
 
 【描述】
 
@@ -1236,7 +1236,7 @@ int kd_mp4_get_track_by_index(KD_HANDLE mp4_handle, uint32_t index, k_mp4_track_
 
 无
 
-#### 2.5.8 kd_mp4_get_frame
+#### kd_mp4_get_frame
 
 【描述】
 

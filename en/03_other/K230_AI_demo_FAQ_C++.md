@@ -25,7 +25,7 @@ Without the written permission of the Company, no unit or individual may extract
 
 [TOC]
 
-## 1 TF Boot Failed with Exit Code 13
+## TF Boot Failed with Exit Code 13
 
 Problem: TF card boot reports a "boot failed with exit code 13" error.
 

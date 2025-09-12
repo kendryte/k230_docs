@@ -51,34 +51,34 @@ This document (this guide) is mainly intended for the following personnel:
 |------------------|-------------|----------------|------------|
 | V1.0             | Initial Version | System Software Department | 2023-10-11 |
 
-## 1. Overview
+## Overview
 
 This document introduces the demo functions provided by the K230 SDK and their usage. The executable programs on rt-smart are all compiled by default into the small core/sharefs directory. When testing the large core programs, you need to wait for the small core to fully start, and then enter the /sharefs/app directory in the large core's msh to test. The audio and video resource files used in each test demo can be obtained from the following link:
 <https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
 
-## 2. Demo Introduction
+## Demo Introduction
 
-### 2.1 Display_demo
+### Display_demo
 
-#### 2.1.1 Display_demo Introduction
+#### Display_demo Introduction
 
 The VO (Video Output) module actively reads video and graphic data from the corresponding memory location and outputs video and graphics through the corresponding display device. It supports display/write-back devices, video layers, and graphic layers.
 
-#### 2.1.2 Feature Description
+#### Feature Description
 
 Video output includes a test case, which is the insertion of frames into the vo osd layer.
 
-#### 2.1.3 Dependency Resources
+#### Dependency Resources
 
 A monitor with an HDMI interface and an HDMI cable. The monitor must support 1080P30, otherwise, it will not display.
 
-#### 2.1.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.1.4.1 Compilation
+##### Compilation
 
 Refer to the README.md in the release SDK software package for software compilation.
 
-##### 2.1.4.2 Execution
+##### Execution
 
 Insert a frame into the vo osd layer:
 
@@ -90,23 +90,23 @@ The display effect is as follows:
 
 ![Image Description](../../../../zh/01_software/board/examples/images/sample_vo_hdmi_15.png)
 
-### 2.2 Venc_demo
+### Venc_demo
 
-#### 2.2.1 Venc_demo Introduction
+#### Venc_demo Introduction
 
 The Venc demo encodes the graphics received by vi and can add a frame and OSD overlay to the input image. It supports encoding protocols H.264/H.265/JPEG. The encoded result can be stored as a file and exported locally for playback using video software.
 
-#### 2.2.2 Feature Description
+#### Feature Description
 
 Only supports 1280x720 resolution.
 
-#### 2.2.3 Dependency Resources
+#### Dependency Resources
 
 Camera
 
-#### 2.2.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.2.4.1 mpp_demo Execution
+##### mpp_demo Execution
 
 After executing `./sample_venc.elf -h`, the usage instructions for the demo are output as follows:
 
@@ -130,7 +130,7 @@ Example:
 ./sample_venc.elf 0 -sensor 39 -o out.265 // Canmv-K230-V2.0 board
 ```
 
-##### 2.2.4.2 MAPI Encoding Demo
+##### MAPI Encoding Demo
 
 The default sensor type used by sample_venc is IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR. Currently, this demo supports 3 channels of encoding. The sensor type and other parameters can be modified through command line arguments as described below:
 
@@ -159,25 +159,25 @@ Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.
 
 You can stop the execution by pressing `ctrl+c`. Depending on the encoding type, different stream files will be generated in the specified output directory on the small core. For h264 type, files like `stream_chn0.264` will be generated, where 0 represents channel 0; for h265 type, files like `stream_chn0.265` will be generated, similarly, 0 represents channel 0; for jpeg type, files like `chn0_0.jpg` will be generated, representing the 0th image of channel 0, and by default, 10 jpg images will be generated.
 
-##### 2.2.4.3 Viewing Results
+##### Viewing Results
 
 The output file can be exported locally and viewed using video playback software.
 
-### 2.3 Nonai_2d_demo
+### Nonai_2d_demo
 
-#### 2.3.1 Nonai_2d_demo Introduction
+#### Nonai_2d_demo Introduction
 
 The Nonai_2d demo implements image overlay functions on the input file.
 
-#### 2.3.2 Feature Description
+#### Feature Description
 
 Nonai_2d performs image overlay operations by reading yuv (I420 format) files.
 
-#### 2.3.3 Dependency Resources
+#### Dependency Resources
 
 None.
 
-#### 2.3.4 Usage Instructions
+#### Usage Instructions
 
 The input parameters are as follows:
 
@@ -188,7 +188,7 @@ The input parameters are as follows:
 | -h             | Image height         | -             |
 | -o             | Output file name     | -             |
 
-##### 2.3.4.1 Execution
+##### Execution
 
 Example:
 
@@ -196,27 +196,27 @@ Example:
 ./sample_nonai_2d.elf -i /sharefs/foreman_128x64_3frames.yuv -w 128 -h 64 -o /sharefs/out_2d.yuv
 ```
 
-##### 2.3.4.2 Viewing Results
+##### Viewing Results
 
 The output file can be exported locally and viewed using yuv playback software.
 
-### 2.4 Vdec_demo
+### Vdec_demo
 
-#### 2.4.1 Vdec_demo Introduction
+#### Vdec_demo Introduction
 
 The Vdec demo implements video decoding functions. It supports decoding H.264/H.265/JPEG formats. The supported input data formats are .264/.265/.jpeg.
 
-#### 2.4.2 Feature Description
+#### Feature Description
 
 The Vdec demo decodes by reading stream files. The decoding output results are displayed on the screen.
 
-#### 2.4.3 Dependency Resources
+#### Dependency Resources
 
 None.
 
-#### 2.4.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.4.4.1 Execution
+##### Execution
 
 Execute `./sample_vdec.elf -help` to see the configurable parameters and descriptions. The default values are as follows:
 
@@ -227,55 +227,55 @@ Execute `./sample_vdec.elf -help` to see the configurable parameters and descrip
 
 The type values refer to the description of k_connector_type in `k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`, set to 0.
 
-###### 2.4.4.1.1 VDEC Binding VO Decoding Display
+###### VDEC Binding VO Decoding Display
 
 `./sample_vdec.elf -type 1 -i canaan.264`
 
-###### 2.4.4.1.2 MAPI VDEC Binding VO Decoding Display
+###### MAPI VDEC Binding VO Decoding Display
 
 `./sample_vdec.elf -type 1 -i canaan.264`
 
-##### 2.4.4.2 Viewing Results
+##### Viewing Results
 
 The decoding results can be viewed on the screen.
 
-### 2.5 Audio_demo
+### Audio_demo
 
-#### 2.5.1 Audio_demo Introduction
+#### Audio_demo Introduction
 
 The audio demo implements audio input and output functions by calling API interfaces. Both audio input and output use the i2s module. The demo includes test cases for audio input or output individually, as well as simultaneous testing of audio input and output.
 
-#### 2.5.2 Feature Description
+#### Feature Description
 
-##### 2.5.2.1 Audio Input
+##### Audio Input
 
 Audio input captures the sound from the environment and saves it as a file to analyze whether it is normal.
 
 The demo captures 15 seconds of audio data, and the captured file format is wav, which can be directly played using VLC.
 
-##### 2.5.2.2 Audio Output
+##### Audio Output
 
 Audio output plays wav files, and by plugging in earphones, you can judge whether the sound is normal.
 
 The demo tests the audio output function by playing wav files. Different audio format wav files can be uploaded to test the audio output function.
 
-##### 2.5.2.3 Audio Input and Output
+##### Audio Input and Output
 
 Audio input and output can be tested simultaneously.
 
 1. Test the i2s module function, i.e., real-time capture of environmental sounds through i2s audio input and real-time output through i2s audio output. By plugging in earphones, you can hear the environmental sounds in real-time.
 
-##### 2.5.2.4 Audio Encoding and Decoding
+##### Audio Encoding and Decoding
 
 Built-in g711a/u 16bit audio codec, users can register other external codecs.
 
-#### 2.5.3 Usage Instructions
+#### Usage Instructions
 
-##### 2.5.3.1 Compilation
+##### Compilation
 
 1. Refer to the `README.md` in the SDK for the software compilation environment.
 
-##### 2.5.3.2 Execution
+##### Execution
 
 After starting the rt-smart system, navigate to the `/sharefs/app` directory, where `sample_audio.elf` is the test demo.
 
@@ -319,7 +319,7 @@ Please input:
 -audio3a: enable audio3a:enable_ans:0x01,enable_agc:0x02,enable_aec:0x04
 ```
 
-###### 2.5.3.2.1 I2S Audio Input Test
+###### I2S Audio Input Test
 
 Enter `./sample_audio.elf -type 0 -enablecodec 1 -bitwidth 16 -filename test.wav -audio3a 1` to collect PCM audio data for 15 seconds and save it as a wav format file.
 
@@ -355,7 +355,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.2 I2S Audio Output Test
+###### I2S Audio Output Test
 
 Supports playing wav files. You need to copy the wav file to the sharefs path. This demo will loop playing the wav file (any other wav files can also be used). Users can press any key to exit the function test.
 
@@ -380,7 +380,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.3 I2S Audio Input and Output API Interface Test
+###### I2S Audio Input and Output API Interface Test
 
 Enter `./sample_audio.elf -type 3 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1` to test audio input and output functions in real-time via the API interface.
 
@@ -423,7 +423,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.4 System Bind Test for I2S Audio Input and Output Modules
+###### System Bind Test for I2S Audio Input and Output Modules
 
 Enter `./sample_audio.elf -type 4 -bitwidth 16 -enablecodec 1 -samplerate 8000 -audio3a 1` to test audio input and output functions in real-time by binding the ai and ao modules.
 
@@ -451,7 +451,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.5 Encoding Test
+###### Encoding Test
 
 Acquire ai data, encode and save to a file. Encoding and decoding only support g711a/u/lpcm, 16bit.
 
@@ -491,7 +491,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.6 Decoding Test
+###### Decoding Test
 
 Read file data and decode for playback. Encoding and decoding only support g711a/u/lpcm, 16bit.
 
@@ -533,7 +533,7 @@ destroy vb block
 sample done
 ```
 
-###### 2.5.3.2.7 Audio Full Process Test
+###### Audio Full Process Test
 
 1)The recording module ai->aenc->file and playback module file->adec->ao run simultaneously to simulate a voice intercom scenario. Using built-in codec, 16bit precision for simulation. Use `-filename` to select the file to play, in g711a format, and `-samplerate` to select the sampling rate. The recording file name is the playback file name appended with `_rec`: for example, if `-filename` is `/sharefs/test.g711a`, then the recording file name is `/sharefs/test.g711a_rec`.
 
@@ -601,7 +601,7 @@ Enter `cat /proc/umap/sysbind` to view the system bindings between modules.
     adec     0       0      ao       0       0    null       0       0        310          0
 ```
 
-###### 2.5.3.2.8 mapi Audio Test
+###### mapi Audio Test
 
 After the system starts, enter the command on the big core: `/sharefs/app/sample_sys_init.elf &`
 
@@ -703,29 +703,29 @@ q
 sample done
 ```
 
-### 2.6 Vicap_demo
+### Vicap_demo
 
-#### 2.6.1 Vicap_demo Introduction
+#### Vicap_demo Introduction
 
 The vicap demo implements camera data collection and preview functions by calling MPI interfaces.
 
-#### 2.6.2 Feature Description
+#### Feature Description
 
 The CanMV development board uses the OV5647 camera module by default, supporting up to three data streams from a single camera.
 
-#### 2.6.3 Dependency Resources
+#### Dependency Resources
 
 Camera module
 
-#### 2.6.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.6.4.1 Compilation
+##### Compilation
 
 Refer to the `README.md` in the SDK for the software compilation environment.
 
 1. Execute `make mpp-clean && rt-smart && make build-image` in the k230_sdk directory to compile the modifications for the large core into the SD card image. The image file `sysimage-sdcard.img` will be generated in the `k230_sdk/output/k230_evb_defconfig/images/` directory.
 
-##### 2.6.4.2 Execution
+##### Execution
 
 1. Copy the `src/big/mpp/userapps/sample/elf/sample_vicap.elf` file to a specified local directory.
 1. Mount this directory to `/sharefs` on the small core Linux via NFS.
@@ -800,11 +800,11 @@ If it is inconvenient to replace the LDO, you can wait for the subsequent V1.2 v
 
 ![Triple Camera Result](../../../../zh/01_software/board/examples/images/Tri_camera_result.png)
 
-### 2.7 DMA_demo
+### DMA_demo
 
-#### 2.7.1 DMA_demo Introduction
+#### DMA_demo Introduction
 
-##### 2.7.1.1 Non-binding Mode
+##### Non-binding Mode
 
 DMA channels 0-3 are GDMA, and channels 4-7 are SDMA.
 
@@ -814,25 +814,25 @@ DMA channels 0-3 are GDMA, and channels 4-7 are SDMA.
 - Channel 4 performs a 1D mode loop transfer of a segment of data, and after the transfer is complete, compares with golden data.
 - Channel 5 performs a 2D mode loop transfer of a segment of data, and after the transfer is complete, compares with golden data.
 
-##### 2.7.1.2 Binding Mode
+##### Binding Mode
 
 Use VVI as the DMA simulation input. Bind VVI device 0's channel 0 to DMA channel 0, and VVI device 0's channel 1 to DMA channel 1. VVI inputs a 640x320, YUV400, 8-bit, 90° rotated image to channel 0 every second, and a 640x320, YUV400, 8-bit, 180° rotated image to channel 1.
 
-#### 2.7.2 Feature Description
+#### Feature Description
 
 Includes DMA device property configuration, channel property configuration, graphical input, output, release, pipeline binding, and other functions.
 
-#### 2.7.3 Dependency Resources
+#### Dependency Resources
 
 None
 
-#### 2.7.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.7.4.1 Compilation
+##### Compilation
 
 Refer to the README.md in the release SDK package for software compilation.
 
-##### 2.7.4.2 Execution
+##### Execution
 
 1. Non-binding mode demo execution
 
@@ -850,9 +850,9 @@ Test information will be displayed on the screen, and press 'q' to end the execu
 
 Test information will be displayed on the screen, and press 'q' to end the execution.
 
-### 2.8 USB_demo
+### USB_demo
 
-#### 2.8.1 USB_demo Introduction
+#### USB_demo Introduction
 
 The USB demo currently includes four functionalities:
 
@@ -860,17 +860,17 @@ As a device, it simulates a USB drive and a mouse/keyboard.
 
 As a host, it connects to a USB drive and a mouse/keyboard.
 
-#### 2.8.2 Feature Description
+#### Feature Description
 
 The USB demo's functionalities are natively integrated into the Linux system.
 
-#### 2.8.3 Dependency Resources
+#### Dependency Resources
 
 Type-C cable, Type-C to Type-A adapter.
 
-#### 2.8.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.8.4.1 Simulating USB Drive as a Device
+##### Simulating USB Drive as a Device
 
 ```shell
 # Allocate a memory space to simulate the USB drive's disk space.
@@ -895,11 +895,11 @@ mkfs.fat 4.1 (2017-01-24)
 
 Connect the USB port of the development board to a PC via a Type-C cable. The PC will display a connected USB drive.
 
-##### 2.8.4.2 Connecting USB Drive as a Host
+##### Connecting USB Drive as a Host
 
 Connect the USB port of the K230 development board to a USB drive using a Type-C to Type-A adapter.
 
-##### 2.8.4.3 Simulating Mouse/Keyboard as a Device
+##### Simulating Mouse/Keyboard as a Device
 
 Connect the USB port of the K230 development board to another computer using a Type-C cable for testing.
 
@@ -913,7 +913,7 @@ Connect the USB port of the K230 development board to another computer using a T
 # Enter the corresponding operations based on the prompts, and you will see keyboard-like input on the PC, such as a b c --return.
 ```
 
-##### 2.8.4.4 Connecting Mouse/Keyboard as a Host
+##### Connecting Mouse/Keyboard as a Host
 
 Connect the USB port of the K230 development board to a mouse or keyboard using a Type-C to Type-A adapter.
 
@@ -942,9 +942,9 @@ B: MSC=10
 # Press different keys on the keyboard, and the corresponding display will appear in the terminal.
 ```
 
-### 2.9 GPU_demo
+### GPU_demo
 
-#### 2.9.1 GPU_demo Introduction
+#### GPU_demo Introduction
 
 The GPU demo includes three executable programs:
 
@@ -952,31 +952,31 @@ The GPU demo includes three executable programs:
 - `linearGrad`: Draws a linear gradient example.
 - `imgIndex`: Draws a color lookup table example.
 
-#### 2.9.2 Feature Description
+#### Feature Description
 
 The GPU demo mainly covers three functions: vector drawing, linear gradient (implemented through pattern), and color lookup table.
 
-#### 2.9.3 Dependency Resources
+#### Dependency Resources
 
 Writable file system.
 
-#### 2.9.4 Usage Instructions
+#### Usage Instructions
 
 Enter a writable directory and execute the program.
 
-##### 2.9.4.1 tiger
+##### tiger
 
 Run the `tiger` command, and after execution, a `tiger.png` file will be generated in the current directory, as shown below:
 
 ![Tiger Image](../../../../zh/01_software/board/examples/images/e54764629a9e9fb63ec4340d316e4f42.png)
 
-##### 2.9.4.2 linearGrad
+##### linearGrad
 
 Run the `linearGrad` command, and after execution, a `linearGrad.png` file will be generated in the current directory, as shown below:
 
 ![Linear Gradient](../../../../zh/01_software/board/examples/images/24db1c231608cd26a5a981e055aa6910.png)
 
-##### 2.9.4.3 imgIndex
+##### imgIndex
 
 Run the `imgIndex` command, and after execution, four image files will be generated in the current directory, as shown below:
 
@@ -996,13 +996,13 @@ Run the `imgIndex` command, and after execution, four image files will be genera
 
 ![index8](../../../../zh/01_software/board/examples/images/1f24a6530d8c0d1ed22bb3eea26a33fb.png)
 
-##### 2.9.4.4 vglite_drm
+##### vglite_drm
 
 Run the `vglite_drm` command, and a pattern drawn by the GPU will be displayed on the LCD screen. Press the `Enter` key again to display the next pattern, as shown below:
 
 ![First Pattern](../../../../zh/02_applications/tutorials/images/gpu-hdmi-2.jpg)
 
-##### 2.9.4.5 vglite_cube
+##### vglite_cube
 
 Run the `vglite_cube` command, and a rotating cube drawn by the GPU will be displayed on the LCD screen, as shown below:
 
@@ -1014,29 +1014,29 @@ This demo will generate a lot of kernel messages. If you do not want to see thes
 sysctl -w kernel.printk=6
 ```
 
-### 2.10 DRM Display Demo
+### DRM Display Demo
 
-#### 2.10.1 Demo Introduction
+#### Demo Introduction
 
 This demo runs on the Linux system of the K230 small core, specifically displaying images on the screen.
 
-#### 2.10.2 Feature Description
+#### Feature Description
 
 1. DRM supports operations on 5 layers, including: 1 video layer and 4 OSD layers.
 1. The video layer supports NV12, NV21, NV16, NV61 color spaces.
 1. The OSD layer supports ARGB8888, ARGB4444, RGB888, RGB565 color spaces.
 
-#### 2.10.3 Dependency Resources
+#### Dependency Resources
 
 HDMI display
 
-#### 2.10.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.10.4.1 Compilation
+##### Compilation
 
 Refer to the README.md in the release SDK package for software compilation.
 
-##### 2.10.4.2 Execution
+##### Execution
 
 ```shell
 modetest -M canaan-drm -D 0 -a -s 38@36:1920x1080-30  -P 32@36:1920x1080@AR24 -v -F smpte
@@ -1046,23 +1046,23 @@ After executing the above command, color bars will be displayed on the HDMI disp
 
 ![Image Description](../../../../zh/01_software/board/examples/images/modetest_ar24_smpte_hdmi.png)
 
-### 2.11 LVGL Demo
+### LVGL Demo
 
-#### 2.11.1 Demo Introduction
+#### Demo Introduction
 
 This demo runs on the Linux system of the K230 small core and displays a configuration interface on the HDMI display.
 
-#### 2.11.3 Dependency Resources
+#### Dependency Resources
 
 HDMI display
 
-#### 2.11.3 Usage Instructions
+#### Usage Instructions
 
-##### 2.11.3.1 Compilation
+##### Compilation
 
 Refer to the README.md in the release SDK package for software compilation.
 
-##### 2.11.3.2 Execution
+##### Execution
 
 ```shell
 lvgl_demo_widgets
@@ -1072,27 +1072,27 @@ After executing the above command, a configuration interface will be displayed o
 
 ![Image Description](../../../../zh/01_software/board/examples/images/lvgl_demo_widgets_hdmi.png)
 
-### 2.12 RTSP Streaming Demo
+### RTSP Streaming Demo
 
-#### 2.12.1 Demo Introduction
+#### Demo Introduction
 
 This demo implements RTSP streaming.
 
-#### 2.12.2 Feature Description
+#### Feature Description
 
 This demo supports simultaneous streaming of audio and video streams to an RTSP server, using the `mapi venc&aenc` interface for audio and video encoding. After streaming, you can pull the stream using a URL. Currently, this demo supports streaming and pulling three URLs.
 
-#### 2.12.3 Dependency Resources
+#### Dependency Resources
 
 A USB to Ethernet adapter is required to connect the development board to a network cable.
 
-#### 2.12.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.12.4.1 Compilation
+##### Compilation
 
 Refer to the `README.md` in the release SDK package for instructions on compiling in the Docker environment. After compilation, the executable program `rtsp_demo` will be generated in the `k230_sdk/src/common/cdk/user/out/little` directory.
 
-### 2.12.4.2 Execution
+### Execution
 
 The default sensor type used by `rtsp_demo` is `IMX335_MIPI_2LANE_RAW12_1920X1080_30FPS_LINEAR`. You can modify the sensor type and other parameters via command line arguments as follows:
 
@@ -1120,19 +1120,19 @@ The audio input type can be either the onboard mic or headphone input.
 
 Once `rtsp_demo` is running on the smaller core, it will print a URL like `rtsp://ip:8554/session0`, where `0` represents the first session. You can use VLC to pull and play the stream from this URL. To stop the stream, first stop VLC and then press `ctrl+c` to terminate `rtsp_demo`.
 
-### 2.13 FaceAeDemo
+### FaceAeDemo
 
-#### 2.13.1 Demo Introduction
+#### Demo Introduction
 
 This demo runs on the larger core and demonstrates the integration of VICAP, KPU, VO (video output), and AERoi. It can adjust the facial exposure brightness through face detection.
 
-#### 2.13.2 Compilation
+#### Compilation
 
 1. Refer to the README.md in the release SDK for instructions on using Docker to compile the image.
 1. After compilation, the sample (`sample_face_ae.elf`) will be located at `k230_sdk/src/big/mpp/userapps/sample/elf`.
 1. Since the KPU linkage requires the detection model `test.kmodel`, it will be stored at `k230_sdk/src/big/mpp/userapps/sample/elf` after compilation.
 
-#### 2.13.3 Execution
+#### Execution
 
 ```shell
 cd /sharefs/app
@@ -1142,27 +1142,27 @@ Type 'a' and press enter to run the face AE demo.
 Upon successful execution, the physical address of each frame image will be printed.
 ```
 
-### 2.14 FFT Demo
+### FFT Demo
 
-#### 2.14.1 Demo Introduction
+#### Demo Introduction
 
 This demo verifies the usage of FFT APIs and tests the FFT functionality. The code is located at `src/big/mpp/userapps/sample/sample_fft/`.
 
-#### 2.14.2 Feature Description
+#### Feature Description
 
 First, an FFT calculation is performed, followed by an IFFT calculation.
 
-#### 2.14.3 Dependency Resources
+#### Dependency Resources
 
 None
 
-#### 2.14.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.14.4.1 Compilation
+##### Compilation
 
 Refer to the README.md in the release SDK package.
 
-##### 2.14.4.2 Execution
+##### Execution
 
 1. Once both the large and small core systems are up, execute the following command on the larger core:
 
@@ -1223,13 +1223,13 @@ Refer to the README.md in the release SDK package.
    -----fft ifft point 4096 use 1099 us result: ok
    ```
 
-### 2.15 SDIO WIFI
+### SDIO WIFI
 
-#### 2.15.1 Demo Introduction
+#### Demo Introduction
 
 The CANMV development board uses an SDIO WIFI module that supports 2.4G, specifically the AP6212. It supports both STA and softAP modes.
 
-#### 2.15.2 Compilation
+#### Compilation
 
 The default configuration for building CANMV in `k230_sdk` supports AP6212 WIFI.
 
@@ -1324,13 +1324,13 @@ The WIFI module is powered on/off via `if wlan down/up` after system startup. So
 };
 ```
 
-#### 2.14.5 Execution
+#### Execution
 
 STA (Station) mode is where the device acts as a client and connects to an AP (Access Point) for network access. Our mobile phones typically operate in STA mode when connecting to a router.
 
 AP mode is where the device acts as a server, providing wireless access to other devices. Wireless routers, gateways, and hotspots typically operate in AP mode, allowing other devices to connect and communicate through it.
 
-##### 2.14.5.1 STA Testing
+##### STA Testing
 
 ```shell
 ifconfig -a
@@ -1345,7 +1345,7 @@ wpa_cli -i wlan0 select_network 1
 udhcpc -i wlan0 -q
 ```
 
-##### 2.14.5.2 AP Testing
+##### AP Testing
 
 ```shell
 [root@canaan ~ ]#cat /etc/hostapd.conf
@@ -1371,13 +1371,13 @@ hostapd /etc/hostapd.conf &
 
 A STA device can connect directly to the `k230_ap` hotspot without a password.
 
-### 2.15 UVC_demo
+### UVC_demo
 
-#### 2.15.1 uvc_demo Introduction
+#### uvc_demo Introduction
 
 The UVC demo turns the K230 development board into a USB camera. When connected to a PC via a USB cable, the PC's player can display the real camera image.
 
-#### 2.15.2 Feature Description
+#### Feature Description
 
 The current version supports both bulk and ISO transfer.
 
@@ -1385,15 +1385,15 @@ It supports 640x480 NV12 format images and 1280x720 H264/MJPEG format images.
 
 PID, VID, and device name can be configured by modifying the shell script.
 
-#### 2.15.3 Dependency Resources
+#### Dependency Resources
 
 Type-C cable to connect USB0 to the PC.
 
 A camera application on the PC or PotPlayer software.
 
-#### 2.15.4 Usage Instructions
+#### Usage Instructions
 
-##### 2.15.4.1 Compilation
+##### Compilation
 
 Refer to the README.md in the SDK for the software compilation environment.
 
@@ -1408,7 +1408,7 @@ The smaller core's Linux implements the USB driver functionality and obtains cam
 
 Refer to [K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream](../../../../en/02_applications/tutorials/K230_USB_Application_Practice_UVC_Transmission_YUV_and_Encoding_Stream.md).
 
-##### 2.15.4.2 Execution
+##### Execution
 
 After entering the large core RT-Smart system, navigate to the `/bin` directory and execute:
 
@@ -1445,25 +1445,25 @@ Go to PotPlayer -> `Options` -> `Device` -> `Camera` interface,
 
 PotPlayer -> `Open` -> `Camera/Other Device`
 
-### 2.16 YUV Sensor Demo
+### YUV Sensor Demo
 
-#### 2.16.1 Demo Introduction
+#### Demo Introduction
 
 Three-way YUV sensor input, outputting YUV444 packed format to DDR through VICAP's MCM hardware, and converting to NV12 format using the CSC function of nonai_2d hardware.
 
 VICAP binds to nonai_2d, nonai_2d outputs to both VENC and VO, performing RTSP streaming and screen display.
 
-#### 2.16.2 Feature Description
+#### Feature Description
 
 Only supports 1280x720 resolution.
 
-#### 2.16.3 Dependency Resources
+#### Dependency Resources
 
 Depends on special adapter board hardware, as shown below:
 
 ![Image Description](../../../../zh/01_software/board/examples/images/yuv_sensor.png)
 
-#### 2.16.4 Usage Instructions
+#### Usage Instructions
 
 After entering the large core RT-Smart system, execute:
 

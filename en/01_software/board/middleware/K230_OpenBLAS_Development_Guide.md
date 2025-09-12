@@ -50,12 +50,12 @@ This document (guide) is primarily intended for the following personnel:
 |------------------|--------------------------|----------|------------|
 | V1.0             | Initial Version          | Algorithm Department | 2023-05-30 |
 
-## 1. Introduction to OpenBLAS
+## Introduction to OpenBLAS
 
 OpenBLAS is an optimized BLAS computation library distributed under the BSD license (open-source). BLAS (Basic Linear Algebra Subprograms) is an API standard for releasing numerical libraries for basic linear algebra operations (such as vector or matrix multiplication). OpenBLAS is a specific implementation of the BLAS standard.
 In the SDK, a pre-cross-compiled OpenBLAS library is included (located at the path `k230_sdk/src/big/utils/lib/openblas/`). Users can directly use this static library to compile their own executable programs.
 
-## 2. Test Case Compilation
+## Test Case Compilation
 
 Note:
 >This section explains how to compile executable programs using the pre-set OpenBLAS static library in the SDK. The SDK includes multiple examples of executable program compilation based on OpenBLAS (located at `k230_sdk/src/big/utils/examples/openblas/`). This section explains based on these examples.
@@ -106,9 +106,9 @@ Finally, the `k230_sdk/src/big/utils/examples/openblas/out/bin` folder contains 
 - `3_openblas_level3.elf`
 - `4_openblas_fortran.elf`
 
-## 3. Test Case Execution Demonstration
+## Test Case Execution Demonstration
 
-### 3.1 level_1 Test Case
+### level_1 Test Case
 
 Execution method and output example:
 
@@ -123,7 +123,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.2 level_2 Test Case
+### level_2 Test Case
 
 Execution method and output example:
 
@@ -138,7 +138,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.3 level_3 Test Case
+### level_3 Test Case
 
 Execution method and output example:
 
@@ -153,7 +153,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.4 Fortran Interface Test Case
+### Fortran Interface Test Case
 
 Execution method and output example:
 
@@ -175,14 +175,14 @@ This is the reference:
 {Test PASS}.
 ```
 
-## 4. OpenBLAS Cross Compilation
+## OpenBLAS Cross Compilation
 
 Note:
 >Although the SDK includes a pre-cross-compiled OpenBLAS library (located at the path `k230_sdk/src/big/utils/lib/openblas/`), interested users can also cross-compile OpenBLAS themselves to obtain the OpenBLAS static library adapted to K230.
 
-### 4.1 Setting Up the OpenBLAS Compilation Environment
+### Setting Up the OpenBLAS Compilation Environment
 
-#### 4.1.1 Git Code Download
+#### Git Code Download
 
 First, use git to obtain the OpenBLAS repository. Since OpenBLAS comes from GitHub, slow cloning speed is normal, please be patient:
 
@@ -196,7 +196,7 @@ OpenBLAS has many versions. Since version 0.3.21 lacks some features compared to
 git checkout e9a911fb9f011c886077e68eab81c48817cdb782
 ```
 
-#### 4.1.2 Applying Patch Package
+#### Applying Patch Package
 
 Note:
 >The patch package is located in the SDK at `k230_sdk/src/big/rt-smart/userapps/openblas/`.
@@ -238,7 +238,7 @@ Execute the following command in the root directory of OpenBLAS to apply the pat
 git am ./patch/*.patch
 ```
 
-### 4.3 OpenBLAS Compilation
+### OpenBLAS Compilation
 
 Enter the root directory of OpenBLAS and execute the following command to compile:
 

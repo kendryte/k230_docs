@@ -53,23 +53,23 @@
 | V1.0       | 正式发布 | 黄子懿 | 2023/04/06 |
 | V1.1       | 调整格式 | 黄子懿 | 2023/05/06 |
 
-## 1. 功能介绍
+## 功能介绍
 
 本模块主要用于加速矢量图形的绘制，可用于绘制菜单等页面等，支持加速部分lvgl绘制。GPU有一系列绘制指令，将绘制指令写入内存，提交地址及指令总长度给GPU后即可开始绘制。本模块支持多边形、二次贝塞尔曲线、三次贝塞尔曲线和椭圆曲线的填充绘制，支持线性渐变色填充，支持颜色查找表，支持图像合成和混合以及BLIT。
 
-## 2. 数据流向
+## 数据流向
 
 GPU软件驱动部分包括设备/dev/vg_lite及其内核模块驱动程序vg_lite.ko，以及用户态函数库libvg_lite.so，libvg_lite.so会打开/dev/vg_lite设备，通过ioctl()及mmap()与内核态的驱动程序进行交互。内核态驱动主要由vg_lite_hal.c实现，vg_lite.c中的函数通过vg_lite_kernel函数调用vg_lite_hal.c中的函数，执行实际的寄存器操作。
 
 注意：驱动不会检查绘制指令中的物理地址，调用VGLite API可以间接读写DDR内存的所有物理地址。
 
-## 3. 软件接口
+## 软件接口
 
 软件接口详见软件包中的头文件vg_lite.h。
 
-### 3.1 主要类型及定义
+### 主要类型及定义
 
-#### 3.1.1 参数类型
+#### 参数类型
 
 | 名称             | 类型定义               | 含义                                                                                                                                                                                                                        |
 |------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -81,7 +81,7 @@ GPU软件驱动部分包括设备/dev/vg_lite及其内核模块驱动程序vg_li
 | vg_lite_float_t  | float                  | 单精度浮点数                                                                                                                                                                                                                |
 | vg_lite_color_t  | uint32_t               | 32位颜色值 颜色值指定了各种功能中使用的颜色。颜色是用8位RGBA通道形成的。红色通道在颜色值的最低8位，其次是绿色和蓝色通道。alpha通道在颜色值的最高8位。 对于L8目标格式，通过使用默认的ITU-R BT.709转换规则将RGB颜色转换为L8。 |
 
-#### 3.1.2 错误类型 vg_lite_error_t
+#### 错误类型 vg_lite_error_t
 
 | 枚举                       | 描述                 |
 |----------------------------|----------------------|
@@ -97,7 +97,7 @@ GPU软件驱动部分包括设备/dev/vg_lite及其内核模块驱动程序vg_li
 | VG_LITE_ALREADY_EXISTS     | 对象已存在           |
 | VG_LITE_NOT_ALIGNED        | 数据对齐错误         |
 
-#### 3.1.3 功能枚举
+#### 功能枚举
 
 | 枚举                              | 描述          |
 |-----------------------------------|---------------|
@@ -109,17 +109,17 @@ GPU软件驱动部分包括设备/dev/vg_lite及其内核模块驱动程序vg_li
 | gcFEATURE_BIT_VG_RADIAL_GRADIENT  | 径向灰度      |
 | gcFEATURE_BIT_VG_RGBA2_FORMAT     | RGBA2222格式  |
 
-### 3.2 GPU控制
+### GPU控制
 
-如果没有特殊说明，那么在调用任何API函数之前，应用程序必须通过调用[vg_lite_init](#3212-vg_lite_init)来初始化GPU隐式（全局）上下文，该函数将填充特征表、重置快速清除缓冲区、重置合成目标缓冲区，以及分配命令和细分缓冲区。
+如果没有特殊说明，那么在调用任何API函数之前，应用程序必须通过调用[vg_lite_init](#vg_lite_init)来初始化GPU隐式（全局）上下文，该函数将填充特征表、重置快速清除缓冲区、重置合成目标缓冲区，以及分配命令和细分缓冲区。
 
-GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命令**。GPU驱动程序不支持在多个线程/进程中同时运行的多个并发上下文，因为GPU内核驱动程序不支持上下文切换。GPU应用程序在任何时候都只能使用一个上下文来向GPU硬件发出命令。如果GPU应用程序需要切换上下文，应该调用[vg_lite_close](#3213-vg_lite_close)来关闭当前线程中的当前上下文，然后可以调用[vg_lite_init](#3212-vg_lite_init)来初始化当前线程中或其他线程/进程中的新上下文。
+GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命令**。GPU驱动程序不支持在多个线程/进程中同时运行的多个并发上下文，因为GPU内核驱动程序不支持上下文切换。GPU应用程序在任何时候都只能使用一个上下文来向GPU硬件发出命令。如果GPU应用程序需要切换上下文，应该调用[vg_lite_close](#vg_lite_close)来关闭当前线程中的当前上下文，然后可以调用[vg_lite_init](#vg_lite_init)来初始化当前线程中或其他线程/进程中的新上下文。
 
-如果没有特殊说明，则所有函数都返回[vg_lite_error_t](#312-错误类型-vg_lite_error_t)。
+如果没有特殊说明，则所有函数都返回[vg_lite_error_t](#错误类型-vg_lite_error_t)。
 
-#### 3.2.1 上下文初始化和控制函数
+#### 上下文初始化和控制函数
 
-##### 3.2.1.1 vg_lite_set_command_buffer_size
+##### vg_lite_set_command_buffer_size
 
 - 描述
 
@@ -131,7 +131,7 @@ GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命
 |----------|----------------|-----------|
 | size     | 命令缓冲区长度 | 输入      |
 
-##### 3.2.1.2 vg_lite_init
+##### vg_lite_init
 
 - 描述
 
@@ -146,29 +146,29 @@ GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命
 | tessellation_width  | 嵌片窗口宽度。必须是16的整数倍，最小为16，最大不能大于帧宽度，如果为0表示不使用tessellation，那么GPU将只运行blit。 | 输入      |
 | tessellation_height | 嵌片窗口高度。必须是16的整数倍，最小为16，最大不能大于帧宽度，如果为0表示不使用tessellation，那么GPU将只运行blit。 | 输入      |
 
-##### 3.2.1.3 vg_lite_close
+##### vg_lite_close
 
 - 描述
 
     删除所有的资源，并释放先前由vg_lite_init函数初始化的所有内存。如果这是唯一的活动上下文，它还会自动关闭硬件。
 
-##### 3.2.1.4 vg_lite_finish
+##### vg_lite_finish
 
 - 描述
 
     这个函数明确地将命令缓冲区提交给GPU，并等待其完成。
 
-##### 3.2.1.5 vg_lite_flush
+##### vg_lite_flush
 
 - 描述
 
     这个函数明确地将命令缓冲区提交给GPU，而不等待它的完成。
 
-#### 3.2.2 像素缓冲区
+#### 像素缓冲区
 
-##### 3.2.2.1 内存对齐要求
+##### 内存对齐要求
 
-###### 3.2.2.1.1 源图像对齐要求
+###### 源图像对齐要求
 
 GPU硬件要求光栅化图像的宽度是16像素的倍数。这一要求适用于所有图像格式。因此，用户需要将任意的图像宽度垫成16像素的倍数，以便GPU硬件能够正确工作。
 
@@ -189,7 +189,7 @@ GPU硬件要求光栅化图像的宽度是16像素的倍数。这一要求适用
 | VG_LITE_ARGB4444组          | 16           | 32B      | 是             | 是               |
 | VG_LITE_ARGB8888/XRGB8888组 | 32           | 64B      | 是             | 是               |
 
-###### 3.2.2.1.2 渲染目标缓冲区对齐要求
+###### 渲染目标缓冲区对齐要求
 
 GPU硬件要求像素缓冲区的宽度是16像素的倍数。这一要求适用于所有图像格式。因此，用户需要将任意的像素缓冲区宽度对齐成16像素的倍数，以便GPU硬件能够正确工作。像素的字节对齐要求取决于具体的像素格式。
 
@@ -201,17 +201,17 @@ GPU硬件要求像素缓冲区的宽度是16像素的倍数。这一要求适用
 
 \- 如果格式是线性的，起始地址和stride没有对齐要求。
 
-##### 3.2.2.2 像素缓存
+##### 像素缓存
 
 GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64字节。在这种情况下，一个缓存行可以容纳一个4x4像素的Tile或一个16x1像素的行。
 
-#### 3.2.3 枚举类型
+#### 枚举类型
 
-##### 3.2.3.1 vg_lite_buffer_format_t
+##### vg_lite_buffer_format_t
 
 - 这个枚举类型指定了用于缓冲区的颜色格式。
 
-    注意：关于图像格式的对齐要求汇总，请参见数值描述后的[内存对齐要求](#3221-内存对齐要求)。
+    注意：关于图像格式的对齐要求汇总，请参见数值描述后的[内存对齐要求](#内存对齐要求)。
 
 | vg_lite_buffer_format_t | 描述                          | 支持作为源 | 支持作为目标 | 对齐（字节） |
 |-------------------------|-------------------------------|------------|--------------|--------------|
@@ -244,7 +244,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_INDEX_4         | 4-bit索引格式                 | 是         | 否           | 8            |
 | VG_LITE_INDEX_8         | 8-bit索引格式                 | 是         | 否           | 8            |
 
-##### 3.2.3.2 vg_lite_buffer_image_mode_t
+##### vg_lite_buffer_image_mode_t
 
 - 指定如何将图像渲染到缓冲区。
 
@@ -254,7 +254,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_NONE_IMAGE_MODE     | 图像输入被忽略       |
 | VG_LITE_MULTIPLY_IMAGE_MODE | 图像与绘制颜色相乘   |
 
-##### 3.2.3.3 vg_lite_buffer_layout_t
+##### vg_lite_buffer_layout_t
 
 - 指定内存中的缓冲区数据布局。
 
@@ -263,7 +263,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_LINEAR | 线性（扫描线）布局。注意：这种布局对缓冲区没有对齐要求。                                |
 | VG_LITE_TILED  | 数据被组织成4x4像素的嵌片。注意：对于这种布局，缓冲区的起始地址和跨度需要以64字节对齐。 |
 
-##### 3.2.3.4 vg_lite_buffer_transparency_mode_t
+##### vg_lite_buffer_transparency_mode_t
 
 - 指定一个缓冲区的透明模式。
 
@@ -272,9 +272,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_IMAGE_OPAQUE      | 不透明的图像：所有的图像像素都被复制到VG PE进行光栅化。                                                                                        |
 | VG_LITE_IMAGE_TRANSPARENT | 透明图像：只有非透明的图像像素被复制到VG PE中。 注意：这种模式只有在图像模式为VG_LITE_NORMAL_IMAGE_MODE或VG_LITE_MULTIPLY_IMAGE_MODE时才有效。 |
 
-#### 3.2.4 结构体
+#### 结构体
 
-##### 3.2.4.1 vg_lite_buffer_t
+##### vg_lite_buffer_t
 
 - 该结构定义了GPU使用的图像或内存数据的缓冲区布局。
 
@@ -292,23 +292,23 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | image_mode         | vg_lite_buffer_image_mode_t        | Blit模式       |
 | transparency_mode  | vg_lite_buffer_transparency_mode_t | 透明模式       |
 
-#### 3.2.5 函数
+#### 函数
 
-##### 3.2.5.1 vg_lite_allocate
+##### vg_lite_allocate
 
 - 描述
 
     这个函数用于在blit或draw函数中使用缓冲区之前分配内存。
 
-    为了让硬件访问一些内存，如源图像或目标缓冲区，需要首先分配。提供的[vg_lite_buffer_t](#3241-vg_lite_buffer_t)结构需要用所请求的缓冲区的大小（宽度和高度）和格式进行初始化。如果stride被设置为0，这个函数将把它填进去。这个函数的唯一输入参数是指向缓冲区结构的指针。如果该结构有所有需要的信息，将为该缓冲区分配适当的内存。
+    为了让硬件访问一些内存，如源图像或目标缓冲区，需要首先分配。提供的[vg_lite_buffer_t](#vg_lite_buffer_t)结构需要用所请求的缓冲区的大小（宽度和高度）和格式进行初始化。如果stride被设置为0，这个函数将把它填进去。这个函数的唯一输入参数是指向缓冲区结构的指针。如果该结构有所有需要的信息，将为该缓冲区分配适当的内存。
 
-    这个函数将调用内核来实际分配内存。[vg_lite_buffer_t](#3241-vg_lite_buffer_t)结构中的内存句柄、逻辑地址和硬件地址将由内核填入。
+    这个函数将调用内核来实际分配内存。[vg_lite_buffer_t](#vg_lite_buffer_t)结构中的内存句柄、逻辑地址和硬件地址将由内核填入。
 
 - 参数
 
-    [vg_lite_buffer_t](#3241-vg_lite_buffer_t) \*buffer: 指向缓冲区的指针，该指针持有被分配的缓冲区的大小和格式。
+    [vg_lite_buffer_t](#vg_lite_buffer_t) \*buffer: 指向缓冲区的指针，该指针持有被分配的缓冲区的大小和格式。
 
-##### 3.2.5.2 vg_lite_free
+##### vg_lite_free
 
 - 描述
 
@@ -316,9 +316,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    [vg_lite_buffer_t](#3241-vg_lite_buffer_t) \*buffer: 指向被vg_lite_allocate填入的缓冲区结构的指针。
+    [vg_lite_buffer_t](#vg_lite_buffer_t) \*buffer: 指向被vg_lite_allocate填入的缓冲区结构的指针。
 
-##### 3.2.5.3 vg_lite_buffer_upload
+##### vg_lite_buffer_upload
 
 - 描述
 
@@ -332,7 +332,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     uint32_t stride\[3\]: 像素数据的行跨度。
 
-##### 3.2.5.4 vg_lite_map
+##### vg_lite_map
 
 - 描述
 
@@ -340,11 +340,11 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_buffer_t \*buffer: 指向被[vg_lite_allocate](#3251-vg_lite_allocate)填入的缓冲区结构的指针。
+    vg_lite_buffer_t \*buffer: 指向被[vg_lite_allocate](#vg_lite_allocate)填入的缓冲区结构的指针。
     vg_lite_map_flag_t flag: 目前只支持 VG_LITE_MAP_DMABUF
     int32_t fd: DMABUF fd
 
-##### 3.2.5.5 vg_lite_unmap
+##### vg_lite_unmap
 
 - 描述
 
@@ -352,9 +352,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_buffer_t \*buffer: 指向被[vg_lite_map](#3254-vg_lite_map)填入的缓冲区结构的指针。
+    vg_lite_buffer_t \*buffer: 指向被[vg_lite_map](#vg_lite_map)填入的缓冲区结构的指针。
 
-##### 3.2.5.6 vg_lite_set_CLUT
+##### vg_lite_set_CLUT
 
 - 描述
 
@@ -376,19 +376,19 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     注意：驱动程序不验证来自应用程序的CLUT内容。
 
-### 3.3 矩阵
+### 矩阵
 
-#### 3.3.1 结构体
+#### 结构体
 
-##### 3.3.1.1 vg_lite_matrix_t
+##### vg_lite_matrix_t
 
 - 描述
 
     定义了一个3x3浮点数矩阵。
 
-#### 3.3.2 函数
+#### 函数
 
-##### 3.3.2.1 vg_lite_identity
+##### vg_lite_identity
 
 - 描述
 
@@ -396,9 +396,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_matrix_t \*matrix: 指向[vg_lite_matrix_t](#3311-vg_lite_matrix_t)结构体的指针，该结构体将被加载单位矩阵。
+    vg_lite_matrix_t \*matrix: 指向[vg_lite_matrix_t](#vg_lite_matrix_t)结构体的指针，该结构体将被加载单位矩阵。
 
-##### 3.3.2.2 vg_lite_perspective
+##### vg_lite_perspective
 
 - 描述
 
@@ -410,9 +410,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t py: 透视变换矩阵的
 
-    vg_lite_matrix_t \*matrix: 指向将被透视变换的[vg_lite_matrix_t](#3311-vg_lite_matrix_t)结构的指针。
+    vg_lite_matrix_t \*matrix: 指向将被透视变换的[vg_lite_matrix_t](#vg_lite_matrix_t)结构的指针。
 
-##### 3.3.2.3 vg_lite_rotate
+##### vg_lite_rotate
 
 - 描述
 
@@ -422,9 +422,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t degrees: 旋转矩阵的度数（角度制），正数表示顺时针旋转。
 
-    vg_lite_matrix_t \*matrix: 指向将被旋转的[vg_lite_matrix_t](#3311-vg_lite_matrix_t)结构的指针。
+    vg_lite_matrix_t \*matrix: 指向将被旋转的[vg_lite_matrix_t](#vg_lite_matrix_t)结构的指针。
 
-##### 3.3.2.4 vg_lite_scale
+##### vg_lite_scale
 
 - 描述
 
@@ -436,9 +436,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t scale_y: 竖直方向缩放因子。
 
-    vg_lite_matrix_t \*matrix: 指向将被缩放的[vg_lite_matrix_t](#3311-vg_lite_matrix_t)结构的指针。
+    vg_lite_matrix_t \*matrix: 指向将被缩放的[vg_lite_matrix_t](#vg_lite_matrix_t)结构的指针。
 
-##### 3.3.2.5 vg_lite_translate
+##### vg_lite_translate
 
 - 描述
 
@@ -450,13 +450,13 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t y: 竖直方向的平移。
 
-    vg_lite_matrix_t \*matrix: 指向将被平移的[vg_lite_matrix_t](#3311-vg_lite_matrix_t)结构的指针。
+    vg_lite_matrix_t \*matrix: 指向将被平移的[vg_lite_matrix_t](#vg_lite_matrix_t)结构的指针。
 
-### 3.4 用于合成和混合的BLITs
+### 用于合成和混合的BLITs
 
-#### 3.4.1 枚举类型
+#### 枚举类型
 
-##### 3.4.1.1 vg_lite_blend_t
+##### vg_lite_blend_t
 
 该枚举定义了一些VGLite API函数所支持的混合模式。S和D代表源和目标颜色通道，Sa和Da代表源和目标alpha通道。
 
@@ -474,7 +474,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_BLEND_SRC_OVER | S+(1-Sa)\*D              |
 | VG_LITE_BLEND_SUBTRACT | D\*(1-Sa)                |
 
-##### 3.4.1.2 vg_lite_filter_t
+##### vg_lite_filter_t
 
 指定blit和draw APIs中的样本过滤模式。
 
@@ -484,7 +484,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_FILTER_LINEAR     | 使用沿水平线的线性内插。                      |
 | VG_LITE_FILTER_BI_LINEAR  | 在图像像素周围使用一个2x2的盒子，并进行插值。 |
 
-##### 3.4.1.3 vg_lite_global_alpha_t
+##### vg_lite_global_alpha_t
 
 指定blit APIs中的全局alpha模式。
 
@@ -494,9 +494,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_GLOBAL          | 使用全局的src/dst alpha值来替换原始的src/dst alpha值。 |
 | VG_LITE_SCALED          | 将全局的src/dst alpha值与原src/dst alpha值相乘。       |
 
-#### 3.4.2 结构体
+#### 结构体
 
-##### 3.4.2.1 vg_lite_rectangle_t
+##### vg_lite_rectangle_t
 
 该结构体定义了一个矩形的数据的组织。
 
@@ -507,7 +507,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | width   | int32_t  | 宽度                |
 | height  | int32_t  | 高度                |
 
-##### 3.4.2.2 vg_lite_point_t
+##### vg_lite_point_t
 
 该结构体定义了一个2D点。
 
@@ -516,7 +516,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | x    | int32_t  | X坐标 |
 | y    | int32_t  | Y坐标 |
 
-##### 3.4.2.3 vg_lite_point4_t
+##### vg_lite_point4_t
 
 该结构体定义了四个构成多边形的二维点。这些点是由结构vg_lite_point_t定义的。
 
@@ -524,9 +524,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 |-------------------|---------------|-------------|
 | vg_lite_point\[4\]  | int32_t each  | 4个点的数组 |
 
-#### 3.4.3 函数
+#### 函数
 
-##### 3.4.3.1 vg_lite_blit
+##### vg_lite_blit
 
 - 描述
 
@@ -534,9 +534,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_buffer_t \*target: 指向定义目标缓冲区的vg_lite_buffer_t结构体。关于blit功能的有效目标颜色格式，请参见[源图像对齐要求](#32211-源图像对齐要求)。
+    vg_lite_buffer_t \*target: 指向定义目标缓冲区的vg_lite_buffer_t结构体。关于blit功能的有效目标颜色格式，请参见[源图像对齐要求](#源图像对齐要求)。
 
-    vg_lite_buffer_t \*source: 指向源缓冲区的vg_lite_buffer_t结构体。[vg_lite_buffer_format_t](#3231-vg_lite_buffer_format_t)枚举中的所有颜色格式都是blit函数的有效源格式。
+    vg_lite_buffer_t \*source: 指向源缓冲区的vg_lite_buffer_t结构体。[vg_lite_buffer_format_t](#vg_lite_buffer_format_t)枚举中的所有颜色格式都是blit函数的有效源格式。
 
     vg_lite_matrix_t \*matrix: 指向一个vg_lite_matrix_t结构，它定义了源像素到目标像素的3x3变换矩阵。如果矩阵为NULL，则假定是一个单位矩阵，这意味着源像素将被直接复制到目标像素的（0,0）位置。
 
@@ -546,7 +546,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_filter_t filter: 指定过滤模式的类型。vg_lite_filter_t枚举中的所有格式都是这个函数的有效格式。
 
-##### 3.4.3.2 vg_lite_blit_rect
+##### vg_lite_blit_rect
 
 - 描述
 
@@ -568,7 +568,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_filter_t filter: 参考vg_lite_blit。
 
-##### 3.4.3.3 vg_lite_get_transform_matrix
+##### vg_lite_get_transform_matrix
 
 - 描述
 
@@ -582,7 +582,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_matrix_t \*mat: 输出参数，指向一个3x3的同质矩阵，将源多边形转换为目标多边形。
 
-##### 3.4.3.4 vg_lite_clear
+##### vg_lite_clear
 
 - 描述
 
@@ -596,9 +596,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_color_t color: 填充的颜色，如vg_lite_color_t枚举中指定的，这是用于填充缓冲区的颜色值。如果缓冲区是L8格式的，RGBA颜色将被转换为亮度值。
 
-#### 3.4.4 全局Alpha函数
+#### 全局Alpha函数
 
-##### 3.4.4.1 vg_lite_set_image_global_alpha
+##### vg_lite_set_image_global_alpha
 
 - 描述
 
@@ -606,11 +606,11 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_global_alpha_t alpha_mode: 全局Alpha模式，参见[vg_lite_global_alpha_t](#3413-vg_lite_global_alpha_t).
+    vg_lite_global_alpha_t alpha_mode: 全局Alpha模式，参见[vg_lite_global_alpha_t](#vg_lite_global_alpha_t).
 
     uint32_t alpha_value: 要设置的 图像/源 全局Alpha值。
 
-##### 3.4.4.2 vg_lite_set_dest_global_alpha
+##### vg_lite_set_dest_global_alpha
 
 - 描述
 
@@ -618,15 +618,15 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 - 参数
 
-    vg_lite_global_alpha_t alpha_mode: 全局Alpha模式，参见[vg_lite_global_alpha_t](#3413-vg_lite_global_alpha_t).
+    vg_lite_global_alpha_t alpha_mode: 全局Alpha模式，参见[vg_lite_global_alpha_t](#vg_lite_global_alpha_t).
 
     uint32_t alpha_value: 要设置的目标全局Alpha值。
 
-### 3.5 矢量路径控制
+### 矢量路径控制
 
-#### 3.5.1 枚举类型
+#### 枚举类型
 
-##### 3.5.1.1 vg_lite_quality_t
+##### vg_lite_quality_t
 
 指定硬件辅助抗锯齿的级别。
 
@@ -637,9 +637,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_MEDIUM     | 中等质量：4倍覆盖率采样抗锯齿                        |
 | VG_LITE_LOW        | 低质量：无抗锯齿                                     |
 
-#### 3.5.2 结构体
+#### 结构体
 
-##### 3.5.2.1 vg_lite_hw_memory
+##### vg_lite_hw_memory
 
 该结构体简单地记录了内核的内存分配信息。
 
@@ -651,11 +651,11 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | bytes     | uint32_t  | 大小                                                                                            |
 | property  | uint32_t  | 第0位用于表示路径上传。 0: 禁用路径数据上传（总是嵌入到命令缓冲区）。 1: 启用自动路径数据上传。 |
 
-##### 3.5.2.2 vg_lite_path_t
+##### vg_lite_path_t
 
 该结构描述了矢量路径数据。
 
-路径数据由操作码和坐标组成。操作码的格式总是VG_LITE_S8。关于操作码的详细情况，请参考本文件中关于[矢量路径操作码](#354-矢量路径操作码)的部分。
+路径数据由操作码和坐标组成。操作码的格式总是VG_LITE_S8。关于操作码的详细情况，请参考本文件中关于[矢量路径操作码](#矢量路径操作码)的部分。
 
 | 字段             | 类型                   | 描述                                               |
 |------------------|------------------------|----------------------------------------------------|
@@ -675,7 +675,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_S16       | 2 bytes      |
 | VG_LITE_S32       | 4 bytes      |
 
-###### 3.5.2.2.1 路径对象的特别说明
+###### 路径对象的特别说明
 
 - 端序没有影响，因为它是靠边界对齐的。
 - 多个连续的操作码应该按照指定的数据格式的大小进行打包。例如，对于VG_LITE_S16按2个字节打包，对于VG_LITE_S32按4个字节打包。由于操作码是8位（1字节），对于16位（2字节）或32位（4字节）数据类型：
@@ -720,9 +720,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 对于float类型，使用IEEE754编码规范，此时操作码仍然为8位有符号整数，可能需要软件进行特殊处理。
 
-#### 3.5.3 函数
+#### 函数
 
-##### 3.5.3.1 vg_lite_path_calc_length
+##### vg_lite_path_calc_length
 
 - 描述
 
@@ -736,7 +736,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_format_t format: 坐标数据格式，所有可用于vg_lite_format_t的格式都是该函数的有效格式。
 
-##### 3.5.3.2 vg_lite_path_append
+##### vg_lite_path_append
 
 - 描述
 
@@ -752,7 +752,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     uint32_t seg_count: 操作码数量。
 
-##### 3.5.3.3 vg_lite_init_path
+##### vg_lite_init_path
 
 - 描述
 
@@ -772,7 +772,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t min_x, vg_lite_float_t min_y, vg_lite_float_t max_x, vg_lite_float_t max_y: 最小和最大的x和y值，指定路径的包围盒。
 
-##### 3.5.3.4 vg_lite_init_arc_path
+##### vg_lite_init_arc_path
 
 - 描述
 
@@ -792,7 +792,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_float_t min_x, vg_lite_float_t min_y, vg_lite_float_t max_x, vg_lite_float_t max_y: 参考vg_lite_init_path。
 
-##### 3.5.3.5 vg_lite_upload_path
+##### vg_lite_upload_path
 
 - 描述
 
@@ -804,7 +804,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_path_t \*path: 指向vg_lite_path_t结构体的指针，该结构体包含要上传的路径。
 
-##### 3.5.3.6 vg_lite_clear_path
+##### vg_lite_clear_path
 
 - 描述
 
@@ -814,7 +814,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_path_t \*path: 指向要清除的vg_lite_path_t路径定义的指针。
 
-#### 3.5.4 矢量路径操作码
+#### 矢量路径操作码
 
 以下操作码是可用于矢量路径数据的路径绘制命令。
 
@@ -840,11 +840,11 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | 0x10   | (rh,rv,rot,x,y)                    | LCWARC. 使用指定的半径和旋转角度绘制一个大的CW弧线到给定的端点。 𝐿𝐶𝑊𝐴𝑅𝐶(𝑟ℎ,𝑟𝑣,𝑟𝑜𝑡,𝑥,𝑦) 𝑠𝑡𝑎𝑟𝑡𝑥=𝑥 𝑠𝑡𝑎𝑟𝑡𝑦=𝑦                                                                                                               |
 | 0x11   | (rh,rv,rot,x,y)                    | LCWARC_REL. 使用指定的半径和旋转角度绘制一个大的CW弧线到给定的相对端点。 𝑥=𝑠𝑡𝑎𝑟𝑡𝑥+Δ𝑥 𝑦=𝑠𝑡𝑎𝑟𝑡𝑦+Δ𝑦 𝐿𝐶𝑊𝐴𝑅𝐶(𝑟ℎ,𝑟𝑣,𝑟𝑜𝑡,𝑥,𝑦) 𝑠𝑡𝑎𝑟𝑡𝑥=𝑥 𝑠𝑡𝑎𝑟𝑡𝑦=𝑦                                                                               |
 
-### 3.6 基于矢量的绘制操作
+### 基于矢量的绘制操作
 
-#### 3.6.1 枚举类型
+#### 枚举类型
 
-##### 3.6.1.1 vg_lite_fill_t
+##### vg_lite_fill_t
 
 这个枚举用于指定要使用的填充规则。对于绘制任何路径，硬件都支持非零和奇偶的填充规则。
 
@@ -857,7 +857,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_FILL_NON_ZERO | 非零填充规则。如果一个像素至少与一个路径像素相交，就会被画出来。 |
 | VG_LITE_FILL_EVEN_ODD | 偶数填充规则。如果一个像素与奇数的路径像素相交，就会被画出来。   |
 
-##### 3.6.1.2 vg_lite_pattern_mode_t
+##### vg_lite_pattern_mode_t
 
 定义图像图案外的区域如何被填充到路径上。
 
@@ -866,7 +866,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | VG_LITE_PATTERN_COLOR   | 按颜色填充图案的外部。                   |
 | VG_LITE_PATTERN_PAD     | 图案边框的颜色被扩大以填充图案外的区域。 |
 
-#### 3.6.2 结构体
+#### 结构体
 
 ##### v3.6.2.1 g_lite_color_ramp_t
 
@@ -882,7 +882,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 | blue   | vg_lite_float_t  | 蓝色停止点的偏移量      |
 | alpha  | vg_lite_float_t  | Alpha通道停止点的偏移量 |
 
-##### 3.6.2.2 vg_lite_linear_gradient_t
+##### vg_lite_linear_gradient_t
 
 该结构定义了VGLite数据中的线性梯度的组织。线性渐变被应用于填充路径。它将根据设置生成一个256x1的图像。
 
@@ -896,9 +896,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
 其中VLC_MAX_GRAD最大为16，VLC_GRADBUFFER_WIDTH最大为256.
 
-#### 3.6.3 函数
+#### 函数
 
-##### 3.6.3.1 vg_lite_draw
+##### vg_lite_draw
 
 - 描述
 
@@ -910,7 +910,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_buffer_t \*target: 指向目标缓冲区的vg_lite_buffer_t结构体的指针。所有在vg_lite_buffer_format_t枚举中的颜色格式都是绘图函数的有效目标格式。
 
-    vg_lite_path_t \*path: 指向vg_lite_path_t结构体的指针，该结构体包含描述要绘制的路径数据。关于操作码的详细内容，请参考本文件中关于[矢量路径操作码](#354-矢量路径操作码)的部分。
+    vg_lite_path_t \*path: 指向vg_lite_path_t结构体的指针，该结构体包含描述要绘制的路径数据。关于操作码的详细内容，请参考本文件中关于[矢量路径操作码](#矢量路径操作码)的部分。
 
     vg_lite_fill_t fill_rule: 为路径的填充规则指定vg_lite_fill_t的枚举值。
 
@@ -920,7 +920,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_color_t color: 应用于路径绘制的每个像素的颜色。
 
-##### 3.6.3.2 vg_lite_draw_gradient
+##### vg_lite_draw_gradient
 
 - 描述
 
@@ -940,7 +940,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_blend_t blend: 参照vg_lite_draw.
 
-##### 3.6.3.3 vg_lite_draw_pattern
+##### vg_lite_draw_pattern
 
 - 描述
 
@@ -968,9 +968,9 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_filter_t filter: 指定过滤器的类型。vg_lite_filter_t枚举中的所有格式都是这个函数的有效格式。值为零（0）表示VG_LITE_FILTER_POINT。
 
-#### 3.6.4 线性渐变初始化和控制函数
+#### 线性渐变初始化和控制函数
 
-##### 3.6.4.1 vg_lite_init_grad
+##### vg_lite_init_grad
 
 - 描述
 
@@ -980,7 +980,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_linear_gradient_t \*grad: 指向vg_lite_linear_gradient_t结构体的指针，该结构定义了要被初始化的渐变。使用默认值。
 
-##### 3.6.4.2 vg_lite_set_grad
+##### vg_lite_set_grad
 
 - 描述
 
@@ -1002,7 +1002,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     uint32_t \*stops: 指向渐变停止的偏移量的指针。
 
-##### 3.6.4.3 vg_lite_update_grad
+##### vg_lite_update_grad
 
 - 描述
 
@@ -1012,7 +1012,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_linear_gradient_t \*grad: 指向vg_lite_linear_gradient_t结构体的指针，该结构体包含要用于渲染对象的更新值。
 
-##### 3.6.4.4 vg_lite_get_grad_matrix
+##### vg_lite_get_grad_matrix
 
 - 描述
 
@@ -1022,7 +1022,7 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_linear_gradient_t \*grad: 指向vg_lite_linear_gradient_t结构体的指针，该结构体包含要检索的矩阵。
 
-##### 3.6.4.5 vg_lite_clear_grad
+##### vg_lite_clear_grad
 
 - 描述
 
@@ -1032,49 +1032,49 @@ GPU包括两个完全关联的高速缓存。每个缓存有8行，每行有64�
 
     vg_lite_linear_gradient_t \*grad: 指向要清除的vg_lite_linear_gradient_t结构的指针。
 
-## 4. 约束条件
+## 约束条件
 
-GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命令**。GPU驱动程序**不支持**在多个线程/进程中同时运行的多个并发上下文，因为GPU内核驱动程序不支持上下文切换。GPU应用程序在任何时候都只能使用一个上下文来向GPU硬件发出命令。如果GPU应用程序需要切换上下文，应该调用[vg_lite_close](#3213-vg_lite_close)来关闭当前线程中的当前上下文，然后可以调用[vg_lite_init](#3212-vg_lite_init)来初始化当前线程中或其他线程/进程中的新上下文。
+GPU驱动程序**只支持一个当前上下文和一个线程来向GPU发布命令**。GPU驱动程序**不支持**在多个线程/进程中同时运行的多个并发上下文，因为GPU内核驱动程序不支持上下文切换。GPU应用程序在任何时候都只能使用一个上下文来向GPU硬件发出命令。如果GPU应用程序需要切换上下文，应该调用[vg_lite_close](#vg_lite_close)来关闭当前线程中的当前上下文，然后可以调用[vg_lite_init](#vg_lite_init)来初始化当前线程中或其他线程/进程中的新上下文。
 
-## 5. 性能建议与最佳实践
+## 性能建议与最佳实践
 
-### 5.1 Cache vs Non-cache
+### Cache vs Non-cache
 
 在加载vg_lite.ko模块时，通过cached参数可以配置是否关闭cache（默认启用cache），cache模式下在提交命令给GPU硬件之前会驱动会刷新CPU缓存（D-cache和L2-cache），而non-cache模式下会将command buffer及显存映射到用户态地址空间时设置为non-cache。一般情况下cache模式具有更好的性能，CPU写入command buffer以及读取显存都更快。
 
 目前刷新cache使用dcache.cipa指令，这个指令一次只能刷一个缓存行即64Bytes，对于较大的缓冲区例如1920x1080@ARGB32，大约需要循环129600次，其中大部分是未命中的，会带来一定的性能开销，而如果使用dcache.ciall指令可以刷新所有cache，但是可能会影响其他进程所以没有使用。
 
-### 5.2 内存使用
+### 内存使用
 
 vg_lite.ko模块加载后会占用大约130KB内存，除command buffer及显存外几乎不会占用更多空间，每个由vg_lite_hal_allocate_contiguous分配的内存除内存本身外还需要相应的页表资源以及一个大小为64B的节点。
 
-### 5.3 绘制流程
+### 绘制流程
 
 使用VGLite API进行操作
 
-1. 调用[vg_lite_init](#3212-vg_lite_init)初始化GPU
-1. 如果需要使用GPU显存，调用[vg_lite_allocate](#3251-vg_lite_allocate)分配和映射
+1. 调用[vg_lite_init](#vg_lite_init)初始化GPU
+1. 如果需要使用GPU显存，调用[vg_lite_allocate](#vg_lite_allocate)分配和映射
 1. 使用API绘制
-1. 调用[vg_lite_finish](#3214-vg_lite_finish)或[vg_lite_flush](#3215-vg_lite_flush)提交命令进行渲染，等待绘制结束
-1. 进程结束前，调用[vg_lite_close](#3213-vg_lite_close)关闭GPU
+1. 调用[vg_lite_finish](#vg_lite_finish)或[vg_lite_flush](#vg_lite_flush)提交命令进行渲染，等待绘制结束
+1. 进程结束前，调用[vg_lite_close](#vg_lite_close)关闭GPU
 
-## 6. 示例
+## 示例
 
 K230 SDK 中包含了多个 GPU 示例，源码放置在 `src/little/buildroot-ext/package/vg_lite/test/samples`，在 buildroot 中打开 BR2_PACKAGE_VG_LITE_DEMOS 即可构建并添加到生成的系统镜像中（默认打开）。
 
-### 6.1 tiger
+### tiger
 
 这是一个绘制老虎图像的示例，运行后会在当前目录下生成 `tiger.png`。
 
 ![tiger.png](images/tiger.png)
 
-### 6.2 linearGrad
+### linearGrad
 
 这是一个线性渐变的图像示例，运行后会在当前目录下生成 `linearGrad.png`。
 
 ![linearGrad.png](images/linearGrad.png)
 
-### 6.3 imgIndex
+### imgIndex
 
 这是一个使用了颜色查找表的示例，运行后会在当前目录下生成 `imgIndex1.png`、`imgIndex2.png`、`imgIndex4.png` 和 `imgIndex8.png`，分别使用了不同数量的颜色索引。
 
@@ -1086,13 +1086,13 @@ K230 SDK 中包含了多个 GPU 示例，源码放置在 `src/little/buildroot-e
 
 ![imgIndex8.png](images/imgIndex8.png)
 
-### 6.4 vglite_drm
+### vglite_drm
 
 这是一个 GPU + DRM 显示联动的示例，
 
 注意：由于 linux 下的视频输出驱动并**不包含**初始化功能，所以需要在运行前确保屏幕已经在使用，例如可以在大核上运行 `sample_vo.elf 3`。
 
-### 6.5 vglite_cube
+### vglite_cube
 
 这是一个 GPU + DRM 显示联动的示例，在屏幕上绘制一个不停旋转的正方体。
 

@@ -51,38 +51,38 @@ This document (this guide) is primarily intended for the following personnel:
 |------------------|-------------|---------|------------|
 | V1.0             | Initial Version | Haibo Hao | 2023/5/4  |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 System control, based on the characteristics of the K230 chip, completes the reset and basic initialization of various hardware components. It is also responsible for establishing inter-core communication for the MPP (Media Process Platform) system and initializing and deinitializing modules such as multimedia memory management.
 
-### 1.2 Function Description
+### Function Description
 
 MAPI features cross-OS calls, enabling the same API to be called on both the big and small cores of the K230 to achieve the required functionality.
 
 For specific details on binding and memory management in MAPI, please refer to the document "K230 System Control API Reference V1.0".
 
-## 2. API Reference
+## API Reference
 
 This functional module provides the following APIs:
 
-- [2. API Reference](#2-api-reference)
-  - [2.1 kd\_mapi\_sys\_init](#21-kd_mapi_sys_init)
-  - [2.2 kd\_mapi\_sys\_deinit](#22-kd_mapi_sys_deinit)
-  - [2.3 kd\_mapi\_media\_init](#23-kd_mapi_media_init)
-  - [2.4 kd\_mapi\_media\_deinit](#24-kd_mapi_media_deinit)
-  - [2.5 kd\_mapi\_alloc\_buffer](#25-kd_mapi_alloc_buffer)
-  - [2.6 kd\_mapi\_free\_buffer](#26-kd_mapi_free_buffer)
-  - [2.7 kd\_mapi\_sys\_get\_vb\_block](#27-kd_mapi_sys_get_vb_block)
-  - [2.8 kd\_mapi\_sys\_release\_vb\_block](#28-kd_mapi_sys_release_vb_block)
-- [3. Data Types](#3-data-types)
-  - [3.1 k\_mapi\_mod\_id\_e](#31-k_mapi_mod_id_e)
-  - [3.2 k\_mapi\_media\_config\_t](#32-k_mapi_media_config_t)
-  - [3.3 k\_mapi\_media\_attr\_t](#33-k_mapi_media_attr_t)
-- [4. Error Codes](#4-error-codes)
+- [2. API Reference](#api-reference)
+  - [2.1 kd\_mapi\_sys\_init](#kd_mapi_sys_init)
+  - [2.2 kd\_mapi\_sys\_deinit](#kd_mapi_sys_deinit)
+  - [2.3 kd\_mapi\_media\_init](#kd_mapi_media_init)
+  - [2.4 kd\_mapi\_media\_deinit](#kd_mapi_media_deinit)
+  - [2.5 kd\_mapi\_alloc\_buffer](#kd_mapi_alloc_buffer)
+  - [2.6 kd\_mapi\_free\_buffer](#kd_mapi_free_buffer)
+  - [2.7 kd\_mapi\_sys\_get\_vb\_block](#kd_mapi_sys_get_vb_block)
+  - [2.8 kd\_mapi\_sys\_release\_vb\_block](#kd_mapi_sys_release_vb_block)
+- [3. Data Types](#data-types)
+  - [3.1 k\_mapi\_mod\_id\_e](#k_mapi_mod_id_e)
+  - [3.2 k\_mapi\_media\_config\_t](#k_mapi_media_config_t)
+  - [3.3 k\_mapi\_media\_attr\_t](#k_mapi_media_attr_t)
+- [4. Error Codes](#error-codes)
 
-### 2.1 kd_mapi_sys_init
+### kd_mapi_sys_init
 
 **Description**:
 
@@ -103,7 +103,7 @@ None
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -126,7 +126,7 @@ None
 
 None
 
-### 2.2 kd_mapi_sys_deinit
+### kd_mapi_sys_deinit
 
 **Description**:
 
@@ -147,7 +147,7 @@ None
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -170,7 +170,7 @@ None
 
 None
 
-### 2.3 kd_mapi_media_init
+### kd_mapi_media_init
 
 **Description**:
 
@@ -193,7 +193,7 @@ k_s32 kd_mapi_media_init(const k_mapi_media_attr_t *media_attr);
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -216,7 +216,7 @@ None
 
 None
 
-### 2.4 kd_mapi_media_deinit
+### kd_mapi_media_deinit
 
 **Description**:
 
@@ -237,7 +237,7 @@ None
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -260,7 +260,7 @@ None
 
 None
 
-### 2.5 kd_mapi_alloc_buffer
+### kd_mapi_alloc_buffer
 
 **Description**:
 
@@ -286,7 +286,7 @@ k_s32 kd_mapi_alloc_buffer(k_u64 *phys_addr, void **virt_addr, k_u32 len, const 
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -310,7 +310,7 @@ None
 
 None
 
-### 2.6 kd_mapi_free_buffer
+### kd_mapi_free_buffer
 
 **Description**:
 
@@ -335,7 +335,7 @@ k_s32 kd_mapi_free_buffer(k_u64 phys_addr, void *virt_addr, k_u32 len);
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -358,7 +358,7 @@ None
 
 None
 
-### 2.7 kd_mapi_sys_get_vb_block
+### kd_mapi_sys_get_vb_block
 
 **Description**:
 
@@ -384,7 +384,7 @@ k_s32 kd_mapi_sys_get_vb_block(k_u32 *pool_id, k_u64 *phys_addr, k_u64 blk_size,
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -408,7 +408,7 @@ None
 
 None
 
-### 2.8 kd_mapi_sys_release_vb_block
+### kd_mapi_sys_release_vb_block
 
 **Description**:
 
@@ -432,7 +432,7 @@ k_s32 kd_mapi_sys_release_vb_block(k_u64 phys_addr, k_u64 blk_size);
 | **Return Value** | **Description**                     |
 |------------------|-------------------------------------|
 | 0                | Success                             |
-| Non-zero         | Failure, see [Error Codes](#4-error-codes) for values |
+| Non-zero         | Failure, see [Error Codes](#error-codes) for values |
 
 **Chip Differences**:
 
@@ -455,9 +455,9 @@ None
 
 None
 
-## 3. Data Types
+## Data Types
 
-### 3.1 k_mapi_mod_id_e
+### k_mapi_mod_id_e
 
 **Description**:
 
@@ -502,7 +502,7 @@ None
 
 None
 
-### 3.2 k_mapi_media_config_t
+### k_mapi_media_config_t
 
 **Description**:
 
@@ -532,7 +532,7 @@ None
 
 None
 
-### 3.3 k_mapi_media_attr_t
+### k_mapi_media_attr_t
 
 **Description**:
 
@@ -560,7 +560,7 @@ None
 
 None
 
-## 4. Error Codes
+## Error Codes
 
 Table 41
 

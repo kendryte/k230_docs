@@ -73,7 +73,7 @@ markdown-link-check:
     # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   stage: lint
-  timeout: 10m
+  timeout: 30m
   retry: 2
   image: ai.b-bug.org:5000/markdown:latest
   script:
@@ -83,7 +83,7 @@ markdown-link-check:
     - git fetch
     - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
     - echo $FILELIST
-    - time markdown-link-check -p -q -v $(find . -name \*.md)
+    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v -r ; fi
 
 # new MR open
 markdownlint:
@@ -214,6 +214,8 @@ build web docs:
     - python3 preprocess.py
     - python3 preprocessEn.py
     - git commit "*.md" -m "remove cover"
+    - pip install --upgrade pip
+    - pip install --force-reinstall "sphinx==7.3.7"
     - make mhtml
     - rm -rf /data1/k230/docs/*
     - cp -r _build/* /data1/k230/docs
@@ -230,6 +232,6 @@ deploy production:
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
   environment:
     name: production
-    url: https://developer.canaan-creative.com/k230/dev/index.html
+    url: https://www.kendryte.com/k230/dev/index.html
   script:
     - scp -P $AWS_PORT -C -r /data1/k230/docs/* $AWS/data/webapp/k230

@@ -1,10 +1,10 @@
 # K230 lpddr3/lpddr4驱动适配指南
 
-## 1.概述
+## 概述
 
 本文档主要介绍K230  LPDDR 驱动适配方法,包含swap,ODT,impedance,vref等适配。
 
-## 2.K230 DDR说明
+## K230 DDR说明
 
 k230/k230d ddr驱动在uboot的board目录下面，常见板子驱动文件说明如下：
 
@@ -35,9 +35,9 @@ lpddr4推荐2667，lpddr3推荐2133. 请参数上述文件(推荐参考文件见
 | board/canaan/common/sip_lpddr4_init_32_swap_1600.c           | k230d 内置lpddr4 1600驱动              |
 | board/canaan/common/sip_lpddr4_init_32_swap_3200_with_allodt.c | k230d 内置lpddr4 3200驱动 |
 
-## 3.LPDDR4  swap
+## LPDDR4  swap
 
-### 3.1lpddr4 swap说明
+### lpddr4 swap说明
 
 建议：
 
@@ -54,19 +54,19 @@ LPDDR4 byte组内DQ可以swap，byte之间不支持DQ swap, channel 组内byte�
 1. DQS/DM must be swap along with the corresonding DBYTE swap.  in the internal DBYTE, DQS/DM are not allowed swappend.
 1. For LPDDR4, CA could be swapped within the same channel,and should modify the Firmware to accommodate this.
 
-### 3.2调整规则
+### 调整规则
 
 调整规则见下图，左边寄存器基地址根据右边红色部分调整，左边bit位根据右边黄色部分调整，左边ca位号根据右边绿色部分调整。
 
-![image-20241225095809752](https://developer.canaan-creative.com/api/post/attachment?id=515)
+![image-20241225095809752](https://www.kendryte.com/api/post/attachment?id=515)
 
->ddr管脚和功能定义可以参考[ddr相关管脚定义表](#61-k230-ddr相关管脚定义表)
+>ddr管脚和功能定义可以参考[ddr相关管脚定义表](#k230-ddr相关管脚定义表)
 
-### 3.3例子1：01studio lpddr4驱动
+### 例子1：01studio lpddr4驱动
 
 01studio lpddr4部分原理图及驱动代码如下：
 
-![image-20241224111024485](https://developer.canaan-creative.com/api/post/attachment?id=516)
+![image-20241224111024485](https://www.kendryte.com/api/post/attachment?id=516)
 
 ```c
 //01studio 板子 ddr驱动代码片段
@@ -128,11 +128,11 @@ reg_write(   DDR_REG_BASE + 0x120a6*4+0x02000000,0x7); //颗粒的DQB14---k230�
 reg_write(   DDR_REG_BASE + 0x120a7*4+0x02000000,0x6); //颗粒的DQB15---k230的B19管脚(第2字节的BIT_6,DDR_DQ6_DQB9)
 ```
 
-### 3.4例子2：evb unsip lpddr4 驱动
+### 例子2：evb unsip lpddr4 驱动
 
 原理图：
 
-![image-20241225095905611](https://developer.canaan-creative.com/api/post/attachment?id=517)
+![image-20241225095905611](https://www.kendryte.com/api/post/attachment?id=517)
 
 代码：
 
@@ -196,9 +196,9 @@ reg_write(   DDR_REG_BASE + 0x120a7*4+0x02000000,0x6); //颗粒的DQB15---k230�
 
 ```
 
-## 4.LPDDR3 DQ swap
+## LPDDR3 DQ swap
 
-### 4.1说明
+### 说明
 
 建议：
 
@@ -212,17 +212,17 @@ LPDDR3 byte组内DQ可以swap，byte之间不支持DQ swap, byte和byte不支持
 1. DQS/DM must be swap along with the corresonding DBYTE swap. in the internal DBYTE, DQS/DM are not allowed swappend.
 1. For LPDDR3 CA pins could be swapped arbitrary.,and should modify the Firmware to accommodate this.
 
-### 4.2调整规则
+### 调整规则
 
 调整规则见下图，左边寄存器基地址根据右边红色部分调整，左边bit位根据右边黄色部分调整,左边ca位号根据右边绿色部分调整。
 
-![image-20241225115831748](https://developer.canaan-creative.com/api/post/attachment?id=518)
+![image-20241225115831748](https://www.kendryte.com/api/post/attachment?id=518)
 
->ddr管脚和功能定义可以参考[ddr相关管脚定义表](#61-k230-ddr相关管脚定义表)
+>ddr管脚和功能定义可以参考[ddr相关管脚定义表](#k230-ddr相关管脚定义表)
 
-### 4.3例子1：canmv  v1.1 lpddr3
+### 例子1：canmv  v1.1 lpddr3
 
-![image-20241225120312528](https://developer.canaan-creative.com/api/post/attachment?id=519)
+![image-20241225120312528](https://www.kendryte.com/api/post/attachment?id=519)
 
 ```c
 //buildroot-overlay/boot/uboot/u-boot-2022.10-overlay/board/canaan/k230_canmv/k230pi_ddr_init_2133.c
@@ -278,9 +278,9 @@ reg_write(DDR_REG_BASE + 0x20109*4+0x02000000,0x0); //颗粒的CA9---k230的P19�
   reg_write(DDR_REG_BASE + 0x100a7 * 4 + 0x2000000, 0x7); //颗粒的DQA31---k230的U16管脚(第0字节的BIT_7,封装名DDR_DQ31_DQA0)
 ```
 
-### 4.4例子2：evb lpddr3
+### 例子2：evb lpddr3
 
-![image-20241225121608101](https://developer.canaan-creative.com/api/post/attachment?id=520)
+![image-20241225121608101](https://www.kendryte.com/api/post/attachment?id=520)
 
 ```c
 //buildroot-overlay/boot/uboot/u-boot-2022.10-overlay/board/canaan/k230_evb/ddr_init_2133.c
@@ -332,9 +332,9 @@ reg_write(DDR_REG_BASE + 0x20109*4+0x02000000,0x0); //CA9
   reg_write(DDR_REG_BASE + 0x100a7 * 4 + 0x2000000, 0x7);
 ```
 
-## 5.ODT vref impedance等其他调整
+## ODT vref impedance等其他调整
 
-### 5.1PHY ODT
+### PHY ODT
 
 ```c
 //buildroot-overlay/boot/uboot/u-boot-2022.10-overlay/board/canaan/k230_canmv/k230pi_ddr_init_2133.c
@@ -361,13 +361,13 @@ reg_write(   DDR_REG_BASE +  0x0001314d*4 +0x02000000 , 0x00000018 );
 
 ODT 寄存器的完整含义如下：
 
-![image-20241225152803384](https://developer.canaan-creative.com/api/post/attachment?id=521)
+![image-20241225152803384](https://www.kendryte.com/api/post/attachment?id=521)
 
-![image-20241225152837675](https://developer.canaan-creative.com/api/post/attachment?id=522)
+![image-20241225152837675](https://www.kendryte.com/api/post/attachment?id=522)
 
-![image-20241225152852941](https://developer.canaan-creative.com/api/post/attachment?id=523)
+![image-20241225152852941](https://www.kendryte.com/api/post/attachment?id=523)
 
-### 5.2PHY impedance
+### PHY impedance
 
 ```c
 ////buildroot-overlay/boot/uboot/u-boot-2022.10-overlay/board/canaan/k230_canmv/k230pi_ddr_init_2133.c
@@ -414,17 +414,17 @@ reg_write(   DDR_REG_BASE + 0x9043 *4+0x02000000,0x63);
 
 寄存器1完整含义如下：
 
-![image-20241225153110934](https://developer.canaan-creative.com/api/post/attachment?id=524)
+![image-20241225153110934](https://www.kendryte.com/api/post/attachment?id=524)
 
-![image-20241225153132265](https://developer.canaan-creative.com/api/post/attachment?id=525)
+![image-20241225153132265](https://www.kendryte.com/api/post/attachment?id=525)
 
 寄存器2定义：
 
-![image-20241225153451764](https://developer.canaan-creative.com/api/post/attachment?id=526)
+![image-20241225153451764](https://www.kendryte.com/api/post/attachment?id=526)
 
-![image-20241225153539216](https://developer.canaan-creative.com/api/post/attachment?id=527)
+![image-20241225153539216](https://www.kendryte.com/api/post/attachment?id=527)
 
-### 5.3phy vref
+### phy vref
 
 ```c
 //iteration place
@@ -458,13 +458,13 @@ reg_write(   DDR_REG_BASE + 0x54006*4+0x02000000,0x60);
 
 寄存器定义：
 
-![image-20241225153813688](https://developer.canaan-creative.com/api/post/attachment?id=528)
+![image-20241225153813688](https://www.kendryte.com/api/post/attachment?id=528)
 
-![image-20241225153830346](https://developer.canaan-creative.com/api/post/attachment?id=529)
+![image-20241225153830346](https://www.kendryte.com/api/post/attachment?id=529)
 
-## 6.附件
+## 附件
 
-### 6.1 k230 ddr相关管脚定义表
+### k230 ddr相关管脚定义表
 
 | 功能           | 功能序号 | RTLBumpName | ball | DDR  ballname_LP3_LP4 |
 | -------------- | -------- | ----------- | ---- | --------------------- |

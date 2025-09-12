@@ -51,13 +51,13 @@
 |------------|----------|--------|----------|
 | v1.0       | 初版     | 郝海波 | 2023/3/8 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 该文档描述了K230异构核间通讯的相关内容。
 
-#### 1.1.1 核间通讯实现原理
+#### 核间通讯实现原理
 
 ![日程表 低可信度描述已自动生成](images/91c0f5a20c9460bd6c865a704f7b9404.png)
 
@@ -65,43 +65,43 @@
 - 共享内存管理用于标识通信消息的属性例如地址，大小，端口号等
 - Mailbox通过中断方式实现大小核发送消息后的通知机制
 
-#### 1.1.2 内存空间使用
+#### 内存空间使用
 
 目前大小核使用的数据共享内存区域设计共1M空间，对于参与通讯的一方来说发送和接收各占512KB的空间大小。用于维护各个核状态的共享内存区域为4KB。
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 IPCMSG
+#### IPCMSG
 
 IPCMSG是K230大小核在用户态进行通讯的组件，主要用于发送控制类消息。该模块包括服务添加删除，消息创建删除，断开连接，发送消息等功能。支持三种消息发送方式，发送异步消息，发送同步消息，以及发送不需要对方回复的消息。其中同步消息支持超时机制，用户调用API时可自定义设置超时时间。需要得到回复的消息，在发出60秒之后才收到回复消息的话，该回复消息会被丢弃。
 
-#### 1.2.2 DATAFIFO
+#### DATAFIFO
 
 DATAFIFO是K230大小核在用户态进行大量数据交互(例如编码数据)时，使用的核间通讯组件。内部主要使用共享内存来完成数据的交互，数据传递的是指针，不会拷贝数据的内容，数据的收发通知依靠线程轮询来实现。
 
 DATAFIFO 主要包含通路的打开、关闭、数据的写入和读出，以及其他控制命令
 
-## 2. API 参考
+## API 参考
 
-### 2.1 IPCMSG
+### IPCMSG
 
 该功能模块提供以下API：
 
-- [kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
-- [kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
-- [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
-- [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
-- [kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
-- [kd_ipcmsg_is_connect](#216-kd_ipcmsg_is_connect)
-- [kd_ipcmsg_send_only](#217-kd_ipcmsg_send_only)
-- [kd_ipcmsg_send_async](#218-kd_ipcmsg_send_async)
-- [kd_ipcmsg_send_sync](#219-kd_ipcmsg_send_sync)
-- [kd_ipcmsg_run](#2110-kd_ipcmsg_run)
-- [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
-- [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
-- [kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+- [kd_ipcmsg_add_service](#kd_ipcmsg_add_service)
+- [kd_ipcmsg_del_service](#kd_ipcmsg_del_service)
+- [kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
+- [kd_ipcmsg_connect](#kd_ipcmsg_connect)
+- [kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
+- [kd_ipcmsg_is_connect](#kd_ipcmsg_is_connect)
+- [kd_ipcmsg_send_only](#kd_ipcmsg_send_only)
+- [kd_ipcmsg_send_async](#kd_ipcmsg_send_async)
+- [kd_ipcmsg_send_sync](#kd_ipcmsg_send_sync)
+- [kd_ipcmsg_run](#kd_ipcmsg_run)
+- [kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
+- [kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
+- [kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.1 kd_ipcmsg_add_service
+#### kd_ipcmsg_add_service
 
 【描述】
 
@@ -109,7 +109,7 @@ DATAFIFO 主要包含通路的打开、关闭、数据的写入和读出，以�
 
 【语法】
 
-k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_connect_s](#314-k_ipcmsg_connect_s)* pstConnectAttr);
+k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_connect_s](#k_ipcmsg_connect_s)* pstConnectAttr);
 
 【参数】
 
@@ -123,7 +123,7 @@ k_s32 kd_ipcmsg_add_service(const k_char\* pszServiceName, const [k_ipcmsg_conne
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -146,9 +146,9 @@ Service 可以添加多个，但不同的 service 不能使用相同的端口号
 
 【相关主题】
 
-[kd_ipcmsg_del_service](#212-kd_ipcmsg_del_service)
+[kd_ipcmsg_del_service](#kd_ipcmsg_del_service)
 
-#### 2.1.2 kd_ipcmsg_del_service
+#### kd_ipcmsg_del_service
 
 【描述】
 
@@ -169,7 +169,7 @@ k_s32 kd_ipcmsg_del_service(const k_char* pszServiceName);
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -190,9 +190,9 @@ k_s32 kd_ipcmsg_del_service(const k_char* pszServiceName);
 
 【相关主题】
 
-[kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
+[kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
 
-#### 2.1.3 kd_ipcmsg_try_connect
+#### kd_ipcmsg_try_connect
 
 【描述】
 
@@ -200,7 +200,7 @@ k_s32 kd_ipcmsg_del_service(const k_char* pszServiceName);
 
 【语法】
 
-k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
+k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
 【参数】
 
@@ -215,7 +215,7 @@ k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ip
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -236,11 +236,11 @@ k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ip
 
 【相关主题】
 
-[kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+[kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-[kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
+[kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
 
-#### 2.1.4 kd_ipcmsg_connect
+#### kd_ipcmsg_connect
 
 【描述】
 
@@ -248,7 +248,7 @@ k_s32 kd_ipcmsg_try_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ip
 
 【语法】
 
-k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
+k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr) pfnMessageHandle);
 
 【参数】
 
@@ -263,7 +263,7 @@ k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -284,11 +284,11 @@ k_s32 kd_ipcmsg_connect(k_s32\* ps32Id, const k_char\* pszServiceName, [k_ipcmsg
 
 【相关主题】
 
-[kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
+[kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
 
-[kd_ipcmsg_disconnect](#215-kd_ipcmsg_disconnect)
+[kd_ipcmsg_disconnect](#kd_ipcmsg_disconnect)
 
-#### 2.1.5 kd_ipcmsg_disconnect
+#### kd_ipcmsg_disconnect
 
 【描述】
 
@@ -309,7 +309,7 @@ k_s32 kd_ipcmsg_disconnect(k_s32 s32Id);
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -330,11 +330,11 @@ k_s32 kd_ipcmsg_disconnect(k_s32 s32Id);
 
 【相关主题】
 
-[kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
+[kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
 
-[kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+[kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-#### 2.1.6 kd_ipcmsg_is_connect
+#### kd_ipcmsg_is_connect
 
 【描述】
 
@@ -376,7 +376,7 @@ k_bool kd_ipcmsg_is_connect(k_s32 s32Id);
 
 【相关主题】
 
-#### 2.1.7 kd_ipcmsg_send_only
+#### kd_ipcmsg_send_only
 
 【描述】
 
@@ -384,7 +384,7 @@ k_bool kd_ipcmsg_is_connect(k_s32 s32Id);
 
 【语法】
 
-k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s) *pstRequest);
+k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s) *pstRequest);
 
 【参数】
 
@@ -398,7 +398,7 @@ k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 | **返回值**  | **描述**                        |
 |-------------|---------------------------------|
 | 0           | 成功。                          |
-| 非 0        | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0        | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -419,7 +419,7 @@ k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 
 【相关主题】
 
-#### 2.1.8 kd_ipcmsg_send_async
+#### kd_ipcmsg_send_async
 
 【描述】
 
@@ -429,7 +429,7 @@ k_s32 kd_ipcmsg_send_only(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 
 【语法】
 
-k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, k_ipcmsg_resphandle_fn_ptr pfnRespHandle);
+k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg, k_ipcmsg_resphandle_fn_ptr pfnRespHandle);
 
 【参数】
 
@@ -444,7 +444,7 @@ k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messs
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -465,7 +465,7 @@ k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messs
 
 【相关主题】
 
-#### 2.1.9 kd_ipcmsg_send_sync
+#### kd_ipcmsg_send_sync
 
 【描述】
 
@@ -473,7 +473,7 @@ k_s32 kd_ipcmsg_send_async(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messs
 
 【语法】
 
-k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg, [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
+k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg, [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)** ppstMsg, k_s32 s32TimeoutMs);
 
 【参数】
 
@@ -489,7 +489,7 @@ k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 | **返回值**   | **描述**                            |
 |---------|---------------------------------|
 | 0       | 成功。                          |
-| 非 0    | 失败，其值为[错误码](#41-ipcmsg) |
+| 非 0    | 失败，其值为[错误码](#ipcmsg) |
 
 【芯片差异】
 
@@ -502,7 +502,7 @@ k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 
 【注意】
 
-本接口超时的情况下，内部会调用 [kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)将*ppstMsg（回复消
+本接口超时的情况下，内部会调用 [kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)将*ppstMsg（回复消
 
 息）销毁一次，由于同一个消息不能重复销毁，所以本接口超时退出后不必再做销毁
 
@@ -514,7 +514,7 @@ k_s32 kd_ipcmsg_send_sync(k_s32 s32Id, [k_ipcmsg_message_s](#315-k_ipcmsg_messsa
 
 【相关主题】
 
-#### 2.1.10 kd_ipcmsg_run
+#### kd_ipcmsg_run
 
 【描述】
 
@@ -555,7 +555,7 @@ k_void kd_ipcmsg_run(k_s32 s32Id);
 
 【相关主题】
 
-#### 2.1.11 kd_ipcmsg_create_message
+#### kd_ipcmsg_create_message
 
 【描述】
 
@@ -563,7 +563,7 @@ k_void kd_ipcmsg_run(k_s32 s32Id);
 
 【语法】
 
-[k_ipcmsg_message_s *](#315-k_ipcmsg_messsage_s)kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void*
+[k_ipcmsg_message_s *](#k_ipcmsg_messsage_s)kd_ipcmsg_create_message(k_u32 u32Module, k_u32 u32CMD, k_void*
 pBody, k_u32 u32BodyLen);
 
 【参数】
@@ -601,9 +601,9 @@ pBody, k_u32 u32BodyLen);
 
 【相关主题】
 
-[kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.12 kd_ipcmsg_create_resp_message
+#### kd_ipcmsg_create_resp_message
 
 【描述】
 
@@ -611,7 +611,7 @@ pBody, k_u32 u32BodyLen);
 
 【语法】
 
-[k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* kd_ipcmsg_create_resp_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)\* pstRequest, k_s32 s32RetVal, k_void* pBody, k_u32 u32BodyLen);
+[k_ipcmsg_message_s](#k_ipcmsg_messsage_s)\* kd_ipcmsg_create_resp_message([k_ipcmsg_message_s](#k_ipcmsg_messsage_s)\* pstRequest, k_s32 s32RetVal, k_void* pBody, k_u32 u32BodyLen);
 
 【参数】
 
@@ -648,9 +648,9 @@ pBody, k_u32 u32BodyLen);
 
 【相关主题】
 
-[kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+[kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)
 
-#### 2.1.13 kd_ipcmsg_destroy_message
+#### kd_ipcmsg_destroy_message
 
 【描述】
 
@@ -658,7 +658,7 @@ pBody, k_u32 u32BodyLen);
 
 【语法】
 
-k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)* pstMsg);
+k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#k_ipcmsg_messsage_s)* pstMsg);
 
 【参数】
 
@@ -691,22 +691,22 @@ k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)*
 
 【相关主题】
 
-[kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
+[kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
 
-[kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
+[kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
 
-### 2.2 DATAFIFO
+### DATAFIFO
 
 该功能模块提供以下API：
 
-- [kd_datafifo_open](#221-kd_datafifo_open)
-- [kd_datafifo_open_by_addr](#222-kd_datafifo_open_by_addr)
-- [kd_datafifo_close](#223-kd_datafifo_close)
-- [kd_datafifo_read](#224-kd_datafifo_read)
-- [kd_datafifo_write](#225-kd_datafifo_write)
-- [kd_datafifo_cmd](#226-kd_datafifo_cmd)
+- [kd_datafifo_open](#kd_datafifo_open)
+- [kd_datafifo_open_by_addr](#kd_datafifo_open_by_addr)
+- [kd_datafifo_close](#kd_datafifo_close)
+- [kd_datafifo_read](#kd_datafifo_read)
+- [kd_datafifo_write](#kd_datafifo_write)
+- [kd_datafifo_cmd](#kd_datafifo_cmd)
 
-#### 2.2.1 kd_datafifo_open
+#### kd_datafifo_open
 
 【描述】
 
@@ -714,7 +714,7 @@ k_void kd_ipcmsg_destroy_message([k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)*
 
 【语法】
 
-k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_datafifo_params_s](#325-k_datafifo_params_s)\* pstParams)
+k_s32 kd_datafifo_open([k_datafifo_handle](#k_datafifo_handle)\* Handle, [k_datafifo_params_s](#k_datafifo_params_s)\* pstParams)
 
 【参数】
 
@@ -728,7 +728,7 @@ k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_
 | **返回值**   | **描述**                                |
 |---------|-------------------------------------|
 | 0       | 成功。                              |
-| 非 0    | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0    | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -747,7 +747,7 @@ k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_
 
 无
 
-#### 2.2.2 kd_datafifo_open_by_addr
+#### kd_datafifo_open_by_addr
 
 【描述】
 
@@ -755,7 +755,7 @@ k_s32 kd_datafifo_open([k_datafifo_handle](#321-k_datafifo_handle)\* Handle, [k_
 
 【语法】
 
-k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Handle, [k_datafifo_params_s](#325-k_datafifo_params_s) *pstParams, k_u64 u64Phyaddr)
+k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#k_datafifo_handle) \*Handle, [k_datafifo_params_s](#k_datafifo_params_s) *pstParams, k_u64 u64Phyaddr)
 
 【参数】
 
@@ -770,7 +770,7 @@ k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Han
 | **返回值**   | **描述**                                |
 |---------|-------------------------------------|
 | 0       | 成功。                              |
-| 非 0    | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0    | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -789,7 +789,7 @@ k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Han
 
 无
 
-#### 2.2.3 kd_datafifo_close
+#### kd_datafifo_close
 
 【描述】
 
@@ -797,7 +797,7 @@ k_s32 kd_datafifo_open_by_addr([k_datafifo_handle](#321-k_datafifo_handle) \*Han
 
 【语法】
 
-k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
+k_s32 kd_datafifo_close([k_datafifo_handle](#k_datafifo_handle) Handle)
 
 【参数】
 
@@ -810,7 +810,7 @@ k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
 | **返回值**   | **描述**                                |
 |---------|-------------------------------------|
 | 0       | 成功。                              |
-| 非 0    | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0    | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -823,13 +823,13 @@ k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
 
 【注意】
 
-关闭 DataFifo 的时候为了保证读写两端数据正常的释放，用户需要保证读端要读完DataFifo 中存在的数据，写端写完数据后需要额外调用一次[kd_datafifo_write](#225-kd_datafifo_write) (Handle, NULL) 触发写端的数据释放和读指针更新
+关闭 DataFifo 的时候为了保证读写两端数据正常的释放，用户需要保证读端要读完DataFifo 中存在的数据，写端写完数据后需要额外调用一次[kd_datafifo_write](#kd_datafifo_write) (Handle, NULL) 触发写端的数据释放和读指针更新
 
 【举例】
 
 无
 
-#### 2.2.4 kd_datafifo_read
+#### kd_datafifo_read
 
 【描述】
 
@@ -837,7 +837,7 @@ k_s32 kd_datafifo_close([k_datafifo_handle](#321-k_datafifo_handle) Handle)
 
 【语法】
 
-k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void** ppData)
+k_s32 kd_datafifo_read([k_datafifo_handle](#k_datafifo_handle) Handle, void** ppData)
 
 【参数】
 
@@ -851,7 +851,7 @@ k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void*
 | **返回值**   | **描述**                                |
 |---------|-------------------------------------|
 | 0       | 成功。                              |
-| 非 0    | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0    | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -870,7 +870,7 @@ k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void*
 
 无
 
-#### 2.2.5 kd_datafifo_write
+#### kd_datafifo_write
 
 【描述】
 
@@ -878,7 +878,7 @@ k_s32 kd_datafifo_read([k_datafifo_handle](#321-k_datafifo_handle) Handle, void*
 
 【语法】
 
-k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void* pData)
+k_s32 kd_datafifo_write([k_datafifo_handle](#k_datafifo_handle) Handle, void* pData)
 
 【参数】
 
@@ -892,7 +892,7 @@ k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void
 | **返回值**   | **描述**                                |
 |---------|-------------------------------------|
 | 0       | 成功。                              |
-| 非 0    | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0    | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -910,7 +910,7 @@ k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void
 
 无
 
-#### 2.2.6 kd_datafifo_cmd
+#### kd_datafifo_cmd
 
 【描述】
 
@@ -918,7 +918,7 @@ k_s32 kd_datafifo_write([k_datafifo_handle](#321-k_datafifo_handle) Handle, void
 
 【语法】
 
-k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_datafifo_cmd_e](#326-k_datafifo_cmd_e) enCMD, void* pArg)
+k_s32 kd_datafifo_cmd([k_datafifo_handle](#k_datafifo_handle) Handle, [k_datafifo_cmd_e](#k_datafifo_cmd_e) enCMD, void* pArg)
 
 【参数】
 
@@ -933,7 +933,7 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 | **返回值**  | **描述**                            |
 |-------------|-------------------------------------|
 | 0           | 成功。                              |
-| 非 0        | 失败，其值为[错误码](#42-datafifo)。 |
+| 非 0        | 失败，其值为[错误码](#datafifo)。 |
 
 【芯片差异】
 
@@ -960,20 +960,20 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 
 无
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 IPCMSG
+### IPCMSG
 
 该模块有如下数据类型
 
-- [K_IPCMSG_MAX_CONTENT_LEN](#311-k_ipcmsg_max_content_len)
-- [K_IPCMSG_PRIVDATA_NUM](#312-k_ipcmsg_privdata_num)
-- [K_IPCMSG_INVALID_MSGID](#313-k_ipcmsg_invalid_msgid)
-- [k_ipcmsg_connect_s](#314-k_ipcmsg_connect_s)
-- [k_ipcmsg_message_s](#315-k_ipcmsg_messsage_s)
-- [k_ipcmsg_handle_fn_ptr](#316-k_ipcmsg_handle_fn_ptr)
+- [K_IPCMSG_MAX_CONTENT_LEN](#k_ipcmsg_max_content_len)
+- [K_IPCMSG_PRIVDATA_NUM](#k_ipcmsg_privdata_num)
+- [K_IPCMSG_INVALID_MSGID](#k_ipcmsg_invalid_msgid)
+- [k_ipcmsg_connect_s](#k_ipcmsg_connect_s)
+- [k_ipcmsg_message_s](#k_ipcmsg_messsage_s)
+- [k_ipcmsg_handle_fn_ptr](#k_ipcmsg_handle_fn_ptr)
 
-#### 3.1.1 K_IPCMSG_MAX_CONTENT_LEN
+#### K_IPCMSG_MAX_CONTENT_LEN
 
 【说明】
 
@@ -995,7 +995,7 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 
 该模块有如下数据类型
 
-#### 3.1.2 K_IPCMSG_PRIVDATA_NUM
+#### K_IPCMSG_PRIVDATA_NUM
 
 【说明】
 
@@ -1015,7 +1015,7 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 
 无
 
-#### 3.1.3 K_IPCMSG_INVALID_MSGID
+#### K_IPCMSG_INVALID_MSGID
 
 【说明】
 
@@ -1035,7 +1035,7 @@ k_s32 kd_datafifo_cmd([k_datafifo_handle](#321-k_datafifo_handle) Handle, [k_dat
 
 无
 
-#### 3.1.4 k_ipcmsg_connect_s
+#### k_ipcmsg_connect_s
 
 【说明】
 
@@ -1072,9 +1072,9 @@ k_u32 u32Priority;
 
 【相关数据类型及接口】
 
-[kd_ipcmsg_add_service](#211-kd_ipcmsg_add_service)
+[kd_ipcmsg_add_service](#kd_ipcmsg_add_service)
 
-#### 3.1.5 k_ipcmsg_messsage_s
+#### k_ipcmsg_messsage_s
 
 【说明】
 
@@ -1126,14 +1126,14 @@ k_u32 u32BodyLen; /**<Length of pBody*/
 
 【相关数据类型及接口】
 
-- [kd_ipcmsg_send_only](#217-kd_ipcmsg_send_only)
-- [kd_ipcmsg_send_async](#218-kd_ipcmsg_send_async)
-- [kd_ipcmsg_send_sync](#219-kd_ipcmsg_send_sync)
-- [kd_ipcmsg_create_message](#2111-kd_ipcmsg_create_message)
-- [kd_ipcmsg_create_resp_message](#2112-kd_ipcmsg_create_resp_message)
-- [kd_ipcmsg_destory_message](#2113-kd_ipcmsg_destroy_message)
+- [kd_ipcmsg_send_only](#kd_ipcmsg_send_only)
+- [kd_ipcmsg_send_async](#kd_ipcmsg_send_async)
+- [kd_ipcmsg_send_sync](#kd_ipcmsg_send_sync)
+- [kd_ipcmsg_create_message](#kd_ipcmsg_create_message)
+- [kd_ipcmsg_create_resp_message](#kd_ipcmsg_create_resp_message)
+- [kd_ipcmsg_destory_message](#kd_ipcmsg_destroy_message)
 
-#### 3.1.6 k_ipcmsg_handle_fn_ptr
+#### k_ipcmsg_handle_fn_ptr
 
 【说明】
 
@@ -1158,21 +1158,21 @@ typedef void (*k_ipcmsg_handle_fn_ptr)(k_s32 s32Id, k_ipcmsg_message_s* pstMsg);
 
 【相关数据类型及接口】
 
-- [kd_ipcmsg_try_connect](#213-kd_ipcmsg_try_connect)
-- [kd_ipcmsg_connect](#214-kd_ipcmsg_connect)
+- [kd_ipcmsg_try_connect](#kd_ipcmsg_try_connect)
+- [kd_ipcmsg_connect](#kd_ipcmsg_connect)
 
-### 3.2 DATAFIFO
+### DATAFIFO
 
 本模块有以下数据结构
 
-- [k_datafifo_handle](#321-k_datafifo_handle)
-- [K_DATAFIFO_INVALID_HANDLE](#322-k_datafifo_invalid_handle)
-- [K_DATAFIFO_RELEASESTREAM_FN_PTR](#323-k_datafifo_releasestream_fn_ptr)
-- [K_DATAFIFO_OPEN_MODE_E](#324-k_datafifo_open_mode_e)
-- [k_datafifo_params_s](#325-k_datafifo_params_s)
-- [k_datafifo_cmd_e](#326-k_datafifo_cmd_e)
+- [k_datafifo_handle](#k_datafifo_handle)
+- [K_DATAFIFO_INVALID_HANDLE](#k_datafifo_invalid_handle)
+- [K_DATAFIFO_RELEASESTREAM_FN_PTR](#k_datafifo_releasestream_fn_ptr)
+- [K_DATAFIFO_OPEN_MODE_E](#k_datafifo_open_mode_e)
+- [k_datafifo_params_s](#k_datafifo_params_s)
+- [k_datafifo_cmd_e](#k_datafifo_cmd_e)
 
-#### 3.2.1 k_datafifo_handle
+#### k_datafifo_handle
 
 【说明】
 
@@ -1199,7 +1199,7 @@ typedef K_U32 K_DATAFIFO_HANDLE;
 
 无
 
-#### 3.2.2 K_DATAFIFO_INVALID_HANDLE
+#### K_DATAFIFO_INVALID_HANDLE
 
 【说明】
 
@@ -1219,7 +1219,7 @@ typedef K_U32 K_DATAFIFO_HANDLE;
 
 无
 
-#### 3.2.3 K_DATAFIFO_RELEASESTREAM_FN_PTR
+#### K_DATAFIFO_RELEASESTREAM_FN_PTR
 
 【说明】
 
@@ -1239,7 +1239,7 @@ typedef void (*K_DATAFIFO_RELEASESTREAM_FN_PTR)(void* pStream);
 
 无
 
-#### 3.2.4 K_DATAFIFO_OPEN_MODE_E
+#### K_DATAFIFO_OPEN_MODE_E
 
 【说明】
 
@@ -1279,7 +1279,7 @@ K_DATAFIFO_OPEN_MODE_E enOpenMode; /**<READER or WRITER*/
 
 无
 
-#### 3.2.5 k_datafifo_params_s
+#### k_datafifo_params_s
 
 【说明】
 
@@ -1320,7 +1320,7 @@ u32EntriesNum 和 u32CacheLineSize 并没有做取值范围做限制，只要 MM
 
 无
 
-#### 3.2.6 k_datafifo_cmd_e
+#### k_datafifo_cmd_e
 
 【说明】
 
@@ -1367,9 +1367,9 @@ DATAFIFO_CMD_GET_AVAIL_READ_LEN /**<Get available read length*/
 
 无
 
-## 4. 错误码
+## 错误码
 
-### 4.1 IPCMSG
+### IPCMSG
 
 表 41
 
@@ -1385,7 +1385,7 @@ DATAFIFO_CMD_GET_AVAIL_READ_LEN /**<Get available read length*/
 | 0x1901      | K_IPCMSG_EINVAL     | 配置参数无效 |
 | 0x1902      | K_IPCMSG_ETIMEOUT   | 超时错误     |
 
-### 4.2 DATAFIFO
+### DATAFIFO
 
 表 42
 
@@ -1403,9 +1403,9 @@ DATAFIFO_CMD_GET_AVAIL_READ_LEN /**<Get available read length*/
 | 0x00000000  | K_SUCCESS                        | 成功         |
 | 0xFFFFFFFF  | K_FAILURE                        | 失败         |
 
-## 5. 调试信息
+## 调试信息
 
-### 5.1 ipcm
+### ipcm
 
 【调试信息】
 

@@ -25,9 +25,9 @@
 
 本文将讲解如何在k230开发板上实现USB摄像头功能。也就是把K230 开发板连接到电脑，电脑可以通过播放器播放K230摄像头采集到的图像。
 
-## 1. 环境准备
+## 环境准备
 
-### 1.1 硬件环境
+### 硬件环境
 
 - K230-UNSIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Ubuntu PC 20.04
@@ -36,7 +36,7 @@
 - 网线一根
 - SD卡(如果使用SD卡启动，或软件需要访问SD卡)
 
-### 1.2 软件环境
+### 软件环境
 
 k230_sdk中提供了工具链，分别在如下路径。
 
@@ -59,21 +59,21 @@ wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
-## 2. SDK UVC demo体验
+## SDK UVC demo体验
 
-### 2.1 release sdk编译固件，烧录固件
+### release sdk编译固件，烧录固件
 
 参考 [K230_SDK_使用说明](../../../zh/01_software/board/K230_SDK_使用说明.md) 2/3/4/5章节描述
 
-### 2.2 执行命令测试demo
+### 执行命令测试demo
 
 参考 [K230_SDK_Demo使用指南](../../../zh/01_software/board/examples/K230_SDK_EVB_Board_Demo使用指南.md) 2.9 UVC_demo 章节
 
-## 3. 如何开发UVC功能
+## 如何开发UVC功能
 
-### 3.1 USB/UVC协议
+### USB/UVC协议
 
-### 3.1.1 USB协议
+### USB协议
 
 USB协议内容比较多，是用得非常普遍的接口，互联网上资料很多。本文只描述一些我认为有助于对USB协议理解的点。
 
@@ -117,9 +117,9 @@ PID决定了包的类型，令牌包、数据包、握手包和特殊包，不�
 
 无论是什么样的USB设备协议，都是通过这4种传输来实现的。所以像linux这样的操作系统的USB协议栈，提供了这4种传输方式的接口。
 
-### 3.1.2 UVC协议
+### UVC协议
 
-### 3.1.2.1 UVC描述符
+### UVC描述符
 
 USB的描述符用于让主机知道设备的属性信息。设备刚连接主机时，主机会发送所有设备都支持的请求命令。通用的描述符包含设备描述符、配置描述符、接口描述符、端点描述符、字符串描述符。不同的设备类型可能会定义特有的描述符，用于对设备的描述扩展。
 
@@ -137,7 +137,7 @@ windows上可以使用UsbTreeView软件查看USB设备的描述符。下图展�
 
 ![usb_unit](images/usb_unit.png)
 
-### 3.1.2.2 UVC视频流格式选择
+### UVC视频流格式选择
 
 VS接口包含许多Format(YUV/MJPEG/H264等)，每个Format包含多个Frame(各种分辨率)。参数设置的过程需要主机和USB设备进行协商， 协商的过程大致如下图所示：
 
@@ -150,7 +150,7 @@ VS接口包含许多Format(YUV/MJPEG/H264等)，每个Format包含多个Frame(�
 - Host 认为设置可行的话，Commit 提交(COMMIT)
 - 设置接口的当前设置为某一个设置
 
-### 3.1.2.3 UVC视频流负载
+### UVC视频流负载
 
 ![uvc_payload](images/uvc_payload.png)
 
@@ -160,13 +160,13 @@ payload header固定前2字节和后面的扩展部分。重点关注FID-不同�
 
 ![uvc_payload](images/uvc_payload_header.png)
 
-### 3.2 linux驱动层
+### linux驱动层
 
 K230的SDK设计，为了性能把视频音频功能放在大核RTT上。linux上USB的功能实现很成熟，所以基于linux开发UVC功能，通过核间mapi通信获取大核视频数据。
 
 ![uvc_payload](images/uvc_framework.png)
 
-### 3.2.1 控制器驱动
+### 控制器驱动
 
 ![usb_gadget](images/usb_gadget.png)
 
@@ -193,7 +193,7 @@ usbotg1: usb-otg@91540000 {
 };
 ```
 
-### 3.2.2 gadget驱动
+### gadget驱动
 
 源码位于linux/drivers/usb/gadget
 
@@ -225,7 +225,7 @@ uvc涉及到v4l2模块的功能，还需要添加media框架
 
 ![media_linux_menuconfig](images/media_linux_menuconfig.png)
 
-### 3.3 uvc-gadget应用层
+### uvc-gadget应用层
 
 从K230的SDK设计架构可以看到，K230的UVC功能与单纯的linux上的uvc功能的差别就是获取视频数据的方式是通过核间通信从大核RTT获取的。
 
@@ -272,7 +272,7 @@ kd_mapi_vicap_set_dev_attr
 - venc模块绑定vi模块 kd_mapi_venc_bind_vi
   - 编码完成后的回调函数，获取编码后的图像数据 get_venc_stream
 
-### 3.4 参考资料学习推荐
+### 参考资料学习推荐
 
 - [USB2.0官方文档下载](https://www.usb.org/document-library/usb-20-specification)
 - [UUV1.1官方文档下载](https://www.usb.org/document-library/video-class-v11-document-set)

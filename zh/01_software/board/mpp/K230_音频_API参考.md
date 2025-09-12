@@ -53,16 +53,16 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 | ---------- | ------------------------------------------------------------ | ----------- | --------- |
 | V1.0       | 初版                                                         | 孙小朋      | 2023/3/7  |
 | V1.1       | 1）增加i2s内置codec的支持 2）增加pdm 单/双声道支持 3）增加ai、ao 不同采样精度支持（16/24/32） 4）api接口不变，增加了参数属性，完善了文档。 | 孙小朋      | 2023/3/27 |
-| V1.1.1     | 增加音频编解码api 接口 增加声音质量增强api接口[kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr)，以及说明。 | 孙小朋/崔妍 | 2023/4/12 |
-| V1.2       | 修改声音质量增强API接口[kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr) 增加音频编解码mapi接口函数 | 孙小朋/崔妍 | 2023/4/27 |
+| V1.1.1     | 增加音频编解码api 接口 增加声音质量增强api接口[kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr)，以及说明。 | 孙小朋/崔妍 | 2023/4/12 |
+| V1.2       | 修改声音质量增强API接口[kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)/[kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr) 增加音频编解码mapi接口函数 | 孙小朋/崔妍 | 2023/4/27 |
 | V1.3       | 1)增加内置Audio Codec API接口                                | 孙小朋      | 2023/5/10 |
-| v1.4       | 1)i2s支持单双声道输入和输出，修改[k_audio_i2s_attr](#3110-k_audio_i2s_attr)属性，增加snd_mode属性。 2)增加内置Audio Codec API接口:包括音量获取和复位相关接口:[k_acodec_get_gain_micl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)/[k_acodec_reset](#2510-k_acodec_reset) | 孙小朋      | 2023/6/15 |
+| v1.4       | 1)i2s支持单双声道输入和输出，修改[k_audio_i2s_attr](#k_audio_i2s_attr)属性，增加snd_mode属性。 2)增加内置Audio Codec API接口:包括音量获取和复位相关接口:[k_acodec_get_gain_micl](#k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_micr](#k_acodec_get_gain_micr)/[k_acodec_get_adcl_volume](#k_acodec_get_adcl_volume)/[k_acodec_get_adcr_volume](#k_acodec_get_adcr_volume)/[k_acodec_get_alc_gain_micl](#k_acodec_get_alc_gain_micl)/[k_acodec_get_alc_gain_micr](#k_acodec_get_alc_gain_micr)/[k_acodec_get_gain_hpoutl](#k_acodec_get_gain_hpoutl)/[k_acodec_get_gain_hpoutr](#k_acodec_get_gain_hpoutr)/[k_acodec_get_dacl_volume](#k_acodec_get_dacl_volume)/[k_acodec_get_dacr_volume](#k_acodec_get_dacr_volume)/[k_acodec_reset](#k_acodec_reset) | 孙小朋      | 2023/6/15 |
 | V1.5       | 1)增加音频输入输出单声道选择控制                                | 孙小朋      | 2024/6/5 |
 | V1.6       | 1)优化音频3a接口                                | 孙小朋      | 2024/11/4 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 音频模块包括音频输入ai、音频输出ao、音频编码aenc、音频解码adec四个子模块以及对内置模拟audio codec的支持。音频输入模块包括i2s和pdm两种音频接口，配合pdma做内存拷贝，支持数字麦(pdm/i2s)和模拟audio codec(i2s)声源输入，内置模拟audio codec，支持对音频数据进行声音质量增强(VQE)处理：3A(AEC回声消除、ANR降噪、AGC自动增益)。音频输出模块支持i2s音频接口，配合pdma做内存拷贝，可外接数据喇叭或模拟audio codec作为声音输出。音频编码和解码模块暂支持对 G711格式的音频编解码功能，并支持外部编解码器的注册。
 
@@ -70,9 +70,9 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 
 ![img](images/b96e2ea6fe9536e76af33afe46b2069e.png)
 
-### 1.2 功能描述
+### 功能描述
 
-#### 1.2.1 音频输入
+#### 音频输入
 
 音频输入模块（AI）主要实现配置及启用音频输入设备、获取音频帧数据等功能。
 
@@ -96,7 +96,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 
   1. 使能的声道序号从小到大并且连续，不支持各声道随机使能
 
-#### 1.2.2 音频输出
+#### 音频输出
 
 音频输出（AO）主要实现启用音频输出设备、发送音频帧到输出通道等功能。
 
@@ -108,7 +108,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 
   1. 支持2组可配置IO用于输入/输出I2S音频数据，支持全双工模式。
 
-#### 1.2.3 音频链路
+#### 音频链路
 
 - audio codec从模拟麦克风接收到的信号，转变为I2S格式的PCM数据后，输入到audio中的I2S中；I2S输出的PCM数据，经过audio codec后，变为模拟信号发出，该模式不使用数字IO，固定使用I2S的sdi0和sdo0接口。
 
@@ -128,29 +128,29 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 
 ![img](images/b76dc39c5256a09c53be0e7572c2f587.png)
 
-#### 1.2.4 声音质量增强
+#### 声音质量增强
 
 音频模块支持对音频数据进行声音质量增强处理，实现音频3A功能。目前支持的采样精度为16bit，支持的采样率为16k。
 
-## 2. API 参考
+## API 参考
 
-### 2.1 音频输入
+### 音频输入
 
 该功能模块提供以下API：
 
-- [kd_mpi_ai_set_pub_attr](#211-kd_mpi_ai_set_pub_attr)
-- [kd_mpi_ai_get_pub_attr](#212-kd_mpi_ai_get_pub_attr)
-- [kd_mpi_ai_enable](#213-kd_mpi_ai_enable)
-- [kd_mpi_ai_disable](#214-kd_mpi_ai_disable)
-- [kd_mpi_ai_enable_chn](#215-kd_mpi_ai_enable_chn)
-- [kd_mpi_ai_disable_chn](#215-kd_mpi_ai_enable_chn)
-- [kd_mpi_ai_get_frame](#217-kd_mpi_ai_get_frame)
-- [kd_mpi_ai_release_frame](#218-kd_mpi_ai_release_frame)
-- [kd_mpi_ai_set_vqe_attr](#219-kd_mpi_ai_set_vqe_attr)
-- [kd_mpi_ai_get_vqe_attr](#2110-kd_mpi_ai_get_vqe_attr)
-- [kd_mpi_ai_send_far_echo_frame](#2111-kd_mpi_ai_send_far_echo_frame)
+- [kd_mpi_ai_set_pub_attr](#kd_mpi_ai_set_pub_attr)
+- [kd_mpi_ai_get_pub_attr](#kd_mpi_ai_get_pub_attr)
+- [kd_mpi_ai_enable](#kd_mpi_ai_enable)
+- [kd_mpi_ai_disable](#kd_mpi_ai_disable)
+- [kd_mpi_ai_enable_chn](#kd_mpi_ai_enable_chn)
+- [kd_mpi_ai_disable_chn](#kd_mpi_ai_enable_chn)
+- [kd_mpi_ai_get_frame](#kd_mpi_ai_get_frame)
+- [kd_mpi_ai_release_frame](#kd_mpi_ai_release_frame)
+- [kd_mpi_ai_set_vqe_attr](#kd_mpi_ai_set_vqe_attr)
+- [kd_mpi_ai_get_vqe_attr](#kd_mpi_ai_get_vqe_attr)
+- [kd_mpi_ai_send_far_echo_frame](#kd_mpi_ai_send_far_echo_frame)
 
-#### 2.1.1 kd_mpi_ai_set_pub_attr
+#### kd_mpi_ai_set_pub_attr
 
 【描述】
 
@@ -158,7 +158,7 @@ AUDIO模块包括音频输入、音频输出、音频编码、音频解码四个
 
 【语法】
 
-k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) \*attr);
+k_s32 kd_mpi_ai_set_pub_attr([k_audio_dev](#k_audio_dev) ai_dev, const [k_aio_dev_attr](#k_aio_dev_attr) \*attr);
 
 【参数】
 
@@ -213,7 +213,7 @@ return K_FAILED;
 }
 ```
 
-#### 2.1.2 kd_mpi_ai_get_pub_attr
+#### kd_mpi_ai_get_pub_attr
 
 【描述】
 
@@ -221,7 +221,7 @@ return K_FAILED;
 
 【语法】
 
-k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) \*attr);
+k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_aio_dev_attr](#k_aio_dev_attr) \*attr);
 
 【参数】
 
@@ -242,7 +242,7 @@ k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.3 kd_mpi_ai_enable
+#### kd_mpi_ai_enable
 
 【描述】
 
@@ -250,7 +250,7 @@ k_s32 kd_mpi_ai_get_pub_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_aio_dev_
 
 【语法】
 
-k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
+k_s32 kd_mpi_ai_enable([k_audio_dev](#k_audio_dev) ai_dev);
 
 【参数】
 
@@ -270,7 +270,7 @@ k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.4 kd_mpi_ai_disable
+#### kd_mpi_ai_disable
 
 【描述】
 
@@ -278,7 +278,7 @@ k_s32 kd_mpi_ai_enable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
 【语法】
 
-k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
+k_s32 kd_mpi_ai_disable([k_audio_dev](#k_audio_dev) ai_dev);
 
 【参数】
 
@@ -298,7 +298,7 @@ k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.5 kd_mpi_ai_enable_chn
+#### kd_mpi_ai_enable_chn
 
 【描述】
 
@@ -306,7 +306,7 @@ k_s32 kd_mpi_ai_disable([k_audio_dev](#312-k_audio_dev) ai_dev);
 
 【语法】
 
-k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#313-k_ai_chn) ai_chn);
+k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#k_audio_dev) ai_dev,[k_ai_chn](#k_ai_chn) ai_chn);
 
 【参数】
 
@@ -327,7 +327,7 @@ k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#31
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.6 kd_mpi_ai_disable_chn
+#### kd_mpi_ai_disable_chn
 
 【描述】
 
@@ -335,7 +335,7 @@ k_s32 kd_mpi_ai_enable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#31
 
 【语法】
 
-k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#313-k_ai_chn) ai_chn);
+k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#k_audio_dev) ai_dev,[k_ai_chn](#k_ai_chn) ai_chn);
 
 【参数】
 
@@ -356,7 +356,7 @@ k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#3
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.7 kd_mpi_ai_get_frame
+#### kd_mpi_ai_get_frame
 
 【描述】
 
@@ -364,7 +364,7 @@ k_s32 kd_mpi_ai_disable_chn([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#3
 
 【语法】
 
-k_s32 kd_mpi_ai_get_frame([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#313-k_ai_chn) ai_chn,[k_audio_frame](#3114-k_audio_frame)\*frame, k_u32 milli_sec);
+k_s32 kd_mpi_ai_get_frame([k_audio_dev](#k_audio_dev) ai_dev,[k_ai_chn](#k_ai_chn) ai_chn,[k_audio_frame](#k_audio_frame)\*frame, k_u32 milli_sec);
 
 【参数】
 
@@ -414,7 +414,7 @@ kd_mpi_ai_release_frame(dev_num, channel, &audio_frame);
 }
 ```
 
-#### 2.1.8 kd_mpi_ai_release_frame
+#### kd_mpi_ai_release_frame
 
 【描述】
 
@@ -422,7 +422,7 @@ kd_mpi_ai_release_frame(dev_num, channel, &audio_frame);
 
 【语法】
 
-k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](#313-k_ai_chn) ai_chn,const [k_audio_frame](#3114-k_audio_frame) *frame);【参数】
+k_s32 kd_mpi_ai_release_frame([k_audio_dev](#k_audio_dev) ai_dev,[k_ai_chn](#k_ai_chn) ai_chn,const [k_audio_frame](#k_audio_frame) *frame);【参数】
 
 | 参数名称 | 描述          | 输入/输出 |
 |----------|---------------|-----------|
@@ -442,7 +442,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.9 kd_mpi_ai_set_vqe_attr
+#### kd_mpi_ai_set_vqe_attr
 
 【描述】
 
@@ -450,7 +450,7 @@ k_s32 kd_mpi_ai_release_frame([k_audio_dev](#312-k_audio_dev) ai_dev,[k_ai_chn](
 
 【语法】
 
-k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
+k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, const [k_ai_vqe_enable](#k_ai_vqe_enable) vqe_enable);
 
 【参数】
 
@@ -477,7 +477,7 @@ k_s32 kd_mpi_ai_set_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 audio 3a支持的采样精度为16bit，且agc只支持8k/16k/32k/48k。
 
-#### 2.1.10 kd_mpi_ai_get_vqe_attr
+#### kd_mpi_ai_get_vqe_attr
 
 【描述】
 
@@ -485,7 +485,7 @@ audio 3a支持的采样精度为16bit，且agc只支持8k/16k/32k/48k。
 
 【语法】
 
-k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, [k_ai_vqe_enable](#3115-k_ai_vqe_enable) vqe_enable);
+k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, [k_ai_vqe_enable](#k_ai_vqe_enable) vqe_enable);
 
 【参数】
 
@@ -507,7 +507,7 @@ k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-#### 2.1.11 kd_mpi_ai_send_far_echo_frame
+#### kd_mpi_ai_send_far_echo_frame
 
 【描述】
 
@@ -515,7 +515,7 @@ k_s32 kd_mpi_ai_get_vqe_attr([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](
 
 【语法】
 
-k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_ai_chn](#313-k_ai_chn) ai_chn, const [k_audio_frame](#3114-k_audio_frame) *frame, k_s32 milli_sec);
+k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#k_audio_dev) ai_dev, [k_ai_chn](#k_ai_chn) ai_chn, const [k_audio_frame](#k_audio_frame) *frame, k_s32 milli_sec);
 
 【参数】
 
@@ -538,19 +538,19 @@ k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_a
 - 头文件：mpi_ai_api.h
 - 库文件：libai.a
 
-### 2.2 音频输出
+### 音频输出
 
 该功能模块提供以下API：
 
-- [kd_mpi_ao_set_pub_attr](#221-kd_mpi_ao_set_pub_attr)
-- [kd_mpi_ao_get_pub_attr](#212-kd_mpi_ai_get_pub_attr)
-- [kd_mpi_ao_enable](#223-kd_mpi_ao_enable)
-- [kd_mpi_ao_disable](#224-kd_mpi_ao_disable)
-- [kd_mpi_ao_enable_chn](#225-kd_mpi_ao_enable_chn)
-- [kd_mpi_ao_disable_chn](#226-kd_mpi_ao_disable_chn)
-- [kd_mpi_ao_send_frame](#227-kd_mpi_ao_send_frame)
+- [kd_mpi_ao_set_pub_attr](#kd_mpi_ao_set_pub_attr)
+- [kd_mpi_ao_get_pub_attr](#kd_mpi_ai_get_pub_attr)
+- [kd_mpi_ao_enable](#kd_mpi_ao_enable)
+- [kd_mpi_ao_disable](#kd_mpi_ao_disable)
+- [kd_mpi_ao_enable_chn](#kd_mpi_ao_enable_chn)
+- [kd_mpi_ao_disable_chn](#kd_mpi_ao_disable_chn)
+- [kd_mpi_ao_send_frame](#kd_mpi_ao_send_frame)
 
-#### 2.2.1 kd_mpi_ao_set_pub_attr
+#### kd_mpi_ao_set_pub_attr
 
 【描述】
 
@@ -558,7 +558,7 @@ k_s32 kd_mpi_ai_send_far_echo_frame([k_audio_dev](#312-k_audio_dev) ai_dev, [k_a
 
 【语法】
 
-k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, const [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ao_set_pub_attr([k_audio_dev](#k_audio_dev) ao_dev, const [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 
 【参数】
 
@@ -615,7 +615,7 @@ return K_FAILED;
 }
 ```
 
-#### 2.2.2 kd_mpi_ao_get_pub_attr
+#### kd_mpi_ao_get_pub_attr
 
 【描述】
 
@@ -623,7 +623,7 @@ return K_FAILED;
 
 【语法】
 
-k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_attr](#3112-k_aio_dev_attr) *attr);
+k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#k_audio_dev) ao_dev, [k_aio_dev_attr](#k_aio_dev_attr) *attr);
 
 【参数】
 
@@ -644,7 +644,7 @@ k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_
 - 头文件：mpi_ao_api.h
 - 库文件：libao.a
 
-#### 2.2.3 kd_mpi_ao_enable
+#### kd_mpi_ao_enable
 
 【描述】
 
@@ -652,7 +652,7 @@ k_s32 kd_mpi_ao_get_pub_attr([k_audio_dev](#312-k_audio_dev) ao_dev, [k_aio_dev_
 
 【语法】
 
-k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
+k_s32 kd_mpi_ao_enable([k_audio_dev](#k_audio_dev) ao_dev);
 
 【参数】
 
@@ -672,7 +672,7 @@ k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 - 头文件：mpi_ao_api.h
 - 库文件：libao.a
 
-#### 2.2.4 kd_mpi_ao_disable
+#### kd_mpi_ao_disable
 
 【描述】
 
@@ -680,7 +680,7 @@ k_s32 kd_mpi_ao_enable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
 【语法】
 
-k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
+k_s32 kd_mpi_ao_disable([k_audio_dev](#k_audio_dev) ao_dev);
 
 【参数】
 
@@ -700,7 +700,7 @@ k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 - 头文件：mpi_ao_api.h
 - 库文件：libao.a
 
-#### 2.2.5 kd_mpi_ao_enable_chn
+#### kd_mpi_ao_enable_chn
 
 【描述】
 
@@ -708,7 +708,7 @@ k_s32 kd_mpi_ao_disable([k_audio_dev](#312-k_audio_dev) ao_dev);
 
 【语法】
 
-k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#314-k_ao_chn) ao_chn);
+k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#k_audio_dev) ao_dev,[k_ao_chn](#k_ao_chn) ao_chn);
 
 【参数】
 
@@ -729,7 +729,7 @@ k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#31
 - 头文件：mpi_ao_api.h
 - 库文件：libao.a
 
-#### 2.2.6 kd_mpi_ao_disable_chn
+#### kd_mpi_ao_disable_chn
 
 【描述】
 
@@ -737,7 +737,7 @@ k_s32 kd_mpi_ao_enable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#31
 
 【语法】
 
-k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#314-k_ao_chn) ao_chn);
+k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#k_audio_dev) ao_dev,[k_ao_chn](#k_ao_chn) ao_chn);
 
 【参数】
 
@@ -758,7 +758,7 @@ k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#3
 - 头文件：mpi_ao_api.h
 - 库文件：libao.a
 
-#### 2.2.7 kd_mpi_ao_send_frame
+#### kd_mpi_ao_send_frame
 
 【描述】
 
@@ -768,7 +768,7 @@ k_s32 kd_mpi_ao_disable_chn([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#3
 
 k_s32 kd_mpi_ao_send_frame
 
-([k_audio_dev](#312-k_audio_dev) ao_dev,[k_ao_chn](#314-k_ao_chn) ao_chn,const [k_audio_frame](#3114-k_audio_frame)*frame,k_s32 milli_sec);
+([k_audio_dev](#k_audio_dev) ao_dev,[k_ao_chn](#k_ao_chn) ao_chn,const [k_audio_frame](#k_audio_frame)*frame,k_s32 milli_sec);
 
 【参数】
 
@@ -824,21 +824,21 @@ kd_mpi_ai_release_frame(0, 0, &audio_frame);
 }
 ```
 
-### 2.3 音频编码
+### 音频编码
 
 音频编码主要实现创建编码通道、发送音频帧编码及获取编码码流等功能。音频编码部分，提供g711a/u编码，暂只支持16bit采样精度。
 
 该功能模块提供以下API：
 
-- [kd_mpi_aenc_register_encoder](#231-kd_mpi_aenc_register_encoder)：注册编码器。
-- [kd_mpi_aenc_unregister_encoder](#232-kd_mpi_aenc_unregister_encoder)：注销编码器。
-- [kd_mpi_aenc_create_chn](#233-kd_mpi_aenc_create_chn):创建编码通道
-- [kd_mpi_aenc_destroy_chn](#234-kd_mpi_aenc_destroy_chn):销毁编码通道
-- [kd_mpi_aenc_send_frame](#235-kd_mpi_aenc_send_frame)：发送音频编码音频帧
-- [kd_mpi_aenc_get_stream](#236-kd_mpi_aenc_get_stream)：获取音频编码码流
-- [kd_mpi_aenc_release_stream](#237-kd_mpi_aenc_release_stream)：释放音频编码码流
+- [kd_mpi_aenc_register_encoder](#kd_mpi_aenc_register_encoder)：注册编码器。
+- [kd_mpi_aenc_unregister_encoder](#kd_mpi_aenc_unregister_encoder)：注销编码器。
+- [kd_mpi_aenc_create_chn](#kd_mpi_aenc_create_chn):创建编码通道
+- [kd_mpi_aenc_destroy_chn](#kd_mpi_aenc_destroy_chn):销毁编码通道
+- [kd_mpi_aenc_send_frame](#kd_mpi_aenc_send_frame)：发送音频编码音频帧
+- [kd_mpi_aenc_get_stream](#kd_mpi_aenc_get_stream)：获取音频编码码流
+- [kd_mpi_aenc_release_stream](#kd_mpi_aenc_release_stream)：释放音频编码码流
 
-#### 2.3.1 kd_mpi_aenc_register_encoder
+#### kd_mpi_aenc_register_encoder
 
 - 【描述】
 
@@ -846,7 +846,7 @@ kd_mpi_ai_release_frame(0, 0, &audio_frame);
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_register_encoder(k_s32 \*handle, const [k_aenc_encoder](#322-k_aenc_encoder) \*encoder);
+k_s32 kd_mpi_aenc_register_encoder(k_s32 \*handle, const [k_aenc_encoder](#k_aenc_encoder) \*encoder);
 
 - 【参数】
 
@@ -881,7 +881,7 @@ AENC 模块最大可注册 20 个编码器，且自身已注册 G711.a、G711.u
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.2 kd_mpi_aenc_unregister_encoder
+#### kd_mpi_aenc_unregister_encoder
 
 - 【描述】
 
@@ -909,7 +909,7 @@ k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.3 kd_mpi_aenc_create_chn
+#### kd_mpi_aenc_create_chn
 
 - 【描述】
 
@@ -917,16 +917,16 @@ k_s32 kd_mpi_aenc_unregister_encoder(k_s32 handle);
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_create_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_aenc_chn_attr](#323-k_aenc_chn_attr) \*attr);
+k_s32 kd_mpi_aenc_create_chn([k_aenc_chn](#k_aenc_chn) aenc_chn, const [k_aenc_chn_attr](#k_aenc_chn_attr) \*attr);
 
 | **参数名称** | **描述**                                                           | **输入/输出** |
 |--------------|--------------------------------------------------------------------|---------------|
-| aenc_chn     | 通道号。 取值范围: [0, [AENC_MAX_CHN_NUM](#324-aenc_max_chn_nums))。  | 输入          |
+| aenc_chn     | 通道号。 取值范围: [0, [AENC_MAX_CHN_NUM](#aenc_max_chn_nums))。  | 输入          |
 | attr         | 音频编码通道属性指针。                                             | 输入          |
 
 - 【说明】
 
-buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num)，建议配置 为 10 以上，过小的 buffer 配置可能导致丢帧等异常。每个编码通道都会根据buffer大小来配置队列大小，用以缓存编码帧数据。
+buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num)，建议配置 为 10 以上，过小的 buffer 配置可能导致丢帧等异常。每个编码通道都会根据buffer大小来配置队列大小，用以缓存编码帧数据。
 
 - 【返回值】
 
@@ -940,7 +940,7 @@ buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#315-k
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.4 kd_mpi_aenc_destroy_chn
+#### kd_mpi_aenc_destroy_chn
 
 - 【描述】
 
@@ -948,11 +948,11 @@ buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#315-k
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
+k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#k_aenc_chn) aenc_chn);
 
 | **参数名称** | **描述**                                                           | **输入/输出** |
 |--------------|--------------------------------------------------------------------|---------------|
-| aenc_chn     | 通道号。 取值范围: [0, [AENC_MAX_CHN_NUM](#324-aenc_max_chn_nums))。  | 输入          |
+| aenc_chn     | 通道号。 取值范围: [0, [AENC_MAX_CHN_NUM](#aenc_max_chn_nums))。  | 输入          |
 
 - 【说明】
 
@@ -970,7 +970,7 @@ k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.5 kd_mpi_aenc_send_frame
+#### kd_mpi_aenc_send_frame
 
 - 【描述】
 
@@ -978,7 +978,7 @@ k_s32 kd_mpi_aenc_destroy_chn([k_aenc_chn](#326-k_aenc_chn) aenc_chn);
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#326-k_aenc_chn) aenc_chn,const [k_audio_frame](#3114-k_audio_frame) \*frame);
+k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#k_aenc_chn) aenc_chn,const [k_audio_frame](#k_audio_frame) \*frame);
 
 - 【参数】
 
@@ -1003,7 +1003,7 @@ k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#326-k_aenc_chn) aenc_chn,const [k_aud
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.6 kd_mpi_aenc_get_stream
+#### kd_mpi_aenc_get_stream
 
 - 【描述】
 
@@ -1011,7 +1011,7 @@ k_s32 kd_mpi_aenc_send_frame([k_aenc_chn](#326-k_aenc_chn) aenc_chn,const [k_aud
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_get_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, [k_audio_stream](#327-k_audio_stream) \*stream, k_s32 milli_sec);
+k_s32 kd_mpi_aenc_get_stream([k_aenc_chn](#k_aenc_chn) aenc_chn, [k_audio_stream](#k_audio_stream) \*stream, k_s32 milli_sec);
 
 - 【参数】
 
@@ -1045,7 +1045,7 @@ s32MilliSec 的值必须大于等于-1，等于-1 时采用阻塞模式获取数
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-#### 2.3.7 kd_mpi_aenc_release_stream
+#### kd_mpi_aenc_release_stream
 
 - 【描述】
 
@@ -1053,7 +1053,7 @@ s32MilliSec 的值必须大于等于-1，等于-1 时采用阻塞模式获取数
 
 - 【语法】
 
-k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [k_audio_stream](#327-k_audio_stream) \*stream);
+k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#k_aenc_chn) aenc_chn, const [k_audio_stream](#k_audio_stream) \*stream);
 
 - 【参数】
 
@@ -1078,7 +1078,7 @@ k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [
 - 头文件：mpi_aenc_api.h
 - 库文件：libaenc.a
 
-### 2.4 音频解码
+### 音频解码
 
 音频解码主要实现解码通道、发送音频码流解码及获取解码后音频帧等功能。
 
@@ -1086,16 +1086,16 @@ k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [
 
 该功能模块提供以下API：
 
-- [kd_mpi_adec_register_decoder](#241-kd_mpi_adec_register_decoder)：注册解码器
-- [kd_mpi_adec_unregister_decoder](#242-kd_mpi_adec_unregister_decoder)：注销解码器
-- [kd_mpi_adec_create_chn](#243-kd_mpi_adec_create_chn)：创建音频解码通道
-- [kd_mpi_adec_destroy_chn](#244-kd_mpi_adec_destroy_chn)：销毁音频解码通道
-- [kd_mpi_adec_send_stream](#245-kd_mpi_adec_send_stream)：发送音频码流到音频解码通道
-- [kd_mpi_adec_clr_chn_buf](#246-kd_mpi_adec_clr_chn_buf)：清除 ADEC 通道中当前的音频数据缓存。
-- [kd_mpi_adec_get_frame](#247-kd_mpi_adec_get_frame)：获取音频解码帧数据
-- [kd_mpi_adec_release_frame](#248-kd_mpi_adec_release_frame)：释放音频解码帧数据
+- [kd_mpi_adec_register_decoder](#kd_mpi_adec_register_decoder)：注册解码器
+- [kd_mpi_adec_unregister_decoder](#kd_mpi_adec_unregister_decoder)：注销解码器
+- [kd_mpi_adec_create_chn](#kd_mpi_adec_create_chn)：创建音频解码通道
+- [kd_mpi_adec_destroy_chn](#kd_mpi_adec_destroy_chn)：销毁音频解码通道
+- [kd_mpi_adec_send_stream](#kd_mpi_adec_send_stream)：发送音频码流到音频解码通道
+- [kd_mpi_adec_clr_chn_buf](#kd_mpi_adec_clr_chn_buf)：清除 ADEC 通道中当前的音频数据缓存。
+- [kd_mpi_adec_get_frame](#kd_mpi_adec_get_frame)：获取音频解码帧数据
+- [kd_mpi_adec_release_frame](#kd_mpi_adec_release_frame)：释放音频解码帧数据
 
-#### 2.4.1 kd_mpi_adec_register_decoder
+#### kd_mpi_adec_register_decoder
 
 - 【描述】
 
@@ -1103,7 +1103,7 @@ k_s32 kd_mpi_aenc_release_stream([k_aenc_chn](#326-k_aenc_chn) aenc_chn, const [
 
 - 【语法】
 
-k_s32 kd_mpi_adec_register_decoder(k_s32 \*handle, const [k_adec_decoder](#329-k_adec_decoder) \*decoder);
+k_s32 kd_mpi_adec_register_decoder(k_s32 \*handle, const [k_adec_decoder](#k_adec_decoder) \*decoder);
 
 - 【参数】
 
@@ -1129,7 +1129,7 @@ k_s32 kd_mpi_adec_register_decoder(k_s32 \*handle, const [k_adec_decoder](#329-k
 
 库文件：libadec.a
 
-#### 2.4.2 kd_mpi_adec_unregister_decoder
+#### kd_mpi_adec_unregister_decoder
 
 - 【描述】
 
@@ -1156,7 +1156,7 @@ k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 - 头文件：mpi_adec_api.h
 - 库文件：libadec.a
 
-#### 2.4.3 kd_mpi_adec_create_chn
+#### kd_mpi_adec_create_chn
 
 - 【描述】
 
@@ -1164,18 +1164,18 @@ k_s32 kd_mpi_adec_unregister_decoder(k_s32 handle);
 
 - 【语法】
 
-k_s32 kd_mpi_adec_create_chn([k_adec_chn](#3212-k_adec_chn) adec_chn, const [k_adec_chn_attr](#328-k_adec_chn_attr) \*attr);
+k_s32 kd_mpi_adec_create_chn([k_adec_chn](#k_adec_chn) adec_chn, const [k_adec_chn_attr](#k_adec_chn_attr) \*attr);
 
 - 【参数】
 
 | **参数名称** | **描述**                                                            | **输入/输出** |
 |--------------|---------------------------------------------------------------------|---------------|
-| adec_chn     | 通道号。  取值范围：[0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums))。  | 输入          |
+| adec_chn     | 通道号。  取值范围：[0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums))。  | 输入          |
 | attr         | 通道属性指针。                                                      | 输入          |
 
 - 【说明】
 
-协议类型指定了该通道的解码协议，目前支持 G711。音频解码的部分属性需要与输出设备属性相匹配，例如采样率、帧长（每帧采样点数目）等。 buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num)，建议配置为 10 以上，过小的 buffer 配置可能导致丢帧等异常。 在通道未创建前（或销毁后）才能使用此接口，如果通道已经被创建，则返回通道已经创建。
+协议类型指定了该通道的解码协议，目前支持 G711。音频解码的部分属性需要与输出设备属性相匹配，例如采样率、帧长（每帧采样点数目）等。 buffer 大小以帧为单位，取值范围是[2, [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num)，建议配置为 10 以上，过小的 buffer 配置可能导致丢帧等异常。 在通道未创建前（或销毁后）才能使用此接口，如果通道已经被创建，则返回通道已经创建。
 
 - 【返回值】
 
@@ -1190,7 +1190,7 @@ k_s32 kd_mpi_adec_create_chn([k_adec_chn](#3212-k_adec_chn) adec_chn, const [k_a
 
 库文件：libadec.a
 
-#### 2.4.4 kd_mpi_adec_destroy_chn
+#### kd_mpi_adec_destroy_chn
 
 - 【描述】
 
@@ -1198,13 +1198,13 @@ k_s32 kd_mpi_adec_create_chn([k_adec_chn](#3212-k_adec_chn) adec_chn, const [k_a
 
 - 【语法】
 
-k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#3212-k_adec_chn) adec_chn);
+k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#k_adec_chn) adec_chn);
 
 - 【参数】
 
 | **参数名称** | **描述**                                                           | **输入/输出** |
 |--------------|--------------------------------------------------------------------|---------------|
-| adec_chn     | 通道号。 取值范围: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums))。  | 输入          |
+| adec_chn     | 通道号。 取值范围: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums))。  | 输入          |
 
 - 【说明】
 
@@ -1221,7 +1221,7 @@ k_s32 kd_mpi_adec_destroy_chn([k_adec_chn](#3212-k_adec_chn) adec_chn);
 - 头文件：mpi_adec_api.h
 - 库文件：libadec.a
 
-#### 2.4.5 kd_mpi_adec_send_stream
+#### kd_mpi_adec_send_stream
 
 - 【描述】
 
@@ -1235,7 +1235,7 @@ k_s32 kd_mpi_adec_send_stream(k_adec_chn adec_chn,const k_audio_stream \*stream,
 
 | **参数名称** | **描述**                                         | **输入/输出** |
 |--------------|--------------------------------------------------|---------------|
-| adec_chn     | 通道号。  取值范围：[0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums))。      | 输入          |
+| adec_chn     | 通道号。  取值范围：[0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums))。      | 输入          |
 | stream       | 音频码流。                                       | 输入          |
 | block        | 阻塞标识。  HI_TRUE：阻塞。  HI_FALSE：非阻塞。  | 输入          |
 
@@ -1256,7 +1256,7 @@ k_s32 kd_mpi_adec_send_stream(k_adec_chn adec_chn,const k_audio_stream \*stream,
 
 库文件：libadec.a
 
-#### 2.4.6 kd_mpi_adec_clr_chn_buf
+#### kd_mpi_adec_clr_chn_buf
 
 - 【描述】
 
@@ -1264,13 +1264,13 @@ k_s32 kd_mpi_adec_send_stream(k_adec_chn adec_chn,const k_audio_stream \*stream,
 
 - 【语法】
 
-k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#3212-k_adec_chn) adec_chn);
+k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#k_adec_chn) adec_chn);
 
 - 【参数】
 
 | **参数名称** | **描述**                                                           | **输入/输出** |
 |--------------|--------------------------------------------------------------------|---------------|
-| adec_chn     | 通道号。 取值范围: [0, [ADEC_MAX_CHN_NUM](#3211-adec_max_chn_nums))。  | 输入          |
+| adec_chn     | 通道号。 取值范围: [0, [ADEC_MAX_CHN_NUM](#adec_max_chn_nums))。  | 输入          |
 
 - 【说明】
 
@@ -1289,7 +1289,7 @@ k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#3212-k_adec_chn) adec_chn);
 
 库文件：libadec.a
 
-#### 2.4.7 kd_mpi_adec_get_frame
+#### kd_mpi_adec_get_frame
 
 - 【描述】
 
@@ -1297,7 +1297,7 @@ k_s32 kd_mpi_adec_clr_chn_buf([k_adec_chn](#3212-k_adec_chn) adec_chn);
 
 - 【语法】
 
-k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_frame](#3114-k_audio_frame) \*frame, k_s32 milli_sec);
+k_s32 kd_mpi_adec_get_frame([k_adec_chn](#k_adec_chn) adec_chn, [k_audio_frame](#k_audio_frame) \*frame, k_s32 milli_sec);
 
 - 【参数】
 
@@ -1320,7 +1320,7 @@ k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_fr
 
 库文件：libadec.a
 
-#### 2.4.8 kd_mpi_adec_release_frame
+#### kd_mpi_adec_release_frame
 
 - 【描述】
 
@@ -1328,7 +1328,7 @@ k_s32 kd_mpi_adec_get_frame([k_adec_chn](#3212-k_adec_chn) adec_chn, [k_audio_fr
 
 - 【语法】
 
-k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k_audio_frame](#3114-k_audio_frame) \*frame);
+k_s32 kd_mpi_adec_release_frame([k_adec_chn](#k_aenc_chn) adec_chn, const [k_audio_frame](#k_audio_frame) \*frame);
 
 - 【参数】
 
@@ -1350,7 +1350,7 @@ k_s32 kd_mpi_adec_release_frame([k_adec_chn](#326-k_aenc_chn) adec_chn, const [k
 
 库文件：libadec.a
 
-### 2.5 内置Audio Codec
+### 内置Audio Codec
 
 内置Audio Codec主要通过ioctl提供对硬件设备的操作。在提供的ioctl的cmd中，有些
 
@@ -1360,33 +1360,33 @@ cmd用户可以不需要调用，直接使用模块加载时的默认值即可�
 
 内置 Audio Codec 标准功能 cmd:
 
-- [k_acodec_set_gain_micl](#251-k_acodec_set_gain_micl)：左声道输入模拟增益控制
-- [k_acodec_set_gain_micr](#252-k_acodec_set_gain_micr)：右声道输入模拟增益控制
-- [k_acodec_set_adcl_volume](#253-k_acodec_set_adcl_volume)：左声道输入数字音量控制
-- [k_acodec_set_adcr_volume](#254-k_acodec_set_adcr_volume)：右声道输入数字音量控制
-- [k_acodec_set_alc_gain_micl](#255-k_acodec_set_alc_gain_micl)：alc左声道输入的模拟增益控制
-- [k_acodec_set_alc_gain_micr](#256-k_acodec_set_alc_gain_micr)：alc右声道输入的模拟增益控制
-- [k_acodec_set_gain_hpoutl](#257-k_acodec_set_gain_hpoutl)：左声道输出模拟音量控制
-- [k_acodec_set_gain_hpoutr](#258-k_acodec_set_gain_hpoutr)：右声道输出模拟音量控制
-- [k_acodec_set_dacl_volume](#259-k_acodec_set_dacl_volume)：左声道输出数字音量控制
-- [k_acodec_set_dacr_volume](#2510-k_acodec_set_dacr_volume)：右声道输出数字音量控制
-- [k_acodec_set_micl_mute](#2511-k_acodec_set_micl_mute)：左声道输入静音控制
-- [k_acodec_set_micr_mute](#2512-k_acodec_set_micr_mute)：右声道输入静音控制
-- [k_acodec_set_dacl_mute](#2513-k_acodec_set_dacl_mute)：左声道输出静音控制
-- [k_acodec_set_dacr_mute](#2514-k_acodec_set_dacr_mute)：右声道输出静音控制
-- [k_acodec_get_gain_micl](#2515-k_acodec_get_gain_micl)：获取左声道输入模拟增益值
-- [k_acodec_get_gain_micr](#2516-k_acodec_get_gain_micr)：获取右声道输入模拟增益值
-- [k_acodec_get_adcl_volume](#2518-k_acodec_get_adcl_volume)：获取左声道输入数字音量值
-- [k_acodec_get_adcr_volume](#2519-k_acodec_get_adcr_volume)：获取右声道输入数字音量值
-- [k_acodec_get_alc_gain_micl](#255-k_acodec_get_alc_gain_micl)：获取alc左声道输入的模拟增益值
-- [k_acodec_get_alc_gain_micr](#256-k_acodec_get_alc_gain_micr)：获取alc右声道输入的模拟增益值
-- [k_acodec_get_gain_hpoutl](#257-k_acodec_get_gain_hpoutl)：获取左声道输出模拟音量值
-- [k_acodec_get_gain_hpoutr](#258-k_acodec_get_gain_hpoutr)：获取右声道输出模拟音量值
-- [k_acodec_get_dacl_volume](#259-k_acodec_get_dacl_volume)：获取左声道输出数字音量值
-- [k_acodec_get_dacr_volume](#2510-k_acodec_get_dacr_volume)：获取右声道输出数字音量值
-- [k_acodec_reset](#2510-k_acodec_reset)：音量重置
+- [k_acodec_set_gain_micl](#k_acodec_set_gain_micl)：左声道输入模拟增益控制
+- [k_acodec_set_gain_micr](#k_acodec_set_gain_micr)：右声道输入模拟增益控制
+- [k_acodec_set_adcl_volume](#k_acodec_set_adcl_volume)：左声道输入数字音量控制
+- [k_acodec_set_adcr_volume](#k_acodec_set_adcr_volume)：右声道输入数字音量控制
+- [k_acodec_set_alc_gain_micl](#k_acodec_set_alc_gain_micl)：alc左声道输入的模拟增益控制
+- [k_acodec_set_alc_gain_micr](#k_acodec_set_alc_gain_micr)：alc右声道输入的模拟增益控制
+- [k_acodec_set_gain_hpoutl](#k_acodec_set_gain_hpoutl)：左声道输出模拟音量控制
+- [k_acodec_set_gain_hpoutr](#k_acodec_set_gain_hpoutr)：右声道输出模拟音量控制
+- [k_acodec_set_dacl_volume](#k_acodec_set_dacl_volume)：左声道输出数字音量控制
+- [k_acodec_set_dacr_volume](#k_acodec_set_dacr_volume)：右声道输出数字音量控制
+- [k_acodec_set_micl_mute](#k_acodec_set_micl_mute)：左声道输入静音控制
+- [k_acodec_set_micr_mute](#k_acodec_set_micr_mute)：右声道输入静音控制
+- [k_acodec_set_dacl_mute](#k_acodec_set_dacl_mute)：左声道输出静音控制
+- [k_acodec_set_dacr_mute](#k_acodec_set_dacr_mute)：右声道输出静音控制
+- [k_acodec_get_gain_micl](#k_acodec_get_gain_micl)：获取左声道输入模拟增益值
+- [k_acodec_get_gain_micr](#k_acodec_get_gain_micr)：获取右声道输入模拟增益值
+- [k_acodec_get_adcl_volume](#k_acodec_get_adcl_volume)：获取左声道输入数字音量值
+- [k_acodec_get_adcr_volume](#k_acodec_get_adcr_volume)：获取右声道输入数字音量值
+- [k_acodec_get_alc_gain_micl](#k_acodec_get_alc_gain_micl)：获取alc左声道输入的模拟增益值
+- [k_acodec_get_alc_gain_micr](#k_acodec_get_alc_gain_micr)：获取alc右声道输入的模拟增益值
+- [k_acodec_get_gain_hpoutl](#k_acodec_get_gain_hpoutl)：获取左声道输出模拟音量值
+- [k_acodec_get_gain_hpoutr](#k_acodec_get_gain_hpoutr)：获取右声道输出模拟音量值
+- [k_acodec_get_dacl_volume](#k_acodec_get_dacl_volume)：获取左声道输出数字音量值
+- [k_acodec_get_dacr_volume](#k_acodec_get_dacr_volume)：获取右声道输出数字音量值
+- [k_acodec_reset](#k_acodec_reset)：音量重置
 
-#### 2.5.1 k_acodec_set_gain_micl
+#### k_acodec_set_gain_micl
 
 - 【描述】
 
@@ -1421,7 +1421,7 @@ int ioctl (int fd, k_acodec_set_gain_micl, k_u32 \*arg);
 
 模拟增益范围为0db,6db,20db,30db。
 
-#### 2.5.2 k_acodec_set_gain_micr
+#### k_acodec_set_gain_micr
 
 - 【描述】
 
@@ -1456,7 +1456,7 @@ int ioctl (int fd, k_acodec_set_gain_micr, k_u32 \*arg);
 
 模拟增益范围为0db,6db,20db,30db。
 
-#### 2.5.3 k_acodec_set_adcl_volume
+#### k_acodec_set_adcl_volume
 
 - 【描述】
 
@@ -1491,7 +1491,7 @@ int ioctl (int fd, k_acodec_set_adcl_volume, float \*arg);
 
 模拟增益范围`[-97,30]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.4 k_acodec_set_adcr_volume
+#### k_acodec_set_adcr_volume
 
 - 【描述】
 
@@ -1526,7 +1526,7 @@ int ioctl (int fd, k_acodec_set_adcr_volume, float \*arg);
 
 模拟增益范围`[-97,30]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.5 k_acodec_set_alc_gain_micl
+#### k_acodec_set_alc_gain_micl
 
 - 【描述】
 
@@ -1561,7 +1561,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 
 模拟增益范围`[-18,28.5]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.6 k_acodec_set_alc_gain_micr
+#### k_acodec_set_alc_gain_micr
 
 - 【描述】
 
@@ -1596,7 +1596,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micr, float \*arg);
 
 模拟增益范围`[-18,28.5]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.7 k_acodec_set_gain_hpoutl
+#### k_acodec_set_gain_hpoutl
 
 - 【描述】
 
@@ -1631,7 +1631,7 @@ int ioctl (int fd, k_acodec_set_gain_hpoutl, float \*arg);
 
 模拟增益范围`[-39,6]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.8 k_acodec_set_gain_hpoutr
+#### k_acodec_set_gain_hpoutr
 
 - 【描述】
 
@@ -1666,7 +1666,7 @@ int ioctl (int fd, k_acodec_set_gain_hpoutr, float \*arg);
 
 模拟增益范围`[-39,6]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.9 k_acodec_set_dacl_volume
+#### k_acodec_set_dacl_volume
 
 - 【描述】
 
@@ -1701,7 +1701,7 @@ int ioctl (int fd, k_acodec_set_dacl_volume, float \*arg);
 
 模拟增益范围`[-120,7]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.10 k_acodec_set_dacr_volume
+#### k_acodec_set_dacr_volume
 
 - 【描述】
 
@@ -1736,7 +1736,7 @@ int ioctl (int fd, k_acodec_set_dacr_volume, float \*arg);
 
 模拟增益范围`[-120,7]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.11 k_acodec_set_micl_mute
+#### k_acodec_set_micl_mute
 
 - 【描述】
 
@@ -1771,7 +1771,7 @@ int ioctl (int fd, k_acodec_set_micl_mute, k_bool \*arg);
 
 取值范围:K_TRUE静音，K_FALSE取消静音。
 
-#### 2.5.12 k_acodec_set_micr_mute
+#### k_acodec_set_micr_mute
 
 - 【描述】
 
@@ -1806,7 +1806,7 @@ int ioctl (int fd, k_acodec_set_micr_mute, k_bool \*arg);
 
 取值范围:K_TRUE静音，K_FALSE取消静音。
 
-#### 2.5.13 k_acodec_set_dacl_mute
+#### k_acodec_set_dacl_mute
 
 - 【描述】
 
@@ -1841,7 +1841,7 @@ int ioctl (int fd, k_acodec_set_dacl_mute, k_bool \*arg);
 
 取值范围:K_TRUE静音，K_FALSE取消静音。
 
-#### 2.5.14 k_acodec_set_dacr_mute
+#### k_acodec_set_dacr_mute
 
 - 【描述】
 
@@ -1876,7 +1876,7 @@ int ioctl (int fd, k_acodec_set_dacr_mute, k_bool \*arg);
 
 取值范围:K_TRUE静音，K_FALSE取消静音。
 
-#### 2.5.15 k_acodec_get_gain_micl
+#### k_acodec_get_gain_micl
 
 - 【描述】
 
@@ -1911,7 +1911,7 @@ int ioctl (int fd, k_acodec_get_gain_micl, k_u32 \*arg);
 
 获取到得模拟增益范围为0db,6db,20db,30db。
 
-#### 2.5.16 k_acodec_get_gain_micr
+#### k_acodec_get_gain_micr
 
 - 【描述】
 
@@ -1946,7 +1946,7 @@ int ioctl (int fd, k_acodec_get_gain_micr, k_u32 \*arg);
 
 获取到得模拟增益范围为0db,6db,20db,30db。
 
-#### 2.5.18 k_acodec_get_adcl_volume
+#### k_acodec_get_adcl_volume
 
 - 【描述】
 
@@ -1981,7 +1981,7 @@ int ioctl (int fd, k_acodec_get_adcl_volume, float \*arg);
 
 模拟增益范围`[-97,30]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.19 k_acodec_get_adcr_volume
+#### k_acodec_get_adcr_volume
 
 - 【描述】
 
@@ -2016,7 +2016,7 @@ int ioctl (int fd, k_acodec_get_adcr_volume, float \*arg);
 
 模拟增益范围`[-97,30]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.5 k_acodec_get_alc_gain_micl
+#### k_acodec_get_alc_gain_micl
 
 - 【描述】
 
@@ -2051,7 +2051,7 @@ int ioctl (int fd, k_acodec_set_alc_gain_micl, float \*arg);
 
 模拟增益范围`[-18,28.5]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.6 k_acodec_get_alc_gain_micr
+#### k_acodec_get_alc_gain_micr
 
 - 【描述】
 
@@ -2086,7 +2086,7 @@ int ioctl (int fd, k_acodec_get_alc_gain_micr, float \*arg);
 
 模拟增益范围`[-18,28.5]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.7 k_acodec_get_gain_hpoutl
+#### k_acodec_get_gain_hpoutl
 
 - 【描述】
 
@@ -2121,7 +2121,7 @@ int ioctl (int fd, k_acodec_get_gain_hpoutl, float \*arg);
 
 模拟增益范围`[-39,6]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.8 k_acodec_get_gain_hpoutr
+#### k_acodec_get_gain_hpoutr
 
 - 【描述】
 
@@ -2156,7 +2156,7 @@ int ioctl (int fd, k_acodec_get_gain_hpoutr, float \*arg);
 
 模拟增益范围`[-39,6]`,赋值越大，音量越大，按1.5db递增。
 
-#### 2.5.9 k_acodec_get_dacl_volume
+#### k_acodec_get_dacl_volume
 
 - 【描述】
 
@@ -2191,7 +2191,7 @@ int ioctl (int fd, k_acodec_get_dacl_volume, float \*arg);
 
 模拟增益范围`[-120,7]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.10 k_acodec_get_dacr_volume
+#### k_acodec_get_dacr_volume
 
 - 【描述】
 
@@ -2226,7 +2226,7 @@ int ioctl (int fd, k_acodec_get_dacr_volume, float \*arg);
 
 模拟增益范围`[-120,7]`,赋值越大，音量越大，按0.5db递增。
 
-#### 2.5.10 k_acodec_reset
+#### k_acodec_reset
 
 - 【描述】
 
@@ -2260,23 +2260,23 @@ int ioctl (int fd, k_acodec_reset, ...);
 
 无
 
-### 2.6 音频编码MAPI
+### 音频编码MAPI
 
 音频编码功能模块提供以下 MAPI：
 
-- [kd_mapi_aenc_init](#261-kd_mapi_aenc_init)：初始化编码通道
-- [kd_mapi_aenc_deinit](#262-kd_mapi_aenc_deinit)：去初始化编码通道。
-- [kd_mapi_aenc_start](#263-kd_mapi_aenc_start)：启动编码通道。
-- [kd_mapi_aenc_stop](#264-kd_mapi_aenc_stop)：停止编码通道。
-- [kd_mapi_aenc_registercallback](#265-kd_mapi_aenc_registercallback)：注册编码回调函数。
-- [kd_mapi_aenc_unregistercallback](#266-kd_mapi_aenc_unregistercallback)：解注册编码回调函数。
-- [kd_mapi_aenc_bind_ai](#267-kd_mapi_aenc_bind_ai)：绑定 ai。
-- [kd_mapi_aenc_unbind_ai](#268-kd_mapi_aenc_unbind_ai)：解绑定 ai。
-- [kd_mapi_register_ext_audio_encoder](#269-kd_mapi_register_ext_audio_encoder)：注册外部音频编码器。
-- [kd_mapi_unregister_ext_audio_encoder](#2610-kd_mapi_unregister_ext_audio_encoder)：解注册外部音频编码器。
-- [kd_mapi_aenc_send_frame](#2611-kd_mapi_aenc_send_frame)：发送音频编码音频帧。
+- [kd_mapi_aenc_init](#kd_mapi_aenc_init)：初始化编码通道
+- [kd_mapi_aenc_deinit](#kd_mapi_aenc_deinit)：去初始化编码通道。
+- [kd_mapi_aenc_start](#kd_mapi_aenc_start)：启动编码通道。
+- [kd_mapi_aenc_stop](#kd_mapi_aenc_stop)：停止编码通道。
+- [kd_mapi_aenc_registercallback](#kd_mapi_aenc_registercallback)：注册编码回调函数。
+- [kd_mapi_aenc_unregistercallback](#kd_mapi_aenc_unregistercallback)：解注册编码回调函数。
+- [kd_mapi_aenc_bind_ai](#kd_mapi_aenc_bind_ai)：绑定 ai。
+- [kd_mapi_aenc_unbind_ai](#kd_mapi_aenc_unbind_ai)：解绑定 ai。
+- [kd_mapi_register_ext_audio_encoder](#kd_mapi_register_ext_audio_encoder)：注册外部音频编码器。
+- [kd_mapi_unregister_ext_audio_encoder](#kd_mapi_unregister_ext_audio_encoder)：解注册外部音频编码器。
+- [kd_mapi_aenc_send_frame](#kd_mapi_aenc_send_frame)：发送音频编码音频帧。
 
-#### 2.6.1 kd_mapi_aenc_init
+#### kd_mapi_aenc_init
 
 - 【描述】
 
@@ -2284,9 +2284,9 @@ int ioctl (int fd, k_acodec_reset, ...);
 
 - 【语法】
 
-kd_mapi_aenc_init([k_handle](#331-k_handle) aenc_hdl,const [k_aenc_chn_attr](#323-k_aenc_chn_attr) \*attr);
+kd_mapi_aenc_init([k_handle](#k_handle) aenc_hdl,const [k_aenc_chn_attr](#k_aenc_chn_attr) \*attr);
 
-#### 2.6.2 kd_mapi_aenc_deinit
+#### kd_mapi_aenc_deinit
 
 - 【描述】
 
@@ -2294,9 +2294,9 @@ kd_mapi_aenc_init([k_handle](#331-k_handle) aenc_hdl,const [k_aenc_chn_attr](#32
 
 - 【语法】
 
-kd_mapi_aenc_deinit([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_deinit([k_handle](#k_handle) aenc_hdl);
 
-#### 2.6.3 kd_mapi_aenc_start
+#### kd_mapi_aenc_start
 
 - 【描述】
 
@@ -2304,9 +2304,9 @@ kd_mapi_aenc_deinit([k_handle](#331-k_handle) aenc_hdl);
 
 - 【语法】
 
-kd_mapi_aenc_start([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_start([k_handle](#k_handle) aenc_hdl);
 
-#### 2.6.4 kd_mapi_aenc_stop
+#### kd_mapi_aenc_stop
 
 - 【描述】
 
@@ -2314,19 +2314,9 @@ kd_mapi_aenc_start([k_handle](#331-k_handle) aenc_hdl);
 
 - 【语法】
 
-kd_mapi_aenc_stop([k_handle](#331-k_handle) aenc_hdl);
+kd_mapi_aenc_stop([k_handle](#k_handle) aenc_hdl);
 
-#### 2.6.5 kd_mapi_aenc_registercallback
-
-- 【描述】
-
-注册编码回调函数。
-
-- 【语法】
-
-k_s32 kd_mapi_aenc_registercallback([k_handle](#331-k_handle) aenc_hdl,k_aenc_callback_s \*aenc_cb);
-
-#### 2.6.6 kd_mapi_aenc_unregistercallback
+#### kd_mapi_aenc_registercallback
 
 - 【描述】
 
@@ -2334,9 +2324,19 @@ k_s32 kd_mapi_aenc_registercallback([k_handle](#331-k_handle) aenc_hdl,k_aenc_ca
 
 - 【语法】
 
-k_s32 kd_mapi_aenc_unregistercallback([k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_registercallback([k_handle](#k_handle) aenc_hdl,k_aenc_callback_s \*aenc_cb);
 
-#### 2.6.7 kd_mapi_aenc_bind_ai
+#### kd_mapi_aenc_unregistercallback
+
+- 【描述】
+
+注册编码回调函数。
+
+- 【语法】
+
+k_s32 kd_mapi_aenc_unregistercallback([k_handle](#k_handle) aenc_hdl);
+
+#### kd_mapi_aenc_bind_ai
 
 - 【描述】
 
@@ -2344,9 +2344,9 @@ k_s32 kd_mapi_aenc_unregistercallback([k_handle](#331-k_handle) aenc_hdl);
 
 - 【语法】
 
-k_s32 kd_mapi_aenc_bind_ai([k_handle](#331-k_handle) ai_hdl,[k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_bind_ai([k_handle](#k_handle) ai_hdl,[k_handle](#k_handle) aenc_hdl);
 
-#### 2.6.8 kd_mapi_aenc_unbind_ai
+#### kd_mapi_aenc_unbind_ai
 
 - 【描述】
 
@@ -2354,9 +2354,9 @@ k_s32 kd_mapi_aenc_bind_ai([k_handle](#331-k_handle) ai_hdl,[k_handle](#331-k_ha
 
 - 【语法】
 
-k_s32 kd_mapi_aenc_unbind_ai([k_handle](#331-k_handle) ai_hdl,[k_handle](#331-k_handle) aenc_hdl);
+k_s32 kd_mapi_aenc_unbind_ai([k_handle](#k_handle) ai_hdl,[k_handle](#k_handle) aenc_hdl);
 
-#### 2.6.9 kd_mapi_register_ext_audio_encoder
+#### kd_mapi_register_ext_audio_encoder
 
 - 【描述】
 
@@ -2364,9 +2364,9 @@ k_s32 kd_mapi_aenc_unbind_ai([k_handle](#331-k_handle) ai_hdl,[k_handle](#331-k_
 
 - 【语法】
 
-k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#322-k_aenc_encoder) \*encoder,[k_handle](#331-k_handle) \* aencoder_hdl)；
+k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#k_aenc_encoder) \*encoder,[k_handle](#k_handle) \* aencoder_hdl)；
 
-#### 2.6.10 kd_mapi_unregister_ext_audio_encoder
+#### kd_mapi_unregister_ext_audio_encoder
 
 - 【描述】
 
@@ -2374,9 +2374,9 @@ k_s32 kd_mapi_register_ext_audio_encoder(const [k_aenc_encoder](#322-k_aenc_enco
 
 - 【语法】
 
-k_s32 kd_mapi_unregister_ext_audio_encoder( [k_handle](#331-k_handle) aencoder_hdl);
+k_s32 kd_mapi_unregister_ext_audio_encoder( [k_handle](#k_handle) aencoder_hdl);
 
-#### 2.6.11 kd_mapi_aenc_send_frame
+#### kd_mapi_aenc_send_frame
 
 - 【描述】
 
@@ -2384,25 +2384,25 @@ k_s32 kd_mapi_unregister_ext_audio_encoder( [k_handle](#331-k_handle) aencoder_h
 
 - 【语法】
 
-k_s32 kd_mapi_aenc_send_frame([k_handle](#331-k_handle) ai_hdl,const [k_audio_frame](#3114-k_audio_frame) \*frame);
+k_s32 kd_mapi_aenc_send_frame([k_handle](#k_handle) ai_hdl,const [k_audio_frame](#k_audio_frame) \*frame);
 
-### 2.7 音频解码MAPI
+### 音频解码MAPI
 
 音频解码功能模块提供以下 MAPI：
 
-- [kd_mapi_adec_init](#261-kd_mapi_aenc_init)：初始化解码通道
-- [kd_mapi_adec_deinit](#271-kd_mapi_adec_init)：去初始化解码通道。
-- [kd_mapi_adec_start](#273-kd_mapi_adec_start)：启动解码通道。
-- [kd_mapi_adec_stop](#274-kd_mapi_adec_stop)：停止解码通道。
-- [kd_mapi_adec_registercallback](#275-kd_mapi_adec_registercallback)：注册解码回调函数。
-- [kd_mapi_adec_unregistercallback](#276-kd_mapi_adec_unregistercallback)：解注册解码回调函数。
-- [kd_mapi_adec_bind_ao](#277-kd_mapi_adec_bind_ao)：绑定 ao。
-- [kd_mapi_adec_unbind_ao](#278-kd_mapi_adec_unbind_ao)：解绑定 ao。
-- [kd_mapi_register_ext_audio_decoder](#279-kd_mapi_register_ext_audio_decoder)：注册外部音频解码器。
-- [kd_mapi_unregister_ext_audio_decoder](#2710-kd_mapi_unregister_ext_audio_decoder)：解注册外部音频解码器。
-- [kd_mapi_adec_send_stream](#2711-kd_mapi_adec_send_stream)：发送音频解码音频帧。
+- [kd_mapi_adec_init](#kd_mapi_aenc_init)：初始化解码通道
+- [kd_mapi_adec_deinit](#kd_mapi_adec_init)：去初始化解码通道。
+- [kd_mapi_adec_start](#kd_mapi_adec_start)：启动解码通道。
+- [kd_mapi_adec_stop](#kd_mapi_adec_stop)：停止解码通道。
+- [kd_mapi_adec_registercallback](#kd_mapi_adec_registercallback)：注册解码回调函数。
+- [kd_mapi_adec_unregistercallback](#kd_mapi_adec_unregistercallback)：解注册解码回调函数。
+- [kd_mapi_adec_bind_ao](#kd_mapi_adec_bind_ao)：绑定 ao。
+- [kd_mapi_adec_unbind_ao](#kd_mapi_adec_unbind_ao)：解绑定 ao。
+- [kd_mapi_register_ext_audio_decoder](#kd_mapi_register_ext_audio_decoder)：注册外部音频解码器。
+- [kd_mapi_unregister_ext_audio_decoder](#kd_mapi_unregister_ext_audio_decoder)：解注册外部音频解码器。
+- [kd_mapi_adec_send_stream](#kd_mapi_adec_send_stream)：发送音频解码音频帧。
 
-#### 2.7.1 kd_mapi_adec_init
+#### kd_mapi_adec_init
 
 - 【描述】
 
@@ -2410,9 +2410,9 @@ k_s32 kd_mapi_aenc_send_frame([k_handle](#331-k_handle) ai_hdl,const [k_audio_fr
 
 - 【语法】
 
-kd_mapi_adec_init([k_handle](#331-k_handle) adec_hdl,const [k_adec_chn_attr](#323-k_aenc_chn_attr) \*attr);
+kd_mapi_adec_init([k_handle](#k_handle) adec_hdl,const [k_adec_chn_attr](#k_aenc_chn_attr) \*attr);
 
-#### 2.7.2 kd_mapi_adec_deinit
+#### kd_mapi_adec_deinit
 
 - 【描述】
 
@@ -2420,9 +2420,9 @@ kd_mapi_adec_init([k_handle](#331-k_handle) adec_hdl,const [k_adec_chn_attr](#32
 
 - 【语法】
 
-kd_mapi_adec_deinit([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_deinit([k_handle](#k_handle) adec_hdl);
 
-#### 2.7.3 kd_mapi_adec_start
+#### kd_mapi_adec_start
 
 - 【描述】
 
@@ -2430,9 +2430,9 @@ kd_mapi_adec_deinit([k_handle](#331-k_handle) adec_hdl);
 
 - 【语法】
 
-kd_mapi_adec_start([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_start([k_handle](#k_handle) adec_hdl);
 
-#### 2.7.4 kd_mapi_adec_stop
+#### kd_mapi_adec_stop
 
 - 【描述】
 
@@ -2440,19 +2440,9 @@ kd_mapi_adec_start([k_handle](#331-k_handle) adec_hdl);
 
 - 【语法】
 
-kd_mapi_adec_stop([k_handle](#331-k_handle) adec_hdl);
+kd_mapi_adec_stop([k_handle](#k_handle) adec_hdl);
 
-#### 2.7.5 kd_mapi_adec_registercallback
-
-- 【描述】
-
-注册解码回调函数。
-
-- 【语法】
-
-k_s32 kd_mapi_adec_registercallback([k_handle](#331-k_handle) adec_hdl,k_adec_callback_s \*adec_cb);
-
-#### 2.7.6 kd_mapi_adec_unregistercallback
+#### kd_mapi_adec_registercallback
 
 - 【描述】
 
@@ -2460,9 +2450,19 @@ k_s32 kd_mapi_adec_registercallback([k_handle](#331-k_handle) adec_hdl,k_adec_ca
 
 - 【语法】
 
-k_s32 kd_mapi_adec_unregistercallback([k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_registercallback([k_handle](#k_handle) adec_hdl,k_adec_callback_s \*adec_cb);
 
-#### 2.7.7 kd_mapi_adec_bind_ao
+#### kd_mapi_adec_unregistercallback
+
+- 【描述】
+
+注册解码回调函数。
+
+- 【语法】
+
+k_s32 kd_mapi_adec_unregistercallback([k_handle](#k_handle) adec_hdl);
+
+#### kd_mapi_adec_bind_ao
 
 - 【描述】
 
@@ -2470,9 +2470,9 @@ k_s32 kd_mapi_adec_unregistercallback([k_handle](#331-k_handle) adec_hdl);
 
 - 【语法】
 
-k_s32 kd_mapi_adec_bind_ao([k_handle](#331-k_handle) ao_hdl,[k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_bind_ao([k_handle](#k_handle) ao_hdl,[k_handle](#k_handle) adec_hdl);
 
-#### 2.7.8 kd_mapi_adec_unbind_ao
+#### kd_mapi_adec_unbind_ao
 
 - 【描述】
 
@@ -2480,9 +2480,9 @@ k_s32 kd_mapi_adec_bind_ao([k_handle](#331-k_handle) ao_hdl,[k_handle](#331-k_ha
 
 - 【语法】
 
-k_s32 kd_mapi_adec_unbind_ao([k_handle](#331-k_handle) ao_hdl,[k_handle](#331-k_handle) adec_hdl);
+k_s32 kd_mapi_adec_unbind_ao([k_handle](#k_handle) ao_hdl,[k_handle](#k_handle) adec_hdl);
 
-#### 2.7.9 kd_mapi_register_ext_audio_decoder
+#### kd_mapi_register_ext_audio_decoder
 
 - 【描述】
 
@@ -2490,9 +2490,9 @@ k_s32 kd_mapi_adec_unbind_ao([k_handle](#331-k_handle) ao_hdl,[k_handle](#331-k_
 
 - 【语法】
 
-k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#329-k_adec_decoder) \*decoder,[k_handle](#331-k_handle) \* adecoder_hdl)；
+k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#k_adec_decoder) \*decoder,[k_handle](#k_handle) \* adecoder_hdl)；
 
-#### 2.7.10 kd_mapi_unregister_ext_audio_decoder
+#### kd_mapi_unregister_ext_audio_decoder
 
 - 【描述】
 
@@ -2500,9 +2500,9 @@ k_s32 kd_mapi_register_ext_audio_decoder(const [k_adec_decoder](#329-k_adec_deco
 
 - 【语法】
 
-k_s32 kd_mapi_unregister_ext_audio_decoder( [k_handle](#331-k_handle) adecoder_hdl);
+k_s32 kd_mapi_unregister_ext_audio_decoder( [k_handle](#k_handle) adecoder_hdl);
 
-#### 2.7.11 kd_mapi_adec_send_stream
+#### kd_mapi_adec_send_stream
 
 - 【描述】
 
@@ -2510,31 +2510,31 @@ k_s32 kd_mapi_unregister_ext_audio_decoder( [k_handle](#331-k_handle) adecoder_h
 
 - 【语法】
 
-k_s32 kd_mapi_adec_send_stream([k_handle](#331-k_handle) ai_hdl,const [k_audio_stream](#327-k_audio_stream) \*stream)；
+k_s32 kd_mapi_adec_send_stream([k_handle](#k_handle) ai_hdl,const [k_audio_stream](#k_audio_stream) \*stream)；
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 音频输入输出
+### 音频输入输出
 
 音频输入输出相关数据类型、数据结构定义如下：
 
-- [k_audio_type](#311-k_audio_type):定义音频输入输出类型。
-- [k_audio_dev](#312-k_audio_dev)：定义音频设备。
-- [k_ai_chn](#313-k_ai_chn)：定义ai通道。
-- [k_ao_chn](#314-k_ao_chn)：定义ao通道。
-- [K_MAX_AUDIO_FRAME_NUM](#315-k_max_audio_frame_num)：定义最大音频解码缓存帧数。
-- [k_audio_bit_width](#316-k_audio_bit_width)：定义音频采样精度。
-- [k_audio_snd_mode](#317-k_audio_snd_mode)：定义音频声道模式。
-- [k_audio_pdm_oversample](#318-k_audio_pdm_oversample):定义pdm过采样。
-- [k_aio_dev_attr](#3112-k_aio_dev_attr):定义音频输入输出设备属性结构体。
-- [k_audio_pdm_attr](#319-k_audio_pdm_attr):定义pdm音频输入属性。
-- [k_i2s_work_mode](#3111-k_i2s_work_mode):定义i2s工作模式。
-- [k_audio_i2s_attr](#3110-k_audio_i2s_attr):定义i2s音频输入属性。
-- [k_aio_i2s_type](#3113-k_aio_i2s_type):定义i2s对接设备类型。
-- [k_audio_frame](#3114-k_audio_frame):定义音频帧结构体。
-- [k_ai_vqe_enable](#3115-k_ai_vqe_enable)：定义音频输入声音质量增强配置信息结构体。
+- [k_audio_type](#k_audio_type):定义音频输入输出类型。
+- [k_audio_dev](#k_audio_dev)：定义音频设备。
+- [k_ai_chn](#k_ai_chn)：定义ai通道。
+- [k_ao_chn](#k_ao_chn)：定义ao通道。
+- [K_MAX_AUDIO_FRAME_NUM](#k_max_audio_frame_num)：定义最大音频解码缓存帧数。
+- [k_audio_bit_width](#k_audio_bit_width)：定义音频采样精度。
+- [k_audio_snd_mode](#k_audio_snd_mode)：定义音频声道模式。
+- [k_audio_pdm_oversample](#k_audio_pdm_oversample):定义pdm过采样。
+- [k_aio_dev_attr](#k_aio_dev_attr):定义音频输入输出设备属性结构体。
+- [k_audio_pdm_attr](#k_audio_pdm_attr):定义pdm音频输入属性。
+- [k_i2s_work_mode](#k_i2s_work_mode):定义i2s工作模式。
+- [k_audio_i2s_attr](#k_audio_i2s_attr):定义i2s音频输入属性。
+- [k_aio_i2s_type](#k_aio_i2s_type):定义i2s对接设备类型。
+- [k_audio_frame](#k_audio_frame):定义音频帧结构体。
+- [k_ai_vqe_enable](#k_ai_vqe_enable)：定义音频输入声音质量增强配置信息结构体。
 
-#### 3.1.1 k_audio_type
+#### k_audio_type
 
 【说明】
 
@@ -2558,7 +2558,7 @@ KD_AUDIO_OUTPUT_TYPE_I2S = 2,//i2s out
 
 无
 
-#### 3.1.2 k_audio_dev
+#### k_audio_dev
 
 【说明】
 
@@ -2574,7 +2574,7 @@ ai模块，k_audio_dev取值为0和1，其中0为i2s音频输入，1为pdm音频
 
 ao模块，k_audio_dev取值固定为0，即i2s音频输出。
 
-#### 3.1.3 k_ai_chn
+#### k_ai_chn
 
 【说明】
 
@@ -2590,7 +2590,7 @@ I2s音频输入，共有2组，取值范围为`[0,1]`。
 
 pdm音频输入，共有4组，取值范围为`[0,3]`。
 
-#### 3.1.4 k_ao_chn
+#### k_ao_chn
 
 【说明】
 
@@ -2604,7 +2604,7 @@ pdm音频输入，共有4组，取值范围为`[0,3]`。
 
 I2s音频输出，共有2组，取值范围为`[0,1]`。
 
-#### 3.1.5 K_MAX_AUDIO_FRAME_NUM
+#### K_MAX_AUDIO_FRAME_NUM
 
 【说明】
 
@@ -2614,7 +2614,7 @@ I2s音频输出，共有2组，取值范围为`[0,1]`。
 
 \#define K_MAX_AUDIO_FRAME_NUM 50
 
-#### 3.1.6 k_audio_bit_width
+#### k_audio_bit_width
 
 【说明】
 
@@ -2638,7 +2638,7 @@ KD_AUDIO_BIT_WIDTH_32 = 2, /* 32bit width */
 
 无
 
-#### 3.1.7 k_audio_snd_mode
+#### k_audio_snd_mode
 
 【说明】
 
@@ -2653,7 +2653,7 @@ KD_AUDIO_SOUND_MODE_STEREO = 1, /* stereo */
 } k_audio_snd_mode;
 ```
 
-#### 3.1.8 k_audio_pdm_oversample
+#### k_audio_pdm_oversample
 
 【说明】
 
@@ -2670,7 +2670,7 @@ KD_AUDIO_PDM_INPUT_OVERSAMPLE_128 ,
 } k_audio_pdm_oversample;
 ```
 
-#### 3.1.9 k_audio_pdm_attr
+#### k_audio_pdm_attr
 
 【说明】
 
@@ -2710,7 +2710,7 @@ k_u32 point_num_per_frame;
 
 无
 
-#### 3.1.10 k_audio_i2s_attr
+#### k_audio_i2s_attr
 
 【说明】
 
@@ -2761,7 +2761,7 @@ k_aio_i2s_type type;
 
 无
 
-#### 3.1.11 k_i2s_work_mode
+#### k_i2s_work_mode
 
 【说明】
 
@@ -2786,7 +2786,7 @@ K_LEFT_JUSTIFYING_MODE = 4
 
 无
 
-#### 3.1.12 k_aio_dev_attr
+#### k_aio_dev_attr
 
 【说明】
 
@@ -2820,7 +2820,7 @@ k_audio_i2s_attr i2s_attr;
 
 无
 
-#### 3.1.13 k_aio_i2s_type
+#### k_aio_i2s_type
 
 【说明】
 
@@ -2844,7 +2844,7 @@ K_AIO_I2STYPE_EXTERN,/* AIO I2S connect extern hardware */
 
 无
 
-#### 3.1.14 k_audio_frame
+#### k_audio_frame
 
 【说明】
 
@@ -2886,7 +2886,7 @@ k_u32 pool_id;
 
 无
 
-#### 3.1.15 k_ai_vqe_enable
+#### k_ai_vqe_enable
 
 【说明】
 
@@ -2919,7 +2919,7 @@ typedef struct
 
 无
 
-#### 3.1.16 k_i2s_in_mono_channel
+#### k_i2s_in_mono_channel
 
 【说明】
 
@@ -2935,33 +2935,33 @@ typedef enum
 } k_i2s_in_mono_channel;
 ```
 
-### 3.2 音频编解码
+### 音频编解码
 
 音频编解码相关数据类型、数据结构定义如下：
 
-[k_payload_type](#321-k_payload_type)
+[k_payload_type](#k_payload_type)
 
-[k_aenc_encoder](#322-k_aenc_encoder)
+[k_aenc_encoder](#k_aenc_encoder)
 
-[k_aenc_chn_attr](#323-k_aenc_chn_attr)
+[k_aenc_chn_attr](#k_aenc_chn_attr)
 
-[AENC_MAX_CHN_NUMS](#324-aenc_max_chn_nums)
+[AENC_MAX_CHN_NUMS](#aenc_max_chn_nums)
 
-[K_MAX_ENCODER_NAME_LEN](#325-k_max_encoder_name_len)
+[K_MAX_ENCODER_NAME_LEN](#k_max_encoder_name_len)
 
-[k_aenc_chn](#326-k_aenc_chn)
+[k_aenc_chn](#k_aenc_chn)
 
-[k_audio_stream](#327-k_audio_stream)
+[k_audio_stream](#k_audio_stream)
 
-[k_adec_chn_attr](#328-k_adec_chn_attr)
+[k_adec_chn_attr](#k_adec_chn_attr)
 
-[k_adec_decoder](#329-k_adec_decoder)
+[k_adec_decoder](#k_adec_decoder)
 
-[K_MAX_DECODER_NAME_LEN](#3210-k_max_decoder_name_len)
+[K_MAX_DECODER_NAME_LEN](#k_max_decoder_name_len)
 
-[ADEC_MAX_CHN_NUMS](#3211-adec_max_chn_nums)
+[ADEC_MAX_CHN_NUMS](#adec_max_chn_nums)
 
-#### 3.2.1 k_payload_type
+#### k_payload_type
 
 【说明】
 
@@ -3061,7 +3061,7 @@ K_PT_BUTT
 
 无
 
-#### 3.2.2 k_aenc_encoder
+#### k_aenc_encoder
 
 【说明】
 
@@ -3099,7 +3099,7 @@ k_s32 (*func_close_encoder)(void *encoder);
 
 无
 
-#### 3.2.3 k_aenc_chn_attr
+#### k_aenc_chn_attr
 
 【说明】
 
@@ -3131,7 +3131,7 @@ k_u32 buf_size; // buf size[2,K_MAX_AUDIO_FRAME_NUM]
 
 无
 
-#### 3.2.4 AENC_MAX_CHN_NUMS
+#### AENC_MAX_CHN_NUMS
 
 【说明】
 
@@ -3149,7 +3149,7 @@ k_u32 buf_size; // buf size[2,K_MAX_AUDIO_FRAME_NUM]
 
 无
 
-#### 3.2.5 K_MAX_ENCODER_NAME_LEN
+#### K_MAX_ENCODER_NAME_LEN
 
 【说明】
 
@@ -3167,7 +3167,7 @@ k_u32 buf_size; // buf size[2,K_MAX_AUDIO_FRAME_NUM]
 
 无
 
-#### 3.2.6 k_aenc_chn
+#### k_aenc_chn
 
 【说明】
 
@@ -3185,7 +3185,7 @@ typedef k_u32 k_aenc_chn;
 
 无
 
-#### 3.2.7 k_audio_stream
+#### k_audio_stream
 
 【说明】
 
@@ -3221,7 +3221,7 @@ k_u32 seq; /* frame seq, if stream is not a valid frame,seq is 0 */
 
 无
 
-#### 3.2.8 k_adec_chn_attr
+#### k_adec_chn_attr
 
 【说明】
 
@@ -3255,7 +3255,7 @@ k_u32 buf_size; /* buf size[2~K_MAX_AUDIO_FRAME_NUM] */
 
 无
 
-#### 3.2.9 k_adec_decoder
+#### k_adec_decoder
 
 【说明】
 
@@ -3294,7 +3294,7 @@ k_s32 (*func_reset_decoder)(void *decoder);
 
 无
 
-#### 3.2.10 K_MAX_DECODER_NAME_LEN
+#### K_MAX_DECODER_NAME_LEN
 
 【说明】
 
@@ -3312,7 +3312,7 @@ k_s32 (*func_reset_decoder)(void *decoder);
 
 无
 
-#### 3.2.11 ADEC_MAX_CHN_NUMS
+#### ADEC_MAX_CHN_NUMS
 
 【说明】
 
@@ -3330,7 +3330,7 @@ k_s32 (*func_reset_decoder)(void *decoder);
 
 无
 
-#### 3.2.12 k_adec_chn
+#### k_adec_chn
 
 【说明】
 
@@ -3348,13 +3348,13 @@ typedef k_u32 k_adec_chn;
 
 无
 
-### 3.3 MAPI
+### MAPI
 
 音频mapi相关数据类型、数据结构定义如下
 
-[k_handle](#331-k_handle)
+[k_handle](#k_handle)
 
-#### 3.3.1 k_handle
+#### k_handle
 
 【说明】
 
@@ -3368,9 +3368,9 @@ typedef k_u32 k_handle;
 
 无
 
-## 4. 错误码
+## 错误码
 
-### 4.1 音频输入API 错误码
+### 音频输入API 错误码
 
 | 错误代码 | 宏定义                 | 描述                        |
 |----------|------------------------|-----------------------------|
@@ -3389,7 +3389,7 @@ typedef k_u32 k_handle;
 |0xA015800D| K_ERR_AI_NOT_READY     | 音频输入系统未初始化        |
 |0xA015800E| K_ERR_AI_BUSY          | 音频输入系统忙              |
 
-### 4.2 音频输出API 错误码
+### 音频输出API 错误码
 
 | 错误代码 | 宏定义                  | 描述                      |
 |----------|-------------------------|---------------------------|

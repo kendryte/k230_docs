@@ -50,7 +50,7 @@
 | ---------- | -------- | ------ | --------- |
 | V1.0       | 文档初版 | 张扬   | 2023/6/25 |
 
-## 1. 概述
+## 概述
 
 HHB程序在k230 rtt上部署运行， 需要如下步骤
 
@@ -58,7 +58,7 @@ HHB程序在k230 rtt上部署运行， 需要如下步骤
 - 使用k230 rtt交叉编译工具链编译c代码
 - 上板运行可执行程序
 
-### 1.1 HHB
+### HHB
 
 HHB （Heterogeneous Honey Badger） 是 T-Head 提供的一套针对玄铁芯片平台的神经网络模型部署工具集。包括了编译优化，性能分析，过程调试，结果模拟等一系列部署时所需的工具。
 
@@ -81,7 +81,7 @@ HHB 以开源项目 [TVM](https://github.com/apache/tvm) 为基础架构，添�
 
 详细使用方法可参考[HHB用户手册](https://www.yuque.com/za4k4z/oxlbxl)
 
-### 1.2 SHL
+### SHL
 
 SHL 是 T-HEAD 提供的一组针对玄铁 CPU 平台的神经网络库 API。抽象了各种常用的网络层的接口，并且提供一系列已优化的二进制库。
 
@@ -100,9 +100,9 @@ SHL 提供了完成的接口声明和接口的参考实现，各个设备提供�
 
 详细使用方法可参考[SHL用户手册](https://www.yuque.com/za4k4z/isgz8o/ayilv9)
 
-## 2. HHB编译模型
+## HHB编译模型
 
-### 2.1 环境搭建
+### 环境搭建
 
 > 前置条件: 本地PC已安装docker
 
@@ -117,7 +117,7 @@ SHL 提供了完成的接口声明和接口的参考实现，各个设备提供�
   ./start_hhb.sh
   ```
 
-### 2.2 编译模型
+### 编译模型
 
 目前这个版本docker image没有集成c908模型编译， 这里拷贝c906并修改相关配置。
 
@@ -216,9 +216,9 @@ drwxr-xr-x 5 root root    4096 Jun 21 09:02 ../
 root@02297217e66d:/home/example/c908/onnx_mobilenetv2# cp -a hhb_out/ /mnt/
 ```
 
-## 3. Demo
+## Demo
 
-### 3.1 环境搭建
+### 环境搭建
 
 > 前置条件: 用户已按照 k230_sdk文档编译了docker image
 
@@ -229,7 +229,7 @@ cd /path/to/k230_sdk
 docker run -u root -it -v $(pwd):$(pwd) -v $(pwd)/toolchain:/opt/toolchain -w $(pwd) k230_docker /bin/bash
 ```
 
-### 3.2 编译demo
+### 编译demo
 
 我们在k230_sdk中提供了HHB的demo, 用户只需将HHB编译的c代码拷贝过来即可编译出上板运行的可执行程序。
 
@@ -271,7 +271,7 @@ total 5560
 -rw-r--r--    1 sshd     sshd        602112 Jun 25  2023 persian_cat.jpg.0.bin
 ```
 
-### 3.3 运行demo
+### 运行demo
 
 - 启动k230,  在大核rtt串口下， 执行如下命令
 

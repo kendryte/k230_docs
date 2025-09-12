@@ -52,15 +52,15 @@
 | V1.0       | 初版 | 龙轶珞 | 2024.02.02  |
 | V1.1       | 增加功能描述和修订错误 | 龙轶珞 | 2024.07.01 |
 
-## 1. 概述
+## 概述
 
-### 1.1 概述
+### 概述
 
 nonai 2D硬件能实现OSD，画框和CSC功能，本文仅仅描述CSC功能，OSD和画框功能暂未在本文API中实现，后续如有需求可以增加。
 
 VENC模块借助nonai 2D硬件实现了在编码图像上叠加OSD和画框，仅限于编码图像不能单独使用，见《K230_视频编解码_API参考》的1.2.1.4和2.1.14 ~ 2.1.29等章节。
 
-### 1.2 功能描述
+### 功能描述
 
 实现RGB和YUV的相互转换，作为mpp的一个模块，可参与系统绑定功能，在不绑定的情况下可以做单帧处理。
 
@@ -101,17 +101,17 @@ kd_mpi_nonai_2d_stop_chn(ch);
 kd_mpi_nonai_2d_destroy_chn(ch);
 ```
 
-## 2. API参考
+## API参考
 
-- [kd_mpi_nonai_2d_create_chn](#21-kd_mpi_nonai_2d_create_chn)
-- [kd_mpi_nonai_2d_destroy_chn](#22-kd_mpi_nonai_2d_destory_chn)
-- [kd_mpi_nonai_2d_start_chn](#23-kd_mpi_nonai_2d_start_chn)
-- [kd_mpi_nonai_2d_stop_chn](#24-kd_mpi_nonai_2d_stop_chn)
-- [kd_mpi_nonai_2d_get_frame](#25-kd_mpi_nonai_2d_get_frame)
-- [kd_mpi_nonai_2d_release_frame](#26-kd_mpi_nonai_2d_release_frame)
-- [kd_mpi_nonai_2d_send_frame](#27-kd_mpi_nonai_2d_send_frame)
+- [kd_mpi_nonai_2d_create_chn](#kd_mpi_nonai_2d_create_chn)
+- [kd_mpi_nonai_2d_destroy_chn](#kd_mpi_nonai_2d_destory_chn)
+- [kd_mpi_nonai_2d_start_chn](#kd_mpi_nonai_2d_start_chn)
+- [kd_mpi_nonai_2d_stop_chn](#kd_mpi_nonai_2d_stop_chn)
+- [kd_mpi_nonai_2d_get_frame](#kd_mpi_nonai_2d_get_frame)
+- [kd_mpi_nonai_2d_release_frame](#kd_mpi_nonai_2d_release_frame)
+- [kd_mpi_nonai_2d_send_frame](#kd_mpi_nonai_2d_send_frame)
 
-### 2.1 kd_mpi_nonai_2d_create_chn
+### kd_mpi_nonai_2d_create_chn
 
 【描述】
 
@@ -135,7 +135,7 @@ k_s32 kd_mpi_nonai_2d_create_chn(k_u32 chn_num, const k_nonai_2d_chn_attr *attr)
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -158,7 +158,7 @@ k_s32 kd_mpi_nonai_2d_create_chn(k_u32 chn_num, const k_nonai_2d_chn_attr *attr)
 
 无。
 
-### 2.2 kd_mpi_nonai_2d_destory_chn
+### kd_mpi_nonai_2d_destory_chn
 
 【描述】
 
@@ -181,7 +181,7 @@ k_s32 kd_mpi_nonai_2d_destory_chn(k_u32 chn_num);
 | 返回值 | 描述                          |
 |---|---|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -204,7 +204,7 @@ k_s32 kd_mpi_nonai_2d_destory_chn(k_u32 chn_num);
 
 无。
 
-### 2.3 kd_mpi_nonai_2d_start_chn
+### kd_mpi_nonai_2d_start_chn
 
 【描述】
 
@@ -227,7 +227,7 @@ k_s32 kd_mpi_nonai_2d_start_chn(k_u32 chn_num);
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -252,7 +252,7 @@ k_s32 kd_mpi_nonai_2d_start_chn(k_u32 chn_num);
 
 无。
 
-### 2.4 kd_mpi_nonai_2d_stop_chn
+### kd_mpi_nonai_2d_stop_chn
 
 【描述】
 
@@ -275,7 +275,7 @@ k_s32 kd_mpi_nonai_2d_stop_chn(k_u32 chn_num);
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -301,7 +301,7 @@ k_s32 kd_mpi_nonai_2d_stop_chn(k_u32 chn_num);
 
 无。
 
-### 2.5 kd_mpi_nonai_2d_get_frame
+### kd_mpi_nonai_2d_get_frame
 
 【描述】
 
@@ -326,7 +326,7 @@ k_s32 kd_mpi_nonai_2d_get_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -351,7 +351,7 @@ k_s32 kd_mpi_nonai_2d_get_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32 
 
 无。
 
-### 2.6 kd_mpi_nonai_2d_release_frame
+### kd_mpi_nonai_2d_release_frame
 
 【描述】
 
@@ -375,7 +375,7 @@ k_s32 kd_mpi_nonai_2d_release_frame(k_u32 chn_num, k_video_frame_info *frame);
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -399,7 +399,7 @@ k_s32 kd_mpi_nonai_2d_release_frame(k_u32 chn_num, k_video_frame_info *frame);
 
 无。
 
-### 2.7 kd_mpi_nonai_2d_send_frame
+### kd_mpi_nonai_2d_send_frame
 
 【描述】
 
@@ -424,7 +424,7 @@ k_s32 kd_mpi_nonai_2d_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32
 | 返回值 | 描述 |
 |---|---|
 | 0      | 成功。                        |
-| 非0    | 失败，参见[错误码](#5-错误码)。 |
+| 非0    | 失败，参见[错误码](#错误码)。 |
 
 【芯片差异】
 
@@ -449,11 +449,11 @@ k_s32 kd_mpi_nonai_2d_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32
 
 无。
 
-## 3. 数据类型
+## 数据类型
 
 该功能模块的相关数据类型定义如下：
 
-### 3.1 K_NONAI_2D_MAX_CHN_NUMS
+### K_NONAI_2D_MAX_CHN_NUMS
 
 【说明】
 
@@ -473,7 +473,7 @@ k_s32 kd_mpi_nonai_2d_send_frame(k_u32 chn_num, k_video_frame_info *frame, k_s32
 
 无。
 
-### 3.2 k_nonai_2d_calc_mode
+### k_nonai_2d_calc_mode
 
 【说明】
 
@@ -506,7 +506,7 @@ typedef enum
 
 无。
 
-### 3.3 k_nonai_2d_chn_attr
+### k_nonai_2d_chn_attr
 
 【说明】
 
@@ -535,7 +535,7 @@ typedef struct
 
 无。
 
-### 3.4 k_nonai_2d_color_gamut
+### k_nonai_2d_color_gamut
 
 【说明】
 
@@ -561,18 +561,18 @@ typedef enum
 
 无。
 
-## 4. MAPI
+## MAPI
 
-### 4.1概述
+### 概述
 
 MAPI是在小核调用，用以创建nonai_2d通道。
 
-- [kd_mpi_nonai_2d_init](#42-kd_mapi_nonai_2d_init)
-- [kd_mpi_nonai_2d_deinit](#43-kd_mapi_nonai_2d_deinit)
-- [kd_mpi_nonai_2d_start](#44-kd_mapi_nonai_2d_start)
-- [kd_mpi_nonai_2d_stop](#45-kd_mapi_nonai_2d_stop)
+- [kd_mpi_nonai_2d_init](#kd_mapi_nonai_2d_init)
+- [kd_mpi_nonai_2d_deinit](#kd_mapi_nonai_2d_deinit)
+- [kd_mpi_nonai_2d_start](#kd_mapi_nonai_2d_start)
+- [kd_mpi_nonai_2d_stop](#kd_mapi_nonai_2d_stop)
 
-### 4.2 kd_mapi_nonai_2d_init
+### kd_mapi_nonai_2d_init
 
 【描述】
 
@@ -620,7 +620,7 @@ k_s32 kd_mapi_nonai_2d_init(k_u32 chn_num, k_nonai_2d_chn_attr * attr)
 
 无。
 
-### 4.3 kd_mapi_nonai_2d_deinit
+### kd_mapi_nonai_2d_deinit
 
 【描述】
 
@@ -643,7 +643,7 @@ k_s32 kd_mapi_nonai_2d_deinit(k_u32 chn_num)
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
-| 非0    | 失败，其值为[错误码](#5-错误码) |
+| 非0    | 失败，其值为[错误码](#错误码) |
 
 【芯片差异】
 
@@ -666,7 +666,7 @@ k_s32 kd_mapi_nonai_2d_deinit(k_u32 chn_num)
 
 无。
 
-### 4.4 kd_mapi_nonai_2d_start
+### kd_mapi_nonai_2d_start
 
 【描述】
 
@@ -689,7 +689,7 @@ k_s32 kd_mapi_nonai_2d_start(k_s32 chn_num);
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
-| 非0    | 失败，其值为[错误码](#5-错误码) |
+| 非0    | 失败，其值为[错误码](#错误码) |
 
 【芯片差异】
 
@@ -710,7 +710,7 @@ k_s32 kd_mapi_nonai_2d_start(k_s32 chn_num);
 
 【相关主题】
 
-### 4.5 kd_mapi_nonai_2d_stop
+### kd_mapi_nonai_2d_stop
 
 【描述】
 
@@ -733,7 +733,7 @@ k_s32 kd_mapi_nonai_2d_stop(k_s32 chn_num);
 | 返回值 | 描述                          |
 |--------|-------------------------------|
 | 0      | 成功                          |
-| 非0    | 失败，其值为[错误码](#5-错误码) |
+| 非0    | 失败，其值为[错误码](#错误码) |
 
 【芯片差异】
 
@@ -754,7 +754,7 @@ k_s32 kd_mapi_nonai_2d_stop(k_s32 chn_num);
 
 【相关主题】
 
-## 5. 错误码
+## 错误码
 
 表 41  API 错误码
 | 错误代码   | 宏定义                       | 描述                                         |
@@ -776,6 +776,6 @@ k_s32 kd_mapi_nonai_2d_stop(k_s32 chn_num);
 | 0xa0188011 | K_ERR_NONAI_2D_BADADDR       | 地址超出合法范围                             |
 | 0xa0188012 | K_ERR_NONAI_2D_BUSY          | NONAI_2D系统忙                               |
 
-## 6. 调试信息
+## 调试信息
 
 多媒体内存管理和和系统绑定调试信息，请参考《K230 系统控制 API参考》。

@@ -53,7 +53,7 @@ This document (this guide) is mainly intended for the following personnel:
 | V1.1             | Example modified to ov5647 and added section 4.4 | Zhao Zhongxiang | 2023-04-11 |
 |                  |                        |        |      |
 
-## 1. Overview
+## Overview
 
 This document mainly describes the basic framework of the K230 platform Camera Sensor and how to add support for a new Camera Sensor.
 
@@ -63,9 +63,9 @@ The K230 platform supports various types of sensor interfaces. We will explain u
 
 The main control sends configuration registers through the I2C interface to control the working mode of the sensor, and the sensor sends image data to the main control SOC through the MIPI CSI interface.
 
-## 2. Camera Sensor Framework
+## Camera Sensor Framework
 
-### 2.1 Framework Introduction
+### Framework Introduction
 
 The Camera Sensor framework is shown in Figure 2-1. The lowest layer is the sensor driver layer.
 
@@ -79,7 +79,7 @@ From top to bottom, the layers are: Media Interface Layer, Driver Layer, and Har
 - Driver Layer: This layer includes the common operation interfaces of specific sensor device drivers. The common operation interfaces mainly include ioctl operation commands and sensor I2C read-write interfaces. The sensor driver mainly provides device nodes and the implementation of operation interfaces. This part is also the main work of sensor adaptation.
 - Hardware Layer: Corresponds to each specific sensor hardware.
 
-## 3. Sensor Adaptation Preparations
+## Sensor Adaptation Preparations
 
 Before adapting a new sensor, users need to do the following preparations:
 
@@ -91,7 +91,7 @@ Before adapting a new sensor, users need to do the following preparations:
 1. Confirm whether the WDR mode is VC, DT, or DOL, etc.
 1. Confirm whether image cropping is required for different timings.
 
-## 4. Sensor Adaptation Example
+## Sensor Adaptation Example
 
 This section will provide a detailed description of the steps to add support for a new camera sensor.
 
@@ -101,7 +101,7 @@ Here, the ov5647 driver is used as an example. The corresponding driver file sou
 src/big/mpp/kernel/sensor/src/ov5647_drv.c
 ```
 
-### 4.1 Define Supported Sensor Types
+### Define Supported Sensor Types
 
 The Sensor types supported by the system are defined by the following enumeration variable:
 
@@ -169,11 +169,11 @@ typedef enum {
 
 When adding new sensor support types, users need to first add the corresponding type definition here. **This type is the only identifier for the application program to obtain sensor configuration.**
 
-### 4.2 Sensor Driver Adaptation
+### Sensor Driver Adaptation
 
 Sensor driver adaptation is the most critical part of the entire process. Users can copy existing sensor driver files for modification. The AE-related register configuration and calculation methods for the sensor need to be reviewed in the corresponding manual or seek professional assistance.
 
-#### 4.2.1 Define Sensor Register Configuration List
+#### Define Sensor Register Configuration List
 
 Sensor register configuration is defined by the data type k_sensor_reg_list:
 
@@ -202,7 +202,7 @@ static const k_sensor_reg ov5647_mipi2lane_1080p_30fps_linear[] = {
 };
 ```
 
-#### 4.2.2 Define Supported Sensor Modes
+#### Define Supported Sensor Modes
 
 Sensor mode parameters are defined by the data type k_sensor_mode:
 
@@ -242,7 +242,7 @@ static k_sensor_mode ov5647_mode_info[] = {
 }
 ```
 
-#### 4.2.3 Implement Sensor Operation Interfaces
+#### Implement Sensor Operation Interfaces
 
 The sensor operation interfaces are defined by the data type k_sensor_function. Users should implement the relevant operation interfaces according to actual conditions, although not all interfaces must be implemented.
 
@@ -312,7 +312,7 @@ The following are the supported modes for ov5647
     },
 ```
 
-#### 4.2.4 Define the sensor driver structure
+#### Define the sensor driver structure
 
 The sensor driver structure is defined by struct sensor_driver_dev, which mainly includes sensor I2C configuration information, sensor driver name, and sensor operation set.
 
@@ -351,7 +351,7 @@ struct sensor_driver_dev ov5647_sensor_drv = {
 };
 ```
 
-#### 4.2.5 Update the sensor driver list
+#### Update the sensor driver list
 
 Add the sensor driver structure defined in the previous section to the sensor_drv_list array in sensor_common.c. The currently supported sensor list in the system is as follows:
 
@@ -365,7 +365,7 @@ struct sensor_driver_dev *sensor_drv_list[SENSOR_NUM_MAX] = {
 };
 ```
 
-### 4.3 Update the sensor configuration information list
+### Update the sensor configuration information list
 
 The sensor configuration information is defined by the structure k_vicap_sensor_info:
 
@@ -414,7 +414,7 @@ const k_vicap_sensor_info sensor_info_list[] = {
 
 Each time a sensor configuration mode is added, a corresponding configuration item needs to be added to the sensor_info_list structure.
 
-### 4.4 Add sensor configuration files
+### Add sensor configuration files
 
 The current SDK version sensor configuration files include XML files and JSON files, and the file storage path is as follows:
 
@@ -430,7 +430,7 @@ ov5647.xml  ov5647_auto.json  ov5647_manual.json
 
 For newly added sensors, you can copy and modify existing files to support them. The calibration and tuning parameters can be modified and exported using related tools.
 
-### 4.5 Porting existing sensor drivers
+### Porting existing sensor drivers
 
 If re-designing the board, the sensor's reset, shutdown, CSI, and I2C may generally be modified. Still taking the ov5647 of canmv as an example.
 

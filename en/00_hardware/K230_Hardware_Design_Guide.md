@@ -68,14 +68,14 @@ This document (guide) is mainly applicable to the following personnel:
 | ---------------- | ------------------------ | -------- | ---------- |
 | V1.0             | Initial Version          | Zhao Ruixin | 2023-06-14 |
 
-## 1. Chip Overview
+## Chip Overview
 
-### 1.1 Chip Block Diagram
+### Chip Block Diagram
 
 ![Figure 1-1 K230 Block Diagram](../../zh/00_hardware/images/HDG/image002.jpg)
 Figure 1-1 K230 Block Diagram
 
-### 1.2 Application Block Diagram
+### Application Block Diagram
 
 Figure 1-2 is the K230 door lock application block diagram
 ![Figure 1-2 K230 Door Lock Solution Application Block Diagram](../../zh/00_hardware/images/HDG/image003.jpg)
@@ -84,11 +84,11 @@ Figure 1-3 is the dictionary pen solution application block diagram
 ![Figure 1-3 K230 Dictionary Pen Solution Application Block Diagram](../../zh/00_hardware/images/HDG/image004.jpg)
 Figure 1-3 K230 Dictionary Pen Solution Application Block Diagram
 
-## 2. Packaging and Pins
+## Packaging and Pins
 
-### 2.1 Packaging
+### Packaging
 
-#### 2.1.1 Information
+#### Information
 
 The packaging information of K230 is shown in Table 2-1:
 
@@ -97,7 +97,7 @@ The packaging information of K230 is shown in Table 2-1:
 | K230   | VFBGA390 | 13mm x 13mm   | 0.65  |
 | K230D  | LFBGA256 | 11mm x 11mm   | 0.65  |
 
-#### 2.1.2 Package Dimensions
+#### Package Dimensions
 
 ##### K230 Dimensions
 
@@ -127,7 +127,7 @@ Primary datum C and bottom are solder balls
 
 Dimension b is the maximum solder ball diameter, parallel to primary datum C
 
-#### 2.1.3 Pin Definition Diagram
+#### Pin Definition Diagram
 
 The pin distribution diagram of K230 is as follows:
 ![Figure 2-6 K230 Package Pin Distribution](../../zh/00_hardware/images/HDG/image010.png)
@@ -136,11 +136,11 @@ Figure 2-6 K230 Package Pin Distribution
 Figure 2-7 K230D Package Pin Distribution
 For pin details, see table [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx).
 
-## 3. Schematic Design Recommendations
+## Schematic Design Recommendations
 
-### 3.1. Minimum System Design
+### Minimum System Design
 
-#### 3.1.1 Clock Requirements
+#### Clock Requirements
 
 The main system of K230 requires a 24MHz high-speed clock, and the RTC of the PMU subsystem requires a 32.768kHz low-speed clock.
 
@@ -183,7 +183,7 @@ Note:
 
 - When using an active crystal, the NC places in the above active crystal circuits need to be connected with a 0Ω resistor.
 
-#### 3.1.2 Reset Circuit
+#### Reset Circuit
 
 The hardware reset of K230 is achieved through the RSTN pin, which is active low.
 If using a button reset, it is recommended to add a 100nF capacitor to the reset signal pin to eliminate reset signal jitter, enhance anti-interference ability, and prevent system abnormal reset caused by mis-triggering.
@@ -191,7 +191,7 @@ The reset circuit schematic is shown in Figure 3-5.
 ![Figure 3-5 K230 Reset Circuit](../../zh/00_hardware/images/HDG/image016.png)
 Figure 3-5 K230 Reset Circuit
 
-#### 3.1.3 System Boot Sequence
+#### System Boot Sequence
 
 The K230 chip provides four boot modes, which can be configured through the BOOT0 and BOOT1 pins.
 Table 3-2 shows the boot modes of K230 under different configurations.
@@ -213,7 +213,7 @@ Figure 3-6 shows the recommended BOOT circuit
 ![Figure 3-6 K230 BOOT Circuit](../../zh/00_hardware/images/HDG/image017.png)
 Figure 3-6 K230 BOOT Circuit
 
-#### 3.1.4 JTAG Debug Circuit
+#### JTAG Debug Circuit
 
 The recommended JTAG interface circuit for the K230 chip is shown in Figure 3-7.
 ![Figure 3-7 K230 JTAG Download Circuit](../../zh/00_hardware/images/HDG/image018.png)
@@ -221,7 +221,7 @@ Figure 3-7 K230 JTAG Download Circuit
 Among them, JTAG_TCK, JTAG_TDI, JTAG_TMS, and JTAG_RST are recommended to be pulled up with 10kΩ, and JTAG_TDO is left floating.
 K230 must use the CKLink series debugger provided by Pingtouge Semiconductor Co., Ltd., otherwise, the chip cannot be debugged.
 
-#### 3.1.5 DDR Controller
+#### DDR Controller
 
 The K230 chip has two versions, K230 and K230D. The K230 version requires a separate DDR circuit design. The K230D version has the DDR Die packaged together and does not require an external DDR circuit design.
 The K230 DDR controller has the following features:
@@ -301,7 +301,7 @@ When using the K230D DDR module, note:
 - The VREF voltage is 0.55V, it is recommended to use 100Ω (1%) resistors for voltage division.
 - The calibration resistor should be 240Ω (1%).
 
-#### 3.1.6 FLASH
+#### FLASH
 
 The K230 has an OSPI/QSPI controller that can be used to connect FLASH memory chips, with the following features:
 
@@ -347,7 +347,7 @@ The reference circuit for QSPI NAND is shown in Figure 3-22.
 Figure 3-22 QSPI NAND FLASH Chip Circuit
 Please place pull-up resistors according to the requirements of the FLASH chip.
 
-### 3.2. MMC Circuit
+### MMC Circuit
 
 The K230 eMMC control circuit has two controllers, MMC0 and MMC1.
 
@@ -391,7 +391,7 @@ When designing the SD card circuit, note:
 - Pull-up resistors are required for each signal.
 - It is recommended to design according to the reference circuit.
 
-### 3.3. USB Circuit
+### USB Circuit
 
 The K230 chip has two built-in USB2.0 OTG controllers with the following features:
 
@@ -414,9 +414,9 @@ Note:
 - To ensure signal quality, the USB_TXRTUNE pin of K230 must be connected to a 200Ω (1%) resistor to ground.
 - The USB_ID can be used for OTG device identification. When grounded, K230 acts as a HOST; when floating or pulled high, K230 acts as a SLAVE.
 
-### 3.4. Audio Circuit
+### Audio Circuit
 
-#### 3.4.1 I2S
+#### I2S
 
 The K230 chip has an I2S controller with the following features:
 
@@ -434,13 +434,13 @@ Figure 3-30 K230 I2S Interface Circuit
 ![Figure 3-31 K230 I2S Reference Peripheral](../../zh/00_hardware/images/HDG/image042.png)
 Figure 3-31 K230 I2S Reference Peripheral
 
-#### 3.4.2 PDM
+#### PDM
 
 The K230 supports 4 channels of PDM signal input. Sampling rates range from 8kHz to 384kHz. The PDM interface is typically used to connect to digital microphones and other audio devices with PDM interfaces. Figure 3-32 shows the K230 PDM peripheral circuit.
 ![Figure 3-32 K230 PDM Peripheral Circuit](../../zh/00_hardware/images/HDG/image043.png)
 Figure 3-32 K230 PDM Peripheral Circuit
 
-#### 3.4.3 Analog Audio Interface
+#### Analog Audio Interface
 
 The analog audio section of the K230 chip has the following features:
 
@@ -461,9 +461,9 @@ Note, to achieve better audio quality, consider the following measures:
 - Place the DC blocking capacitors for audio input close to the K230 chip.
 - Place filter circuits or DC blocking capacitors on the output pins.
 
-### 3.5. Video Circuit
+### Video Circuit
 
-#### 3.5.1 MIPI DSI
+#### MIPI DSI
 
 The MIPI DSI controller of the K230 has the following features:
 
@@ -485,9 +485,9 @@ Note:
 - The MIPI_REXT pin must be connected to a 200Ω (1%) resistor to ground.
 - The connector circuit pins are only suitable for the JinZhaoHui screen; please design the circuit according to your own screen module.
 
-### 3.6. Camera Circuit
+### Camera Circuit
 
-#### 3.6.1 MIPI CSI
+#### MIPI CSI
 
 The MIPI CSI controller of the K230 has the following features:
 
@@ -505,9 +505,9 @@ Note:
 
 - This connector circuit is for internal testing only; please design the circuit according to your needs for actual use.
 
-### 3.7. Low-Speed Subsystem Circuit
+### Low-Speed Subsystem Circuit
 
-#### 3.7.1 I2C Circuit
+#### I2C Circuit
 
 The K230 chip supports 5 I2C interfaces with the following features:
 
@@ -520,7 +520,7 @@ When using I2C peripherals, pay attention to the corresponding power domain supp
 - For systems not exceeding 400kb/s, the recommended resistor value is 4.7kΩ.
 - For systems exceeding 400kb/s but less than 3.4Mb/s, the recommended pull-up resistor is 2.2kΩ.
 
-#### 3.7.2 UART Circuit
+#### UART Circuit
 
 The K230 supports 5 UART signals with the following features:
 
@@ -532,7 +532,7 @@ The K230 supports 5 UART signals with the following features:
 
 When using UART peripherals, pay attention to the corresponding power domain supply, which must be consistent.
 
-#### 3.7.3 PWM Circuit
+#### PWM Circuit
 
 The K230 supports 6 PWM signals with the following features:
 
@@ -542,11 +542,11 @@ The K230 supports 6 PWM signals with the following features:
 - Can be used as a periodic accurate interrupt generator.
 - Supports output glitch elimination.
 
-#### 3.7.4 MCLK Circuit
+#### MCLK Circuit
 
 The K230 supports outputting 3 MCLK signals. This signal can be used as the driving clock for cameras.
 
-### 3.7.4 MCLK Circuit
+### MCLK Circuit
 
 Supports output clock frequencies as shown in Table 3-4:
 
@@ -567,7 +567,7 @@ Supports output clock frequencies as shown in Table 3-4:
 
 Table 3-4 MCLK Output Clock Frequencies (in MHz)
 
-#### 3.7.5 ADC Circuit
+#### ADC Circuit
 
 The K230 integrates an 11-bit (effective resolution) SAR ADC with a maximum sampling rate of no less than 1MHz. It has the following features:
 
@@ -576,7 +576,7 @@ The K230 integrates an 11-bit (effective resolution) SAR ADC with a maximum samp
 - Supports single sampling and continuous sampling
 - Internally integrated signal conditioning circuit with a cutoff frequency at half the bandwidth. The ADC can directly sample signals or design peripheral circuits as needed.
 
-#### 3.7.6 PMU Circuit
+#### PMU Circuit
 
 The PMU module of the K230 is used to control and manage internal and external power supplies of the chip. It has a built-in RTC circuit and supports 6 input channels. Its functions are shown in the table below:
 
@@ -591,9 +591,9 @@ The PMU module of the K230 is used to control and manage internal and external p
 
 Supports two output channels OUT0 and OUT1, which can be used to enable power supplies. In a cold start state, the PMU only enables the long press interrupt of INT0 and the high-level input interrupt of INT4 as triggers for PMU module startup. OUT0 and OUT1 default to low level with an initial pull-down resistance of about 40Ω. Upon receiving either of these two interrupts, OUT0 is pulled high, and OUT1 is pulled high after approximately 50ms. OUT0 and OUT1 can be used to control the enable pins of external PMICs or for other purposes.
 
-### 3.8. Power Design
+### Power Design
 
-#### 3.8.1 K230 Power Requirements
+#### K230 Power Requirements
 
 | Module         | Power Pin         | Description                                                   |
 | -------------- | ----------------- | ------------------------------------------------------------- |
@@ -626,11 +626,11 @@ Supports two output channels OUT0 and OUT1, which can be used to enable power su
 
 Table 3-6 K230 Power Requirements
 
-#### 3.8.2 Power-Up Sequence
+#### Power-Up Sequence
 
 VDD0P8_CORE must be powered up earlier than VDD1P8 and VDDIO3P3_0 to VDDIO3P3_5 IO interfaces. AVDD0P8_MIPI must be powered up earlier than AVDD1P8_MIPI, and AVDD1P8_RTC must not be powered up later than AVDD1P8_LDO. There are no other specific power-up sequence requirements.
 
-#### 3.8.3 Power Design Recommendations
+#### Power Design Recommendations
 
 ##### PMU
 
@@ -733,7 +733,7 @@ The reference design for the K230D DDR module VREF power supply is shown in Figu
 ![Figure 3-41 K230D Version DDR Vref Circuit](../../zh/00_hardware/images/HDG/image053.png)
 Figure 3-41 K230D Version DDR Vref Circuit
 
-#### 3.8.4 Dynamic Voltage Scaling
+#### Dynamic Voltage Scaling
 
 The power supplies for the CPU and KPU in the K230 support dynamic voltage scaling to ensure high performance and low power consumption. The adjustable voltage nodes for the CPU are shown in Table 3-7.
 
@@ -758,11 +758,11 @@ Among them, V_retention is the voltage node for the DDR retention function. The 
 
 Table 3-8 KPU Adjustable Voltage Nodes
 
-## 4. PCB Design Recommendations
+## PCB Design Recommendations
 
-### 4.1 High-Speed PCB Design Recommendations
+### High-Speed PCB Design Recommendations
 
-#### 4.1.1 DDR Design
+#### DDR Design
 
 Impedance Control: Single-ended DDR 50Ω, Differential (clock clk, data dqs) 100Ω;
 Crosstalk Requirements: Follow the 3W rule;
@@ -869,12 +869,12 @@ Figure 4-2 LPDDR3 Length Matching Design Rules
 ![Figure 4-3 LPDDR4 Length Matching Design Rules](../../zh/00_hardware/images/HDG/image056.png)
 Figure 4-3 LPDDR4 Length Matching Design Rules
 
-#### 4.1.2 USB 2.0 Design
+#### USB 2.0 Design
 
 - Impedance Control: Differential 90Ω.
 - Skew within the differential pair should not exceed 4ps, with a maximum of 6 vias allowed.
 
-#### 4.1.3 MIPI Design
+#### MIPI Design
 
 - Impedance Control: MIPI_DSI differential 100Ω, MIPI_CSI differential 100Ω.
 - Length matching within the pair should be controlled within 0.3mm.

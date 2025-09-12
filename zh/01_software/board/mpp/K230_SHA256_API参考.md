@@ -50,19 +50,19 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 杨帆          | 2023-05-30 |
 
-## 1. 功能介绍
+## 功能介绍
 
 SHA256 主要用于计算数据的 hash 值，大核 rt-smart 中实现了 SHA256 算法，用于计算数据的 hash 值，代码逻辑如下图所示：
 
 ![sha256](images/sha256.png)
 
-## 2. API 参考
+## API 参考
 
 SHA256模块主要提供了以下 API：
 
-- [kd_mpi_cipher_sha256](#21-kd_mpi_cipher_sha256)
+- [kd_mpi_cipher_sha256](#kd_mpi_cipher_sha256)
 
-### 2.1 kd_mpi_cipher_sha256
+### kd_mpi_cipher_sha256
 
 【描述】
 
@@ -108,7 +108,7 @@ kd_mpi_cipher_sha256(const void \*data, k_u32 len, k_u8 \*hash);
 
 无
 
-## 3. 调试及打印信息
+## 调试及打印信息
 
 写一个用户态应用程序 *sample_cipher.c* 来测试 SHA256 功能。
 

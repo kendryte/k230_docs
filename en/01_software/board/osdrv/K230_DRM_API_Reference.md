@@ -52,11 +52,11 @@ This document is intended primarily for:
 | --- | --- | --- | --- |
 | V1.0 | Initial edition | Author | 2023/06/29 |
 
-## 1. Introduction to DRM
+## Introduction to DRM
 
 DRM is the management architecture responsible for interacting with the graphics card in the Linux kernel, and user programs can easily use the API provided by DRM to achieve display control, 3D rendering, video encoding and decoding, GPU computing and other work
 
-### 1.1 DRM architecture features
+### DRM architecture features
 
 DRM is the mainstream graphics display framework in the current Linux kernel, compared with the traditional FB architecture, it has the following characteristics:
 
@@ -64,7 +64,7 @@ DRM is the mainstream graphics display framework in the current Linux kernel, co
 1. The DRM architecture natively supports VSYNC, DMA_BUF, and Fence mechanisms
 1. The DRM architecture manages rendering and display drivers in a unified manner, making software development and maintenance simpler
 
-### 1.2 DRM architecture composition
+### DRM architecture composition
 
 From the overall architecture, DRM is mainly divided into three parts:
 
@@ -80,11 +80,11 @@ From the overall architecture, DRM is mainly divided into three parts:
 
     Memory management, responsible for memory allocation and release
 
-## 2. ModeTest instructions
+## ModeTest instructions
 
 modetest is a test program provided by libdrm that can query the details of DRM devices while also performing basic display tests
 
-### 2.1 Query K230 DRM details
+### Query K230 DRM details
 
 The specific instructions are as follows:
 
@@ -223,7 +223,7 @@ The following figure shows the LCD display:
 
 ![Display content](../../../../zh/01_software/board/osdrv/images/modetest_video_nv12_smpte.png)
 
-### 2.3 The OSD layer outputs tiles color bars, and the color space is AR24(ARGB8888)
+### The OSD layer outputs tiles color bars, and the color space is AR24(ARGB8888)
 
 The specific instructions are as follows
 
@@ -235,7 +235,7 @@ The following figure shows the LCD display:
 
 ![Display content](../../../../zh/01_software/board/osdrv/images/modetest_osd_ar24_tiles.png)
 
-### 2.4 OSD layer outputs tiles color bars with a color space of RG16(RGB565)
+### OSD layer outputs tiles color bars with a color space of RG16(RGB565)
 
 The specific instructions are as follows:
 
@@ -247,9 +247,9 @@ The following figure shows the LCD display:
 
 ![Display content](../../../../zh/01_software/board/osdrv/images/modetest_osd_rg16_tiles.png)
 
-## 3. Introduction to DRM API
+## Introduction to DRM API
 
-### 3.1 Turn on the DRM device
+### Turn on the DRM device
 
 ```c
     fd = open("/dev/dri/card0", O_RDWR | O_CLOEXEC);
@@ -260,7 +260,7 @@ The following figure shows the LCD display:
 
 ```
 
-### 3.2 Retrieving DRM resources
+### Retrieving DRM resources
 
 ```c
 drmModeResPtr drmModeGetResources(int fd);
@@ -298,7 +298,7 @@ An example of a code call is as follows:
 
 ```
 
-### 3.3 Enable or disable DRM-related features
+### Enable or disable DRM-related features
 
 ```c
 int drmSetClientCap(int fd, uint64_t capability, uint64_t value);
@@ -320,7 +320,7 @@ An example of a code call is as follows:
     }
 ```
 
-### 3.4 Retrieving layer resources
+### Retrieving layer resources
 
 ```c
 drmModePlaneResPtr drmModeGetPlaneResources(int fd);
@@ -350,7 +350,7 @@ plane_res->plans[0] stand for Video layer
 
 plane_res->plans[1] to plane_res->plans[4] stand for OSD layer
 
-### 3.5 Obtaining Connectors
+### Obtaining Connectors
 
 ```c
 drmModeConnectorPtr drmModeGetConnector(int fd, uint32_t connector_id);
@@ -388,7 +388,7 @@ An example of a code call is as follows:
 
 ```
 
-### 3.6 Apply for DRM DUMB buffer
+### Apply for DRM DUMB buffer
 
 An example of a code call is as follows:
 
@@ -406,7 +406,7 @@ An example of a code call is as follows:
 
 ```
 
-### 3.7 Submit DRM Requests
+### Submit DRM Requests
 
 An example of a code call is as follows:
 
@@ -418,7 +418,7 @@ int drmModeAtomicCommit(int fd,
 
 ```
 
-## 4. Precautions
+## Precautions
 
 1. K230 DRM development and testing rely on LCD screens
 

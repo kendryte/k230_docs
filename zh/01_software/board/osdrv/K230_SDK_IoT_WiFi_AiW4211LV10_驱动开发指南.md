@@ -51,21 +51,21 @@
 | V1.0       | 初版                                                                                                   | 徐百坤 | 2023/04/08 |
 | V1.1       | 修改2.2章节，WiFi子板硬件更新到V1.1，分线链接变化 修改3.2、3.3章节，修改sdio扫描接口调用方式为间接调用 | 徐百坤 | 2023/04/13 |
 
-## 1. 功能介绍
+## 功能介绍
 
 AiW4211LV10是一款低功耗IoT WiFi芯片，我司采用该芯片平台设计了一款AiW4211LV10开发板，该开发板可插入K230 EVB板的TF卡插槽实现接入。K230 EVB加载AiW4211LV10驱动之后，可以生成wlan0无线网卡，实现网络数据通信。
 
-## 2. 模块依赖
+## 模块依赖
 
 硬件上依赖AiW4211LV10开发板，依赖K230 EVB开发板，K230 EVB为WiFi提供电源及中断检测连线。
 
 软件上依赖于K230 SDIO主控驱动，依赖GPIO驱动的完备，需要emmc引导启动实现。
 
-### 2.1 操作系统
+### 操作系统
 
 当前驱动支持linux 4.9、linux 4.17和linux 5.10.4
 
-### 2.2 硬件环境
+### 硬件环境
 
 K230 EVB开发板设置emmc启动，空出TF卡插槽用于AiW4211LV10开发板接入。
 
@@ -81,11 +81,11 @@ K230 EVB开发板飞线到AiW4211LV10开发板排针。连接关系如下：
 
 备注：TTL-USB与WiFi的连线主要是为了观察WiFi的固件输出，可以不连接
 
-## 3. 模块配置
+## 模块配置
 
-### 3.1 设备树修改
+### 设备树修改
 
-#### 3.1.1 配置引脚function
+#### 配置引脚function
 
 修改uboot设备树arch/riscv/dts/k230_evb.dts，配置K230 EVB IO52引脚功能为GPIO，方向为input：
 
@@ -103,7 +103,7 @@ pinctrl-single,pins = <
 }
 ```
 
-#### 3.1.2 配置GPIO控制器
+#### 配置GPIO控制器
 
 修改linux设备树arch/riscv/boot/dts/kendryte/gpio_provider.dtsi，配置K230 EVB GPIO52控制器：
 
@@ -133,7 +133,7 @@ id = <52>;
 };
 ```
 
-#### 3.1.3 配置SDHCI1参数
+#### 配置SDHCI1参数
 
 修改linux设备树arch/riscv/boot/dts/kendryte/k230_evb.dtsi，配置对应sdio主控参数：
 
@@ -156,7 +156,7 @@ status = "okay";
 };
 ```
 
-### 3.2 内核配置项
+### 内核配置项
 
 通过内核配置将AiW4211LV10驱动编译为内核模块，并将必要的协议及驱动编入内核。
 
@@ -232,7 +232,7 @@ status = "okay";
 │ │ [ ] Microchip devices
 ```
 
-### 3.3 SDIO主控增加扫描接口
+### SDIO主控增加扫描接口
 
 AiW4211LV10驱动需要依据WiFi所接入的槽位发起SDIO扫描，因此特封装plat_sdio_rescan接口函数。修改drivers/mmc/host/sdhci-of-dwcmshc.c文件如下：
 
@@ -269,19 +269,19 @@ goto err_clk;
 }
 ```
 
-## 4. 模块编译
+## 模块编译
 
 在SDK顶层执行make linux，随内核一同编译，ko临时存储在output/k230_evb_defconfig/little/linux/drivers/net/wireless/aich/aiw4211lv10/目录。
 
-## 5. 模块启动
+## 模块启动
 
-### 5.1 WiFi固件
+### WiFi固件
 
 在K230 SDK当中WiFi固件AiW4211L_demo_allinone.bin以二进制文件形式提供，如需源码请联系我们。
 
 固件存储路径：k230_sdk/src/little/utils/firmware/AiW4211L_demo_allinone.bin
 
-### 5.2 驱动加载
+### 驱动加载
 
 在硬件环境配置完成后上电启动，执行以下指令即可实现驱动加载：
 
@@ -291,7 +291,7 @@ modprobe aiw4211lv10 或者 modprobe aiw4211lv10 mmc=1 gpio=52
 
 驱动加载完成后，使用ifconfig -a指令可以看到已经生成了无线网卡wlan0。
 
-### 5.3 网络配置
+### 网络配置
 
 启动配置工具server端并置于后台运行：iotwifi_link &
 
@@ -303,17 +303,17 @@ modprobe aiw4211lv10 或者 modprobe aiw4211lv10 mmc=1 gpio=52
 
 /etc/wifi.conf是WiFi工作参数配置文件，以json格式编写，基本上是对wifi_config_t结构体的映射，具体可参考6.1.2章节。
 
-## 6. API参考
+## API参考
 
 AiW4211LV10驱动加载后生成的无线网卡与一般WiFi网卡无异，因此网络通信功能无特殊API需要说明。
 
 除基本的网络通信外，K230与WiFi还存在两个消息通信接口，需要重点说明。
 
-### 6.1 config接口
+### config接口
 
-#### 6.1.1 API
+#### API
 
-int kd_wifi_config([wifi_config_t](#6121-wifi_config_t) \*config)
+int kd_wifi_config([wifi_config_t](#wifi_config_t) \*config)
 
 配置WiFi工作参数：
 
@@ -321,9 +321,9 @@ int kd_wifi_config([wifi_config_t](#6121-wifi_config_t) \*config)
 - 配置WiFi休眠等级，苏醒周期以及可唤醒的gpio
 - 配置tcp keepalive时间参数等
 
-#### 6.1.2 数据结构
+#### 数据结构
 
-##### 6.1.2.1 wifi_config_t
+##### wifi_config_t
 
 ```c
 typedef struct {
@@ -342,11 +342,11 @@ wifi_keepalive_t keepalive;
 | 成员                            |  说明   |
 |---------------------------------|---------|
 | config_mask                    | 配置目标项掩码，使能或屏蔽目标项，例如全部配置则：config_mask = CFG_MASK_SLEEP\|CFG_MASK_CONNECT\|CFG_MASK_KEEPALIVE;  CFG_MASK_SLEEP：配置休眠参数，CFG_MASK_CONNECT：配置AP连接参数，CFG_MASK_KEEPALIVE：配置tcp keepalive参数 |
-| [sleep](#6122-wifi_sleep_t)         | 休眠参数  |
-| [conn](#6123-wifi_connect_t)        | AP连接参数|
-| [keepalive](#6124-wifi_keepalive_t) | tcp keepalive参数|
+| [sleep](#wifi_sleep_t)         | 休眠参数  |
+| [conn](#wifi_connect_t)        | AP连接参数|
+| [keepalive](#wifi_keepalive_t) | tcp keepalive参数|
 
-#### 6.1.2.2 wifi_sleep_t
+#### wifi_sleep_t
 
 ```c
 typedef struct
@@ -391,7 +391,7 @@ unsigned int wake_gpios;
 | period     | 苏醒周期，有效数值33\~\~4000ms。WiFi周期性从休眠态醒来，检测AP是否有发给自己的数据缓存                                             |
 | wake_gpios | enable或disable可唤醒WiFi的gpio（WiFi侧gpio）|
 
-#### 6.1.2.3 wifi_connect_t
+#### wifi_connect_t
 
 ```c
 typedef struct
@@ -413,7 +413,7 @@ ext_wifi_pairwise pairwise;
 | bssid    | AP bssid，一般为AP mac地址                                                                                                                                                                                                                                                     |
 | pairwise | 加密类型 EXT_WIFI_PARIWISE_UNKNOWN EXT_WIFI_PAIRWISE_AES EXT_WIFI_PAIRWISE_TKIP EXT_WIFI_PAIRWISE_TKIP_AES_MIX                                                                                                                                                                 |
 
-#### 6.1.2.4 wifi_keepalive_t
+#### wifi_keepalive_t
 
 ```c
 typedef struct
@@ -439,15 +439,15 @@ unsigned short heartbeat_probes;
 | heartbeat_intvl      | 应用层心跳包发送周期，秒                                                |
 | heartbeat_probes     | 应用层心跳包无回应计数超过该阈值之后，判断socket连接异常，断开重连      |
 
-### 6.2 sleep接口
+### sleep接口
 
 int kd_wifi_sleep(void)
 
 控制WiFi进入休眠，休眠相关参数在config API当中设置。
 
-## 7. 基本性能测试
+## 基本性能测试
 
-### 7.1 吞吐量测试
+### 吞吐量测试
 
 在办公室环境使用iperf进行网络吞吐量测试，PC通过网线接入AP，K230 EVB通过AiW4211LV10接入同一AP，分别在两端启动iperf工具，交叉测试上行及下行吞吐量。
 
@@ -475,6 +475,6 @@ server：iperf -s -i 2 -u
 | client    | 17.8                 | 1.341      | 1571/455457 (0.34%)  |
 | server    | 21.0                 | 1.064      | 1/534990 (0.00019%)  |
 
-## 7.2 文件传输测试
+## 文件传输测试
 
 分别在PC与K230 EVB端架设nginx服务器，并分别使用wget拉取544MB大文件，并校验拉取文件的MD5值，测试150次无异常。

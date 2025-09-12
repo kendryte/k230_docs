@@ -25,7 +25,7 @@
 
 ## nncase运行时库版本问题说明
 
-### 1. kmodel 版本说明
+### kmodel 版本说明
 
 由于 `kmodel`中***没有包含nncase的版本信息***，因此无法直接判断 `kmodel`是由哪个版本的nncase生成。需自行进行版本信息管理，以下两种方式可供参考：
 
@@ -42,7 +42,7 @@
       f.write(kmodel)
   ```
 
-### 2. 版本不兼容问题
+### 版本不兼容问题
 
 由于nncase各版本之间可能存在不兼容的情况，而SDK中的nncase运行时库版本可能与编译 `kmodel`时使用的nncase版本不一致，从而导致上板推理时出现异常。因此最好在上板推理前，检查两者的版本是否匹配。
 
@@ -50,9 +50,9 @@
 
 - 通过[版本对应关系表](./K230_SDK_nncase版本对应关系.md#k230-sdk-nncase版本对应关系)查询。
 - 通过镜像名字确定两者的版本，例如 `k230_canmv_sdcard_v1.4_nncase_v2.8.0.img.gz`，其中 `v1.4` 表示SDK版本，`v2.8.0`表示 nncase 版本，即SDK-v1.4可以推理nncase-v2.8.0编译生成的 `kmodel`。
-  镜像可通过[嘉楠开发者社区](https://developer.canaan-creative.com/resource)获取。
+  镜像可通过[勘智开发者社区](https://www.kendryte.com/resource)获取。
 
-### 3. 版本不兼容解决办法
+### 版本不兼容解决办法
 
 1. 与SDK版本对齐
    在确定好需要的nncase版本后，使用 `pip`进行安装，具体参考[nncase install](https://github.com/kendryte/nncase?tab=readme-ov-file#install)，之后重新编译`kmodel`。

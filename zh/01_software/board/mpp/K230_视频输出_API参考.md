@@ -51,7 +51,7 @@
 |------------|----------|------------|------------|
 | V1.0       | 初版     | 系统软件部 | 2023-03-10 |
 
-## 1. 概述
+## 概述
 
 VO（Video Output，视频输出）模块主动从内存相应位置读取视频和图形数据，并通过相应的显示设备输出视频和图形。芯片支持的显示/回写设备、视频层和图形层情况。
 
@@ -78,11 +78,11 @@ OSD 层支持
 | ARGB 265 等级ALPHA | √                                                         | √                                                         | √                                                         | √                                                         |
 | 独立开关           | √                                                         | √                                                         | √                                                         | √                                                         |
 
-### 1.1 硬件描述
+### 硬件描述
 
 本次硬件介绍是以evblp3 做的介绍
 
-#### 1.1.1 Mipi接口
+#### Mipi接口
 
 在evblp3 上的硬件引脚如下：
 
@@ -93,22 +93,22 @@ OSD 层支持
 - 屏幕的rst：gpio9，backlight：gpio31
 - Mipi的引脚和屏幕的引脚一一对应
 
-#### 1.1.2 实物图
+#### 实物图
 
 ![图片包含 游戏机, 电子, 电路 描述已自动生成](images/69dbfc0ef3144c90f5978f1019482030.png)
 
 - 图中1为mipi接口，采用的是软排线
 - 图中2为mipi信号测试点、包含四路data线和一路clk线
 
-### 1.2 软件描述
+### 软件描述
 
 视频输出软件配置分为3部分配置：phy 配置、dsi配置、VO配置，
 
-#### 1.2.1 PHY的配置流程
+#### PHY的配置流程
 
 phy的频率需要配置三个参数、计算PLL、配置voc、配置freq，根据这三个参数就可以确定txphy的频率，每一个的参数计算如下。
 
-##### 1.2.1.1 计算phy的pll
+##### 计算phy的pll
 
 数据速率由 PLL 输出时钟相位频率的两倍给出：数据速率 (Gbps) = PLL Fout(GHz) \* 2，输出频率是输入参考频率和倍频/分频比的函数。 计算phy 的pll共分为4种范围做的计算，不同的频率对应着不同的频率，它可以通过以下方式确定：
 
@@ -155,7 +155,7 @@ mipi 的速率为 445.5M：所以pll的速率就是222.75M，应该选择第二�
 
 配置pll中的m 和n都是整数值、如果所有的值都不是整数，就需要在m 和 n的值做加1和减1处理、反推回去看哪个频率理你需要的最近，再去验证是否可用，不可以就重复上边的操作。
 
-##### 1.2.1.2 配置phy的voc
+##### 配置phy的voc
 
 配置phy 的voc 可以根据表格查询即可：
 
@@ -167,7 +167,7 @@ Example：
 
 mipi 的速率为 445.5M：所以pll的速率就是222.75M，voc = 010111 = 0x17
 
-##### 1.2.1.3 配置freq
+##### 配置freq
 
 配置phy 的freq 可以根据表格查询即可：
 
@@ -181,13 +181,13 @@ Example：
 
 mipi 的速率为 445.5M：pll的速率就是222.75M，freq 选择0100101, 配置这个的时候需要将最高位bit\[7\] = 1，所有freq = 10100101= 0xa5
 
-#### 1.2.2 DSI的配置
+#### DSI的配置
 
 DSI（Display Serial Interface）是MIPI 定义的一组通信协议的一部分联盟，主要实现 MIPI DSI 规范中定义的所有协议功能的数字控制器，包含了具有两个和四个通道的双向 PHY。
 
 DSI在软件中主要配置屏幕显示用的timing和发送命令的功能。
 
-##### 1.2.2.1 配置显示器的timing
+##### 配置显示器的timing
 
 每个厂家的屏幕都会有一组时序用来做屏幕的控制，主要包含了帧的控制时序和一行的控制时序，如下图所示：
 
@@ -197,16 +197,16 @@ DSI在软件中主要配置屏幕显示用的timing和发送命令的功能。
 
 DSI中也会用到这些参数、配置的时序和屏幕一致即可。
 
-##### 1.2.2.2 DSI的命令下发
+##### DSI的命令下发
 
 需要dsi 先进入lp模式、然后就可以发送命令，需要的api如下：
 
-- [kd_mpi_dsi_set_lp_mode_send_cmd](#226-kd_mpi_dsi_set_lp_mode_send_cmd)
-- [kd_mpi_dsi_send_cmd](#223-kd_mpi_dsi_send_cmd)
+- [kd_mpi_dsi_set_lp_mode_send_cmd](#kd_mpi_dsi_set_lp_mode_send_cmd)
+- [kd_mpi_dsi_send_cmd](#kd_mpi_dsi_send_cmd)
 
 发送的数据是按照8位发送的，会根据数量自动选择发送长包还是短包。
 
-##### 1.2.2.3 DSI 的自测模式
+##### DSI 的自测模式
 
 DSI 自测模式会按照自己配置的dsi timing 产生color bar 的数据发送出去，这样不依赖vo从ddr读取数据，测试模式显示如下图：
 
@@ -214,50 +214,50 @@ DSI 自测模式会按照自己配置的dsi timing 产生color bar 的数据发�
 
 DSI 和vo之间采用的是24位接口，所以配置出来的color bar 是上图的效果，使用方法只需要配置完成dsi之后使能color bar即可，api如下
 
-- [kd_mpi_dsi_set_test_pattern](#225-kd_mpi_dsi_set_test_pattern)
+- [kd_mpi_dsi_set_test_pattern](#kd_mpi_dsi_set_test_pattern)
 
-#### 1.2.3 VO的配置
+#### VO的配置
 
 VO（video output）主要是VO（Video Output，视频输出）模块主动从内存相应位置读取视频和图形数据，并通过相应的显示设备输出视频和图形，VO这部分包含两个配置、一个是timing 的配置、另一个是视频层的配置
 
-##### 1.2.3.1 VO 时序配置
+##### VO 时序配置
 
 VO的时序配置和dsi 的时序配置采用的一样的配置参数，具体的行和列一样，看dsi timing 介绍即可
 
 ##### V1.2.3.2 O的layer层配置
 
-VO layer 层目前支持3个layer层、4个osd层。Layer层只能显示yuv的图像格式（layer0 和 layer1 支持的功能在[概述](#1-概述)中的图表）。
+VO layer 层目前支持3个layer层、4个osd层。Layer层只能显示yuv的图像格式（layer0 和 layer1 支持的功能在[概述](#概述)中的图表）。
 
-##### 1.2.3.3 VO 的回写功能配置
+##### VO 的回写功能配置
 
 VO 还支持回写功能、这个可以验证VO配置的是否正确，VO配置完成之后会将数据写回到ddr 当中，方便验证VO的配置是否出现异常
 
-#### 1.2.4 VO模块的调试方法
+#### VO模块的调试方法
 
-##### 1.2.4.1 屏幕的测试方法
+##### 屏幕的测试方法
 
 - 可以通过LP命令配置屏幕进入自测模式、看产生的图像是否正常
 - 通过LP命令读取屏幕寄存器看是否有返回
 
-##### 1.2.4.2 DSI 的测试方法
+##### DSI 的测试方法
 
 - 配置完dsi之后，让屏幕进入自测模式，量取信号看时候正常，也可以看屏幕是否产生color bar 的图像
 - 查看phy的err 状态寄存器、看是否有err 状态，可以通过proc查看
 
-##### 1.2.4.3 VO的测试方法
+##### VO的测试方法
 
 - VO配置完成之后、打开writeback 功能，查看是否和配置的要求一致
 - 读取DSI的err状态寄存器，查看VO和dsi之间数据传输是否出现underflow和overflow，如果出现、适当的调整timing再次尝试
 
-## 2. API 参考
+## API 参考
 
-### 2.1 TXPHY
+### TXPHY
 
 该功能模块提供以下API：
 
-- [kd_mpi_set_mipi_phy_attr](#211-kd_mpi_set_mipi_phy_attr)
+- [kd_mpi_set_mipi_phy_attr](#kd_mpi_set_mipi_phy_attr)
 
-#### 2.1.1 kd_mpi_set_mipi_phy_attr
+#### kd_mpi_set_mipi_phy_attr
 
 【描述】
 
@@ -301,18 +301,18 @@ k_s32 kd_mpi_set_mipi_phy_attr(k_vo_mipi_phy_attr \*attr)
 
 无
 
-### 2.2 DSI
+### DSI
 
 该功能模块提供以下API：
 
-- [kd_mpi_dsi_set_attr](#221-kd_mpi_dsi_set_attr)
-- [kd_mpi_dsi_enable](#222-kd_mpi_dsi_enable)
-- [kd_mpi_dsi_send_cmd](#223-kd_mpi_dsi_send_cmd)
-- [kd_mpi_dsi_read_pkg](#224-kd_mpi_dsi_read_pkg)
-- [kd_mpi_dsi_set_test_pattern](#225-kd_mpi_dsi_set_test_pattern)
-- [kd_mpi_dsi_set_lp_mode_send_cmd](#226-kd_mpi_dsi_set_lp_mode_send_cmd)
+- [kd_mpi_dsi_set_attr](#kd_mpi_dsi_set_attr)
+- [kd_mpi_dsi_enable](#kd_mpi_dsi_enable)
+- [kd_mpi_dsi_send_cmd](#kd_mpi_dsi_send_cmd)
+- [kd_mpi_dsi_read_pkg](#kd_mpi_dsi_read_pkg)
+- [kd_mpi_dsi_set_test_pattern](#kd_mpi_dsi_set_test_pattern)
+- [kd_mpi_dsi_set_lp_mode_send_cmd](#kd_mpi_dsi_set_lp_mode_send_cmd)
 
-#### 2.2.1 kd_mpi_dsi_set_attr
+#### kd_mpi_dsi_set_attr
 
 【描述】
 
@@ -354,7 +354,7 @@ k_s32 kd_mpi_dsi_set_attr(k_display_mode \*attr)【参数】
 
 无
 
-#### 2.2.2 kd_mpi_dsi_enable
+#### kd_mpi_dsi_enable
 
 【描述】
 
@@ -396,7 +396,7 @@ k_s32 kd_mpi_dsi_enable(void)
 
 无
 
-#### 2.2.3 kd_mpi_dsi_send_cmd
+#### kd_mpi_dsi_send_cmd
 
 【描述】
 
@@ -441,7 +441,7 @@ k_s32 kd_mpi_dsi_send_cmd(k_u8 \*data, k_s32 cmd_len)
 
 无
 
-#### 2.2.4 kd_mpi_dsi_read_pkg
+#### kd_mpi_dsi_read_pkg
 
 【描述】
 
@@ -486,7 +486,7 @@ k_s32 kd_mpi_dsi_read_pkg(k_u8 \*rx_buf, k_s32 cmd_len)
 
 无
 
-#### 2.2.5 kd_mpi_dsi_set_test_pattern
+#### kd_mpi_dsi_set_test_pattern
 
 【描述】
 
@@ -528,7 +528,7 @@ k_s32 kd_mpi_dsi_set_test_pattern(void)
 
 无
 
-#### 2.2.6 kd_mpi_dsi_set_lp_mode_send_cmd
+#### kd_mpi_dsi_set_lp_mode_send_cmd
 
 【描述】
 
@@ -570,28 +570,28 @@ k_s32 kd_mpi_dsi_set_lp_mode_send_cmd(void)
 
 无
 
-### 2.3 VO
+### VO
 
-- [kd_mpi_vo_init](#231-kd_mpi_vo_init)
-- [kd_mpi_vo_set_dev_param](#232-kd_mpi_vo_set_dev_param)
-- [kd_mpi_vo_enable_video_layer](#233-kd_mpi_vo_enable_video_layer)
-- [kd_mpi_vo_disable_video_layer](#234-kd_mpi_vo_disable_video_layer)
-- [kd_mpi_vo_enable](#235-kd_mpi_vo_enable)
-- [kd_mpi_vo_chn_insert_frame](#236-kd_mpi_vo_chn_insert_frame)
-- [kd_mpi_vo_chn_dump_frame](#237-kd_mpi_vo_chn_dump_frame)
-- [kd_mpi_vo_chn_dump_release](#238-kd_mpi_vo_chn_dump_release)
-- [kd_mpi_vo_osd_enable](#239-kd_mpi_vo_osd_enable)
-- [kd_mpi_vo_osd_disable](#2310-kd_mpi_vo_osd_disable)
-- [kd_mpi_vo_set_video_osd_attr](#2311-kd_mpi_vo_set_video_osd_attr)
-- [kd_mpi_vo_set_wbc_attr](#2312-kd_mpi_vo_set_wbc_attr)
-- [kd_mpi_vo_enable_wbc](#2313-kd_mpi_vo_enable_wbc)
-- [kd_mpi_vo_disable_wbc](#2314-kd_mpi_vo_disable_wbc)
-- [kd_display_reset](#2315-kd_display_reset)
-- [kd_display_set_backlight](#2316-kd_display_set_backlight)
-- [kd_mpi_vo_set_user_sync_info](#2317-kd_mpi_vo_set_user_sync_info)
+- [kd_mpi_vo_init](#kd_mpi_vo_init)
+- [kd_mpi_vo_set_dev_param](#kd_mpi_vo_set_dev_param)
+- [kd_mpi_vo_enable_video_layer](#kd_mpi_vo_enable_video_layer)
+- [kd_mpi_vo_disable_video_layer](#kd_mpi_vo_disable_video_layer)
+- [kd_mpi_vo_enable](#kd_mpi_vo_enable)
+- [kd_mpi_vo_chn_insert_frame](#kd_mpi_vo_chn_insert_frame)
+- [kd_mpi_vo_chn_dump_frame](#kd_mpi_vo_chn_dump_frame)
+- [kd_mpi_vo_chn_dump_release](#kd_mpi_vo_chn_dump_release)
+- [kd_mpi_vo_osd_enable](#kd_mpi_vo_osd_enable)
+- [kd_mpi_vo_osd_disable](#kd_mpi_vo_osd_disable)
+- [kd_mpi_vo_set_video_osd_attr](#kd_mpi_vo_set_video_osd_attr)
+- [kd_mpi_vo_set_wbc_attr](#kd_mpi_vo_set_wbc_attr)
+- [kd_mpi_vo_enable_wbc](#kd_mpi_vo_enable_wbc)
+- [kd_mpi_vo_disable_wbc](#kd_mpi_vo_disable_wbc)
+- [kd_display_reset](#kd_display_reset)
+- [kd_display_set_backlight](#kd_display_set_backlight)
+- [kd_mpi_vo_set_user_sync_info](#kd_mpi_vo_set_user_sync_info)
 - kd_mpi_vo_draw_frame
 
-#### 2.3.1 kd_mpi_vo_init
+#### kd_mpi_vo_init
 
 【描述】
 
@@ -633,7 +633,7 @@ k_s32 kd_mpi_vo_init(void);
 
 无
 
-#### 2.3.2 kd_mpi_vo_set_dev_param
+#### kd_mpi_vo_set_dev_param
 
 【描述】
 
@@ -677,7 +677,7 @@ k_s32 kd_mpi_vo_set_dev_param(k_vo_pub_attr \*attr)
 
 无
 
-#### 2.3.3 kd_mpi_vo_enable_video_layer
+#### kd_mpi_vo_enable_video_layer
 
 【描述】
 
@@ -685,7 +685,7 @@ k_s32 kd_mpi_vo_set_dev_param(k_vo_pub_attr \*attr)
 
 【语法】
 
-k_s32 kd_mpi_vo_enable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
+k_s32 kd_mpi_vo_enable_video_layer([k_vo_layer](#k_vo_layer) layer)
 
 【参数】
 
@@ -722,7 +722,7 @@ k_s32 kd_mpi_vo_enable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
 
 无
 
-#### 2.3.4 kd_mpi_vo_disable_video_layer
+#### kd_mpi_vo_disable_video_layer
 
 【描述】
 
@@ -730,7 +730,7 @@ k_s32 kd_mpi_vo_enable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
 
 【语法】
 
-k_s32 kd_mpi_vo_disable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
+k_s32 kd_mpi_vo_disable_video_layer([k_vo_layer](#k_vo_layer) layer)
 
 【参数】
 
@@ -766,7 +766,7 @@ k_s32 kd_mpi_vo_disable_video_layer([k_vo_layer](#315-k_vo_layer) layer)
 
 无
 
-#### 2.3.5 kd_mpi_vo_enable
+#### kd_mpi_vo_enable
 
 【描述】
 
@@ -808,7 +808,7 @@ k_u8 kd_mpi_vo_enable(void);
 
 无
 
-#### 2.3.6 kd_mpi_vo_chn_insert_frame
+#### kd_mpi_vo_chn_insert_frame
 
 【描述】
 
@@ -816,7 +816,7 @@ k_u8 kd_mpi_vo_enable(void);
 
 【语法】
 
-k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video_frame_info) \*vf_info)
+k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, [k_video_frame_info](#k_video_frame_info) \*vf_info)
 
 【参数】
 
@@ -853,7 +853,7 @@ k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_vid
 
 无
 
-#### 2.3.7 kd_mpi_vo_chn_dump_frame
+#### kd_mpi_vo_chn_dump_frame
 
 【描述】
 
@@ -861,7 +861,7 @@ k_s32 kd_mpi_vo_chn_insert_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_vid
 
 【语法】
 
-k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video_frame_info) \*vf_info, k_u32 timeout_ms);
+k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, [k_video_frame_info](#k_video_frame_info) \*vf_info, k_u32 timeout_ms);
 
 【参数】
 
@@ -899,7 +899,7 @@ k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video
 
 无
 
-#### 2.3.8 kd_mpi_vo_chn_dump_release
+#### kd_mpi_vo_chn_dump_release
 
 【描述】
 
@@ -907,7 +907,7 @@ k_s32 kd_mpi_vo_chn_dump_frame(k_u32 chn_num, [k_video_frame_info](#3119-k_video
 
 【语法】
 
-k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const [k_video_frame_info](#3119-k_video_frame_info) \*vf_info);
+k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const [k_video_frame_info](#k_video_frame_info) \*vf_info);
 
 【参数】
 
@@ -944,7 +944,7 @@ k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const [k_video_frame_info](#3119
 
 无
 
-#### 2.3.9 kd_mpi_vo_osd_enable
+#### kd_mpi_vo_osd_enable
 
 【描述】
 
@@ -952,7 +952,7 @@ k_s32 kd_mpi_vo_chn_dump_release(k_u32 chn_num, const [k_video_frame_info](#3119
 
 【语法】
 
-k_s32 kd_mpi_vo_osd_enable([k_vo_osd](#314-k_vo_osd) layer)
+k_s32 kd_mpi_vo_osd_enable([k_vo_osd](#k_vo_osd) layer)
 
 【参数】
 
@@ -988,7 +988,7 @@ k_s32 kd_mpi_vo_osd_enable([k_vo_osd](#314-k_vo_osd) layer)
 
 无
 
-#### 2.3.10 kd_mpi_vo_osd_disable
+#### kd_mpi_vo_osd_disable
 
 【描述】
 
@@ -996,7 +996,7 @@ k_s32 kd_mpi_vo_osd_enable([k_vo_osd](#314-k_vo_osd) layer)
 
 【语法】
 
-k_s32 kd_mpi_vo_osd_disable([k_vo_osd](#314-k_vo_osd) layer)
+k_s32 kd_mpi_vo_osd_disable([k_vo_osd](#k_vo_osd) layer)
 
 【参数】
 
@@ -1032,7 +1032,7 @@ k_s32 kd_mpi_vo_osd_disable([k_vo_osd](#314-k_vo_osd) layer)
 
 无
 
-#### 2.3.11 kd_mpi_vo_set_video_osd_attr
+#### kd_mpi_vo_set_video_osd_attr
 
 【描述】
 
@@ -1040,7 +1040,7 @@ k_s32 kd_mpi_vo_osd_disable([k_vo_osd](#314-k_vo_osd) layer)
 
 【语法】
 
-k_s32 kd_mpi_vo_set_video_osd_attr([k_vo_osd](#314-k_vo_osd) layer, [k_vo_video_osd_attr](#3118-k_vo_video_osd_attr) \*attr)
+k_s32 kd_mpi_vo_set_video_osd_attr([k_vo_osd](#k_vo_osd) layer, [k_vo_video_osd_attr](#k_vo_video_osd_attr) \*attr)
 
 【参数】
 
@@ -1077,7 +1077,7 @@ k_s32 kd_mpi_vo_set_video_osd_attr([k_vo_osd](#314-k_vo_osd) layer, [k_vo_video_
 
 无
 
-#### 2.3.12 kd_mpi_vo_set_wbc_attr
+#### kd_mpi_vo_set_wbc_attr
 
 【描述】
 
@@ -1085,7 +1085,7 @@ k_s32 kd_mpi_vo_set_video_osd_attr([k_vo_osd](#314-k_vo_osd) layer, [k_vo_video_
 
 【语法】
 
-k_s32 kd_mpi_vo_set_wbc_attr([k_vo_wbc_attr](#3112-k_vo_wbc_attr) \*attr)
+k_s32 kd_mpi_vo_set_wbc_attr([k_vo_wbc_attr](#k_vo_wbc_attr) \*attr)
 
 【参数】
 
@@ -1121,7 +1121,7 @@ k_s32 kd_mpi_vo_set_wbc_attr([k_vo_wbc_attr](#3112-k_vo_wbc_attr) \*attr)
 
 无
 
-#### 2.3.13 kd_mpi_vo_enable_wbc
+#### kd_mpi_vo_enable_wbc
 
 【描述】
 
@@ -1163,7 +1163,7 @@ k_s32 kd_mpi_vo_enable_wbc(void)
 
 无
 
-#### 2.3.14 kd_mpi_vo_disable_wbc
+#### kd_mpi_vo_disable_wbc
 
 【描述】
 
@@ -1205,7 +1205,7 @@ k_s32 kd_mpi_vo_disable_wbc(void)
 
 无
 
-#### 2.3.15 kd_display_reset
+#### kd_display_reset
 
 【描述】
 
@@ -1247,7 +1247,7 @@ k_s32 kd_display_reset(void)
 
 无
 
-#### 2.3.16 kd_display_set_backlight
+#### kd_display_set_backlight
 
 【描述】
 
@@ -1289,7 +1289,7 @@ k_s32 kd_display_set_backlight(void)
 
 无
 
-#### 2.3.17 kd_mpi_vo_set_user_sync_info
+#### kd_mpi_vo_set_user_sync_info
 
 【描述】
 
@@ -1297,7 +1297,7 @@ k_s32 kd_display_set_backlight(void)
 
 【语法】
 
-k_s32 kd_mpi_vo_set_user_sync_info([k_vo_user_sync_info](#318-k_vo_user_sync_info) \*sync_info)
+k_s32 kd_mpi_vo_set_user_sync_info([k_vo_user_sync_info](#k_vo_user_sync_info) \*sync_info)
 
 【参数】
 
@@ -1334,7 +1334,7 @@ k_s32 kd_mpi_vo_set_user_sync_info([k_vo_user_sync_info](#318-k_vo_user_sync_inf
 
 无
 
-#### 2.3.18 kd_mpi_vo_draw_frame
+#### kd_mpi_vo_draw_frame
 
 【描述】
 
@@ -1342,7 +1342,7 @@ k_s32 kd_mpi_vo_set_user_sync_info([k_vo_user_sync_info](#318-k_vo_user_sync_inf
 
 【语法】
 
-k_s32 kd_mpi_vo_draw_frame([k_vo_draw_frame](#3115-k_vo_draw_frame) \*frame)
+k_s32 kd_mpi_vo_draw_frame([k_vo_draw_frame](#k_vo_draw_frame) \*frame)
 
 【参数】
 
@@ -1378,7 +1378,7 @@ k_s32 kd_mpi_vo_draw_frame([k_vo_draw_frame](#3115-k_vo_draw_frame) \*frame)
 
 无
 
-#### 2.3.19 kd_mpi_get_connector_info
+#### kd_mpi_get_connector_info
 
 【描述】
 
@@ -1386,7 +1386,7 @@ k_s32 kd_mpi_vo_draw_frame([k_vo_draw_frame](#3115-k_vo_draw_frame) \*frame)
 
 【语法】
 
-k_s32 kd_mpi_get_connector_info([k_connector_type](#3120-k_connector_type) connector_type, [k_connector_info](#3125-k_connector_info) \*connector_info)
+k_s32 kd_mpi_get_connector_info([k_connector_type](#k_connector_type) connector_type, [k_connector_info](#k_connector_info) \*connector_info)
 
 【参数】
 
@@ -1423,7 +1423,7 @@ k_s32 kd_mpi_get_connector_info([k_connector_type](#3120-k_connector_type) conne
 
 无
 
-#### 2.3.20 kd_mpi_connector_open
+#### kd_mpi_connector_open
 
 【描述】
 
@@ -1467,7 +1467,7 @@ k_s32 kd_mpi_connector_open(const char \*connector_name)
 
 无
 
-#### 2.3.21 kd_mpi_connector_power_set
+#### kd_mpi_connector_power_set
 
 【描述】
 
@@ -1512,7 +1512,7 @@ k_s32 kd_mpi_connector_power_set(k_s32 fd, k_bool on)
 
 无
 
-#### 2.3.22 kd_mpi_connector_init
+#### kd_mpi_connector_init
 
 【描述】
 
@@ -1520,7 +1520,7 @@ vo connector 初始化
 
 【语法】
 
-k_s32 kd_mpi_connector_init(k_s32 fd, [k_connector_info](#3125-k_connector_info) info)
+k_s32 kd_mpi_connector_init(k_s32 fd, [k_connector_info](#k_connector_info) info)
 
 【参数】
 
@@ -1557,7 +1557,7 @@ k_s32 kd_mpi_connector_init(k_s32 fd, [k_connector_info](#3125-k_connector_info)
 
 无
 
-#### 2.3.23 kd_mpi_connector_get_negotiated_data
+#### kd_mpi_connector_get_negotiated_data
 
 【描述】
 
@@ -1565,7 +1565,7 @@ Display驱动和显示器自动协商分辨率，协商成功后会将协商后�
 
 【语法】
 
-k_s32 kd_mpi_connector_get_negotiated_data(k_s32 fd, [k_connector_negotiated_data](#3126-k_connector_negotiated_data) *negotiated_data);
+k_s32 kd_mpi_connector_get_negotiated_data(k_s32 fd, [k_connector_negotiated_data](#k_connector_negotiated_data) *negotiated_data);
 
 【参数】
 
@@ -1602,7 +1602,7 @@ kd_mpi_connector_get_negotiated_data()仅仅只会和显示器进行协商，协
 
 无
 
-#### 2.3.24 kd_mpi_connector_adapt_resolution
+#### kd_mpi_connector_adapt_resolution
 
 【描述】
 
@@ -1610,7 +1610,7 @@ Display驱动和显示器自动协商分辨率，协商成功后会将协商后�
 
 【语法】
 
-k_s32 kd_mpi_connector_adapt_resolution(k_connector_type type, [k_connector_negotiated_data](#3126-k_connector_negotiated_data) *negotiated_data)
+k_s32 kd_mpi_connector_adapt_resolution(k_connector_type type, [k_connector_negotiated_data](#k_connector_negotiated_data) *negotiated_data)
 
 【参数】
 
@@ -1650,7 +1650,7 @@ kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_s
 
 无
 
-#### 2.3.25 kd_mpi_connector_set_mirror
+#### kd_mpi_connector_set_mirror
 
 【描述】
 
@@ -1698,11 +1698,11 @@ kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_s
 
 无
 
-## 3. 数据类型
+## 数据类型
 
-### 3.1 VO
+### VO
 
-#### 3.1.1 k_vo_intf_sync
+#### k_vo_intf_sync
 
 【说明】
 
@@ -1730,7 +1730,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-#### 3.1.2 k_vo_intf_type
+#### k_vo_intf_type
 
 【说明】
 
@@ -1754,7 +1754,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-#### 3.1.3 k_pixel_format
+#### k_pixel_format
 
 【说明】
 
@@ -1794,7 +1794,7 @@ typedef enum {
 
 无
 
-#### 3.1.4 k_vo_osd
+#### k_vo_osd
 
 【说明】
 
@@ -1828,7 +1828,7 @@ typedef enum {
 
 无
 
-#### 3.1.5 k_vo_layer
+#### k_vo_layer
 
 【说明】
 
@@ -1861,7 +1861,7 @@ typedef enum {
 
 无
 
-#### 3.1.6 k_vo_rotation
+#### k_vo_rotation
 
 【说明】
 
@@ -1884,7 +1884,7 @@ typedef enum {
 
 无
 
-#### 3.1.7 k_vo_mirror_mode
+#### k_vo_mirror_mode
 
 【说明】
 
@@ -1916,7 +1916,7 @@ typedef enum {
 
 无
 
-#### 3.1.8 k_vo_user_sync_info
+#### k_vo_user_sync_info
 
 【说明】
 
@@ -1946,7 +1946,7 @@ typedef struct {
 
 无
 
-#### 3.1.9 k_vo_point
+#### k_vo_point
 
 【说明】
 
@@ -1974,7 +1974,7 @@ typedef struct {
 
 无
 
-#### 3.1.10 k_vo_size
+#### k_vo_size
 
 【说明】
 
@@ -2002,7 +2002,7 @@ typedef struct {
 
 无
 
-#### 3.1.11 k_vo_video_layer_attr
+#### k_vo_video_layer_attr
 
 【说明】
 
@@ -2038,7 +2038,7 @@ alptha_tpye 仅对osd 层使用
 
 无
 
-#### 3.1.12 k_vo_wbc_attr
+#### k_vo_wbc_attr
 
 【说明】
 
@@ -2047,8 +2047,8 @@ alptha_tpye 仅对osd 层使用
 【定义】
 
 typedef struct {  
-&emsp;[k_vo_size](#3110-k_vo_size) target_size;  
-&emsp;[k_pixel_format](#313-k_pixel_format) pixel_format;  
+&emsp;[k_vo_size](#k_vo_size) target_size;  
+&emsp;[k_pixel_format](#k_pixel_format) pixel_format;  
 &emsp;k_u32 stride;  
 &emsp;k_u32 y_phy_addr;  
 } k_vo_wbc_attr;
@@ -2071,7 +2071,7 @@ y_addr 需要分配空间
 
 无
 
-#### 3.1.13 k_vo_pub_attr
+#### k_vo_pub_attr
 
 【说明】
 
@@ -2081,9 +2081,9 @@ y_addr 需要分配空间
 
 typedef struct {
 &emsp;k_u32 bg_color;  
-&emsp;[k_vo_intf_type](#312-k_vo_intf_type) intf_type;  
-&emsp;[k_vo_intf_sync](#311-k_vo_intf_sync) intf_sync;  
-&emsp;[k_vo_display_resolution](#3116-k_vo_display_resolution) \*sync_info;  
+&emsp;[k_vo_intf_type](#k_vo_intf_type) intf_type;  
+&emsp;[k_vo_intf_sync](#k_vo_intf_sync) intf_sync;  
+&emsp;[k_vo_display_resolution](#k_vo_display_resolution) \*sync_info;  
 &emsp;}k_vo_pub_attr;
 
 【成员】
@@ -2104,7 +2104,7 @@ typedef struct {
 
 无
 
-#### 3.1.14 k_vo_scaler_attr
+#### k_vo_scaler_attr
 
 【说明】
 
@@ -2135,7 +2135,7 @@ typedef struct{
 
 无
 
-#### 3.1.15 k_vo_draw_frame
+#### k_vo_draw_frame
 
 【说明】
 
@@ -2171,7 +2171,7 @@ typedef struct {
 
 无
 
-#### 3.1.16 k_vo_display_resolution
+#### k_vo_display_resolution
 
 【说明】
 
@@ -2219,7 +2219,7 @@ typedef struct{
 
 无
 
-#### 3.1.17 k_vo_mipi_phy_attr
+#### k_vo_mipi_phy_attr
 
 【说明】
 
@@ -2253,7 +2253,7 @@ typedef struct {
 
 无
 
-#### 3.1.18 k_vo_video_osd_attr
+#### k_vo_video_osd_attr
 
 【说明】
 
@@ -2262,9 +2262,9 @@ typedef struct {
 【定义】
 
 typedef struct {  
-&emsp;[k_vo_point](#3110-k_vo_size) display_rect;  
-&emsp;[k_vo_size](#3110-k_vo_size) img_size;  
-&emsp;[k_pixel_format](#313-k_pixel_format) pixel_format;  
+&emsp;[k_vo_point](#k_vo_size) display_rect;  
+&emsp;[k_vo_size](#k_vo_size) img_size;  
+&emsp;[k_pixel_format](#k_pixel_format) pixel_format;  
 &emsp;k_u32 stride;  
 &emsp;k_u8 global_alptha;  
 } k_vo_video_osd_attr;
@@ -2287,7 +2287,7 @@ typedef struct {
 
 无
 
-#### 3.1.19 k_video_frame_info
+#### k_video_frame_info
 
 【说明】
 
@@ -2317,7 +2317,7 @@ typedef struct {
 
 无
 
-#### 3.1.20 k_connector_type
+#### k_connector_type
 
 【说明】
 
@@ -2348,7 +2348,7 @@ typedef enum {
 
 无
 
-#### 3.1.21 k_dsi_lan_num
+#### k_dsi_lan_num
 
 【说明】
 
@@ -2378,7 +2378,7 @@ typedef enum {
 
 无
 
-#### 3.1.22 k_dsi_work_mode
+#### k_dsi_work_mode
 
 【说明】
 
@@ -2408,7 +2408,7 @@ typedef enum{
 
 无
 
-#### 3.1.23 k_vo_dsi_cmd_mode
+#### k_vo_dsi_cmd_mode
 
 【说明】
 
@@ -2436,7 +2436,7 @@ typedef enum {
 
 无
 
-#### 3.1.24 k_connectori_phy_attr
+#### k_connectori_phy_attr
 
 【说明】
 
@@ -2468,7 +2468,7 @@ typedef struct {
 
 无
 
-#### 3.1.25 k_connector_info
+#### k_connector_info
 
 【说明】
 
@@ -2482,12 +2482,12 @@ typedef struct {
 &emsp;k_u32 dsi_test_mode;  
 &emsp;k_u32 bg_color;  
 &emsp;k_u32 intr_line;  
-&emsp;[k_dsi_lan_num](#3121-k_dsi_lan_num) lan_num;  
-&emsp;[k_dsi_work_mode](#3122-k_dsi_work_mode) work_mode;  
-&emsp;[k_vo_dsi_cmd_mode](#3123-k_vo_dsi_cmd_mode) cmd_mode;  
-&emsp;[k_connectori_phy_attr](#3124-k_connectori_phy_attr) phy_attr;  
-&emsp;[k_vo_display_resolution](#3116-k_vo_display_resolution) resolution;  
-&emsp;[k_connector_type](#3120-k_connector_type) type;  
+&emsp;[k_dsi_lan_num](#k_dsi_lan_num) lan_num;  
+&emsp;[k_dsi_work_mode](#k_dsi_work_mode) work_mode;  
+&emsp;[k_vo_dsi_cmd_mode](#k_vo_dsi_cmd_mode) cmd_mode;  
+&emsp;[k_connectori_phy_attr](#k_connectori_phy_attr) phy_attr;  
+&emsp;[k_vo_display_resolution](#k_vo_display_resolution) resolution;  
+&emsp;[k_connector_type](#k_connector_type) type;  
 } k_connector_info;
 
 【成员】
@@ -2506,7 +2506,7 @@ typedef struct {
 
 无
 
-#### 3.1.26 k_connector_negotiated_data
+#### k_connector_negotiated_data
 
 【说明】
 
@@ -2540,7 +2540,7 @@ typedef struct {
 
 无
 
-#### 3.1.27 k_connector_mirror
+#### k_connector_mirror
 
 【说明】
 
@@ -2574,7 +2574,7 @@ typedef enum {
 
 无
 
-## 4. 错误码
+## 错误码
 
 表 41 VO API 错误码
 

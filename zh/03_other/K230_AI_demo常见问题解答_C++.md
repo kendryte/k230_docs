@@ -25,7 +25,7 @@
 
 [TOC]
 
-## 1 TF boot failed with exit code 13
+## TF boot failed with exit code 13
 
 问题： TF卡启动报boot failed with exit code 13错误
 

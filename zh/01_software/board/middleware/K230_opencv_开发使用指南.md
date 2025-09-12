@@ -50,7 +50,7 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 算法部 | 2023-05-30 |
 
-## 1.OpenCV简介
+## OpenCV简介
 
 OpenCV的全称是Open Source Computer Vision Library，是一个跨平台的计算机视觉库。OpenCV是由英特尔公司发起并参与开发，以BSD许可证授权发行，可以在商业和研究领域中免费使用。OpenCV可用于开发实时的图像处理、计算机视觉以及模式识别程序。
 嘉楠科技提供了针对K230优化的升级版OpenCV加速库，相比于原始版本OpenCV，可大幅减少OpenCV算子的推理时间。对比示例如下：
@@ -67,7 +67,7 @@ OpenCV的全称是Open Source Computer Vision Library，是一个跨平台的计
 
 此外，SDK中已包含预先交叉编译好的升级版OpenCV加速库(位于`k230_sdk/src/big/utils/lib/opencv/`路径下)，用户直接使用该静态库编译自己的可执行程序即可。
 
-## 2.测试用例编译示例
+## 测试用例编译示例
 
 本节讲解如何通过SDK中预设的OpenCV静态库，来进行可执行程序的编译。SDK的已包含多个基于OpenCV实现的可执行程序编译示例(位于`k230_sdk/src/big/utils/examples/opencv/`路径下)，本节基于这些示例来进行讲解。该路径下的目录结构说明如下：
 
@@ -124,12 +124,12 @@ Install the project...
 - `4_opencv_features2d.elf`
 - `5_opencv_objdetect.elf`
 
-## 3.测试用例运行示例
+## 测试用例运行示例
 
 注意：
 >所有测试用例运行所需的输入图像数据，均位于SDK的`k230_sdk/src/big/utils/examples/opencv/resources`路径下。
 
-### 3.1 opencv_calcHist
+### opencv_calcHist
 
 `1_opencv_calcHist`测试用例的运行方式如下：
 
@@ -143,7 +143,7 @@ msh /sharefs/bin_opencv>./1_opencv_calcHist.elf
 
 其中，左侧为原图像，右侧为3个channel的像素直方图信息。
 
-### 3.2 opencv_threshold
+### opencv_threshold
 
 `2_opencv_threshold`测试用例的运行方式如下：
 
@@ -156,7 +156,7 @@ msh /sharefs/bin_opencv>./2_opencv_threshold.elf
 
 其中，左侧为原图像，右侧为阈值化后的图像。
 
-### 3.3 opencv_findContours
+### opencv_findContours
 
 `3_opencv_findContours`测试用例的运行方式如下：
 
@@ -169,7 +169,7 @@ msh /sharefs/bin_opencv>./3_opencv_findContours.elf
 
 其中，左侧为原图像，右侧为处理后的轮廓信息图。
 
-### 3.4 opencv_features2d
+### opencv_features2d
 
 `4_opencv_features2d`测试用例的运行方式如下：
 
@@ -181,7 +181,7 @@ msh /sharefs/bin_opencv>./4_opencv_features2d.elf
 ![test_opencv_features2d](images/test_opencv_features2d.png)
 其中，左侧为原图像，右侧为处理后的特征提取结果图。
 
-### 3.5 opencv_objdetect
+### opencv_objdetect
 
 `5_opencv_objdetect`测试用例的运行方式如下：
 
@@ -194,12 +194,12 @@ msh /sharefs/bin_opencv>./5_opencv_objdetect.elf
 
 其中，左侧为原图像，右侧为眼睛和人脸的目标检测结果图。
 
-## 4.原始版本OpenCV库的交叉编译及使用
+## 原始版本OpenCV库的交叉编译及使用
 
 注意：
 >在第1~3章节中，均基于嘉楠科技提供的K230 加速版OpenCV库进行讲解。若用户希望使用原生的OpenCV库进行应用程序的开发，那可以参考本节内容：首先，通过交叉编译得到原始版本OpenCV的静态库；然后，基于原始版本OpenCV的静态库，进行可执行程序的编译。
 
-### 4.1 下载OpenCV源码
+### 下载OpenCV源码
 
 首先，使用Github获取OpenCV仓库，由于OpenCV来自于Github，因此克隆速度慢为正常现象，请耐心等待：
 
@@ -214,7 +214,7 @@ OpenCV中存在着很多版本，这里我们选用最新的版本4.6.0:
 git checkout tags/4.6.0 -b v4.6.0-branch
 ```
 
-### 4.2 应用patch补丁包
+### 应用patch补丁包
 
 patch补丁包在SDK中的路径为：`k230_sdk/src/big/rt-smart/userapps/opencv/v4.6.0`。
 
@@ -272,7 +272,7 @@ git am ./patch/*.patch
 `-- version
 ```
 
-### 4.3 交叉编译OpenCV静态库
+### 交叉编译OpenCV静态库
 
 首先，检查`build.sh`文件中的工具链路径是否正确：
 
@@ -297,7 +297,7 @@ make install
 
 在编译过程中，若终端未出现告警信息，则说明编译成功，编译完成的产物在`build/install`中，其中包含了原始版本OpenCV的静态库文件。
 
-### 4.4 编译可执行程序
+### 编译可执行程序
 
 本小节通过对第2节中的测试用例进行修改，来说明如何基于原始版本OpenCV库来实现可执行程序的编译。
 首先，把原始版本的OpenCV库拷贝到`k230_sdk/src/big/utils/lib/`下并将文件夹命名为`opencv_rtt`。

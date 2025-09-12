@@ -51,7 +51,7 @@ This document (this guide) is intended primarily for:
 |------------|----------|--------|------------|
 | V1.0       | Initial edition     | Xu Baikun | 2023/04/24 |
 
-## 1. Function Introduction
+## Function Introduction
 
 AiW4211LV10 is a low-power IoT WiFi chip, our company uses this chip platform to design an AiW4211LV10 development board, the development board can be connected to the K230 EVB board through the TF card slot. After the K230 EVB is loaded with the AiW4211LV10 driver, a wlan0 wireless card can be generated to realize network data communication.
 
@@ -77,16 +77,16 @@ Brief introduction of the main functions of WiFi:
 - IO wake-up: Processes button or PIR wake-up signals, restores the software and hardware environment, and powers up the host
 - Wake-on-LAN: Processes wake-up packets from keepalive links, restores the software and hardware environment, and powers up the host
 
-## 2. Module Dependencies
+## Module Dependencies
 
 The hardware relies on the AiW4211LV10 development board and the K230 EVB development board. Software relies on the K230 SDK.
 
-### 2.1 Software Environment
+### Software Environment
 
 K230 SDK V0.5.1 and later.
 AiW4211LV10 SDK。
 
-### 2.2 Hardware Environment
+### Hardware Environment
 
 The K230 EVB development board is set to emmc startup, and the TF card slot is vacated for AiW4211LV10 development board access.
 The hardware version and jumper of the development board are shown in Table 2-1:
@@ -139,9 +139,9 @@ Table 2-3 Description of the header headers of WiFi development boards
 |                       | PIN3         | PIR_WAKE_WiFi     | PIR signal, connected to the PIR brown line | 3.3V       | \\                             | \\                          |
 |                       | PIN4         | VDD_3V3           | PIR power supply, connected to PIR red wire | POWER      | \\                             | \\                          |
 
-## 3. Module Configuration
+## Module Configuration
 
-### 3.1 SDK Directory Structure
+### SDK Directory Structure
 
 The directory structure of the WiFi SDK is as follows:
 
@@ -159,7 +159,7 @@ The directory structure of the WiFi SDK is as follows:
 
 The compilation-driven toolchain is not included in the SDK due to platform dependency, please contact us if necessary.
 
-### 3.2 Customized Modifications
+### Customized Modifications
 
 In the WiFi SDK, in order to facilitate firmware customization, the code closely related to the hardware design, the relevant parameters of SoftAP that need to be published and can be customized by users, as well as custom global variables used by multiple files, are placed in canaan_private.h and canaan_private.c files. The description of the key projects is shown in Table 3-1:
 
@@ -177,14 +177,14 @@ Table 3-1 Description of key items of customization
 | kd_gpios_hoststanby           | WiFi to Host power-down interface, can be realized according to the characteristics of the platform, because the K230 is powered down, this interface does not operate any IO                                                                |
 | kd_gpios_wakehost             | WiFi powers up the host, which can be realized according to the characteristics of the platform, and for the K230 platform, WiFi sends an IO signal to the K230 PMU                                                    |
 
-## 4. Firmware Compilation
+## Firmware Compilation
 
-### 4.1 Compilation Environment
+### Compilation Environment
 
 For the firmware compilation environment construction, please refer to the document "AiW4211V10/AiW4211LV10 SDK Development Environment Setup User Guide .pdf", which is stored in the support directory of the WiFi SDK.
 Users can also contact Chengdu Aiqi Technology Co., Ltd<http://www.aichtech.com/>. for relevant information.
 
-### 4.2 Compilation Methods
+### Compilation Methods
 
 Enter the WiFi SDK source code directory to execute the commands make all and make install, and compile the WiFi firmware, driver, configuration tools and communication interface shared library files and store them in the top-level out directory:
 
@@ -221,9 +221,9 @@ make tools: compile configuration tools and communication interface shared libra
 
 Note: The K230 SDK already integrates WiFi drivers, configuration tools, and communication interface libraries, so these can not be compiled
 
-## 5. Module Starts
+## Module Starts
 
-### 5.1 Firmware Flashing
+### Firmware Flashing
 
 Use the BurnTool .exe of the programming tool in the WiFi SDK support directory to flash the firmware aiw4211l_demo_allinone.bin to the AiW4211LV10 development board through the serial port.
 
@@ -243,7 +243,7 @@ Step 3: Select WiFi firmware
 step 4: Click the "Connect" control to initiate a connection to the WiFi development board, the WiFi development board is powered on, and the tool log window can see ready to load ... , indicating that the connection has been established and can start flashing
 Step 5: Click the "Send file" control to start flashing
 
-### 5.2 Driver Loading
+### Driver Loading
 
 Refer to Section 2.2 to configure the hardware environment, press and hold the K1 button on the K230 EVB board to power on and start, and load the driver:
 
@@ -257,13 +257,13 @@ The current driver supports passing in the MMC master number and GPIO number for
 
 Figure 5-2 Driver loading and iotwifi_link startup
 
-### 5.3 Parameter Configuration
+### Parameter Configuration
 
 The access AP, sleep level, sleep cycle, wake-up IO, TCP keepalive target server, keepalive parameters, etc. of AiW4211LV10 directly affect WiFi operation, and parameters that need to be dynamically adjusted according to the actual scenario can be configured through the methods provided in Section 5.3.1 and 5.3.2.
 
 Unless the user wants to change the configuration, there is no need to reconfigure after each boot.
 
-#### 5.3.1 Configure AP Access Through the Network
+#### Configure AP Access Through the Network
 
 The AiW4211LV10 development board supports configuring the name, password, and encryption method of the target AP through the network. The steps to configure AP access are as follows:
 
@@ -289,11 +289,11 @@ Table 5-1 SoftAP parameters and configuration data format
 
 Figure 5-3 NetAssist configuration runs
 
-#### 5.3.2 Configure AP Access Through Messages
+#### Configure AP Access Through Messages
 
 The AiW4211LV10 development board supports configuring target AP parameters through message channels (same as 5.3.1 functions), in addition to configuring WiFi sleep parameters and tcp keepalive parameters through message channels. The message channel is a software channel established between the K230 and the AiW4211LV10 via the SDIO bus.
 
-##### 5.3.2.1 Configuration via the Configuration Tool
+##### Configuration via the Configuration Tool
 
 The configuration steps are as follows:
 
@@ -304,7 +304,7 @@ Step 4: The K230 side edits the configuration file/etc/wifi.conf based on the ho
 Step 5: Run the configuration tool client, parse the configuration file, and send the configuration message: iotwifi_cli --config /etc/wifi.conf
 Step 6: After receiving the configuration parameters, AiW4211LV10 first stores the sleep parameters, then accesses the specified AP, and finally establishes a tcp socket client to connect to the tcp socket server established by NetAssist
 
-/etc/wifi.conf is a WiFi working parameter configuration file, written in json format. It is basically a mapping of the [wifi_config_t](#6121-wifi_config_t) structure. For details, please refer to Chapter 6.1.2. The contents of the file are as follows:
+/etc/wifi.conf is a WiFi working parameter configuration file, written in json format. It is basically a mapping of the [wifi_config_t](#wifi_config_t) structure. For details, please refer to Chapter 6.1.2. The contents of the file are as follows:
 
 ```c
 {
@@ -338,15 +338,15 @@ Note: "wake_gpios": \[5\] is an array item, the current array has only one eleme
 
 Figure 5-4 (A) WiFi access router and assigned IP (B) tcp keepalive server
 
-##### 5.3.2.2 Configure by Calling APIs
+##### Configure by Calling APIs
 
-In the actual business program, you can configure parameters by calling the API interface [kd_wifi_config](#6121-wifi_config_t) provided by the communication interface shared library libhal_iotwifi.so. For API description, please refer to Chapter 6.1.1. The configuration steps are the same as 5.3.2.1. .
+In the actual business program, you can configure parameters by calling the API interface [kd_wifi_config](#wifi_config_t) provided by the communication interface shared library libhal_iotwifi.so. For API description, please refer to Chapter 6.1.1. The configuration steps are the same as 5.3.2.1. .
 
 The tool introduced in Section 5.3.2.1 also iotwifi_cli configure WiFi parameters by calling this interface.
 
-### 5.4 System Hibernation
+### System Hibernation
 
-#### 5.4.1 Configuring Hibernation Through Tools
+#### Configuring Hibernation Through Tools
 
 Run the configuration tool client to send a sleep command to trigger WiFi sleep: iotwifi_cli --dirsleep
 
@@ -354,13 +354,13 @@ Run the configuration tool client to send a sleep command to trigger WiFi sleep:
 
 Figure 5-5 WiFi enters the hibernation log
 
-#### 5.4.2 Sleep by Calling the API
+#### Sleep by Calling the API
 
-In the actual business program, WiFi sleep can be triggered by calling the API interface [kd_wifi_sleep](#62-sleep-interface) provided by the communication interface shared library libhal_iotwifi.so. Please refer to Chapter 6.2 for details.
+In the actual business program, WiFi sleep can be triggered by calling the API interface [kd_wifi_sleep](#sleep-interface) provided by the communication interface shared library libhal_iotwifi.so. Please refer to Chapter 6.2 for details.
 
 The tool iotwifi_cli also triggers WiFi sleep by calling this interface.
 
-#### 5.4.3 Sleep by Monitoring Levels
+#### Sleep by Monitoring Levels
 
 The K230 EVB can be self-powered, after power-down, the level of the J1 PIN14 (PW_EN) pin of the K230 EVB development board will be pulled low, and WiFi can also trigger sleep by monitoring the level of this pin. The premise of this function is that the K230 power management function is normal, and the macro CONFIG_WIFI_MONITOR_HOSTLEVEL is enabled when compiling the WiFi firmware (not enabled by default), after enabling the macro, WiFi will ignore the sleep command sent by the K230 and sleep only according to the pin level state.
 
@@ -368,9 +368,9 @@ The tool k230_pwrdown can realize the relatively simple K230 EVB dual-core self-
 
 ./k230_pwrdown
 
-### 5.5 System Wake
+### System Wake
 
-#### 5.5.1 Key Wake-up
+#### Key Wake-up
 
 If WiFi has gone to sleep, simply press the K4 button on the AiW4211LV10 development board to wake up WiFi, WiFi will send a wake-up signal to the PMU of the K230 EVB, and if the K230 EVB is in the power-down state (non-cold start) configured in Section 5.4.3, it will be powered on.
 
@@ -378,7 +378,7 @@ If WiFi has gone to sleep, simply press the K4 button on the AiW4211LV10 develop
 
 Figure 5-6 Press the button wake-up log
 
-#### 5.5.2 Wake on LAN
+#### Wake on LAN
 
 If the WiFi has gone to sleep, NetAssist sends wakeup to wake up the WiFi, WiFi will send a wake-up signal to the PMU of the K230 EVB, and if the K230 EVB is in the power-down state (non-cold start) configured in Section 5.4.3, it will be powered on.
 
@@ -386,25 +386,25 @@ If the WiFi has gone to sleep, NetAssist sends wakeup to wake up the WiFi, WiFi 
 
 Figure 5-7 Wake-on-LAN log
 
-## 6. API Reference
+## API Reference
 
 The wireless network card generated after the AiW4211LV10 driver is loaded is no different from that of general WiFi network cards, so there is no special API for network communication functions.
 In addition to basic network communication, K230 and WiFi also have two message communication interfaces, which need to be highlighted.
 
-### 6.1 Config Interface
+### Config Interface
 
-#### 6.1.1 API
+#### API
 
-int kd_wifi_config([wifi_config_t](#6121-wifi_config_t) \*config)
+int kd_wifi_config([wifi_config_t](#wifi_config_t) \*config)
 Configure WiFi working parameters:
 
 - Configure the name, password, authentication, and encryption method of the target AP
 - Configure WiFi sleep level, wake-up period, and wake-up GPIOs
 - Configure TCP keepalive time parameters, etc
 
-#### 6.1.2 Data Structures
+#### Data Structures
 
-##### 6.1.2.1 wifi_config_t
+##### wifi_config_t
 
 ```c
 typedef struct {
@@ -422,11 +422,11 @@ Table 6-1 wifi_config_t structure members
 
 | config_mask                    | Configure the target item mask to enable or mask the target item, for example, configure all: config_mask = CFG_MASK_SLEEP\|CFG_MASK_CONNECT\|CFG_MASK_KEEPALIVE CFG_MASK_SLEEP: Configure sleep parameters CFG_MASK_CONNECT: Configure AP connection parameters CFG_MASK_KEEPALIVE: Configure tcp keepalive parameters |
 |--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [sleep](#6122-wifi_sleep_t)         | Sleep parameters                                                                                                                                                                                                                     |
-| [Conn](#6123-wifi_connect_t)        | AP connection parameters                                                                                                                                                                                                                   |
-| [keepalive](#6124-wifi_keepalive_t) | TCP keepalive parameter                                                                                                                                                                                                            |
+| [sleep](#wifi_sleep_t)         | Sleep parameters                                                                                                                                                                                                                     |
+| [Conn](#wifi_connect_t)        | AP connection parameters                                                                                                                                                                                                                   |
+| [keepalive](#wifi_keepalive_t) | TCP keepalive parameter                                                                                                                                                                                                            |
 
-##### 6.1.2.2 wifi_sleep_t
+##### wifi_sleep_t
 
 ```c
 typedef struct
@@ -470,7 +470,7 @@ Table 6-2 wifi_sleep_t structure members
 | period     | Wake up period, effective value 33\~\~4000ms. WiFi periodically wakes up from sleep to detect whether the AP has sent a cache of data to itself                                             |
 | wake_gpios | Enable or disable to wake up WiFi gpio (WiFi side gpio)                                                                                      |
 
-##### 6.1.2.3 wifi_connect_t
+##### wifi_connect_t
 
 ```c
 typedef struct
@@ -492,7 +492,7 @@ Table 6-3 wifi\_**connect**\_t structure members
 | BSSID    | AP bssid, generally the AP mac address                                                                                                                                                                                                                                                     |
 | pairwise | Encryption type EXT_WIFI_PARIWISE_UNKNOWN EXT_WIFI_PAIRWISE_AES EXT_WIFI_PAIRWISE_TKIP EXT_WIFI_PAIRWISE_TKIP_AES_MIX                                                                                                                                                                 |
 
-##### 6.1.2.4 wifi_keepalive_t
+##### wifi_keepalive_t
 
 ```c
 typedef struct
@@ -518,12 +518,12 @@ Table 6-4 wifi_keepalive_t structure members
 | heartbeat_intvl      | Application layer heartbeat packet sending cycle, seconds                                                |
 | heartbeat_probes     | After the application-layer heartbeat packet no response count exceeds this threshold, the socket connection is determined to be abnormal and the socket is disconnected and reconnected      |
 
-### 6.2 Sleep Interface
+### Sleep Interface
 
 int kd_wifi_sleep(void)
 To control WiFi sleep, sleep related parameters are set in the config API.
 
-## 7. WiFi Function Limitation
+## WiFi Function Limitation
 
   AiW4211LV10 chip is a single-band wifi chip, does not support AP and STA coexistence at the same time, when the AP is fixed in a certain channel when starting, and then the STA will scan on different channels, at this time the AP will be disconnected.
   When passing in conf through sdio for misconfiguration, AiW4211LV10 will show that the sta connection ap failed serial port printing please reset conf, at this time a new correct conf can be passed in through the iotwifi_cli.

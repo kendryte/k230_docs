@@ -50,12 +50,12 @@
 | ---------- | -------- | ---------- | ---------- |
 | V1.0       | 初版     | 算法部 | 2023-05-30 |
 
-## 1.OpenBLAS简介
+## OpenBLAS简介
 
 OpenBLAS 是一个基于BSD许可(开源)发行的优化BLAS计算库。BLAS(Basic Linear Algebra Subprograms，基础线性代数程序集)是一个应用程序接口(API)标准，用以规范发布基础线性代数操作的数值库(如矢量或矩阵乘法)，OpenBLAS是BLAS标准的一种具体实现。
 在SDK中，已包含预先交叉编译好的OpenBLAS库(位于`k230_sdk/src/big/utils/lib/openblas/`路径下)，用户直接使用该静态库编译自己的可执行程序即可。
 
-## 2.测试用例编译
+## 测试用例编译
 
 注意：
 >本节讲解如何通过SDK中预设的OpenBLAS静态库，来进行可执行程序的编译。SDK中已包含多个基于OpenBLAS实现的可执行程序编译示例(位于`k230_sdk/src/big/utils/examples/openblas/`路径下)，本节基于这些示例来进行讲解。
@@ -106,9 +106,9 @@ Install the project...
 - `3_openblas_level3.elf`
 - `4_openblas_fortran.elf`
 
-## 3.测试用例运行演示
+## 测试用例运行演示
 
-### 3.1 level_1测试用例
+### level_1测试用例
 
 运行方式及输出结果示例如下：
 
@@ -123,7 +123,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.2 level_2测试用例
+### level_2测试用例
 
 运行方式及输出结果示例如下：
 
@@ -138,7 +138,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.3 level_3测试用例
+### level_3测试用例
 
 运行方式及输出结果示例如下：
 
@@ -153,7 +153,7 @@ This is the reference:
 {Test PASS}.
 ```
 
-### 3.4 Fortran接口测试用例
+### Fortran接口测试用例
 
 运行方式及输出结果示例如下：
 
@@ -175,14 +175,14 @@ This is the reference:
 {Test PASS}.
 ```
 
-## 4.OpenBLAS交叉编译
+## OpenBLAS交叉编译
 
 注意：
 >尽管SDK中已包含预先交叉编译好的OpenBLAS库(位于`k230_sdk/src/big/utils/lib/openblas/`路径下)，感兴趣的用户也可以自己对OpenBLAS进行交叉编译，得到适配K230的OpenBLAS静态库。
 
-### 4.1 OpenBLAS编译环境搭建
+### OpenBLAS编译环境搭建
 
-#### 4.1.1 Git代码下载
+#### Git代码下载
 
 首先使用git获取OpenBLAS仓库，由于OpenBLAS来自于Github，因此克隆速度慢为正常现象，请耐心等待:
 
@@ -197,7 +197,7 @@ OpenBLAS中存在着很多版本，由于 0.3.21 版本与最新分支相比缺�
 git checkout e9a911fb9f011c886077e68eab81c48817cdb782
 ```
 
-#### 4.1.2 patch补丁包应用
+#### patch补丁包应用
 
 注意：
 >patch补丁包在SDK中的路径为`k230_sdk/src/big/rt-smart/userapps/openblas/`。
@@ -239,7 +239,7 @@ git checkout e9a911fb9f011c886077e68eab81c48817cdb782
 git am ./patch/*.patch
 ```
 
-### 4.3 OpenBLAS编译
+### OpenBLAS编译
 
 进入 OpenBLAS 的根目录，执行以下命令，进行编译：
 

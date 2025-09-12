@@ -51,17 +51,17 @@ This document (this guide) is primarily intended for the following personnel:
 |------------------|--------|------------|-------------|
 | V0.1             | Software Department | 2023.07.20 | Initial version |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 The middleware's position in the system is `k230_sdk/src/common/cdk/user/middleware`.
 
 This document describes the relevant parts of the middleware, involving intercom protocol, mixing, MP4 format encapsulation and decapsulation, player, etc.
 
-### 1.2 Function Description
+### Function Description
 
-#### 1.2.1 Visual Intercom RTSP Protocol
+#### Visual Intercom RTSP Protocol
 
 Referencing the ONVIF RTSP extension, it implements a single-line video visual intercom protocol;
 
@@ -71,34 +71,34 @@ The RTSP client supports receiving audio, video, and sending backchannel audio m
 
 For related descriptions, see the visual intercom protocol chapter.
 
-#### 1.2.2 Player
+#### Player
 
 Implements MP4 file playback. Video supports H264, H265, and audio supports G711a/u.
 
-#### 1.2.3 Mixing
+#### Mixing
 
 Implements two-way G711a/u mixing.
 
-#### 1.2.4 MP4 Format Encapsulation and Decapsulation
+#### MP4 Format Encapsulation and Decapsulation
 
 Implements encapsulation and decapsulation between audio-video and MP4 formats.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 Visual Intercom RTSP Server
+### Visual Intercom RTSP Server
 
 KdRtspServer provides the following APIs:
 
-- [Init](#211-kdrtspserverinit): Initialization.
-- [DeInit](#212-kdrtspserverdeinit): Deinitialization.
-- [CreateSession](#213-kdrtspservercreatesession): Create RTSP session.
-- [DestroySession](#214-kdrtspserverdestroysession): Destroy RTSP session.
-- [Start](#215-kdrtspserverstart): Start RTSP server service.
-- [Stop](#216-kdrtspserverstop): Stop RTSP server service.
-- [SendVideoData](#217-kdrtspserversendvideodata): Write video stream data.
-- [SendAudioData](#218-kdrtspserversendaudiodata): Write audio stream data.
+- [Init](#kdrtspserverinit): Initialization.
+- [DeInit](#kdrtspserverdeinit): Deinitialization.
+- [CreateSession](#kdrtspservercreatesession): Create RTSP session.
+- [DestroySession](#kdrtspserverdestroysession): Destroy RTSP session.
+- [Start](#kdrtspserverstart): Start RTSP server service.
+- [Stop](#kdrtspserverstop): Stop RTSP server service.
+- [SendVideoData](#kdrtspserversendvideodata): Write video stream data.
+- [SendAudioData](#kdrtspserversendaudiodata): Write audio stream data.
 
-#### 2.1.1 KdRtspServer::Init
+#### KdRtspServer::Init
 
 **Description**:
 
@@ -141,7 +141,7 @@ None.
 
 None.
 
-#### 2.1.2 KdRtspServer::DeInit
+#### KdRtspServer::DeInit
 
 **Description**:
 
@@ -170,7 +170,7 @@ None.
 
 None.
 
-#### 2.1.3 KdRtspServer::CreateSession
+#### KdRtspServer::CreateSession
 
 **Description**:
 
@@ -209,7 +209,7 @@ None.
 
 None.
 
-#### 2.1.4 KdRtspServer::DestroySession
+#### KdRtspServer::DestroySession
 
 **Description**:
 
@@ -251,7 +251,7 @@ None.
 
 None.
 
-#### 2.1.5 KdRtspServer::Start
+#### KdRtspServer::Start
 
 **Description**:
 
@@ -288,7 +288,7 @@ None.
 
 None.
 
-#### 2.1.6 KdRtspServer::Stop
+#### KdRtspServer::Stop
 
 **Description**:
 
@@ -321,7 +321,7 @@ None.
 
 None.
 
-#### 2.1.7 KdRtspServer::SendVideoData
+#### KdRtspServer::SendVideoData
 
 **Description**:
 
@@ -358,7 +358,7 @@ int SendVideoData(const std::string &session_name, const uint8_t *data, size_t s
 
 None.
 
-#### 2.1.8 KdRtspServer::SendAudioData
+#### KdRtspServer::SendAudioData
 
 **Description**:
 
@@ -395,17 +395,17 @@ int SendAudioData(const std::string &session_name, const uint8_t *data, size_t s
 
 None.
 
-### 2.2 Visual Intercom RTSP Client
+### Visual Intercom RTSP Client
 
 KdRtspClient module provides the following APIs:
 
-- [Init](#221-kdrtspclientinit): Initialization.
-- [DeInit](#222-kdrtspclientdeinit): Deinitialization.
-- [Open](#223-kdrtspclientopen): Open and run RTSP client connection.
-- [Close](#224-kdrtspclientclose): Close RTSP client connection.
-- [SendAudioData](#225-kdrtspclientsendaudiodata): Write backchannel audio stream data.
+- [Init](#kdrtspclientinit): Initialization.
+- [DeInit](#kdrtspclientdeinit): Deinitialization.
+- [Open](#kdrtspclientopen): Open and run RTSP client connection.
+- [Close](#kdrtspclientclose): Close RTSP client connection.
+- [SendAudioData](#kdrtspclientsendaudiodata): Write backchannel audio stream data.
 
-#### 2.2.1 KdRtspClient::Init
+#### KdRtspClient::Init
 
 **Description**:
 
@@ -476,7 +476,7 @@ None.
 
 None.
 
-#### 2.2.2 KdRtspClient::Deinit
+#### KdRtspClient::Deinit
 
 **Description**:
 
@@ -513,7 +513,7 @@ None.
 
 None.
 
-#### 2.2.3 KdRtspClient::Open
+#### KdRtspClient::Open
 
 **Description**:
 
@@ -555,7 +555,7 @@ None.
 
 None.
 
-#### 2.2.4 KdRtspClient::Close
+#### KdRtspClient::Close
 
 **Description**:
 
@@ -592,7 +592,7 @@ None.
 
 None.
 
-#### 2.2.5 KdRtspClient::SendAudioData
+#### KdRtspClient::SendAudioData
 
 **Description**:
 
@@ -636,18 +636,18 @@ None.
 
 None.
 
-### 2.3 Player Encapsulation
+### Player Encapsulation
 
 KdPlayer module provides the following APIs:
 
-- [kd_player_init](#231-kd_player_init): Initialization.
-- [kd_player_deinit](#232-kd_player_deinit): Deinitialization.
-- [kd_player_setdatasource](#233-kd_player_setdatasource): Set media playback file.
-- [kd_player_regcallback](#234-kd_player_regcallback): Register event callback.
-- [kd_player_start](#235-kd_player_start): Start playback.
-- [kd_player_stop](#236-kd_player_stop): Stop playback.
+- [kd_player_init](#kd_player_init): Initialization.
+- [kd_player_deinit](#kd_player_deinit): Deinitialization.
+- [kd_player_setdatasource](#kd_player_setdatasource): Set media playback file.
+- [kd_player_regcallback](#kd_player_regcallback): Register event callback.
+- [kd_player_start](#kd_player_start): Start playback.
+- [kd_player_stop](#kd_player_stop): Stop playback.
 
-#### 2.3.1 kd_player_init
+#### kd_player_init
 
 **Description**:
 
@@ -687,7 +687,7 @@ None.
 
 None.
 
-#### 2.3.2 kd_player_deinit
+#### kd_player_deinit
 
 **Description**:
 
@@ -727,7 +727,7 @@ None.
 
 None.
 
-#### 2.3.3 kd_player_setdatasource
+#### kd_player_setdatasource
 
 **Description**:
 
@@ -769,7 +769,7 @@ None.
 
 None.
 
-#### 2.3.4 kd_player_regcallback
+#### kd_player_regcallback
 
 **Description**:
 
@@ -812,7 +812,7 @@ None.
 
 None.
 
-#### 2.3.5 kd_player_start
+#### kd_player_start
 
 **Description**:
 
@@ -852,7 +852,7 @@ None.
 
 None.
 
-#### 2.3.6 kd_player_stop
+#### kd_player_stop
 
 **Description**:
 
@@ -892,14 +892,14 @@ None.
 
 None.
 
-### 2.4 Audio Mixing
+### Audio Mixing
 
 The mixing module provides the following APIs:
 
-- [kd_mix_g711a_audio](#241-kd_mix_g711a_audio): g711a mixing.
-- [kd_mix_g711u_audio](#242-kd_mix_g711u_audio): g711u mixing.
+- [kd_mix_g711a_audio](#kd_mix_g711a_audio): g711a mixing.
+- [kd_mix_g711u_audio](#kd_mix_g711u_audio): g711u mixing.
 
-#### 2.4.1 kd_mix_g711a_audio
+#### kd_mix_g711a_audio
 
 **Description**:
 
@@ -944,7 +944,7 @@ None.
 
 None.
 
-#### 2.4.2 kd_mix_g711u_audio
+#### kd_mix_g711u_audio
 
 **Description**:
 
@@ -989,20 +989,20 @@ None.
 
 None.
 
-### 2.5 MP4 Format Encapsulation and Decapsulation
+### MP4 Format Encapsulation and Decapsulation
 
 The MP4 format encapsulation and decapsulation provide the following APIs:
 
-- [kd_mp4_create](#251-kd_mp4_create): Create MP4 instance.
-- [kd_mp4_destroy](#252-kd_mp4_destroy): Destroy MP4 instance.
-- [kd_mp4_create_track](#253-kd_mp4_create_track): Create track for MP4.
-- [kd_mp4_destroy_tracks](#254-kd_mp4_destroy_tracks): Destroy all tracks for MP4.
-- [kd_mp4_write_frame](#255-kd_mp4_write_frame): Write frame data to MP4.
-- [kd_mp4_get_file_info](#256-kd_mp4_get_file_info): Get MP4 file information.
-- [kd_mp4_get_track_by_index](#257-kd_mp4_get_track_by_index): Get track information by index.
-- [kd_mp4_get_frame](#258-kd_mp4_get_frame): Get track stream information.
+- [kd_mp4_create](#kd_mp4_create): Create MP4 instance.
+- [kd_mp4_destroy](#kd_mp4_destroy): Destroy MP4 instance.
+- [kd_mp4_create_track](#kd_mp4_create_track): Create track for MP4.
+- [kd_mp4_destroy_tracks](#kd_mp4_destroy_tracks): Destroy all tracks for MP4.
+- [kd_mp4_write_frame](#kd_mp4_write_frame): Write frame data to MP4.
+- [kd_mp4_get_file_info](#kd_mp4_get_file_info): Get MP4 file information.
+- [kd_mp4_get_track_by_index](#kd_mp4_get_track_by_index): Get track information by index.
+- [kd_mp4_get_frame](#kd_mp4_get_frame): Get track stream information.
 
-#### 2.5.1 kd_mp4_create
+#### kd_mp4_create
 
 **Description**:
 
@@ -1045,7 +1045,7 @@ Refer to samples under mp4_muxer and mp4_demuxer.
 
 None.
 
-#### 2.5.2 kd_mp4_destroy
+#### kd_mp4_destroy
 
 **Description**:
 
@@ -1087,7 +1087,7 @@ Refer to samples under mp4_muxer and mp4_demuxer.
 
 None.
 
-#### 2.5.3 kd_mp4_create_track
+#### kd_mp4_create_track
 
 **Description**:
 
@@ -1132,7 +1132,7 @@ Refer to samples under mp4_muxer.
 
 None.
 
-#### 2.5.4 kd_mp4_destroy_tracks
+#### kd_mp4_destroy_tracks
 
 **Description**:
 
@@ -1175,7 +1175,7 @@ Refer to samples under mp4_muxer.
 
 None.
 
-#### 2.5.5 kd_mp4_write_frame
+#### kd_mp4_write_frame
 
 **Description**:
 
@@ -1220,7 +1220,7 @@ Refer to samples under mp4_muxer.
 
 None.
 
-#### 2.5.6 kd_mp4_get_file_info
+#### kd_mp4_get_file_info
 
 **Description**:
 
@@ -1263,7 +1263,7 @@ Refer to samples under mp4_demuxer.
 
 None.
 
-#### 2.5.7 kd_mp4_get_track_by_index
+#### kd_mp4_get_track_by_index
 
 **Description**:
 
@@ -1307,7 +1307,7 @@ Refer to samples under mp4_demuxer.
 
 None.
 
-#### 2.5.8 kd_mp4_get_frame
+#### kd_mp4_get_frame
 
 **Description**:
 

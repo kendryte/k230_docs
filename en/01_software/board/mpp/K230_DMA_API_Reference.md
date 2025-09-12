@@ -54,19 +54,19 @@ This document (this guide) is mainly for the following personnel:
 | V1.2             | Replaced the data structure of the image address; added frame number passthrough function. | Liu Suntao | 2023/4/26 |
 | V1.3             | Added configurable buffer functionality                        | Liu Suntao | 2023/5/31 |
 
-## 1. Overview
+## Overview
 
-### 1.1 Overview
+### Overview
 
 GSDMA: DMA stands for Direct Memory Access, which copies data from one address space to another, providing high-speed data transfer between memory and memory. GDMA stands for Graphic Direct Memory Access, responsible for copying images in memory to another memory area, and can also perform image rotation and mirroring functions. SDMA stands for System Direct Memory Access, responsible for copying data in memory to another memory area, which is the traditional DMA.
 
 The software code provides the various functions of the GSDMA hardware in the form of APIs to users, helping them quickly achieve image transfer, rotation, mirroring, 2D functions, and data transfer functions. It also implements module status information statistics and other functions.
 
-### 1.2 Function Description
+### Function Description
 
 Abstract the DMA hardware as a device with eight channels, where channels 0 to 3 are GDMA channels, and channels 4 to 7 are SDMA channels.
 
-#### 1.2.1 GDMA
+#### GDMA
 
 Users can achieve image rotation and mirroring work through GDMA, and the main call flow is as follows:
 
@@ -78,7 +78,7 @@ Users can achieve image rotation and mirroring work through GDMA, and the main c
 1. The driver will transfer the data from the source address to the data buffer of the destination address requested in step two;
 1. Users call `kd_mpi_dma_get_frame` to get the data address in the destination address.
 
-#### 1.2.2 SDMA
+#### SDMA
 
 Users can achieve data transfer work through SDMA, and the main call flow is as follows:
 
@@ -90,25 +90,25 @@ Users can achieve data transfer work through SDMA, and the main call flow is as 
 1. The driver will transfer the data from the source address to the data buffer of the destination address requested in step two;
 1. Users call `kd_mpi_dma_get_frame` to get the data address in the destination address.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 DMA Usage
+### DMA Usage
 
 This functional module provides the following APIs:
 
-- [kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
-- [kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
-- [kd_mpi_dma_start_dev](#213-kd_mpi_dma_start_dev)
-- [kd_mpi_dma_stop_dev](#214-kd_mpi_dma_stop_dev)
-- [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-- [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
-- [kd_mpi_dma_start_chn](#217-kd_mpi_dma_start_chn)
-- [kd_mpi_dma_stop_chn](#218-kd_mpi_dma_stop_chn)
-- [kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-- [kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
-- [kd_mpi_dma_release_frame](#2111-kd_mpi_dma_release_frame)
+- [kd_mpi_dma_set_dev_attr](#kd_mpi_dma_set_dev_attr)
+- [kd_mpi_dma_get_dev_attr](#kd_mpi_dma_get_dev_attr)
+- [kd_mpi_dma_start_dev](#kd_mpi_dma_start_dev)
+- [kd_mpi_dma_stop_dev](#kd_mpi_dma_stop_dev)
+- [kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+- [kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
+- [kd_mpi_dma_start_chn](#kd_mpi_dma_start_chn)
+- [kd_mpi_dma_stop_chn](#kd_mpi_dma_stop_chn)
+- [kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+- [kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
+- [kd_mpi_dma_release_frame](#kd_mpi_dma_release_frame)
 
-#### 2.1.1 kd_mpi_dma_set_dev_attr
+#### kd_mpi_dma_set_dev_attr
 
 **Description**:
 
@@ -152,9 +152,9 @@ None
 
 **Related Topics**:
 
-[k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
+[k_dma_dev_attr_t](#k_dma_dev_attr_t)
 
-#### 2.1.2 kd_mpi_dma_get_dev_attr
+#### kd_mpi_dma_get_dev_attr
 
 **Description**:
 
@@ -198,9 +198,9 @@ None
 
 **Related Topics**:
 
-[k_dma_dev_attr_t](#314-k_dma_dev_attr_t)
+[k_dma_dev_attr_t](#k_dma_dev_attr_t)
 
-#### 2.1.3 kd_mpi_dma_start_dev
+#### kd_mpi_dma_start_dev
 
 **Description**:
 
@@ -246,7 +246,7 @@ None
 
 None
 
-#### 2.1.4 kd_mpi_dma_stop_dev
+#### kd_mpi_dma_stop_dev
 
 **Description**:
 
@@ -292,7 +292,7 @@ None
 
 None
 
-#### 2.1.5 kd_mpi_dma_set_chn_attr
+#### kd_mpi_dma_set_chn_attr
 
 **Description**:
 
@@ -337,9 +337,9 @@ None
 
 **Related Topics**:
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-#### 2.1.6 kd_mpi_dma_get_chn_attr
+#### kd_mpi_dma_get_chn_attr
 
 **Description**:
 
@@ -384,9 +384,9 @@ None
 
 **Related Topics**:
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-#### 2.1.7 kd_mpi_dma_start_chn
+#### kd_mpi_dma_start_chn
 
 **Description**:
 
@@ -432,7 +432,7 @@ None
 
 None
 
-#### 2.1.8 kd_mpi_dma_stop_chn
+#### kd_mpi_dma_stop_chn
 
 **Description**:
 
@@ -478,7 +478,7 @@ None
 
 None
 
-#### 2.1.9 kd_mpi_dma_send_frame
+#### kd_mpi_dma_send_frame
 
 **Description**:
 
@@ -524,9 +524,9 @@ None
 
 **Related Topics**:
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-#### 2.1.10 kd_mpi_dma_get_frame
+#### kd_mpi_dma_get_frame
 
 **Description**:
 
@@ -572,9 +572,9 @@ None
 
 **Related Topics**:
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-#### 2.1.11 kd_mpi_dma_release_frame
+#### kd_mpi_dma_release_frame
 
 **Description**:
 
@@ -619,13 +619,13 @@ None
 
 **Related Topics**:
 
-[k_video_frame_info](#316-k_video_frame_info)
+[k_video_frame_info](#k_video_frame_info)
 
-## 3 Data Types
+## Data Types
 
-### 3.1 Common Data Types
+### Common Data Types
 
-#### 3.1.1 DMA_MAX_DEV_NUMS
+#### DMA_MAX_DEV_NUMS
 
 **Description**:
 
@@ -645,7 +645,7 @@ None
 
 None
 
-#### 3.1.2 DMA_MAX_CHN_NUMS
+#### DMA_MAX_CHN_NUMS
 
 **Description**:
 
@@ -665,7 +665,7 @@ None
 
 None
 
-#### 3.1.3 k_dma_mode_e
+#### k_dma_mode_e
 
 **Description**:
 
@@ -694,10 +694,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-#### 3.1.4 k_dma_dev_attr_t
+#### k_dma_dev_attr_t
 
 **Description**:
 
@@ -728,10 +728,10 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dma_set_dev_attr](#211-kd_mpi_dma_set_dev_attr)
-[kd_mpi_dma_get_dev_attr](#212-kd_mpi_dma_get_dev_attr)
+[kd_mpi_dma_set_dev_attr](#kd_mpi_dma_set_dev_attr)
+[kd_mpi_dma_get_dev_attr](#kd_mpi_dma_get_dev_attr)
 
-#### 3.1.5 k_dma_chn_attr_u
+#### k_dma_chn_attr_u
 
 **Description**:
 
@@ -760,12 +760,12 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
-[kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-[kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
+[kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+[kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
 
-#### 3.1.6 k_video_frame_info
+#### k_video_frame_info
 
 **Description**:
 
@@ -796,11 +796,11 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-[kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
-[kd_mpi_dma_release_frame](#2111-kd_mpi_dma_release_frame)
+[kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+[kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
+[kd_mpi_dma_release_frame](#kd_mpi_dma_release_frame)
 
-#### 3.1.7 k_video_frame
+#### k_video_frame
 
 **Description**:
 
@@ -833,19 +833,19 @@ None
 
 **Related Data Types and Interfaces**:
 
-[kd_mpi_dma_send_frame](#219-kd_mpi_dma_send_frame)
-[kd_mpi_dma_get_frame](#2110-kd_mpi_dma_get_frame)
+[kd_mpi_dma_send_frame](#kd_mpi_dma_send_frame)
+[kd_mpi_dma_get_frame](#kd_mpi_dma_get_frame)
 
-### 3.2 GDMA Channel Data Types
+### GDMA Channel Data Types
 
 This module has the following data types:
 
-- [GDMA_MAX_CHN_NUMS](#321-gdma_max_chn_nums)
-- [k_gdma_rotation_e](#322-k_gdma_rotation_e)
-- [k_pixel_format_dma_e](#323-k_pixel_format_dma_e)
-- [k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
+- [GDMA_MAX_CHN_NUMS](#gdma_max_chn_nums)
+- [k_gdma_rotation_e](#k_gdma_rotation_e)
+- [k_pixel_format_dma_e](#k_pixel_format_dma_e)
+- [k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
 
-#### 3.2.1 GDMA_MAX_CHN_NUMS
+#### GDMA_MAX_CHN_NUMS
 
 **Description**:
 
@@ -865,7 +865,7 @@ None
 
 None
 
-#### 3.2.2 k_gdma_rotation_e
+#### k_gdma_rotation_e
 
 **Description**:
 
@@ -889,9 +889,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_gdma_chn_attr_t](#324-k_gdma_chn_attr_t)
+[k_gdma_chn_attr_t](#k_gdma_chn_attr_t)
 
-#### 3.2.3 k_pixel_format_dma_e
+#### k_pixel_format_dma_e
 
 **Description**:
 
@@ -953,7 +953,7 @@ typedef enum
 } k_pixel_format_dma_e;
 ```
 
-#### 3.2.4 k_gdma_chn_attr_t
+#### k_gdma_chn_attr_t
 
 **Description**:
 
@@ -998,18 +998,18 @@ None
 
 **Related Data Types and Interfaces**:
 
-- [kd_mpi_dma_set_chn_attr](#215-kd_mpi_dma_set_chn_attr)
-- [kd_mpi_dma_get_chn_attr](#216-kd_mpi_dma_get_chn_attr)
+- [kd_mpi_dma_set_chn_attr](#kd_mpi_dma_set_chn_attr)
+- [kd_mpi_dma_get_chn_attr](#kd_mpi_dma_get_chn_attr)
 
-### 3.3 SDMA Channel Data Types
+### SDMA Channel Data Types
 
 This module has the following data types:
 
-- [SDMA_MAX_CHN_NUMS](#331-sdma_max_chn_nums)
-- [k_sdma_data_mode_e](#332-k_sdma_data_mode_e)
-- [k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+- [SDMA_MAX_CHN_NUMS](#sdma_max_chn_nums)
+- [k_sdma_data_mode_e](#k_sdma_data_mode_e)
+- [k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-#### 3.3.1 SDMA_MAX_CHN_NUMS
+#### SDMA_MAX_CHN_NUMS
 
 **Description**:
 
@@ -1029,7 +1029,7 @@ None
 
 None
 
-### 3.3.2 k_sdma_data_mode_e
+### k_sdma_data_mode_e
 
 **Description**:
 
@@ -1058,9 +1058,9 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_sdma_chn_attr_t](#333-k_sdma_chn_attr_t)
+[k_sdma_chn_attr_t](#k_sdma_chn_attr_t)
 
-### 3.3.3 k_sdma_chn_attr_t
+### k_sdma_chn_attr_t
 
 **Description**:
 
@@ -1097,11 +1097,11 @@ None
 
 **Related Data Types and Interfaces**:
 
-[k_dma_chn_attr_u](#315-k_dma_chn_attr_u)
+[k_dma_chn_attr_u](#k_dma_chn_attr_u)
 
-## 4. Error Codes
+## Error Codes
 
-### 4.1 DMA Error Codes
+### DMA Error Codes
 
 Table 41
 
@@ -1124,9 +1124,9 @@ Table 41
 | 0xa00148011  | K_ERR_DMA_BADADDR          | Invalid address               |
 | 0xa00148012  | K_ERR_DMA_BUSY             | DMA is busy                   |
 
-## 5. Debug Information
+## Debug Information
 
-### 5.1 Overview
+### Overview
 
 Debug information uses the proc file system, which can reflect the current system running status in real-time. The recorded information can be used for problem localization and analysis.
 
@@ -1140,9 +1140,9 @@ Debug information uses the proc file system, which can reflect the current syste
 |------------|-----------------------------|
 | umap/dma   | Records the current usage of the DMA module |
 
-### 5.2 System Binding
+### System Binding
 
-#### 5.2.1 System Binding Debug Information
+#### System Binding Debug Information
 
 **Debug Information**:
 
@@ -1202,9 +1202,9 @@ Records the current usage of the DMA module.
 | data_mode   | SDMA data transfer mode, includes 1D mode and 2D mode.                           |
 | work_mode   | Work mode, can choose binding mode or non-binding mode.                          |
 
-## 6. Demo Description
+## Demo Description
 
-### 6.1 Non-binding Mode Demo
+### Non-binding Mode Demo
 
 The non-binding mode demo is located at /bin/sample_dma.elf. After executing /bin/sample_dma.elf, it starts running in a loop. Press 'e' + Enter to stop running.
 
@@ -1216,7 +1216,7 @@ The demo mainly implements the following functions:
 - Use channel 4 to transfer data using SDMA in 1D mode.
 - Use channel 5 to transfer data using SDMA in 2D mode.
 
-### 6.2 Binding Mode Demo
+### Binding Mode Demo
 
 The binding mode demo is located at /bin/sample_dma_bind.elf. After executing /bin/sample_dma_bind.elf, it starts running in a loop. Press 'e' + Enter to stop running.
 

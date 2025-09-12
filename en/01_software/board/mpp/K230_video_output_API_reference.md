@@ -51,7 +51,7 @@ This document (this guide) is mainly intended for the following personnel:
 |------------------|-------------|----------------|------------|
 | V1.0             | Initial Version | System Software Dept. | 2023-03-10 |
 
-## 1. Overview
+## Overview
 
 The VO (Video Output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The chip supports display/write-back devices, video layers, and graphic layers.
 
@@ -78,11 +78,11 @@ OSD Layer support:
 | ARGB 265 Level ALPHA | √                                                         | √                                                         | √                                                         | √                                                         |
 | Independent Switch | √                                                         | √                                                         | √                                                         | √                                                         |
 
-### 1.1 Hardware Description
+### Hardware Description
 
 This hardware description is based on the evblp3.
 
-#### 1.1.1 Mipi Interface
+#### Mipi Interface
 
 The hardware pins on the evblp3 are as follows:
 
@@ -93,22 +93,22 @@ The hardware pins on the evblp3 are as follows:
 - Screen rst: gpio9, backlight: gpio31
 - Mipi pins correspond one-to-one with the screen pins
 
-#### 1.1.2 Physical Diagram
+#### Physical Diagram
 
 ![Image containing game console, electronics, circuit](../../../../zh/01_software/board/mpp/images/69dbfc0ef3144c90f5978f1019482030.png)
 
 - In the figure, 1 is the mipi interface, using a soft ribbon cable
 - In the figure, 2 is the mipi signal test point, containing four data lines and one clk line
 
-### 1.2 Software Description
+### Software Description
 
 The video output software configuration is divided into three parts: phy configuration, dsi configuration, and VO configuration.
 
-#### 1.2.1 PHY Configuration Process
+#### PHY Configuration Process
 
 The phy frequency requires three parameters to be configured: calculate PLL, configure voc, and configure freq. Based on these three parameters, the txphy frequency can be determined. Each parameter calculation is as follows.
 
-##### 1.2.1.1 Calculate the PHY PLL
+##### Calculate the PHY PLL
 
 The data rate is given by twice the PLL output clock phase frequency: Data rate (Gbps) = PLL Fout (GHz) * 2. The output frequency is a function of the input reference frequency and the multiplication/division ratio. The calculation of the phy PLL is divided into 4 ranges, each corresponding to a different frequency. It can be determined as follows:
 
@@ -155,7 +155,7 @@ The resulting m = 295, n = 15.
 
 The configuration of m and n in the pll must be integer values. If none of the values are integers, m and n need to be adjusted by adding or subtracting 1, then recalculating to find the closest frequency, and verifying if it's usable. If not, repeat the above steps.
 
-##### 1.2.1.2 Configure the PHY VOC
+##### Configure the PHY VOC
 
 The configuration of the phy voc can be determined by referring to the table:
 
@@ -167,7 +167,7 @@ Example:
 
 The mipi rate is 445.5M, so the pll rate is 222.75M, voc = 010111 = 0x17.
 
-##### 1.2.1.3 Configure the Frequency
+##### Configure the Frequency
 
 The configuration of the phy frequency can be determined by referring to the table:
 
@@ -181,13 +181,13 @@ Example:
 
 The mipi rate is 445.5M, so the pll rate is 222.75M. The frequency is chosen as 0100101. When configuring this, the highest bit bit\[7\] = 1, so freq = 10100101= 0xa5.
 
-#### 1.2.2 DSI Configuration
+#### DSI Configuration
 
 DSI (Display Serial Interface) is part of a set of communication protocols defined by the MIPI alliance, mainly implementing all the protocol functions defined in the MIPI DSI specification, including a bidirectional PHY with two and four channels.
 
 DSI mainly configures the timing used for screen display and the functionality for sending commands.
 
-##### 1.2.2.1 Configuring Display Timing
+##### Configuring Display Timing
 
 Each manufacturer's screen has a set of timings used for screen control, mainly including frame control timing and line control timing, as shown in the following figure:
 
@@ -197,16 +197,16 @@ Each manufacturer's screen has a set of timings used for screen control, mainly 
 
 The timing used in DSI is consistent with the screen's timing configuration.
 
-##### 1.2.2.2 Sending DSI Commands
+##### Sending DSI Commands
 
 DSI needs to enter lp mode first, and then commands can be sent. The required APIs are as follows:
 
-- [kd_mpi_dsi_set_lp_mode_send_cmd](#226-kd_mpi_dsi_set_lp_mode_send_cmd)
-- [kd_mpi_dsi_send_cmd](#223-kd_mpi_dsi_send_cmd)
+- [kd_mpi_dsi_set_lp_mode_send_cmd](#kd_mpi_dsi_set_lp_mode_send_cmd)
+- [kd_mpi_dsi_send_cmd](#kd_mpi_dsi_send_cmd)
 
 The sent data is in 8-bit format, and it will automatically choose to send long or short packets based on the quantity.
 
-##### 1.2.2.3 DSI Self-Test Mode
+##### DSI Self-Test Mode
 
 The DSI self-test mode generates color bar data according to the configured DSI timing and sends it out, thus not relying on the VO to read data from DDR. The test mode display is as follows:
 
@@ -214,50 +214,50 @@ The DSI self-test mode generates color bar data according to the configured DSI 
 
 The DSI and VO use a 24-bit interface, so the configured color bar appears as shown above. The usage method is to enable the color bar after configuring the DSI. The API is as follows:
 
-- [kd_mpi_dsi_set_test_pattern](#225-kd_mpi_dsi_set_test_pattern)
+- [kd_mpi_dsi_set_test_pattern](#kd_mpi_dsi_set_test_pattern)
 
-#### 1.2.3 VO Configuration
+#### VO Configuration
 
 The VO (video output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The VO part includes two configurations: timing configuration and video layer configuration.
 
-##### 1.2.3.1 VO Timing Configuration
+##### VO Timing Configuration
 
 The VO timing configuration uses the same parameters as the DSI timing configuration, as described in the DSI timing introduction.
 
-##### 1.2.3.2 VO Layer Configuration
+##### VO Layer Configuration
 
-The VO layer currently supports 3 layers and 4 OSD layers. The layer can only display YUV image formats (the functions supported by layer0 and layer1 are listed in the [Overview](#1-overview) table).
+The VO layer currently supports 3 layers and 4 OSD layers. The layer can only display YUV image formats (the functions supported by layer0 and layer1 are listed in the [Overview](#overview) table).
 
-##### 1.2.3.3 VO Write-Back Function Configuration
+##### VO Write-Back Function Configuration
 
 The VO also supports a write-back function, which can verify whether the VO configuration is correct. After the VO configuration is completed, the data will be written back to the DDR, making it easy to verify whether there is any anomaly in the VO configuration.
 
-#### 1.2.4 VO Module Debugging Methods
+#### VO Module Debugging Methods
 
-##### 1.2.4.1 Screen Testing Methods
+##### Screen Testing Methods
 
 - Configure the screen to enter self-test mode through LP commands and check if the generated image is normal.
 - Read the screen registers through LP commands to see if there is a response.
 
-##### 1.2.4.2 DSI Testing Methods
+##### DSI Testing Methods
 
 - After configuring the DSI, let the screen enter self-test mode, measure the signals to see if they are normal, and check if the screen generates a color bar image.
 - Check the phy error status register to see if there is an error status, which can be viewed through proc.
 
-##### 1.2.4.3 VO Testing Methods
+##### VO Testing Methods
 
 - After the VO configuration is completed, enable the write-back function and check if it meets the configuration requirements.
 - Read the DSI error status register to check if there is any underflow or overflow in the data transmission between VO and DSI. If so, adjust the timing appropriately and try again.
 
-## 2. API Reference
+## API Reference
 
-### 2.1 TXPHY
+### TXPHY
 
 This functional module provides the following APIs:
 
-- [kd_mpi_set_mipi_phy_attr](#211-kd_mpi_set_mipi_phy_attr)
+- [kd_mpi_set_mipi_phy_attr](#kd_mpi_set_mipi_phy_attr)
 
-### 2.1.1 kd_mpi_set_mipi_phy_attr
+### kd_mpi_set_mipi_phy_attr
 
 **Description**:
 
@@ -303,18 +303,18 @@ None
 
 None
 
-### 2.2 DSI
+### DSI
 
 This functional module provides the following APIs:
 
-- [kd_mpi_dsi_set_attr](#221-kd_mpi_dsi_set_attr)
-- [kd_mpi_dsi_enable](#222-kd_mpi_dsi_enable)
-- [kd_mpi_dsi_send_cmd](#223-kd_mpi_dsi_send_cmd)
-- [kd_mpi_dsi_read_pkg](#224-kd_mpi_dsi_read_pkg)
-- [kd_mpi_dsi_set_test_pattern](#225-kd_mpi_dsi_set_test_pattern)
-- [kd_mpi_dsi_set_lp_mode_send_cmd](#226-kd_mpi_dsi_set_lp_mode_send_cmd)
+- [kd_mpi_dsi_set_attr](#kd_mpi_dsi_set_attr)
+- [kd_mpi_dsi_enable](#kd_mpi_dsi_enable)
+- [kd_mpi_dsi_send_cmd](#kd_mpi_dsi_send_cmd)
+- [kd_mpi_dsi_read_pkg](#kd_mpi_dsi_read_pkg)
+- [kd_mpi_dsi_set_test_pattern](#kd_mpi_dsi_set_test_pattern)
+- [kd_mpi_dsi_set_lp_mode_send_cmd](#kd_mpi_dsi_set_lp_mode_send_cmd)
 
-#### 2.2.1 kd_mpi_dsi_set_attr
+#### kd_mpi_dsi_set_attr
 
 **Description**:
 
@@ -360,7 +360,7 @@ None
 
 None
 
-#### 2.2.2 kd_mpi_dsi_enable
+#### kd_mpi_dsi_enable
 
 **Description**:
 
@@ -404,7 +404,7 @@ None
 
 None
 
-#### 2.2.3 kd_mpi_dsi_send_cmd
+#### kd_mpi_dsi_send_cmd
 
 **Description**:
 
@@ -451,7 +451,7 @@ None
 
 None
 
-#### 2.2.4 kd_mpi_dsi_read_pkg
+#### kd_mpi_dsi_read_pkg
 
 **Description**:
 
@@ -498,7 +498,7 @@ None
 
 None
 
-#### 2.2.5 kd_mpi_dsi_set_test_pattern
+#### kd_mpi_dsi_set_test_pattern
 
 **Description**:
 
@@ -542,7 +542,7 @@ None
 
 None
 
-#### 2.2.6 kd_mpi_dsi_set_lp_mode_send_cmd
+#### kd_mpi_dsi_set_lp_mode_send_cmd
 
 **Description**:
 
@@ -586,28 +586,28 @@ None
 
 None
 
-### 2.3 VO
+### VO
 
-- [kd_mpi_vo_init](#231-kd_mpi_vo_init)
-- [kd_mpi_vo_set_dev_param](#232-kd_mpi_vo_set_dev_param)
-- [kd_mpi_vo_enable_video_layer](#233-kd_mpi_vo_enable_video_layer)
-- [kd_mpi_vo_disable_video_layer](#234-kd_mpi_vo_disable_video_layer)
-- [kd_mpi_vo_enable](#235-kd_mpi_vo_enable)
-- [kd_mpi_vo_chn_insert_frame](#236-kd_mpi_vo_chn_insert_frame)
-- [kd_mpi_vo_chn_dump_frame](#237-kd_mpi_vo_chn_dump_frame)
-- [kd_mpi_vo_chn_dump_release](#238-kd_mpi_vo_chn_dump_release)
-- [kd_mpi_vo_osd_enable](#239-kd_mpi_vo_osd_enable)
-- [kd_mpi_vo_osd_disable](#2310-kd_mpi_vo_osd_disable)
-- [kd_mpi_vo_set_video_osd_attr](#2311-kd_mpi_vo_set_video_osd_attr)
-- [kd_mpi_vo_set_wbc_attr](#2312-kd_mpi_vo_set_wbc_attr)
-- [kd_mpi_vo_enable_wbc](#2313-kd_mpi_vo_enable_wbc)
-- [kd_mpi_vo_disable_wbc](#2314-kd_mpi_vo_disable_wbc)
-- [kd_display_reset](#2315-kd_display_reset)
-- [kd_display_set_backlight](#2316-kd_display_set_backlight)
-- [kd_mpi_vo_set_user_sync_info](#2317-kd_mpi_vo_set_user_sync_info)
+- [kd_mpi_vo_init](#kd_mpi_vo_init)
+- [kd_mpi_vo_set_dev_param](#kd_mpi_vo_set_dev_param)
+- [kd_mpi_vo_enable_video_layer](#kd_mpi_vo_enable_video_layer)
+- [kd_mpi_vo_disable_video_layer](#kd_mpi_vo_disable_video_layer)
+- [kd_mpi_vo_enable](#kd_mpi_vo_enable)
+- [kd_mpi_vo_chn_insert_frame](#kd_mpi_vo_chn_insert_frame)
+- [kd_mpi_vo_chn_dump_frame](#kd_mpi_vo_chn_dump_frame)
+- [kd_mpi_vo_chn_dump_release](#kd_mpi_vo_chn_dump_release)
+- [kd_mpi_vo_osd_enable](#kd_mpi_vo_osd_enable)
+- [kd_mpi_vo_osd_disable](#kd_mpi_vo_osd_disable)
+- [kd_mpi_vo_set_video_osd_attr](#kd_mpi_vo_set_video_osd_attr)
+- [kd_mpi_vo_set_wbc_attr](#kd_mpi_vo_set_wbc_attr)
+- [kd_mpi_vo_enable_wbc](#kd_mpi_vo_enable_wbc)
+- [kd_mpi_vo_disable_wbc](#kd_mpi_vo_disable_wbc)
+- [kd_display_reset](#kd_display_reset)
+- [kd_display_set_backlight](#kd_display_set_backlight)
+- [kd_mpi_vo_set_user_sync_info](#kd_mpi_vo_set_user_sync_info)
 - kd_mpi_vo_draw_frame
 
-#### 2.3.1 kd_mpi_vo_init
+#### kd_mpi_vo_init
 
 **Description**:
 
@@ -651,7 +651,7 @@ None
 
 None
 
-#### 2.3.2 kd_mpi_vo_set_dev_param
+#### kd_mpi_vo_set_dev_param
 
 **Description**:
 
@@ -697,7 +697,7 @@ None
 
 None
 
-#### 2.3.3 kd_mpi_vo_enable_video_layer
+#### kd_mpi_vo_enable_video_layer
 
 **Description**:
 
@@ -744,7 +744,7 @@ None
 
 None
 
-#### 2.3.4 kd_mpi_vo_disable_video_layer
+#### kd_mpi_vo_disable_video_layer
 
 **Description**:
 
@@ -790,7 +790,7 @@ None
 
 None
 
-#### 2.3.5 kd_mpi_vo_enable
+#### kd_mpi_vo_enable
 
 **Description**:
 
@@ -834,7 +834,7 @@ None
 
 None
 
-#### 2.3.6 kd_mpi_vo_chn_insert_frame
+#### kd_mpi_vo_chn_insert_frame
 
 **Description**:
 
@@ -881,7 +881,7 @@ None
 
 None
 
-#### 2.3.7 kd_mpi_vo_chn_dump_frame
+#### kd_mpi_vo_chn_dump_frame
 
 **Description**:
 
@@ -929,7 +929,7 @@ None
 
 None
 
-#### 2.3.8 kd_mpi_vo_chn_dump_release
+#### kd_mpi_vo_chn_dump_release
 
 **Description**:
 
@@ -976,7 +976,7 @@ None
 
 None
 
-#### 2.3.9 kd_mpi_vo_osd_enable
+#### kd_mpi_vo_osd_enable
 
 **Description**:
 
@@ -1022,7 +1022,7 @@ None
 
 None
 
-### 2.3.10 kd_mpi_vo_osd_disable
+### kd_mpi_vo_osd_disable
 
 **Description**:
 
@@ -1068,7 +1068,7 @@ None
 
 None
 
-#### 2.3.11 kd_mpi_vo_set_video_osd_attr
+#### kd_mpi_vo_set_video_osd_attr
 
 **Description**:
 
@@ -1115,7 +1115,7 @@ None
 
 None
 
-#### 2.3.12 kd_mpi_vo_set_wbc_attr
+#### kd_mpi_vo_set_wbc_attr
 
 **Description**:
 
@@ -1161,7 +1161,7 @@ None
 
 None
 
-#### 2.3.13 kd_mpi_vo_enable_wbc
+#### kd_mpi_vo_enable_wbc
 
 **Description**:
 
@@ -1205,7 +1205,7 @@ None
 
 None
 
-#### 2.3.14 kd_mpi_vo_disable_wbc
+#### kd_mpi_vo_disable_wbc
 
 **Description**:
 
@@ -1249,7 +1249,7 @@ None
 
 None
 
-#### 2.3.15 kd_display_reset
+#### kd_display_reset
 
 **Description**:
 
@@ -1293,7 +1293,7 @@ None
 
 None
 
-#### 2.3.16 kd_display_set_backlight
+#### kd_display_set_backlight
 
 **Description**:
 
@@ -1337,7 +1337,7 @@ None
 
 None
 
-#### 2.3.17 kd_mpi_vo_set_user_sync_info
+#### kd_mpi_vo_set_user_sync_info
 
 **Description**:
 
@@ -1383,7 +1383,7 @@ None
 
 None
 
-#### 2.3.18 kd_mpi_vo_draw_frame
+#### kd_mpi_vo_draw_frame
 
 **Description**:
 
@@ -1429,7 +1429,7 @@ None
 
 None
 
-#### 2.3.19 kd_mpi_get_connector_info
+#### kd_mpi_get_connector_info
 
 **Description**:
 
@@ -1476,7 +1476,7 @@ None
 
 None
 
-#### 2.3.20 kd_mpi_connector_open
+#### kd_mpi_connector_open
 
 **Description**:
 
@@ -1522,7 +1522,7 @@ None
 
 None
 
-#### 2.3.21 kd_mpi_connector_power_set
+#### kd_mpi_connector_power_set
 
 **Description**:
 
@@ -1569,7 +1569,7 @@ None
 
 None
 
-#### 2.3.22 kd_mpi_connector_init
+#### kd_mpi_connector_init
 
 **Description**:
 
@@ -1616,7 +1616,7 @@ None
 
 None
 
-#### 2.3.23 kd_mpi_connector_get_negotiated_data
+#### kd_mpi_connector_get_negotiated_data
 
 **Description**:
 
@@ -1663,7 +1663,7 @@ None
 
 None
 
-#### 2.3.24 kd_mpi_connector_adapt_resolution
+#### kd_mpi_connector_adapt_resolution
 
 **Description**:
 
@@ -1711,7 +1711,7 @@ None
 
 None
 
-#### 2.3.25 kd_mpi_connector_set_mirror
+#### kd_mpi_connector_set_mirror
 
 **Description**:
 
@@ -1759,7 +1759,7 @@ None
 
 None
 
-### 3.1.1 k_vo_intf_sync
+### k_vo_intf_sync
 
 **Description**:
 
@@ -1791,7 +1791,7 @@ None
 
 None
 
-### 3.1.2 k_vo_intf_type
+### k_vo_intf_type
 
 **Description**:
 
@@ -1819,7 +1819,7 @@ None
 
 None
 
-### 3.1.3 k_pixel_format
+### k_pixel_format
 
 **Description**:
 
@@ -1861,7 +1861,7 @@ None
 
 None
 
-### 3.1.4 k_vo_osd
+### k_vo_osd
 
 **Description**:
 
@@ -1897,7 +1897,7 @@ None
 
 None
 
-### 3.1.5 k_vo_layer
+### k_vo_layer
 
 **Description**:
 
@@ -1931,7 +1931,7 @@ None
 
 None
 
-### 3.1.6 k_vo_rotation
+### k_vo_rotation
 
 **Description**:
 
@@ -1956,7 +1956,7 @@ None
 
 None
 
-### 3.1.7 k_vo_mirror_mode
+### k_vo_mirror_mode
 
 **Description**:
 
@@ -1990,7 +1990,7 @@ None
 
 None
 
-### 3.1.8 k_vo_user_sync_info
+### k_vo_user_sync_info
 
 **Description**:
 
@@ -2022,7 +2022,7 @@ None
 
 None
 
-### 3.1.9 k_vo_point
+### k_vo_point
 
 **Description**:
 
@@ -2052,7 +2052,7 @@ None
 
 None
 
-### 3.1.10 k_vo_size
+### k_vo_size
 
 **Description**:
 
@@ -2082,7 +2082,7 @@ None
 
 None
 
-### 3.1.11 k_vo_video_layer_attr
+### k_vo_video_layer_attr
 
 **Description**:
 
@@ -2120,7 +2120,7 @@ alpha_type is only used by OSD layers.
 
 None
 
-### 3.1.12 k_vo_wbc_attr
+### k_vo_wbc_attr
 
 **Description**:
 
@@ -2154,7 +2154,7 @@ y_phy_addr needs allocated space.
 
 None
 
-### 3.1.13 k_vo_pub_attr
+### k_vo_pub_attr
 
 **Description**:
 
@@ -2188,7 +2188,7 @@ None
 
 None
 
-### 3.1.14 k_vo_scaler_attr
+### k_vo_scaler_attr
 
 **Description**:
 
@@ -2221,7 +2221,7 @@ None
 
 None
 
-### 3.1.15 k_vo_draw_frame
+### k_vo_draw_frame
 
 **Description**:
 
@@ -2259,7 +2259,7 @@ None
 
 None
 
-### 3.1.16 k_vo_display_resolution
+### k_vo_display_resolution
 
 **Description**:
 
@@ -2309,7 +2309,7 @@ None
 
 None
 
-### 3.1.17 k_vo_mipi_phy_attr
+### k_vo_mipi_phy_attr
 
 **Description**:
 
@@ -2345,7 +2345,7 @@ None
 
 None
 
-### 3.1.18 k_vo_video_osd_attr
+### k_vo_video_osd_attr
 
 **Description**:
 
@@ -2381,7 +2381,7 @@ None
 
 None
 
-### 3.1.19 k_video_frame_info
+### k_video_frame_info
 
 **Description**:
 
@@ -2413,7 +2413,7 @@ None
 
 None
 
-### 3.1.20 k_connector_type
+### k_connector_type
 
 **Description**:
 
@@ -2445,7 +2445,7 @@ None
 
 None
 
-### 3.1.21 k_dsi_lan_num
+### k_dsi_lan_num
 
 **Description**:
 
@@ -2477,7 +2477,7 @@ None
 
 None
 
-### 3.1.22 k_dsi_work_mode
+### k_dsi_work_mode
 
 **Description**:
 
@@ -2509,7 +2509,7 @@ None
 
 None
 
-### 3.1.23 k_vo_dsi_cmd_mode
+### k_vo_dsi_cmd_mode
 
 **Description**:
 
@@ -2539,7 +2539,7 @@ None
 
 None
 
-### 3.1.24 k_connectori_phy_attr
+### k_connectori_phy_attr
 
 **Description**:
 
@@ -2573,7 +2573,7 @@ None
 
 None
 
-### 3.1.25 k_connector_info
+### k_connector_info
 
 **Description**:
 
@@ -2621,7 +2621,7 @@ None
 
 None
 
-### 3.1.26 k_connector_negotiated_data
+### k_connector_negotiated_data
 
 **Description**:
 
@@ -2653,7 +2653,7 @@ None
 
 None
 
-### 3.1.27 k_connector_mirror
+### k_connector_mirror
 
 **Description**:
 
@@ -2685,7 +2685,7 @@ None
 
 None
 
-## 4. Error Codes
+## Error Codes
 
 Table 41 VO API Error Codes
 

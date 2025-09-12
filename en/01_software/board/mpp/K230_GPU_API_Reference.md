@@ -53,23 +53,23 @@ This document (this guide) is mainly intended for the following personnel:
 | V1.0           | Official Release | Huang Ziyi | 2023/04/06 |
 | V1.1           | Format Adjustment | Huang Ziyi | 2023/05/06 |
 
-## 1. Function Introduction
+## Function Introduction
 
 This module is mainly used to accelerate the drawing of vector graphics, which can be used to draw menus and other pages and supports the acceleration of some lvgl drawings. The GPU has a series of drawing instructions. After writing the drawing instructions into memory and submitting the address and total length of the instructions to the GPU, drawing can begin. This module supports the filled drawing of polygons, quadratic Bezier curves, cubic Bezier curves, and elliptical curves, supports linear gradient fills, supports color lookup tables, supports image composition and blending, and supports BLIT.
 
-## 2. Data Flow
+## Data Flow
 
 The GPU software driver part includes the device /dev/vg_lite and its kernel module driver vg_lite.ko, as well as the user-space function library libvg_lite.so. libvg_lite.so will open the /dev/vg_lite device and interact with the kernel space driver through ioctl() and mmap(). The kernel space driver is mainly implemented by vg_lite_hal.c. The functions in vg_lite.c call the functions in vg_lite_hal.c through the vg_lite_kernel function to perform actual register operations.
 
 Note: The driver does not check the physical addresses in the drawing instructions. Calling the VGLite API can indirectly read and write all physical addresses in DDR memory.
 
-## 3. Software Interface
+## Software Interface
 
 The software interface is detailed in the header file vg_lite.h in the software package.
 
-### 3.1 Main Types and Definitions
+### Main Types and Definitions
 
-#### 3.1.1 Parameter Types
+#### Parameter Types
 
 | Name            | Type Definition         | Meaning                                                                                                                                                                                                                   |
 |-----------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -81,7 +81,7 @@ The software interface is detailed in the header file vg_lite.h in the software 
 | vg_lite_float_t | float                   | Single precision floating-point number                                                                                                                                                                                     |
 | vg_lite_color_t | uint32_t                | 32-bit color value. The color value specifies the color used in various functions. The color is formed by 8-bit RGBA channels. The red channel is in the lowest 8 bits of the color value, followed by green and blue channels. The alpha channel is in the highest 8 bits of the color value. For the L8 target format, the RGB color is converted to L8 using the default ITU-R BT.709 conversion rules. |
 
-#### 3.1.2 Error Types vg_lite_error_t
+#### Error Types vg_lite_error_t
 
 | Enumeration                  | Description                |
 |------------------------------|----------------------------|
@@ -97,7 +97,7 @@ The software interface is detailed in the header file vg_lite.h in the software 
 | VG_LITE_ALREADY_EXISTS       | Object already exists      |
 | VG_LITE_NOT_ALIGNED          | Data alignment error       |
 
-#### 3.1.3 Functional Enumerations
+#### Functional Enumerations
 
 | Enumeration                    | Description               |
 |--------------------------------|---------------------------|
@@ -109,17 +109,17 @@ The software interface is detailed in the header file vg_lite.h in the software 
 | gcFEATURE_BIT_VG_RADIAL_GRADIENT | Radial gradient           |
 | gcFEATURE_BIT_VG_RGBA2_FORMAT  | RGBA2222 format           |
 
-### 3.2 GPU Control
+### GPU Control
 
-Unless otherwise specified, the application must initialize the GPU implicit (global) context by calling [vg_lite_init](#3212-vg_lite_init) before calling any API functions. This function will fill the feature table, reset the fast clear buffer, reset the composition target buffer, and allocate command and tessellation buffers.
+Unless otherwise specified, the application must initialize the GPU implicit (global) context by calling [vg_lite_init](#vg_lite_init) before calling any API functions. This function will fill the feature table, reset the fast clear buffer, reset the composition target buffer, and allocate command and tessellation buffers.
 
-The GPU driver **only supports one current context and one thread to issue commands to the GPU**. The GPU driver does not support multiple concurrent contexts running in multiple threads/processes because the GPU kernel driver does not support context switching. GPU applications can only use one context to issue commands to the GPU hardware at any time. If the GPU application needs to switch contexts, it should call [vg_lite_close](#3213-vg_lite_close) to close the current context in the current thread and then call [vg_lite_init](#3212-vg_lite_init) to initialize a new context in the current thread or other threads/processes.
+The GPU driver **only supports one current context and one thread to issue commands to the GPU**. The GPU driver does not support multiple concurrent contexts running in multiple threads/processes because the GPU kernel driver does not support context switching. GPU applications can only use one context to issue commands to the GPU hardware at any time. If the GPU application needs to switch contexts, it should call [vg_lite_close](#vg_lite_close) to close the current context in the current thread and then call [vg_lite_init](#vg_lite_init) to initialize a new context in the current thread or other threads/processes.
 
-Unless otherwise specified, all functions return [vg_lite_error_t](#312-error-types-vg_lite_error_t).
+Unless otherwise specified, all functions return [vg_lite_error_t](#error-types-vg_lite_error_t).
 
-#### 3.2.1 Context Initialization and Control Functions
+#### Context Initialization and Control Functions
 
-##### 3.2.1.1 vg_lite_set_command_buffer_size
+##### vg_lite_set_command_buffer_size
 
 - Description
 
@@ -131,7 +131,7 @@ Unless otherwise specified, all functions return [vg_lite_error_t](#312-error-ty
 |----------------|--------------------|--------------|
 | size           | Command buffer size | Input        |
 
-##### 3.2.1.2 vg_lite_init
+##### vg_lite_init
 
 - Description
 
@@ -146,29 +146,29 @@ Unless otherwise specified, all functions return [vg_lite_error_t](#312-error-ty
 | tessellation_width  | Tessellation window width. Must be a multiple of 16, the minimum is 16, the maximum cannot be greater than the frame width. If it is 0, it means no tessellation is used, then the GPU will only run blit. | Input        |
 | tessellation_height | Tessellation window height. Must be a multiple of 16, the minimum is 16, the maximum cannot be greater than the frame width. If it is 0, it means no tessellation is used, then the GPU will only run blit. | Input        |
 
-##### 3.2.1.3 vg_lite_close
+##### vg_lite_close
 
 - Description
 
     Deletes all resources and frees all memory previously initialized by the vg_lite_init function. If this is the only active context, it will also automatically close the hardware.
 
-##### 3.2.1.4 vg_lite_finish
+##### vg_lite_finish
 
 - Description
 
     This function explicitly submits the command buffer to the GPU and waits for its completion.
 
-##### 3.2.1.5 vg_lite_flush
+##### vg_lite_flush
 
 - Description
 
     This function explicitly submits the command buffer to the GPU without waiting for its completion.
 
-#### 3.2.2 Pixel Buffer
+#### Pixel Buffer
 
-##### 3.2.2.1 Memory Alignment Requirements
+##### Memory Alignment Requirements
 
-###### 3.2.2.1.1 Source Image Alignment Requirements
+###### Source Image Alignment Requirements
 
 The GPU hardware requires that the width of the rasterized image be a multiple of 16 pixels. This requirement applies to all image formats. Therefore, the user needs to pad any image width to a multiple of 16 pixels for the GPU hardware to work correctly.
 
@@ -189,7 +189,7 @@ The byte alignment requirements for pixels depend on the specific pixel format.
 | VG_LITE_ARGB4444               | 16             | 32B                    | Yes                        | Yes                        |
 | VG_LITE_ARGB8888/XRGB8888      | 32             | 64B                    | Yes                        | Yes                        |
 
-###### 3.2.2.1.2 Render Target Buffer Alignment Requirements
+###### Render Target Buffer Alignment Requirements
 
 The GPU hardware requires that the width of the pixel buffer be a multiple of 16 pixels. This requirement applies to all image formats. Therefore, the user needs to align any pixel buffer width to a multiple of 16 pixels for the GPU hardware to work correctly. The byte alignment requirements for pixels depend on the specific pixel format.
 
@@ -201,17 +201,17 @@ The starting address alignment requirements for the pixel buffer depend on wheth
 
 - If the format is linear, the starting address and stride have no alignment requirements.
 
-##### 3.2.2.2 Pixel Cache
+##### Pixel Cache
 
 The GPU includes two fully associative caches. Each cache has 8 lines, and each line has 64 bytes. In this case, a cache line can hold a 4x4 pixel tile or a 16x1 pixel line.
 
-#### 3.2.3 Enumeration Types
+#### Enumeration Types
 
-##### 3.2.3.1 vg_lite_buffer_format_t
+##### vg_lite_buffer_format_t
 
 - This enumeration type specifies the color format used for the buffer.
 
-    Note: For a summary of image format alignment requirements, see the [Memory Alignment Requirements](#3221-memory-alignment-requirements) after the numerical descriptions.
+    Note: For a summary of image format alignment requirements, see the [Memory Alignment Requirements](#memory-alignment-requirements) after the numerical descriptions.
 
 | vg_lite_buffer_format_t | Description                       | Supported as Source | Supported as Target | Alignment (Bytes) |
 |-------------------------|-----------------------------------|---------------------|---------------------|-------------------|
@@ -244,7 +244,7 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 | VG_LITE_INDEX_4         | 4-bit index format                | Yes                 | No                  | 8                 |
 | VG_LITE_INDEX_8         | 8-bit index format                | Yes                 | No                  | 8                 |
 
-##### 3.2.3.2 vg_lite_buffer_image_mode_t
+##### vg_lite_buffer_image_mode_t
 
 - Specifies how the image is rendered to the buffer.
 
@@ -254,7 +254,7 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 | VG_LITE_NONE_IMAGE_MODE   | Image input is ignored  |
 | VG_LITE_MULTIPLY_IMAGE_MODE | Image multiplied with draw color |
 
-##### 3.2.3.3 vg_lite_buffer_layout_t
+##### vg_lite_buffer_layout_t
 
 - Specifies the buffer data layout in memory.
 
@@ -263,7 +263,7 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 | VG_LITE_LINEAR   | Linear (scanline) layout. Note: This layout has no alignment requirements for the buffer.     |
 | VG_LITE_TILED    | Data is organized into 4x4 pixel tiles. Note: For this layout, the buffer's starting address and stride need to be aligned to 64 bytes. |
 
-##### 3.2.3.4 vg_lite_buffer_transparency_mode_t
+##### vg_lite_buffer_transparency_mode_t
 
 - Specifies the transparency mode of a buffer.
 
@@ -272,9 +272,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 | VG_LITE_IMAGE_OPAQUE       | Opaque image: All image pixels are copied to the VG PE for rasterization.                       |
 | VG_LITE_IMAGE_TRANSPARENT  | Transparent image: Only non-transparent image pixels are copied to the VG PE. Note: This mode is only effective when the image mode is VG_LITE_NORMAL_IMAGE_MODE or VG_LITE_MULTIPLY_IMAGE_MODE. |
 
-#### 3.2.4 Structures
+#### Structures
 
-##### 3.2.4.1 vg_lite_buffer_t
+##### vg_lite_buffer_t
 
 - This structure defines the buffer layout for images or memory data used by the GPU.
 
@@ -292,23 +292,23 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 | image_mode         | vg_lite_buffer_image_mode_t        | Blit mode             |
 | transparency_mode  | vg_lite_buffer_transparency_mode_t | Transparency mode     |
 
-#### 3.2.5 Functions
+#### Functions
 
-##### 3.2.5.1 vg_lite_allocate
+##### vg_lite_allocate
 
 - Description
 
     This function allocates memory for a buffer before it can be used in blit or draw functions.
 
-    To allow hardware access to some memory, such as source images or target buffers, it needs to be allocated first. The provided [vg_lite_buffer_t](#3241-vg_lite_buffer_t) structure needs to be initialized with the size (width and height) and format of the requested buffer. If the stride is set to 0, this function will fill it in. The only input parameter to this function is a pointer to the buffer structure. If the structure has all the required information, appropriate memory will be allocated for the buffer.
+    To allow hardware access to some memory, such as source images or target buffers, it needs to be allocated first. The provided [vg_lite_buffer_t](#vg_lite_buffer_t) structure needs to be initialized with the size (width and height) and format of the requested buffer. If the stride is set to 0, this function will fill it in. The only input parameter to this function is a pointer to the buffer structure. If the structure has all the required information, appropriate memory will be allocated for the buffer.
 
-    This function will call the kernel to actually allocate memory. The memory handle, logical address, and hardware address in the [vg_lite_buffer_t](#3241-vg_lite_buffer_t) structure will be filled in by the kernel.
+    This function will call the kernel to actually allocate memory. The memory handle, logical address, and hardware address in the [vg_lite_buffer_t](#vg_lite_buffer_t) structure will be filled in by the kernel.
 
 - Parameters
 
-    [vg_lite_buffer_t](#3241-vg_lite_buffer_t) \*buffer: Pointer to the buffer structure holding the size and format of the allocated buffer.
+    [vg_lite_buffer_t](#vg_lite_buffer_t) \*buffer: Pointer to the buffer structure holding the size and format of the allocated buffer.
 
-##### 3.2.5.2 vg_lite_free
+##### vg_lite_free
 
 - Description
 
@@ -316,9 +316,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
 - Parameters
 
-    [vg_lite_buffer_t](#3241-vg_lite_buffer_t) \*buffer: Pointer to the buffer structure filled in by vg_lite_allocate.
+    [vg_lite_buffer_t](#vg_lite_buffer_t) \*buffer: Pointer to the buffer structure filled in by vg_lite_allocate.
 
-##### 3.2.5.3 vg_lite_buffer_upload
+##### vg_lite_buffer_upload
 
 - Description
 
@@ -332,7 +332,7 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     uint32_t stride\[3\]: Row stride of the pixel data.
 
-##### 3.2.5.4 vg_lite_map
+##### vg_lite_map
 
 - Description
 
@@ -340,13 +340,13 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
 - Parameters
 
-    vg_lite_buffer_t \*buffer: Pointer to the buffer structure filled in by [vg_lite_allocate](#3251-vg_lite_allocate).
+    vg_lite_buffer_t \*buffer: Pointer to the buffer structure filled in by [vg_lite_allocate](#vg_lite_allocate).
 
     vg_lite_map_flag_t flag: Currently only supports VG_LITE_MAP_DMABUF.
 
     int32_t fd: DMABUF fd.
 
-##### 3.2.5.5 vg_lite_unmap
+##### vg_lite_unmap
 
 - Description
 
@@ -354,9 +354,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
 - Parameters
 
-    vg_lite_buffer_t \*buffer: Pointer to the buffer structure filled in by [vg_lite_map](#3254-vg_lite_map).
+    vg_lite_buffer_t \*buffer: Pointer to the buffer structure filled in by [vg_lite_map](#vg_lite_map).
 
-##### 3.2.5.6 vg_lite_set_CLUT
+##### vg_lite_set_CLUT
 
 - Description
 
@@ -378,19 +378,19 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     Note: The driver does not verify the CLUT content from the application.
 
-### 3.3 Matrix
+### Matrix
 
-#### 3.3.1 Structures
+#### Structures
 
-##### 3.3.1.1 vg_lite_matrix_t
+##### vg_lite_matrix_t
 
 - Description
 
     Defines a 3x3 floating-point matrix.
 
-#### 3.3.2 Functions
+#### Functions
 
-##### 3.3.2.1 vg_lite_identity
+##### vg_lite_identity
 
 - Description
 
@@ -398,9 +398,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
 - Parameters
 
-    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#3311-vg_lite_matrix_t) structure to be loaded with the identity matrix.
+    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#vg_lite_matrix_t) structure to be loaded with the identity matrix.
 
-##### 3.3.2.2 vg_lite_perspective
+##### vg_lite_perspective
 
 - Description
 
@@ -412,9 +412,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     vg_lite_float_t py: Perspective transformation matrix value.
 
-    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#3311-vg_lite_matrix_t) structure to be perspective transformed.
+    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#vg_lite_matrix_t) structure to be perspective transformed.
 
-##### 3.3.2.3 vg_lite_rotate
+##### vg_lite_rotate
 
 - Description
 
@@ -424,9 +424,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     vg_lite_float_t degrees: Degree of rotation (in degrees), positive for clockwise rotation.
 
-    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#3311-vg_lite_matrix_t) structure to be rotated.
+    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#vg_lite_matrix_t) structure to be rotated.
 
-##### 3.3.2.4 vg_lite_scale
+##### vg_lite_scale
 
 - Description
 
@@ -438,9 +438,9 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     vg_lite_float_t scale_y: Vertical scaling factor.
 
-    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#3311-vg_lite_matrix_t) structure to be scaled.
+    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#vg_lite_matrix_t) structure to be scaled.
 
-##### 3.3.2.5 vg_lite_translate
+##### vg_lite_translate
 
 - Description
 
@@ -452,13 +452,13 @@ The GPU includes two fully associative caches. Each cache has 8 lines, and each 
 
     vg_lite_float_t y: Vertical translation.
 
-    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#3311-vg_lite_matrix_t) structure to be translated.
+    vg_lite_matrix_t \*matrix: Pointer to the [vg_lite_matrix_t](#vg_lite_matrix_t) structure to be translated.
 
-### 3.4 BLITs for Composition and Blending
+### BLITs for Composition and Blending
 
-#### 3.4.1 Enumeration Types
+#### Enumeration Types
 
-##### 3.4.1.1 vg_lite_blend_t
+##### vg_lite_blend_t
 
 This enumeration defines the blending modes supported by some VGLite API functions. S and D represent source and destination color channels, Sa and Da represent source and destination alpha channels.
 
@@ -476,7 +476,7 @@ Colors are displayed at 100% and 50% opacity.
 | VG_LITE_BLEND_SRC_OVER | S + (1 - Sa) * D           |
 | VG_LITE_BLEND_SUBTRACT | D * (1 - Sa)               |
 
-##### 3.4.1.2 vg_lite_filter_t
+##### vg_lite_filter_t
 
 Specifies the sample filter mode in blit and draw APIs.
 
@@ -486,7 +486,7 @@ Specifies the sample filter mode in blit and draw APIs.
 | VG_LITE_FILTER_LINEAR  | Uses linear interpolation along the scanline. |
 | VG_LITE_FILTER_BI_LINEAR | Uses a 2x2 box around the image pixel and interpolates. |
 
-##### 3.4.1.3 vg_lite_global_alpha_t
+##### vg_lite_global_alpha_t
 
 Specifies the global alpha mode in blit APIs.
 | vg_lite_global_alpha_t  | Description                                                   |
@@ -495,9 +495,9 @@ Specifies the global alpha mode in blit APIs.
 | VG_LITE_GLOBAL          | Replaces the original src/dst alpha values with global src/dst alpha values. |
 | VG_LITE_SCALED          | Multiplies the global src/dst alpha values with the original src/dst alpha values. |
 
-#### 3.4.2 Structures
+#### Structures
 
-##### 3.4.2.1 vg_lite_rectangle_t
+##### vg_lite_rectangle_t
 
 This structure defines the organization of a rectangle's data.
 
@@ -508,7 +508,7 @@ This structure defines the organization of a rectangle's data.
 | width  | int32_t  | Width                           |
 | height | int32_t  | Height                          |
 
-##### 3.4.2.2 vg_lite_point_t
+##### vg_lite_point_t
 
 This structure defines a 2D point.
 
@@ -517,7 +517,7 @@ This structure defines a 2D point.
 | x     | int32_t  | X-coordinate|
 | y     | int32_t  | Y-coordinate|
 
-##### 3.4.2.3 vg_lite_point4_t
+##### vg_lite_point4_t
 
 This structure defines four 2D points that form a polygon. These points are defined by the vg_lite_point_t structure.
 
@@ -525,9 +525,9 @@ This structure defines four 2D points that form a polygon. These points are defi
 |------------------|--------------|---------------|
 | vg_lite_point\[4\] | int32_t each | Array of 4 points |
 
-#### 3.4.3 Functions
+#### Functions
 
-##### 3.4.3.1 vg_lite_blit
+##### vg_lite_blit
 
 - Description
 
@@ -535,9 +535,9 @@ This structure defines four 2D points that form a polygon. These points are defi
 
 - Parameters
 
-    vg_lite_buffer_t \*target: Pointer to the vg_lite_buffer_t structure defining the target buffer. For valid target color formats for the blit function, see [Source Image Alignment Requirements](#32211-source-image-alignment-requirements).
+    vg_lite_buffer_t \*target: Pointer to the vg_lite_buffer_t structure defining the target buffer. For valid target color formats for the blit function, see [Source Image Alignment Requirements](#source-image-alignment-requirements).
 
-    vg_lite_buffer_t \*source: Pointer to the vg_lite_buffer_t structure defining the source buffer. All color formats in the [vg_lite_buffer_format_t](#3231-vg_lite_buffer_format_t) enumeration are valid source formats for the blit function.
+    vg_lite_buffer_t \*source: Pointer to the vg_lite_buffer_t structure defining the source buffer. All color formats in the [vg_lite_buffer_format_t](#vg_lite_buffer_format_t) enumeration are valid source formats for the blit function.
 
     vg_lite_matrix_t \*matrix: Pointer to a vg_lite_matrix_t structure defining the 3x3 transformation matrix from source pixels to target pixels. If the matrix is NULL, it is assumed to be an identity matrix, meaning the source pixels will be directly copied to the (0,0) position of the target pixels.
 
@@ -547,7 +547,7 @@ This structure defines four 2D points that form a polygon. These points are defi
 
     vg_lite_filter_t filter: Specifies the type of filtering mode. All formats in the vg_lite_filter_t enumeration are valid formats for this function.
 
-##### 3.4.3.2 vg_lite_blit_rect
+##### vg_lite_blit_rect
 
 - Description
 
@@ -569,7 +569,7 @@ This structure defines four 2D points that form a polygon. These points are defi
 
     vg_lite_filter_t filter: Refer to vg_lite_blit.
 
-##### 3.4.3.3 vg_lite_get_transform_matrix
+##### vg_lite_get_transform_matrix
 
 - Description
 
@@ -583,7 +583,7 @@ This structure defines four 2D points that form a polygon. These points are defi
 
     vg_lite_matrix_t \*mat: Output parameter, pointer to a 3x3 homogeneous matrix that transforms the source polygon to the destination polygon.
 
-##### 3.4.3.4 vg_lite_clear
+##### vg_lite_clear
 
 - Description
 
@@ -597,9 +597,9 @@ This structure defines four 2D points that form a polygon. These points are defi
 
     vg_lite_color_t color: The fill color, as specified in the vg_lite_color_t enumeration, which is the color value used to fill the buffer. If the buffer is in L8 format, the RGBA color will be converted to a luminance value.
 
-#### 3.4.4 Global Alpha Functions
+#### Global Alpha Functions
 
-##### 3.4.4.1 vg_lite_set_image_global_alpha
+##### vg_lite_set_image_global_alpha
 
 - Description
 
@@ -607,11 +607,11 @@ This structure defines four 2D points that form a polygon. These points are defi
 
 - Parameters
 
-    vg_lite_global_alpha_t alpha_mode: Global Alpha mode, see [vg_lite_global_alpha_t](#3413-vg_lite_global_alpha_t).
+    vg_lite_global_alpha_t alpha_mode: Global Alpha mode, see [vg_lite_global_alpha_t](#vg_lite_global_alpha_t).
 
     uint32_t alpha_value: The global Alpha value to set for the image/source.
 
-##### 3.4.4.2 vg_lite_set_dest_global_alpha
+##### vg_lite_set_dest_global_alpha
 
 - Description
 
@@ -619,15 +619,15 @@ This structure defines four 2D points that form a polygon. These points are defi
 
 - Parameters
 
-    vg_lite_global_alpha_t alpha_mode: Global Alpha mode, see [vg_lite_global_alpha_t](#3413-vg_lite_global_alpha_t).
+    vg_lite_global_alpha_t alpha_mode: Global Alpha mode, see [vg_lite_global_alpha_t](#vg_lite_global_alpha_t).
 
     uint32_t alpha_value: The global Alpha value to set for the destination.
 
-### 3.5 Vector Path Control
+### Vector Path Control
 
-#### 3.5.1 Enumeration Types
+#### Enumeration Types
 
-##### 3.5.1.1 vg_lite_quality_t
+##### vg_lite_quality_t
 
 Specifies the level of hardware-assisted anti-aliasing.
 
@@ -638,9 +638,9 @@ Specifies the level of hardware-assisted anti-aliasing.
 | VG_LITE_MEDIUM     | Medium quality: 4x coverage sampling anti-aliasing    |
 | VG_LITE_LOW        | Low quality: No anti-aliasing                         |
 
-#### 3.5.2 Structures
+#### Structures
 
-##### 3.5.2.1 vg_lite_hw_memory
+##### vg_lite_hw_memory
 
 This structure simply records the kernel's memory allocation information.
 
@@ -652,11 +652,11 @@ This structure simply records the kernel's memory allocation information.
 | bytes     | uint32_t  | Size                                                                                            |
 | property  | uint32_t  | Bit 0 indicates path upload. 0: Disable path data upload (always embedded in command buffer). 1: Enable automatic path data upload. |
 
-##### 3.5.2.2 vg_lite_path_t
+##### vg_lite_path_t
 
 This structure describes vector path data.
 
-Path data consists of opcodes and coordinates. The format of the opcodes is always VG_LITE_S8. For detailed information about the opcodes, refer to the section on [Vector Path OpCodes](#354-vector-path-opcodes) in this document.
+Path data consists of opcodes and coordinates. The format of the opcodes is always VG_LITE_S8. For detailed information about the opcodes, refer to the section on [Vector Path OpCodes](#vector-path-opcodes) in this document.
 
 | Field             | Type                   | Description                                           |
 |-------------------|------------------------|-------------------------------------------------------|
@@ -676,7 +676,7 @@ Regarding coordinate format and data alignment.
 | VG_LITE_S16       | 2 bytes             |
 | VG_LITE_S32       | 4 bytes             |
 
-###### 3.5.2.2.1 Special Notes on Path Objects
+###### Special Notes on Path Objects
 
 - Endianness does not matter as it is boundary-aligned.
 - Multiple consecutive opcodes should be packed according to the specified data format size. For example, for VG_LITE_S16 pack by 2 bytes, for VG_LITE_S32 pack by 4 bytes. Since opcodes are 8-bit (1 byte), for 16-bit (2 bytes) or 32-bit (4 bytes) data types:
@@ -721,9 +721,9 @@ The path data in the array should always be aligned to 1, 2, or 4 bytes, dependi
 
 For float types, use IEEE754 encoding specification, while the opcode remains an 8-bit signed integer, special handling by software may be required.
 
-#### 3.5.3 Functions
+#### Functions
 
-##### 3.5.3.1 vg_lite_path_calc_length
+##### vg_lite_path_calc_length
 
 - Description
 
@@ -737,7 +737,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     vg_lite_format_t format: Coordinate data format, all formats available in vg_lite_format_t are valid formats for this function.
 
-##### 3.5.3.2 vg_lite_path_append
+##### vg_lite_path_append
 
 - Description
 
@@ -753,7 +753,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     uint32_t seg_count: Number of opcodes.
 
-##### 3.5.3.3 vg_lite_init_path
+##### vg_lite_init_path
 
 - Description
 
@@ -773,7 +773,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     vg_lite_float_t min_x, vg_lite_float_t min_y, vg_lite_float_t max_x, vg_lite_float_t max_y: Minimum and maximum x and y values specifying the bounding box of the path.
 
-##### 3.5.3.4 vg_lite_init_arc_path
+##### vg_lite_init_arc_path
 
 - Description
 
@@ -792,7 +792,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     vg_lite_float_t min_x, vg_lite_float_t min_y, vg_lite_float_t max_x, vg_lite_float_t max_y: Refer to vg_lite_init_path.
 
-##### 3.5.3.5 vg_lite_upload_path
+##### vg_lite_upload_path
 
 - Description
 
@@ -804,7 +804,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     vg_lite_path_t \*path: Pointer to the vg_lite_path_t structure containing the path to upload.
 
-##### 3.5.3.6 vg_lite_clear_path
+##### vg_lite_clear_path
 
 - Description
 
@@ -814,7 +814,7 @@ For float types, use IEEE754 encoding specification, while the opcode remains an
 
     vg_lite_path_t \*path: Pointer to the vg_lite_path_t path definition to clear.
 
-#### 3.5.4 Vector Path OpCodes
+#### Vector Path OpCodes
 
 The following opcodes are the path drawing commands available for vector path data.
 
@@ -840,11 +840,11 @@ A path operation is submitted to the GPU in the form of [opcode | coordinates]. 
 | 0x10   | (rh,rv,rot,x,y)                      | LCWARC. Draw a large clockwise arc to the given endpoint using the specified radii and rotation angle. LCWARC(rh, rv, rot, x, y) startx = x starty = y|
 | 0x11   | (rh, rv, rot, x, y)                  | LCWARC_REL. Draw a large clockwise arc to the given relative endpoint using the specified radii and rotation angle.  x = startx + Δx y = starty + Δy LCWARC(rh, rv, rot, x, y) startx = x starty = y                                                                 |
 
-### 3.6 Vector-Based Drawing Operations
+### Vector-Based Drawing Operations
 
-#### 3.6.1 Enumerations
+#### Enumerations
 
-##### 3.6.1.1 vg_lite_fill_t
+##### vg_lite_fill_t
 
 This enumeration is used to specify the fill rule to use. For drawing any path, the hardware supports both non-zero and even-odd fill rules.
 
@@ -857,7 +857,7 @@ The non-zero fill rule says that if the resulting sum is not zero, the point is 
 | VG_LITE_FILL_NON_ZERO | Non-zero fill rule. A pixel is drawn if it intersects at least one path pixel. |
 | VG_LITE_FILL_EVEN_ODD | Even-odd fill rule. A pixel is drawn if it intersects an odd number of path pixels. |
 
-##### 3.6.1.2 vg_lite_pattern_mode_t
+##### vg_lite_pattern_mode_t
 
 Defines how areas outside the image pattern are filled onto the path.
 
@@ -866,9 +866,9 @@ Defines how areas outside the image pattern are filled onto the path.
 | VG_LITE_PATTERN_COLOR   | Fill the outside of the pattern with color.     |
 | VG_LITE_PATTERN_PAD     | Extend the color of the pattern border to fill the area outside the pattern. |
 
-#### 3.6.2 Structures
+#### Structures
 
-##### 3.6.2.1 vg_lite_color_ramp_t
+##### vg_lite_color_ramp_t
 
 This structure defines stop points for radial gradients. Five parameters provide the offset and color for each stop point. Each stop point is defined by a set of floating-point values that specify the offset and sRGBA color and alpha values. The color channel values are in non-premultiplied (R, G, B, alpha) form. All parameters are in the range \[0,1\]. Red, green, blue, and alpha values \[0,1\] are mapped to 8-bit pixel values \[0,255\].
 
@@ -882,7 +882,7 @@ The maximum number of stops defining a radial gradient is MAX_COLOR_RAMP_STOPS, 
 | blue   | vg_lite_float_t  | Blue offset of the color stop  |
 | alpha  | vg_lite_float_t  | Alpha channel offset of the color stop |
 
-##### 3.6.2.2 vg_lite_linear_gradient_t
+##### vg_lite_linear_gradient_t
 
 This structure defines the organization of linear gradients in VGLite data. Linear gradients are applied to fill paths. It will generate a 256x1 image based on the settings.
 
@@ -896,9 +896,9 @@ This structure defines the organization of linear gradients in VGLite data. Line
 
 The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 256.
 
-#### 3.6.3 Functions
+#### Functions
 
-##### 3.6.3.1 vg_lite_draw
+##### vg_lite_draw
 
 - Description
 
@@ -910,7 +910,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_buffer_t \*target: Pointer to the vg_lite_buffer_t structure of the target buffer. All color formats in the vg_lite_buffer_format_t enumeration are valid target formats for the drawing function.
 
-    vg_lite_path_t \*path: Pointer to the vg_lite_path_t structure containing the path data to draw. For details on opcodes, refer to the section on [Vector Path OpCodes](#354-Vector Path OpCodes) in this document.
+    vg_lite_path_t \*path: Pointer to the vg_lite_path_t structure containing the path data to draw. For details on opcodes, refer to the section on [Vector Path OpCodes](#Vector Path OpCodes) in this document.
 
     vg_lite_fill_t fill_rule: Enumeration value of vg_lite_fill_t specifying the fill rule for the path.
 
@@ -920,7 +920,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_color_t color: Color applied to each pixel of the path drawing.
 
-##### 3.6.3.2 vg_lite_draw_gradient
+##### vg_lite_draw_gradient
 
 - Description
 
@@ -940,7 +940,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_blend_t blend: Refer to vg_lite_draw.
 
-##### 3.6.3.3 vg_lite_draw_pattern
+##### vg_lite_draw_pattern
 
 - Description
 
@@ -968,9 +968,9 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_filter_t filter: Specify the type of filter. All formats in the vg_lite_filter_t enumeration are valid formats for this function. A value of zero (0) indicates VG_LITE_FILTER_POINT.
 
-#### 3.6.4 Linear Gradient Initialization and Control Functions
+#### Linear Gradient Initialization and Control Functions
 
-##### 3.6.4.1 vg_lite_init_grad
+##### vg_lite_init_grad
 
 - Description
 
@@ -980,7 +980,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_linear_gradient_t \*grad: Pointer to the vg_lite_linear_gradient_t structure that defines the gradient to be initialized. Use default values.
 
-##### 3.6.4.2 vg_lite_set_grad
+##### vg_lite_set_grad
 
 - Description
 
@@ -1002,7 +1002,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     uint32_t \*stops: Pointer to the array of gradient stop offsets.
 
-##### 3.6.4.3 vg_lite_update_grad
+##### vg_lite_update_grad
 
 - Description
 
@@ -1012,7 +1012,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_linear_gradient_t \*grad: Pointer to the vg_lite_linear_gradient_t structure containing the values to be updated for the rendering object.
 
-##### 3.6.4.4 vg_lite_get_grad_matrix
+##### vg_lite_get_grad_matrix
 
 - Description
 
@@ -1022,7 +1022,7 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_linear_gradient_t \*grad: Pointer to the vg_lite_linear_gradient_t structure containing the matrix to be retrieved.
 
-##### 3.6.4.5 vg_lite_clear_grad
+##### vg_lite_clear_grad
 
 - Description
 
@@ -1032,49 +1032,49 @@ The maximum for VLC_MAX_GRAD is 16, and the maximum for VLC_GRADBUFFER_WIDTH is 
 
     vg_lite_linear_gradient_t \*grad: Pointer to the vg_lite_linear_gradient_t structure to be cleared.
 
-## 4. Constraints
+## Constraints
 
-The GPU driver **supports only one current context and one thread issuing commands to the GPU**. The GPU driver **does not support** multiple concurrent contexts running in multiple threads/processes, as the GPU kernel driver does not support context switching. A GPU application can only use one context to issue commands to the GPU hardware at any time. If a GPU application needs to switch contexts, it should call [vg_lite_close](#3213-vg_lite_close) to close the current context in the current thread, and then call [vg_lite_init](#3212-vg_lite_init) to initialize a new context in the current thread or another thread/process.
+The GPU driver **supports only one current context and one thread issuing commands to the GPU**. The GPU driver **does not support** multiple concurrent contexts running in multiple threads/processes, as the GPU kernel driver does not support context switching. A GPU application can only use one context to issue commands to the GPU hardware at any time. If a GPU application needs to switch contexts, it should call [vg_lite_close](#vg_lite_close) to close the current context in the current thread, and then call [vg_lite_init](#vg_lite_init) to initialize a new context in the current thread or another thread/process.
 
-## 5. Performance Tips and Best Practices
+## Performance Tips and Best Practices
 
-### 5.1 Cache vs Non-cache
+### Cache vs Non-cache
 
 When loading the vg_lite.ko module, you can configure whether to disable the cache through the cached parameter (cache is enabled by default). In cache mode, the driver will refresh the CPU cache (D-cache and L2-cache) before submitting commands to the GPU hardware. In non-cache mode, the command buffer and video memory will be mapped to the user space address as non-cache. Generally, cache mode provides better performance, as the CPU can write to the command buffer and read from video memory faster.
 
 Currently, cache refreshing uses the dcache.cipa instruction, which can only refresh one cache line (64 bytes) at a time. For larger buffers, such as 1920x1080@ARGB32, it requires approximately 129,600 iterations, most of which are misses, resulting in some performance overhead. Using the dcache.ciall instruction can refresh all caches, but it might affect other processes, so it is not used.
 
-### 5.2 Memory Usage
+### Memory Usage
 
 After loading the vg_lite.ko module, it occupies about 130KB of memory. Besides the command buffer and video memory, it hardly occupies any more space. Each memory allocation by vg_lite_hal_allocate_contiguous requires corresponding page table resources and a 64B node in addition to the memory itself.
 
-### 5.3 Drawing Process
+### Drawing Process
 
 Using VGLite API for operations:
 
-1. Call [vg_lite_init](#3212-vg_lite_init) to initialize the GPU.
-1. If GPU video memory is needed, call [vg_lite_allocate](#3251-vg_lite_allocate) to allocate and map it.
+1. Call [vg_lite_init](#vg_lite_init) to initialize the GPU.
+1. If GPU video memory is needed, call [vg_lite_allocate](#vg_lite_allocate) to allocate and map it.
 1. Use the API to draw.
-1. Call [vg_lite_finish](#3214-vg_lite_finish) or [vg_lite_flush](#3215-vg_lite_flush) to submit commands for rendering and wait for the drawing to complete.
-1. Before the process ends, call [vg_lite_close](#3213-vg_lite_close) to close the GPU.
+1. Call [vg_lite_finish](#vg_lite_finish) or [vg_lite_flush](#vg_lite_flush) to submit commands for rendering and wait for the drawing to complete.
+1. Before the process ends, call [vg_lite_close](#vg_lite_close) to close the GPU.
 
-## 6. Examples
+## Examples
 
 The K230 SDK contains multiple GPU examples. The source code is located in `src/little/buildroot-ext/package/vg_lite/test/samples`. To build and add them to the generated system image, enable BR2_PACKAGE_VG_LITE_DEMOS in buildroot (enabled by default).
 
-### 6.1 tiger
+### tiger
 
 This is an example that draws an image of a tiger. After running, it generates `tiger.png` in the current directory.
 
 ![tiger.png](../../../../zh/01_software/board/mpp/images/tiger.png)
 
-### 6.2 linearGrad
+### linearGrad
 
 This is an example of a linear gradient image. After running, it generates `linearGrad.png` in the current directory.
 
 ![linearGrad.png](../../../../zh/01_software/board/mpp/images/linearGrad.png)
 
-### 6.3 imgIndex
+### imgIndex
 
 This is an example using a color lookup table. After running, it generates `imgIndex1.png`, `imgIndex2.png`, `imgIndex4.png`, and `imgIndex8.png` in the current directory, each using a different number of color indices.
 
@@ -1086,13 +1086,13 @@ This is an example using a color lookup table. After running, it generates `imgI
 
 ![imgIndex8.png](../../../../zh/01_software/board/mpp/images/imgIndex8.png)
 
-### 6.4 vglite_drm
+### vglite_drm
 
 This is an example of GPU + DRM display linkage.
 
 Note: Since the video output driver under Linux does **not include** initialization functionality, you need to ensure the screen is already in use before running, for example, by running `sample_vo.elf 3` on the main core.
 
-### 6.5 vglite_cube
+### vglite_cube
 
 This is another example of GPU + DRM display linkage, drawing a continuously rotating cube on the screen.
 

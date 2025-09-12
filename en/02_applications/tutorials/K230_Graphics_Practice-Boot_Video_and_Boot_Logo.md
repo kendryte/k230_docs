@@ -25,9 +25,9 @@ Without written permission from the Company, no unit or individual may excerpt, 
 
 This document explains how to implement boot video and boot logo on the K230 EVB development board through video decoding. The video decoding module supports H.264/H.265/MJPEG decoding, with a maximum screen display resolution of 1920x1080 and can be rotated.
 
-## 1. Environment Preparation
+## Environment Preparation
 
-### 1.1 Hardware Environment
+### Hardware Environment
 
 - K230-USIP-LP3-EVB-V1.0/K230-UNSIP-LP3-EVB-V1.1
 - Type-C USB cable for power supply.
@@ -35,7 +35,7 @@ This document explains how to implement boot video and boot logo on the K230 EVB
 - Screen and cables
 - Camera sub-board (IMX335)
 
-### 1.2 Software Environment
+### Software Environment
 
 The k230_sdk provides toolchains located in the following paths.
 
@@ -58,7 +58,7 @@ wget https://download.rt-thread.org/rt-smart/riscv64/riscv64-unknown-linux-musl-
 wget https://occ-oss-prod.oss-cn-hangzhou.aliyuncs.com/resource//1659325511536/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0-20220715.tar.gz
 ```
 
-## 2. Source Code Location
+## Source Code Location
 
 The SDK contains a user-space decoding demo located at `k230_sdk/src/big/mpp/userapps/sample/sample_vdec`. The compiled executable file is located at `k230_sdk/src/big/mpp/userapps/sample/elf/sample_vdec.elf`. By default, it is not loaded into the large core image and requires modification of the Makefile as described in the execution section to generate the executable file in the `/mnt` directory after the large core starts.
 
@@ -72,7 +72,7 @@ The SDK contains a user-space decoding demo located at `k230_sdk/src/big/mpp/use
 1. `input_thread`: Read data from the file and call `kd_mpi_vdec_send_stream` to send the data to the VPU.
 1. `output_thread`: Retrieve decoded data from the VPU.
 
-## 3. Program Execution
+## Program Execution
 
 1. Modify the `mpp-apps` compilation script in `k230_sdk/Makefile`. Change
 

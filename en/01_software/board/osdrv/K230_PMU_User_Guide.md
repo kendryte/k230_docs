@@ -50,7 +50,7 @@ This document (this guide) is intended primarily for:
 | --- | --- | --- | --- |
 | V1.0 | Initial edition | Zhang Tao | 2023/05/19 |
 
-## 1. Function introduction
+## Function introduction
 
 The PMU module provides 6 input and 2 output ports, each with the following functions:
 
@@ -65,11 +65,11 @@ The PMU module provides 6 input and 2 output ports, each with the following func
 
 The PMU module also provides a log storage function of 64Byte, of which the last 4Byte is used by the driver and the remaining 60Byte is left to the user
 
-## 2. User Control
+## User Control
 
 The PMU can be controlled by the user through the device tree and sysfs, the PMU can be configured through the device tree at system startup, and the PMU can be dynamically configured through sysfs after startup
 
-### 2.1 PMU Device Tree Configuration
+### PMU Device Tree Configuration
 
 ```c
 pmu: pmu@0x91000000 {
@@ -142,7 +142,7 @@ Key field meanings:
 
 All times are measured in (1/32768) seconds, e.g. 327680 for 10 seconds
 
-### 2.2 PMU file control
+### PMU file control
 
 PMU sysfs is located in `/sys/devices/platform/soc/91000000.pmu`the directory and the file structure is as follows:
 
@@ -236,7 +236,7 @@ echo falling > type
 echo enabled > event
 ```
 
-### 2.3 PMU events are reported
+### PMU events are reported
 
 PMU uses the input subsystem to report events, and the reported event code is so `EV_KEY`that users can perform business processing after receiving the corresponding events. For example, after receiving`KEY_POWER` the key value, the user can perform shutdown preparation and invoke the`poweroff` shutdown command
 
@@ -253,12 +253,12 @@ You can use the `evtest`tool for testing with the following event table:
 | RTC_ALARM | BTN_6 |
 | RTC_TICK | BTN_7 |
 
-### 2.4 PMU shutdown control
+### PMU shutdown control
 
 1. Use `poweroff`the command shutdown
 1. Force shutdown by pressing the INT0 button long (not recommended unless the system is down. *Forced shutdown after system downtime will cause PMU to wake up*).
 
-## 3. Hardware connection
+## Hardware connection
 
 When using a PMU, you need to set up the EVB board as follows
 
@@ -277,7 +277,7 @@ Connection diagram using INT0 as a wake-up source:
 ![top_view](../../../../zh/01_software/board/osdrv/images/pmu_hw_top_view.jpg)
 ![bottom_view](../../../../zh/01_software/board/osdrv/images/pmu_hw_bottom_view.jpg)
 
-## 4. Precautions
+## Precautions
 
 1. The PMU module is not enabled by default in the device tree, if you need to use it, enable it in the device tree
 1. When using the PMU module, be sure to wake up the PMU module through any INT, otherwise the kernel will be stuck when initializing the driver

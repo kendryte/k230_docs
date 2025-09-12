@@ -52,7 +52,7 @@ This document (this guide) is primarily intended for the following personnel:
 
 [Burntool Download Link](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v3.7z)
 
-## 1. Purpose of K230 Burning Tool
+## Purpose of K230 Burning Tool
 
 1. For devices with SD card storage, users can remove the SD card to burn the image. However, for devices with emmc/nand/nor storage, users cannot do so, so K230 provides a mechanism for burning via USB.
 
@@ -60,7 +60,7 @@ This document (this guide) is primarily intended for the following personnel:
 
 1. The K230 burning tool version 3 supports burning SD/emmc/nand/nor/otp. It supports partition burning and reading data from storage media.
 
-## 2. How to Use the K230 Burning Tool
+## How to Use the K230 Burning Tool
 
 When the K230 chip fails to boot from the storage media and detects a USB connection, it will enter the USB burning mode.
 
@@ -98,7 +98,7 @@ The first row is for selecting loader.bin. You can open the file and select the 
 
 **9**, Start burning. After configuring the previous options and putting the K230 chip in USB burning mode, click to start burning.
 
-## 3. K230 USB Burning Mechanism
+## K230 USB Burning Mechanism
 
 ![k230_dfu](../../../../en/01_software/pc/burntool/images/0.png)
 
@@ -108,7 +108,7 @@ ROM only provides the function of downloading data to SRAM via USB and letting t
 
 Different devices have different DDR training, and the storage media solutions may vary, so different devices correspond to their respective loader.bin.
 
-## 4. How to Develop K230 Burning Tool loader.bin
+## How to Develop K230 Burning Tool loader.bin
 
 The uboot of sdk1.5 includes the source code of loader.bin. It supports the following devices. Customers can refer to these configuration files to modify their own designed devices.
 
