@@ -241,6 +241,8 @@ The K230 DDR controller has the following features:
     | LPDDR4 | RS256M32LS4D1BNR-46BT | Rayson   | 8Gb  |
     | LPDDR4 | RS512M3LO4D1BDS-53BT  | Rayson   | 16Gb  |
     | LPDDR4 | GDB4CBQN-MK  | GigaDevice  | 16Gb  |
+    | LPDDR4 | BWMZFX32H2A-8G-X | Biwin  | 8Gb  |
+    | LPDDR4 | BWMZAX32H2A-16GI-X | Biwin   | 16Gb  |
 
 The schematic of the K230 DDR PHY and each DRAM chip must be consistent with the reference schematic, including power decoupling capacitors.
 
@@ -590,6 +592,7 @@ The PMU module of the K230 is used to control and manage internal and external p
 |      INT_5       |      -       |      Yes      |     -    |          -           |            -              |
 
 Supports two output channels OUT0 and OUT1, which can be used to enable power supplies. In a cold start state, the PMU only enables the long press interrupt of INT0 and the high-level input interrupt of INT4 as triggers for PMU module startup. OUT0 and OUT1 default to low level with an initial pull-down resistance of about 40Ω. Upon receiving either of these two interrupts, OUT0 is pulled high, and OUT1 is pulled high after approximately 50ms. OUT0 and OUT1 can be used to control the enable pins of external PMICs or for other purposes.
+INT0 should be connected to a button and powered by the PMU power supply; INT4 needs to be pulled up to the PMU power supply.
 
 ### Power Design
 
@@ -603,26 +606,26 @@ Supports two output channels OUT0 and OUT1, which can be used to enable power su
 | DDR Controller | VDD0P8_DDR_CORE   | Digital CORE power for DDR, can be powered off                |
 |                | VDD1P1_DDR_IO     | IO power for DDR                                              |
 |                | VAA_DDR           | PLL power for DDR                                             |
-| USB            | AVDD3P3_USB       | 3.3V power for USB PHY, can be left unpowered if not in use   |
-|                | AVDD1P8_USB       | 1.8V power for USB PHY, can be left unpowered if not in use   |
+| USB            | AVDD3P3_USB       | 3.3V power for USB PHY, must be powered if not in use    |
+|                | AVDD1P8_USB       | 1.8V power for USB PHY, must be powered if not in use   |
 | PLL            | AVDD0P8_PLL       | Power for PLL                                                 |
-| MIPI           | AVDD0P8_MIPI      | 0.8V power for MIPI, can be left unpowered if not in use      |
-|                | AVDD1P8_MIPI      | 1.8V power for MIPI, can be left unpowered if not in use      |
+| MIPI           | AVDD0P8_MIPI      | 0.8V power for MIPI, must be powered if not in use      |
+|                | AVDD1P8_MIPI      | 1.8V power for MIPI, must be powered if not in use       |
 | VDD1P8         | VDD1P8            | 1.8V module power                                             |
-| ADC            | AVDD1P8_ADC       | Power for ADC, can be left unpowered if not in use            |
-| CODEC          | AVDD1P8_CODEC     | Power for CODEC, can be left unpowered if not in use          |
-| PMU            | AVDD1P8_RTC       | RTC power for PMU, can be left unpowered if not in use        |
-|                | AVDD1P8_LDO       | LDO power for PMU, can be left unpowered if not in use        |
-| MMC            | VDD3P3_SD         | 3.3V output buffer and pre-buffer IO power, can be left unpowered if not in use |
-| IO             | VDDIO3P3_0        | IO power for IO_2-IO_13, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
-|                | VDDIO3P3_1        | IO power for IO_14-IO_25, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
-|                | VDDIO3P3_2        | IO power for IO_26-IO_37, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
-|                | VDDIO3P3_3        | IO power for IO_38-IO_49, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
-|                | VDDIO3P3_4        | IO power for IO_50-IO_61, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
-|                | VDDIO3P3_5        | IO power for IO_62-IO_63, voltage selectable between 1.8V or 3.3V, can be left unpowered if not in use |
+| ADC            | AVDD1P8_ADC       | Power for ADC, must be powered if not in use            |
+| CODEC          | AVDD1P8_CODEC     | Power for CODEC, must be powered if not in use          |
+| PMU            | AVDD1P8_RTC       | RTC power for PMU, must be powered if not in use        |
+|                | AVDD1P8_LDO       | LDO power for PMU, must be powered if not in use        |
+| MMC            | VDD3P3_SD         | 3.3V output buffer and pre-buffer IO power, must be powered if not in use  |
+| IO             | VDDIO3P3_0        | IO power for IO_2-IO_13, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
+|                | VDDIO3P3_1        | IO power for IO_14-IO_25, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
+|                | VDDIO3P3_2        | IO power for IO_26-IO_37, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
+|                | VDDIO3P3_3        | IO power for IO_38-IO_49, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
+|                | VDDIO3P3_4        | IO power for IO_50-IO_61, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
+|                | VDDIO3P3_5        | IO power for IO_62-IO_63, voltage selectable between 1.8V or 3.3V, must be powered if not in use  |
 | K230D DDR Part | VDD1P8_DDR_VDD1   | DDR power in K230D, not present in K230                       |
 |                | VDD1P1_DDR_VDD2   | DDR power in K230D, not present in K230, cannot be powered off |
-|                | VDD1P1_DDR_VDDQ   | DDR power in K230D, not present in K230, can be powered off   |
+|                | VDD1P1_DDR_VDDQ   | DDR power in K230D, not present in K230, cannot be powered off   |
 
 Table 3-6 K230 Power Requirements
 
