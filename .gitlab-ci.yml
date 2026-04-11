@@ -1,9 +1,7 @@
-# docker image from https://github.com/DavidAnson/markdownlint-cli2
-# vscode markdownlint https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
-# markdownlint-cli2: https://github.com/DavidAnson/markdownlint-cli2
-# markdownlint rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
-# markdown-link-check: https://github.com/tcort/markdown-link-check
-#
+# How to do manually markdonw-lint or markdown-link?
+# docker run --rm   -v "$(pwd)":/workspace   -w /workspace   ai.b-bug.org:5000/markdown:latest   /bin/sh -c "find . -name '*.md' -print0 | xargs -0 markdownlint-cli2"
+# docker run -it --rm -v $(pwd):/workspace -w /workspace ai.b-bug.org:5000/huangziyi/lychee:latest --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" /workspace
+
 variables:
   GITLAB_REPO: git@g.a-bug.org:maix_sw/k230_docs.git
   GITHUB_REPO: git@github.com:kendryte/k230_docs.git
@@ -17,221 +15,285 @@ default:
 
 stages:
   - lint
+  - translate
   - build
-  - sync
   - deploy
+  - sync_mirrors
 
-# MR merged
-merge_sync:
-  stage: sync
+# ============================================
+# Markdown 语法检查
+# ============================================
+markdown_lint:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
-  extends:
-    - .setup_env
-    - .sync_github_gitee
-
-# release
-dev_to_main:
-  stage: sync
-  rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
-  extends:
-    - .setup_env
-    - .dev_to_main
-
-# tag push
-tag_sync:
-  stage: sync
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG =~ /^v\d+\.\d+.*$/
-  extends:
-    - .setup_env
-    - .sync_github_gitee
-
-# auto sync
-schedule_sync:
-  stage: sync
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  extends:
-    - .setup_env
-    - .sync_github_gitee
-
-# manual sync
-manual_sync:
-  stage: sync
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "web"'
-      when: always
-  extends:
-    - .setup_env
-    - .sync_github_gitee
-
-# new MR open
-markdown-link-check:
-  rules:
-    # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
+
   stage: lint
   timeout: 30m
   retry: 2
   image: ai.b-bug.org:5000/markdown:latest
+  tags:
+    - markdown-lint
+
   script:
+    - echo "===== Markdown Lint ====="
     - uname -a
     - whoami
+    - id
     - pwd
-    - git fetch
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
-    - echo $FILELIST
-    - if [ -n "$FILELIST" ]; then echo $FILELIST | xargs markdown-link-check -p -q -v -r ; fi
 
-# new MR open
-markdownlint:
+    # ----------------------------------------
+    # 1. Markdownlint 语法检查
+    # ----------------------------------------
+    - echo "Running markdownlint..."
+    - find . -name "*.md" -print0 | xargs -0 markdownlint-cli2
+
+    # ----------------------------------------
+    # 2. 文件名 slug 检查, 只允许英文文件名， 否则自动翻译会翻译文件名后造成链接失败
+    # ----------------------------------------
+    - echo "Checking markdown filenames for English slugs..."
+    - |
+      FAILED_FILES=$(find . -name "*.md" -not -path "*/.*" -exec basename {} \; | grep -Pv "^[a-z0-9_\-\.]+\.md$" || true)
+      if [ -n "$FAILED_FILES" ]; then
+        echo "❌ 错误：发现不符合 slug 规范的 Markdown 文件名"
+        echo ""
+        echo "规范：仅允许 a-z 0-9 _ - ."
+        echo ""
+        echo "$FAILED_FILES"
+        exit 1
+      else
+        echo "✅ 文件名检查通过"
+      fi
+
+    # ----------------------------------------
+    # 3. 中文 anchor 检查, 只允许英文anchor, 否则自动翻译标题后造成 anchor 失败
+    # ----------------------------------------
+    - echo "Checking Chinese anchors..."
+    - |
+      BAD_ANCHORS=$(grep -rP "\]\([^)]*#[^)]*[\x{4e00}-\x{9fa5}]" --include="*.md" . || true)
+      if [ -n "$BAD_ANCHORS" ]; then
+        echo "❌ 错误：检测到中文 Anchor"
+        echo ""
+        echo "$BAD_ANCHORS"
+        echo ""
+        echo "规范：Markdown 链接中的 anchor 必须为英文，例如："
+        echo "  ❌ guide.md#1-概述"
+        echo "  ✅ guide.md#overview"
+        exit 1
+      else
+        echo "✅ Anchor 检查通过"
+      fi
+
+    - echo "===== Markdown Lint Passed ====="
+
+# ============================================
+# Link 检查 (使用 lychee, 原来用的markdown-link检查有缺陷)
+# ============================================
+lychee_link_check:
   rules:
-    # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
   stage: lint
   timeout: 10m
-  image: ai.b-bug.org:5000/markdown:latest
+  tags:
+    - markdown-link-check
+  image:
+    name: ai.b-bug.org:5000/huangziyi/lychee:latest
+    entrypoint: [""]
   script:
     - uname -a
     - whoami
     - pwd
-    #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
-    - git fetch --tags
-    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
-    - echo $FILELIST
-    - markdownlint-cli2 $(find . -name \*.md)
+    - lychee --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" .
+    
 
-.setup_env:
+# ============================================
+# 自动翻译任务
+# ============================================
+auto_translate:
+  stage: translate
+  image: ai.b-bug.org:5000/canmv/gitdoctranslator:latest
+  tags:
+    - docker-runner-192.168.1.104
+  variables:
+    # 强制 Runner 每次都执行 git clone 而不是 git fetch
+    GIT_STRATEGY: clone
+    # 可选：确保子模块（如果有）也重新初始化
+    GIT_SUBMODULE_STRATEGY: recursive
+    # GitLab CI 会自动注入这些变量
+    GITLAB_REPO: $CI_PROJECT_URL
+    DOCS_DIR: $CI_PROJECT_DIR
+  rules:
+    # 仅在 push 到 dev 分支时触发，如果包括[skip ci]则不启动此任务
+    - when: never
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_MESSAGE !~ /\[skip ci\]/
   before_script:
-    - echo '----------Build ENV Prepare----------'
-    - echo 'Add SSH KEY for Multiple repo'
+    # --- 打印关键调试 ---
+    - echo $SHELL
+    - whoami
+    - id
+    - set
+    - pwd
+    - ls -alht
+    - uname -a
+    - ls -alht $CI_PROJECT_DIR
+    - echo $CI_PROJECT_DIR
+    - echo $CI_PROJECT_NAME
+    - echo $CI_PIPELINE_SOURCE
+    - echo $DOCS_DIR
+    - echo $LLM_PROVIDER
+    - echo $LLM_MODEL
+    - echo $LLM_MAX_TOKENS
+    - echo $LLM_SECTION_MAX_TOKENS
+    - echo $LLM_API_KEY
+    - echo $LLM_TEMPERATURE
+    
+    # 初始化 SSH 环境 (用于 Deploy Key)
+    - echo "Setting up SSH for Deploy Key..."
     - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | ssh-add - > ~/.ssh/id_ed25519 || exit 1
+    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n    StrictHostKeyChecking no\n" > ~/.ssh/config'
-    - echo $SHELL
-    - echo "increate ssh timeout for github"
-    - echo "    ServerAliveInterval 30" >> ~/.ssh/config
-    - echo "    ServerAliveCountMax 60" >> ~/.ssh/config
-    - echo "    TCPKeepAlive yes" >> ~/.ssh/config
-    - cat ~/.ssh/config
-    - whoami
-    - uptime
-    - pwd
-    - uname -a
-    - cat /etc/issue
-    - echo $CI_PROJECT_DIR
-    - echo $CI_PROJECT_NAME
-    - echo '----------set git config ----------'
-    - echo "${GITLAB_USER_EMAIL}"
-    - echo "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - git config --global user.name "${GITLAB_USER_NAME}"
+    
+    # --- 2. 配置 Git 身份与环境 ---
+    - git config --global user.email "auto@canaan-creative.com"
+    - git config --global user.name "GitDocTranslator Bot"
     - git config --global --add safe.directory $CI_PROJECT_DIR
 
-.sync_github_gitee:
-  timeout: 30m
-  script:
-    - cd $CI_PROJECT_DIR
-    - ls -alht
-    - rm -rf ./k230_docs/
-    - git clone ${GITLAB_REPO} k230_docs || exit 1
-    - cd k230_docs || exit 1
-    - pwd
-    - git checkout main
-    - git branch -a
-    - git status
-    - echo '---pull latest main branch---'
-    - git pull origin main
-    - echo '---fetch all tags---'
+    # --- 3. 切换远程仓库地址为 SSH (使用刚刚添加的私钥进行鉴权) ---
+    - git remote set-url origin git@${CI_SERVER_HOST}:${CI_PROJECT_PATH}.git
+
+    # --- 4. 对齐分支 (解决 Detached HEAD 问题) ---
     - git fetch --tags
-    - git remote add github ${GITHUB_REPO}
-    - git remote add gitee ${GITEE_REPO}
-    - git remote -v
-    - git branch -a
-    - git status
-    - echo "---push to gitee---"
-    - git push --atomic --tags -u -f gitee main || git push --atomic --tags -u -f gitee main
-    - echo "---push to github---"
-    - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
+    - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
 
-.dev_to_main:
-  timeout: 30m
   script:
-    - cd $CI_PROJECT_DIR
-    - ls -alht
-    - echo "----------Step 1, Check Merge Request Title, k230 sdk docs release v*.* MUST bt exist----------"
-    - echo "$CI_MERGE_REQUEST_TITLE"
-    - >
-      if [[ "$CI_MERGE_REQUEST_TITLE" =~ ^"k230 sdk docs release v[0-9]+\.[0-9]+".*$ ]];
-      then
-        echo "Merge Request title check PASS, continue get release version from merge request title";
-      else
-        echo "Merge Request title check FAILED, please EDIT title name with release tag";
-        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
-        exit 1;
-      fi
-    - RELEASE_TAG=$(echo $CI_MERGE_REQUEST_TITLE |grep -Eo "v[0-9]+\.[0-9]+.*?$")
-    - >
-      if [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+.*$ ]];
-      then
-        echo "Release TAG/version will be " $RELEASE_TAG;
-      else
-        echo "Release TAG/version check FAILED, please EDIT title name with release tag";
-        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
-        exit 1;
-      fi
-    - echo "----------sync dev branch to main branch for k230 sdk docs release----------"
-    - wget -qc https://ai.b-bug.org/k230/test_resources/ci/release/k230_docs_release.sh -O ./k230_docs_release.sh
-    - chmod +x ./k230_docs_release.sh
-    - ./k230_docs_release.sh $RELEASE_TAG "k230 sdk docs release $RELEASE_TAG" || exit 1
-    - echo "----------sync dev to main branch pass in k230 sdk docs repos----------"
+    - |
+      gitdoctranslator sync \
+        --lang en \
+        --ci-mode \
+        --log-level DEBUG
+  after_script:
+    - echo "Translation completed"
 
-build web docs:
+# ============================================
+# 构建测试环境文档
+# ============================================
+build_web_html:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
   image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
-  environment:
-    name: dev
-    url: https://ai.b-bug.org/k230/docs/dev/
+  tags:
+    - docker-runner-192.168.1.104
   script:
-    - git fetch --tags
-    - git branch main origin/main
-    - git checkout main
-    - python3 preprocess.py
-    - python3 preprocessEn.py
+    - git fetch --tags --force
+    - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
+    - python3 preprocess.py || true
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
-    - git commit "*.md" -m "remove cover"
-    - git checkout dev
-    - git tag --list
-    - git reset --hard origin/dev
-    - python3 preprocess.py
-    - python3 preprocessEn.py
-    - git commit "*.md" -m "remove cover"
-    - pip install --upgrade pip
-    - pip install --force-reinstall "sphinx==7.3.7"
-    - make mhtml
-    - rm -rf /data1/k230/docs/*
-    - cp -r _build/* /data1/k230/docs
+    
+    # 解决 sphinx-multiversion 可能遇到的 Git 安全目录问题
+    - git config --global --add safe.directory "*"
+    - git commit "*.md" -m "remove cover" || true
 
-deploy production:
+    # 核心修复：安装兼容的“黄金版本”组合
+    # 放弃强制 7.3.7，使用 Sphinx 6.x 以兼容 myst-parser 和 docutils < 0.19
+    - pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple \
+        "sphinx>=6.2.1,<7.0.0" \
+        "docutils<0.19" \
+        "myst-parser>=1.0.0" \
+        "sphinx-book-theme" \
+        "sphinx-multiversion" \
+        "sphinx-copybutton" \
+        "sphinxcontrib-mermaid"
+    
+    # 检查当前的 commit 是否精确对应某一个 Git Tag
+    # 如果是tag, 则返回 tag 号，否则返回 branch 名
+    - |
+      if git describe --tags --exact-match 2>/dev/null; then
+        VERSION=$(git describe --tags --exact-match)
+      else
+        VERSION=$CI_COMMIT_REF_NAME
+      fi
+      echo "Building version: $VERSION"
+
+      # 显式清理并构建，加入 -v 查看详细静态文件处理逻辑
+      make clean-templates
+      make clean
+      make mhtml SPHINXOPTS="-v"
+      
+    - echo "VERSION=$VERSION" > version.env
+  artifacts:
+    paths:
+      - _build
+      - version.env
+
+# ============================================
+# 部署到测试环境 (北京94服务器)
+# ============================================
+deploy_beijing_94:
   stage: deploy
   image: ai.b-bug.org:5000/huangziyi/deploy:v1
-  retry: 2
   dependencies:
-    - build web docs
-  needs:
-    - build web docs
+    - build_web_html
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
-  environment:
-    name: production
-    url: https://www.kendryte.com/k230/dev/index.html
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+  tags:
+    - kendryte_dev_website
+  retry: 2
   script:
-    - scp -P $AWS_PORT -C -r /data1/k230/docs/* $AWS/data/webapp/k230
+    - |
+      if [ -f version.env ]; then source version.env; fi
+      echo "Deploying version: ${VERSION:-unknown}"
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      if [ -z "$VERSION" ]; then echo "VERSION is empty, aborting"; exit 1; fi
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      cp -r _build/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      cp -r _build/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+
+# ============================================
+# 部署到深圳104服务器
+# ============================================
+deploy_shenzhen_104:
+  stage: deploy
+  image: ai.b-bug.org:5000/huangziyi/deploy:v1
+  dependencies:
+    - build_web_html
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+  tags:
+    - docker-runner-192.168.1.104
+  retry: 2
+  before_script:
+    - echo $SHELL
+    - whoami
+    - id
+    - set
+    - pwd
+    - ls -alht
+    - uname -a
+    - ls -alht $CI_PROJECT_DIR
+    - echo $CI_PROJECT_DIR
+    - echo $CI_PROJECT_NAME
+    - echo $CI_PIPELINE_SOURCE
+    - ls /
+  script:
+    - |
+      if [ -f version.env ]; then source version.env; fi
+      echo "Deploying version: ${VERSION:-unknown}"
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      if [ -z "$VERSION" ]; then echo "VERSION is empty, aborting"; exit 1; fi
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      cp -r _build/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      cp -r _build/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+
+
+
+

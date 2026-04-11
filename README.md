@@ -120,7 +120,6 @@
 | [K230_Camera_Sensor适配指南.md](zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md) | K230 Camera Sensor适配指南|
 | [K230_DMA_API参考.md](zh/01_software/board/mpp/K230_DMA_API参考.md) | K230 DMA API参考|
 | [K230_DPU_API参考.md](zh/01_software/board/mpp/K230_DPU_API参考.md) | K230 DPU API参考|
-| [K230_GPU_API参考.md](zh/01_software/board/mpp/K230_GPU_API参考.md) | K230 GPU API参考|
 | [K230_SHA256_API参考.md](zh/01_software/board/mpp/K230_SHA256_API参考.md) | K230 SHA256 API参考|
 | [K230_VICAP_API参考.md](zh/01_software/board/mpp/K230_VICAP_API参考.md) | K230 VICAP API参考|
 | [K230_VICAP_SENSOR_参数分区参考.md](zh/01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md) | K230 VICAP SENSOR 参数分区参考|
@@ -235,7 +234,6 @@
 | [K230_Camera_Sensor适配指南.md](zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md) | K230 Camera Sensor适配指南|
 | [K230_DMA_API参考.md](zh/01_software/board/mpp/K230_DMA_API参考.md) | K230 DMA API参考|
 | [K230_DPU_API参考.md](zh/01_software/board/mpp/K230_DPU_API参考.md) | K230 DPU API参考|
-| [K230_GPU_API参考.md](zh/01_software/board/mpp/K230_GPU_API参考.md) | K230 GPU API参考|
 | [K230_SHA256_API参考.md](zh/01_software/board/mpp/K230_SHA256_API参考.md) | K230 SHA256 API参考|
 | [K230_VICAP_API参考.md](zh/01_software/board/mpp/K230_VICAP_API参考.md) | K230 VICAP API参考|
 | [K230_VICAP_SENSOR_参数分区参考.md](zh/01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md) | K230 VICAP SENSOR 参数分区参考|

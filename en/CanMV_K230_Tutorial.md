@@ -887,8 +887,8 @@ Currently, `CanMV` supports two sets of development APIs, `C++` and `MicroPython
 
 For inference on the development board, we provide two modules to accelerate model inference:
 
-- Hardware-based preprocessing module: `AI2D`. For detailed functionality, see [AI2D Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#5-ai2d-runtime-apis-c).
-- Hardware-based model inference module: `KPU`. For detailed functionality, see [KPU Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#6-kpu-runtime-apis-c).
+- Hardware-based preprocessing module: `AI2D`. For detailed functionality, see [AI2D Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#ai2d-runtime-apis-c).
+- Hardware-based model inference module: `KPU`. For detailed functionality, see [KPU Runtime APIs](./01_software/board/ai/K230_nncase_Development_Guide.md#kpu-runtime-apis-c).
 
 Next, we will explain how to use these two modules and what to pay attention to in a C++ code example.
 

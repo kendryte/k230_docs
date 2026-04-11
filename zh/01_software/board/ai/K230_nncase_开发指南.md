@@ -1457,6 +1457,8 @@ output 1 cosine similarity : 0.999757707118988
 output 2 cosine similarity : 0.9997308850288391
 ```
 
+<a id="kpu-runtime-apisc"></a>
+
 ## KPU运行时APIs(C++)
 
 ### 简介
@@ -1961,11 +1963,13 @@ int main(int argc, char *argv[])
 }
 ```
 
+<a id="ai2d-runtime-apisc"></a>
+
 ## AI2D 运行时APIs(C++)
 
 ### 简介
 
-AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配置，执行AI2D计算等。请在使用前阅读最后一部分[注意事项](./K230_nncase_开发指南.md#54-注意事项)。
+AI2D运行时APIs用于在AI设备配置AI2D的参数，生成相关寄存器配置，执行AI2D计算等。请在使用前阅读最后一部分[注意事项](./K230_nncase_开发指南.md#precautions)。
 
 #### 支持的格式转换
 
@@ -2414,6 +2418,8 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
     }
 }
 ```
+
+<a id="precautions"></a>
 
 ### 注意事项
 

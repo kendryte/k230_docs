@@ -1,0 +1,114 @@
+{
+    // MD003 - heading-style
+    "MD003": {
+        "style": "atx"
+    },
+    // MD004 - ul-style
+    "MD004": {
+        "style": "consistent"
+    },
+    // MD007 - ul-indent
+    "MD007": {
+        "indent": 2
+    },
+    // MD009 - no-trailing-spaces
+    "MD009": {
+        "br_spaces": 2,
+        "list_item_empty_lines": false,
+        "strict": false
+    },
+    // MD010 - no-hard-tabs
+    "MD010": {
+        "code_blocks": true,
+        "ignore_code_languages": [
+            "Makefile",
+            "makefile"
+        ],
+        "spaces_per_tab": 1
+    },
+    // MD012 - no-multiple-blanks（修正编号）
+    "MD012": {
+        "maximum": 1
+    },
+    // MD013 - line-length
+    "MD013": {
+        "strict": false,
+        "line_length": 2000,
+        "code_blocks": false
+    },
+    // MD022 - blanks-around-headers
+    "MD022": {
+        "lines_above": 1,
+        "lines_below": 1
+    },
+    // MD024 - no-duplicate-heading
+    "MD024": {
+        "allow_different_nesting": false,
+        "siblings_only": true
+    },
+    // MD025 - single-title
+    "MD025": {
+        "level": 1
+    },
+    // MD029 - ol-prefix
+    "MD029": {
+        "style": "one_or_ordered"
+    },
+    // MD030 - list-marker-space
+    "MD030": {
+        "ol_multi": 1,
+        "ol_single": 1,
+        "ul_multi": 1,
+        "ul_single": 1
+    },
+    // MD031 - blanks-around-fences
+    "MD031": {
+        "list_items": true
+    },
+    // MD033 - no-inline-html
+    "MD033": {
+        "allowed_elements": [
+            "div",
+            "br",
+            "a"
+        ]
+    },
+    // MD035 - hr-style
+    "MD035": {
+        "style": "---"
+    },
+    // MD036 - no-emphasis-as-heading（禁用）
+    "MD036": false,
+    // MD040 - fenced-code-language
+    "MD040": {
+        "allowed_languages": [],
+        "language_only": false
+    },
+    // MD041 - first-line-heading
+    "MD041": {
+        "level": 1
+    },
+    // MD044 - proper-names
+    "MD044": {
+        "code_blocks": true,
+        "names": []
+    },
+    // MD046 - code-block-style
+    "MD046": {
+        "style": "fenced"
+    },
+    // MD048 - code-fence-style
+    "MD048": {
+        "style": "backtick"
+    },
+    // MD049 - emphasis-style
+    "MD049": {
+        "style": "asterisk"
+    },
+    // MD050 - strong-style
+    "MD050": {
+        "style": "asterisk"
+    },
+    // MD052 - reference-links-images（关闭）
+    "MD052": false
+}

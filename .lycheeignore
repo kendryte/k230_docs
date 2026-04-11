@@ -1,0 +1,12 @@
+# 忽略 OpenCV 文档，防止其反爬虫机制导致的 403 错误
+# https://docs.opencv.org/.*
+
+# 忽略 Gitee 仓库，防止其人机验证机制导致的 468 错误
+# https://gitee.com/kendryte/nncase
+
+# 忽略本地回环地址
+http://127.0.0.1.*
+http://localhost.*
+
+https://xuantie.t-head.cn/community/download?id=4212696449735004160
+https://www.putty.org
