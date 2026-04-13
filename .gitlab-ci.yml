@@ -242,7 +242,7 @@ deploy_beijing_94:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
   tags:
-    - kendryte_dev_website
+    - docker-runner-10.10.1.94
   retry: 2
   script:
     - |
