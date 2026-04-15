@@ -187,7 +187,7 @@ build_web_html:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
   image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   tags:
-    - docker-runner-192.168.1.104
+    - docker-runner-10.10.1.94
   script:
     - git fetch --tags --force
     - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
@@ -271,8 +271,8 @@ deploy_shenzhen_104:
   dependencies:
     - build_web_html
   rules:
+    - when: never
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
-      when: never
   tags:
     - docker-runner-192.168.1.104
   retry: 2
