@@ -106,7 +106,7 @@ smv_branch_whitelist = r"^(main|dev)$"
 
 # 2. 构建 v1.5 及以上版本的 Tag (排除 < 1.5)
 # 逻辑：匹配 v1.6-1.9, 或者 v2 及以上的所有版本
-smv_tag_whitelist = r"^v(1\.[6-9]|[2-9]|\d{2,})\.\d+.*$"
+smv_tag_whitelist = r"^v(1\.[6-9]|[2-9]|[1-9]\d+)(\.\d+)*.*$"
 
 # 3. 远程分支匹配（兼容 CI 环境，匹配所有远程）
 smv_remote_whitelist = r"^.*$"
