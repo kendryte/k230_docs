@@ -226,10 +226,16 @@ build_web_html:
       make mhtml SPHINXOPTS="-v"
       
     - echo "VERSION=$VERSION" > version.env
-  artifacts:
-    paths:
-      - _build
-      - version.env
+
+    # 因为 k230_docs这个库产生的文件大小过大，已超过 artifacts的存储限制
+    # 所以，暂时采用workaround, 直接在本地服务器中转进行文件复制和部署,
+    - rm -rf /data1/k230/docs/*
+    - cp -r _build/* /data1/k230/docs/
+
+  # artifacts:
+  #   paths:
+  #     - _build
+  #     - version.env
 
 # ============================================
 # 部署到测试环境 (北京94服务器)
@@ -253,8 +259,8 @@ deploy_beijing_94:
       rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
       rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
       mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      cp -r _build/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      cp -r _build/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      cp -r /data1/k230/docs/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      cp -r /data1/k230/docs/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
 # ============================================
 # 部署到深圳104服务器
@@ -266,6 +272,7 @@ deploy_shenzhen_104:
     - build_web_html
   rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+      when: never
   tags:
     - docker-runner-192.168.1.104
   retry: 2
