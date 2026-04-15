@@ -252,10 +252,7 @@ deploy_beijing_94:
   retry: 2
   script:
     - |
-      if [ -f version.env ]; then source version.env; fi
-      echo "Deploying version: ${VERSION:-unknown}"
       mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      if [ -z "$VERSION" ]; then echo "VERSION is empty, aborting"; exit 1; fi
       rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
       rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
       mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
