@@ -1878,14 +1878,14 @@ static int inference(const char *kmodel_file, const char *image_file, const char
 {
     // load kmodel
     interpreter interp;
-    
+
     // 从内存加载kmodel
     auto kmodel = read_binary_file<unsigned char>(kmodel_file);
     interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load kmodel.");
     // 从文件流加载kmodel
     std::ifstream ifs(kmodel_file, std::ios::binary);
     interp.load_model(ifs).expect("cannot load kmodel");
-    
+
 
     // create input tensor
     auto input_desc = interp.input_desc(0);
@@ -2300,15 +2300,15 @@ ai2d_builder(dims_t &input_shape, dims_t &output_shape, ai2d_datatype_t ai2d_dty
 【示例】
 
 ```cpp
-dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };          
-auto out_span = ai2d_out_tensor_.shape();                                    
-dims_t out_shape { out_span.begin(), out_span.end() };                       
+dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };
+auto out_span = ai2d_out_tensor_.shape();
+dims_t out_shape { out_span.begin(), out_span.end() };
 ai2d_datatype_t ai2d_dtype { ai2d_format::NCHW_FMT, ai2d_format::NCHW_FMT, typecode_t::dt_uint8, typecode_t::dt_uint8 };
-ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };                          
-ai2d_shift_param_t shift_param { false, 0 };                                 
+ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };
+ai2d_shift_param_t shift_param { false, 0 };
 ai2d_pad_param_t pad_param { true, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 70, 70 } }, ai2d_pad_mode::constant, { 0, 0, 0 } };
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
-ai2d_affine_param_t affine_param { false };                                  
+ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
@@ -2364,7 +2364,7 @@ result\<void\>。
 【示例】
 
 ```c++
-// run ai2d                                                                  
+// run ai2d
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 

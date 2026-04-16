@@ -115,7 +115,7 @@ k230_sdk/src/big/mpp/kernel/sensor/src/xs9950_csi0_drv.c:
 
 static int xs9950_power_rest(k_s32 on)
 {
-    #define VICAP_XS9950_RST_GPIO     (0)  //24// 
+    #define VICAP_XS9950_RST_GPIO     (0)  //24//
 
     kd_pin_mode(VICAP_XS9950_RST_GPIO, GPIO_DM_OUTPUT);
 
@@ -253,7 +253,7 @@ static int sample_vb_init(void)
     config.comm_pool[7].blk_size = VICAP_ALIGN_UP((DW200_CHN1_OUTPUT_WIDTH * DW200_CHN1_OUTPUT_HEIGHT * 3), 0x1000);
     config.comm_pool[7].mode = VB_REMAP_MODE_NOCACHE;
 
-    // for gdma chn0 
+    // for gdma chn0
     config.comm_pool[8].blk_cnt = GDMA_BUF_NUM;
     config.comm_pool[8].blk_size = VICAP_ALIGN_UP((DW200_CHN0_OUTPUT_WIDTH * DW200_CHN0_OUTPUT_HEIGHT * 3), 0x1000);
     config.comm_pool[8].mode = VB_REMAP_MODE_NOCACHE;
@@ -893,7 +893,7 @@ static void sample_vo_init(k_connector_type type)
         info.offset.y = 0;//(1920-h)/2;
         vo_creat_layer_test(K_VO_LAYER1, &info);
 #endif
-        
+
 #if DW_DEV1_USE_RGB
          // osd0 init
         osd.act_size.width = DW200_CHN1_OUTPUT_WIDTH ;
@@ -959,7 +959,7 @@ static void sample_bind()
     k_mpp_chn vo_mpp_chn;
     k_mpp_chn gdma;
 
-    // pipe 1 
+    // pipe 1
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 0;
     vi_mpp_chn.chn_id = 0;
@@ -988,7 +988,7 @@ static void sample_bind()
     ret = kd_mpi_sys_bind(&gdma, &vo_mpp_chn);
     CHECK_RET(ret, __func__, __LINE__);
 
-    // pipe 2 
+    // pipe 2
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 1;
     vi_mpp_chn.chn_id = 0;
@@ -1062,7 +1062,7 @@ static void sample_unbind()
     k_mpp_chn vo_mpp_chn;
     k_mpp_chn gdma;
 
-    // pipe 1 
+    // pipe 1
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 0;
     vi_mpp_chn.chn_id = 0;
@@ -1091,7 +1091,7 @@ static void sample_unbind()
     ret = kd_mpi_sys_unbind(&gdma, &vo_mpp_chn);
     CHECK_RET(ret, __func__, __LINE__);
 
-    // pipe 2 
+    // pipe 2
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 1;
     vi_mpp_chn.chn_id = 0;
@@ -1176,10 +1176,10 @@ int main(int argc, char *argv[])
     // vo init
     sample_vo_init(ILI9881C_MIPI_4LAN_800X1280_60FPS);
 
-    // init 2d 
+    // init 2d
     nonai_2d_init();
 
-    // init bind 
+    // init bind
     sample_bind();
 
     dma_dev_attr_init();
@@ -1253,7 +1253,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        // todo ai 
+        // todo ai
 
         ret = kd_mpi_nonai_2d_release_frame(NONAI_2D_RGB_CH, &rgb_vf_info);
         if (ret) {
@@ -1269,7 +1269,7 @@ int main(int argc, char *argv[])
 
     sample_vicap_stream(VICAP_DEV_ID_0 , K_FALSE);
     sample_vicap_stream(VICAP_DEV_ID_1 , K_FALSE);
-    sample_vicap_stream(VICAP_DEV_ID_2 , K_FALSE); 
+    sample_vicap_stream(VICAP_DEV_ID_2 , K_FALSE);
 
 
     usleep(1000 * 34);

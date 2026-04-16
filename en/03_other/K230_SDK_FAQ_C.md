@@ -170,7 +170,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -186,7 +186,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -213,7 +213,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -254,7 +254,7 @@ setenv bootargs "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 c
 Answer: Method 1: In Linux, enter `cat /proc/cmdline` to view:
 
 ```bash
-[root@canaan ~ ]#cat /proc/cmdline 
+[root@canaan ~ ]#cat /proc/cmdline
 root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
 [root@canaan ~ ]#
 ```
@@ -281,7 +281,7 @@ aliases {
     chosen {
         stdout-path = "uart2:115200n8";
     };
-    
+
     serial2: serial@91402000 {
     compatible = "snps,dw-apb-uart";
     reg = <0x0 0x91402000 0x0 0x400>;
@@ -302,7 +302,7 @@ aliases {
 chosen {
         stdout-path = "serial2";
     };
-    
+
 &uart2 {
     status = "okay";
 };
@@ -428,11 +428,11 @@ cd /sdcard/app/onboard
 
 Modification 2: Add a wait for the shared file system action (applicable to SDK version 1.5 and later)
 
-```c  
+```c
 // Modify around line 34 in the src/big/rt-smart/kernel/bsp/maix3/applications/main.c file as follows:
-        
+
     struct stat stat_buf;
-    while(stat("/sharefs/onboard",&stat_buf));// Please modify to the correct file according to the actual situation 
+    while(stat("/sharefs/onboard",&stat_buf));// Please modify to the correct file according to the actual situation
     msh_exec("/bin/init.sh", 13); // The script to auto-start, please modify to the correct file according to the actual situation
 ```
 
@@ -445,7 +445,7 @@ Modification 2: Add a wait for the shared file system action (applicable to SDK 
             // shell_thread_first_run = 0;
             // msh_exec("/bin/init.sh", 13);
             if(0 == stat("/sharefs/onboard",&stat_buf)){ // Please modify to the correct file according to the actual situation
-                shell_thread_first_run = 0;               
+                shell_thread_first_run = 0;
                 msh_exec("/bin/init.sh", 13); // The script to auto-start, please modify to the correct file according to the actual situation
             }
             continue;
@@ -461,7 +461,7 @@ Enabling libxml2 Method 1: If the SDK has already been compiled
 ```bash
 # Method to use libxml2 (using k230_canmv_defconfig as an example), execute the following commands in the SDK main directory:
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ menuconfig
-# Target packages --> Libraries --> JSON/XML --> libxml2 
+# Target packages --> Libraries --> JSON/XML --> libxml2
 # Enable the libxml2 library and save the configuration;
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ savedefconfig  # Save the configuration
 make -C output/k230_canmv_defconfig/little/buildroot-ext/  # Compile Buildroot
@@ -523,7 +523,7 @@ int main(void)
     return (0);
 }
 
-// Compilation method 
+// Compilation method
 /* Assuming the SDK main directory is SDK=/home/wangjianxin/k230_sdk
 SDK=/home/wangjianxin/k230_sdk
 BD=${SDK}/output/k230_canmv_defconfig/little/buildroot-ext

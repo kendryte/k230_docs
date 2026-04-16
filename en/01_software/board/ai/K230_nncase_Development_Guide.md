@@ -424,7 +424,7 @@ ShapeBucket is a solution for dynamic shapes that optimizes based on the range o
 
 In the shape information of a model, some dimensions may be variable names. For example, consider an ONNX model with the following inputs:
 
-> tokens: int64[batch_size, tgt_seq_len]  
+> tokens: int64[batch_size, tgt_seq_len]
 > step: float32[seq_len, batch_size]
 
 The shape information contains three variables: `seq_len`, `tgt_seq_len`, and `batch_size`. Although `batch_size` is a variable, it is fixed to 3 in actual use. Therefore, add `batch_size = 3` to **fix_var_map** to fix this dimension to 3 during runtime. The variables `seq_len` and `tgt_seq_len` are dynamic and need to be configured with their actual ranges in **range_info**. **segments_count** specifies the number of segments to divide the range into, which will proportionally increase the compilation time.
@@ -1875,14 +1875,14 @@ static int inference(const char *kmodel_file, const char *image_file, const char
 {
     // load kmodel
     interpreter interp;
-    
+
     // Load kmodel from memory
     auto kmodel = read_binary_file<unsigned char>(kmodel_file);
     interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load kmodel.");
     // Load kmodel from file stream
     std::ifstream ifs(kmodel_file, std::ios::binary);
     interp.load_model(ifs).expect("cannot load kmodel");
-    
+
 
     // create input tensor
     auto input_desc = interp.input_desc(0);
@@ -2297,15 +2297,15 @@ None
 **Example**：
 
 ```cpp
-dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };          
-auto out_span = ai2d_out_tensor_.shape();                                    
-dims_t out_shape { out_span.begin(), out_span.end() };                       
+dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };
+auto out_span = ai2d_out_tensor_.shape();
+dims_t out_shape { out_span.begin(), out_span.end() };
 ai2d_datatype_t ai2d_dtype { ai2d_format::NCHW_FMT, ai2d_format::NCHW_FMT, typecode_t::dt_uint8, typecode_t::dt_uint8 };
-ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };                          
-ai2d_shift_param_t shift_param { false, 0 };                                 
+ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };
+ai2d_shift_param_t shift_param { false, 0 };
 ai2d_pad_param_t pad_param { true, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 70, 70 } }, ai2d_pad_mode::constant, { 0, 0, 0 } };
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
-ai2d_affine_param_t affine_param { false };                                  
+ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
@@ -2361,7 +2361,7 @@ result<void> invoke(runtime_tensor &input, runtime_tensor &output);
 **Example**：
 
 ```c++
-// run ai2d                                                                  
+// run ai2d
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 

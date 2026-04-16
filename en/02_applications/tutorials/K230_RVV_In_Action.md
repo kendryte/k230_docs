@@ -153,7 +153,7 @@ scaleBMP(const char* inputPath, const char* outputPath, float scaleFactor) {
     printf("BMP image scaling completed.\n");
 }
 
-int main() 
+int main()
 {
     const char* inputPath = "input.bmp";
     const char* outputPath = "output.bmp";

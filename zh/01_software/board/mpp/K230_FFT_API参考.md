@@ -83,7 +83,7 @@ fft或ifft计算核心函数。
 【语法】
 
 ```c
-int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);  
+int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 ```
 
 【参数】
@@ -120,7 +120,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -142,7 +142,7 @@ fft_args初始化(辅助函数)
 【语法】
 
 ```c
-int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im, 
+int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im,
                           k_fft_out_mode_e om,    k_u32 timeout ,    k_u16 shift,
                           short *real, short *imag, k_fft_args_st *fft_args );
 ```
@@ -189,7 +189,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -211,7 +211,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 【语法】
 
 ```c
-int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);    
+int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 ```
 
 【参数】
@@ -250,7 +250,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    fft_args_st fft_args;   
+    fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift, dma_ch,  rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -267,7 +267,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
 
 【描述】
 
-fft计算,  
+fft计算,
 
 核心是kd_mpi_fft_args_init,   kd_mpi_fft_or_ifft,  kd_mpi_fft_args_2_arra三个函数封装到一起，方便使用。
 
@@ -275,7 +275,7 @@ fft计算,
 
 ```c
 int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
+                k_u32 timeout , k_u16 shift ,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
@@ -319,7 +319,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 static int fft_test(int point)
 {
 
-    test_build_fft_org_data(point, i_real, i_imag);    
+    test_build_fft_org_data(point, i_real, i_imag);
 
     //soft_fft_ifft_calc(point);
     clock_gettime(CLOCK_MONOTONIC, &begain_time);
@@ -349,8 +349,8 @@ ifft计算
 
 ```c
 int kd_mpi_ifft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
-                short *rx_in, short *iy_in, short *rx_out, short *iy_out);    
+                k_u32 timeout , k_u16 shift ,
+                short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
 【参数】

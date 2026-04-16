@@ -162,7 +162,7 @@ After modifying the definition, compile the source code into an executable progr
 
 ```shell
 gcc -o main_header gen_database_param_bin_calib_header.c
-./main_header 
+./main_header
 # Obtain sensor_cfg_calib_header.bin
 ```
 
@@ -197,7 +197,7 @@ gcc -o main_02 gen_database_param_bin.c $DATABASE_CFLAGS -DDATABASE_SELECT=1
 gcc -o main_03 gen_database_param_bin.c $DATABASE_CFLAGS -DDATABASE_SELECT=2
 $DATABASE_CURRENT_DIR/main_01 0
 $DATABASE_CURRENT_DIR/main_02 1
-$DATABASE_CURRENT_DIR/main_03 2 
+$DATABASE_CURRENT_DIR/main_03 2
 # Obtain files sensor_cfg_00.bin (imx335), sensor_cfg_01.bin (ov9732), sensor_cfg_02.bin (ov9286)
 ```
 

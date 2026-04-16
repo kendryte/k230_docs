@@ -99,7 +99,7 @@ id      encoder status          name            size (mm)       modes   encoders
 38      37      connected       DSI-1           68x120          1       37
   modes:
         index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-  #0 1080x1920 30.00 1080 1310 1330 1350 1920 1925 1931 1939 78529 flags: ; type: preferred, driver
+  #1080x1920 30.00 1080 1310 1330 1350 1920 1925 1931 1939 78529 flags: ; type: preferred, driver
   props:
         1 EDID:
                 flags: immutable blob
@@ -127,7 +127,7 @@ id      encoder status          name            size (mm)       modes   encoders
 CRTCs:
 id      fb      pos     size
 36      0       (0,0)   (1080x1920)
-  #0 1080x1920 30.00 1080 1310 1330 1350 1920 1925 1931 1939 78529 flags: ; type: preferred, driver
+  #1080x1920 30.00 1080 1310 1330 1350 1920 1925 1931 1939 78529 flags: ; type: preferred, driver
   props:
         24 VRR_ENABLED:
                 flags: range

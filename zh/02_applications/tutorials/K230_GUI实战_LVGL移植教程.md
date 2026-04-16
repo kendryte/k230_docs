@@ -98,13 +98,13 @@ linux内核中DRM驱动加载成功后会出现以下节点`/dev/dri/card0`。
 
 在头文件`src/little/buildroot-ext/package/lvgl/port_src/lv_drv_conf.h`中
 
-- 配置宏定义`define USE_DRM 1`来使能DRM显示驱动  
+- 配置宏定义`define USE_DRM 1`来使能DRM显示驱动
 - 配置宏定义`define DRM_CARD  "/dev/dri/card0"`指定DRM驱动节点
 
 #### DRM驱动源码具体介绍
-  
+
 lvgl的drm驱动程序位于`src/little/buildroot-ext/package/lvgl/port_src/lv_drivers/display/drm.c`。
-对DRM的操作需要先open该文件节点。  
+对DRM的操作需要先open该文件节点。
 lvgl使用中主要用到以下几个函数：
 
 - drm_init()        drm初始化。
@@ -173,7 +173,7 @@ lvgl配置文件，linux 位于 `src/little/buildroot-ext/package/lvgl/port_src/
     disp_drv.ver_res    = lcd_h;
     disp_drv.screen_transp = 1;
     lv_disp_drv_register(&disp_drv);
-    ```  
+    ```
 
 1. 触摸驱动：
 

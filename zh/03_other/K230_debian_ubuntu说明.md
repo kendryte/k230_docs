@@ -138,8 +138,8 @@ tar -xvf debian13.ext4.tar.gz  -C output/k230_canmv_only_linux_defconfig/images/
 
 ```Bash
 #在board/common/gen_image_cfg/genimage-sdcard.cfg 添加如下内容：
- partition debian { 
-        image = "debian13.ext4" 
+ partition debian {
+        image = "debian13.ext4"
  }
 #把board/common/env/default.env里面bootcmd修改为如下
 bootcmd=setenv bootargs "root=/dev/mmcblk1p5 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi";k230_boot auto auto_boot;
@@ -172,7 +172,7 @@ apt-get install ssh
 apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
-./a.out 
+./a.out
 ```
 
 ## k230 ubuntu23系统制作及验证
@@ -185,7 +185,7 @@ gcc a.c
 
 ```Bash
 #构建ubuntu23.04容器；
-#docker build -t ubuntu23:v1 . -f ~/tools/docker/Dockerfile23 
+#docker build -t ubuntu23:v1 . -f ~/tools/docker/Dockerfile23
 #docker run  --privileged  -u root -it  -v $(pwd):$(pwd)    -w $(pwd) ubuntu23:v1  /bin/bash
 FROM ubuntu:23.04
 # config for default software install
@@ -233,7 +233,7 @@ deb https://mirrors.aliyun.com/ubuntu-ports mantic-security multiverse
 EOF
 echo "root:root" | chpasswd
 echo k230>/etc/hostname
-exit 
+exit
 
 mkfs.ext4  -d ubuntu23_rootfs  -r 1 -N 0 -m 1 -L "rootfs" -O ^64bit ubuntu23_rootfs.ext4 1G
 tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
@@ -263,8 +263,8 @@ tar -xvf ubuntu23_rootfs.ext4.gz  -C output/k230_canmv_only_linux_defconfig/imag
 
 ```Bash
 #在board/common/gen_image_cfg/genimage-sdcard.cfg 添加如下内容：
- partition debian { 
-        image = "ubuntu23_rootfs.ext4" 
+ partition debian {
+        image = "ubuntu23_rootfs.ext4"
  }
 #把board/common/env/default.env里面bootcmd修改为如下
 bootcmd=setenv bootargs "root=/dev/mmcblk1p5 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi";k230_boot auto auto_boot;
@@ -287,7 +287,7 @@ make build-image
 主要命令：
 
 ```bash
-dhcpcd 
+dhcpcd
 date -s "20240507 15:06"
 apt-get update
 apt-get install gcc
@@ -295,7 +295,7 @@ apt-get install ssh
 apt-get install parted;parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G;resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
-./a.out 
+./a.out
 ```
 
 ## 添加Qt及lxqt支持

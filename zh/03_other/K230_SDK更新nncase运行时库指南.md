@@ -60,7 +60,7 @@
    在[nncase release界面](https://github.com/kendryte/nncase/releases)下载与编译 `kmodel`时nncase版本一致的运行时库，例如，"nncase_k230_v2.8.0_runtime.tgz"即为nncase-2.8.0的运行时库。之后按照以下步骤进行SDK中nncase运行时库版本更新：
 
    ```shell
-   #0. 准备工作
+   #准备工作
    git clone https://github.com/kendryte/k230_sdk.git
    cd k230_sdk
    PATH_TO_K230_SDK=`pwd`
@@ -68,13 +68,13 @@
    # 注意检查该命令执行后是否存在以下文件夹
    # src/big/nncase/riscv64/nncase/
 
-   #1. 解压nncase_k230_v2.8.0_runtime.tgz
+   #解压nncase_k230_v2.8.0_runtime.tgz
    tar -xf nncase_k230_v2.8.0_runtime.tgz
 
-   #2. 替换nncase运行时库
+   #替换nncase运行时库
    cp -r nncase_k230_v2.8.0_runtime/* $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/
 
-   #3. 检查nncase运行时库版本是否正确更新
+   #检查nncase运行时库版本是否正确更新
    cat $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/include/nncase/version.h | grep NNCASE_VERSION
    > #define NNCASE_VERSION "2.8.0"
    ```

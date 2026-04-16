@@ -191,7 +191,7 @@ y= (x−E[x])/sqrt(Var[x]+ϵ)∗γ+β
 "add a1, a1, t1;"      // a1 += t1,更新加载地址
 "bnez a0, XXXXXX%=;"   // 如果a0!=0,跳转至循环开始地址
 "vfmv.f.s f0, v0;"     // 把v0向量累加结果移动到f0
-"fcvt.s.w f1, %[avl];"  // 将avl转换为float保存到f1 
+"fcvt.s.w f1, %[avl];"  // 将avl转换为float保存到f1
 "fdiv.s %[ret], f0, f1;" // ret = f0/f1,即求平均值
 ```
 

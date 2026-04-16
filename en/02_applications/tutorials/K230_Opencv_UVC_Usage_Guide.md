@@ -134,13 +134,13 @@ Format Video Capture:
         Transfer Function : Default (maps to Rec. 709)
         YCbCr/HSV Encoding: Default (maps to ITU-R 601)
         Quantization      : Default (maps to Full Range)
-        Flags             : 
+        Flags             :
 Crop Capability Video Capture:
         Bounds      : Left 0, Top 0, Width 1920, Height 1080
         Default     : Left 0, Top 0, Width 1920, Height 1080
         Pixel Aspect: 1/1
-Selection Video Capture: crop_default, Left 0, Top 0, Width 1920, Height 1080, Flags: 
-Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1920, Height 1080, Flags: 
+Selection Video Capture: crop_default, Left 0, Top 0, Width 1920, Height 1080, Flags:
+Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1920, Height 1080, Flags:
 Streaming Parameters Video Capture:
         Capabilities     : timeperframe
         Frames per second: 30.000 (30/1)
@@ -155,7 +155,7 @@ Use the `v4l2-ctl --device /dev/video0 --stream-mmap --stream-to=video0-output.j
 [root@canaan ~ ]# v4l2-ctl --device /dev/video0 --stream-mmap --stream-to=video0-output.jpg --stream-count=1
 <
 [root@canaan ~ ]# ls -lh
-total 222K   
+total 222K
 -rw-r--r--    1 root     root      221.7K Jan  1 00:11 video0-output.jpg
 ```
 
@@ -164,7 +164,7 @@ total 222K
 Copy the `video_cap` test application to the file system and execute it to generate a test.jpg file.
 
 ```sh
-[root@canaan ~ ]# ./video_cap 
+[root@canaan ~ ]# ./video_cap
 [root@canaan ~ ]# ls
 nfs        test.jpg   video_cap
 ```

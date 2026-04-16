@@ -59,7 +59,7 @@ Here are two ways to confirm if the version information matches:
    Download the runtime library that matches the nncase version used to compile the `kmodel` from the [nncase release page](https://github.com/kendryte/nncase/releases). For example, "nncase_k230_v2.8.0_runtime.tgz" is the runtime library for nncase-2.8.0. Then follow these steps to update the nncase runtime library version in the SDK:
 
    ```shell
-   #0. Preparation
+   #Preparation
    git clone https://github.com/kendryte/k230_sdk.git
    cd k230_sdk
    PATH_TO_K230_SDK=`pwd`
@@ -67,13 +67,13 @@ Here are two ways to confirm if the version information matches:
    # Ensure the following folder exists after executing the above command
    # src/big/nncase/riscv64/nncase/
 
-   #1. Extract nncase_k230_v2.8.0_runtime.tgz
+   #Extract nncase_k230_v2.8.0_runtime.tgz
    tar -xf nncase_k230_v2.8.0_runtime.tgz
 
-   #2. Replace the nncase runtime library
+   #Replace the nncase runtime library
    cp -r nncase_k230_v2.8.0_runtime/* $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/
 
-   #3. Check if the nncase runtime library version is correctly updated
+   #Check if the nncase runtime library version is correctly updated
    cat $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/include/nncase/version.h | grep NNCASE_VERSION
    > #define NNCASE_VERSION "2.8.0"
    ```

@@ -210,12 +210,12 @@ LPDDR3 with 32bit
 
 ![K230_block_diagram.png](images/K230_block_diagram.png)
 
-## Typical Applications　　
+## Typical Applications
 
-- 3D Face Lock Integrated Application Solution　　
+- 3D Face Lock Integrated Application Solution
 
 ![K230_application_1.png](images/K230_application_1.png)
 
-- Smart Dictionary Pen Application Solution　　
+- Smart Dictionary Pen Application Solution
 
 ![K230_application_2.png](images/K230_application_2.png)

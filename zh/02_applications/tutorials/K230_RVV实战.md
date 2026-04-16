@@ -156,7 +156,7 @@ scaleBMP(const char* inputPath, const char* outputPath, float scaleFactor) {
 }
 
 
-int main() 
+int main()
 {
     const char* inputPath = "input.bmp";
     const char* outputPath = "output.bmp";
@@ -244,13 +244,13 @@ index 16fc9b2..c045bf5 100644
 @@ -44,7 +44,7 @@ class ARCHRISCV64():
                  EXT_CFLAGS = ''
                  EXT_LFLAGS = ''
- 
+
 -            DEVICE = ' -mcmodel=medany -march=rv64imafdcv -mabi=lp64d'
 +            DEVICE = ' -mcmodel=medany -march=rv64imafdc -mabi=lp64d'
              self.CFLAGS    = configuration.get('CFLAGS', DEVICE + ' -Werror -Wall' + EXT_CFLAGS)
              self.AFLAGS    = configuration.get('AFLAGS', ' -c' + DEVICE + ' -x assembler-with-cpp -D__ASSEMBLY__ -I.' + EXT_CFLAGS)
              LINK_SCRIPT    = configuration.get('LINK_SCRIPT', os.path.join(USR_ROOT, 'linker_scripts', 'riscv64', 'link.lds'))
-haohaibo@develop:~/work/k230_sdk/src/big/rt-smart/userapps/testcases/scale$ 
+haohaibo@develop:~/work/k230_sdk/src/big/rt-smart/userapps/testcases/scale$
 
 ```
 

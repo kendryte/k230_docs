@@ -138,8 +138,8 @@ tar -xvf debian13.ext4.tar.gz -C output/k230_canmv_only_linux_defconfig/images/
 
 ```bash
 # Add the following content to board/common/gen_image_cfg/genimage-sdcard.cfg:
-partition debian { 
-        image = "debian13.ext4" 
+partition debian {
+        image = "debian13.ext4"
 }
 # Modify bootcmd in board/common/env/default.env to the following:
 bootcmd=setenv bootargs "root=/dev/mmcblk1p5 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi";k230_boot auto auto_boot;
@@ -172,7 +172,7 @@ apt-get install ssh
 apt-get install parted; parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G; resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
-./a.out 
+./a.out
 ```
 
 ## Creating and Verifying the K230 Ubuntu 23 System
@@ -185,19 +185,19 @@ Build command: docker build -t ubuntu23:v1 . -f Dockerfile23
 
 ```bash
 # Build the Ubuntu 23.04 container:
-# docker build -t ubuntu23:v1 . -f ~/tools/docker/Dockerfile23 
+# docker build -t ubuntu23:v1 . -f ~/tools/docker/Dockerfile23
 # docker run --privileged -u root -it -v $(pwd):$(pwd) -w $(pwd) ubuntu23:v1 /bin/bash
-FROM ubuntu:23.04 
+FROM ubuntu:23.04
 # Config for default software install
-ARG DEBIAN_FRONTEND=noninteractive 
+ARG DEBIAN_FRONTEND=noninteractive
 # Install 32-bit lib for toolchain
-RUN dpkg --add-architecture i386 
+RUN dpkg --add-architecture i386
 # Config Ubuntu apt repo to Tsinghua
 RUN sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
-RUN sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list 
+RUN sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 # Install software
 RUN apt-get update
-RUN apt install -y debootstrap qemu-user-static binfmt-support dpkg-cross 
+RUN apt install -y debootstrap qemu-user-static binfmt-support dpkg-cross
 # Set default timezone
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -233,7 +233,7 @@ deb https://mirrors.aliyun.com/ubuntu-ports mantic-security multiverse
 EOF
 echo "root:root" | chpasswd
 echo k230>/etc/hostname
-exit 
+exit
 
 mkfs.ext4 -d ubuntu23_rootfs -r 1 -N 0 -m 1 -L "rootfs" -O ^64bit ubuntu23_rootfs.ext4 1G
 tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
@@ -263,8 +263,8 @@ tar -xvf ubuntu23_rootfs.ext4.gz -C output/k230_canmv_only_linux_defconfig/image
 
 ```bash
 # Add the following content to board/common/gen_image_cfg/genimage-sdcard.cfg:
-partition debian { 
-        image = "ubuntu23_rootfs.ext4" 
+partition debian {
+        image = "ubuntu23_rootfs.ext4"
 }
 # Modify bootcmd in board/common/env/default.env to the following:
 bootcmd=setenv bootargs "root=/dev/mmcblk1p5 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 earlycon=sbi";k230_boot auto auto_boot;
@@ -287,7 +287,7 @@ Note: If the network port is unstable and cannot be found, please restart the de
 Main commands:
 
 ```bash
-dhcpcd 
+dhcpcd
 date -s "20240507 15:06"
 apt-get update
 apt-get install gcc
@@ -295,7 +295,7 @@ apt-get install ssh
 apt-get install parted; parted /dev/mmcblk1 print; parted /dev/mmcblk1 resizepart 3 16G; resize2fs /dev/mmcblk1p3
 scp wangjianxin@10.10.1.94:~/t/a.c .
 gcc a.c
-./a.out 
+./a.out
 ```
 
 ## Adding Qt and LXQt Support

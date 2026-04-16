@@ -164,7 +164,7 @@ char *board_fdt_chosen_bootargs(void){
 The door lock POC needs to use USB drivers to connect to the network and MMC drivers to import facial data. These two drivers' probes are time-consuming and will trigger the probe process of peripheral drivers. Therefore, these drivers need to be compiled as modules. They will be automatically loaded using the modprobe mechanism after the kernel starts. Configurations can be referred to in `k230_sdk/src/little/linux/arch/riscv/configs/k230_evb_doorlock_defconfig`.
 
 ``` shell
-CONFIG_MMC=m 
+CONFIG_MMC=m
 #  CONFIG_MMC_TEST is not set
 CONFIG_MMC_SDHCI=m
 CONFIG_MMC_SDHCI_PLTFM=m
