@@ -1,57 +1,5 @@
 # K230 Product Full Datasheet
 
-![cover](images/canaan-cover.png)
-
-Document version: V1.1
-Release date: 2024-7-1
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services or features you purchase shall be subject to the commercial contracts and terms of Canaan Creative CO., LTD. (the "Company") and its affiliates, and all or part of the products, services or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-aggression of any statements, information, or content in this document.Unless otherwise agreed, this document is intended as a guide for use only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
-
-## Trademark Notice
-
-![logo](images/logo.png)
-"Canaan" and other Canaan trademarks are trademarks of Canaan Creative CO., LTD. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
-
-Copyright©2023 Canaan Creative CO., LTD.
-This document is only suitable for the development and design of K230 platform, without the written permission of the company, any unit or individual shall not disseminate part or all of the content of this document in any form.
-
-Canaan Creative CO., LTD.
-Website：canaan-creative.com
-Business Email：<salesAI@canaan-creative.com>
-
-<div style="page-break-after:always"></div>
-
-## Preface
-
-### Purpose
-
-This document is intended to provide a full description of the K230 platform and its features.
-
-### Intended Audience
-
-The main people to whom this document (this guide) applies:
-
-- Design and maintenance personnel for electronic products
-- Sales personnel for electronic products
-- Technical support personnel
-
-### Terms
-
-### Revision history
-
-| Version Number | Modified by    | Revision Date | Revision Notes                                                                    |
-| -------------- | -------------- | ------------- | --------------------------------------------------------------------------------- |
-| V1.0           | Ruizheng Li,Heng Wen | 2023-7-6 | Revised version |
-| V1.1           | Jimmy Huang          | 2024-7-1 | Add description for ADC |
-
-<div style="page-break-after:always"></div>
-
 ## Index
 
 [TOC]

@@ -1,55 +1,5 @@
 # K230 SHA256 API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-©2023 Canaan Creative Co., Ltd. All Rights Reserved
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not fall within the scope of your purchase or usage. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective holders.
-
-**© 2023 Canaan Creative Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy part or all of the content of this document, nor disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the usage of the K230 SHA256 software, including the usage of the SHA256 API and an introduction to the test program.
-
-### Intended Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-| ------------ | ----------- |
-| SHA256       | Secure Hash Algorithm |
-
-### Revision History
-
-| Document Version | Description | Author | Date       |
-| ---------------- | ----------- | ------ | ---------- |
-| V1.0             | Initial Version | Yang Fan | 2023-05-30 |
-
 ## Function Introduction
 
 SHA256 is mainly used to calculate the hash value of data. The SHA256 algorithm is implemented in the rt-smart of the main core to calculate the hash value of data. The code logic is shown in the following figure:

@@ -1,55 +1,5 @@
 # K230 AI Practical - HHB Neural Network Model Deployment Tool
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase should be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. Some or all of the products, services, or features described in this document may not fall within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document is a user manual for using HHB on the K230 hardware platform, guiding users on how to compile models on HHB to generate C code, how to use the K230 cross-compilation toolchain to compile programs, and how to run them on the board.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                          |
-| ------------ | ------------------------------------ |
-| HHB          | Heterogeneous Honey Badger           |
-| SHL          | Structure of Heterogeneous Library   |
-
-### Revision History
-
-| Document Version | Description  | Author | Date       |
-| ---------------- | ------------ | ------ | ---------- |
-| V1.0             | Initial Draft | Zhang Yang | 2023/6/25  |
-
 ## Overview
 
 To deploy and run the HHB program on the K230 RTT, the following steps are required:

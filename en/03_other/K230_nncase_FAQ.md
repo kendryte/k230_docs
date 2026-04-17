@@ -1,30 +1,5 @@
 # K230 nncase FAQ
 
-![cover](../../zh/03_other/images/canaan-cover.png)
-
-Copyright ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the company") and its affiliates. All or part of the products, services, or features described in this document may not be within your scope of purchase or use. Unless otherwise agreed in the contract, the company makes no express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](images/logo.png)、 "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.
-Without the company's written permission, no unit or individual may excerpt, copy any part or all of the contents of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[toc]
-
 ## Error Installing whl Package
 
 ### `xxx.whl is not a supported wheel on this platform.`

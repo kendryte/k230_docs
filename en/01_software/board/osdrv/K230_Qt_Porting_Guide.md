@@ -1,49 +1,5 @@
 # K230 Qt Porting Guide
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as "we") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, we do not make any explicit or implicit statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is intended only as a reference for usage guidance.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without written permission from the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, and shall not disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the porting of the Qt GUI environment.
-
-### Target Audience
-
-This document (this guide) is primarily intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Revision History
-
-| Document Version | Description of Changes | Author | Date |
-| --- | --- | --- | --- |
-| V1.0 | Initial version | Wang Quan | 2023/11/29 |
-
 ## Introduction to Qt
 
 Qt is a cross-platform C++ graphical user interface application development framework. It can be used to develop both GUI programs and non-GUI programs, such as console tools and servers. Qt is an object-oriented framework and is easily extensible, allowing for true component programming.

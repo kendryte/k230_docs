@@ -1,58 +1,5 @@
 # K230 Camera Sensor Adaptation Guide
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise stipulated in the contract, the Company does not provide any express or implied statements or warranties on the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan", and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without written permission from the Company, no unit or individual may excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly describes the K230 platform Camera Sensor framework and how to add support for a new Camera Sensor.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Acronyms and Definitions
-
-| Acronym | Description |
-| ------- | ----------- |
-|         |             |
-|         |             |
-
-### Revision History
-
-| Document Version | Description of Changes | Author | Date |
-|------------------|------------------------|--------|------|
-| V1.0             | Initial version        | Wang Chenggen | 2023-05-30 |
-| V1.1             | Example modified to ov5647 and added section 4.4 | Zhao Zhongxiang | 2023-04-11 |
-|                  |                        |        |      |
-
 ## Overview
 
 This document mainly describes the basic framework of the K230 platform Camera Sensor and how to add support for a new Camera Sensor.

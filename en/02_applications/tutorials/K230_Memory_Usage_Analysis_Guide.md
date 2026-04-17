@@ -1,26 +1,5 @@
 # K230 Memory Analysis Guide
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company," hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any explicit or implicit statements or guarantees regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Small Core Memory Usage Analysis
 
 ### Static Memory Usage in Linux Kernel

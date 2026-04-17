@@ -1,30 +1,5 @@
 # K230 SDK Frequently Asked Questions (C)
 
-![cover](../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not make any express or implied statements or guarantees regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No unit or individual may excerpt, copy, or disseminate part or all of the content of this document in any form without written permission from the Company.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
 ## TF Boot Failed with Exit Code 13
 
 Issue: TF card boot reports boot failed with exit code 13 error

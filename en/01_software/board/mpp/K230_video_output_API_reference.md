@@ -1,56 +1,5 @@
 # K230 Video Output API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase shall be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document primarily introduces the functions and usage of the video output system control module. The functionalities and usage of other modules will be discussed in dedicated documents.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                |
-|--------------|----------------------------|
-| VO           | Video output               |
-| DSI          | Display Serial Interface   |
-
-### Revision History
-
-| Document Version | Description | Author         | Date       |
-|------------------|-------------|----------------|------------|
-| V1.0             | Initial Version | System Software Dept. | 2023-03-10 |
-
 ## Overview
 
 The VO (Video Output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The chip supports display/write-back devices, video layers, and graphic layers.

@@ -1,57 +1,5 @@
 # K230 VICAP API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No part of this document may be excerpted, copied, or disseminated in any form without prior written permission from the Company.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly guides application developers on how to obtain image data through the VICAP module and describes the basic functions of various module APIs.
-
-### Intended Audience
-
-This document (this guide) is primarily intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-|--------------|-------------|
-|              |             |
-
-### Revision History
-
-| Document Version | Modification Description                                                                                                           | Modifier       | Date       |
-|------------------|------------------------------------------------------------------------------------------------------------------------------------|----------------|------------|
-| V1.0             | Initial version                                                                                                                    | Chenggen Wang  | 2023/4/4   |
-| V1.1             | Modified VICAP overview 2, added API and data type navigation                                                                      | Zhongxiang Zhao| 2023/4/6   |
-| V1.2             | Removed ISP related interfaces, added API and data type descriptions, separated sensor interface from libvicap library to libsensor library, added ov9286 infrared/scatter type, updated VICAP description, updated document format | Shidong Guo, Chenggen Wang | 2023/4/26 |
-
 ## Overview
 
 ### Overview

@@ -1,26 +1,5 @@
 # K230_Opencv UVC Usage Guide
 
-![cover](../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Canaan Creative
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative and its affiliates (hereinafter referred to as "the Company"). The products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not make any explicit or implicit statements or guarantees regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/images/logo.png), "Canaan," and other Canaan trademarks are trademarks of Canaan Creative and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Canaan Creative. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Overview
 
 This document explains how to drive a USB camera on the Linux side of the K230 development board and call UVC through OpenCV.

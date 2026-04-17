@@ -1,26 +1,5 @@
 # K230 USB Practical Application - UVC Transmission of YUV and Encoded Streams
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is only for use as a reference guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No part of this document may be excerpted, reproduced, or transmitted in any form without the written permission of the Company.
-
-<div style="page-break-after:always"></div>
-
 ## Overview
 
 This document explains how to implement the USB camera function on the K230 development board. This means connecting the K230 development board to a computer, allowing the computer to play images captured by the K230 camera through a media player.

@@ -1,56 +1,5 @@
 # K230 System Control API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as such) and its affiliates. Some or all of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference and guidance purposes only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the contents of this document, or spread it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the functions and usage of the system control module in the media subsystem. The functions and usage of other modules will be discussed in separate documents.
-
-### Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                        |
-|--------------|------------------------------------|
-| mpp          | Media Process Platform             |
-| vb           | Video Buffer                       |
-
-### Revision History
-
-| Document Version | Description | Author  | Date       |
-|------------------|-------------|---------|------------|
-| V1.0             | Initial Version | Haibo Hao | 2023/3/4   |
-
 ## Overview
 
 ### Overview

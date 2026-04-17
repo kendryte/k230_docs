@@ -1,58 +1,5 @@
 # K230 LCD Adaptation Guide
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. Some or all of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any explicit or implicit statements or guarantees regarding the correctness, reliability, completeness, merchantability, suitability for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only a reference for usage guidance.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or transmit it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly describes the LCD framework of the K230 platform and how to add support for a new LCD.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-| ---- | ---- |
-|      |      |
-|      |      |
-
-### Revision History
-
-| Document Version | Description of Changes  | Author | Date  |
-|---|---|---|---|
-| V1.0       | Initial Version | Wang Quan | 2023-11-30 |
-|            |          |        |            |
-|            |          |        |            |
-
 ## Overview
 
 This document mainly describes the basic framework of the K230 platform LCD and how to add support for a new LCD.

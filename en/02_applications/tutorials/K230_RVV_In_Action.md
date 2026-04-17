@@ -1,26 +1,5 @@
 # K230 RVV Practical Guide
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-Your purchase of products, services, or features is subject to the commercial contracts and terms of Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan", and other Canaan trademarks are trademarks of Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without written permission from the Company, no unit or individual is allowed to excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Overview
 
 RVV (RISC-V Vector Extension) refers to the vector extension of the RISC-V instruction set architecture. RISC-V is an open-source instruction set architecture known for its simplicity, scalability, and wide range of applications. RVV, as an optional extension of RISC-V, aims to support vector processing and parallel computing. RVV defines a set of new instructions for executing vector operations. These instructions allow multiple data elements to be processed simultaneously, thereby improving computational efficiency and throughput. Vector operations can be executed in a single instruction without needing loops or individual operations for each data element. RVV supports different vector lengths, which can be fixed or configurable based on application requirements. It also supports various data types, including integers, floating-point numbers, and fixed-point numbers.
