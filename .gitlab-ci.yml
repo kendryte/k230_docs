@@ -276,6 +276,11 @@ build_web_html:
       rm -rf "$WORKTREE_BASE"
       echo "All refs preprocessed."
 
+    # --- 清理远程分支引用 ---
+    # 强制删除本地存储的远程分支指针，让本地环境变成一个“纯本地”库
+    # 这样 Sphinx 的正则就只能匹配到你刚刚本地 commit 过的分支
+    git branch -r -D $(git branch -r) || true
+
     # 核心修复：安装兼容的“黄金版本”组合
     # 放弃强制 7.3.7，使用 Sphinx 6.x 以兼容 myst-parser 和 docutils < 0.19
     - pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple \

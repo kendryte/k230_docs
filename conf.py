@@ -100,6 +100,9 @@ if language == "en":
     )
 
 # -- Options for sphinx-multiversion (核心多版本配置) --------------------------
+# 注意： .gitlab-ci.yml中的 build_web_html 任务里真正决定生成哪些branch和tag， 它会生成本地 branch 和 tag
+# 若你不想生成某些 Tag 或 Branch，请修改 build_web_html 任务
+# sphinx-multiversion 只是根据 git 的标签和分支来生成不同版本的文档
 
 smv_branch_whitelist = r"^(main|dev|v\d+\.\d+.*)$"
 smv_tag_whitelist = None
