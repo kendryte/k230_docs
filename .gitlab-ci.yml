@@ -191,16 +191,58 @@ build_web_html:
   script:
     - git fetch --tags --force
     - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
-    - python3 md_bat_mod_tool.py heading . || true
-    - python3 md_bat_mod_tool.py fixlink . || true
-    - python3 md_bat_mod_tool.py domain . || true
-    - python3 md_bat_mod_tool.py cover . || true
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
-    
-    # 解决 sphinx-multiversion 可能遇到的 Git 安全目录问题
     - git config --global --add safe.directory "*"
-    - git commit "*.md" -m "post markdown process" || true
+
+    # 收集所有需要构建的 ref（分支 + 符合版本条件的 tags）
+    - |
+      echo "Collecting refs for preprocessing..."
+      WORKTREE_BASE=$(mktemp -d)
+      echo "WORKTREE_BASE=$WORKTREE_BASE"
+
+      # 获取所有远程分支（排除当前 checkout 的分支，避免冲突）
+      BRANCHES=$(git branch -r --format="%(refname:short)" | grep -E '^origin/(main|dev)$' | grep -v "origin/$CI_COMMIT_REF_NAME$" || true)
+      # 获取所有 v 开头的 tags
+      TAGS=$(git tag -l 'v*' || true)
+
+      echo "Preprocessing branches: $BRANCHES"
+      echo "Preprocessing tags: $TAGS"
+
+      preprocess_ref() {
+        local ref=$1
+        local wt_dir=$WORKTREE_BASE/${ref//\//_}
+        echo "=== Preprocessing ref: $ref ==="
+        git worktree add "$wt_dir" "$ref" --force 2>/dev/null || {
+          echo "  worktree exists, skipping: $ref"
+          return
+        }
+        python3 md_bat_mod_tool.py heading   "$wt_dir" || true
+        python3 md_bat_mod_tool.py fixlink   "$wt_dir" || true
+        python3 md_bat_mod_tool.py domain    "$wt_dir" || true
+        python3 md_bat_mod_tool.py cover     "$wt_dir" || true
+        cd "$wt_dir"
+        git add -A "*.md"
+        git diff --cached --quiet || git commit -m "preprocess: strip numbers and fix anchors"
+        cd - > /dev/null
+        git worktree remove "$wt_dir"
+        echo "=== Done: $ref ==="
+      }
+
+      export -f preprocess_ref
+      echo "$BRANCHES" | xargs -P4 -I{} bash -c 'preprocess_ref "{}"'
+      echo "$TAGS" | xargs -P4 -I{} bash -c 'preprocess_ref "{}"'
+
+      # 当前 checkout 的分支也预处理一次（worktree 已存在，跳过）
+      python3 md_bat_mod_tool.py heading   . || true
+      python3 md_bat_mod_tool.py fixlink   . || true
+      python3 md_bat_mod_tool.py domain    . || true
+      python3 md_bat_mod_tool.py cover     . || true
+      git add -A "*.md"
+      git diff --cached --quiet || git commit -m "preprocess: strip numbers and fix anchors"
+
+      rm -rf "$WORKTREE_BASE"
+      echo "All refs preprocessed."
 
     # 核心修复：安装兼容的“黄金版本”组合
     # 放弃强制 7.3.7，使用 Sphinx 6.x 以兼容 myst-parser 和 docutils < 0.19
