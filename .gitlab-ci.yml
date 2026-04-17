@@ -201,45 +201,77 @@ build_web_html:
       WORKTREE_BASE=$(mktemp -d)
       echo "WORKTREE_BASE=$WORKTREE_BASE"
 
-      # 获取所有远程分支（排除当前 checkout 的分支，避免冲突）
       BRANCHES=$(git branch -r --format="%(refname:short)" | grep -E '^origin/(main|dev)$' | grep -v "origin/$CI_COMMIT_REF_NAME$" || true)
-      # 获取所有 v 开头的 tags
       TAGS=$(git tag -l 'v*' || true)
 
       echo "Preprocessing branches: $BRANCHES"
       echo "Preprocessing tags: $TAGS"
 
-      preprocess_ref() {
+      preprocess_branch() {
         local ref=$1
         local wt_dir=$WORKTREE_BASE/${ref//\//_}
-        echo "=== Preprocessing ref: $ref ==="
-        git worktree add "$wt_dir" "$ref" --force 2>/dev/null || {
+        local branch_name="$(basename "$ref")"
+        echo "=== Preprocessing: $ref -> $branch_name ==="
+        git worktree add -b "$branch_name" "$wt_dir" "$ref" 2>/dev/null || {
           echo "  worktree exists, skipping: $ref"
           return
         }
-        python3 md_bat_mod_tool.py heading   "$wt_dir" || true
-        python3 md_bat_mod_tool.py fixlink   "$wt_dir" || true
-        python3 md_bat_mod_tool.py domain    "$wt_dir" || true
-        python3 md_bat_mod_tool.py cover     "$wt_dir" || true
+        python3 md_bat_mod_tool.py heading "$wt_dir" || true
+        python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
+        python3 md_bat_mod_tool.py domain  "$wt_dir" || true
+        python3 md_bat_mod_tool.py cover   "$wt_dir" || true
         cd "$wt_dir"
         git add -A "*.md"
-        git diff --cached --quiet || git commit -m "preprocess: strip numbers and fix anchors"
+        if git diff --cached --quiet; then
+          echo "  No changes"
+        else
+          git commit -m "preprocess: strip numbers and fix anchors"
+        fi
         cd - > /dev/null
         git worktree remove "$wt_dir"
-        echo "=== Done: $ref ==="
+        echo "=== Done: $branch_name ==="
       }
 
-      export -f preprocess_ref
-      echo "$BRANCHES" | xargs -P4 -I{} bash -c 'preprocess_ref "{}"'
-      echo "$TAGS" | xargs -P4 -I{} bash -c 'preprocess_ref "{}"'
+      preprocess_tag() {
+        local tag=$1
+        local wt_dir=$WORKTREE_BASE/tag-$(basename "$tag")
+        local branch_name="$(basename "$tag")"
+        echo "=== Preprocessing: $tag -> $branch_name ==="
+        git worktree add -b "$branch_name" "$wt_dir" "$tag" 2>/dev/null || {
+          echo "  worktree exists, skipping: $tag"
+          return
+        }
+        python3 md_bat_mod_tool.py heading "$wt_dir" || true
+        python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
+        python3 md_bat_mod_tool.py domain  "$wt_dir" || true
+        python3 md_bat_mod_tool.py cover   "$wt_dir" || true
+        cd "$wt_dir"
+        git add -A "*.md"
+        if git diff --cached --quiet; then
+          echo "  No changes"
+        else
+          git commit -m "preprocess: strip numbers and fix anchors"
+        fi
+        cd - > /dev/null
+        git worktree remove "$wt_dir"
+        echo "=== Done: $branch_name ==="
+      }
 
-      # 当前 checkout 的分支也预处理一次（worktree 已存在，跳过）
-      python3 md_bat_mod_tool.py heading   . || true
-      python3 md_bat_mod_tool.py fixlink   . || true
-      python3 md_bat_mod_tool.py domain    . || true
-      python3 md_bat_mod_tool.py cover     . || true
+      export -f preprocess_branch preprocess_tag
+
+      echo "$BRANCHES" | xargs -P4 -I{} bash -c 'preprocess_branch "{}"'
+      echo "$TAGS"    | xargs -P4 -I{} bash -c 'preprocess_tag "{}"'
+
+      # 当前 checkout 的分支：原地预处理，smv_remote_whitelist=None 会过滤掉 origin/dev
+      python3 md_bat_mod_tool.py heading . || true
+      python3 md_bat_mod_tool.py fixlink . || true
+      python3 md_bat_mod_tool.py domain  . || true
+      python3 md_bat_mod_tool.py cover   . || true
       git add -A "*.md"
-      git diff --cached --quiet || git commit -m "preprocess: strip numbers and fix anchors"
+      if ! git diff --cached --quiet; then
+        git commit -m "preprocess: strip numbers and fix anchors"
+      fi
+      echo "Current branch '$CI_COMMIT_REF_NAME' preprocessed."
 
       rm -rf "$WORKTREE_BASE"
       echo "All refs preprocessed."

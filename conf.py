@@ -101,15 +101,7 @@ if language == "en":
 
 # -- Options for sphinx-multiversion (核心多版本配置) --------------------------
 
-# 1. 构建 main 和 dev 分支
-smv_branch_whitelist = r"^(main|dev)$"
-
-# 2. 构建 v1.5 及以上版本的 Tag (排除 < 1.5)
-# 逻辑：匹配 v1.6-1.9, 或者 v2 及以上的所有版本
-smv_tag_whitelist = r"^v(1\.[6-9]|[2-9]|[1-9]\d+)(\.\d+)*.*$"
-
-# 3. 远程分支匹配（兼容 CI 环境，匹配所有远程）
-smv_remote_whitelist = r"^.*$"
-
-# 4. 构建后是否自动切换到最新的版本（可选）
-smv_latest_version = "main"
+smv_branch_whitelist = r"^(main|dev|v\d+\.\d+.*)$"
+smv_tag_whitelist = None
+smv_remote_whitelist = None
+smv_latest_version = "dev"
