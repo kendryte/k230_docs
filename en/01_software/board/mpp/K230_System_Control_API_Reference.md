@@ -899,7 +899,7 @@ None
 
 **Related Topics**:
 
-**Description**:block](#2115-kd_mpi_vb_get_block)
+**Description**:block](#kd_mpi_vb_get_block)
 
 #### kd_mpi_vb_phyaddr_to_handle
 
@@ -1179,7 +1179,7 @@ None
 
 **Related Topics**:
 
-**Description**:supplement_config](#2123-kd_mpi_vb_get_supplement_config)
+**Description**:supplement_config](#kd_mpi_vb_get_supplement_config)
 
 #### kd_mpi_vb_get_supplement_config
 
@@ -1225,7 +1225,7 @@ None
 
 **Related Topics**:
 
-**Description**:supplement_config](#2122-kd_mpi_vb_set_supplement_config)
+**Description**:supplement_config](#kd_mpi_vb_set_supplement_config)
 
 #### kd_mpi_vb_set_mod_pool_config
 
@@ -1273,7 +1273,7 @@ None
 
 **Related Topics**:
 
-**Description**:mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
+**Description**:mod_pool_config](#kd_mpi_vb_get_mod_pool_config)
 
 #### kd_mpi_vb_get_mod_pool_config
 
@@ -1320,7 +1320,7 @@ None
 
 **Related Topics**:
 
-**Description**:mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
+**Description**:mod_pool_config](#kd_mpi_vb_set_mod_pool_config)
 
 #### kd_mpi_vb_init_mod_common_pool
 
@@ -1368,7 +1368,7 @@ None
 
 **Related Topics**:
 
-**Description**:_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
+**Description**:_mod_common_pool](#kd_mpi_vb_exit_mod_common_pool)
 
 #### kd_mpi_vb_exit_mod_common_pool
 
@@ -1425,7 +1425,7 @@ This functional module provides the following APIs:
 
 - [kd_mpi_sys_bind](#kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
-**Description**:et_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
+**Description**:et_bind_by_dest](#kd_mpi_sys_get_bind_by_dest)
 
 #### kd_mpi_sys_bind
 
@@ -1474,7 +1474,7 @@ None
 
 **Related Topics**:
 
-**Description**:ind](#222-kd_mpi_sys_unbind)
+**Description**:ind](#kd_mpi_sys_unbind)
 
 #### kd_mpi_sys_unbind
 
@@ -1521,7 +1521,7 @@ None
 
 **Related Topics**:
 
-**Description**:d](#221-kd_mpi_sys_bind)
+**Description**:d](#kd_mpi_sys_bind)
 
 #### kd_mpi_sys_get_bind_by_dest
 
@@ -1581,7 +1581,7 @@ This functional module provides the following APIs:
 - [kd_mpi_log_read](#kd_mpi_log_read)
 - [kd_mpi_log_close](#kd_mpi_log_close)
 - [kd_mpi_log_set_console](#kd_mpi_log_set_console)
-**Description**:et_console](#237-kd_mpi_log_get_console)
+**Description**:et_console](#kd_mpi_log_get_console)
 
 #### kd_mpi_log_set_level_conf
 
@@ -1627,7 +1627,7 @@ None
 
 **Related Topics**:
 
-**Description**:_level_conf](#232-kd_mpi_log_get_level_conf)
+**Description**:_level_conf](#kd_mpi_log_get_level_conf)
 
 #### kd_mpi_log_get_level_conf
 
@@ -1675,7 +1675,7 @@ None
 
 **Related Topics**:
 
-**Description**:_level_conf](#231-kd_mpi_log_set_level_conf)
+**Description**:_level_conf](#kd_mpi_log_set_level_conf)
 
 #### kd_mpi_log_set_wait_flag
 
@@ -1854,7 +1854,7 @@ None
 
 **Related Topics**:
 
-**Description**:_console](#237-kd_mpi_log_get_console)
+**Description**:_console](#kd_mpi_log_get_console)
 
 #### kd_mpi_log_get_console
 
@@ -2023,7 +2023,7 @@ This module has the following data types:
 - [k_vb_config](#k_vb_config)
 - [k_vb_pool_config](#k_vb_pool_config)
 - [k_vb_remap_mode](#k_vb_remap_mode)
-**Description**:ent_config](#326-k_vb_supplement_config)
+**Description**:ent_config](#k_vb_supplement_config)
 
 #### VB_MAX_POOLS
 
@@ -2175,7 +2175,7 @@ char mmz_name[MAX_MMZ_NAME_LEN];/*< Name of the MMZ that allocates the memory fo
 **Related Data Types and Interfaces**:
 
 - [kd_mpi_vb_set_config](#kd_mpi_vb_set_config)
-**Description**:eate_pool](#2113-kd_mpi_vb_create_pool)
+**Description**:eate_pool](#kd_mpi_vb_create_pool)
 
 #### k_vb_remap_mode
 
@@ -2266,7 +2266,7 @@ This module has the following data types:
 - [k_video_format](#k_video_format)
 - [k_video_field](#k_video_field)
 
-**Description**:at](#3314-k_pixel_format)
+**Description**:at](#k_pixel_format)
 
 #### k_video_frame_info
 
@@ -2302,7 +2302,7 @@ Currently supports two types of supplementary information. For details, please r
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_video_frame
 
@@ -2434,7 +2434,7 @@ None
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_isp_frame_info
 
@@ -2777,7 +2777,7 @@ None
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_pixel_format
 
@@ -2931,7 +2931,7 @@ Omitted
 
 This module has the following data structures:
 
-**Description**:conf](#341-k_log_level_conf)
+**Description**:conf](#k_log_level_conf)
 
 #### k_log_level_conf
 

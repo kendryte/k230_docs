@@ -78,6 +78,33 @@ def cmd_domain(args) -> None:
     print(f"\nProcessed {len(files)} file(s), {total} replacement(s) made.")
 
 
+def fixlink(content: str) -> str:
+    pattern = re.compile(r"(.*?\()#(?:\d+\.)*\d+-([^\)]+\))")
+    return pattern.sub(r"\1#\2", content)
+
+
+def cmd_fixlink(args) -> None:
+    files = collect_files(args.paths, args.recursive, args.include)
+    if not files:
+        print("No markdown files found.")
+        return
+    total = 0
+    for f in files:
+        text = f.read_text(encoding="utf-8")
+        new_text = fixlink(text)
+        if new_text != text:
+            pat = r"(.*?\()#(?:\d+\.)*\d+-([^\)]+\))"
+            changes = len(re.findall(pat, text))
+            total += changes
+            if args.verbose:
+                print(f"\n{f}:")
+                for m in re.finditer(pat, text):
+                    print(f"  \"{m.group()}\" -> \"{m.group(1)}#{m.group(2)}\"")
+            if not args.dry_run:
+                f.write_text(new_text, encoding="utf-8")
+    print(f"\nProcessed {len(files)} file(s), {total} link anchor(s) fixed.")
+
+
 def cmd_cover(args) -> None:
     files = collect_files(args.paths, args.recursive, args.include)
     if not files:
@@ -87,16 +114,16 @@ def cmd_cover(args) -> None:
     en_sections = [
         r"^## Disclaimer",
         r"^## Trademark Statement",
+        r"^## Trademark Notice",
         r"^## Table of Contents",
         r"^## Preface",
-        r"^## Markdown Syntax Reference",
+        r"^## Menu",
     ]
     zh_sections = [
         r"^## 免责声明",
         r"^## 商标声明",
         r"^## 目录",
         r"^## 前言",
-        r"^## Markdown语法参考",
     ]
 
     removed = []
@@ -197,6 +224,10 @@ def main():
     p_cover = sub.add_parser("cover", help="Remove template boilerplate sections")
     p_cover.add_argument("paths", nargs="*", default=[Path(".")], type=Path)
     p_cover.set_defaults(func=cmd_cover)
+
+    p_fixlink = sub.add_parser("fixlink", help="Remove number prefixes from link anchors")
+    p_fixlink.add_argument("paths", nargs="*", default=[Path(".")], type=Path)
+    p_fixlink.set_defaults(func=cmd_fixlink)
 
     args = parser.parse_args()
     args.func(args)

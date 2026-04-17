@@ -191,13 +191,16 @@ build_web_html:
   script:
     - git fetch --tags --force
     - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
-    - python3 preprocess.py || true
+    - python3 md_bat_mod_tool.py heading . || true
+    - python3 md_bat_mod_tool.py fixlink . || true
+    - python3 md_bat_mod_tool.py domain . || true
+    - python3 md_bat_mod_tool.py cover . || true
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
     
     # 解决 sphinx-multiversion 可能遇到的 Git 安全目录问题
     - git config --global --add safe.directory "*"
-    - git commit "*.md" -m "remove cover" || true
+    - git commit "*.md" -m "post markdown process" || true
 
     # 核心修复：安装兼容的“黄金版本”组合
     # 放弃强制 7.3.7，使用 Sphinx 6.x 以兼容 myst-parser 和 docutils < 0.19
