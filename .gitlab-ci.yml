@@ -210,6 +210,7 @@ build_web_html:
     # ==========================================================================
     - |
       echo "Collecting refs for preprocessing..."
+
       WORKTREE_BASE=$(mktemp -d)
       echo "WORKTREE_BASE=$WORKTREE_BASE"
 
@@ -219,15 +220,21 @@ build_web_html:
       echo "Preprocessing branches: $BRANCHES"
       echo "Preprocessing tags: $TAGS"
 
+      # 清理上次 CI 遗留的同名本地分支（上次 worktree 删除了，但分支还在）
+      for ref in $BRANCHES; do
+        local_branch="$(basename "$ref")"
+        git branch -D "$local_branch" 2>/dev/null && echo "Cleaned stale branch: $local_branch" || true
+      done
+      for tag in $TAGS; do
+        git branch -D "$tag" 2>/dev/null && echo "Cleaned stale branch: $tag" || true
+      done
+
       preprocess_branch() {
         local ref=$1
         local wt_dir=$WORKTREE_BASE/${ref//\//_}
         local branch_name="$(basename "$ref")"
         echo "=== Preprocessing: $ref -> $branch_name ==="
-        git worktree add -b "$branch_name" "$wt_dir" "$ref" 2>/dev/null || {
-          echo "  worktree exists, skipping: $ref"
-          return
-        }
+        git worktree add -b "$branch_name" "$wt_dir" "$ref"
         python3 md_bat_mod_tool.py heading "$wt_dir" || true
         python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
         python3 md_bat_mod_tool.py domain  "$wt_dir" || true
@@ -249,10 +256,7 @@ build_web_html:
         local wt_dir=$WORKTREE_BASE/tag-$(basename "$tag")
         local branch_name="$(basename "$tag")"
         echo "=== Preprocessing: $tag -> $branch_name ==="
-        git worktree add -b "$branch_name" "$wt_dir" "$tag" 2>/dev/null || {
-          echo "  worktree exists, skipping: $tag"
-          return
-        }
+        git worktree add -b "$branch_name" "$wt_dir" "$tag"
         python3 md_bat_mod_tool.py heading "$wt_dir" || true
         python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
         python3 md_bat_mod_tool.py domain  "$wt_dir" || true
@@ -274,7 +278,6 @@ build_web_html:
       echo "$BRANCHES" | xargs -P4 -I{} bash -c 'preprocess_branch "{}"'
       echo "$TAGS"    | xargs -P4 -I{} bash -c 'preprocess_tag "{}"'
 
-      # 当前 checkout 的分支：原地预处理，smv_remote_whitelist=None 会过滤掉 origin/dev
       python3 md_bat_mod_tool.py heading . || true
       python3 md_bat_mod_tool.py fixlink . || true
       python3 md_bat_mod_tool.py domain  . || true
