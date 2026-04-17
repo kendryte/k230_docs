@@ -1,56 +1,5 @@
 # K230 System Control MAPI Reference
 
-![cover](../../../../zh/01_software/board/cdk/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise stipulated in the contract, the Company does not make any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference purposes only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/cdk/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No part of this document may be excerpted, copied, or disseminated in any form without the written permission of the Company.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the functions and usage of the system control module in MAPI. The functions and usage of other modules will be discussed in their respective dedicated documents.
-
-### Intended Audience
-
-This document (this guide) is primarily intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviations
-
-| Abbreviation | Description                         |
-|--------------|-------------------------------------|
-| mpp          | Media Process Platform              |
-| vb           | video buffer                        |
-
-### Revision History
-
-| Document Version | Description | Author  | Date       |
-|------------------|-------------|---------|------------|
-| V1.0             | Initial Version | Haibo Hao | 2023/5/4  |
-
 ## Overview
 
 ### Overview

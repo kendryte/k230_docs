@@ -1,66 +1,5 @@
 # K230视频编解码API参考
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
-## 目录
-
-[TOC]
-
-## 前言
-
-### 概述
-
-本文档主要介绍视频编解码模块的功能和用法。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 缩略词定义
-
-| 简称 | 说明 |
-|------|------|
-|      |      |
-|      |      |
-
-### 修订记录
-
-| 文档版本号 | 修改者 | 日期 | 修改说明 |
-|---|---|---|---|
-| V1.0       | 系统软件部 | 2023.03.10 | 初版  |
-| V1.1       | 系统软件部 | 2023.03.31 | 1. 新增2d设置/获取运算模式接口kd_mpi_venc_set_2d_mode、 kd_mpi_venc_get_2d_mode 2.修改2d的参数设置/获取接口，kd_mpi_venc_set_2d_osd_param、 kd_mpi_venc_get_2d_osd_param 3. 新增设置2D运算中的图像格式转换系数接口kd_mpi_venc_set_2d_set_custom_coef 4. kd_mpi_venc_set_2d_set_custom_coef删除编码器属性结构体k_venc_attr的pic_format属性 |
-| V1.1.1     | 系统软件部 | 2023.04.11 | 1. 新增编码图像旋转设置/获取接口 kd_mpi_venc_set_rotaion、 kd_mpi_venc_get_rotaion 2. 新增2D画框属性的设置/获取接口 kd_mpi_venc_set_2d_border_param、 kd_mpi_venc_get_2d_border_param 3. 删除2D运算属性结构体`k_venc_2d_attr`4. 增加OSD背景层格式说明 5. 增加部分MAPI函数接口及数据类型，具体是章节4 MAPI。|
-| V1.2       | 系统软件部 | 2023.04.27 | 1. 修改2D画框结构体k_venc_2d_border_attr的线宽参数 2. 修改2D用户自定义转换系数API名称kd_mpi_venc_set_2d_custom_coef 3. 修改kd_mpi_venc_set_2d_custom_coef的转换系数参数类型。 4. 增加获取转换系数的接口kd_mpi_venc_get_2d_custom_coef 5. 增加色域设置和获取接口kd_mpi_venc_set_2d_color_gamut、kd_mpi_venc_get_2d_color_gamut 6. 修改kd_mpi_venc_set_rotaion的旋转角度参数。7. 修改视频编码功能描述中JPEG的输入格式 |
-| V1.2.1     | 系统软件部 | 2023-04-28 | 1. 在 k_venc_chn_attr中增加GOP属性 |
-| V1.2.2     | 系统软件部 | 2023-05-24 | 1. 增加图像翻转设置/获取接口kd_mpi_venc_set_mirror、kd_mpi_venc_get_mirror 2. 增加IDR帧使能接口kd_mpi_venc_enable_idr |
-| V1.3       | 系统软件部 |  2023-05-25  | 1. mapi增加IDR帧使能接口 kd_mapi_venc_request_idr |
-| V1.3.1       | 系统软件部 |  2023-06-14  | 1. 添加mpi可设置解码输出缩小的图像。kd_mpi_vdec_set_downscale |
-| V1.3.2       | 系统软件部 |  2023-06-19  | 1. 修改kd_mapi_venc_request_idr 2. 增加kd_mpi_venc_request_idr、kd_mapi_venc_enable_idr 3.增加H.265 SAO设置和获取接口kd_mpi_venc_set_h265_sao、kd_mpi_venc_get_h265_sao 4. 增加deblocking设置/获取接口kd_mpi_venc_set_dblk、kd_mpi_venc_get_dblk 5. 增加ROI接口kd_mpi_venc_set_roi_attr、kd_mpi_venc_get_roi_attr |
-| V1.3.3       | 系统软件部 |  2023-06-20  | 1. 增加H.264/H.265熵编码模式设置/获取接口kd_mpi_venc_set_h264_entropy、kd_mpi_venc_get_h264_entropy、kd_mpi_venc_set_h265_entropy、kd_mpi_venc_get_h265_entropy 2. k_venc_rotation枚举更明为k_rotation 3. 增加解码旋转设置接口kd_mpi_vdec_set_rotation |
-| V1.3.4 | 系统软件部 | 2023-06-30 | 修改编解码及2D支持的数据类型 |
-
 ## 概述
 
 ### 概述
@@ -2678,12 +2617,12 @@ k_s32 kd_mpi_vdec_set_rotation(k_u32 chn_num, const  [k_rotation](#k_rotation) r
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_RC_MODE_CBR = 1,  
-&emsp;K_VENC_RC_MODE_VBR,  
-&emsp;K_VENC_RC_MODE_FIXQP,  
-&emsp;K_VENC_RC_MODE_MJPEG_FIXQP,  
-&emsp;K_VENC_RC_MODE_BUTT,  
+typedef enum {
+&emsp;K_VENC_RC_MODE_CBR = 1,
+&emsp;K_VENC_RC_MODE_VBR,
+&emsp;K_VENC_RC_MODE_FIXQP,
+&emsp;K_VENC_RC_MODE_MJPEG_FIXQP,
+&emsp;K_VENC_RC_MODE_BUTT,
 } k_venc_rc_mode;
 
 【成员】
@@ -2711,11 +2650,11 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_P_FRAME = 1,  
-&emsp;K_VENC_I_FRAME = 2,  
-&emsp;K_VENC_HEADER = 3,  
-&emsp;K_VENC_BUTT  
+typedef enum {
+&emsp;K_VENC_P_FRAME = 1,
+&emsp;K_VENC_I_FRAME = 2,
+&emsp;K_VENC_HEADER = 3,
+&emsp;K_VENC_BUTT
 } k_venc_pack_type;
 
 【成员】
@@ -2742,12 +2681,12 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_2D_CALC_MODE_CSC = 0,  
-&emsp;K_VENC_2D_CALC_MODE_OSD,  
-&emsp;K_VENC_2D_CALC_MODE_BORDER,  
-&emsp;K_VENC_2D_CALC_MODE_OSD_BORDER,  
-&emsp;K_VENC_2D_CALC_MODE_BUTT  
+typedef enum {
+&emsp;K_VENC_2D_CALC_MODE_CSC = 0,
+&emsp;K_VENC_2D_CALC_MODE_OSD,
+&emsp;K_VENC_2D_CALC_MODE_BORDER,
+&emsp;K_VENC_2D_CALC_MODE_OSD_BORDER,
+&emsp;K_VENC_2D_CALC_MODE_BUTT
 } k_venc_2d_calc_mode;
 
 【成员】
@@ -2775,28 +2714,28 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV12= 0,  
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV21,  
-&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_I420,  
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,  
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB4444,  
-&emsp;K_VENC_2D_SRC_DST_FMT_ARGB1555,  
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB8888,  
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB4444,  
-&emsp;K_VENC_2D_SRC_DST_FMT_XRGB1555,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA8888,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA4444,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRA5551,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX8888,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX4444,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGRX5551,  
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB888,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR888,  
-&emsp;K_VENC_2D_SRC_DST_FMT_RGB565,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BGR565,  
-&emsp;K_VENC_2D_SRC_DST_FMT_SEPERATE_RGB,  
-&emsp;K_VENC_2D_SRC_DST_FMT_BUTT  
+typedef enum {
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV12= 0,
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_NV21,
+&emsp;K_VENC_2D_SRC_DST_FMT_YUV420_I420,
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB8888 = 4,
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB4444,
+&emsp;K_VENC_2D_SRC_DST_FMT_ARGB1555,
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB8888,
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB4444,
+&emsp;K_VENC_2D_SRC_DST_FMT_XRGB1555,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA8888,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA4444,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRA5551,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX8888,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX4444,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGRX5551,
+&emsp;K_VENC_2D_SRC_DST_FMT_RGB888,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGR888,
+&emsp;K_VENC_2D_SRC_DST_FMT_RGB565,
+&emsp;K_VENC_2D_SRC_DST_FMT_BGR565,
+&emsp;K_VENC_2D_SRC_DST_FMT_SEPERATE_RGB,
+&emsp;K_VENC_2D_SRC_DST_FMT_BUTT
 } k_venc_2d_src_dst_fmt;
 
 【注意事项】
@@ -2815,25 +2754,25 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_2D_OSD_FMT_ARGB8888= 0,  
-&emsp;K_VENC_2D_OSD_FMT_ARGB4444,  
-&emsp;K_VENC_2D_OSD_FMT_ARGB1555,  
-&emsp;K_VENC_2D_OSD_FMT_XRGB8888,  
-&emsp;K_VENC_2D_OSD_FMT_XRGB4444,  
-&emsp;K_VENC_2D_OSD_FMT_XRGB1555,  
-&emsp;K_VENC_2D_OSD_FMT_BGRA8888,  
-&emsp;K_VENC_2D_OSD_FMT_BGRA4444,  
-&emsp;K_VENC_2D_OSD_FMT_BGRA5551,  
-&emsp;K_VENC_2D_OSD_FMT_BGRX8888,  
-&emsp;K_VENC_2D_OSD_FMT_BGRX4444,  
-&emsp;K_VENC_2D_OSD_FMT_BGRX5551,  
-&emsp;K_VENC_2D_OSD_FMT_RGB888,  
-&emsp;K_VENC_2D_OSD_FMT_BGR888,  
-&emsp;K_VENC_2D_OSD_FMT_RGB565,  
-&emsp;K_VENC_2D_OSD_FMT_BGR565,  
-&emsp;K_VENC_2D_OSD_FMT_SEPERATE_RGB,  
-&emsp;K_VENC_2D_OSD_FMT_BUTT  
+typedef enum {
+&emsp;K_VENC_2D_OSD_FMT_ARGB8888= 0,
+&emsp;K_VENC_2D_OSD_FMT_ARGB4444,
+&emsp;K_VENC_2D_OSD_FMT_ARGB1555,
+&emsp;K_VENC_2D_OSD_FMT_XRGB8888,
+&emsp;K_VENC_2D_OSD_FMT_XRGB4444,
+&emsp;K_VENC_2D_OSD_FMT_XRGB1555,
+&emsp;K_VENC_2D_OSD_FMT_BGRA8888,
+&emsp;K_VENC_2D_OSD_FMT_BGRA4444,
+&emsp;K_VENC_2D_OSD_FMT_BGRA5551,
+&emsp;K_VENC_2D_OSD_FMT_BGRX8888,
+&emsp;K_VENC_2D_OSD_FMT_BGRX4444,
+&emsp;K_VENC_2D_OSD_FMT_BGRX5551,
+&emsp;K_VENC_2D_OSD_FMT_RGB888,
+&emsp;K_VENC_2D_OSD_FMT_BGR888,
+&emsp;K_VENC_2D_OSD_FMT_RGB565,
+&emsp;K_VENC_2D_OSD_FMT_BGR565,
+&emsp;K_VENC_2D_OSD_FMT_SEPERATE_RGB,
+&emsp;K_VENC_2D_OSD_FMT_BUTT
 } k_venc_2d_osd_fmt;
 
 【注意事项】
@@ -2852,19 +2791,19 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-/\* bottom ------\> top \*/  
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD= 0,  
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO,  
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG,  
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO,  
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,  
-&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,  
-&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,  
-&emsp;K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,  
-&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,  
-&emsp;K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,  
-&emsp;K_VENC_2D_ADD_ORDER_BUTT  
+typedef enum {
+/\* bottom ------\> top \*/
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD= 0,
+&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO,
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG,
+&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO,
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_BG_OSD,
+&emsp;K_VENC_2D_ADD_ORDER_VIDEO_OSD_BG,
+&emsp;K_VENC_2D_ADD_ORDER_BG_VIDEO_OSD,
+&emsp;K_VENC_2D_ADD_ORDER_BG_OSD_VIDEO,
+&emsp;K_VENC_2D_ADD_ORDER_OSD_VIDEO_BG,
+&emsp;K_VENC_2D_ADD_ORDER_OSD_BG_VIDEO,
+&emsp;K_VENC_2D_ADD_ORDER_BUTT
 } k_venc_2d_add_order;
 
 【成员】
@@ -2898,12 +2837,12 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VPU_ROTATION_0 = 0,  
-&emsp;K_VPU_ROTATION_90 = 1,  
-&emsp;K_VPU_ROTATION_180 = 2,  
-&emsp;K_VPU_ROTATION_270 = 3,  
-&emsp;K_VPU_ROTATION_BUTT  
+typedef enum {
+&emsp;K_VPU_ROTATION_0 = 0,
+&emsp;K_VPU_ROTATION_90 = 1,
+&emsp;K_VPU_ROTATION_180 = 2,
+&emsp;K_VPU_ROTATION_270 = 3,
+&emsp;K_VPU_ROTATION_BUTT
 } k_rotation;
 
 【成员】
@@ -2931,10 +2870,10 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VENC_MIRROR_HORI = 0,  
-&emsp;K_VENC_MIRROR_VERT = 1,  
-&emsp;K_VENC_MIRROR_BUTT  
+typedef enum {
+&emsp;K_VENC_MIRROR_HORI = 0,
+&emsp;K_VENC_MIRROR_VERT = 1,
+&emsp;K_VENC_MIRROR_BUTT
 } k_venc_mirror;
 
 【成员】
@@ -2960,11 +2899,11 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;VENC_2D_COLOR_GAMUT_BT601 = 0,  
-&emsp;VENC_2D_COLOR_GAMUT_BT709,  
-&emsp;VENC_2D_COLOR_GAMUT_BT2020,  
-&emsp;VENC_2D_COLOR_GAMUT_BUTT  
+typedef enum {
+&emsp;VENC_2D_COLOR_GAMUT_BT601 = 0,
+&emsp;VENC_2D_COLOR_GAMUT_BT709,
+&emsp;VENC_2D_COLOR_GAMUT_BT2020,
+&emsp;VENC_2D_COLOR_GAMUT_BUTT
 } k_venc_2d_color_gamut;
 
 【成员】
@@ -3019,13 +2958,13 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_payload_type type;  
-&emsp;k_u32 stream_buf_size;  
-&emsp;k_u32 stream_buf_cnt;  
-&emsp;k_u32 pic_width;  
-&emsp;k_u32 pic_height;  
-&emsp;k_venc_profile profile;  
+typedef struct {
+&emsp;k_payload_type type;
+&emsp;k_u32 stream_buf_size;
+&emsp;k_u32 stream_buf_cnt;
+&emsp;k_u32 pic_width;
+&emsp;k_u32 pic_height;
+&emsp;k_venc_profile profile;
 } k_venc_attr;
 
 【成员】
@@ -3056,13 +2995,13 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;[k_venc_rc_mode](#k_venc_rc_mode) rc_mode;  
-&emsp;union { [k_venc_cbr](#k_venc_cbr) cbr;  
-&emsp;&emsp;[k_venc_vbr](#k_venc_vbr) vbr;  
-&emsp;&emsp;[k_venc_fixqp](#k_venc_fixqp) fixqp;  
-&emsp;&emsp;[k_venc_mjpeg_fixqp](#k_venc_mjpeg_fixqp) mjpeg_fixqp;  
-&emsp;};  
+typedef struct {
+&emsp;[k_venc_rc_mode](#k_venc_rc_mode) rc_mode;
+&emsp;union { [k_venc_cbr](#k_venc_cbr) cbr;
+&emsp;&emsp;[k_venc_vbr](#k_venc_vbr) vbr;
+&emsp;&emsp;[k_venc_fixqp](#k_venc_fixqp) fixqp;
+&emsp;&emsp;[k_venc_mjpeg_fixqp](#k_venc_mjpeg_fixqp) mjpeg_fixqp;
+&emsp;};
 } k_venc_rc_attr;
 
 【成员】
@@ -3091,12 +3030,12 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 gop;  
-&emsp;k_u32 stats_time;  
-&emsp;k_u32 src_frame_rate;  
-&emsp;k_u32 dst_frame_rate;  
-&emsp;k_u32 bit_rate;  
+typedef struct {
+&emsp;k_u32 gop;
+&emsp;k_u32 stats_time;
+&emsp;k_u32 src_frame_rate;
+&emsp;k_u32 dst_frame_rate;
+&emsp;k_u32 bit_rate;
 } k_venc_cbr;
 
 【成员】
@@ -3125,13 +3064,13 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 gop;  
-&emsp;k_u32 stats_time;  
-&emsp;k_u32 src_frame_rate;  
-&emsp;k_u32 dst_frame_rate;  
-&emsp;k_u32 max_bit_rate;  
-&emsp;k_u32 bit_rate;  
+typedef struct {
+&emsp;k_u32 gop;
+&emsp;k_u32 stats_time;
+&emsp;k_u32 src_frame_rate;
+&emsp;k_u32 dst_frame_rate;
+&emsp;k_u32 max_bit_rate;
+&emsp;k_u32 bit_rate;
 } k_venc_vbr;
 
 【成员】
@@ -3161,11 +3100,11 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 gop;  
-&emsp;k_u32 src_frame_rate;  
-&emsp;k_u32 dst_frame_rate;  
-&emsp;k_u32 i_qp; k_u32 p_qp;  
+typedef struct {
+&emsp;k_u32 gop;
+&emsp;k_u32 src_frame_rate;
+&emsp;k_u32 dst_frame_rate;
+&emsp;k_u32 i_qp; k_u32 p_qp;
 } k_venc_fixqp;
 
 【成员】
@@ -3194,10 +3133,10 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 src_frame_rate;  
-&emsp;k_u32 dst_frame_rate;  
-&emsp;k_u32 q_factor;  
+typedef struct {
+&emsp;k_u32 src_frame_rate;
+&emsp;k_u32 dst_frame_rate;
+&emsp;k_u32 q_factor;
 } k_venc_mjpeg_fixqp;
 
 【成员】
@@ -3224,10 +3163,10 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 cur_packs;  
-&emsp;k_u64 release_pic_pts;  
-&emsp;k_bool end_of_stream;  
+typedef struct {
+&emsp;k_u32 cur_packs;
+&emsp;k_u64 release_pic_pts;
+&emsp;k_bool end_of_stream;
 } k_venc_chn_status;
 
 【成员】
@@ -3254,9 +3193,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;[k_venc_pack](#k_venc_pack) \*pack;  
-&emsp;k_u32 pack_cnt;  
+typedef struct {
+&emsp;[k_venc_pack](#k_venc_pack) \*pack;
+&emsp;k_u32 pack_cnt;
 } k_venc_stream;
 
 【成员】
@@ -3282,11 +3221,11 @@ typedef struct {
 
 【定义】
 
-&emsp;typedef struct {  
-&emsp;k_u64 phys_addr;  
-&emsp;k_u32 len;  
-&emsp;k_u64 pts;  
-&emsp;[k_venc_pack_type](#k_venc_pack_type) type;  
+&emsp;typedef struct {
+&emsp;k_u64 phys_addr;
+&emsp;k_u32 len;
+&emsp;k_u64 pts;
+&emsp;[k_venc_pack_type](#k_venc_pack_type) type;
 } k_venc_pack;
 
 【成员】
@@ -3314,18 +3253,18 @@ typedef struct {
 
 【定义】
 
-typedef struct{  
-&emsp;k_u16 width;  
-&emsp;k_u16 height;  
-&emsp;k_u16 startx;  
-&emsp;k_u16 starty;  
-&emsp;k_u32 phys_addr`[3]`;  
-&emsp;k_u8 bg_alpha;  
-&emsp;k_u8 osd_alpha;  
-&emsp;k_u8 video_alpha;  
-&emsp;[k_venc_2d_add_order](#k_venc_2d_add_order) add_order;  
-&emsp;k_u32 bg_color;  
-&emsp;[k_venc_2d_osd_fmt](#k_venc_2d_osd_fmt) fmt;  
+typedef struct{
+&emsp;k_u16 width;
+&emsp;k_u16 height;
+&emsp;k_u16 startx;
+&emsp;k_u16 starty;
+&emsp;k_u32 phys_addr`[3]`;
+&emsp;k_u8 bg_alpha;
+&emsp;k_u8 osd_alpha;
+&emsp;k_u8 video_alpha;
+&emsp;[k_venc_2d_add_order](#k_venc_2d_add_order) add_order;
+&emsp;k_u32 bg_color;
+&emsp;[k_venc_2d_osd_fmt](#k_venc_2d_osd_fmt) fmt;
 } k_venc_2d_osd_attr;
 
 【成员】
@@ -3362,13 +3301,13 @@ typedef struct{
 
 【定义】
 
-typedef struct {  
-&emsp;k_u16 width;  
-&emsp;k_u16 height;  
-&emsp;k_u16 line_width;  
-&emsp;k_u32 color;  
-&emsp;k_u16 startx;  
-&emsp;k_u16 starty;  
+typedef struct {
+&emsp;k_u16 width;
+&emsp;k_u16 height;
+&emsp;k_u16 line_width;
+&emsp;k_u32 color;
+&emsp;k_u16 startx;
+&emsp;k_u16 starty;
 } k_venc_2d_border_attr;
 
 【成员】
@@ -3400,9 +3339,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 slice_sao_luma_flag;  
-&emsp;k_u32 slice_sao_chroma_flag;  
+typedef struct {
+&emsp;k_u32 slice_sao_luma_flag;
+&emsp;k_u32 slice_sao_chroma_flag;
 } k_venc_h265_sao;
 
 【成员】
@@ -3424,11 +3363,11 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_s32 left;  
-&emsp;k_s32 right;  
-&emsp;k_u32 top;  
-&emsp;k_u32 bottom;  
+typedef struct {
+&emsp;k_s32 left;
+&emsp;k_s32 right;
+&emsp;k_u32 top;
+&emsp;k_u32 bottom;
 } k_venc_rect;
 
 【成员】
@@ -3456,12 +3395,12 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 idx;  
-&emsp;k_bool enable;  
-&emsp;k_bool is_abs_qp;  
-&emsp;k_s32 qp;  
-&emsp;[k_venc_rect](#k_venc_rect) rect;  
+typedef struct {
+&emsp;k_u32 idx;
+&emsp;k_bool enable;
+&emsp;k_bool is_abs_qp;
+&emsp;k_s32 qp;
+&emsp;[k_venc_rect](#k_venc_rect) rect;
 } k_venc_roi_attr;
 
 【成员】
@@ -3490,9 +3429,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 entropy_coding_mode;  
-&emsp;k_u32 cabac_init_idc;  
+typedef struct {
+&emsp;k_u32 entropy_coding_mode;
+&emsp;k_u32 cabac_init_idc;
 } k_venc_h264_entropy;
 
 【成员】
@@ -3518,8 +3457,8 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 cabac_init_flag;  
+typedef struct {
+&emsp;k_u32 cabac_init_flag;
 } k_venc_h265_entropy;
 
 【成员】
@@ -3574,10 +3513,10 @@ typedef struct {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VDEC_SEND_MODE_STREAM = 0,  
-&emsp;K_VDEC_SEND_MODE_FRAME,  
-&emsp;K_VDEC_SEND_MODE_BUTT  
+typedef enum {
+&emsp;K_VDEC_SEND_MODE_STREAM = 0,
+&emsp;K_VDEC_SEND_MODE_FRAME,
+&emsp;K_VDEC_SEND_MODE_BUTT
 } k_vdec_send_mode;
 
 【成员】
@@ -3603,15 +3542,15 @@ typedef enum {
 
 【定义】
 
-typedef struct {  
-&emsp;k_payload_type type;  
-&emsp;[k_vdec_send_mode](#k_vdec_send_mode) mode;  
-&emsp;k_u32 pic_width;  
-&emsp;k_u32 pic_height;  
-&emsp;k_u32 stream_buf_size;  
-&emsp;k_u32 frame_buf_size;  
-&emsp;k_u32 frame_buf_cnt;  
-&emsp;k_pixel_format pic_format;  
+typedef struct {
+&emsp;k_payload_type type;
+&emsp;[k_vdec_send_mode](#k_vdec_send_mode) mode;
+&emsp;k_u32 pic_width;
+&emsp;k_u32 pic_height;
+&emsp;k_u32 stream_buf_size;
+&emsp;k_u32 frame_buf_size;
+&emsp;k_u32 frame_buf_cnt;
+&emsp;k_pixel_format pic_format;
 } k_vdec_chn_attr;
 
 【成员】
@@ -3642,16 +3581,16 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_payload_type type;  
-&emsp;k_bool is_started;  
-&emsp;k_u32 recv_stream_frames;  
-&emsp;k_u32 dec_stream_frames;  
-&emsp;[k_vdec_dec_err](#k_vdec_dec_err) dec_err;  
-&emsp;k_u32 width;  
-&emsp;k_u32 height;  
-&emsp;k_u64 latest_frame_pts;  
-&emsp;k_bool end_of_stream;  
+typedef struct {
+&emsp;k_payload_type type;
+&emsp;k_bool is_started;
+&emsp;k_u32 recv_stream_frames;
+&emsp;k_u32 dec_stream_frames;
+&emsp;[k_vdec_dec_err](#k_vdec_dec_err) dec_err;
+&emsp;k_u32 width;
+&emsp;k_u32 height;
+&emsp;k_u64 latest_frame_pts;
+&emsp;k_bool end_of_stream;
 } k_vdec_chn_status;
 
 【成员】
@@ -3684,10 +3623,10 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_s32 set_pic_size_err;  
-&emsp;k_s32 format_err;  
-&emsp;k_s32 stream_unsupport;  
+typedef struct {
+&emsp;k_s32 set_pic_size_err;
+&emsp;k_s32 format_err;
+&emsp;k_s32 stream_unsupport;
 } k_vdec_dec_err;
 
 【成员】
@@ -3714,11 +3653,11 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_bool end_of_stream;  
-&emsp;k_u64 pts;  
-&emsp;k_u32 len;  
-&emsp;k_u8 \* addr;  
+typedef struct {
+&emsp;k_bool end_of_stream;
+&emsp;k_u64 pts;
+&emsp;k_u32 len;
+&emsp;k_u8 \* addr;
 } k_vdec_stream;
 
 【成员】
@@ -3746,10 +3685,10 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_payload_type type;  
-&emsp;k_bool is_valid_frame;  
-&emsp;k_bool end_of_stream;  
+typedef struct {
+&emsp;k_payload_type type;
+&emsp;k_bool is_valid_frame;
+&emsp;k_bool end_of_stream;
 } k_vdec_supplement_info;
 
 【成员】
@@ -3776,10 +3715,10 @@ typedef struct {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VDEC_DSL_MODE_BY_SIZE,  
-&emsp;K_VDEC_DSL_MODE_BY_RATIO,  
-&emsp;K_VDEC_DSL_MODE_BUTT  
+typedef enum {
+&emsp;K_VDEC_DSL_MODE_BY_SIZE,
+&emsp;K_VDEC_DSL_MODE_BY_RATIO,
+&emsp;K_VDEC_DSL_MODE_BUTT
 } k_vdec_dsl_mode;
 
 【成员】
@@ -3805,9 +3744,9 @@ typedef enum {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 dsl_frame_width;  
-&emsp;k_u32 dsl_frame_height;  
+typedef struct {
+&emsp;k_u32 dsl_frame_width;
+&emsp;k_u32 dsl_frame_height;
 } k_vdec_dsl_size;
 
 【成员】
@@ -3833,9 +3772,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u8 dsl_ratio_hor;  
-&emsp;k_u8 dsl_ratio_ver;  
+typedef struct {
+&emsp;k_u8 dsl_ratio_hor;
+&emsp;k_u8 dsl_ratio_ver;
 } k_vdec_dsl_ratio;
 
 【成员】
@@ -3861,13 +3800,13 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-    &emsp;[k_vdec_dsl_mode](#k_vdec_dsl_mode) dsl_mode;  
-    &emsp;union  
-    {  
-    &emsp;&emsp;[k_vdec_dsl_size](#k_vdec_dsl_size) dsl_size;  
-    &emsp;&emsp;[k_vdec_dsl_ratio](#k_vdec_dsl_ratio) dsl_ratio;  
-    };  
+typedef struct {
+    &emsp;[k_vdec_dsl_mode](#k_vdec_dsl_mode) dsl_mode;
+    &emsp;union
+    {
+    &emsp;&emsp;[k_vdec_dsl_size](#k_vdec_dsl_size) dsl_size;
+    &emsp;&emsp;[k_vdec_dsl_ratio](#k_vdec_dsl_ratio) dsl_ratio;
+    };
 } k_vdec_downscale;
 
 【成员】
@@ -4408,10 +4347,10 @@ k_s32 kd_mapi_venc_enable_idr(k_s32 chn_num, k_bool idr_enable);
 
 【定义】
 
-typedef struct  
-{  
-&emsp;[pfn_venc_dataproc](#pfn_venc_dataproc)  
-&emsp;k_u8 \*p_private_data;  
+typedef struct
+{
+&emsp;[pfn_venc_dataproc](#pfn_venc_dataproc)
+&emsp;k_u8 \*p_private_data;
 }kd_venc_callback_s;
 
 【成员】
@@ -4499,13 +4438,13 @@ typedef struct
 
 【定义】
 
-typedef struct  
-{  
-&emsp;k_char * vir_addr;  
-&emsp;k_u64 phys_addr;  
-&emsp;k_u32 len;  
-&emsp;k_u64 pts;  
-&emsp;k_venc_pack_type type;  
+typedef struct
+{
+&emsp;k_char * vir_addr;
+&emsp;k_u64 phys_addr;
+&emsp;k_u32 len;
+&emsp;k_u64 pts;
+&emsp;k_venc_pack_type type;
 }k_venc_data_pack_s;
 
 【成员】

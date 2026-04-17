@@ -1,26 +1,5 @@
 # K230 Practical Basics - Hello World
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-All rights reserved ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**All rights reserved © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No part of this document may be excerpted, copied, or disseminated in any form by any unit or individual without the written permission of the Company.
-
-<div style="page-break-after:always"></div>
-
 ## Overview
 
 This document explains how to use a cross-compilation tool on a PC to compile a basic Hello World program and run it on a big core RT-Smart or a small core Linux.

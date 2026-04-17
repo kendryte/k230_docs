@@ -1,51 +1,5 @@
 # K230 ISP Initialization Configuration Guide
 
-![cover](../../../../zh/01_software/pc/ISP_tuning/images/canaan-cover.png)
-
-© 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/pc/ISP_tuning/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**© 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly guides users in the initialization configuration of the K230 ISP.
-
-### Target Audience
-
-This document (this guide) is mainly applicable to the following personnel:
-
-- Image Debugging Engineers
-- Technical Support Engineers
-- Software Development Engineers
-
-### Revision History
-
-| Document Version | Description of Changes      | Author | Date       |
-|------------------|-----------------------------|--------|------------|
-| V1.0             | Initial version             | Rong Jian | 2024-01-24 |
-| V1.1             | Updated some parameter descriptions | Rong Jian | 2024-04-28 |
-
 ## Overview of K230 ISP Initialization Configuration
 
 After image tuning, the formed ISP configuration parameters need to be written into the corresponding sensor's initialization configuration file. During startup, the ISP will automatically call the settings in these configuration files to complete the initialization. When the module's adaptive function is enabled, the ISP will operate according to the settings of the module's adaptive function. The ISP initialization configuration includes three files: xml, manual.json, and auto.json. If the sensor supports different resolutions, these three configuration files are required for each resolution. These configuration files are stored in the \k230_sdk\src\big\mpp\userapps\src\sensor\config directory.

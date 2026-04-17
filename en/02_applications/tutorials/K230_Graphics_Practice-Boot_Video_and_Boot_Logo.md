@@ -1,26 +1,5 @@
 # K230 Image Practical - Boot Video and Boot Logo
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as "we") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, we do not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference as a usage guide only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without written permission from the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Overview
 
 This document explains how to implement boot video and boot logo on the K230 EVB development board through video decoding. The video decoding module supports H.264/H.265/MJPEG decoding, with a maximum screen display resolution of 1920x1080 and can be rotated.

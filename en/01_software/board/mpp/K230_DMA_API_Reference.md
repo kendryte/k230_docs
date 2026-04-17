@@ -1,59 +1,5 @@
 # K230 DMA API Reference
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for usage guidance and reference.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/images/logo.png), "Canaan," and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or distribute any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the design of the K230 GSDMA software, including the GSDMA driver framework and software implementation.
-
-### Intended Audience
-
-This document (this guide) is mainly for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                       |
-|--------------|-----------------------------------|
-| GDMA         | Graphic Direct Memory Access      |
-| SDMA         | System Direct Memory Access       |
-
-### Revision History
-
-| Document Version | Modification Description                                       | Author | Date       |
-|------------------|----------------------------------------------------------------|----------|------------|
-| V1.0             | Initial version                                                | Liu Suntao | 2023/3/7  |
-| V1.1             | Modified some descriptions of binding mode; added function interface description for frame number release. | Liu Suntao | 2023/3/31 |
-| V1.2             | Replaced the data structure of the image address; added frame number passthrough function. | Liu Suntao | 2023/4/26 |
-| V1.3             | Added configurable buffer functionality                        | Liu Suntao | 2023/5/31 |
-
 ## Overview
 
 ### Overview

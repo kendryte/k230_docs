@@ -1,26 +1,5 @@
 # K230 little core Linux driver API reference
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright 2023 Canaan Inc. ©
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services or features you purchase should be subject to Canaan Inc. ("Company", hereinafter referred to as "Company") and its affiliates are bound by the commercial contracts and terms and conditions of all or part of the products, services or features described in this document may not be covered by your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied representations or warranties as to the correctness, reliability, completeness, merchantability, fitness for a particular purpose and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is intended as a guide for use only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified from time to time without any notice.
-
-## Trademark Notice
-
-![The logo](../../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Inc. and its affiliates. All other trademarks or registered trademarks that may be mentioned in this document are owned by their respective owners.
-
-**Copyright 2023 Canaan Inc.. © All Rights Reserved.**
-Without the written permission of the company, no unit or individual may extract or copy part or all of the content of this document without authorization, and shall not disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Directory
 
 [TOC]
@@ -149,7 +128,7 @@ K230 integrates 2 PWMs, each channel has 3 channels, that is, channel 0~2 belong
 
 #### FBTFT module
 
-The K230 is adapted to the screen of the ST7735S driver chip, which is turned off by default, and can be enabled if needed according to the [FBTFT configuration reference]section (#211-fbtft configuration reference).
+The K230 is adapted to the screen of the ST7735S driver chip, which is turned off by default, and can be enabled if needed according to the [FBTFT configuration reference]section (#fbtft configuration reference).
 
 ## Usage reference
 

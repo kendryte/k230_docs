@@ -1,56 +1,5 @@
 # K230 SDK CanMV Board Demo User Guide
 
-![cover](../../../../zh/01_software/board/examples/images/canaan-cover.png)
-
-Copyright©2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/examples/images/logo.png), "Canaan", and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual may excerpt, copy any part or all of the contents of this document, nor disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the demo programs provided in the K230 SDK adapted to the Canmv-K230 development board.
-
-### Intended Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                                                 |
-|--------------|-------------------------------------------------------------|
-| UVC          | USB video class (USB camera)                                |
-| VVI          | Virtual video input, mainly used for pipeline debugging     |
-
-### Revision History
-
-| Document Version | Description | Editor         | Date       |
-|------------------|-------------|----------------|------------|
-| V1.0             | Initial Version | System Software Department | 2023-10-11 |
-
 ## Overview
 
 This document introduces the demo functions provided by the K230 SDK and their usage. The executable programs on rt-smart are all compiled by default into the small core/sharefs directory. When testing the large core programs, you need to wait for the small core to fully start, and then enter the /sharefs/app directory in the large core's msh to test. The audio and video resource files used in each test demo can be obtained from the following link:

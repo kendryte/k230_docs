@@ -1,26 +1,5 @@
 # K230 Scenario Practice - DPU Depth Camera POC
 
-![cover](../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, suitability for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for use as a reference guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
 ## K230 DPU Depth Camera
 
 Simulate the K230 device as a depth camera, transmitting the depth map processed by the internal DPU module to a PC in real-time. It supports multiple data transmission formats, multiple K230 devices, and stream/snap functions with stream performance reaching 720p@10fps.
@@ -103,4 +82,4 @@ After downloading the files from the `k230_sdk/src/common/cdk/user/thirdparty/wi
   ```shell
   test_uvc.exe -m 1 -s 1 -a 36 -b 35 -f "./bin/canmv/05/H1280W720.bin" -t 0 -n "2405-05" -r 2
   ```
-  
+

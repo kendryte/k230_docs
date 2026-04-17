@@ -1,56 +1,5 @@
 # K230 System Control API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter referred to as such) and its affiliates. Some or all of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference and guidance purposes only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the contents of this document, or spread it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the functions and usage of the system control module in the media subsystem. The functions and usage of other modules will be discussed in separate documents.
-
-### Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                        |
-|--------------|------------------------------------|
-| mpp          | Media Process Platform             |
-| vb           | Video Buffer                       |
-
-### Revision History
-
-| Document Version | Description | Author  | Date       |
-|------------------|-------------|---------|------------|
-| V1.0             | Initial Version | Haibo Hao | 2023/3/4   |
-
 ## Overview
 
 ### Overview
@@ -899,7 +848,7 @@ None
 
 **Related Topics**:
 
-**Description**:block](#2115-kd_mpi_vb_get_block)
+**Description**:block](#kd_mpi_vb_get_block)
 
 #### kd_mpi_vb_phyaddr_to_handle
 
@@ -1179,7 +1128,7 @@ None
 
 **Related Topics**:
 
-**Description**:supplement_config](#2123-kd_mpi_vb_get_supplement_config)
+**Description**:supplement_config](#kd_mpi_vb_get_supplement_config)
 
 #### kd_mpi_vb_get_supplement_config
 
@@ -1225,7 +1174,7 @@ None
 
 **Related Topics**:
 
-**Description**:supplement_config](#2122-kd_mpi_vb_set_supplement_config)
+**Description**:supplement_config](#kd_mpi_vb_set_supplement_config)
 
 #### kd_mpi_vb_set_mod_pool_config
 
@@ -1273,7 +1222,7 @@ None
 
 **Related Topics**:
 
-**Description**:mod_pool_config](#2125-kd_mpi_vb_get_mod_pool_config)
+**Description**:mod_pool_config](#kd_mpi_vb_get_mod_pool_config)
 
 #### kd_mpi_vb_get_mod_pool_config
 
@@ -1320,7 +1269,7 @@ None
 
 **Related Topics**:
 
-**Description**:mod_pool_config](#2124-kd_mpi_vb_set_mod_pool_config)
+**Description**:mod_pool_config](#kd_mpi_vb_set_mod_pool_config)
 
 #### kd_mpi_vb_init_mod_common_pool
 
@@ -1368,7 +1317,7 @@ None
 
 **Related Topics**:
 
-**Description**:_mod_common_pool](#2127-kd_mpi_vb_exit_mod_common_pool)
+**Description**:_mod_common_pool](#kd_mpi_vb_exit_mod_common_pool)
 
 #### kd_mpi_vb_exit_mod_common_pool
 
@@ -1425,7 +1374,7 @@ This functional module provides the following APIs:
 
 - [kd_mpi_sys_bind](#kd_mpi_sys_bind)
 - [kd_mpi_sys_unbind](#kd_mpi_sys_unbind)
-**Description**:et_bind_by_dest](#223-kd_mpi_sys_get_bind_by_dest)
+**Description**:et_bind_by_dest](#kd_mpi_sys_get_bind_by_dest)
 
 #### kd_mpi_sys_bind
 
@@ -1474,7 +1423,7 @@ None
 
 **Related Topics**:
 
-**Description**:ind](#222-kd_mpi_sys_unbind)
+**Description**:ind](#kd_mpi_sys_unbind)
 
 #### kd_mpi_sys_unbind
 
@@ -1521,7 +1470,7 @@ None
 
 **Related Topics**:
 
-**Description**:d](#221-kd_mpi_sys_bind)
+**Description**:d](#kd_mpi_sys_bind)
 
 #### kd_mpi_sys_get_bind_by_dest
 
@@ -1581,7 +1530,7 @@ This functional module provides the following APIs:
 - [kd_mpi_log_read](#kd_mpi_log_read)
 - [kd_mpi_log_close](#kd_mpi_log_close)
 - [kd_mpi_log_set_console](#kd_mpi_log_set_console)
-**Description**:et_console](#237-kd_mpi_log_get_console)
+**Description**:et_console](#kd_mpi_log_get_console)
 
 #### kd_mpi_log_set_level_conf
 
@@ -1627,7 +1576,7 @@ None
 
 **Related Topics**:
 
-**Description**:_level_conf](#232-kd_mpi_log_get_level_conf)
+**Description**:_level_conf](#kd_mpi_log_get_level_conf)
 
 #### kd_mpi_log_get_level_conf
 
@@ -1675,7 +1624,7 @@ None
 
 **Related Topics**:
 
-**Description**:_level_conf](#231-kd_mpi_log_set_level_conf)
+**Description**:_level_conf](#kd_mpi_log_set_level_conf)
 
 #### kd_mpi_log_set_wait_flag
 
@@ -1854,7 +1803,7 @@ None
 
 **Related Topics**:
 
-**Description**:_console](#237-kd_mpi_log_get_console)
+**Description**:_console](#kd_mpi_log_get_console)
 
 #### kd_mpi_log_get_console
 
@@ -2023,7 +1972,7 @@ This module has the following data types:
 - [k_vb_config](#k_vb_config)
 - [k_vb_pool_config](#k_vb_pool_config)
 - [k_vb_remap_mode](#k_vb_remap_mode)
-**Description**:ent_config](#326-k_vb_supplement_config)
+**Description**:ent_config](#k_vb_supplement_config)
 
 #### VB_MAX_POOLS
 
@@ -2175,7 +2124,7 @@ char mmz_name[MAX_MMZ_NAME_LEN];/*< Name of the MMZ that allocates the memory fo
 **Related Data Types and Interfaces**:
 
 - [kd_mpi_vb_set_config](#kd_mpi_vb_set_config)
-**Description**:eate_pool](#2113-kd_mpi_vb_create_pool)
+**Description**:eate_pool](#kd_mpi_vb_create_pool)
 
 #### k_vb_remap_mode
 
@@ -2266,7 +2215,7 @@ This module has the following data types:
 - [k_video_format](#k_video_format)
 - [k_video_field](#k_video_field)
 
-**Description**:at](#3314-k_pixel_format)
+**Description**:at](#k_pixel_format)
 
 #### k_video_frame_info
 
@@ -2302,7 +2251,7 @@ Currently supports two types of supplementary information. For details, please r
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_video_frame
 
@@ -2434,7 +2383,7 @@ None
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_isp_frame_info
 
@@ -2777,7 +2726,7 @@ None
 
 **Related Data Types and Interfaces**:
 
-**Description**:(#332-k_video_frame)
+**Description**:(#k_video_frame)
 
 #### k_pixel_format
 
@@ -2931,7 +2880,7 @@ Omitted
 
 This module has the following data structures:
 
-**Description**:conf](#341-k_log_level_conf)
+**Description**:conf](#k_log_level_conf)
 
 #### k_log_level_conf
 

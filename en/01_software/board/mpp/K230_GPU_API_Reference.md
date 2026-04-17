@@ -1,58 +1,5 @@
 # K230 GPU API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase should be subject to the commercial contracts and terms of Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not make any explicit or implicit representations or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document describes the usage guide for the 2.5D GPU module of the K230 chip.
-
-### Intended Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviations
-
-| Abbreviation | Full Name              |
-|--------------|------------------------|
-| GPU          | Graphics Processing Unit |
-| BLIT         | Bit Block Transfer     |
-| CLUT         | Color Look Up Table    |
-
-### Revision History
-
-| Version Number | Description   | Modified By | Date       |
-|----------------|---------------|-------------|------------|
-| V1.0           | Official Release | Huang Ziyi | 2023/04/06 |
-| V1.1           | Format Adjustment | Huang Ziyi | 2023/05/06 |
-
 ## Function Introduction
 
 This module is mainly used to accelerate the drawing of vector graphics, which can be used to draw menus and other pages and supports the acceleration of some lvgl drawings. The GPU has a series of drawing instructions. After writing the drawing instructions into memory and submitting the address and total length of the instructions to the GPU, drawing can begin. This module supports the filled drawing of polygons, quadratic Bezier curves, cubic Bezier curves, and elliptical curves, supports linear gradient fills, supports color lookup tables, supports image composition and blending, and supports BLIT.

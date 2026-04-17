@@ -1,56 +1,5 @@
 # K230 Inter-Core Communication API Reference
 
-![cover](../../../../zh/01_software/board/cdk/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not make any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for guidance and reference.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/cdk/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the functions and usage of the system control module in the media subsystem. The functions and usage of other modules will be discussed in their respective documents.
-
-### Target Audience
-
-This document (this guide) is mainly applicable to the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                                |
-|--------------|--------------------------------------------|
-| ipcm         | internal processor communication module    |
-| IPCMSG       | internal processor communication message   |
-
-### Revision History
-
-| Document Version | Modification Description | Modifier | Date       |
-|------------------|--------------------------|----------|------------|
-| v1.0             | Initial version          | Haibo Hao | 2023/3/8   |
-
 ## Overview
 
 ### Overview

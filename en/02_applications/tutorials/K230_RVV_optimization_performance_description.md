@@ -1,51 +1,5 @@
 # K230 RVV Performance Optimization Description
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no organization or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[toc]
-
-<div style="page-break-after:always"></div>
-
-## Preface
-
-### Overview
-
-This document mainly introduces the impact of RVV on model inference performance.
-
-### Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Revision History
-
-| Document Version | Modification Description | Modifier | Date       |
-| ---------------- | ------------------------ | -------- | ---------- |
-| V1.0             | Initial Version          | Yang Haoqi | 2023/08/04 |
-
 ## Overview
 
 In recent years, the rapid development of the AI field has led to the emergence of various neural network models and new operators. However, the iteration cycle of AI chips is much longer compared to AI models, and many of these new operators cannot directly use AI chips for inference acceleration. At the same time, some old operators are also not suitable for inference acceleration using AI chips. Therefore, the CPU becomes the execution carrier for these operators, which means that the performance of the CPU will become a factor affecting the final performance during model deployment. The RVV extension is an important means to improve the performance of RISC-V CPUs. The K230 uses the Xuantie C908 dual-core processor, where the large core has the RVV1.0 extension feature, which can significantly improve the performance during CPU operator inference.

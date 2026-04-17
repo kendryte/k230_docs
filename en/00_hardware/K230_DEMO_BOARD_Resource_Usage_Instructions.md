@@ -1,57 +1,5 @@
 # K230 DEMO BOARD Resource Usage Guide
 
-![cover](../../zh/00_hardware/images/HDG/canaan-cover.png)
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (“the Company,” hereinafter) and its affiliates. Some or all of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise agreed in the contract, the Company does not make any explicit or implicit statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is for reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../zh/00_hardware/images/K230_DEMO_BOARD_USAGE_GUIDE/image3.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual may excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document primarily introduces the usage instructions for the K230 DEMO BOARD.
-
-### Intended Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-|--------------|-------------|
-|              |             |
-|              |             |
-
-### Revision History
-
-| Document Version | Description of Changes               | Author  | Date       |
-|------------------|--------------------------------------|---------|------------|
-| V1.0             | Initial version                      | Du Lingyi | 2023-03-10 |
-| V1.1             | Updated to correspond to EVB V1.1    | Du Lingyi | 2023-05-05 |
-| V1.2             | Updated the usage method of J5, USB OTG pin header | Du Lingyi | 2023-05-10 |
-| V1.3             | Changed content from EVB to K230 DEMO BOARD | Du Lingyi | 2023-06-07 |
-
 ## Development Board Overview
 
 ### K230 DEMO BOARD Overview

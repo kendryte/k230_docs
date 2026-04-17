@@ -1,58 +1,5 @@
 # K230 ahd sensor 移植参考
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
-## 目录
-
-[TOC]
-
-## 前言
-
-### 概述
-
-本文档主要描述k230 sdk如何适配ahd sensor 和 对应的ahd 转mipi 的芯片使用，本次介绍需要用到的k230 芯片模块比较多、大家可以根据自己的需求做对应的裁剪。
-
-### 模块
-
-本次demo 使用的模块如下：
-
-- vicap ：vicap是将接受到的sensor的输出数据存储到ddr。在vicap配置AHD sensor中，sensor 的输入只支持YUV422_8 , vicap输出的格式是yuv444。
-- nonai-2d ： nonai-2d是格式转换模块，可以将yuv444的图像转换成yuv420、rgb888 plane等。
-- dw：dw模块是做任意比例缩放，但是stride 必须是4的倍数。
-- gdma ： gdma模块可以进行图像旋转和mirror。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 修订记录
-
-| 文档版本号 | 修改说明 | 修改者 | 日期 |
-| --- | --- | --- | --- |
-| V1.0 | 初版 | zs | 2024/10/23 |
-
 ## ahd sensor介绍
 
 AHD（Analog High Definition）即模拟高清技术，是一种基于模拟同轴电缆传输逐行扫描的高清视频技术，具有高清、传输距离远的特点。本次用的AHD 转 mipi 的芯片是XS9950 芯片，这款芯片是国产的支持将高清制式AHD 信号转换成mipi 信号的芯片。
@@ -115,7 +62,7 @@ k230_sdk/src/big/mpp/kernel/sensor/src/xs9950_csi0_drv.c:
 
 static int xs9950_power_rest(k_s32 on)
 {
-    #define VICAP_XS9950_RST_GPIO     (0)  //24// 
+    #define VICAP_XS9950_RST_GPIO     (0)  //24//
 
     kd_pin_mode(VICAP_XS9950_RST_GPIO, GPIO_DM_OUTPUT);
 
@@ -253,7 +200,7 @@ static int sample_vb_init(void)
     config.comm_pool[7].blk_size = VICAP_ALIGN_UP((DW200_CHN1_OUTPUT_WIDTH * DW200_CHN1_OUTPUT_HEIGHT * 3), 0x1000);
     config.comm_pool[7].mode = VB_REMAP_MODE_NOCACHE;
 
-    // for gdma chn0 
+    // for gdma chn0
     config.comm_pool[8].blk_cnt = GDMA_BUF_NUM;
     config.comm_pool[8].blk_size = VICAP_ALIGN_UP((DW200_CHN0_OUTPUT_WIDTH * DW200_CHN0_OUTPUT_HEIGHT * 3), 0x1000);
     config.comm_pool[8].mode = VB_REMAP_MODE_NOCACHE;
@@ -893,7 +840,7 @@ static void sample_vo_init(k_connector_type type)
         info.offset.y = 0;//(1920-h)/2;
         vo_creat_layer_test(K_VO_LAYER1, &info);
 #endif
-        
+
 #if DW_DEV1_USE_RGB
          // osd0 init
         osd.act_size.width = DW200_CHN1_OUTPUT_WIDTH ;
@@ -959,7 +906,7 @@ static void sample_bind()
     k_mpp_chn vo_mpp_chn;
     k_mpp_chn gdma;
 
-    // pipe 1 
+    // pipe 1
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 0;
     vi_mpp_chn.chn_id = 0;
@@ -988,7 +935,7 @@ static void sample_bind()
     ret = kd_mpi_sys_bind(&gdma, &vo_mpp_chn);
     CHECK_RET(ret, __func__, __LINE__);
 
-    // pipe 2 
+    // pipe 2
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 1;
     vi_mpp_chn.chn_id = 0;
@@ -1062,7 +1009,7 @@ static void sample_unbind()
     k_mpp_chn vo_mpp_chn;
     k_mpp_chn gdma;
 
-    // pipe 1 
+    // pipe 1
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 0;
     vi_mpp_chn.chn_id = 0;
@@ -1091,7 +1038,7 @@ static void sample_unbind()
     ret = kd_mpi_sys_unbind(&gdma, &vo_mpp_chn);
     CHECK_RET(ret, __func__, __LINE__);
 
-    // pipe 2 
+    // pipe 2
     vi_mpp_chn.mod_id = K_ID_VI;
     vi_mpp_chn.dev_id = 1;
     vi_mpp_chn.chn_id = 0;
@@ -1176,10 +1123,10 @@ int main(int argc, char *argv[])
     // vo init
     sample_vo_init(ILI9881C_MIPI_4LAN_800X1280_60FPS);
 
-    // init 2d 
+    // init 2d
     nonai_2d_init();
 
-    // init bind 
+    // init bind
     sample_bind();
 
     dma_dev_attr_init();
@@ -1253,7 +1200,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        // todo ai 
+        // todo ai
 
         ret = kd_mpi_nonai_2d_release_frame(NONAI_2D_RGB_CH, &rgb_vf_info);
         if (ret) {
@@ -1269,7 +1216,7 @@ int main(int argc, char *argv[])
 
     sample_vicap_stream(VICAP_DEV_ID_0 , K_FALSE);
     sample_vicap_stream(VICAP_DEV_ID_1 , K_FALSE);
-    sample_vicap_stream(VICAP_DEV_ID_2 , K_FALSE); 
+    sample_vicap_stream(VICAP_DEV_ID_2 , K_FALSE);
 
 
     usleep(1000 * 34);

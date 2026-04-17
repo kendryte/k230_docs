@@ -1,30 +1,5 @@
 # K230 SDK Frequently Asked Questions (C)
 
-![cover](../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not make any express or implied statements or guarantees regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No unit or individual may excerpt, copy, or disseminate part or all of the content of this document in any form without written permission from the Company.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
 ## TF Boot Failed with Exit Code 13
 
 Issue: TF card boot reports boot failed with exit code 13 error
@@ -170,7 +145,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -186,7 +161,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -213,7 +188,7 @@ Model: SD SD32G (sd/mmc)
 Disk /dev/mmcblk1: 31.3GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End     Size    File system  Name        Flags
  1      10.5MB  31.5MB  21.0MB               rtt
@@ -254,7 +229,7 @@ setenv bootargs "root=/dev/mmcblk1p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 c
 Answer: Method 1: In Linux, enter `cat /proc/cmdline` to view:
 
 ```bash
-[root@canaan ~ ]#cat /proc/cmdline 
+[root@canaan ~ ]#cat /proc/cmdline
 root=/dev/mmcblk0p3 loglevel=8 rw rootdelay=4 rootfstype=ext4 console=ttyS0,115200 crashkernel=256M-:128M earlycon=sbi
 [root@canaan ~ ]#
 ```
@@ -281,7 +256,7 @@ aliases {
     chosen {
         stdout-path = "uart2:115200n8";
     };
-    
+
     serial2: serial@91402000 {
     compatible = "snps,dw-apb-uart";
     reg = <0x0 0x91402000 0x0 0x400>;
@@ -302,7 +277,7 @@ aliases {
 chosen {
         stdout-path = "serial2";
     };
-    
+
 &uart2 {
     status = "okay";
 };
@@ -426,11 +401,11 @@ cd /sdcard/app/onboard
 
 Modification 2: Add a wait for the shared file system action (applicable to SDK version 1.5 and later)
 
-```c  
+```c
 // Modify around line 34 in the src/big/rt-smart/kernel/bsp/maix3/applications/main.c file as follows:
-        
+
     struct stat stat_buf;
-    while(stat("/sharefs/onboard",&stat_buf));// Please modify to the correct file according to the actual situation 
+    while(stat("/sharefs/onboard",&stat_buf));// Please modify to the correct file according to the actual situation
     msh_exec("/bin/init.sh", 13); // The script to auto-start, please modify to the correct file according to the actual situation
 ```
 
@@ -443,7 +418,7 @@ Modification 2: Add a wait for the shared file system action (applicable to SDK 
             // shell_thread_first_run = 0;
             // msh_exec("/bin/init.sh", 13);
             if(0 == stat("/sharefs/onboard",&stat_buf)){ // Please modify to the correct file according to the actual situation
-                shell_thread_first_run = 0;               
+                shell_thread_first_run = 0;
                 msh_exec("/bin/init.sh", 13); // The script to auto-start, please modify to the correct file according to the actual situation
             }
             continue;
@@ -459,7 +434,7 @@ Enabling libxml2 Method 1: If the SDK has already been compiled
 ```bash
 # Method to use libxml2 (using k230_canmv_defconfig as an example), execute the following commands in the SDK main directory:
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ menuconfig
-# Target packages --> Libraries --> JSON/XML --> libxml2 
+# Target packages --> Libraries --> JSON/XML --> libxml2
 # Enable the libxml2 library and save the configuration;
 make -C output/k230_canmv_defconfig/little/buildroot-ext/ savedefconfig  # Save the configuration
 make -C output/k230_canmv_defconfig/little/buildroot-ext/  # Compile Buildroot
@@ -521,7 +496,7 @@ int main(void)
     return (0);
 }
 
-// Compilation method 
+// Compilation method
 /* Assuming the SDK main directory is SDK=/home/wangjianxin/k230_sdk
 SDK=/home/wangjianxin/k230_sdk
 BD=${SDK}/output/k230_canmv_defconfig/little/buildroot-ext

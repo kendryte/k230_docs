@@ -1,55 +1,5 @@
 # K230 OpenBLAS Development Guide
 
-![cover](../../../../zh/01_software/board/middleware/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contract and terms of Beijing Canaan Creative Information Technology Co., Ltd. (“the Company”) and its affiliates. All or part of the products, services, or features described in this document may not be within your purchase or usage scope. Unless otherwise agreed in the contract, the Company does not provide any express or implied statement or warranty regarding the correctness, reliability, completeness, merchantability, suitability for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is only for reference as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/middleware/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces K230 OpenBLAS.
-
-### Target Audience
-
-This document (guide) is primarily intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                                        |
-|--------------|-----------------------------------------------------|
-| OpenBLAS     | Open Basic Linear Algebra Subprograms              |
-
-### Revision History
-
-| Document Version | Modification Description | Modifier | Date       |
-|------------------|--------------------------|----------|------------|
-| V1.0             | Initial Version          | Algorithm Department | 2023-05-30 |
-
 ## Introduction to OpenBLAS
 
 OpenBLAS is an optimized BLAS computation library distributed under the BSD license (open-source). BLAS (Basic Linear Algebra Subprograms) is an API standard for releasing numerical libraries for basic linear algebra operations (such as vector or matrix multiplication). OpenBLAS is a specific implementation of the BLAS standard.

@@ -1,58 +1,5 @@
 # K230 xx User Guide
 
-![cover](../../zh/template/images/canaan-cover.png)
-
-Copyright © 2023 Canaan Creative Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Canaan Creative Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any explicit or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../zh/template/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Canaan Creative Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Canaan Creative Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual may extract, copy, or distribute part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces xxx.
-
-### Intended Audience
-
-This document (this guide) is mainly applicable to the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-| ------------ | ----------- |
-| XXX          | xx          |
-| XXX          | xx          |
-
-### Revision History
-
-| Document Version | Modification Description | Modifier       | Date       |
-| ---------------- | ------------------------ | -------------- | ---------- |
-| V1.0             | Initial version          | System Software Dept. | 2023-03-10 |
-| V1.1             |                          |                |            |
-| V1.2             |                          |                |            |
-
 ## Overview
 
 This document introduces xxx, etc.

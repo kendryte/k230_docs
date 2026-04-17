@@ -1,56 +1,5 @@
 # K230视频输出API参考
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
-## 目录
-
-[TOC]
-
-## 前言
-
-### 概述
-
-本文档主要介绍视频输出系统控制模块的功能和用法，其它模块的功能和用法将各有专门的文档加以论述。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 缩略词定义
-
-| 简称 | 说明                     |
-|------|--------------------------|
-| VO   | Video output             |
-| DSI  | Display Serial Interface |
-
-### 修订记录
-
-| 文档版本号 | 修改说明 | 修改者     | 日期       |
-|------------|----------|------------|------------|
-| V1.0       | 初版     | 系统软件部 | 2023-03-10 |
-
 ## 概述
 
 VO（Video Output，视频输出）模块主动从内存相应位置读取视频和图形数据，并通过相应的显示设备输出视频和图形。芯片支持的显示/回写设备、视频层和图形层情况。
@@ -1710,9 +1659,9 @@ kd_mpi_get_connector_info()、kd_mpi_connector_open()、kd_mpi_connector_power_s
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_OUT_1080P30,  
-&emsp;K_VO_OUT_1080P60,  
+typedef enum {
+&emsp;K_VO_OUT_1080P30,
+&emsp;K_VO_OUT_1080P60,
 } k_vo_intf_sync;
 
 【成员】
@@ -1738,8 +1687,8 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_INTF_MIPI = 0,  
+typedef enum {
+&emsp;K_VO_INTF_MIPI = 0,
 } k_vo_intf_type;
 
 【成员】
@@ -1762,15 +1711,15 @@ typedef enum {
 
 【定义】
 
-typedef enum {  
-&emsp;PIXEL_FORMAT_YVU_PLANAR_420,  
-&emsp;PIXEL_FORMAT_YVU_PLANAR_422,  
-&emsp;PIXEL_FORMAT_RGB_565,  
-&emsp;PIXEL_FORMAT_RGB_888,  
-&emsp;PIXEL_FORMAT_ARGB_8888,  
-&emsp;PIXEL_FORMAT_ARGB_4444,  
-&emsp;PIXEL_FORMAT_ARGB_1555,  
-&emsp;PIXEL_FORMAT_RGB_MONOCHROME_8BPP,  
+typedef enum {
+&emsp;PIXEL_FORMAT_YVU_PLANAR_420,
+&emsp;PIXEL_FORMAT_YVU_PLANAR_422,
+&emsp;PIXEL_FORMAT_RGB_565,
+&emsp;PIXEL_FORMAT_RGB_888,
+&emsp;PIXEL_FORMAT_ARGB_8888,
+&emsp;PIXEL_FORMAT_ARGB_4444,
+&emsp;PIXEL_FORMAT_ARGB_1555,
+&emsp;PIXEL_FORMAT_RGB_MONOCHROME_8BPP,
 } k_pixel_format;
 
 【成员】
@@ -1802,12 +1751,12 @@ OSD 的数量和每一个osd 的编号
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_OSD0,  
-&emsp;K_VO_OSD1,  
-&emsp;K_VO_OSD2,  
-&emsp;K_VO_OSD3,  
-&emsp;K_MAX_VO_OSD_NUM,  
+typedef enum {
+&emsp;K_VO_OSD0,
+&emsp;K_VO_OSD1,
+&emsp;K_VO_OSD2,
+&emsp;K_VO_OSD3,
+&emsp;K_MAX_VO_OSD_NUM,
 } k_vo_osd;
 
 【成员】
@@ -1836,11 +1785,11 @@ layer 的数量和每一个layer的编号
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_LYAER0 = 0,  
-&emsp;K_VO_LYAER1,  
-&emsp;K_VO_LYAER2,  
-&emsp;K_MAX_VO_LAYER_NUM,  
+typedef enum {
+&emsp;K_VO_LYAER0 = 0,
+&emsp;K_VO_LYAER1,
+&emsp;K_VO_LYAER2,
+&emsp;K_MAX_VO_LAYER_NUM,
 } k_vo_layer;
 
 成员】
@@ -1869,11 +1818,11 @@ Layer rotation 支持的功能
 
 【定义】
 
-typedef enum {  
-&emsp;K_ROTATION_0 = (0x01L \<\< 0),  
-&emsp;K_ROTATION_90 = (0x01L \<\< 1),  
-&emsp;K_ROTATION_180 = (0x01L \<\< 2),  
-&emsp;K_ROTATION_270 = (0x01L \<\< 3),  
+typedef enum {
+&emsp;K_ROTATION_0 = (0x01L \<\< 0),
+&emsp;K_ROTATION_90 = (0x01L \<\< 1),
+&emsp;K_ROTATION_180 = (0x01L \<\< 2),
+&emsp;K_ROTATION_270 = (0x01L \<\< 3),
 } k_vo_rotation;
 
 【注意事项】
@@ -1892,11 +1841,11 @@ Layer mirror 支持的功能。
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_MIRROR_NONE = (0x01L \<\< 4),  
-&emsp;K_VO_MIRROR_HOR = (0x01L \<\< 5),  
-&emsp;K_VO_MIRROR_VER = (0x01L \<\< 6),  
-&emsp;K_VO_MIRROR_BOTH = (0x01L \<\< 7),  
+typedef enum {
+&emsp;K_VO_MIRROR_NONE = (0x01L \<\< 4),
+&emsp;K_VO_MIRROR_HOR = (0x01L \<\< 5),
+&emsp;K_VO_MIRROR_VER = (0x01L \<\< 6),
+&emsp;K_VO_MIRROR_BOTH = (0x01L \<\< 7),
 } k_vo_mirror_mode;
 
 【成员】
@@ -1924,10 +1873,10 @@ typedef enum {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 ext_div;  
-&emsp;k_u32 dev_div;  
-&emsp;k_u32 clk_en;  
+typedef struct {
+&emsp;k_u32 ext_div;
+&emsp;k_u32 dev_div;
+&emsp;k_u32 clk_en;
 } k_vo_user_sync_info;
 
 【成员】
@@ -1954,9 +1903,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 x;  
-&emsp;k_u32 y;  
+typedef struct {
+&emsp;k_u32 x;
+&emsp;k_u32 y;
 }k_vo_point;
 
 【成员】
@@ -1982,9 +1931,9 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 width;  
-&emsp;k_u32 height;  
+typedef struct {
+&emsp;k_u32 width;
+&emsp;k_u32 height;
 } k_vo_size;
 
 【成员】
@@ -2010,13 +1959,13 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_point display_rect;  
-&emsp;k_size img_size;  
-&emsp;k_pixel_format pixel_format;  
-&emsp;k_u32 stride;  
-&emsp;k_u32 uv_swap_en;  
-&emsp;k_u32 alptha_tpye;  
+typedef struct {
+&emsp;k_point display_rect;
+&emsp;k_size img_size;
+&emsp;k_pixel_format pixel_format;
+&emsp;k_u32 stride;
+&emsp;k_u32 uv_swap_en;
+&emsp;k_u32 alptha_tpye;
 } k_vo_video_layer_attr;
 
 【成员】
@@ -2046,11 +1995,11 @@ alptha_tpye 仅对osd 层使用
 
 【定义】
 
-typedef struct {  
-&emsp;[k_vo_size](#k_vo_size) target_size;  
-&emsp;[k_pixel_format](#k_pixel_format) pixel_format;  
-&emsp;k_u32 stride;  
-&emsp;k_u32 y_phy_addr;  
+typedef struct {
+&emsp;[k_vo_size](#k_vo_size) target_size;
+&emsp;[k_pixel_format](#k_pixel_format) pixel_format;
+&emsp;k_u32 stride;
+&emsp;k_u32 y_phy_addr;
 } k_vo_wbc_attr;
 
 【成员】
@@ -2080,10 +2029,10 @@ y_addr 需要分配空间
 【定义】
 
 typedef struct {
-&emsp;k_u32 bg_color;  
-&emsp;[k_vo_intf_type](#k_vo_intf_type) intf_type;  
-&emsp;[k_vo_intf_sync](#k_vo_intf_sync) intf_sync;  
-&emsp;[k_vo_display_resolution](#k_vo_display_resolution) \*sync_info;  
+&emsp;k_u32 bg_color;
+&emsp;[k_vo_intf_type](#k_vo_intf_type) intf_type;
+&emsp;[k_vo_intf_sync](#k_vo_intf_sync) intf_sync;
+&emsp;[k_vo_display_resolution](#k_vo_display_resolution) \*sync_info;
 &emsp;}k_vo_pub_attr;
 
 【成员】
@@ -2112,10 +2061,10 @@ typedef struct {
 
 【定义】
 
-typedef struct{  
-&emsp;k_size in_size;  
-&emsp;k_size out_size;  
-&emsp;k_u32 stride;  
+typedef struct{
+&emsp;k_size in_size;
+&emsp;k_size out_size;
+&emsp;k_u32 stride;
 }k_vo_scaler_attr;
 
 【成员】
@@ -2143,13 +2092,13 @@ typedef struct{
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 draw_en;  
-&emsp;k_u32 line_x_start;  
-&emsp;k_u32 line_y_start;  
-&emsp;k_u32 line_x_end;  
-&emsp;k_u32 line_y_end;  
-&emsp;k_u32 frame_num;  
+typedef struct {
+&emsp;k_u32 draw_en;
+&emsp;k_u32 line_x_start;
+&emsp;k_u32 line_y_start;
+&emsp;k_u32 line_x_end;
+&emsp;k_u32 line_y_end;
+&emsp;k_u32 frame_num;
 }k_vo_draw_frame;
 
 【成员】
@@ -2179,19 +2128,19 @@ Display timing属性。
 
 【定义】
 
-typedef struct{  
-&emsp;k_u32 pclk;  
-&emsp;k_u32 phyclk;  
-&emsp;k_u32 htotal;  
-&emsp;k_u32 hdisplay;  
-&emsp;k_u32 hsync_len;  
-&emsp;k_u32 hback_porch;  
-&emsp;k_u32 hfront_porch;  
-&emsp;k_u32 vtotal;  
-&emsp;k_u32 vdisplay;  
-&emsp;k_u32 vsync_len;  
-&emsp;k_u32 vback_porch;  
-&emsp;k_u32 vfront_porch;  
+typedef struct{
+&emsp;k_u32 pclk;
+&emsp;k_u32 phyclk;
+&emsp;k_u32 htotal;
+&emsp;k_u32 hdisplay;
+&emsp;k_u32 hsync_len;
+&emsp;k_u32 hback_porch;
+&emsp;k_u32 hfront_porch;
+&emsp;k_u32 vtotal;
+&emsp;k_u32 vdisplay;
+&emsp;k_u32 vsync_len;
+&emsp;k_u32 vback_porch;
+&emsp;k_u32 vfront_porch;
 } k_vo_display_resolution;
 
 【成员】
@@ -2227,13 +2176,13 @@ typedef struct{
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 n;  
-&emsp;k_u32 m;  
-&emsp;k_u32 voc;  
-&emsp;k_u32 phy_lan_num;  
-&emsp;k_u32 hs_freq;  
-}k_vo_mipi_phy_attr;  
+typedef struct {
+&emsp;k_u32 n;
+&emsp;k_u32 m;
+&emsp;k_u32 voc;
+&emsp;k_u32 phy_lan_num;
+&emsp;k_u32 hs_freq;
+}k_vo_mipi_phy_attr;
 
 【成员】
 
@@ -2261,12 +2210,12 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;[k_vo_point](#k_vo_size) display_rect;  
-&emsp;[k_vo_size](#k_vo_size) img_size;  
-&emsp;[k_pixel_format](#k_pixel_format) pixel_format;  
-&emsp;k_u32 stride;  
-&emsp;k_u8 global_alptha;  
+typedef struct {
+&emsp;[k_vo_point](#k_vo_size) display_rect;
+&emsp;[k_vo_size](#k_vo_size) img_size;
+&emsp;[k_pixel_format](#k_pixel_format) pixel_format;
+&emsp;k_u32 stride;
+&emsp;k_u8 global_alptha;
 } k_vo_video_osd_attr;
 
 【成员】
@@ -2295,10 +2244,10 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;k_video_frame v_frame;  
-&emsp;k_u32 pool_id;  
-&emsp;k_mod_id mod_id;  
+typedef struct {
+&emsp;k_video_frame v_frame;
+&emsp;k_u32 pool_id;
+&emsp;k_mod_id mod_id;
 } k_video_frame_info;
 
 【成员】
@@ -2325,7 +2274,7 @@ typedef struct {
 
 【定义】
 
-typedef enum {  
+typedef enum {
 &emsp;HX8377_V2_MIPI_4LAN_1080X1920_30FPS;
 &emsp;LT9611_MIPI_4LAN_1920X1080_60FPS;
 &emsp;LT9611_MIPI_4LAN_1920X1080_30FPS;
@@ -2356,10 +2305,10 @@ dsi 的 lane 数量。
 
 【定义】
 
-typedef enum {  
-&emsp;K_DSI_1LAN = 0,  
-&emsp;K_DSI_2LAN = 1,  
-&emsp;K_DSI_4LAN = 3,  
+typedef enum {
+&emsp;K_DSI_1LAN = 0,
+&emsp;K_DSI_2LAN = 1,
+&emsp;K_DSI_4LAN = 3,
 } k_dsi_lan_num;
 
 【成员】
@@ -2386,10 +2335,10 @@ dsi 的工作模式
 
 【定义】
 
-typedef enum{  
-&emsp;K_BURST_MODE = 0,  
-&emsp;K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,  
-&emsp;K_NON_BURST_MODE_WITH_PULSES = 2,  
+typedef enum{
+&emsp;K_BURST_MODE = 0,
+&emsp;K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,
+&emsp;K_NON_BURST_MODE_WITH_PULSES = 2,
 } k_dsi_work_mode;
 
 【成员】
@@ -2416,9 +2365,9 @@ dsi 发送命令的模式。
 
 【定义】
 
-typedef enum {  
-&emsp;K_VO_LP_MODE,  
-&emsp;K_VO_HS_MODE,  
+typedef enum {
+&emsp;K_VO_LP_MODE,
+&emsp;K_VO_HS_MODE,
 } k_vo_dsi_cmd_mode;
 
 【成员】
@@ -2444,11 +2393,11 @@ connector 连接器 配置phy 的信息。
 
 【定义】
 
-typedef struct {  
-&emsp;k_u32 n;  
-&emsp;k_u32 m;  
-&emsp;k_u32 voc;  
-&emsp;k_u32 hs_freq;  
+typedef struct {
+&emsp;k_u32 n;
+&emsp;k_u32 m;
+&emsp;k_u32 voc;
+&emsp;k_u32 hs_freq;
 } k_connectori_phy_attr;
 
 【成员】
@@ -2476,18 +2425,18 @@ typedef struct {
 
 【定义】
 
-typedef struct {  
-&emsp;const char *connector_name;  
-&emsp;k_u32 screen_test_mode;  
-&emsp;k_u32 dsi_test_mode;  
-&emsp;k_u32 bg_color;  
-&emsp;k_u32 intr_line;  
-&emsp;[k_dsi_lan_num](#k_dsi_lan_num) lan_num;  
-&emsp;[k_dsi_work_mode](#k_dsi_work_mode) work_mode;  
-&emsp;[k_vo_dsi_cmd_mode](#k_vo_dsi_cmd_mode) cmd_mode;  
-&emsp;[k_connectori_phy_attr](#k_connectori_phy_attr) phy_attr;  
-&emsp;[k_vo_display_resolution](#k_vo_display_resolution) resolution;  
-&emsp;[k_connector_type](#k_connector_type) type;  
+typedef struct {
+&emsp;const char *connector_name;
+&emsp;k_u32 screen_test_mode;
+&emsp;k_u32 dsi_test_mode;
+&emsp;k_u32 bg_color;
+&emsp;k_u32 intr_line;
+&emsp;[k_dsi_lan_num](#k_dsi_lan_num) lan_num;
+&emsp;[k_dsi_work_mode](#k_dsi_work_mode) work_mode;
+&emsp;[k_vo_dsi_cmd_mode](#k_vo_dsi_cmd_mode) cmd_mode;
+&emsp;[k_connectori_phy_attr](#k_connectori_phy_attr) phy_attr;
+&emsp;[k_vo_display_resolution](#k_vo_display_resolution) resolution;
+&emsp;[k_connector_type](#k_connector_type) type;
 } k_connector_info;
 
 【成员】
@@ -2516,10 +2465,10 @@ Display驱动和HDMI显示器协商后的数据
 
 ```C
 
-typedef struct {  
-&emsp;k_u32 connection_status;  
-&emsp;k_u32 negotiated_count;  
-&emsp;k_connector_type negotiated_types[256];  
+typedef struct {
+&emsp;k_u32 connection_status;
+&emsp;k_u32 negotiated_count;
+&emsp;k_connector_type negotiated_types[256];
 } k_connector_negotiated_data;
 
 ```
@@ -2550,10 +2499,10 @@ Display驱动的mirror 功能
 
 ```C
 
-typedef enum {  
-&emsp;K_CONNECTOR_MIRROR_HOR = 1,  
-&emsp;K_CONNECTOR_MIRROR_VER,  
-&emsp;K_CONNECTOR_MIRROR_BOTH,  
+typedef enum {
+&emsp;K_CONNECTOR_MIRROR_HOR = 1,
+&emsp;K_CONNECTOR_MIRROR_VER,
+&emsp;K_CONNECTOR_MIRROR_BOTH,
 }k_connector_mirror;
 
 ```

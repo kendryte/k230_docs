@@ -1,56 +1,5 @@
 # K230 FFT API Reference
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any explicit or implicit statements or guarantees regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any representations, information, or content in this document. Unless otherwise agreed, this document is only for use as a reference guide.
-
-Due to product version upgrades or other reasons, the contents of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual may excerpt, copy any part or all of the content of this document, and may not disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the API of K230 FFT, including the usage of the API and the introduction of test programs.
-
-### Target Audience
-
-This document (this guide) is mainly suitable for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-| ------------ | ----------- |
-| FFT          | Fast Fourier Transform, a fast algorithm for discrete Fourier transform |
-| IFFT         | Inverse Fast Fourier Transform, the inverse of the fast Fourier transform |
-
-### Revision Record
-
-| Document Version | Modification Description | Modifier | Date       |
-| ---------------- | ------------------------ | -------- | ---------- |
-| V1.0             | Initial Version          | Wang Jianxin | 2023-08-08 |
-
 ## Introduction to K230 FFT
 
 The FFT module of K230 is mainly used for hardware acceleration of FFT and IFFT calculations. Its features are as follows:

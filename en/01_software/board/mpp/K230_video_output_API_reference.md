@@ -1,56 +1,5 @@
 # K230 Video Output API Reference
 
-![cover](../../../../zh/01_software/board/mpp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase shall be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter the same) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/board/mpp/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document primarily introduces the functions and usage of the video output system control module. The functionalities and usage of other modules will be discussed in dedicated documents.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                |
-|--------------|----------------------------|
-| VO           | Video output               |
-| DSI          | Display Serial Interface   |
-
-### Revision History
-
-| Document Version | Description | Author         | Date       |
-|------------------|-------------|----------------|------------|
-| V1.0             | Initial Version | System Software Dept. | 2023-03-10 |
-
 ## Overview
 
 The VO (Video Output) module actively reads video and graphic data from the corresponding location in the memory and outputs the video and graphics through the corresponding display device. The chip supports display/write-back devices, video layers, and graphic layers.
@@ -1768,9 +1717,9 @@ Defines the resolution and frame rate in video.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_OUT_1080P30,  
-    K_VO_OUT_1080P60,  
+typedef enum {
+    K_VO_OUT_1080P30,
+    K_VO_OUT_1080P60,
 } k_vo_intf_sync;
 ```
 
@@ -1800,8 +1749,8 @@ Defines the resolution and frame rate in video.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_INTF_MIPI = 0,  
+typedef enum {
+    K_VO_INTF_MIPI = 0,
 } k_vo_intf_type;
 ```
 
@@ -1828,15 +1777,15 @@ Data formats supported by the display layer. The following structure lists only 
 **Definition**:
 
 ```c
-typedef enum {  
-    PIXEL_FORMAT_YVU_PLANAR_420,  
-    PIXEL_FORMAT_YVU_PLANAR_422,  
-    PIXEL_FORMAT_RGB_565,  
-    PIXEL_FORMAT_RGB_888,  
-    PIXEL_FORMAT_ARGB_8888,  
-    PIXEL_FORMAT_ARGB_4444,  
-    PIXEL_FORMAT_ARGB_1555,  
-    PIXEL_FORMAT_RGB_MONOCHROME_8BPP,  
+typedef enum {
+    PIXEL_FORMAT_YVU_PLANAR_420,
+    PIXEL_FORMAT_YVU_PLANAR_422,
+    PIXEL_FORMAT_RGB_565,
+    PIXEL_FORMAT_RGB_888,
+    PIXEL_FORMAT_ARGB_8888,
+    PIXEL_FORMAT_ARGB_4444,
+    PIXEL_FORMAT_ARGB_1555,
+    PIXEL_FORMAT_RGB_MONOCHROME_8BPP,
 } k_pixel_format;
 ```
 
@@ -1870,12 +1819,12 @@ Number of OSDs and the ID of each OSD.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_OSD0,  
-    K_VO_OSD1,  
-    K_VO_OSD2,  
-    K_VO_OSD3,  
-    K_MAX_VO_OSD_NUM,  
+typedef enum {
+    K_VO_OSD0,
+    K_VO_OSD1,
+    K_VO_OSD2,
+    K_VO_OSD3,
+    K_MAX_VO_OSD_NUM,
 } k_vo_osd;
 ```
 
@@ -1906,11 +1855,11 @@ Number of layers and the ID of each layer.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_LAYER0 = 0,  
-    K_VO_LAYER1,  
-    K_VO_LAYER2,  
-    K_MAX_VO_LAYER_NUM,  
+typedef enum {
+    K_VO_LAYER0 = 0,
+    K_VO_LAYER1,
+    K_VO_LAYER2,
+    K_MAX_VO_LAYER_NUM,
 } k_vo_layer;
 ```
 
@@ -1940,11 +1889,11 @@ Supported layer rotation functions.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_ROTATION_0 = (0x01L << 0),  
-    K_ROTATION_90 = (0x01L << 1),  
-    K_ROTATION_180 = (0x01L << 2),  
-    K_ROTATION_270 = (0x01L << 3),  
+typedef enum {
+    K_ROTATION_0 = (0x01L << 0),
+    K_ROTATION_90 = (0x01L << 1),
+    K_ROTATION_180 = (0x01L << 2),
+    K_ROTATION_270 = (0x01L << 3),
 } k_vo_rotation;
 ```
 
@@ -1965,11 +1914,11 @@ Supported layer mirror functions.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_MIRROR_NONE = (0x01L << 4),  
-    K_VO_MIRROR_HOR = (0x01L << 5),  
-    K_VO_MIRROR_VER = (0x01L << 6),  
-    K_VO_MIRROR_BOTH = (0x01L << 7),  
+typedef enum {
+    K_VO_MIRROR_NONE = (0x01L << 4),
+    K_VO_MIRROR_HOR = (0x01L << 5),
+    K_VO_MIRROR_VER = (0x01L << 6),
+    K_VO_MIRROR_BOTH = (0x01L << 7),
 } k_vo_mirror_mode;
 ```
 
@@ -1999,10 +1948,10 @@ User-defined clock division.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 ext_div;  
-    k_u32 dev_div;  
-    k_u32 clk_en;  
+typedef struct {
+    k_u32 ext_div;
+    k_u32 dev_div;
+    k_u32 clk_en;
 } k_vo_user_sync_info;
 ```
 
@@ -2031,9 +1980,9 @@ Defines a coordinate information structure.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 x;  
-    k_u32 y;  
+typedef struct {
+    k_u32 x;
+    k_u32 y;
 } k_vo_point;
 ```
 
@@ -2061,9 +2010,9 @@ Defines a size information structure.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 width;  
-    k_u32 height;  
+typedef struct {
+    k_u32 width;
+    k_u32 height;
 } k_vo_size;
 ```
 
@@ -2091,13 +2040,13 @@ Defines the attributes of the display layer.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_vo_point display_rect;  
-    k_vo_size img_size;  
-    k_pixel_format pixel_format;  
-    k_u32 stride;  
-    k_u32 uv_swap_en;  
-    k_u32 alpha_type;  
+typedef struct {
+    k_vo_point display_rect;
+    k_vo_size img_size;
+    k_pixel_format pixel_format;
+    k_u32 stride;
+    k_u32 uv_swap_en;
+    k_u32 alpha_type;
 } k_vo_video_layer_attr;
 ```
 
@@ -2129,11 +2078,11 @@ Defines writeback attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_vo_size target_size;  
-    k_pixel_format pixel_format;  
-    k_u32 stride;  
-    k_u32 y_phy_addr;  
+typedef struct {
+    k_vo_size target_size;
+    k_pixel_format pixel_format;
+    k_u32 stride;
+    k_u32 y_phy_addr;
 } k_vo_wbc_attr;
 ```
 
@@ -2164,10 +2113,10 @@ Configures the public attributes of the video output device.
 
 ```c
 typedef struct {
-    k_u32 bg_color;  
-    k_vo_intf_type intf_type;  
-    k_vo_intf_sync intf_sync;  
-    k_vo_display_resolution *sync_info;  
+    k_u32 bg_color;
+    k_vo_intf_type intf_type;
+    k_vo_intf_sync intf_sync;
+    k_vo_display_resolution *sync_info;
 } k_vo_pub_attr;
 ```
 
@@ -2197,10 +2146,10 @@ Defines the scaler attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_vo_size in_size;  
-    k_vo_size out_size;  
-    k_u32 stride;  
+typedef struct {
+    k_vo_size in_size;
+    k_vo_size out_size;
+    k_u32 stride;
 } k_vo_scaler_attr;
 ```
 
@@ -2230,13 +2179,13 @@ Defines the attributes for drawing a frame.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 draw_en;  
-    k_u32 line_x_start;  
-    k_u32 line_y_start;  
-    k_u32 line_x_end;  
-    k_u32 line_y_end;  
-    k_u32 frame_num;  
+typedef struct {
+    k_u32 draw_en;
+    k_u32 line_x_start;
+    k_u32 line_y_start;
+    k_u32 line_x_end;
+    k_u32 line_y_end;
+    k_u32 frame_num;
 } k_vo_draw_frame;
 ```
 
@@ -2268,19 +2217,19 @@ Display timing attributes.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 pclk;  
-    k_u32 phyclk;  
-    k_u32 htotal;  
-    k_u32 hdisplay;  
-    k_u32 hsync_len;  
-    k_u32 hback_porch;  
-    k_u32 hfront_porch;  
-    k_u32 vtotal;  
-    k_u32 vdisplay;  
-    k_u32 vsync_len;  
-    k_u32 vback_porch;  
-    k_u32 vfront_porch;  
+typedef struct {
+    k_u32 pclk;
+    k_u32 phyclk;
+    k_u32 htotal;
+    k_u32 hdisplay;
+    k_u32 hsync_len;
+    k_u32 hback_porch;
+    k_u32 hfront_porch;
+    k_u32 vtotal;
+    k_u32 vdisplay;
+    k_u32 vsync_len;
+    k_u32 vback_porch;
+    k_u32 vfront_porch;
 } k_vo_display_resolution;
 ```
 
@@ -2318,13 +2267,13 @@ Defines the structure for MIPI PHY frequency.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 n;  
-    k_u32 m;  
-    k_u32 voc;  
-    k_u32 phy_lan_num;  
-    k_u32 hs_freq;  
-} k_vo_mipi_phy_attr;  
+typedef struct {
+    k_u32 n;
+    k_u32 m;
+    k_u32 voc;
+    k_u32 phy_lan_num;
+    k_u32 hs_freq;
+} k_vo_mipi_phy_attr;
 ```
 
 **Members**:
@@ -2354,12 +2303,12 @@ Configures the public attributes of the OSD layer.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_vo_point display_rect;  
-    k_vo_size img_size;  
-    k_pixel_format pixel_format;  
-    k_u32 stride;  
-    k_u8 global_alpha;  
+typedef struct {
+    k_vo_point display_rect;
+    k_vo_size img_size;
+    k_pixel_format pixel_format;
+    k_u32 stride;
+    k_u8 global_alpha;
 } k_vo_video_osd_attr;
 ```
 
@@ -2390,10 +2339,10 @@ Information of a frame.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_video_frame v_frame;  
-    k_u32 pool_id;  
-    k_mod_id mod_id;  
+typedef struct {
+    k_video_frame v_frame;
+    k_u32 pool_id;
+    k_mod_id mod_id;
 } k_video_frame_info;
 ```
 
@@ -2422,7 +2371,7 @@ Type of screen connection.
 **Definition**:
 
 ```c
-typedef enum {  
+typedef enum {
     HX8377_V2_MIPI_4LAN_1080X1920_30FPS,
     LT9611_MIPI_4LAN_1920X1080_60FPS,
     LT9611_MIPI_4LAN_1920X1080_30FPS,
@@ -2454,10 +2403,10 @@ Number of DSI lanes.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_DSI_1LAN = 0,  
-    K_DSI_2LAN = 1,  
-    K_DSI_4LAN = 3,  
+typedef enum {
+    K_DSI_1LAN = 0,
+    K_DSI_2LAN = 1,
+    K_DSI_4LAN = 3,
 } k_dsi_lan_num;
 ```
 
@@ -2486,10 +2435,10 @@ DSI work mode.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_BURST_MODE = 0,  
-    K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,  
-    K_NON_BURST_MODE_WITH_PULSES = 2,  
+typedef enum {
+    K_BURST_MODE = 0,
+    K_NON_BURST_MODE_WITH_SYNC_EVENT = 1,
+    K_NON_BURST_MODE_WITH_PULSES = 2,
 } k_dsi_work_mode;
 ```
 
@@ -2518,9 +2467,9 @@ DSI command transmission mode.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_VO_LP_MODE,  
-    K_VO_HS_MODE,  
+typedef enum {
+    K_VO_LP_MODE,
+    K_VO_HS_MODE,
 } k_vo_dsi_cmd_mode;
 ```
 
@@ -2548,11 +2497,11 @@ Configuration information for the PHY of the connector.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 n;  
-    k_u32 m;  
-    k_u32 voc;  
-    k_u32 hs_freq;  
+typedef struct {
+    k_u32 n;
+    k_u32 m;
+    k_u32 voc;
+    k_u32 hs_freq;
 } k_connectori_phy_attr;
 ```
 
@@ -2582,18 +2531,18 @@ Information of the connector.
 **Definition**:
 
 ```c
-typedef struct {  
-    const char *connector_name;  
-    k_u32 screen_test_mode;  
-    k_u32 dsi_test_mode;  
-    k_u32 bg_color;  
-    k_u32 intr_line;  
-    k_dsi_lan_num lan_num;  
-    k_dsi_work_mode work_mode;  
-    k_vo_dsi_cmd_mode cmd_mode;  
-    k_connectori_phy_attr phy_attr;  
-    k_vo_display_resolution resolution;  
-    k_connector_type type;  
+typedef struct {
+    const char *connector_name;
+    k_u32 screen_test_mode;
+    k_u32 dsi_test_mode;
+    k_u32 bg_color;
+    k_u32 intr_line;
+    k_dsi_lan_num lan_num;
+    k_dsi_work_mode work_mode;
+    k_vo_dsi_cmd_mode cmd_mode;
+    k_connectori_phy_attr phy_attr;
+    k_vo_display_resolution resolution;
+    k_connector_type type;
 } k_connector_info;
 ```
 
@@ -2630,10 +2579,10 @@ Data negotiated between the display driver and the HDMI display.
 **Definition**:
 
 ```c
-typedef struct {  
-    k_u32 connection_status;  
-    k_u32 negotiated_count;  
-    k_connector_type negotiated_types[256];  
+typedef struct {
+    k_u32 connection_status;
+    k_u32 negotiated_count;
+    k_connector_type negotiated_types[256];
 } k_connector_negotiated_data;
 ```
 
@@ -2662,10 +2611,10 @@ Mirror function of the display driver.
 **Definition**:
 
 ```c
-typedef enum {  
-    K_CONNECTOR_MIRROR_HOR = 1,  
-    K_CONNECTOR_MIRROR_VER,  
-    K_CONNECTOR_MIRROR_BOTH,  
+typedef enum {
+    K_CONNECTOR_MIRROR_HOR = 1,
+    K_CONNECTOR_MIRROR_VER,
+    K_CONNECTOR_MIRROR_BOTH,
 } k_connector_mirror;
 ```
 

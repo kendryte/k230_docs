@@ -1,55 +1,5 @@
 # K230 AI Practical - HHB Neural Network Model Deployment Tool
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright ©2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase should be governed by the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. Some or all of the products, services, or features described in this document may not fall within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any express or implied statements or warranties regarding the correctness, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for guidance and reference only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy, or disseminate any part or all of the content of this document in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document is a user manual for using HHB on the K230 hardware platform, guiding users on how to compile models on HHB to generate C code, how to use the K230 cross-compilation toolchain to compile programs, and how to run them on the board.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description                          |
-| ------------ | ------------------------------------ |
-| HHB          | Heterogeneous Honey Badger           |
-| SHL          | Structure of Heterogeneous Library   |
-
-### Revision History
-
-| Document Version | Description  | Author | Date       |
-| ---------------- | ------------ | ------ | ---------- |
-| V1.0             | Initial Draft | Zhang Yang | 2023/6/25  |
-
 ## Overview
 
 To deploy and run the HHB program on the K230 RTT, the following steps are required:
@@ -256,7 +206,7 @@ root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb#
 The final generated executable program is `out/bin/mbv2_onnx_int8.elf`.
 
 ```shell
-root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf 
+root@9d2a450436a7:/home/zhangyang/workspace/k230_sdk/src/big/utils/examples/hhb# ll out/bin/mbv2_onnx_int8.elf
 -rwxr-xr-x 1 root root 1172680 Jun 25 14:37 out/bin/mbv2_onnx_int8.elf*
 ```
 
@@ -282,11 +232,11 @@ msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg.0.b
 Run graph execution time: 64.71648ms, FPS=15.45
 
 === tensor info ===
-shape: 1 3 224 224 
+shape: 1 3 224 224
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000 
+shape: 1 1000
 data pointer: 0x300194c80
 The max_value of output: 15.581656
 The min_value of output: -8.026914
@@ -299,15 +249,15 @@ The std_value of output: 11.703238
 285: 11.709850
 287: 11.143245
 
-msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg      
+msh /sharefs/k230/mbv2_onnx_int8>./mbv2_onnx_int8.elf hhb.bm persian_cat.jpg
 Run graph execution time: 64.67589ms, FPS=15.46
 
 === tensor info ===
-shape: 1 3 224 224 
+shape: 1 3 224 224
 data pointer: 0x300170060
 
 === tensor info ===
-shape: 1 1000 
+shape: 1 1000
 data pointer: 0x300194c80
 The max_value of output: 16.053827
 The min_value of output: -8.026914

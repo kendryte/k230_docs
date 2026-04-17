@@ -1,26 +1,5 @@
 # K230_Opencv调用UVC指南
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
 ## 概述
 
 本文将讲解如何在k230开发板Linux侧驱动USB摄像头，并通过opencv调用uvc。
@@ -135,13 +114,13 @@ Format Video Capture:
         Transfer Function : Default (maps to Rec. 709)
         YCbCr/HSV Encoding: Default (maps to ITU-R 601)
         Quantization      : Default (maps to Full Range)
-        Flags             : 
+        Flags             :
 Crop Capability Video Capture:
         Bounds      : Left 0, Top 0, Width 1920, Height 1080
         Default     : Left 0, Top 0, Width 1920, Height 1080
         Pixel Aspect: 1/1
-Selection Video Capture: crop_default, Left 0, Top 0, Width 1920, Height 1080, Flags: 
-Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1920, Height 1080, Flags: 
+Selection Video Capture: crop_default, Left 0, Top 0, Width 1920, Height 1080, Flags:
+Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1920, Height 1080, Flags:
 Streaming Parameters Video Capture:
         Capabilities     : timeperframe
         Frames per second: 30.000 (30/1)
@@ -157,7 +136,7 @@ Streaming Parameters Video Capture:
 output.jpg --stream-count=1
 <
 [root@canaan ~ ]#ls -lh
-total 222K   
+total 222K
 -rw-r--r--    1 root     root      221.7K Jan  1 00:11 video0-output.jpg
 ```
 
@@ -166,7 +145,7 @@ total 222K
 拷贝`video_cap`测试应用到文件系统中并执行，会生成一个test.jpg文件
 
 ```sh
-[root@canaan ~ ]#./video_cap 
+[root@canaan ~ ]#./video_cap
 [root@canaan ~ ]#ls
 nfs        test.jpg   video_cap
 ```

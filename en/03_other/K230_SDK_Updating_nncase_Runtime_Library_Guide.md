@@ -1,28 +1,5 @@
 # K230 SDK Update Guide for nncase Runtime Library
 
-![cover](../../zh/03_other/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company", hereinafter) and its affiliates. Some or all of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise stipulated in the contract, the Company does not provide any express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../zh/03_other/images/logo.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-No part of this document may be excerpted, reproduced, or distributed in any form without the written permission of the Company.
-
-<div style="page-break-after:always"></div>
-
-[TOC]
-
 ## Explanation of nncase Runtime Library Version Issues
 
 ### Explanation of kmodel Version
@@ -59,7 +36,7 @@ Here are two ways to confirm if the version information matches:
    Download the runtime library that matches the nncase version used to compile the `kmodel` from the [nncase release page](https://github.com/kendryte/nncase/releases). For example, "nncase_k230_v2.8.0_runtime.tgz" is the runtime library for nncase-2.8.0. Then follow these steps to update the nncase runtime library version in the SDK:
 
    ```shell
-   #0. Preparation
+   #Preparation
    git clone https://github.com/kendryte/k230_sdk.git
    cd k230_sdk
    PATH_TO_K230_SDK=`pwd`
@@ -67,13 +44,13 @@ Here are two ways to confirm if the version information matches:
    # Ensure the following folder exists after executing the above command
    # src/big/nncase/riscv64/nncase/
 
-   #1. Extract nncase_k230_v2.8.0_runtime.tgz
+   #Extract nncase_k230_v2.8.0_runtime.tgz
    tar -xf nncase_k230_v2.8.0_runtime.tgz
 
-   #2. Replace the nncase runtime library
+   #Replace the nncase runtime library
    cp -r nncase_k230_v2.8.0_runtime/* $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/
 
-   #3. Check if the nncase runtime library version is correctly updated
+   #Check if the nncase runtime library version is correctly updated
    cat $PATH_TO_K230_SDK/src/big/nncase/riscv64/nncase/include/nncase/version.h | grep NNCASE_VERSION
    > #define NNCASE_VERSION "2.8.0"
    ```

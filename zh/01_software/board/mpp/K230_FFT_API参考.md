@@ -1,56 +1,5 @@
 # K230 FFT API参考
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
-## 目录
-
-[TOC]
-
-## 前言
-
-### 概述
-
-本文档主要介绍 K230 FFT的api，内容主要包括 api使用及测试程序介绍。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 缩略词定义
-
-| 简称    | 说明 |
-| ----    | ---- |
-| FFT | Fast Fourier Transform，离散傅里叶变换快速算法 |
-| IFFT | Inverse fast Fourier transform，快速傅里叶逆变换 |
-
-### 修订记录
-
-| 文档版本号 | 修改说明 | 修改者     | 日期       |
-| ---------- | -------- | ---------- | ---------- |
-| V1.0       | 初版     | 王建新       | 2023-08-08 |
-
 ## k230 fft介绍
 
 K230 的FFT模块主要用于硬件加速FFT、IFFT的计算，其特性如下：
@@ -83,7 +32,7 @@ fft或ifft计算核心函数。
 【语法】
 
 ```c
-int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);  
+int kd_mpi_fft_or_ifft(k_fft_args_st * fft_args);
 ```
 
 【参数】
@@ -120,7 +69,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -142,7 +91,7 @@ fft_args初始化(辅助函数)
 【语法】
 
 ```c
-int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im, 
+int kd_mpi_fft_args_init( int point,  k_fft_mode_e mode,  k_fft_input_mode_e im,
                           k_fft_out_mode_e om,    k_u32 timeout ,    k_u16 shift,
                           short *real, short *imag, k_fft_args_st *fft_args );
 ```
@@ -189,7 +138,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    k_fft_args_st fft_args;   
+    k_fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift,   rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -211,7 +160,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 【语法】
 
 ```c
-int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);    
+int kd_mpi_fft_args_2_array(k_fft_args_st * fft_args, short *rx, short *iy);
 ```
 
 【参数】
@@ -250,7 +199,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out)
 {
     int ret = 0 ;
-    fft_args_st fft_args;   
+    fft_args_st fft_args;
     ret = kd_mpi_fft_args_init(point, FFT_MODE , im, om, \
                  timeout,  shift, dma_ch,  rx_in, iy_in , &fft_args); ERET(ret);
     ret = kd_mpi_fft_or_ifft(&fft_args); ERET(ret);
@@ -267,7 +216,7 @@ int kd_mpi_fft(int point , fft_input_mode_e im,  fft_out_mode_e om,
 
 【描述】
 
-fft计算,  
+fft计算,
 
 核心是kd_mpi_fft_args_init,   kd_mpi_fft_or_ifft,  kd_mpi_fft_args_2_arra三个函数封装到一起，方便使用。
 
@@ -275,7 +224,7 @@ fft计算,
 
 ```c
 int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
+                k_u32 timeout , k_u16 shift ,
                 short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
@@ -319,7 +268,7 @@ int kd_mpi_fft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
 static int fft_test(int point)
 {
 
-    test_build_fft_org_data(point, i_real, i_imag);    
+    test_build_fft_org_data(point, i_real, i_imag);
 
     //soft_fft_ifft_calc(point);
     clock_gettime(CLOCK_MONOTONIC, &begain_time);
@@ -349,8 +298,8 @@ ifft计算
 
 ```c
 int kd_mpi_ifft(int point , k_fft_input_mode_e im,  k_fft_out_mode_e om,
-                k_u32 timeout , k_u16 shift ,         
-                short *rx_in, short *iy_in, short *rx_out, short *iy_out);    
+                k_u32 timeout , k_u16 shift ,
+                short *rx_in, short *iy_in, short *rx_out, short *iy_out);
 ```
 
 【参数】

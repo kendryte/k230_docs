@@ -1,55 +1,5 @@
 # K230 SDK Dewarp User Guide
 
-![cover](../../../../zh/01_software/pc/dewarp/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or usage. Unless otherwise stipulated in the contract, the Company does not provide any explicit or implicit statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference purposes only.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/01_software/pc/dewarp/images/canaan-lable.png), "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly introduces the calibration and usage methods of the Dewarp module in the K230 VICAP module.
-
-### Target Audience
-
-This document (guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Abbreviation Definitions
-
-| Abbreviation | Description |
-| ------------ | ----------- |
-| DW           | Dewarp      |
-
-### Revision History
-
-| Document Version | Description | Author(s)       | Date       |
-| ---------------- | ----------- | --------------- | ---------- |
-| V1.0             | Initial Version | Liu Jia'an, Huang Ziyi | 2023-06-08 |
-
 ## Introduction to Dewarp Calibration
 
 The Dewarp calibration process generates a YAML file containing the camera matrix and distortion coefficients. During the build process, the K230 SDK uses this YAML file to generate a remap file, which is then placed in the `/bin` directory of the main core root file system. When configuring VICAP, set the `dw_enable` field of the `k_vicap_dev_attr` structure to 1 to enable Dewarp. VICAP will look for the `<sensor_name>-<width>x<height>.bin` file (e.g., for IMX335 full resolution, it would be `imx335-2592x1944.bin`) in the current path as the Dewarp configuration file for distortion correction.

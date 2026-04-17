@@ -1,49 +1,5 @@
 # K230 4G Module Linux Porting Reference
 
-![cover](../../../../zh/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. (hereinafter referred to as "the Company") and its affiliates. All or part of the products, services, or features described in this document may not fall within your purchase or usage scope. Unless otherwise agreed in the contract, the Company makes no express or implied statements or warranties regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, or non-infringement of any representation, information, or content in this document. Unless otherwise agreed, this document is intended solely as a usage guide reference.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../../zh/images/logo.png), "Canaan," and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the Company's written permission, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, and shall not disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
-## Table of Contents
-
-[TOC]
-
-## Preface
-
-### Overview
-
-This document mainly describes how the K230 SDK adapts to the EC200A 4G module. Other 4G modules are similar.
-
-### Target Audience
-
-This document (this guide) is mainly intended for the following personnel:
-
-- Technical Support Engineers
-- Software Development Engineers
-
-### Revision History
-
-| Document Version | Description of Changes | Author | Date |
-| --- | --- | --- | --- |
-| V1.0 | Initial version | Wang Jianxin | 2024/05/08 |
-
 ## Introduction to the EC200A 4G Module
 
 The EC200A series is an LTE Cat 4 wireless communication module designed by Quectel for the M2M and IoT fields, supporting USB-to-serial PPP, RNDIS, and ECM networking modes. The EC200A has 5 USB interfaces; interfaces 2-4 need to adapt to the USB serial driver and use PPP dial-up internet through the ttyUSB2 node; interfaces 0-1 need to adapt to the ECM/RNDIS driver.

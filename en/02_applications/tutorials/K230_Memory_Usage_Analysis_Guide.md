@@ -1,26 +1,5 @@
 # K230 Memory Analysis Guide
 
-![cover](../../../zh/02_applications/tutorials/images/canaan-cover.png)
-
-Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd.
-
-<div style="page-break-after:always"></div>
-
-## Disclaimer
-
-The products, services, or features you purchase are subject to the commercial contracts and terms of Beijing Canaan Creative Information Technology Co., Ltd. ("the Company," hereinafter) and its affiliates. All or part of the products, services, or features described in this document may not be within the scope of your purchase or use. Unless otherwise agreed in the contract, the Company does not provide any explicit or implicit statements or guarantees regarding the accuracy, reliability, completeness, merchantability, fitness for a particular purpose, and non-infringement of any statements, information, or content in this document. Unless otherwise agreed, this document is for reference only as a usage guide.
-
-Due to product version upgrades or other reasons, the content of this document may be updated or modified periodically without any notice.
-
-## Trademark Statement
-
-![logo](../../../zh/02_applications/tutorials/images/logo.png) "Canaan" and other Canaan trademarks are trademarks of Beijing Canaan Creative Information Technology Co., Ltd. and its affiliates. All other trademarks or registered trademarks mentioned in this document are owned by their respective owners.
-
-**Copyright © 2023 Beijing Canaan Creative Information Technology Co., Ltd. All rights reserved.**
-Without the written permission of the Company, no unit or individual is allowed to excerpt, copy any part or all of the content of this document, or disseminate it in any form.
-
-<div style="page-break-after:always"></div>
-
 ## Small Core Memory Usage Analysis
 
 ### Static Memory Usage in Linux Kernel
@@ -41,9 +20,9 @@ In the `tools` directory of the Linux source code, there is a script named `ksiz
 
 ```shell
 $ ./source/tools/ksize.py vmlinux
-Linux Kernel                          total |       text       data        bss 
+Linux Kernel                          total |       text       data        bss
 --------------------------------------------------------------------------------
- vmlinux                            14959957 |   10010970    4573194     375793 
+ vmlinux                            14959957 |   10010970    4573194     375793
 --------------------------------------------------------------------------------
  drivers/built-in.a                  4060898 |    3757793     257384      45721
 fs/built-in.a                       3450902 |    2984349     439120      27433
@@ -58,14 +37,14 @@ ipc/built-in.a                        60699 |      57375       3296         28
 security/built-in.a                   45740 |      43716       1944         80
 init/built-in.a                       31148 |      20394      10617        137
 certs/built-in.a                       1241 |       1217         16          8
-usr/built-in.a                          520 |        520          0          0 
+usr/built-in.a                          520 |        520          0          0
 --------------------------------------------------------------------------------
  sum                                14613453 |   12290508    1948299     374646
 delta                                346504 |   -2279538    2624895       1147
 
-drivers                               total |       text       data        bss 
+drivers                               total |       text       data        bss
 --------------------------------------------------------------------------------
- drivers/built-in.a                  4060898 |    3757793     257384      45721 
+ drivers/built-in.a                  4060898 |    3757793     257384      45721
 --------------------------------------------------------------------------------
  drivers/net/built-in.a               620309 |     589318      30918         73
 drivers/usb/built-in.a               531811 |     500758      27947       3106
@@ -109,14 +88,14 @@ drivers/clocksource/built-in.a         3633 |       3229        400          4
 drivers/canaan-hwtimer/built-in.a       3553 |       3273        224         56
 drivers/mfd/built-in.a                 2350 |       2122        224          4
 drivers/canaan-hardlock/built-in.a       1312 |       1096        208          8
-drivers/pci/built-in.a                  164 |        164          0          0 
+drivers/pci/built-in.a                  164 |        164          0          0
 --------------------------------------------------------------------------------
  sum                                 4048635 |    3746366     256552      45717
 delta                                 12263 |      11427        832          4
 
-fs                                    total |       text       data        bss 
+fs                                    total |       text       data        bss
 --------------------------------------------------------------------------------
- fs/built-in.a                       3450902 |    2984349     439120      27433 
+ fs/built-in.a                       3450902 |    2984349     439120      27433
 --------------------------------------------------------------------------------
  fs/nfs/built-in.a                    831393 |     586545     243616       1232
 fs/*.o                               605562 |     543984      44914      16664
@@ -146,14 +125,14 @@ fs/devpts/built-in.a                   4019 |       3383        628          8
 fs/tracefs/built-in.a                  3327 |       3191        120         16
 fs/exportfs/built-in.a                 2512 |       2488         24          0
 fs/ramfs/built-in.a                    2379 |       2299         80          0
-fs/nfs_common/built-in.a               1962 |       1833        105         24 
+fs/nfs_common/built-in.a               1962 |       1833        105         24
 --------------------------------------------------------------------------------
  sum                                 3450902 |    2984349     439120      27433
 delta                                     0 |          0          0          0
 
-net                                   total |       text       data        bss 
+net                                   total |       text       data        bss
 --------------------------------------------------------------------------------
- net/built-in.a                      3103220 |    2635627     392278      75315 
+ net/built-in.a                      3103220 |    2635627     392278      75315
 --------------------------------------------------------------------------------
  net/wireless/built-in.a              537167 |     416358     118041       2768
 net/mac80211/built-in.a              530597 |     448777      81720        100
@@ -170,14 +149,14 @@ net/*.o                               26420 |      24930       1014        476
 net/sched/built-in.a                  14230 |      12813       1417          0
 net/bpf/built-in.a                     6775 |       6211        564          0
 net/dns_resolver/built-in.a            4191 |       3835        344         12
-net/ethernet/built-in.a                3560 |       3468         92          0 
+net/ethernet/built-in.a                3560 |       3468         92          0
 --------------------------------------------------------------------------------
  sum                                 3103220 |    2635627     392278      75315
 delta                                     0 |          0          0          0
 
-kernel                                total |       text       data        bss 
+kernel                                total |       text       data        bss
 --------------------------------------------------------------------------------
- kernel/built-in.a                   2258370 |    1402705     668085     187580 
+ kernel/built-in.a                   2258370 |    1402705     668085     187580
 --------------------------------------------------------------------------------
 
 
@@ -378,7 +357,7 @@ level 51
 free pages is 00004e95
 used pages is 0000000d
 max used pages is 00000992
-max used pages memory is 10035200 bytes 
+max used pages memory is 10035200 bytes
 -------------------------------
 ```
 

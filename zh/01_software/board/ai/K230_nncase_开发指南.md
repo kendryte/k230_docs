@@ -1,60 +1,5 @@
 # K230 nncase开发指南
 
-![cover](images/canaan-cover.png)
-
-版权所有©2023北京嘉楠捷思信息技术有限公司
-
-<div style="page-break-after:always"></div>
-
-## 免责声明
-
-您购买的产品、服务或特性等应受北京嘉楠捷思信息技术有限公司（“本公司”，下同）及其关联公司的商业合同和条款的约束，本文档中描述的全部或部分产品、服务或特性可能不在您的购买或使用范围之内。除非合同另有约定，本公司不对本文档的任何陈述、信息、内容的正确性、可靠性、完整性、适销性、符合特定目的和不侵权提供任何明示或默示的声明或保证。除非另有约定，本文档仅作为使用指导参考。
-
-由于产品版本升级或其他原因，本文档内容将可能在未经任何通知的情况下，不定期进行更新或修改。
-
-## 商标声明
-
-![logo](images/logo.png)、“嘉楠”和其他嘉楠商标均为北京嘉楠捷思信息技术有限公司及其关联公司的商标。本文档可能提及的其他所有商标或注册商标，由各自的所有人拥有。
-
-**版权所有 © 2023北京嘉楠捷思信息技术有限公司。保留一切权利。**
-非经本公司书面许可，任何单位和个人不得擅自摘抄、复制本文档内容的部分或全部，并不得以任何形式传播。
-
-<div style="page-break-after:always"></div>
-
-## 目录
-
-[TOC]
-
-## 前言
-
-### 概述
-
-本文档为K230 nncase的使用说明文档，提供给用户如何安装nncase, 如何调用compiler APIs编译神经网络模型和runtime APIs编写AI推理程序。
-
-### 读者对象
-
-本文档（本指南）主要适用于以下人员：
-
-- 技术支持工程师
-- 软件开发工程师
-
-### 缩略词定义
-
-| 简称 | 说明                                   |
-| ---- | -------------------------------------- |
-| PTQ  | Post-training quantization, 训练后量化 |
-| MSE  | mean-square error, 均方误差            |
-
-### 修订记录
-
-| 文档版本号 | 修改说明                                            | 修改者             | 日期      |
-| ---------- | --------------------------------------------------- | ------------------ | --------- |
-| V1.0       | 文档初版                                            | 张扬/霍成海        | 2023/4/7  |
-| V1.1       | 统一改成word格式， 完善ai2d                         | 张扬/霍成海        | 2023/5/5  |
-| V1.2       | nncase v2新架构                                     | 张扬/郑启航/霍成海 | 2023/6/2  |
-| V1.3       | nncase_k230_v2.1.0, ai2d/runtime_tensor支持物理地址 | 张扬               | 2023/7/3  |
-| V1.4       | 文档描述更新                                        | 杨浩琪             | 2024/5/15 |
-
 ## 概述
 
 ### 什么是nncase
@@ -1876,14 +1821,14 @@ static int inference(const char *kmodel_file, const char *image_file, const char
 {
     // load kmodel
     interpreter interp;
-    
+
     // 从内存加载kmodel
     auto kmodel = read_binary_file<unsigned char>(kmodel_file);
     interp.load_model({ (const gsl::byte *)kmodel.data(), kmodel.size() }).expect("cannot load kmodel.");
     // 从文件流加载kmodel
     std::ifstream ifs(kmodel_file, std::ios::binary);
     interp.load_model(ifs).expect("cannot load kmodel");
-    
+
 
     // create input tensor
     auto input_desc = interp.input_desc(0);
@@ -2296,15 +2241,15 @@ ai2d_builder(dims_t &input_shape, dims_t &output_shape, ai2d_datatype_t ai2d_dty
 【示例】
 
 ```cpp
-dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };          
-auto out_span = ai2d_out_tensor_.shape();                                    
-dims_t out_shape { out_span.begin(), out_span.end() };                       
+dims_t in_shape { 1, ai2d_input_c_, ai2d_input_h_, ai2d_input_w_ };
+auto out_span = ai2d_out_tensor_.shape();
+dims_t out_shape { out_span.begin(), out_span.end() };
 ai2d_datatype_t ai2d_dtype { ai2d_format::NCHW_FMT, ai2d_format::NCHW_FMT, typecode_t::dt_uint8, typecode_t::dt_uint8 };
-ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };                          
-ai2d_shift_param_t shift_param { false, 0 };                                 
+ai2d_crop_param_t crop_param { false, 0, 0, 0, 0 };
+ai2d_shift_param_t shift_param { false, 0 };
 ai2d_pad_param_t pad_param { true, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 70, 70 } }, ai2d_pad_mode::constant, { 0, 0, 0 } };
 ai2d_resize_param_t resize_param { true, ai2d_interp_method::tf_bilinear, ai2d_interp_mode::half_pixel };
-ai2d_affine_param_t affine_param { false };                                  
+ai2d_affine_param_t affine_param { false };
 ai2d_builder_.reset(new ai2d_builder(in_shape, out_shape, ai2d_dtype, crop_param, shift_param, pad_param, resize_param, affine_param));
 ```
 
@@ -2360,7 +2305,7 @@ result\<void\>。
 【示例】
 
 ```c++
-// run ai2d                                                                  
+// run ai2d
 ai2d_builder_->invoke(ai2d_in_tensor, ai2d_out_tensor_).expect("error occurred in ai2d running");
 ```
 
