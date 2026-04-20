@@ -104,7 +104,7 @@ if language == "en":
 # 若你不想生成某些 Tag 或 Branch，请修改 build_web_html 任务
 # sphinx-multiversion 只是根据 git 的标签和分支来生成不同版本的文档
 
-smv_branch_whitelist = r"^(main|dev|v\d+\.\d+.*)$"
+smv_branch_whitelist = r"^(v(1\.[6-9]|[2-9]|[1-9]\d+)(\.\d+)*.*|main|dev)$"
 smv_tag_whitelist = None
 smv_remote_whitelist = None
 smv_latest_version = "dev"
