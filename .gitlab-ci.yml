@@ -350,14 +350,13 @@ deploy_production_kendryte_com:
   retry: 2
   script:
     - |
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
-      cp -r /data1/k230/docs/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      cp -r /data1/k230/docs/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      scp -P $AWS_PORT -C -r /data1/k230/docs/en/. $AWS/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      scp -P $AWS_PORT -C -r /data1/k230/docs/zh/. $AWS/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      # 1. 远程清理并重新创建您提到的 k230_docs 目录 
+      ssh -p $AWS_PORT $AWS "rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/"
+      ssh -p $AWS_PORT $AWS "mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/"
+
+      # 2. 使用 scp 将本地文件复制到远程 (注意目标路径前的冒号 :)
+      scp -P $AWS_PORT -C -r /data1/k230/docs/en/* $AWS:/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      scp -P $AWS_PORT -C -r /data1/k230/docs/zh/* $AWS:/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
 # ============================================
 # 部署到测试环境 (北京94服务器)
