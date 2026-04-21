@@ -346,7 +346,7 @@ deploy_production_kendryte_com:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
   tags:
-    - docker-runner-kendryte.com
+    - docker-runner-10.10.1.94
   retry: 2
   script:
     - |
