@@ -128,7 +128,7 @@ K230 integrates 2 PWMs, each channel has 3 channels, that is, channel 0~2 belong
 
 #### FBTFT module
 
-The K230 is adapted to the screen of the ST7735S driver chip, which is turned off by default, and can be enabled if needed according to the [FBTFT configuration reference]section (#fbtft configuration reference).
+The K230 is adapted to the screen of the ST7735S driver chip, which is turned off by default, and can be enabled if needed according to the section [FBTFT configuration reference](#fbtft configuration reference).
 
 ## Usage reference
 

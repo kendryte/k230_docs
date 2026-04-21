@@ -1,0 +1,25 @@
+# 根目录设定为当前路径，用于解析以 / 开头的链接
+root_dir = "."
+
+# --- 核心功能配置 ---
+# 必须开启：检查 URL 中的 #锚点（包括 HTML 的 id 属性）
+include_fragments = true
+
+# --- 容错与性能 ---
+# 接受的状态码
+accept = [200, 201, 202, 204, 206, 299, 403, 468]
+
+# 并发请求数
+max_concurrency = 20
+
+# 链接超时设置（单位：秒）
+timeout = 20
+
+# 失败重试次数
+max_retries = 3
+
+# 即使链接在 HTML 注释中也要检查
+# preprocess = true
+
+# 关闭对代码块（backticks）内链接的检查
+include_verbatim = false

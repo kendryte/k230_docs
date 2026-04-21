@@ -65,7 +65,7 @@ tar -czvf debian13.ext4.tar.gz debian13.ext4
 
 ### 镜像制作
 
-1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#4-sdk-编译)
+1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-compiling)
 
 ```Bash
 git clone git@github.com:kendryte/k230_sdk.git
@@ -102,7 +102,7 @@ make build-image
 
 5).烧录到tf卡，并重启设备
 
-把output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img 文件烧录到tf卡，把tf卡插入设备并重启设备。烧录方法可以[参考](../../zh/01_software/board/K230_SDK_使用说明.md#5-sdk-镜像烧写)。
+把output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img 文件烧录到tf卡，把tf卡插入设备并重启设备。烧录方法可以[参考](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-flashing)。
 
 备注：网口不稳定，如果找不到网口，请重启设备试下。
 
@@ -190,7 +190,7 @@ tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
 
 ### 镜像制作及验证
 
-1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#43-编译-sdk)
+1).下载k230 sdk并进行编译：备注：sdk编译相关问题请[参考](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-compiling)
 
 ```Bash
 git clone git@github.com:kendryte/k230_sdk.git

@@ -876,8 +876,8 @@ if __name__ == "__main__":
 
 在开发板上推理时，我们提供两个模块用于加速模型推理
 
-- 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#5-ai2d-运行时apisc)；
-- 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#4-kpu运行时apisc)；
+- 基于硬件的前处理模块：`AI2D`，详细功能说明见[AI2D运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#ai2d-runtime-apisc)；
+- 基于硬件的模型推理模块：`KPU`，详细功能说明见[KPU运行时APIs](./01_software/board/ai/K230_nncase_开发指南.md#kpu-runtime-apisc)；
 
 接下来，我们将在C++代码示例中说明这两个模块如何使用，有哪些需要注意的地方。
 

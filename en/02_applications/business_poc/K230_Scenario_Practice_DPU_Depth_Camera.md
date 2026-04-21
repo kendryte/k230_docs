@@ -82,4 +82,3 @@ After downloading the files from the `k230_sdk/src/common/cdk/user/thirdparty/wi
   ```shell
   test_uvc.exe -m 1 -s 1 -a 36 -b 35 -f "./bin/canmv/05/H1280W720.bin" -t 0 -n "2405-05" -r 2
   ```
-

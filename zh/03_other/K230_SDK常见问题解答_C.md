@@ -377,6 +377,8 @@ echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  #发送字符串
 cat  /dev/ttyS2   #接受串口数据
 ```
 
+<a id="how-to-quickly-modify-linux-config"></a>
+
 ## 如何快速修改linux配置？
 
 答：

@@ -1399,6 +1399,8 @@ output 1 cosine similarity : 0.999757707118988
 output 2 cosine similarity : 0.9997308850288391
 ```
 
+<a id="kpu_runtime_apis_cpp"></a>
+
 ## KPU Runtime APIs (C++)
 
 ### Introduction
@@ -1903,11 +1905,13 @@ int main(int argc, char *argv[])
 }
 ```
 
+<a id="ai2d-runtime-apis-c"></a>
+
 ## AI2D Runtime APIs (C++)
 
 ### Introduction
 
-AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate related register configurations, execute AI2D computations, etc. Please read the last section [Precautions](./K230_nncase_Development_Guide.md#54-Precautions) before use.
+AI2D Runtime APIs are used to configure AI2D parameters on AI devices, generate related register configurations, execute AI2D computations, etc. Please read the last section [Precautions](./K230_nncase_Development_Guide.md#Precautions) before use.
 
 #### Supported Format Conversions
 
@@ -2356,6 +2360,8 @@ static void test_pad_mini_test(const char *gmodel_file, const char *expect_file)
     }
 }
 ```
+
+<a id="Precautions"></a>
 
 ### Notes
 

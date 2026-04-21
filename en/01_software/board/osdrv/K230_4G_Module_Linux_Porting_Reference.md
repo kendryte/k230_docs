@@ -81,7 +81,7 @@ E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
 After loading the USB-to-serial option driver for the module, device files such as ttyUSB0, ttyUSB1, and ttyUSB2 are created in the /dev directory. This section describes the modifications needed for the USB-to-serial option driver.
 
-#### Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration)
+#### Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#how-to-quickly-modify-linux-configuration)
 
 ```bash
 CONFIG_USB_SERIAL
@@ -106,7 +106,7 @@ CONFIG_PPP_SYNC_TTY=y
 
 ### RNDIS/ECM Driver Modification
 
-Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#19-how-to-quickly-modify-linux-configuration):
+Add the following configurations to the Linux kernel. For modification methods, please refer to [this link](../../../03_other/K230_SDK_FAQ_C.md#how-to-quickly-modify-linux-configuration):
 
 ```shell
 CONFIG_USB_NET_DRIVERS

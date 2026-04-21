@@ -358,6 +358,8 @@ echo 00000000000000000000000000000011111111111111 > /dev/ttyS2  # Send a string,
 cat /dev/ttyS2  # Receive serial port data
 ```
 
+<a id="how-to-quickly-modify-linux-configuration"></a>
+
 ## How to Quickly Modify Linux Configuration
 
 Answer:

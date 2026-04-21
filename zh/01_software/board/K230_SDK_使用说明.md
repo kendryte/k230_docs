@@ -150,6 +150,8 @@ k230_sdk
 - `tools`：存放各种工具，脚本等。例如`kconfig`，`doxygen`，`dockerfile`等
 - `board`：环境变量、镜像配置文件、文件系统等
 
+<a id="sdk-compiling"></a>
+
 ## SDK 编译
 
 ### SDK 编译介绍
@@ -248,6 +250,8 @@ sdk默认不产生安全镜像，如果需要安全镜像，请参考下面增�
 sdk默认产生release镜像，如果需要调试镜像，请参考下面增加CONFIG_BUILD_DEBUG_VER配置：
 
 在sdk主目录 执行`make menuconfig` ，选择`build debug/release version`，配上`debug` 选项。
+
+<a id="sdk-flashing"></a>
 
 ## SDK 镜像烧写
 
