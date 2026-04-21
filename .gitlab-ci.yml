@@ -10,8 +10,6 @@ variables:
 default:
   interruptible: true
   image: ai.b-bug.org:5000/k230_sdk:latest
-  tags:
-    - k230_sdk
 
 stages:
   - lint
@@ -184,7 +182,8 @@ auto_translate:
 build_web_html:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|dev)$/
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(main|dev)$/
   image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   tags:
     - docker-runner-10.10.1.94
@@ -333,6 +332,34 @@ build_web_html:
   #   paths:
   #     - _build
   #     - version.env
+
+
+# ============================================
+# 部署到生产环境 (kendryte.com)
+# ============================================
+deploy_production_kendryte_com:
+  stage: deploy
+  image: ai.b-bug.org:5000/huangziyi/deploy:v1
+  dependencies:
+    - build_web_html
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
+  tags:
+    - docker-runner-kendryte.com
+  retry: 2
+  script:
+    - |
+
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
+      if [ -z "$VERSION" ]; then echo "VERSION is empty, aborting"; exit 1; fi
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/
+      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
+      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_linux_sdk_docs/zh/
+      cp -r /data1/k230/docs/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      cp -r /data1/k230/docs/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+      scp -P $AWS_PORT -C -r /data1/k230/docs/en/. $AWS/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+      scp -P $AWS_PORT -C -r /data1/k230/docs/zh/. $AWS/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
 # ============================================
 # 部署到测试环境 (北京94服务器)
