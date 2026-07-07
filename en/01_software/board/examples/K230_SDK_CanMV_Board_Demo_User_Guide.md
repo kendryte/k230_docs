@@ -70,7 +70,7 @@ index:
 sensor_index: see vicap doc
 ```
 
-Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the sensor_index values regarding k_vicap_sensor_type, the default value is 7.
+Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document for the sensor_index values regarding k_vicap_sensor_type, the default value is 7.
 
 Example:
 
@@ -104,7 +104,7 @@ Usage: ./sample_venc -s 24 -n 2 -o /tmp -t 0            // Canmv-K230-V1.0/1.1 b
 Usage: ./sample_venc -s 39 -n 2 -o /tmp -t 0            // Canmv-K230-V2.0 board
 ```
 
-Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the sensor_index values regarding k_vicap_sensor_type, the default value is 7.
+Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document for the sensor_index values regarding k_vicap_sensor_type, the default value is 7.
 
 You can stop the execution by pressing `ctrl+c`. Depending on the encoding type, different stream files will be generated in the specified output directory on the small core. For h264 type, files like `stream_chn0.264` will be generated, where 0 represents channel 0; for h265 type, files like `stream_chn0.265` will be generated, similarly, 0 represents channel 0; for jpeg type, files like `chn0_0.jpg` will be generated, representing the 0th image of channel 0, and by default, 10 jpg images will be generated.
 
@@ -174,7 +174,7 @@ Execute `./sample_vdec.elf -help` to see the configurable parameters and descrip
 | i              | Input file name, with suffixes .264/.265/.jpg     | -             |
 | type           | vo connector type, refer to the vo documentation  | 0             |
 
-The type values refer to the description of k_connector_type in `k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md`, set to 0.
+The type values refer to the description of k_connector_type in `k230_docs/zh/01_software/board/mpp/K230_video_output_API_reference.md`, set to 0.
 
 ###### VDEC Binding VO Decoding Display
 
@@ -1063,7 +1063,7 @@ Usage: ./rtsp_demo -s 39 -n 2 -t h265 -w 1280 -h 720 -a 0  // Canmv-K230-V2.0 bo
                     -a: audio input type (0: mic input, 1: headphone input): default 0.
 ```
 
-Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the sensor type values under `k_vicap_sensor_type`.
+Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document for the sensor type values under `k_vicap_sensor_type`.
 
 The audio input type can be either the onboard mic or headphone input.
 
@@ -1386,7 +1386,7 @@ By default, it uses BULK transfer. You can change to ISO transfer with the follo
 ./camera -i -t 39  // Canmv-K230-V2.0 board
 ```
 
-The `-t` option is used to specify the vicap sensor type. Please refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the description of `k_vicap_sensor_type`. For CanMV, it should be set to 24.
+The `-t` option is used to specify the vicap sensor type. Please refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document for the description of `k_vicap_sensor_type`. For CanMV, it should be set to 24.
 
 Go to PotPlayer -> `Options` -> `Device` -> `Camera` interface,
 `Video Recording Device` -> `Device`, select `UVC Camera`

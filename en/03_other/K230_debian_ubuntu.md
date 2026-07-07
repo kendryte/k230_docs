@@ -65,7 +65,7 @@ tar -czvf debian13.ext4.tar.gz debian13.ext4
 
 ### Creating the Image
 
-1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-compiling).
+1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_User_Manual.md#sdk-compiling).
 
 ```bash
 git clone git@github.com:kendryte/k230_sdk.git
@@ -102,7 +102,7 @@ make build-image
 
 1) Burn it to the TF card and restart the device.
 
-Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file to the TF card, insert the TF card into the device, and restart the device. For the burning method, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-flashing).
+Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file to the TF card, insert the TF card into the device, and restart the device. For the burning method, please refer to [this guide](../../zh/01_software/board/K230_SDK_User_Manual.md#sdk-flashing).
 
 Note: If the network port is unstable and cannot be found, please restart the device and try again.
 
@@ -190,7 +190,7 @@ tar -czvf ubuntu23_rootfs.ext4.tar.gz ubuntu23_rootfs.ext4
 
 ### Creating and Verifying the Image
 
-1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md#sdk-compiling).
+1) Download the K230 SDK and compile it. Note: For SDK compilation-related issues, please refer to [this guide](../../zh/01_software/board/K230_SDK_User_Manual.md#sdk-compiling).
 
 ```bash
 git clone git@github.com:kendryte/k230_sdk.git
@@ -227,7 +227,7 @@ make build-image
 
 1) Burn it to the TF card and restart the device.
 
-Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file to the TF card, insert the TF card into the device, and restart the device. For the burning method, please refer to [this guide](../../zh/01_software/board/K230_SDK_使用说明.md).
+Burn the output/k230_canmv_only_linux_defconfig/images/sysimage-sdcard.img file to the TF card, insert the TF card into the device, and restart the device. For the burning method, please refer to [this guide](../../zh/01_software/board/K230_SDK_User_Manual.md).
 
 Note: If the network port is unstable and cannot be found, please restart the device and try again.
 

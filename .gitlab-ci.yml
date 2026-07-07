@@ -51,11 +51,11 @@ markdown_lint:
     # ----------------------------------------
     - echo "Checking markdown filenames for English slugs..."
     - |
-      FAILED_FILES=$(find . -name "*.md" -not -path "*/.*" -exec basename {} \; | grep -Pv "^[a-z0-9_\-\.]+\.md$" || true)
+      FAILED_FILES=$(find . -name "*.md" -not -path "*/.*" -exec basename {} \; | grep -Ev "^[a-zA-Z0-9_.+-]+\.md$" || true)
       if [ -n "$FAILED_FILES" ]; then
         echo "❌ 错误：发现不符合 slug 规范的 Markdown 文件名"
         echo ""
-        echo "规范：仅允许 a-z 0-9 _ - ."
+        echo "规范：仅允许 a-z A-Z 0-9 _ - . +"
         echo ""
         echo "$FAILED_FILES"
         exit 1
@@ -68,7 +68,7 @@ markdown_lint:
     # ----------------------------------------
     - echo "Checking Chinese anchors..."
     - |
-      BAD_ANCHORS=$(grep -rP "\]\([^)]*#[^)]*[\x{4e00}-\x{9fa5}]" --include="*.md" . || true)
+      BAD_ANCHORS=$(find . -name "*.md" -not -path "*/.*" -print0 | xargs -0 grep -E '\]\([^)]*#[^)]*[^ -~]' || true)
       if [ -n "$BAD_ANCHORS" ]; then
         echo "❌ 错误：检测到中文 Anchor"
         echo ""
@@ -113,18 +113,15 @@ auto_translate:
   image: ai.b-bug.org:5000/canmv/gitdoctranslator:latest
   tags:
     - docker-runner-192.168.1.104
+  resource_group: auto-translate-$CI_COMMIT_BRANCH
   variables:
-    # 强制 Runner 每次都执行 git clone 而不是 git fetch
     GIT_STRATEGY: clone
-    # 可选：确保子模块（如果有）也重新初始化
     GIT_SUBMODULE_STRATEGY: recursive
-    # GitLab CI 会自动注入这些变量
     GITLAB_REPO: $CI_PROJECT_URL
     DOCS_DIR: $CI_PROJECT_DIR
   rules:
-    # 仅在 push 到 dev 分支时触发，如果包括[skip ci]则不启动此任务
     - when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_MESSAGE !~ /\[skip ci\]/
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE !~ /\[skip ci\]/
   before_script:
     # --- 打印关键调试 ---
     - echo $SHELL
@@ -182,18 +179,21 @@ auto_translate:
 build_web_html:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(main|dev)$/
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(main|dev)$/
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(main|dev|dev\/.*|feat\/.*)$/
   image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   tags:
     - docker-runner-10.10.1.94
   script:
-    - git fetch --tags --force
-    - git checkout -B $CI_COMMIT_REF_NAME origin/$CI_COMMIT_REF_NAME
     - git config --global user.email "auto@canaan-creative.com"
     - git config --global user.name "GitLab CI"
     - git config --global --add safe.directory "*"
-
+    
+    # 直接删除所有本地遗留分支，然后重新检出目标分支至本地，保证本地只有一个目标分支作为初始工作环境
+    - rm -rf .git/refs/heads/*
+    - rm -f .git/packed-refs
+    - git fetch origin --prune --tags --force
+    - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
+    
     # 收集所有需要构建的 ref（分支 + 符合版本条件的 tags）
     # ==========================================================================
     # 核心逻辑：平行时空预处理 (Worktree Isolation Preprocessing)
@@ -213,27 +213,24 @@ build_web_html:
       WORKTREE_BASE=$(mktemp -d)
       echo "WORKTREE_BASE=$WORKTREE_BASE"
 
-      BRANCHES=$(git branch -r --format="%(refname:short)" | grep -E '^origin/(main|dev)$' | grep -v "origin/$CI_COMMIT_REF_NAME$" || true)
+      # BRANCHES 决定 worktree 额外预处理哪些分支（当前分支由后续 python3 md_bat_mod_tool.py . 处理）
+      # main pipeline：当前目录已是 main，不需要额外 worktree；dev pipeline：需要 worktree 预处理 main
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        BRANCHES=
+      else
+        BRANCHES=$(git branch -r --format="%(refname:short)" | grep -E '^origin/(main|dev/|feat/).*' | grep -v "^origin/$CI_COMMIT_REF_NAME$" || true)
+      fi
       TAGS=$(git tag -l 'v*' || true)
 
       echo "Preprocessing branches: $BRANCHES"
       echo "Preprocessing tags: $TAGS"
 
-      # 清理上次 CI 遗留的同名本地分支（上次 worktree 删除了，但分支还在）
-      for ref in $BRANCHES; do
-        local_branch="$(basename "$ref")"
-        git branch -D "$local_branch" 2>/dev/null && echo "Cleaned stale branch: $local_branch" || true
-      done
-      for tag in $TAGS; do
-        git branch -D "$tag" 2>/dev/null && echo "Cleaned stale branch: $tag" || true
-      done
-
       preprocess_branch() {
         local ref=$1
-        local wt_dir=$WORKTREE_BASE/${ref//\//_}
-        local branch_name="$(basename "$ref")"
+        local wt_dir=$WORKTREE_BASE/$(echo "$ref" | tr '/' '_')
+        local branch_name="${ref#origin/}"
         echo "=== Preprocessing: $ref -> $branch_name ==="
-        git worktree add -b "$branch_name" "$wt_dir" "$ref"
+        git worktree add -B "$branch_name" "$wt_dir" "$ref"
         python3 md_bat_mod_tool.py heading "$wt_dir" || true
         python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
         python3 md_bat_mod_tool.py domain  "$wt_dir" || true
@@ -255,7 +252,7 @@ build_web_html:
         local wt_dir=$WORKTREE_BASE/tag-$(basename "$tag")
         local branch_name="$(basename "$tag")"
         echo "=== Preprocessing: $tag -> $branch_name ==="
-        git worktree add -b "$branch_name" "$wt_dir" "$tag"
+        git worktree add -B "$branch_name" "$wt_dir" "$tag"
         python3 md_bat_mod_tool.py heading "$wt_dir" || true
         python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
         python3 md_bat_mod_tool.py domain  "$wt_dir" || true
@@ -343,7 +340,6 @@ deploy_production_kendryte_com:
   dependencies:
     - build_web_html
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
   tags:
     - docker-runner-10.10.1.94
@@ -380,44 +376,6 @@ deploy_beijing_94:
       cp -r /data1/k230/docs/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
       cp -r /data1/k230/docs/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
-# ============================================
-# 部署到深圳104服务器
-# ============================================
-deploy_shenzhen_104:
-  stage: deploy
-  image: ai.b-bug.org:5000/huangziyi/deploy:v1
-  dependencies:
-    - build_web_html
-  rules:
-    - when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
-  tags:
-    - docker-runner-192.168.1.104
-  retry: 2
-  before_script:
-    - echo $SHELL
-    - whoami
-    - id
-    - set
-    - pwd
-    - ls -alht
-    - uname -a
-    - ls -alht $CI_PROJECT_DIR
-    - echo $CI_PROJECT_DIR
-    - echo $CI_PROJECT_NAME
-    - echo $CI_PIPELINE_SOURCE
-    - ls /
-  script:
-    - |
-      if [ -f version.env ]; then source version.env; fi
-      echo "Deploying version: ${VERSION:-unknown}"
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      if [ -z "$VERSION" ]; then echo "VERSION is empty, aborting"; exit 1; fi
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      cp -r _build/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      cp -r _build/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
 
 
