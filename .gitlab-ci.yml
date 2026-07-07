@@ -174,12 +174,173 @@ auto_translate:
     - echo "Translation completed"
 
 # ============================================
-# 构建测试环境文档
+# 构建生产环境文档
 # ============================================
-build_web_html:
+build_web_html_kendryte:
   stage: build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(main|dev|dev\/.*|feat\/.*)$/
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(main)$/
+  image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
+  tags:
+    - docker-runner-kendryte.com
+  script:
+    - git config --global user.email "auto@canaan-creative.com"
+    - git config --global user.name "GitLab CI"
+    - git config --global --add safe.directory "*"
+    
+    # 直接删除所有本地遗留分支，然后重新检出目标分支至本地，保证本地只有一个目标分支作为初始工作环境
+    - rm -rf .git/refs/heads/*
+    - rm -f .git/packed-refs
+    - git fetch origin --prune --tags --force
+    - git checkout -B "$CI_COMMIT_REF_NAME" "origin/$CI_COMMIT_REF_NAME"
+    
+    # 收集所有需要构建的 ref（分支 + 符合版本条件的 tags）
+    # ==========================================================================
+    # 核心逻辑：平行时空预处理 (Worktree Isolation Preprocessing)
+    # --------------------------------------------------------------------------
+    # 1. 原因：Git 远程分支和 Tag 是只读的（Detached HEAD），无法直接原地修改并 Commit。
+    # 2. 方案：利用 git worktree 为每个需要构建的 ref 创建一个独立的临时目录。
+    # 3. 转化：
+    #    - 分支：将 origin/main 检出为本地真实的 main 分支。
+    #    - 标签：将 v1.6 标签“升格”检出为本地同名的 v1.6 分支。
+    # 4. 手术：在各临时目录中运行 python 脚本修改 Markdown（去封面、修链接等）。
+    # 5. 固化：在临时目录执行 git commit，将修改永远留在 CI 容器的本地 Git 引用中。
+    # 6. 结果：Sphinx 构建时，会直接读取这些本地已 commit 的分支，从而达成让指定分支或版本获得预处理后的文档。
+    # ==========================================================================
+    - |
+      echo "Collecting refs for preprocessing..."
+
+      WORKTREE_BASE=$(mktemp -d)
+      echo "WORKTREE_BASE=$WORKTREE_BASE"
+
+      # BRANCHES 决定 worktree 额外预处理哪些分支（当前分支由后续 python3 md_bat_mod_tool.py . 处理）
+      # main pipeline：当前目录已是 main，不需要额外 worktree；dev pipeline：需要 worktree 预处理 main
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        BRANCHES=
+      else
+        BRANCHES=$(git branch -r --format="%(refname:short)" | grep -E '^origin/(main|dev/|feat/).*' | grep -v "^origin/$CI_COMMIT_REF_NAME$" || true)
+      fi
+      TAGS=$(git tag -l 'v*' || true)
+
+      echo "Preprocessing branches: $BRANCHES"
+      echo "Preprocessing tags: $TAGS"
+
+      preprocess_branch() {
+        local ref=$1
+        local wt_dir=$WORKTREE_BASE/$(echo "$ref" | tr '/' '_')
+        local branch_name="${ref#origin/}"
+        echo "=== Preprocessing: $ref -> $branch_name ==="
+        git worktree add -B "$branch_name" "$wt_dir" "$ref"
+        python3 md_bat_mod_tool.py heading "$wt_dir" || true
+        python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
+        python3 md_bat_mod_tool.py domain  "$wt_dir" || true
+        python3 md_bat_mod_tool.py cover   "$wt_dir" || true
+        cd "$wt_dir"
+        git add -A "*.md"
+        if git diff --cached --quiet; then
+          echo "  No changes"
+        else
+          git commit -m "preprocess: strip numbers and fix anchors"
+        fi
+        cd - > /dev/null
+        git worktree remove "$wt_dir"
+        echo "=== Done: $branch_name ==="
+      }
+
+      preprocess_tag() {
+        local tag=$1
+        local wt_dir=$WORKTREE_BASE/tag-$(basename "$tag")
+        local branch_name="$(basename "$tag")"
+        echo "=== Preprocessing: $tag -> $branch_name ==="
+        git worktree add -B "$branch_name" "$wt_dir" "$tag"
+        python3 md_bat_mod_tool.py heading "$wt_dir" || true
+        python3 md_bat_mod_tool.py fixlink "$wt_dir" || true
+        python3 md_bat_mod_tool.py domain  "$wt_dir" || true
+        python3 md_bat_mod_tool.py cover   "$wt_dir" || true
+        cd "$wt_dir"
+        git add -A "*.md"
+        if git diff --cached --quiet; then
+          echo "  No changes"
+        else
+          git commit -m "preprocess: strip numbers and fix anchors"
+        fi
+        cd - > /dev/null
+        git worktree remove "$wt_dir"
+        echo "=== Done: $branch_name ==="
+      }
+
+      export -f preprocess_branch preprocess_tag
+
+      echo "$BRANCHES" | xargs -P4 -I{} bash -c 'preprocess_branch "{}"'
+      echo "$TAGS"    | xargs -P4 -I{} bash -c 'preprocess_tag "{}"'
+
+      python3 md_bat_mod_tool.py heading . || true
+      python3 md_bat_mod_tool.py fixlink . || true
+      python3 md_bat_mod_tool.py domain  . || true
+      python3 md_bat_mod_tool.py cover   . || true
+      git add -A "*.md"
+      if ! git diff --cached --quiet; then
+        git commit -m "preprocess: strip numbers and fix anchors"
+      fi
+      echo "Current branch '$CI_COMMIT_REF_NAME' preprocessed."
+
+      rm -rf "$WORKTREE_BASE"
+      echo "All refs preprocessed."
+
+      # --- 清理远程分支引用 ---
+      # 强制删除本地存储的远程分支指针，让本地环境变成一个“纯本地”库
+      # 这样 Sphinx 的正则就只能匹配到你刚刚本地 commit 过的分支
+      git branch -r -D $(git branch -r) || true
+
+    # 核心修复：安装兼容的“黄金版本”组合
+    # 放弃强制 7.3.7，使用 Sphinx 6.x 以兼容 myst-parser 和 docutils < 0.19
+    - pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple \
+        "sphinx>=6.2.1,<7.0.0" \
+        "docutils<0.19" \
+        "myst-parser>=1.0.0" \
+        "sphinx-book-theme" \
+        "sphinx-multiversion" \
+        "sphinx-copybutton" \
+        "sphinxcontrib-mermaid"
+    
+    # 检查当前的 commit 是否精确对应某一个 Git Tag
+    # 如果是tag, 则返回 tag 号，否则返回 branch 名
+    - |
+      if git describe --tags --exact-match 2>/dev/null; then
+        VERSION=$(git describe --tags --exact-match)
+      else
+        VERSION=$CI_COMMIT_REF_NAME
+      fi
+      echo "Building version: $VERSION"
+
+      # 显式清理并构建，加入 -v 查看详细静态文件处理逻辑
+      make clean-templates
+      make clean
+      make mhtml SPHINXOPTS="-v"
+      
+    - echo "VERSION=$VERSION" > version.env
+
+    # 因为 k230_docs这个库产生的文件大小过大，已超过 artifacts的存储限制
+    # 所以，暂时采用workaround, 直接在本地服务器中转进行文件复制和部署,
+    - rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+    - mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+    - cp -r _build//en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+    - rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+    - mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+    - cp -r _build//zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+
+  # artifacts:
+  #   paths:
+  #     - _build
+  #     - version.env
+
+#   ============================================
+# 构建测试环境文档
+# ============================================
+build_web_html_dev:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^(dev\/.*|feat\/.*)$/
   image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
   tags:
     - docker-runner-10.10.1.94
@@ -322,61 +483,13 @@ build_web_html:
 
     # 因为 k230_docs这个库产生的文件大小过大，已超过 artifacts的存储限制
     # 所以，暂时采用workaround, 直接在本地服务器中转进行文件复制和部署,
-    - rm -rf /data1/k230/docs/*
-    - cp -r _build/* /data1/k230/docs/
+    - rm -rf /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+    - rm -rf /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+    - mkdir -p /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
+    - cp -r _build//en/. /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
+    - cp -r _build//zh/. /data1/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
 
   # artifacts:
   #   paths:
   #     - _build
   #     - version.env
-
-
-# ============================================
-# 部署到生产环境 (kendryte.com)
-# ============================================
-deploy_production_kendryte_com:
-  stage: deploy
-  image: ai.b-bug.org:5000/huangziyi/deploy:v1
-  dependencies:
-    - build_web_html
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
-  tags:
-    - docker-runner-10.10.1.94
-  retry: 2
-  script:
-    - |
-      # 1. 远程清理并重新创建您提到的 k230_docs 目录 
-      ssh -p $AWS_PORT $AWS "rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/"
-      ssh -p $AWS_PORT $AWS "mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/"
-
-      # 2. 使用 scp 将本地文件复制到远程 (注意目标路径前的冒号 :)
-      scp -P $AWS_PORT -C -r /data1/k230/docs/en/* $AWS:/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      scp -P $AWS_PORT -C -r /data1/k230/docs/zh/* $AWS:/data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-
-# ============================================
-# 部署到测试环境 (北京94服务器)
-# ============================================
-deploy_beijing_94:
-  stage: deploy
-  image: ai.b-bug.org:5000/huangziyi/deploy:v1
-  dependencies:
-    - build_web_html
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
-  tags:
-    - docker-runner-10.10.1.94
-  retry: 2
-  script:
-    - |
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      mkdir -p /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/ /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-      cp -r /data1/k230/docs/en/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en/
-      cp -r /data1/k230/docs/zh/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh/
-
-
-
-
-
