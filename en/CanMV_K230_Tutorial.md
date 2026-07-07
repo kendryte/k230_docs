@@ -208,7 +208,7 @@ At this point, the entire SDK compilation is completed, generating the image sys
 
 **Example**: 1
 
-For a basic hello world example, please refer to [K230_Basic_Tutorial_Hello_World](https://github.com/kendryte/k230_docs/blob/main/zh/02_applications/tutorials/K230_%E5%AE%9E%E6%88%98%E5%9F%BA%E7%A1%80%E7%AF%87_hello_world.md)
+For a basic hello world example, please refer to [K230_Basic_Tutorial_Hello_World](../zh/02_applications/tutorials/K230_Practical_Basics_hello_world.md)
 
 Taking Vicap_demo as an example, the code is located at k230_sdk/src/big/mpp/userapps/sample/sample_vicap.
 
@@ -268,9 +268,9 @@ Example 1:
 
 Description: Binds the ov5647@1920x1080 RGB output to vicap device 0 and enables vicap device output channels 0 and 1. Channel 0 output size defaults to the input image size (1920x1080), and channel 1 output image size is 640x480.
 
-For the API used in this example, please refer to [K230_VICAP_API_Reference.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_VICAP_API%E5%8F%82%E8%80%83.md) and [K230_Video_Output_API_Reference.md](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/mpp/K230_%E8%A7%86%E9%A2%91%E8%BE%93%E5%87%BA_API%E5%8F%82%E8%80%83.md).
+For the API used in this example, please refer to [K230_VICAP_API_Reference.md](../zh/01_software/board/mpp/K230_VICAP_API_Reference.md) and [K230_Video_Output_API_Reference.md](../zh/01_software/board/mpp/K230_video_output_API_reference.md).
 
-For other demos supported by the CanMV-K230 development board, please refer to [K230_SDK_CanMV_Board_Demo_User_Guide](https://github.com/kendryte/k230_docs/blob/main/zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md).
+For other demos supported by the CanMV-K230 development board, please refer to [K230_SDK_CanMV_Board_Demo_User_Guide](../zh/01_software/board/examples/K230_SDK_CanMV_Board_Demo_User_Guide.md).
 
 For other SDK-related documents, please visit [K230 SDK Documentation](https://github.com/kendryte/k230_docs).
 

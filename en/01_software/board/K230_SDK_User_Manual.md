@@ -676,7 +676,7 @@ CONFIG_MEM_BOUNDARY_RESERVED_SIZE="0x00001000"  # Isolation zone         Not con
 
 ## SDK Board Debugging
 
-> The CanMV-K230 board's default debug port is a serial port. For debugging, please refer to the [SDK FAQ](../../../zh/03_other/K230_SDK常见问题解答_C.md).
+> The CanMV-K230 board's default debug port is a serial port. For debugging, please refer to the [SDK FAQ](../../../zh/03_other/K230_SDK_FAQ_C.md).
 
 ### Preparation for Debugging
 

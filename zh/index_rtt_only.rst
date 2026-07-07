@@ -9,8 +9,8 @@
 .. toctree::
    :maxdepth: 2
 
-   CanMV_K230_教程.md
-   01_software/board/K230_SDK_使用说明.md
+   CanMV_K230_Tutorial.md
+   01_software/board/K230_SDK_User_Manual.md
    index_normal_tutorial_rtt_only.rst
    index_dev_guide_rtt_only.rst
    inde_api_rtt_only.rst

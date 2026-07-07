@@ -668,7 +668,7 @@ By default, BULK transfer is used. You can switch to ISO transfer using the foll
 ./camera -i -t 7
 ```
 
-The `-t` option is used to specify the vicap sensor type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document for the description of `k_vicap_sensor_type`. The default value is 7.
+The `-t` option is used to specify the vicap sensor type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document for the description of `k_vicap_sensor_type`. The default value is 7.
 
 In PotPlayer, go to `Options` -> `Device` -> `Camera` interface,
 `Video Capture Device` -> `Device`, select `UVC Camera`
@@ -946,7 +946,7 @@ Usage: ./rtsp_demo -s 0 -n 2 -t h265 -w 1280 -h 720 -a 0
                     -a: audio input type (0: mic input, 1: headphone input), default 0.
 ```
 
-The sensor type values can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document under the description of `k_vicap_sensor_type`.
+The sensor type values can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document under the description of `k_vicap_sensor_type`.
 The audio input type can be selected as onboard mic or headphone input.
 
 After `rtsp_demo` runs successfully on the small core, it will print a URL in the form of `rtsp://ip:8554/session0`, where `0` represents the first stream. You can use VLC to pull the stream from the URL for playback. To stop the stream, first stop VLC from pulling the stream, then execute `ctrl+c` to stop `rtsp_demo`.
@@ -1157,7 +1157,7 @@ Refer to the README.md in the release SDK package for instructions. In the Docke
 | a | Voice change setting | `[-12, 12]` | 0 |
 | s | Sensor type | See camera sensor documentation | 7 |
 
-The sensor type can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor适配指南.md` document under the description of `k_vicap_sensor_type`.
+The sensor type can be found in the `k230_docs/zh/01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md` document under the description of `k_vicap_sensor_type`.
 
 ##### Execution
 
@@ -1180,7 +1180,7 @@ Specific execution steps on board B:
 1. Execute on the large core: `cd /bin; ./sample_sys_init.elf`
 1. Execute on the small core: `./backclient_test rtsp://<server_ip>:8554/BackChannelTest`
 
-The `backclient_test` execution command is `./backclient_test <rtsp_url> <out_type>`, where `rtsp_url` is the RTSP address, and `out_type` is the VO output connect type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_视频输出_API参考.md` document for the description of `k_connector_type`. The `out_type` is set to 0 by default.
+The `backclient_test` execution command is `./backclient_test <rtsp_url> <out_type>`, where `rtsp_url` is the RTSP address, and `out_type` is the VO output connect type. Refer to the `k230_docs/zh/01_software/board/mpp/K230_video_output_API_reference.md` document for the description of `k_connector_type`. The `out_type` is set to 0 by default.
 
 ### Depth Map Display Demo
 

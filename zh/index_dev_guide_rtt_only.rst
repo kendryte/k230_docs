@@ -3,14 +3,14 @@ K230 SDK 开发指南
 .. toctree::
    :maxdepth: 1
 
-   02_applications/tutorials/K230_RVV优化性能说明.md
-   02_applications/tutorials/K230_内存优化指南.md
-   02_applications/tutorials/K230_内存占用分析指南.md
-   01_software/board/middleware/K230_openblas_开发使用指南.md
-   01_software/board/middleware/K230_opencv_开发使用指南.md
-   01_software/board/mpp/K230_Camera_Sensor适配指南.md
-   01_software/board/mpp/K230_VICAP_SENSOR_参数分区参考.md
-   01_software/board/mpp/K230_LCD适配指南.md
-   01_software/board/osdrv/K230_lpddr4_lpddr3驱动适配指南.md
-   01_software/board/ai/K230_nncase_开发指南.md
-   03_other/K230_SDK更新nncase运行时库指南.md
+   02_applications/tutorials/K230_RVV_optimization_performance_description.md
+   02_applications/tutorials/K230_Memory_Optimization_Guide.md
+   02_applications/tutorials/K230_Memory_Usage_Analysis_Guide.md
+   01_software/board/middleware/K230_OpenBLAS_Development_Guide.md
+   01_software/board/middleware/K230_OpenCV_Development_Guide.md
+   01_software/board/mpp/K230_Camera_Sensor_Adaptation_Guide.md
+   01_software/board/mpp/K230_VICAP_SENSOR_Parameter_Partition_Reference.md
+   01_software/board/mpp/K230_LCD_Adaptation_Guide.md
+   01_software/board/osdrv/K230_LPDDR4_LPDDR3_Driver_Adaptation_Guide.md
+   01_software/board/ai/K230_nncase_Development_Guide.md
+   03_other/K230_SDK_Updating_nncase_Runtime_Library_Guide.md

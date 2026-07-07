@@ -6,8 +6,8 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_DEMO_BOARD资源使用指南.md](K230_DEMO_BOARD资源使用指南.md) | K230 Demo Board 硬件资源使用说明文档 |
-| [K230_硬件设计指南.md](K230_硬件设计指南.md) | K230 硬件设计指南文档 |
+| [K230_DEMO_BOARD_Resource_Usage_Instructions.md](K230_DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board 硬件资源使用说明文档 |
+| [K230_Hardware_Design_Guide.md](K230_Hardware_Design_Guide.md) | K230 硬件设计指南文档 |
 | [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx) | K230 芯片引脚定义 |
 | [K230_datasheet.md](K230_datasheet.md) | K230 Datasheet |
 
