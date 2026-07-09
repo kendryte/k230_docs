@@ -1,0 +1,35 @@
+# Build context only needs ./docs for the Dockerfile's COPY
+# Exclude everything from source tree except docs/ + Dockerfile
+
+# Git / CI metadata
+.git/
+.gitignore
+.gitlab-ci.yml
+.gitlab/
+.github/
+.lycheeignore
+
+# Sphinx 中间产物（已被复制进 docs/）
+_build/
+
+# Sphinx 源文件（处理后落到 docs/{en,zh}）
+en/
+zh/
+exts/
+rtt-config/
+_static/
+_templates/
+logs/
+
+# 项目元数据 / 工具脚本
+README.md
+README_en.md
+LICENSE
+requirements.txt
+conf.py
+Makefile
+manual_check.sh
+md_bat_mod_tool.py
+.markdownlint.jsonc
+lychee.toml
+.dockerignore
