@@ -4,7 +4,7 @@
 SPHINXOPTS          ?=
 SPHINXBUILD         ?= sphinx-build
 SPHINXMULTIVERSION  ?= sphinx-multiversion
-WEB_DOCS_BUILDER_URL ?= https://ai.b-bug.org/~zhengshanshan/web-docs-builder
+WEB_DOCS_BUILDER_URL ?= http://10.10.1.94/web-docs-builder
 
 ### Directory Structure
 BUILDDIR            = _build
