@@ -296,5 +296,4 @@ Currently, LXQt can only be displayed on a PC or other platforms via X11 Forward
 
 ## References
 
-<https://wiki.debian.org/RISC-V>
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>
