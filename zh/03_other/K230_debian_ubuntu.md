@@ -300,5 +300,4 @@ source env.sh
 
 ## 参考资料
 
-<https://wiki.debian.org/RISC-V>
 <https://github.com/carlosedp/riscv-bringup/blob/master/Ubuntu-Rootfs-Guide.md>
