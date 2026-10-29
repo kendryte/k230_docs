@@ -3,7 +3,7 @@
 ## Overview
 
 This document introduces the demo functions provided by the K230 SDK and their usage. The executable programs on rt-smart are all compiled into the small core/sharefs directory by default. When testing the large core program, you need to wait for the small core to fully start, then enter the /sharefs/app directory in the large core's msh to test. The audio and video resource files used in each test demo can be obtained from the following link:
-<https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
+<https://download.kendryte.com/k230/downloads/test_resource/>
 
 ## Demo Introduction
 

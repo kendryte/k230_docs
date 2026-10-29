@@ -66,7 +66,7 @@ The pin distribution diagram of K230 is as follows:
 Figure 2-6 K230 Package Pin Distribution
 ![Figure 2-7 K230D Package Pin Distribution](../../zh/00_hardware/images/HDG/image011.png)
 Figure 2-7 K230D Package Pin Distribution
-For pin details, see table [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx).
+For pin details, see table [K230_PINOUT_V1.2_20240822.xlsx](https://download.kendryte.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx).
 
 ## Schematic Design Recommendations
 

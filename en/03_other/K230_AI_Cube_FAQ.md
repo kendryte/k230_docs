@@ -10,7 +10,7 @@
 
 ### Issue 2: AI Cube crashes or becomes unresponsive when running
 
-**Answer:** When encountering a crash issue, first refer to the [AI Cube User Guide](https://kendryte-download.canaan-creative.com/developer/common/AI_Cube_V1.2%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97.pdf) to check if the Nvidia graphics driver and dotnet are correctly installed.
+**Answer:** When encountering a crash issue, first refer to the [AI Cube User Guide](https://download.kendryte.com/developer/common/AI_Cube_V1.2%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97.pdf) to check if the Nvidia graphics driver and dotnet are correctly installed.
 
 Possible causes include:
 

@@ -77,7 +77,7 @@ You can use the Linux minicom or other serial tools to connect and debug, with s
 
 #### Firmware Acquisition
 
-CanMV-K230 firmware download address: `https://kendryte-download.canaan-creative.com/k230/release/sdk_images/`
+CanMV-K230 firmware download address: `https://download.kendryte.com/k230/release/sdk_images/`
 
 k230_canmv_defconfig: CanMV-K230 1.0/1.1 Linux+rtt image.
 

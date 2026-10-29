@@ -17,8 +17,8 @@
 |[K230_training_scripts](https://github.com/kendryte/K230_training_scripts/)| Kendryte K230 Training Scripts Github Repo |
 | [K230 SDK Gitee mirror](https://gitee.com/kendryte/k230_sdk) | Kendryte K230 SDK Gitee mirror Repo |
 |[K230 Docs Gitee mirror](https://gitee.com/kendryte/k230_docs)| Kendryte K230 Docs Gitee mirror Repo |
-|[K230 SDK Release mirror](https://kendryte-download.canaan-creative.com/k230/release/sdk/k230_sdk.tar.gz)|Canaan Kendryte K230 SDK release k230_sdk.tar.gz download|
-|[K230 Docs Release mirror](https://kendryte-download.canaan-creative.com/k230/release/docs/k230_docs.tar.gz)|Canaan Kendryte K230 Docs release k230_docs.tar.gz download|
+|[K230 SDK Release mirror](https://download.kendryte.com/k230/release/sdk/k230_sdk.tar.gz)|Canaan Kendryte K230 SDK release k230_sdk.tar.gz download|
+|[K230 Docs Release mirror](https://download.kendryte.com/k230/release/docs/k230_docs.tar.gz)|Canaan Kendryte K230 Docs release k230_docs.tar.gz download|
 |[Canaan Kendryte K230](https://www.kendryte.com/product/k230)|Canaan Kendryte K230|
 |[Canaan Kendryte Forum](https://www.kendryte.com/)|Canaan Kendryte developer forum|
 
@@ -28,7 +28,7 @@
 | --- | --- |
 | [K230_DEMO_BOARD_Resource_Usage_Instructions.md](en/00_hardware/K230_DEMO_BOARD_Resource_Usage_Instructions.md) | K230 Demo Board Hardware Resource Usage Documentation |
 | [K230_Hardware_Design_Guide.md](en/00_hardware/K230_Hardware_Design_Guide.md) | K230 Hardware Design Guide document |
-| [K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx) | K230 chip pin definition |
+| [K230_PINOUT_V1.2_20240822.xlsx](https://download.kendryte.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx) | K230 chip pin definition |
 | [K230_datasheet.md](en/00_hardware/K230_datasheet.md) | K230 Datasheet |
 
 ### K230 LP3 engineering design file
@@ -65,7 +65,7 @@
 | [K230-SIP-EVB-V1_0-A_1_20230316-BOM](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1_20230316-BOM.xlsx) | The BOM of the device used in the K230D Demo Board |
 | [K230-SIP-EVB-V1_0-A_1-20230316.DSN](zh/00_hardware/K230D/K230-SIP-EVB-V1_0-A_1-20230316.DSN) | K230D Demo Board Cadence CIS Capture File |
 | [K230-SIP-EVB-V1.0-A.1-20230317.pdf](zh/00_hardware/K230D/K230-SIP-EVB-V1.0-A.1-20230317.pdf) | K230D Demo Board schematic pdf file |
-| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230D%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230D-Zero_V1.0_2024-07-09.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件 |
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://download.kendryte.com/developer/k230/HDK/K230D%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230D-Zero_V1.0_2024-07-09.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件 |
 
 ### CanMV-K230 engineering design file
 
@@ -73,7 +73,7 @@
 | --- | --- |
 | [CanMV-K230-V1.0_2023-09-15.pdf](zh/00_hardware/CanMV_K230/CanMV-K230-V1.0_2023-09-15.pdf) | CanMV-K230 Demo Board schematic pdf file|
 | [CanMV-K230_2023-10-11.html](zh/00_hardware/CanMV_K230/CanMV-K230_2023-10-11.html) | CanMV-K230 Demo Board bitmap file|
-| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://kendryte-download.canaan-creative.com/developer/k230/HDK/CanMV-K230%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230-LP4-V3.0-20240509.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件|
+| [CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件](https://download.kendryte.com/developer/k230/HDK/CanMV-K230%E5%B7%A5%E7%A8%8B%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6/ProDocument_CanMV-K230-LP4-V3.0-20240509.epro) | CanMV-K230D-Zero V1.0开发板原理图和PCB设计文件|
 
 ## K230 SDK software documentation
 

@@ -25,7 +25,7 @@ This document (this guide) is primarily intended for the following personnel:
 | V2.0             | Removed full image burning page, added loader_sip.bin support for SIP burning | jiangxiangbing | 2023-10-12 |
 | V3.0             | Supported sdcard/otp burning, supported reading data from storage media. Users can develop and compile loader.bin based on uboot | jiangxiangbing | 2024-4-1 |
 
-[Burntool Download Link](https://kendryte-download.canaan-creative.com/k230/downloads/burn_tool/k230_burntool_v3.7z)
+[Burntool Download Link](https://download.kendryte.com/k230/downloads/burn_tool/k230_burntool_v3.7z)
 
 ## Purpose of K230 Burning Tool
 
