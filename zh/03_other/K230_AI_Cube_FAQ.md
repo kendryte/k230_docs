@@ -23,7 +23,7 @@
 
 问题3： 运行AI Cube时发生闪退，无响应。
 
-答：遇到闪退问题时首先要按照[AI Cube用户指南](https://kendryte-download.canaan-creative.com/developer/common/AI_Cube_V1.2%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97.pdf)排查是否正确安装Nvidia显卡驱动及dotnet。
+答：遇到闪退问题时首先要按照[AI Cube用户指南](https://download.kendryte.com/developer/common/AI_Cube_V1.2%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97.pdf)排查是否正确安装Nvidia显卡驱动及dotnet。
 
 其次可能引起原因如下：
 

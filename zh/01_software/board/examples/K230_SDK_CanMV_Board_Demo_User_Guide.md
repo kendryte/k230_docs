@@ -3,7 +3,7 @@
 ## 概述
 
 此文档介绍K230 SDK提供的demo功能，使用方法等。其中rt-smart上的可执行程序都默认编译到了小核/sharefs目录下, 测试大核程序时，需要等待小核完全启动，之后在大核的msh中进入/sharefs/app目录内测试。各测试demo用到的音视频资源文件，可到以下链接地址获取
-<https://kendryte-download.canaan-creative.com/k230/downloads/test_resource/>
+<https://download.kendryte.com/k230/downloads/test_resource/>
 
 ## Demo介绍
 

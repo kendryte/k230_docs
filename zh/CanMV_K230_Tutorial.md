@@ -86,7 +86,7 @@ Linux串口显示如下：
 
 #### 固件获取
 
-CanMV-K230 固件下载地址： `https://kendryte-download.canaan-creative.com/k230/release/sdk_images/`
+CanMV-K230 固件下载地址： `https://download.kendryte.com/k230/release/sdk_images/`
 
 里面有各个版本的镜像。
 

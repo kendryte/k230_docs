@@ -66,7 +66,7 @@ K230引脚分布图如下：
 图2-6 K230封装管脚分布
 ![图2-7 K230D封装管脚分布](images/HDG/image011.png)
 图2-7 K230D封装管脚分布
-引脚详情见表[K230_PINOUT_V1.2_20240822.xlsx](https://kendryte-download.canaan-creative.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx)。
+引脚详情见表[K230_PINOUT_V1.2_20240822.xlsx](https://download.kendryte.com/developer/k230/HDK/K230%E7%A1%AC%E4%BB%B6%E6%96%87%E6%A1%A3/K230_PINOUT_V1.2_20240822.xlsx)。
 
 ## 原理图设计建议
 
