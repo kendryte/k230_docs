@@ -395,3 +395,102 @@ deploy_beijing_94:
   script:
     # 假定 gitlab-runner 已挂载 /data1 → 宿主机部署目录
     - rm -rf /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/en /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/zh && cp -r /app/docs/. /data/docker-projects/kendryte.com/bbs-website/website_data/docs/k230_docs/ && echo '==> Deployed to Beijing 94'
+
+# ============================================
+# 同步到 GitHub / Gitee (恢复自 dfa31fe 的 sync 任务)
+# ============================================
+# MR merged
+# merge_sync:
+#   stage: sync_mirrors
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
+#   extends:
+#     - .setup_env
+#     - .sync_github_gitee
+
+# tag push
+tag_sync:
+  stage: sync_mirrors
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG =~ /^v\d+\.\d+.*$/
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+# auto sync
+# schedule_sync:
+#   stage: sync_mirrors
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "schedule"
+#   extends:
+#     - .setup_env
+#     - .sync_github_gitee
+
+# manual sync
+manual_sync:
+  stage: sync_mirrors
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+.setup_env:
+  before_script:
+    - echo '----------Build ENV Prepare----------'
+    - echo 'Add SSH KEY for Multiple repo'
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | ssh-add - > ~/.ssh/id_ed25519 || exit 1
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n    StrictHostKeyChecking no\n" > ~/.ssh/config'
+    - echo $SHELL
+    - echo "increate ssh timeout for github"
+    - echo "    ServerAliveInterval 30" >> ~/.ssh/config
+    - echo "    ServerAliveCountMax 60" >> ~/.ssh/config
+    - echo "    TCPKeepAlive yes" >> ~/.ssh/config
+    - cat ~/.ssh/config
+    - whoami
+    - uptime
+    - pwd
+    - uname -a
+    - cat /etc/issue
+    - echo $CI_PROJECT_DIR
+    - echo $CI_PROJECT_NAME
+    - echo '----------set git config ----------'
+    - echo "${GITLAB_USER_EMAIL}"
+    - echo "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+
+.sync_github_gitee:
+  timeout: 30m
+  # 原 default 中的 runner tag，当前 default 已无 tags，因此在此单独指定
+  tags:
+    - k230_sdk
+  script:
+    - cd $CI_PROJECT_DIR
+    - ls -alht
+    - rm -rf ./k230_docs/
+    - git clone ${GITLAB_REPO} k230_docs || exit 1
+    - cd k230_docs || exit 1
+    - pwd
+    - git checkout main
+    - git branch -a
+    - git status
+    - echo '---pull latest main branch---'
+    - git pull origin main
+    - echo '---fetch all tags---'
+    - git fetch --tags
+    - git remote add github ${GITHUB_REPO}
+    - git remote add gitee ${GITEE_REPO}
+    - git remote -v
+    - git branch -a
+    - git status
+    - echo "---push to gitee---"
+    - git push --atomic --tags -u -f gitee main || git push --atomic --tags -u -f gitee main
+    - echo "---push to github---"
+    - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
